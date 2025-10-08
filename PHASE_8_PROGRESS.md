@@ -106,19 +106,14 @@ GET    /agents/_health      Health check
 
 ---
 
-## 🚧 Next Steps (Steps 3-8 Remaining)
+## 🚧 Next Steps (Steps 4-8 Remaining)
 
-### Step 3: Template Library UI (1 hour)
-**Files to Create**:
-- `apps/web/components/agents/TemplateLibrary.tsx` - Modal with search/filter
-- `apps/web/components/agents/TemplateCard.tsx` - Individual template card
+### ⚡ NEXT SESSION START HERE ⚡
 
-**Features**:
-- Modal overlay with search bar
-- Category filter tabs
-- Grid layout with hover effects (OpenSea style)
-- Template selection → Apply to builder
-- "Start from Scratch" option
+**Resume Point**: Build Agent Builder - Basic Forms  
+**Estimated Time**: 1.5 hours for Step 4  
+**Files to Create**: 6 files (builder page, forms, hook)  
+**Goal**: Get basic agent creation form working with Save Draft
 
 ---
 
