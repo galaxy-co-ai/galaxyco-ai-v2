@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@clerk/nextjs';
-import { useWorkspace } from '@/contexts/workspace-context';
+import { useWorkspace } from '@/hooks/useWorkspace';
 
 /**
  * Hook to get authentication headers for API calls

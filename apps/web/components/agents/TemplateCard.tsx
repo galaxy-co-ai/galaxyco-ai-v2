@@ -27,7 +27,7 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-4px)';
         e.currentTarget.style.boxShadow = shadows.cardHover;
-        e.currentTarget.style.borderColor = colors.primary[300];
+        e.currentTarget.style.borderColor = colors.primary['300'];
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
@@ -45,7 +45,7 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
           justifyContent: 'center',
           width: '72px',
           height: '72px',
-          background: colors.primary[50],
+          background: colors.primaryLight,
           borderRadius: radius.lg,
         }}
       >
@@ -128,7 +128,7 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
         <span
           style={{
             fontSize: typography.fontSize.sm,
-            color: colors.primary[600],
+            color: colors.primaryHover,
             fontWeight: typography.fontWeight.semibold,
           }}
         >

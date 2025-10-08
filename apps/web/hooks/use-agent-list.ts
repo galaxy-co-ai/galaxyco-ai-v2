@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { listAgents } from '@/lib/actions/agent-actions';
+import { useWorkspaceId } from './useWorkspace';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 
 interface Agent {
   id: string;
@@ -29,6 +31,9 @@ interface UseAgentListState {
 const ITEMS_PER_PAGE = 12;
 
 export const useAgentList = () => {
+  const workspaceId = useWorkspaceId();
+  const { getAuthHeaders } = useWorkspaceAuth();
+  
   const [state, setState] = useState<UseAgentListState>({
     agents: [],
     isLoading: true,
@@ -41,6 +46,11 @@ export const useAgentList = () => {
   });
 
   const fetchAgents = useCallback(async () => {
+    // Don't fetch if workspace is not loaded yet
+    if (!workspaceId) {
+      return;
+    }
+    
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -57,7 +67,8 @@ export const useAgentList = () => {
         filters.search = state.search;
       }
 
-      const result = await listAgents('workspace-id-placeholder', filters);
+      const headers = await getAuthHeaders();
+      const result = await listAgents(headers, filters);
       
       setState((prev) => ({
         ...prev,
@@ -73,7 +84,7 @@ export const useAgentList = () => {
         isLoading: false,
       }));
     }
-  }, [state.page, state.statusFilter, state.search]);
+  }, [workspaceId, state.page, state.statusFilter, state.search]);
 
   const setSearch = useCallback((search: string) => {
     setState((prev) => ({ ...prev, search, page: 1 }));

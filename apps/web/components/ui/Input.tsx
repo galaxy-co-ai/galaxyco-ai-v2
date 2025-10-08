@@ -39,13 +39,13 @@ export const Input: React.FC<InputProps> = ({
           width: '100%',
           padding: `${spacing.sm} ${spacing.md}`,
           fontSize: typography.sizes.base,
-          fontFamily: typography.fontFamily,
+          fontFamily: typography.fontFamily.sans,
           color: colors.text.primary,
           backgroundColor: colors.background.primary,
           border: `1px solid ${error ? colors.danger : colors.border.default}`,
           borderRadius: radius.md,
           outline: 'none',
-          transition: `border-color ${animation.timing.fast}ms ${animation.easing.standard}`,
+          transition: `border-color ${animation.timing.fast} ${animation.easing.default}`,
           ...(props.disabled && {
             backgroundColor: colors.background.tertiary,
             cursor: 'not-allowed',
@@ -55,7 +55,7 @@ export const Input: React.FC<InputProps> = ({
         }}
         onFocus={(e) => {
           if (!error) {
-            e.currentTarget.style.borderColor = colors.primary;
+            e.currentTarget.style.borderColor = colors.primaryColor;
           }
           props.onFocus?.(e);
         }}
@@ -72,7 +72,7 @@ export const Input: React.FC<InputProps> = ({
             marginTop: spacing.xs,
             fontSize: typography.sizes.sm,
             color: colors.danger,
-            animation: `${animation.timing.fast}ms ${animation.easing.standard}`,
+            animation: `${animation.timing.fast} ${animation.easing.default}`,
           }}
         >
           {error}
@@ -132,13 +132,13 @@ export const Textarea: React.FC<TextareaProps> = ({
           width: '100%',
           padding: `${spacing.sm} ${spacing.md}`,
           fontSize: typography.sizes.base,
-          fontFamily: typography.fontFamily,
+          fontFamily: typography.fontFamily.sans,
           color: colors.text.primary,
           backgroundColor: colors.background.primary,
           border: `1px solid ${error ? colors.danger : colors.border.default}`,
           borderRadius: radius.md,
           outline: 'none',
-          transition: `border-color ${animation.timing.fast}ms ${animation.easing.standard}`,
+          transition: `border-color ${animation.timing.fast} ${animation.easing.default}`,
           resize: 'vertical',
           minHeight: '100px',
           ...(props.disabled && {
@@ -150,7 +150,7 @@ export const Textarea: React.FC<TextareaProps> = ({
         }}
         onFocus={(e) => {
           if (!error) {
-            e.currentTarget.style.borderColor = colors.primary;
+            e.currentTarget.style.borderColor = colors.primaryColor;
           }
           props.onFocus?.(e);
         }}
@@ -228,13 +228,13 @@ export const Select: React.FC<SelectProps> = ({
           width: '100%',
           padding: `${spacing.sm} ${spacing.md}`,
           fontSize: typography.sizes.base,
-          fontFamily: typography.fontFamily,
+          fontFamily: typography.fontFamily.sans,
           color: colors.text.primary,
           backgroundColor: colors.background.primary,
           border: `1px solid ${error ? colors.danger : colors.border.default}`,
           borderRadius: radius.md,
           outline: 'none',
-          transition: `border-color ${animation.timing.fast}ms ${animation.easing.standard}`,
+          transition: `border-color ${animation.timing.fast} ${animation.easing.default}`,
           cursor: 'pointer',
           ...(props.disabled && {
             backgroundColor: colors.background.tertiary,
@@ -245,7 +245,7 @@ export const Select: React.FC<SelectProps> = ({
         }}
         onFocus={(e) => {
           if (!error) {
-            e.currentTarget.style.borderColor = colors.primary;
+            e.currentTarget.style.borderColor = colors.primaryColor;
           }
           props.onFocus?.(e);
         }}

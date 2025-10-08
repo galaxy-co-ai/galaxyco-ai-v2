@@ -7,7 +7,7 @@
  * Always use `withTenant(db, workspaceId)` to ensure tenant isolation.
  */
 
-import { drizzle } from 'drizzle-orm/neon-serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { eq, and, SQL } from 'drizzle-orm';
 import * as schema from './schema';
@@ -115,4 +115,4 @@ export async function validateTenantAccess(
 
 // Re-export schema and types
 export * from './schema';
-export type { NeonDatabase } from 'drizzle-orm/neon-serverless';
+export type { NeonHttpDatabase as NeonDatabase } from 'drizzle-orm/neon-http';

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useAgentList } from '@/hooks/use-agent-list';
-import { AgentListCard } from '@/components/agents/AgentListCard';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
+import { useAgentList } from '../../hooks/use-agent-list';
+import { AgentListCard } from '../../components/agents/AgentListCard';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { colors, spacing, typography, radius } from '../../lib/constants/design-system';
 
 export default function AgentsPage() {
   const {
@@ -94,7 +94,7 @@ export default function AgentsPage() {
                   fontSize: typography.sizes.base,
                   fontWeight: typography.weights.semibold,
                   color: colors.background.primary,
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.primaryColor,
                   border: 'none',
                   borderRadius: radius.md,
                   cursor: 'pointer',
@@ -123,7 +123,7 @@ export default function AgentsPage() {
               maxWidth: '500px',
               padding: `${spacing.sm} ${spacing.md}`,
               fontSize: typography.sizes.base,
-              fontFamily: typography.fontFamily,
+              fontFamily: typography.fontFamily.sans,
               color: colors.text.primary,
               backgroundColor: colors.background.tertiary,
               border: `1px solid ${colors.border.default}`,
@@ -131,7 +131,7 @@ export default function AgentsPage() {
               outline: 'none',
             }}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = colors.primary;
+              e.currentTarget.style.borderColor = colors.primaryColor;
             }}
             onBlur={(e) => {
               e.currentTarget.style.borderColor = colors.border.default;
@@ -149,9 +149,9 @@ export default function AgentsPage() {
                   padding: `${spacing.sm} ${spacing.lg}`,
                   fontSize: typography.sizes.sm,
                   fontWeight: typography.weights.medium,
-                  color: statusFilter === tab.value ? colors.primary : colors.text.secondary,
+                  color: statusFilter === tab.value ? colors.primaryColor : colors.text.secondary,
                   backgroundColor: statusFilter === tab.value ? colors.background.tertiary : 'transparent',
-                  border: `1px solid ${statusFilter === tab.value ? colors.primary : colors.border.default}`,
+                  border: `1px solid ${statusFilter === tab.value ? colors.primaryColor : colors.border.default}`,
                   borderRadius: radius.md,
                   cursor: 'pointer',
                   transition: 'all 200ms',

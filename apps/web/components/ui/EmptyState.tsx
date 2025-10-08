@@ -54,7 +54,6 @@ export function EmptyState({ icon, title, description, action, secondaryAction }
         style={{
           fontSize: typography.fontSize.base,
           color: colors.neutral[600],
-          marginBottom: spacing.xl,
           maxWidth: '400px',
           margin: '0 auto',
           marginBottom: spacing.xl,

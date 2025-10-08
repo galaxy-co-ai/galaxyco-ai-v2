@@ -55,6 +55,44 @@ export const colors = {
     DEFAULT: '#17a2b8',
     dark: '#0c5460',
   },
+
+  // Background colors (for component compatibility)
+  background: {
+    primary: '#ffffff',     // White
+    secondary: '#fafafa',   // Neutral-50
+    tertiary: '#f5f5f5',    // Neutral-100
+    overlay: 'rgba(0, 0, 0, 0.5)',
+  },
+
+  // Text colors (for component compatibility)
+  text: {
+    primary: '#171717',     // Neutral-900
+    secondary: '#525252',   // Neutral-600
+    tertiary: '#a3a3a3',    // Neutral-400
+    inverse: '#ffffff',     // White
+    placeholder: '#d4d4d4', // Neutral-300
+  },
+
+  // Border colors (for component compatibility)
+  border: {
+    default: '#e5e5e5',     // Neutral-200
+    focus: '#4d6fff',       // Primary-500
+    error: '#dc3545',       // Error DEFAULT
+    success: '#28a745',     // Success DEFAULT
+  },
+
+  // Convenience aliases
+  primaryColor: '#4d6fff',      // Primary-500
+  primaryHover: '#3d5acc', // Primary-600
+  primaryLight: '#f5f7ff', // Primary-50
+  successColor: '#28a745',      // Success DEFAULT
+  successLight: '#d4edda', // Success light
+  warningColor: '#ffc107',      // Warning DEFAULT
+  warningLight: '#fff3cd', // Warning light
+  danger: '#dc3545',       // Error DEFAULT
+  dangerLight: '#fee',     // Error light
+  infoColor: '#17a2b8',    // Info DEFAULT
+  infoLight: '#d1ecf1',    // Info light
 };
 
 export const spacing = {
@@ -110,6 +148,24 @@ export const typography = {
     tight: '1.25',
     normal: '1.5',
     relaxed: '1.75',
+  },
+  
+  // Aliases for component compatibility
+  sizes: {
+    xs: '0.75rem',      // 12px
+    sm: '0.875rem',     // 14px
+    base: '1rem',       // 16px
+    lg: '1.125rem',     // 18px
+    xl: '1.25rem',      // 20px
+    '2xl': '1.5rem',    // 24px
+    '3xl': '1.875rem',  // 30px
+    '4xl': '2.25rem',   // 36px
+  },
+  weights: {
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
   },
 };
 

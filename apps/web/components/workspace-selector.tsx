@@ -108,7 +108,7 @@ export default function WorkspaceSelector() {
               Switch Workspace
             </div>
 
-            {workspaces.map((workspace) => (
+            {workspaces.map((workspace: any) => (
               <button
                 key={workspace.id}
                 onClick={() => {

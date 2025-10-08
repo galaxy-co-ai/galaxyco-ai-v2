@@ -95,7 +95,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                   margin: 0,
                 }}
               >
-                You're about to publish <strong>{agentName}</strong>
+                You&apos;re about to publish <strong>{agentName}</strong>
               </p>
             </div>
 
@@ -137,7 +137,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                     >
                       {item.text}
                     </span>
-                    <span style={{ color: colors.success, fontSize: typography.sizes.lg }}>✓</span>
+                    <span style={{ color: colors.successColor, fontSize: typography.sizes.lg }}>✓</span>
                   </div>
                 ))}
               </div>
@@ -211,7 +211,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                   fontSize: typography.sizes.base,
                   fontWeight: typography.weights.semibold,
                   color: colors.background.primary,
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.primaryColor,
                   border: 'none',
                   borderRadius: radius.md,
                   cursor: isPublishing ? 'not-allowed' : 'pointer',
@@ -256,7 +256,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
               style={{
                 fontSize: typography.sizes['2xl'],
                 fontWeight: typography.weights.bold,
-                color: colors.success,
+                color: colors.successColor,
                 marginBottom: spacing.sm,
               }}
             >

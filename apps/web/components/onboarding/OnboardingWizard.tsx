@@ -366,7 +366,7 @@ function Step4Tools({
         Which tools do you use?
       </h2>
       <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[500], marginBottom: spacing.xl }}>
-        We'll help you connect them later. No auth required now.
+We&apos;ll help you connect them later. No auth required now.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: spacing.md }}>
@@ -433,7 +433,7 @@ function Step5Sensitivity({
           <div style={{ fontSize: '3rem', marginBottom: spacing.md }}>🔒</div>
           <div style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.semibold }}>Yes</div>
           <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[500], marginTop: spacing.sm }}>
-            We'll enable stricter logging and redaction
+We&apos;ll enable stricter logging and redaction
           </p>
         </div>
 

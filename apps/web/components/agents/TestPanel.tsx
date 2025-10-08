@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { testAgent, executeAgentLive } from '@/lib/actions/agent-actions';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelProps {
@@ -19,6 +20,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   onClose,
   onTestComplete,
 }) => {
+  const { getAuthHeaders, isAuthenticated, workspace } = useWorkspaceAuth();
   const [inputJson, setInputJson] = useState('{\n  "emailThread": "Sample email content here..."\n}');
   const [isRunning, setIsRunning] = useState(false);
   const [testResult, setTestResult] = useState<any>(null);
@@ -29,6 +31,11 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   const handleRunTest = async () => {
     if (!agentId) {
       setError('Agent must be saved before testing');
+      return;
+    }
+    
+    if (!isAuthenticated) {
+      setError('Not authenticated. Please sign in and select a workspace.');
       return;
     }
 
@@ -42,9 +49,12 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       // Call appropriate API based on mode
       let result;
       if (useLiveMode) {
-        result = await executeAgentLive(agentId, inputs, 'workspace-id-placeholder');
+        // executeAgentLive uses internal /api route, doesn't need auth headers
+        result = await executeAgentLive(agentId, inputs);
       } else {
-        result = await testAgent(agentId, { inputs, mode: 'mock' }, 'workspace-id-placeholder');
+        // testAgent calls external API, needs auth headers
+        const headers = await getAuthHeaders();
+        result = await testAgent(agentId, { inputs, mode: 'mock' }, headers);
       }
       
       setTestResult(result);
@@ -214,7 +224,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 position: 'relative',
                 width: '56px',
                 height: '32px',
-                backgroundColor: useLiveMode ? colors.primary : colors.background.tertiary,
+                backgroundColor: useLiveMode ? colors.primaryColor : colors.background.tertiary,
                 borderRadius: radius.full,
                 border: `1px solid ${colors.border.default}`,
                 cursor: isRunning ? 'not-allowed' : 'pointer',
@@ -296,7 +306,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
-                backgroundColor: colors.primary,
+                backgroundColor: colors.primaryColor,
                 border: 'none',
                 borderRadius: radius.md,
                 cursor: isRunning || !agentId ? 'not-allowed' : 'pointer',
@@ -463,7 +473,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                     <div
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
-                        backgroundColor: testResult.metrics.status === 'success' ? colors.success : colors.danger,
+                        backgroundColor: testResult.metrics.status === 'success' ? colors.successColor : colors.danger,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,
@@ -476,7 +486,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                     <div
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
-                        backgroundColor: colors.warning,
+                        backgroundColor: colors.warningColor,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,
@@ -507,7 +517,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   margin: 0,
                 }}
               >
-                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click "Run Test". Toggle Live Mode to test with real AI (requires API keys configured in Settings).
+💡 <strong>Tip:</strong> Enter valid JSON inputs above and click &quot;Run Test&quot;. Toggle Live Mode to test with real AI (requires API keys configured in Settings).
               </p>
             </div>
           )}

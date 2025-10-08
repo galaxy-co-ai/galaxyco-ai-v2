@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useWorkspace } from '@/contexts/workspace-context';
+import { useWorkspace } from '@/hooks/useWorkspace';
 import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -52,6 +52,11 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       return;
     }
 
+    if (!workspace) {
+      setMessage({ type: 'error', text: 'No workspace selected' });
+      return;
+    }
+
     setIsTestingConnection(true);
     setMessage(null);
 
@@ -85,6 +90,11 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       return;
     }
 
+    if (!workspace) {
+      setMessage({ type: 'error', text: 'No workspace selected' });
+      return;
+    }
+
     setIsLoading(true);
     setMessage(null);
 
@@ -115,6 +125,11 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
 
   const handleDeleteKey = async (provider: 'openai' | 'anthropic') => {
     if (!confirm(`Remove ${provider} API key?`)) return;
+
+    if (!workspace) {
+      setMessage({ type: 'error', text: 'No workspace selected' });
+      return;
+    }
 
     setIsLoading(true);
     setMessage(null);
@@ -164,9 +179,9 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             flex: 1,
             padding: spacing.md,
             backgroundColor: configuredProviders.openai
-              ? colors.success.light
+              ? colors.successLight
               : colors.background.secondary,
-            border: `1px solid ${configuredProviders.openai ? colors.success.DEFAULT : colors.border.default}`,
+            border: `1px solid ${configuredProviders.openai ? colors.successColor : colors.border.default}`,
             borderRadius: radius.md,
           }}
         >
@@ -207,9 +222,9 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             flex: 1,
             padding: spacing.md,
             backgroundColor: configuredProviders.anthropic
-              ? colors.success.light
+              ? colors.successLight
               : colors.background.secondary,
-            border: `1px solid ${configuredProviders.anthropic ? colors.success.DEFAULT : colors.border.default}`,
+            border: `1px solid ${configuredProviders.anthropic ? colors.successColor : colors.border.default}`,
             borderRadius: radius.md,
           }}
         >
@@ -296,8 +311,8 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             marginTop: spacing.md,
             padding: spacing.md,
             backgroundColor:
-              message.type === 'success' ? colors.success.light : colors.danger + '20',
-            border: `1px solid ${message.type === 'success' ? colors.success.DEFAULT : colors.danger}`,
+              message.type === 'success' ? colors.successLight : colors.dangerLight,
+            border: `1px solid ${message.type === 'success' ? colors.successColor : colors.danger}`,
             borderRadius: radius.md,
             fontSize: typography.sizes.sm,
             color: message.type === 'success' ? colors.success.dark : colors.danger,
@@ -341,7 +356,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
           href="https://platform.openai.com/api-keys"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: colors.primary, textDecoration: 'underline' }}
+          style={{ color: colors.primaryColor, textDecoration: 'underline' }}
         >
           OpenAI
         </a>{' '}
@@ -350,7 +365,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
           href="https://console.anthropic.com/settings/keys"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: colors.primary, textDecoration: 'underline' }}
+          style={{ color: colors.primaryColor, textDecoration: 'underline' }}
         >
           Anthropic
         </a>

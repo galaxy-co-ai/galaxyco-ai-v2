@@ -106,7 +106,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
             }}
             onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
               if (!disabled) {
-                e.currentTarget.style.borderColor = colors.primary;
+                e.currentTarget.style.borderColor = colors.primaryColor;
               }
             }}
             onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -281,7 +281,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               flex: 1,
               padding: `${spacing.sm} ${spacing.md}`,
               fontSize: typography.sizes.base,
-              fontFamily: typography.fontFamily,
+              fontFamily: typography.fontFamily.sans,
               color: colors.text.primary,
               backgroundColor: colors.background.primary,
               border: `1px solid ${colors.border.default}`,
@@ -299,7 +299,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               fontSize: typography.sizes.sm,
               fontWeight: typography.weights.medium,
               color: colors.background.primary,
-              backgroundColor: colors.primary,
+              backgroundColor: colors.primaryColor,
               border: 'none',
               borderRadius: radius.md,
               cursor: disabled || !tagInput.trim() ? 'not-allowed' : 'pointer',
