@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { testAgent } from '@/lib/actions/agent-actions';
+import { testAgent, executeAgentLive } from '@/lib/actions/agent-actions';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelProps {
@@ -24,6 +24,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   const [testResult, setTestResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showRaw, setShowRaw] = useState(false);
+  const [useLiveMode, setUseLiveMode] = useState(false);
 
   const handleRunTest = async () => {
     if (!agentId) {
@@ -38,8 +39,13 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       // Parse JSON input
       const inputs = JSON.parse(inputJson);
 
-      // Call test API
-      const result = await testAgent(agentId, { inputs, mode: 'mock' }, 'workspace-id-placeholder');
+      // Call appropriate API based on mode
+      let result;
+      if (useLiveMode) {
+        result = await executeAgentLive(agentId, inputs, 'workspace-id-placeholder');
+      } else {
+        result = await testAgent(agentId, { inputs, mode: 'mock' }, 'workspace-id-placeholder');
+      }
       
       setTestResult(result);
       onTestComplete?.(result);
@@ -165,23 +171,71 @@ export const TestPanel: React.FC<TestPanelProps> = ({
 
         {/* Content */}
         <div style={{ flex: 1, overflow: 'auto', padding: spacing.lg }}>
-          {/* Mock Mode Badge */}
+          {/* Execution Mode Toggle */}
           <div
             style={{
-              display: 'inline-flex',
+              display: 'flex',
               alignItems: 'center',
-              gap: spacing.xs,
-              padding: `${spacing.xs} ${spacing.sm}`,
-              backgroundColor: colors.background.tertiary,
-              color: colors.text.secondary,
-              fontSize: typography.sizes.xs,
-              fontWeight: typography.weights.medium,
-              borderRadius: radius.full,
-              border: `1px solid ${colors.border.default}`,
+              gap: spacing.md,
               marginBottom: spacing.md,
+              padding: spacing.md,
+              backgroundColor: colors.background.secondary,
+              borderRadius: radius.md,
+              border: `1px solid ${colors.border.default}`,
             }}
           >
-            🎭 Mock Mode
+            <div style={{ flex: 1 }}>
+              <p
+                style={{
+                  margin: 0,
+                  marginBottom: spacing.xs,
+                  fontSize: typography.sizes.sm,
+                  fontWeight: typography.weights.medium,
+                  color: colors.text.primary,
+                }}
+              >
+                Execution Mode
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: typography.sizes.xs,
+                  color: colors.text.tertiary,
+                }}
+              >
+                {useLiveMode ? '🚀 Live execution with real AI' : '🎭 Mock mode (simulated response)'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setUseLiveMode(!useLiveMode)}
+              disabled={isRunning}
+              style={{
+                position: 'relative',
+                width: '56px',
+                height: '32px',
+                backgroundColor: useLiveMode ? colors.primary : colors.background.tertiary,
+                borderRadius: radius.full,
+                border: `1px solid ${colors.border.default}`,
+                cursor: isRunning ? 'not-allowed' : 'pointer',
+                transition: 'all 200ms',
+                opacity: isRunning ? 0.6 : 1,
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '3px',
+                  left: useLiveMode ? '26px' : '3px',
+                  width: '24px',
+                  height: '24px',
+                  backgroundColor: colors.background.primary,
+                  borderRadius: radius.full,
+                  boxShadow: shadows.sm,
+                  transition: 'all 200ms',
+                }}
+              />
+            </button>
           </div>
 
           {/* Input Section */}
@@ -379,6 +433,19 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                       🎯 {testResult.metrics.tokens} tokens
                     </div>
                   )}
+                  {testResult.metrics.cost !== undefined && (
+                    <div
+                      style={{
+                        padding: `${spacing.xs} ${spacing.sm}`,
+                        backgroundColor: colors.background.tertiary,
+                        borderRadius: radius.sm,
+                        fontSize: typography.sizes.xs,
+                        color: colors.text.secondary,
+                      }}
+                    >
+                      💰 ${testResult.metrics.cost.toFixed(4)}
+                    </div>
+                  )}
                   {testResult.metrics.latency && (
                     <div
                       style={{
@@ -405,6 +472,19 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                       {testResult.metrics.status === 'success' ? '✓' : '✗'} {testResult.metrics.status}
                     </div>
                   )}
+                  {testResult.metrics.retries !== undefined && testResult.metrics.retries > 0 && (
+                    <div
+                      style={{
+                        padding: `${spacing.xs} ${spacing.sm}`,
+                        backgroundColor: colors.warning,
+                        borderRadius: radius.sm,
+                        fontSize: typography.sizes.xs,
+                        color: colors.background.primary,
+                      }}
+                    >
+                      🔄 {testResult.metrics.retries} {testResult.metrics.retries === 1 ? 'retry' : 'retries'}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -427,7 +507,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   margin: 0,
                 }}
               >
-                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click "Run Test" to see mock results. Save your agent first to enable testing.
+                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click "Run Test". Toggle Live Mode to test with real AI (requires API keys configured in Settings).
               </p>
             </div>
           )}
