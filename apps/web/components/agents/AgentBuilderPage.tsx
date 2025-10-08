@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAgentBuilder } from '@/hooks/use-agent-builder';
 import { BasicInfoForm } from './BasicInfoForm';
 import { ConfigurationForm } from './ConfigurationForm';
+import { AdvancedSettings } from './AdvancedSettings';
+import { PublishConfirmationModal } from './PublishConfirmationModal';
 import { TemplateLibrary } from './TemplateLibrary';
 import { AgentTemplate } from '@/lib/constants/agent-templates';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
@@ -19,8 +21,17 @@ export const AgentBuilderPage: React.FC = () => {
   } = useAgentBuilder();
 
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(true);
+  const [showPublishModal, setShowPublishModal] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [advancedSettings, setAdvancedSettings] = useState({
+    timeout: undefined,
+    maxRetries: undefined,
+    rateLimitPerMinute: undefined,
+    enableLogging: true,
+    enableCaching: false,
+    cacheTTL: undefined,
+  });
 
   const handleTemplateSelect = (template: AgentTemplate | null) => {
     if (template) {
@@ -41,9 +52,33 @@ export const AgentBuilderPage: React.FC = () => {
     const success = await publish();
     if (success) {
       setPublishSuccess(true);
+      setShowPublishModal(false);
       setTimeout(() => setPublishSuccess(false), 3000);
     }
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+S / Ctrl+S to save
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        if (state.isDirty && !state.isSaving) {
+          handleSaveDraft();
+        }
+      }
+      // Cmd+Enter / Ctrl+Enter to publish
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (!state.isSaving) {
+          setShowPublishModal(true);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [state.isDirty, state.isSaving]);
 
   return (
     <div
@@ -57,6 +92,16 @@ export const AgentBuilderPage: React.FC = () => {
         <TemplateLibrary
           onSelect={handleTemplateSelect}
           onClose={() => setShowTemplateLibrary(false)}
+        />
+      )}
+
+      {/* Publish Confirmation Modal */}
+      {showPublishModal && (
+        <PublishConfirmationModal
+          agentName={state.basicInfo.name || 'Untitled Agent'}
+          onConfirm={handlePublish}
+          onCancel={() => setShowPublishModal(false)}
+          isPublishing={state.isSaving}
         />
       )}
 
@@ -122,6 +167,17 @@ export const AgentBuilderPage: React.FC = () => {
                 </span>
               )}
             </div>
+            {/* Keyboard shortcuts hint */}
+            <p
+              style={{
+                fontSize: typography.sizes.xs,
+                color: colors.text.tertiary,
+                marginTop: spacing.xs,
+                margin: 0,
+              }}
+            >
+              ⌨️ <kbd>Cmd+S</kbd> to save • <kbd>Cmd+Enter</kbd> to publish
+            </p>
           </div>
 
           {/* Right Side - Actions */}
@@ -186,7 +242,7 @@ export const AgentBuilderPage: React.FC = () => {
 
             <button
               type="button"
-              onClick={handlePublish}
+              onClick={() => setShowPublishModal(true)}
               disabled={state.isSaving}
               style={{
                 padding: `${spacing.sm} ${spacing.xl}`,
@@ -307,6 +363,13 @@ export const AgentBuilderPage: React.FC = () => {
             disabled={state.isSaving}
           />
 
+          {/* Advanced Settings */}
+          <AdvancedSettings
+            settings={advancedSettings}
+            onChange={(updates) => setAdvancedSettings({ ...advancedSettings, ...updates })}
+            disabled={state.isSaving}
+          />
+
           {/* Bottom Action Bar (Mobile Friendly) */}
           <div
             style={{
@@ -340,7 +403,7 @@ export const AgentBuilderPage: React.FC = () => {
 
             <button
               type="button"
-              onClick={handlePublish}
+              onClick={() => setShowPublishModal(true)}
               disabled={state.isSaving}
               style={{
                 padding: `${spacing.md} ${spacing['2xl']}`,
