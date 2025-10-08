@@ -76,11 +76,11 @@ export function ProgressTracker({ steps, onStepClick }: ProgressTrackerProps) {
               alignItems: 'center',
               gap: spacing.md,
               padding: spacing.md,
-              background: step.completed ? colors.success.light : colors.neutral[50],
+              background: step.completed ? colors.successLight : colors.neutral[50],
               borderRadius: radius.md,
               cursor: !step.completed && onStepClick ? 'pointer' : 'default',
-              transition: `all ${colors.neutral[100]}ms ease`,
-              border: `1px solid ${step.completed ? colors.success.DEFAULT : colors.neutral[200]}`,
+              transition: `all 200ms ease`,
+              border: `1px solid ${step.completed ? colors.successColor : colors.neutral[200]}`,
             }}
           >
             <div
@@ -90,7 +90,7 @@ export function ProgressTracker({ steps, onStepClick }: ProgressTrackerProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: step.completed ? colors.success.DEFAULT : colors.neutral[0],
+                background: step.completed ? colors.successColor : colors.neutral[0],
                 color: step.completed ? colors.neutral[0] : colors.neutral[600],
                 borderRadius: radius.full,
                 fontSize: typography.fontSize.lg,

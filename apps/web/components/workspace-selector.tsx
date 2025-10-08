@@ -1,6 +1,6 @@
 'use client';
 
-import { useWorkspace } from '@/hooks/useWorkspace';
+import { useWorkspace } from '@/contexts/workspace-context';
 import { useState } from 'react';
 
 export default function WorkspaceSelector() {
@@ -108,7 +108,7 @@ export default function WorkspaceSelector() {
               Switch Workspace
             </div>
 
-            {workspaces.map((workspace) => (
+            {workspaces.map((workspace: any) => (
               <button
                 key={workspace.id}
                 onClick={() => {

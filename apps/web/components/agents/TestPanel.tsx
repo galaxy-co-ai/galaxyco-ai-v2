@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { testAgent, executeAgentLive } from '@/lib/actions/agent-actions';
-import { useWorkspaceId } from '@/hooks/useWorkspace';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelProps {
@@ -20,7 +20,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   onClose,
   onTestComplete,
 }) => {
-  const workspaceId = useWorkspaceId();
+  const { getAuthHeaders, isAuthenticated, workspace } = useWorkspaceAuth();
   const [inputJson, setInputJson] = useState('{\n  "emailThread": "Sample email content here..."\n}');
   const [isRunning, setIsRunning] = useState(false);
   const [testResult, setTestResult] = useState<any>(null);
@@ -34,8 +34,8 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       return;
     }
     
-    if (!workspaceId) {
-      setError('Workspace not loaded. Please refresh the page.');
+    if (!isAuthenticated) {
+      setError('Not authenticated. Please sign in and select a workspace.');
       return;
     }
 
@@ -49,9 +49,12 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       // Call appropriate API based on mode
       let result;
       if (useLiveMode) {
-        result = await executeAgentLive(agentId, inputs, workspaceId);
+        // executeAgentLive uses internal /api route, doesn't need auth headers
+        result = await executeAgentLive(agentId, inputs);
       } else {
-        result = await testAgent(agentId, { inputs, mode: 'mock' }, workspaceId);
+        // testAgent calls external API, needs auth headers
+        const headers = await getAuthHeaders();
+        result = await testAgent(agentId, { inputs, mode: 'mock' }, headers);
       }
       
       setTestResult(result);

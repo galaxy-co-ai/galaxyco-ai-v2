@@ -82,12 +82,12 @@ export const colors = {
   },
 
   // Convenience aliases
-  primary: '#4d6fff',      // Primary-500
+  primaryColor: '#4d6fff',      // Primary-500
   primaryHover: '#3d5acc', // Primary-600
   primaryLight: '#f5f7ff', // Primary-50
-  success: '#28a745',      // Success DEFAULT
+  successColor: '#28a745',      // Success DEFAULT
   successLight: '#d4edda', // Success light
-  warning: '#ffc107',      // Warning DEFAULT
+  warningColor: '#ffc107',      // Warning DEFAULT
   warningLight: '#fff3cd', // Warning light
   danger: '#dc3545',       // Error DEFAULT
   dangerLight: '#fee',     // Error light
