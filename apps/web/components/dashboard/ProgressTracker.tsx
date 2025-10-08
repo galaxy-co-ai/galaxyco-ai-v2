@@ -143,8 +143,9 @@ export function ProgressTracker({ steps, onStepClick }: ProgressTrackerProps) {
  */
 export function useWorkspaceProgress(workspace: any) {
   const onboardingProfile = workspace.settings?.onboardingProfile;
-  const hasAgents = false; // TODO: Query actual agent count in Phase 8
-  const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
+  // Note: Agent and tool tracking will be implemented when we have active agents
+  const hasAgents = false;
+  const hasConnectedTools = false;
 
   const steps = [
     {
@@ -168,7 +169,7 @@ export function useWorkspaceProgress(workspace: any) {
     {
       id: 'marketplace',
       label: 'Explore the marketplace',
-      completed: false, // TODO: Track marketplace visit
+      completed: false,
       icon: '🛍️',
     },
   ];
