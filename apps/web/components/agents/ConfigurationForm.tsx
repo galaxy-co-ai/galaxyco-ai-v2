@@ -87,7 +87,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
       <Select
         label="Trigger Type"
         value={configuration.trigger}
-        onChange={(e) => onChange({ trigger: e.target.value as any })}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ trigger: e.target.value as any })}
         options={TRIGGER_OPTIONS}
         disabled={disabled}
         helperText="Choose how this agent should be triggered"
@@ -128,7 +128,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         <Select
           label="AI Provider"
           value={configuration.aiProvider}
-          onChange={(e) => onChange({ aiProvider: e.target.value as any })}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ aiProvider: e.target.value as any })}
           options={AI_PROVIDER_OPTIONS}
           disabled={disabled}
           required
@@ -138,7 +138,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         <Select
           label="Model"
           value={displayModel}
-          onChange={(e) => onChange({ model: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ model: e.target.value })}
           options={currentModelOptions}
           disabled={disabled}
           required
@@ -164,7 +164,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
             max="2"
             step="0.1"
             value={configuration.temperature}
-            onChange={(e) => onChange({ temperature: parseFloat(e.target.value) })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ temperature: parseFloat(e.target.value) })}
             disabled={disabled}
             style={{
               width: '100%',
@@ -199,7 +199,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         <Textarea
           label="System Prompt"
           value={configuration.systemPrompt}
-          onChange={(e) => onChange({ systemPrompt: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange({ systemPrompt: e.target.value })}
           error={errors.systemPrompt}
           placeholder="You are a helpful AI assistant that..."
           required
@@ -214,7 +214,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
           label="Max Tokens (Optional)"
           type="number"
           value={configuration.maxTokens?.toString() || ''}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
             onChange({ maxTokens: value });
           }}

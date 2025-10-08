@@ -6,3 +6,22 @@
 
 export * from './client';
 export * from './schema';
+
+// Re-export specific tables for convenience
+export {
+  users,
+  workspaces,
+  workspaceMembers,
+  agents,
+  agentPacks,
+  agentExecutions,
+} from './schema';
+
+// Re-export types
+export type {
+  userRoleEnum,
+  agentTypeEnum,
+  agentStatusEnum,
+  executionStatusEnum,
+  subscriptionTierEnum,
+} from './schema';

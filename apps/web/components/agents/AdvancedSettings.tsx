@@ -105,7 +105,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               label="Timeout (seconds)"
               type="number"
               value={settings.timeout?.toString() || ''}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ timeout: value });
               }}
@@ -121,7 +121,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               label="Max Retries"
               type="number"
               value={settings.maxRetries?.toString() || ''}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ maxRetries: value });
               }}
@@ -137,7 +137,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               label="Rate Limit (per minute)"
               type="number"
               value={settings.rateLimitPerMinute?.toString() || ''}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ rateLimitPerMinute: value });
               }}
@@ -185,7 +185,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               <input
                 type="checkbox"
                 checked={settings.enableLogging ?? true}
-                onChange={(e) => onChange({ enableLogging: e.target.checked })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ enableLogging: e.target.checked })}
                 disabled={disabled}
                 style={{
                   width: '20px',
@@ -228,7 +228,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               <input
                 type="checkbox"
                 checked={settings.enableCaching ?? false}
-                onChange={(e) => onChange({ enableCaching: e.target.checked })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ enableCaching: e.target.checked })}
                 disabled={disabled}
                 style={{
                   width: '20px',
@@ -263,7 +263,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 label="Cache TTL (seconds)"
                 type="number"
                 value={settings.cacheTTL?.toString() || ''}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                   onChange({ cacheTTL: value });
                 }}

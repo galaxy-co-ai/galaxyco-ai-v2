@@ -229,7 +229,7 @@ export default function AgentsPage() {
                 marginBottom: spacing.xl,
               }}
             >
-              {agents.map((agent) => (
+              {agents.map((agent: any) => (
                 <AgentListCard key={agent.id} agent={agent} />
               ))}
             </div>

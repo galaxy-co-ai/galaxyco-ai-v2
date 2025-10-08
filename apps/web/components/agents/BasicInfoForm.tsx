@@ -104,12 +104,12 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               transition: 'border-color 200ms',
               opacity: disabled ? 0.6 : 1,
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
               if (!disabled) {
                 e.currentTarget.style.borderColor = colors.primary;
               }
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.currentTarget.style.borderColor = colors.border.default;
             }}
           >
@@ -161,12 +161,12 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
                   justifyContent: 'center',
                   transition: 'background-color 200ms',
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
                   if (basicInfo.icon !== emoji) {
                     e.currentTarget.style.backgroundColor = colors.background.secondary;
                   }
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
                   if (basicInfo.icon !== emoji) {
                     e.currentTarget.style.backgroundColor = 'transparent';
                   }
@@ -183,7 +183,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
       <Input
         label="Agent Name"
         value={basicInfo.name}
-        onChange={(e) => onChange({ name: e.target.value })}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ name: e.target.value })}
         error={errors.name}
         placeholder="e.g., Email Analyzer, Document Summarizer"
         required
@@ -196,7 +196,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
       <Textarea
         label="Description"
         value={basicInfo.description}
-        onChange={(e) => onChange({ description: e.target.value })}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange({ description: e.target.value })}
         error={errors.description}
         placeholder="Describe what this agent does and how it helps your workflow"
         required
