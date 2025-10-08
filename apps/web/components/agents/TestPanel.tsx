@@ -224,7 +224,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 position: 'relative',
                 width: '56px',
                 height: '32px',
-                backgroundColor: useLiveMode ? colors.primary : colors.background.tertiary,
+                backgroundColor: useLiveMode ? colors.primaryColor : colors.background.tertiary,
                 borderRadius: radius.full,
                 border: `1px solid ${colors.border.default}`,
                 cursor: isRunning ? 'not-allowed' : 'pointer',
@@ -306,7 +306,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
-                backgroundColor: colors.primary,
+                backgroundColor: colors.primaryColor,
                 border: 'none',
                 borderRadius: radius.md,
                 cursor: isRunning || !agentId ? 'not-allowed' : 'pointer',
@@ -517,7 +517,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   margin: 0,
                 }}
               >
-                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click "Run Test". Toggle Live Mode to test with real AI (requires API keys configured in Settings).
+💡 <strong>Tip:</strong> Enter valid JSON inputs above and click &quot;Run Test&quot;. Toggle Live Mode to test with real AI (requires API keys configured in Settings).
               </p>
             </div>
           )}

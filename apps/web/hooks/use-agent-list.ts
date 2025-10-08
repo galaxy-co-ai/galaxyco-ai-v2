@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { listAgents } from '@/lib/actions/agent-actions';
 import { useWorkspaceId } from './useWorkspace';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 
 interface Agent {
   id: string;
@@ -31,6 +32,7 @@ const ITEMS_PER_PAGE = 12;
 
 export const useAgentList = () => {
   const workspaceId = useWorkspaceId();
+  const { getAuthHeaders } = useWorkspaceAuth();
   
   const [state, setState] = useState<UseAgentListState>({
     agents: [],
@@ -65,7 +67,8 @@ export const useAgentList = () => {
         filters.search = state.search;
       }
 
-      const result = await listAgents(workspaceId, filters);
+      const headers = await getAuthHeaders();
+      const result = await listAgents(headers, filters);
       
       setState((prev) => ({
         ...prev,

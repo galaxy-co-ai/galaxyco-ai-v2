@@ -95,7 +95,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                   margin: 0,
                 }}
               >
-                You're about to publish <strong>{agentName}</strong>
+                You&apos;re about to publish <strong>{agentName}</strong>
               </p>
             </div>
 
@@ -211,7 +211,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                   fontSize: typography.sizes.base,
                   fontWeight: typography.weights.semibold,
                   color: colors.background.primary,
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.primaryColor,
                   border: 'none',
                   borderRadius: radius.md,
                   cursor: isPublishing ? 'not-allowed' : 'pointer',

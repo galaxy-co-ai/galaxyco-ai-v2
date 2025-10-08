@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { AgentTemplate } from '@/lib/constants/agent-templates';
 import { createAgent, updateAgent } from '@/lib/actions/agent-actions';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 
 export interface AgentBuilderState {
   basicInfo: {
@@ -112,12 +113,12 @@ export const useAgentBuilder = () => {
         tags: template.tags,
       },
       configuration: {
-        trigger: template.trigger,
-        aiProvider: template.aiProvider,
-        model: template.model,
-        temperature: template.temperature,
-        systemPrompt: template.systemPrompt,
-        maxTokens: template.maxTokens,
+        trigger: template.prefilledConfig.trigger,
+        aiProvider: template.prefilledConfig.aiProvider,
+        model: template.prefilledConfig.model,
+        temperature: template.prefilledConfig.temperature,
+        systemPrompt: template.prefilledConfig.systemPrompt,
+        maxTokens: template.prefilledConfig.maxTokens,
       },
       isDirty: true,
     }));
@@ -154,6 +155,8 @@ export const useAgentBuilder = () => {
   }, [validateConfiguration]);
 
   // Save draft (debounced)
+  const { getAuthHeaders } = useWorkspaceAuth();
+
   const saveDraft = useCallback(async (): Promise<boolean> => {
     if (!validateAll()) {
       return false;
@@ -177,13 +180,15 @@ export const useAgentBuilder = () => {
         status: 'draft' as const,
       };
 
+      const headers = await getAuthHeaders();
+
       let result;
       if (state.agentId) {
         // Update existing agent
-        result = await updateAgent(state.agentId, agentData);
+        result = await updateAgent(state.agentId, agentData, headers);
       } else {
         // Create new agent
-        result = await createAgent(agentData);
+        result = await createAgent(agentData, headers);
       }
 
       if (result.success && result.data) {
@@ -249,11 +254,13 @@ export const useAgentBuilder = () => {
         status: 'active' as const,
       };
 
+      const headers = await getAuthHeaders();
+
       let result;
       if (state.agentId) {
-        result = await updateAgent(state.agentId, agentData);
+        result = await updateAgent(state.agentId, agentData, headers);
       } else {
-        result = await createAgent(agentData);
+        result = await createAgent(agentData, headers);
       }
 
       if (result.success && result.data) {

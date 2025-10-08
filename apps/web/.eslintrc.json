@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals"],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "@next/next/no-html-link-for-pages": "off"
+  }
+}

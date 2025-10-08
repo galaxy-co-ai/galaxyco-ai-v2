@@ -175,7 +175,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
             style={{
               width: size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px',
               height: size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px',
-              backgroundColor: colors.primary,
+              backgroundColor: colors.primaryColor,
               borderRadius: radius.md,
               display: 'flex',
               alignItems: 'center',
@@ -289,7 +289,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                   style={{
                     width: '24px',
                     height: '24px',
-                    backgroundColor: ws.id === workspaceId ? colors.primary : colors.background.tertiary,
+                    backgroundColor: ws.id === workspaceId ? colors.primaryColor : colors.background.tertiary,
                     borderRadius: radius.md,
                     display: 'flex',
                     alignItems: 'center',
@@ -329,7 +329,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                   <div
                     style={{
                       fontSize: '12px',
-                      color: colors.primary,
+                      color: colors.primaryColor,
                     }}
                   >
                     ✓

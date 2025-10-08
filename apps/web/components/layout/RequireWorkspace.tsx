@@ -58,7 +58,7 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
               width: '32px',
               height: '32px',
               border: `3px solid ${colors.background.tertiary}`,
-              borderTop: `3px solid ${colors.primary}`,
+              borderTop: `3px solid ${colors.primaryColor}`,
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
             }}
@@ -101,7 +101,7 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
           onClick={() => router.push(redirectTo)}
           style={{
             padding: `${spacing.sm} ${spacing.lg}`,
-            backgroundColor: colors.primary,
+            backgroundColor: colors.primaryColor,
             color: colors.background.primary,
             border: 'none',
             borderRadius: '4px',
