@@ -3,7 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { db, withTenant } from '@galaxyco/database/client';
+import { db } from '@galaxyco/database/client';
 import { agents } from '@galaxyco/database/schema';
 import { eq, and, like, desc } from 'drizzle-orm';
 import { CreateAgentDto } from './dto/create-agent.dto';
@@ -22,9 +22,7 @@ export class AgentsService {
     userId: string,
     workspaceId: string,
   ) {
-    const tenantDb = withTenant(db, workspaceId);
-
-    const agent = await tenantDb
+    const agent = await db
       .insert(agents)
       .values({
         id: randomUUID(),
@@ -62,14 +60,6 @@ export class AgentsService {
       offset?: number;
     },
   ) {
-    const tenantDb = withTenant(db, workspaceId);
-
-    let query = tenantDb
-      .select()
-      .from(agents)
-      .where(eq(agents.workspaceId, workspaceId))
-      .orderBy(desc(agents.createdAt));
-
     // Apply filters
     const conditions = [eq(agents.workspaceId, workspaceId)];
 
@@ -81,23 +71,18 @@ export class AgentsService {
       conditions.push(like(agents.name, `%${filters.search}%`));
     }
 
-    if (conditions.length > 1) {
-      query = tenantDb
-        .select()
-        .from(agents)
-        .where(and(...conditions))
-        .orderBy(desc(agents.createdAt));
-    }
+    let baseQuery = db
+      .select()
+      .from(agents)
+      .where(and(...conditions))
+      .orderBy(desc(agents.createdAt));
 
-    // Pagination
-    if (filters?.limit) {
-      query = query.limit(filters.limit);
-    }
-    if (filters?.offset) {
-      query = query.offset(filters.offset);
-    }
-
-    const results = await query;
+    // Pagination - build the query with limit and offset
+    const results = await (filters?.limit
+      ? filters?.offset
+        ? baseQuery.limit(filters.limit).offset(filters.offset)
+        : baseQuery.limit(filters.limit)
+      : baseQuery);
 
     return {
       agents: results,
@@ -112,9 +97,7 @@ export class AgentsService {
    * Multi-tenant: Validates workspace access
    */
   async findOne(id: string, workspaceId: string) {
-    const tenantDb = withTenant(db, workspaceId);
-
-    const agent = await tenantDb
+    const agent = await db
       .select()
       .from(agents)
       .where(and(eq(agents.id, id), eq(agents.workspaceId, workspaceId)))
@@ -139,9 +122,7 @@ export class AgentsService {
     // First verify the agent belongs to this workspace
     await this.findOne(id, workspaceId);
 
-    const tenantDb = withTenant(db, workspaceId);
-
-    const updated = await tenantDb
+    const updated = await db
       .update(agents)
       .set({
         ...(updateAgentDto.name && { name: updateAgentDto.name }),
@@ -181,9 +162,7 @@ export class AgentsService {
     // Verify ownership
     await this.findOne(id, workspaceId);
 
-    const tenantDb = withTenant(db, workspaceId);
-
-    await tenantDb
+    await db
       .update(agents)
       .set({
         status: 'archived',

@@ -15,7 +15,10 @@
     "noEmit": true,
     "incremental": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@galaxyco/database": ["packages/database/src/index.ts"],
+      "@galaxyco/database/*": ["packages/database/src/*"]
+    }
   },
   "exclude": ["node_modules", "dist", ".next", "build"]
 }

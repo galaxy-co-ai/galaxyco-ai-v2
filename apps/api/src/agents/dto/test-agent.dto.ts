@@ -2,7 +2,7 @@ import { IsObject, IsEnum, IsOptional } from 'class-validator';
 
 export class TestAgentDto {
   @IsObject()
-  inputs: Record<string, any>;
+  inputs!: Record<string, any>;
 
   @IsEnum(['mock', 'live'], {
     message: 'Mode must be either "mock" or "live"',

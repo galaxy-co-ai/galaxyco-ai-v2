@@ -14,22 +14,22 @@ export class CreateAgentDto {
   @IsString()
   @MinLength(3, { message: 'Agent name must be at least 3 characters' })
   @MaxLength(50, { message: 'Agent name must not exceed 50 characters' })
-  name: string;
+  name!: string;
 
   @IsString()
   @MinLength(10, { message: 'Description must be at least 10 characters' })
   @MaxLength(500, { message: 'Description must not exceed 500 characters' })
-  description: string;
+  description!: string;
 
   @IsEnum(['scope', 'call', 'email', 'note', 'task', 'roadmap', 'content', 'custom'], {
     message: 'Invalid agent type',
   })
-  type: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
+  type!: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
 
   @IsEnum(['webhook', 'schedule', 'manual', 'event'], {
     message: 'Trigger must be one of: webhook, schedule, manual, event',
   })
-  trigger: 'webhook' | 'schedule' | 'manual' | 'event';
+  trigger!: 'webhook' | 'schedule' | 'manual' | 'event';
 
   @IsEnum(['openai', 'anthropic', 'custom'], {
     message: 'AI provider must be one of: openai, anthropic, custom',
