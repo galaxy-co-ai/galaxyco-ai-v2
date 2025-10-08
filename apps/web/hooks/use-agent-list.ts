@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { listAgents } from '@/lib/actions/agent-actions';
+import { useWorkspaceId } from './useWorkspace';
 
 interface Agent {
   id: string;
@@ -29,6 +30,8 @@ interface UseAgentListState {
 const ITEMS_PER_PAGE = 12;
 
 export const useAgentList = () => {
+  const workspaceId = useWorkspaceId();
+  
   const [state, setState] = useState<UseAgentListState>({
     agents: [],
     isLoading: true,
@@ -41,6 +44,11 @@ export const useAgentList = () => {
   });
 
   const fetchAgents = useCallback(async () => {
+    // Don't fetch if workspace is not loaded yet
+    if (!workspaceId) {
+      return;
+    }
+    
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
@@ -57,7 +65,7 @@ export const useAgentList = () => {
         filters.search = state.search;
       }
 
-      const result = await listAgents('workspace-id-placeholder', filters);
+      const result = await listAgents(workspaceId, filters);
       
       setState((prev) => ({
         ...prev,
@@ -73,7 +81,7 @@ export const useAgentList = () => {
         isLoading: false,
       }));
     }
-  }, [state.page, state.statusFilter, state.search]);
+  }, [workspaceId, state.page, state.statusFilter, state.search]);
 
   const setSearch = useCallback((search: string) => {
     setState((prev) => ({ ...prev, search, page: 1 }));

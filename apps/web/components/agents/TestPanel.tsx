@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { testAgent, executeAgentLive } from '@/lib/actions/agent-actions';
+import { useWorkspaceId } from '@/hooks/useWorkspace';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelProps {
@@ -19,6 +20,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   onClose,
   onTestComplete,
 }) => {
+  const workspaceId = useWorkspaceId();
   const [inputJson, setInputJson] = useState('{\n  "emailThread": "Sample email content here..."\n}');
   const [isRunning, setIsRunning] = useState(false);
   const [testResult, setTestResult] = useState<any>(null);
@@ -29,6 +31,11 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   const handleRunTest = async () => {
     if (!agentId) {
       setError('Agent must be saved before testing');
+      return;
+    }
+    
+    if (!workspaceId) {
+      setError('Workspace not loaded. Please refresh the page.');
       return;
     }
 
@@ -42,9 +49,9 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       // Call appropriate API based on mode
       let result;
       if (useLiveMode) {
-        result = await executeAgentLive(agentId, inputs, 'workspace-id-placeholder');
+        result = await executeAgentLive(agentId, inputs, workspaceId);
       } else {
-        result = await testAgent(agentId, { inputs, mode: 'mock' }, 'workspace-id-placeholder');
+        result = await testAgent(agentId, { inputs, mode: 'mock' }, workspaceId);
       }
       
       setTestResult(result);
