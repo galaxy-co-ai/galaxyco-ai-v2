@@ -1,5 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "NODE_ENV",
+    "CLERK_SECRET_KEY",
+    "REDIS_URL",
+    "JWT_SECRET",
+    "JWT_EXPIRES_IN",
+    "CORS_ORIGIN",
+    "RATE_LIMIT_MAX",
+    "RATE_LIMIT_WINDOW_MS",
+    "ENABLE_MARKETPLACE",
+    "ENABLE_BUILDER",
+    "ENABLE_SIM_MODE",
+    "ENABLE_AUTO_APPROVE",
+    "NEXT_PUBLIC_*"
+  ],
   "tasks": {
     "dev": {
       "cache": false,
@@ -7,7 +23,23 @@
     },
     "build": {
       "outputs": ["dist/**", ".next/**"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": [
+        "DATABASE_URL",
+        "NODE_ENV",
+        "CLERK_SECRET_KEY",
+        "REDIS_URL",
+        "JWT_SECRET",
+        "JWT_EXPIRES_IN",
+        "CORS_ORIGIN",
+        "RATE_LIMIT_MAX",
+        "RATE_LIMIT_WINDOW_MS",
+        "ENABLE_MARKETPLACE",
+        "ENABLE_BUILDER",
+        "ENABLE_SIM_MODE",
+        "ENABLE_AUTO_APPROVE",
+        "NEXT_PUBLIC_*"
+      ]
     },
     "lint": {
       "outputs": []
