@@ -6,6 +6,7 @@ import { BasicInfoForm } from './BasicInfoForm';
 import { ConfigurationForm } from './ConfigurationForm';
 import { AdvancedSettings } from './AdvancedSettings';
 import { PublishConfirmationModal } from './PublishConfirmationModal';
+import { TestPanel } from './TestPanel';
 import { TemplateLibrary } from './TemplateLibrary';
 import { AgentTemplate } from '@/lib/constants/agent-templates';
 import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
@@ -22,6 +23,7 @@ export const AgentBuilderPage: React.FC = () => {
 
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(true);
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showTestPanel, setShowTestPanel] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [advancedSettings, setAdvancedSettings] = useState({
@@ -104,6 +106,14 @@ export const AgentBuilderPage: React.FC = () => {
           isPublishing={state.isSaving}
         />
       )}
+
+      {/* Test Panel */}
+      <TestPanel
+        agentId={state.agentId}
+        agentName={state.basicInfo.name || 'Untitled Agent'}
+        isOpen={showTestPanel}
+        onClose={() => setShowTestPanel(false)}
+      />
 
       {/* Top Toolbar */}
       <div
@@ -208,6 +218,34 @@ export const AgentBuilderPage: React.FC = () => {
               }}
             >
               📚 Change Template
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowTestPanel(true)}
+              disabled={state.isSaving}
+              style={{
+                padding: `${spacing.sm} ${spacing.lg}`,
+                fontSize: typography.sizes.sm,
+                fontWeight: typography.weights.medium,
+                color: colors.text.secondary,
+                backgroundColor: 'transparent',
+                border: `1px solid ${colors.border.default}`,
+                borderRadius: radius.md,
+                cursor: state.isSaving ? 'not-allowed' : 'pointer',
+                opacity: state.isSaving ? 0.6 : 1,
+                transition: 'all 200ms',
+              }}
+              onMouseEnter={(e) => {
+                if (!state.isSaving) {
+                  e.currentTarget.style.backgroundColor = colors.background.secondary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              🧪 Test
             </button>
 
             <button
