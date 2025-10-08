@@ -37,7 +37,7 @@ export function AgentCard({ agent, onView, onToggle, isInstalled = false }: Agen
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: colors.primary[50],
+              background: colors.primaryLight,
               borderRadius: radius.lg,
             }}
           >

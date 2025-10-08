@@ -45,7 +45,7 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-4px)';
           e.currentTarget.style.boxShadow = shadows.lg;
-          e.currentTarget.style.borderColor = colors.primary;
+          e.currentTarget.style.borderColor = colors.primaryColor;
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'translateY(0)';
@@ -53,7 +53,7 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
           e.currentTarget.style.borderColor = colors.border.default;
         }}
         onFocus={(e) => {
-          e.currentTarget.style.outline = `2px solid ${colors.primary}`;
+          e.currentTarget.style.outline = `2px solid ${colors.primaryColor}`;
           e.currentTarget.style.outlineOffset = '2px';
         }}
         onBlur={(e) => {
