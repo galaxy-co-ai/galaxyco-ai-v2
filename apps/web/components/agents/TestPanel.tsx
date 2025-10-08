@@ -473,7 +473,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                     <div
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
-                        backgroundColor: testResult.metrics.status === 'success' ? colors.success : colors.danger,
+                        backgroundColor: testResult.metrics.status === 'success' ? colors.successColor : colors.danger,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,
@@ -486,7 +486,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                     <div
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
-                        backgroundColor: colors.warning,
+                        backgroundColor: colors.warningColor,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,

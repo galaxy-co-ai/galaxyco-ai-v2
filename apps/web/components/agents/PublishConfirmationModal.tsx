@@ -137,7 +137,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
                     >
                       {item.text}
                     </span>
-                    <span style={{ color: colors.success, fontSize: typography.sizes.lg }}>✓</span>
+                    <span style={{ color: colors.successColor, fontSize: typography.sizes.lg }}>✓</span>
                   </div>
                 ))}
               </div>
@@ -256,7 +256,7 @@ export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> =
               style={{
                 fontSize: typography.sizes['2xl'],
                 fontWeight: typography.weights.bold,
-                color: colors.success,
+                color: colors.successColor,
                 marginBottom: spacing.sm,
               }}
             >

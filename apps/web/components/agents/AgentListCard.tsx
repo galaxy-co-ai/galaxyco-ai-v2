@@ -19,8 +19,8 @@ interface AgentListCardProps {
 
 export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
   const statusColors = {
-    draft: colors.warning,
-    active: colors.success,
+    draft: colors.warningColor,
+    active: colors.successColor,
     paused: colors.text.tertiary,
     archived: colors.text.tertiary,
   };

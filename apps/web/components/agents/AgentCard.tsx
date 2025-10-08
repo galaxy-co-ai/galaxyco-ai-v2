@@ -62,7 +62,7 @@ export function AgentCard({ agent, onView, onToggle, isInstalled = false }: Agen
                     fontWeight: typography.fontWeight.medium,
                     padding: `${spacing.xs} ${spacing.sm}`,
                     background: agent.status === 'active' ? colors.successLight : colors.neutral[100],
-                    color: agent.status === 'active' ? colors.success : colors.neutral[600],
+                    color: agent.status === 'active' ? colors.successColor : colors.neutral[600],
                     borderRadius: radius.full,
                     textTransform: 'uppercase',
                   }}
@@ -101,7 +101,7 @@ export function AgentCard({ agent, onView, onToggle, isInstalled = false }: Agen
                 <div style={{ fontSize: typography.fontSize.xs, color: colors.neutral[500], marginBottom: spacing.xs }}>
                   Success Rate
                 </div>
-                <div style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.success }}>
+                <div style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.successColor }}>
                   {agent.stats.successRate}%
                 </div>
               </div>

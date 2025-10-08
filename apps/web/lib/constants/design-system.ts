@@ -91,6 +91,8 @@ export const colors = {
   warningLight: '#fff3cd', // Warning light
   danger: '#dc3545',       // Error DEFAULT
   dangerLight: '#fee',     // Error light
+  infoColor: '#17a2b8',    // Info DEFAULT
+  infoLight: '#d1ecf1',    // Info light
 };
 
 export const spacing = {

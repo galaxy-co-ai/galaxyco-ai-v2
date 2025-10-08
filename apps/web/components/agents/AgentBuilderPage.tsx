@@ -169,7 +169,7 @@ export const AgentBuilderPage: React.FC = () => {
                 <span
                   style={{
                     fontSize: typography.sizes.xs,
-                    color: colors.warning,
+                    color: colors.warningColor,
                   }}
                 >
                   • Unsaved changes
@@ -179,7 +179,7 @@ export const AgentBuilderPage: React.FC = () => {
                 <span
                   style={{
                     fontSize: typography.sizes.xs,
-                    color: colors.primary,
+                    color: colors.primaryColor,
                   }}
                 >
                   • Saving...
@@ -296,7 +296,7 @@ export const AgentBuilderPage: React.FC = () => {
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
-                backgroundColor: colors.primary,
+                backgroundColor: colors.primaryColor,
                 border: 'none',
                 borderRadius: radius.md,
                 cursor: state.isSaving ? 'not-allowed' : 'pointer',
@@ -332,7 +332,7 @@ export const AgentBuilderPage: React.FC = () => {
             right: spacing.xl,
             zIndex: 100,
             padding: `${spacing.md} ${spacing.lg}`,
-            backgroundColor: colors.success,
+            backgroundColor: colors.successColor,
             color: colors.background.primary,
             borderRadius: radius.lg,
             boxShadow: shadows.lg,
@@ -457,7 +457,7 @@ export const AgentBuilderPage: React.FC = () => {
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
-                backgroundColor: colors.primary,
+                backgroundColor: colors.primaryColor,
                 border: 'none',
                 borderRadius: radius.md,
                 cursor: state.isSaving ? 'not-allowed' : 'pointer',
