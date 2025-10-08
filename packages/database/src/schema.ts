@@ -65,6 +65,12 @@ export const workspaces = pgTable('workspaces', {
     notifications?: { email?: boolean; slack?: boolean };
   }>().default({}),
   
+  // Encrypted API keys for AI providers
+  encryptedApiKeys: jsonb('encrypted_api_keys').$type<{
+    openai?: string; // AES-256-GCM encrypted
+    anthropic?: string; // AES-256-GCM encrypted
+  }>().default({}),
+  
   // Metadata
   isActive: boolean('is_active').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),

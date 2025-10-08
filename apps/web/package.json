@@ -10,10 +10,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
     "@clerk/nextjs": "^5.7.5",
     "@galaxyco/database": "workspace:*",
     "drizzle-orm": "^0.44.6",
     "next": "^14.2.0",
+    "openai": "^6.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "svix": "^1.76.1"
