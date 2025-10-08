@@ -89,27 +89,10 @@ export default async function DashboardPage() {
           <li>✅ Step 1: Clerk authentication integrated</li>
           <li>✅ Step 2: User sync to database via webhooks</li>
           <li>✅ Step 3: Workspace creation flow complete</li>
-          <li>🔄 Step 4: Workspace switching (in progress)</li>
-          <li>🔄 Step 5: API authentication guards</li>
+          <li>✅ Step 4: Workspace switching with persistence</li>
+          <li>🔄 Step 5: API authentication guards (next)</li>
           <li>🔄 Step 6: End-to-end testing</li>
         </ul>
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
-        <a
-          href="/api/auth/signout"
-          style={{
-            display: 'inline-block',
-            padding: '0.75rem 1.5rem',
-            background: '#dc3545',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '8px',
-            fontWeight: '500',
-          }}
-        >
-          Sign Out
-        </a>
       </div>
     </div>
   );
