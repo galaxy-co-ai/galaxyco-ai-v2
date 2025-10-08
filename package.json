@@ -16,13 +16,19 @@
     "release:rollback": "bash scripts/rollback.sh"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
+    "drizzle-kit": "^0.31.5",
     "eslint": "^9.0.0",
-    "typescript": "^5.5.0",
-    "prettier": "^3.3.0"
+    "prettier": "^3.3.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0"
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.6"
   }
 }
