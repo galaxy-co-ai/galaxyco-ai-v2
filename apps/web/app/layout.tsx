@@ -1,5 +1,5 @@
 import { ClerkProvider } from '@clerk/nextjs';
-import { WorkspaceProvider } from '@/contexts/workspace-context';
+import { Providers } from '../components/providers';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html lang="en">
         <body>
-          <WorkspaceProvider>{children}</WorkspaceProvider>
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>
