@@ -26,7 +26,14 @@ export const AgentBuilderPage: React.FC = () => {
   const [showTestPanel, setShowTestPanel] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
-  const [advancedSettings, setAdvancedSettings] = useState({
+  const [advancedSettings, setAdvancedSettings] = useState<{
+    timeout?: number;
+    maxRetries?: number;
+    rateLimitPerMinute?: number;
+    enableLogging?: boolean;
+    enableCaching?: boolean;
+    cacheTTL?: number;
+  }>({
     timeout: undefined,
     maxRetries: undefined,
     rateLimitPerMinute: undefined,
@@ -92,7 +99,9 @@ export const AgentBuilderPage: React.FC = () => {
       {/* Template Library Modal */}
       {showTemplateLibrary && (
         <TemplateLibrary
-          onSelect={handleTemplateSelect}
+          isOpen={showTemplateLibrary}
+          onSelectTemplate={(template) => handleTemplateSelect(template)}
+          onStartFromScratch={() => handleTemplateSelect(null)}
           onClose={() => setShowTemplateLibrary(false)}
         />
       )}

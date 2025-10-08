@@ -281,7 +281,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               flex: 1,
               padding: `${spacing.sm} ${spacing.md}`,
               fontSize: typography.sizes.base,
-              fontFamily: typography.fontFamily,
+              fontFamily: typography.fontFamily.sans,
               color: colors.text.primary,
               backgroundColor: colors.background.primary,
               border: `1px solid ${colors.border.default}`,

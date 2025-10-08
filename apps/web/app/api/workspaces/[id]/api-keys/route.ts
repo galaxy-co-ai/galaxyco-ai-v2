@@ -143,6 +143,14 @@ export async function DELETE(
         { status: 400 }
       );
     }
+    
+    // Type guard to ensure provider is valid
+    if (provider !== 'openai' && provider !== 'anthropic') {
+      return NextResponse.json(
+        { error: 'Invalid provider. Only "openai" and "anthropic" are supported.' },
+        { status: 400 }
+      );
+    }
 
     const workspace = await db.query.workspaces.findFirst({
       where: eq(workspaces.id, params.id),

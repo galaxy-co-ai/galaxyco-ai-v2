@@ -123,7 +123,7 @@ export default function AgentsPage() {
               maxWidth: '500px',
               padding: `${spacing.sm} ${spacing.md}`,
               fontSize: typography.sizes.base,
-              fontFamily: typography.fontFamily,
+              fontFamily: typography.fontFamily.sans,
               color: colors.text.primary,
               backgroundColor: colors.background.tertiary,
               border: `1px solid ${colors.border.default}`,

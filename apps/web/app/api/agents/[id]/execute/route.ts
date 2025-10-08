@@ -62,6 +62,17 @@ export async function POST(
     const aiProvider = agent.config.aiProvider as AIProviderType;
     const encryptedKeys = workspace.encryptedApiKeys || {};
     
+    // Type guard to ensure aiProvider is a valid key
+    if (aiProvider !== 'openai' && aiProvider !== 'anthropic') {
+      return NextResponse.json(
+        { 
+          error: `Unsupported AI provider: ${aiProvider}`,
+          message: `Only OpenAI and Anthropic are currently supported`,
+        },
+        { status: 400 }
+      );
+    }
+    
     if (!encryptedKeys[aiProvider]) {
       return NextResponse.json(
         { 
