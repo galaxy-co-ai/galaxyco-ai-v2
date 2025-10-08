@@ -1,6 +1,6 @@
 'use client';
 
-import { useWorkspace } from '@/contexts/workspace-context';
+import { useWorkspace } from '@/hooks/useWorkspace';
 import { useState } from 'react';
 
 export default function WorkspaceSelector() {

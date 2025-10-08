@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useWorkspace } from '@/contexts/workspace-context';
+import { useWorkspace } from '@/hooks/useWorkspace';
 import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';

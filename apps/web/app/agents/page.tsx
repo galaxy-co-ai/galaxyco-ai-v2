@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useAgentList } from '@/hooks/use-agent-list';
-import { AgentListCard } from '@/components/agents/AgentListCard';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
+import { useAgentList } from '../../hooks/use-agent-list';
+import { AgentListCard } from '../../components/agents/AgentListCard';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { colors, spacing, typography, radius } from '../../lib/constants/design-system';
 
 export default function AgentsPage() {
   const {

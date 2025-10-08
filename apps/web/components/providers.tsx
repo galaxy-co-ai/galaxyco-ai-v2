@@ -1,6 +1,6 @@
 'use client';
 
-import { WorkspaceProvider } from '../contexts/workspace-context';
+import { WorkspaceProvider } from '@/hooks/useWorkspace';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return <WorkspaceProvider>{children}</WorkspaceProvider>;
