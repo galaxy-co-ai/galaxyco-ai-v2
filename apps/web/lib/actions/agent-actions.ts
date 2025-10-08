@@ -32,12 +32,9 @@ interface TestAgentPayload {
 
 /**
  * Get auth headers (Clerk token + workspace ID)
+ * Note: These functions are called from client components with useWorkspaceAuth hook
  */
-async function getAuthHeaders(workspaceId: string): Promise<HeadersInit> {
-  // In a real app, get Clerk token from useAuth() hook
-  // For now, we'll add placeholder
-  const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
-  
+function buildHeaders(token: string, workspaceId: string): HeadersInit {
   return {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
@@ -50,9 +47,8 @@ async function getAuthHeaders(workspaceId: string): Promise<HeadersInit> {
  */
 export async function createAgent(
   payload: CreateAgentPayload,
-  workspaceId: string,
+  headers: HeadersInit,
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const response = await fetch(`${API_BASE_URL}/agents`, {
     method: 'POST',
@@ -72,7 +68,7 @@ export async function createAgent(
  * List agents with optional filters
  */
 export async function listAgents(
-  workspaceId: string,
+  headers: HeadersInit,
   filters?: {
     status?: 'draft' | 'active' | 'paused' | 'archived';
     search?: string;
@@ -80,7 +76,6 @@ export async function listAgents(
     offset?: number;
   },
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const queryParams = new URLSearchParams();
   if (filters?.status) queryParams.set('status', filters.status);
@@ -107,9 +102,8 @@ export async function listAgents(
  */
 export async function getAgent(
   agentId: string,
-  workspaceId: string,
+  headers: HeadersInit,
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: 'GET',
@@ -129,9 +123,8 @@ export async function getAgent(
 export async function updateAgent(
   agentId: string,
   payload: UpdateAgentPayload,
-  workspaceId: string,
+  headers: HeadersInit,
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: 'PUT',
@@ -152,9 +145,8 @@ export async function updateAgent(
  */
 export async function deleteAgent(
   agentId: string,
-  workspaceId: string,
+  headers: HeadersInit,
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: 'DELETE',
@@ -174,9 +166,8 @@ export async function deleteAgent(
 export async function testAgent(
   agentId: string,
   payload: TestAgentPayload,
-  workspaceId: string,
+  headers: HeadersInit,
 ): Promise<any> {
-  const headers = await getAuthHeaders(workspaceId);
   
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}/test`, {
     method: 'POST',
