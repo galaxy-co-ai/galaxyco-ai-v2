@@ -282,6 +282,7 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
+  workspaceMembers: many(workspaceMembers),
   workspaceMemberships: many(workspaceMembers),
   createdAgents: many(agents),
   triggeredExecutions: many(agentExecutions),

@@ -12,13 +12,13 @@
     "db:check": "drizzle-kit check"
   },
   "dependencies": {
-    "drizzle-orm": "workspace:*",
-    "@neondatabase/serverless": "workspace:*",
-    "dotenv": "workspace:*"
+    "drizzle-orm": "^0.44.6",
+    "@neondatabase/serverless": "^1.0.2",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
-    "drizzle-kit": "workspace:*",
+    "drizzle-kit": "^0.31.5",
     "@types/node": "^20.12.7",
-    "typescript": "workspace:*"
+    "typescript": "^5.5.0"
   }
 }

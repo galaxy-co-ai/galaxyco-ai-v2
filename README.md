@@ -384,4 +384,4 @@ Proprietary - All rights reserved
 
 ---
 
-**Built with ❤️ for Jason and the Rise Roofing team**
+**Built with ❤️ to make multi-agent AI useful in minutes**

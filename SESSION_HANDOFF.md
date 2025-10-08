@@ -149,7 +149,7 @@ uvicorn app:app --reload
 1. ✅ Quick win (2-3 hours) with immediate user-facing results
 2. ✅ Foundation for all future features (agents, dashboard, etc.)
 3. ✅ Natural progression after database schema
-4. ✅ Enables Jason (first user) to test the full flow
+4. ✅ Enables external users to sign up and use the platform
 5. ✅ Unlocks workspace-scoped functionality
 
 ### 🎯 Phase 6 Detailed Action Plan
@@ -501,9 +501,9 @@ test(auth): verify end-to-end auth flow
 
 ### Project Goals
 - **Vision**: "Make multi-agent AI useful in minutes"
-- **User**: Building for Jason at Rise Roofing (first customer)
-- **Timeline**: 2-3 weeks at 70 hours/week
-- **Budget**: $200-300/month after setup
+- **Target Users**: Businesses of all sizes needing AI automation
+- **Timeline**: Iterative development with rapid feature rollout
+- **Budget**: $200-300/month operational costs after setup
 
 ### Technical Standards
 - ✅ Conventional Commits format
