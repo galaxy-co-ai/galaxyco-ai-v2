@@ -182,3 +182,27 @@ export async function testAgent(
 
   return response.json();
 }
+
+/**
+ * Execute agent with live AI (Phase 9)
+ * Uses Next.js API route with access to AI providers
+ */
+export async function executeAgentLive(
+  agentId: string,
+  inputs: Record<string, any>,
+): Promise<any> {
+  const response = await fetch(`/api/agents/${agentId}/execute`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ inputs }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || error.message || 'Failed to execute agent');
+  }
+
+  return response.json();
+}
