@@ -1,20 +1,21 @@
 # 🔄 Session Handoff Document - GalaxyCo-ai 2.0
 
-**Last Updated**: 2025-10-08 17:42:00 UTC  
-**Session**: #2 ACTIVE  
-**Next Agent**: Read this FIRST for seamless continuation
+**Last Updated**: 2025-10-08 17:46:30 UTC  
+**Session**: #2 → #3 HANDOFF  
+**Next Agent**: Phase 6 - Authentication & RBAC
 
 ---
 
 ## 🎯 Project Status at Handoff
 
 ### Current Phase
-**Phase 5: Database Schema** - ✅ COMPLETE
+**Phase 6: Authentication & RBAC** - 🔄 READY TO START
 
 ### Overall Progress
 - **Phases Complete**: 4 of 17 (23.5%)
 - **Time Invested**: 74 minutes
-- **Health**: 🟢 EXCELLENT - Momentum strong!
+- **Next Phase Est.**: 2-3 hours
+- **Health**: 🟢 EXCELLENT - All foundations ready!
 
 ---
 
@@ -142,9 +143,314 @@ uvicorn app:app --reload
 
 ---
 
-## 🎯 Immediate Next Steps (Choose One)
+## 🚀 RECOMMENDED: Phase 6 - Authentication & RBAC
 
-### Option A: Phase 6 - Authentication & RBAC (2-3 hours) ⭐ RECOMMENDED
+**Why Phase 6 is the smart next move:**
+1. ✅ Quick win (2-3 hours) with immediate user-facing results
+2. ✅ Foundation for all future features (agents, dashboard, etc.)
+3. ✅ Natural progression after database schema
+4. ✅ Enables Jason (first user) to test the full flow
+5. ✅ Unlocks workspace-scoped functionality
+
+### 🎯 Phase 6 Detailed Action Plan
+
+#### **Step 1: Clerk Integration in Next.js** (30 min)
+```bash
+# Install Clerk SDK
+pnpm add @clerk/nextjs --filter web
+
+# Tasks:
+1. Wrap app in ClerkProvider (app/layout.tsx)
+2. Add sign-in/sign-up pages (/sign-in, /sign-up)
+3. Add protected route middleware
+4. Test: Sign up → redirects to onboarding
+5. Test: Sign in → redirects to dashboard
+```
+
+**Acceptance Criteria:**
+- [ ] User can sign up with email/password
+- [ ] User can sign in with existing account
+- [ ] Clerk session is active in browser
+- [ ] Protected routes redirect to sign-in
+
+---
+
+#### **Step 2: User Sync to Database** (45 min)
+```bash
+# Create API endpoint for Clerk webhooks
+
+# Tasks:
+1. Create POST /api/webhooks/clerk in Next.js
+2. Verify Clerk webhook signature
+3. On user.created → Insert into users table
+4. On user.updated → Update users table
+5. On user.deleted → Soft delete or cascade
+6. Test with Clerk webhook testing tool
+```
+
+**Acceptance Criteria:**
+- [ ] New Clerk users auto-create database record
+- [ ] User profile updates sync to database
+- [ ] Webhook signature validation works
+- [ ] Error handling for duplicate users
+
+**Database Query Example:**
+```typescript
+import { db } from '@galaxyco/database';
+import { users } from '@galaxyco/database/schema';
+
+await db.insert(users).values({
+  clerkUserId: event.data.id,
+  email: event.data.email_addresses[0].email_address,
+  firstName: event.data.first_name,
+  lastName: event.data.last_name,
+  avatarUrl: event.data.image_url,
+});
+```
+
+---
+
+#### **Step 3: Workspace Creation Flow** (45 min)
+```bash
+# Create onboarding page: /onboarding
+
+# Tasks:
+1. Build form: Workspace name → slug generation
+2. On submit → Create workspace in database
+3. Create workspace_member record (role: owner)
+4. Redirect to /dashboard
+5. Add loading states and error handling
+```
+
+**Acceptance Criteria:**
+- [ ] User can create workspace with custom name
+- [ ] Slug auto-generates (e.g., "My Company" → "my-company")
+- [ ] User becomes workspace owner
+- [ ] Duplicate slug validation works
+- [ ] Redirects to dashboard on success
+
+**Database Query Example:**
+```typescript
+import { db } from '@galaxyco/database';
+import { workspaces, workspaceMembers } from '@galaxyco/database/schema';
+
+const workspace = await db.insert(workspaces).values({
+  name: formData.name,
+  slug: generateSlug(formData.name),
+  clerkOrganizationId: null, // For personal workspaces
+}).returning();
+
+await db.insert(workspaceMembers).values({
+  workspaceId: workspace[0].id,
+  userId: currentUser.id,
+  role: 'owner',
+});
+```
+
+---
+
+#### **Step 4: Workspace Middleware & Context** (30 min)
+```bash
+# Create workspace selection/switching logic
+
+# Tasks:
+1. Add workspace selector component (header)
+2. Store selected workspace in cookie/localStorage
+3. Create useWorkspace() hook
+4. Add workspace ID to all API calls
+5. Test switching between multiple workspaces
+```
+
+**Acceptance Criteria:**
+- [ ] User can switch workspaces from header dropdown
+- [ ] Current workspace persists across page loads
+- [ ] Only user's workspaces appear in selector
+- [ ] API calls include workspace ID
+
+---
+
+#### **Step 5: Protected API Endpoints** (30 min)
+```bash
+# Add auth middleware to NestJS API
+
+# Tasks:
+1. Install @clerk/clerk-sdk-node in API
+2. Create AuthGuard middleware
+3. Extract user + workspace from JWT
+4. Add to request context
+5. Test with Postman/Thunder Client
+```
+
+**Acceptance Criteria:**
+- [ ] Unauthorized requests return 401
+- [ ] Valid JWT extracts user info
+- [ ] Workspace ID available in all controllers
+- [ ] Multi-tenant queries use workspace filter
+
+**Example Guard:**
+```typescript
+import { clerkClient } from '@clerk/clerk-sdk-node';
+import { validateTenantAccess } from '@galaxyco/database';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    const token = request.headers.authorization?.split(' ')[1];
+    
+    const session = await clerkClient.verifyToken(token);
+    const workspaceId = request.headers['x-workspace-id'];
+    
+    await validateTenantAccess(session.sub, workspaceId);
+    
+    request.user = { id: session.sub, workspaceId };
+    return true;
+  }
+}
+```
+
+---
+
+#### **Step 6: End-to-End Testing** (30 min)
+```bash
+# Test complete authentication flow
+
+# Test Scenarios:
+1. New user signup → onboarding → workspace creation → dashboard
+2. Existing user login → workspace selector → dashboard
+3. User with multiple workspaces → switch workspace → verify data isolation
+4. Unauthorized access → redirect to sign-in
+5. API calls with/without auth → verify 401/200
+6. Clerk webhook → verify database sync
+```
+
+**Acceptance Criteria:**
+- [ ] Complete user journey works end-to-end
+- [ ] Multi-tenant data isolation verified
+- [ ] No security vulnerabilities
+- [ ] Error states handled gracefully
+- [ ] Performance is acceptable (<2s page loads)
+
+---
+
+### 📦 Expected Deliverables
+
+**Files to Create/Modify:**
+- `apps/web/app/layout.tsx` - ClerkProvider wrapper
+- `apps/web/app/(auth)/sign-in/[[...sign-in]]/page.tsx` - Sign in page
+- `apps/web/app/(auth)/sign-up/[[...sign-up]]/page.tsx` - Sign up page
+- `apps/web/app/onboarding/page.tsx` - Workspace creation
+- `apps/web/app/api/webhooks/clerk/route.ts` - User sync
+- `apps/web/middleware.ts` - Protected routes
+- `apps/web/components/workspace-selector.tsx` - Workspace switcher
+- `apps/web/hooks/use-workspace.ts` - Workspace context
+- `apps/api/src/guards/auth.guard.ts` - API authentication
+- `apps/api/src/decorators/workspace.decorator.ts` - Workspace extraction
+
+**Database Queries to Implement:**
+- Create user on Clerk webhook
+- Create workspace
+- Create workspace member
+- Get user's workspaces
+- Validate workspace access
+
+**Environment Variables Needed:**
+```bash
+# Already configured in apps/web/.env.local:
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+CLERK_SECRET_KEY=sk_...
+
+# Add to apps/api/.env.local:
+CLERK_SECRET_KEY=sk_...
+```
+
+---
+
+### ✅ Phase 6 Acceptance Checklist
+
+**Authentication:**
+- [ ] User can sign up with Clerk
+- [ ] User can sign in with Clerk  
+- [ ] User syncs to database automatically
+- [ ] Protected routes work correctly
+
+**Workspace Management:**
+- [ ] User can create workspace on first login
+- [ ] Workspace slug validation works
+- [ ] User becomes workspace owner
+- [ ] Multiple workspaces supported
+- [ ] Workspace switching works
+
+**API Security:**
+- [ ] API validates Clerk JWT tokens
+- [ ] API enforces workspace access control
+- [ ] Unauthorized requests return 401
+- [ ] Multi-tenant queries filter by workspace
+
+**Data Isolation:**
+- [ ] Users only see their workspace data
+- [ ] Cross-tenant access blocked
+- [ ] Security logs work
+- [ ] RBAC roles enforced
+
+**Testing:**
+- [ ] End-to-end user flow tested
+- [ ] Edge cases handled
+- [ ] Error states tested
+- [ ] Performance acceptable
+
+---
+
+### 🎓 Key Patterns to Follow
+
+**1. Multi-Tenant Security (Rule 4kR94Z3XhqK4C54vwDDwnq):**
+```typescript
+// ALWAYS use withTenant helper
+import { db, withTenant } from '@galaxyco/database';
+
+const tenantDb = withTenant(db, workspaceId);
+const agents = await tenantDb.query.agents.findMany();
+// workspace_id automatically filtered!
+```
+
+**2. Conventional Commits (Rule sEEtaBeEb0qvERiOXvkHFk):**
+```bash
+feat(auth): add clerk integration to next.js
+feat(auth): implement user sync webhook
+feat(auth): add workspace creation flow
+feat(api): add authentication guard
+test(auth): verify end-to-end auth flow
+```
+
+**3. Never Expose Secrets (Rule 7Em0KwTXJn2kF4HEBRvjO2):**
+- Never log environment variables
+- Never commit .env files
+- Use environment variable names only in code
+
+---
+
+### 🚨 Common Pitfalls to Avoid
+
+1. **Forgetting to validate workspace access** in API
+   - Always call `validateTenantAccess(userId, workspaceId)`
+
+2. **Not handling Clerk webhook failures**
+   - Add retry logic and dead letter queue
+
+3. **Workspace slug conflicts**
+   - Add unique constraint validation
+
+4. **Missing workspace context**
+   - Always pass workspace ID in API calls
+
+5. **Security**: Never trust client-side workspace ID
+   - Always verify user has access on server
+
+---
+
+## 🎯 Alternative Next Steps
+
+### Option A: Phase 6 - Authentication & RBAC (2-3 hours) ⭐ RECOMMENDED (see detailed plan above)
 1. Integrate Clerk authentication in Next.js and API
 2. Implement workspace selection/creation flow
 3. Add middleware for tenant isolation
@@ -265,9 +571,9 @@ Let's keep the momentum going! 🚀"
 
 ## 📋 Context Window Status
 
-- **Current Session**: ~62% used (125K/200K tokens)
-- **Handoff Reason**: N/A - plenty of space
-- **Safe to Continue**: ✅ YES - can complete 1-2 more phases
+- **Previous Session**: ~62% used (125K/200K tokens)
+- **Handoff Reason**: Proactive - starting new phase with fresh context
+- **Ready State**: ✅ All foundations complete, ready for Phase 6
 
 ---
 
