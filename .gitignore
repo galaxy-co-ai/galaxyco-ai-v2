@@ -29,6 +29,7 @@ out/
 *.pem
 *.key
 secrets.json
+SECRETS_CHECKLIST_FILLED.md
 
 # IDE
 .vscode/
