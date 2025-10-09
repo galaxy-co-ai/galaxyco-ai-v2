@@ -1,14 +1,19 @@
-// TEMPORARILY DISABLED TO FIX DEPLOYMENT
-// Middleware is causing runtime errors on Vercel
-// Will re-enable once environment variables are properly configured
-
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-  // For now, just pass through all requests
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/health',
+]);
+
+export default clerkMiddleware((auth, request) => {
+  if (!isPublicRoute(request)) {
+    auth().protect();
+  }
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [
