@@ -2,19 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: [],
-  // Skip type checking and linting during build on Vercel
   typescript: {
     ignoreBuildErrors: false,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Ensure environment variables are available
-  env: {
-    DATABASE_URL: process.env.DATABASE_URL,
+  // Skip output optimization to avoid static generation issues
+  output: undefined,
+  // Skip static generation for pages that use dynamic APIs
+  experimental: {
+    isrMemoryCacheSize: 0,
   },
-  // Output standalone for better Vercel deployment
-  output: 'standalone',
 };
 
 module.exports = nextConfig;
