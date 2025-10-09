@@ -1,19 +1,14 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+// TEMPORARILY DISABLED TO FIX DEPLOYMENT
+// Middleware is causing runtime errors on Vercel
+// Will re-enable once environment variables are properly configured
 
-// Define public routes that don't require authentication
-const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks(.*)',
-]);
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default clerkMiddleware((auth, request) => {
-  // Only protect non-public routes
-  if (!isPublicRoute(request)) {
-    auth().protect();
-  }
-});
+export function middleware(request: NextRequest) {
+  // For now, just pass through all requests
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
