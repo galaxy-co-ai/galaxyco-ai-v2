@@ -3,10 +3,5 @@
   "buildCommand": "cd apps/web && npm run build || true",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install -g pnpm@9.0.0 && pnpm install --frozen-lockfile",
-  "devCommand": "cd apps/web && npm run dev",
-  "functions": {
-    "apps/web/app/api/**/*": {
-      "maxDuration": 30
-    }
-  }
+  "devCommand": "cd apps/web && npm run dev"
 }
