@@ -69,6 +69,7 @@ export const workspaces = pgTable('workspaces', {
   encryptedApiKeys: jsonb('encrypted_api_keys').$type<{
     openai?: string; // AES-256-GCM encrypted
     anthropic?: string; // AES-256-GCM encrypted
+    google?: string; // AES-256-GCM encrypted
   }>().default({}),
   
   // Metadata
@@ -163,7 +164,7 @@ export const agents = pgTable('agents', {
   
   // Configuration
   config: jsonb('config').$type<{
-    aiProvider?: 'openai' | 'anthropic' | 'custom';
+    aiProvider?: 'openai' | 'anthropic' | 'google' | 'custom';
     model?: string;
     temperature?: number;
     maxTokens?: number;

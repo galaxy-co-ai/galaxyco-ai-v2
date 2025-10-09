@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@galaxyco/database';
 import { agents, workspaces } from '@galaxyco/database/schema';
 import { eq, and } from 'drizzle-orm';
-import { createProvider } from '@/lib/ai/factory';
+import { AIGatewayService } from '@/lib/ai-gateway';
+import type { AIGatewayRequest } from '@/lib/ai-gateway';
 import { decryptApiKey } from '@/lib/crypto';
 import { retryWithBackoff } from '@/lib/retry';
 import {
@@ -11,7 +12,7 @@ import {
   completeExecution,
   failExecution,
 } from '@/lib/execution-tracker';
-import type { AIProviderType, Message } from '@/lib/ai/types';
+import type { AIProviderType } from '@/lib/ai/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,11 +66,11 @@ export async function POST(
     const encryptedKeys = workspace.encryptedApiKeys || {};
     
     // Type guard to ensure aiProvider is a valid key
-    if (aiProvider !== 'openai' && aiProvider !== 'anthropic') {
+    if (aiProvider !== 'openai' && aiProvider !== 'anthropic' && aiProvider !== 'google') {
       return NextResponse.json(
         { 
           error: `Unsupported AI provider: ${aiProvider}`,
-          message: `Only OpenAI and Anthropic are currently supported`,
+          message: `Only OpenAI, Anthropic, and Google are currently supported`,
         },
         { status: 400 }
       );
@@ -104,32 +105,47 @@ export async function POST(
     });
 
     try {
-      // Decrypt API key
+      // Decrypt API key and set as environment variable for AI Gateway
       const apiKey = decryptApiKey(encryptedKeys[aiProvider]!);
-
-      // Create AI provider
-      const provider = createProvider(aiProvider, apiKey);
+      
+      // Temporarily set the API key for this request
+      const envKey = 
+        aiProvider === 'openai' 
+          ? 'OPENAI_API_KEY' 
+          : aiProvider === 'anthropic'
+          ? 'ANTHROPIC_API_KEY'
+          : aiProvider === 'google'
+          ? 'GOOGLE_GENERATIVE_AI_API_KEY'
+          : '';
+      const originalKey = process.env[envKey];
+      process.env[envKey] = apiKey;
 
       // Build messages from system prompt and inputs
-      const messages: Message[] = [
+      const messages = [
         {
-          role: 'system',
+          role: 'system' as const,
           content: agent.config.systemPrompt || 'You are a helpful AI assistant.',
         },
         {
-          role: 'user',
+          role: 'user' as const,
           content: JSON.stringify(inputs),
         },
       ];
 
-      // Execute with retry logic
+      // Prepare AI Gateway request
+      const gatewayRequest: AIGatewayRequest = {
+        tenantId: agent.workspaceId,
+        userId: userRecord.id,
+        agentId: agent.id,
+        model: agent.config.model || 'gpt-3.5-turbo',
+        messages,
+        temperature: agent.config.temperature ?? 0.7,
+        maxTokens: agent.config.maxTokens,
+      };
+
+      // Execute with retry logic using AI Gateway
       const result = await retryWithBackoff(
-        () => provider.execute({
-          model: agent.config.model || 'gpt-3.5-turbo',
-          messages,
-          temperature: agent.config.temperature ?? 1.0,
-          maxTokens: agent.config.maxTokens,
-        }),
+        () => AIGatewayService.generateText(gatewayRequest),
         {
           maxAttempts: 3,
           baseDelayMs: 1000,
@@ -139,6 +155,13 @@ export async function POST(
           },
         }
       );
+      
+      // Restore original API key
+      if (originalKey) {
+        process.env[envKey] = originalKey;
+      } else {
+        delete process.env[envKey];
+      }
 
       // Parse output if it's JSON
       let output: Record<string, any>;

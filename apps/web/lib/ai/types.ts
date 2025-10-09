@@ -46,4 +46,4 @@ export interface AIProvider {
   estimateCost(params: ExecuteParams): number;
 }
 
-export type AIProviderType = 'openai' | 'anthropic' | 'custom';
+export type AIProviderType = 'openai' | 'anthropic' | 'google' | 'custom';
