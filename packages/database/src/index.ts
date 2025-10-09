@@ -13,8 +13,10 @@ export {
   workspaces,
   workspaceMembers,
   agents,
+  agentTemplates,
   agentPacks,
   agentExecutions,
+  workspaceApiKeys,
 } from './schema';
 
 // Re-export types

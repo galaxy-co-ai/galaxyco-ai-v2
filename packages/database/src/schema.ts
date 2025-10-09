@@ -35,7 +35,7 @@ import { relations } from 'drizzle-orm';
 // ============================================================================
 
 export const userRoleEnum = pgEnum('user_role', ['owner', 'admin', 'member', 'viewer']);
-export const agentTypeEnum = pgEnum('agent_type', ['scope', 'call', 'email', 'note', 'task', 'roadmap', 'content', 'custom']);
+export const agentTypeEnum = pgEnum('agent_type', ['scope', 'call', 'email', 'note', 'task', 'roadmap', 'content', 'custom', 'browser', 'cross-app', 'knowledge', 'sales', 'trending', 'research', 'meeting', 'code', 'data', 'security']);
 export const agentStatusEnum = pgEnum('agent_status', ['draft', 'active', 'paused', 'archived']);
 export const executionStatusEnum = pgEnum('execution_status', ['pending', 'running', 'completed', 'failed', 'cancelled']);
 export const subscriptionTierEnum = pgEnum('subscription_tier', ['free', 'starter', 'professional', 'enterprise']);
@@ -194,6 +194,78 @@ export const agents = pgTable('agents', {
 }));
 
 // ============================================================================
+// AGENT TEMPLATES (Individual Marketplace Templates)
+// ============================================================================
+
+export const agentTemplates = pgTable('agent_templates', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  
+  // Template info
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  description: text('description').notNull(),
+  shortDescription: text('short_description').notNull(), // For cards
+  category: text('category').notNull(),
+  type: agentTypeEnum('type').notNull(),
+  
+  // Visual
+  iconUrl: text('icon_url'),
+  coverImageUrl: text('cover_image_url'),
+  badgeText: text('badge_text'), // 'Trending', 'New', 'Popular', etc
+  
+  // Configuration template
+  config: jsonb('config').$type<{
+    aiProvider?: 'openai' | 'anthropic' | 'custom';
+    model?: string;
+    temperature?: number;
+    maxTokens?: number;
+    systemPrompt?: string;
+    tools?: string[];
+    inputs?: { name: string; type: string; required?: boolean }[];
+    outputs?: { name: string; type: string }[];
+    triggers?: { type: string; config: any }[];
+    defaults?: Record<string, any>;
+  }>().notNull().default({}),
+  
+  // KPIs and metrics
+  kpis: jsonb('kpis').$type<{
+    successRate?: number; // 0-100
+    avgTimeSaved?: string; // "2 hours/claim"
+    accuracy?: number; // 0-100
+    avgDuration?: string; // "45 seconds"
+  }>().default({}),
+  
+  // Marketplace metadata
+  authorId: uuid('author_id').references(() => users.id),
+  authorName: text('author_name').default('GalaxyCo Team'),
+  tags: text('tags').array().default([]),
+  
+  // Stats
+  installCount: integer('install_count').notNull().default(0),
+  rating: integer('rating').default(0), // 0-500 (5.00 stars * 100)
+  reviewCount: integer('review_count').notNull().default(0),
+  
+  // Trending metrics (for ranking)
+  installs24h: integer('installs_24h').notNull().default(0),
+  installs7d: integer('installs_7d').notNull().default(0),
+  installs30d: integer('installs_30d').notNull().default(0),
+  trendingScore: integer('trending_score').notNull().default(0),
+  
+  // Publishing
+  isPublished: boolean('is_published').notNull().default(true),
+  isFeatured: boolean('is_featured').notNull().default(false),
+  publishedAt: timestamp('published_at'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+}, (table) => ({
+  slugIdx: uniqueIndex('agent_template_slug_idx').on(table.slug),
+  categoryIdx: index('agent_template_category_idx').on(table.category),
+  publishedIdx: index('agent_template_published_idx').on(table.isPublished),
+  featuredIdx: index('agent_template_featured_idx').on(table.isFeatured),
+  trendingIdx: index('agent_template_trending_idx').on(table.trendingScore),
+}));
+
+// ============================================================================
 // AGENT PACKS (Marketplace Templates)
 // ============================================================================
 
@@ -238,6 +310,35 @@ export const agentPacks = pgTable('agent_packs', {
   slugIdx: uniqueIndex('agent_pack_slug_idx').on(table.slug),
   categoryIdx: index('agent_pack_category_idx').on(table.category),
   publishedIdx: index('agent_pack_published_idx').on(table.isPublished),
+}));
+
+// ============================================================================
+// WORKSPACE API KEYS (Encrypted Storage)
+// ============================================================================
+
+export const workspaceApiKeys = pgTable('workspace_api_keys', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  
+  // Multi-tenant key
+  workspaceId: uuid('workspace_id').notNull().references(() => workspaces.id, { onDelete: 'cascade' }),
+  
+  // Provider info
+  provider: text('provider').notNull(), // 'openai', 'anthropic', etc
+  name: text('name').notNull(), // User-friendly name
+  
+  // Encrypted key (AES-256-GCM)
+  encryptedKey: text('encrypted_key').notNull(),
+  iv: text('iv').notNull(), // Initialization vector
+  authTag: text('auth_tag').notNull(), // Authentication tag
+  
+  // Metadata
+  isActive: boolean('is_active').notNull().default(true),
+  lastUsedAt: timestamp('last_used_at'),
+  createdBy: uuid('created_by').notNull().references(() => users.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+}, (table) => ({
+  tenantProviderIdx: uniqueIndex('api_key_tenant_provider_idx').on(table.workspaceId, table.provider),
 }));
 
 // ============================================================================
@@ -347,6 +448,9 @@ export type NewWorkspaceMember = typeof workspaceMembers.$inferInsert;
 
 export type Agent = typeof agents.$inferSelect;
 export type NewAgent = typeof agents.$inferInsert;
+
+export type AgentTemplate = typeof agentTemplates.$inferSelect;
+export type NewAgentTemplate = typeof agentTemplates.$inferInsert;
 
 export type AgentPack = typeof agentPacks.$inferSelect;
 export type NewAgentPack = typeof agentPacks.$inferInsert;
