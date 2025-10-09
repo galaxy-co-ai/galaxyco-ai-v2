@@ -9,7 +9,7 @@
 
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { and, eq } from 'drizzle-orm';
 import * as schema from './schema';
 
 // Handle build-time vs runtime
