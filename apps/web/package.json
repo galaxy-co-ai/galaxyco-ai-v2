@@ -17,6 +17,7 @@
     "@clerk/nextjs": "^5.7.5",
     "@galaxyco/database": "workspace:*",
     "@google/generative-ai": "^0.24.1",
+    "@sentry/nextjs": "^10.19.0",
     "ai": "^5.0.64",
     "drizzle-orm": "^0.44.6",
     "next": "^14.2.0",
