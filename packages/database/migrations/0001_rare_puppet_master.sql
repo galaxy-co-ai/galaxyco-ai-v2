@@ -1,0 +1,1 @@
+ALTER TABLE "workspaces" ADD COLUMN "encrypted_api_keys" jsonb DEFAULT '{}'::jsonb;
