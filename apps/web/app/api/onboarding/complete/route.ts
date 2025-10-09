@@ -1,9 +1,11 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { db } from '@galaxyco/database';
+import { db } from '@galaxyco/database/client';
 import { workspaces, workspaceMembers, users } from '@galaxyco/database/schema';
 import { eq } from 'drizzle-orm';
 import { OnboardingProfile, STARTER_PACKS } from '@/lib/constants/onboarding';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
