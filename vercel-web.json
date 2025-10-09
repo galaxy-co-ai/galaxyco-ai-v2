@@ -1,5 +1,5 @@
 {
-  "name": "galaxyco-ai-platform",
+  "name": "galaxyco-ai-v2",
   "buildCommand": "npm run build --workspace=web",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install",
