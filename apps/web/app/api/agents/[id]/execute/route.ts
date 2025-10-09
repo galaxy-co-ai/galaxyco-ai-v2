@@ -13,6 +13,8 @@ import {
 } from '@/lib/execution-tracker';
 import type { AIProviderType, Message } from '@/lib/ai/types';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * POST /api/agents/[id]/execute
  * Execute an agent with live AI
