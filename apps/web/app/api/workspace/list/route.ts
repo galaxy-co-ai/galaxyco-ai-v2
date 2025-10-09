@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getUserWorkspaces } from '@/lib/workspace';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/workspace/list
  * Get all workspaces user has access to

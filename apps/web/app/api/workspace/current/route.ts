@@ -6,6 +6,8 @@ import {
   validateWorkspaceAccess 
 } from '@/lib/workspace';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/workspace/current
  * Get current workspace ID and details
