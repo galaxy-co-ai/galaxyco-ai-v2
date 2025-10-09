@@ -8,6 +8,13 @@
       "when": 1759945055802,
       "tag": "0000_quick_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1760006460375,
+      "tag": "0001_melodic_vulture",
+      "breakpoints": true
     }
   ]
 }

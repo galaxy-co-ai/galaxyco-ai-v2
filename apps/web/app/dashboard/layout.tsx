@@ -1,7 +1,8 @@
 'use client';
 
-import WorkspaceSelector from '@/components/workspace-selector';
 import { UserButton } from '@clerk/nextjs';
+import Link from 'next/link';
+import WorkspaceSelector from '@/components/workspace-selector';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,10 +19,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700' }}>
-            🚀 GalaxyCo.ai
-          </h1>
+          <Link href="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', cursor: 'pointer' }}>
+              🚀 GalaxyCo.ai
+            </h1>
+          </Link>
           <WorkspaceSelector />
+          <nav style={{ display: 'flex', gap: '1rem' }}>
+            <Link href="/marketplace" style={{ textDecoration: 'none', padding: '0.5rem 1rem', borderRadius: '6px', background: '#f3f4f6', color: '#374151', fontWeight: '500' }}>
+              Marketplace
+            </Link>
+          </nav>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

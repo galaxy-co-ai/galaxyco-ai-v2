@@ -21,6 +21,15 @@ export default function MarketplaceHero() {
       ]
     },
     {
+      title: "Founder Ops Pack",
+      subtitle: "Everything you need to run your startup. 4 agents working together to save you 12 hrs/week.",
+      cta: "Install Pack",
+      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      featured: true,
+      packId: "founder-ops-pack",
+      badge: "STARTER PACK"
+    },
+    {
       title: "Browser Automation Agent",
       subtitle: "Automate any web task with our most popular agent",
       cta: "Install Now",
@@ -28,6 +37,15 @@ export default function MarketplaceHero() {
       image: "/hero-browser.svg",
       featured: true,
       agentSlug: "browser-automation"
+    },
+    {
+      title: "Sales GTM Pack",
+      subtitle: "Accelerate your sales motion. 4 agents for prospecting, enrichment, and CRM automation.",
+      cta: "Install Pack",
+      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      featured: true,
+      packId: "sales-gtm-pack",
+      badge: "POPULAR"
     },
     {
       title: "Build Custom Agents",
@@ -44,7 +62,7 @@ export default function MarketplaceHero() {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   const slide = heroSlides[currentSlide];
 
@@ -127,7 +145,20 @@ export default function MarketplaceHero() {
               {slide.cta}
             </Link>
 
-            {slide.featured && (
+            {slide.featured && slide.badge && (
+              <span style={{
+                padding: '0.5rem 1rem',
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                backdropFilter: 'blur(10px)'
+              }}>
+                {slide.badge === 'STARTER PACK' ? '🎁' : slide.badge === 'POPULAR' ? '🔥' : '✨'} {slide.badge}
+              </span>
+            )}
+            {slide.featured && slide.agentSlug && (
               <span style={{
                 padding: '0.5rem 1rem',
                 background: 'rgba(255, 255, 255, 0.2)',
