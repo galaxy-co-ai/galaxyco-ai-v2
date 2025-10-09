@@ -9,6 +9,10 @@ const isPublicRoute = createRouteMatcher([
   '/api/workspace/current',
   '/api/workspace/list',
   '/api/webhooks/clerk',
+  '/api/marketplace/templates(.*)',
+  '/api/marketplace/categories',
+  '/api/marketplace/stats',
+  '/marketplace(.*)',
 ]);
 
 export default clerkMiddleware((auth, request) => {
