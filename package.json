@@ -14,11 +14,14 @@
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
-    "release:rollback": "bash scripts/rollback.sh"
+    "release:rollback": "bash scripts/rollback.sh",
+    "prepare": "husky"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
     "next": "14.2.33",
     "prettier": "^3.3.0",
     "turbo": "^2.0.0",
@@ -32,5 +35,14 @@
     "@neondatabase/serverless": "^1.0.2",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }
