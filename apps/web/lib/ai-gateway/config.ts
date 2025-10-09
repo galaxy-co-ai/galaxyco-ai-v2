@@ -37,12 +37,12 @@ export const MODEL_PRICING = {
   'claude-3-sonnet-20240229': { input: 3, output: 15 },
   'claude-3-haiku-20240307': { input: 0.25, output: 1.25 },
   
-  // Google Gemini models
-  'gemini-1.5-pro-latest': { input: 3.5, output: 10.5 },
-  'gemini-1.5-flash-latest': { input: 0.075, output: 0.30 },
-  'gemini-1.5-pro': { input: 3.5, output: 10.5 },
-  'gemini-1.5-flash': { input: 0.075, output: 0.30 },
-  'gemini-pro': { input: 0.5, output: 1.5 },
+  // Google Gemini models (Gemini 2.x - latest stable models)
+  'gemini-2.5-flash': { input: 0.075, output: 0.30 },
+  'gemini-2.5-pro': { input: 3.5, output: 10.5 },
+  'gemini-2.0-flash': { input: 0.075, output: 0.30 },
+  'gemini-flash-latest': { input: 0.075, output: 0.30 },
+  'gemini-pro-latest': { input: 3.5, output: 10.5 },
 } as const;
 
 // Supported models by provider
@@ -62,11 +62,11 @@ export const PROVIDER_MODELS = {
     'claude-3-haiku-20240307',
   ],
   google: [
-    'gemini-1.5-pro-latest',
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-pro',
-    'gemini-1.5-flash',
-    'gemini-pro',
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.0-flash',
+    'gemini-flash-latest',
+    'gemini-pro-latest',
   ],
 } as const;
 
