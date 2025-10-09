@@ -18,9 +18,10 @@ import { colors, typography, spacing, radius } from '@/lib/constants/design-syst
 
 interface OnboardingWizardProps {
   onComplete: (profile: OnboardingProfile) => void;
+  isLoading?: boolean;
 }
 
-export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
+export function OnboardingWizard({ onComplete, isLoading = false }: OnboardingWizardProps) {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
   const [industry, setIndustry] = useState('');
@@ -176,7 +177,9 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
               </Button>
             )}
             {step === totalSteps && (
-              <Button onClick={handleComplete}>Create My Workspace</Button>
+              <Button onClick={handleComplete} disabled={isLoading}>
+                {isLoading ? 'Creating workspace...' : 'Create My Workspace'}
+              </Button>
             )}
           </div>
         </div>

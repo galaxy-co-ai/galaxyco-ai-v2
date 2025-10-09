@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { db } from '@galaxyco/database/client';
 import { workspaces, workspaceMembers, users } from '@galaxyco/database/schema';
@@ -17,17 +17,58 @@ export async function POST(request: Request) {
 
     const profile: OnboardingProfile = await request.json();
 
-    // Get the user record
-    const userRecord = await db.query.users.findFirst({
+    // Validate profile data
+    if (!profile.starterPack?.recommendedId) {
+      console.error('Missing starter pack recommendation in profile:', { userId });
+      return NextResponse.json(
+        { error: 'Invalid onboarding profile: missing starter pack' },
+        { status: 400 }
+      );
+    }
+
+    // Get or create the user record
+    // (Webhook might not have fired yet for new signups)
+    let userRecord = await db.query.users.findFirst({
       where: eq(users.clerkUserId, userId),
     });
 
     if (!userRecord) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      console.log('User record not found, creating from Clerk data:', { userId });
+      
+      // Get user info from Clerk
+      const clerkUser = await currentUser();
+      if (!clerkUser) {
+        console.error('Unable to fetch Clerk user data:', { userId });
+        return NextResponse.json(
+          { error: 'Unable to fetch user information' },
+          { status: 500 }
+        );
+      }
+
+      // Create user record
+      const [newUser] = await db
+        .insert(users)
+        .values({
+          clerkUserId: userId,
+          email: clerkUser.emailAddresses[0]?.emailAddress || '',
+          firstName: clerkUser.firstName || null,
+          lastName: clerkUser.lastName || null,
+          avatarUrl: clerkUser.imageUrl || null,
+          lastLoginAt: new Date(),
+        })
+        .returning();
+
+      userRecord = newUser;
+      console.log('User record created:', { userId: userRecord.id, email: userRecord.email });
     }
 
-    // Get starter pack details
-    const pack = STARTER_PACKS[profile.starterPack.recommendedId];
+    // Get starter pack details with fallback to founder-ops
+    const packId = profile.starterPack.recommendedId;
+    const pack = STARTER_PACKS[packId] || STARTER_PACKS['founder-ops'];
+    
+    if (!STARTER_PACKS[packId]) {
+      console.warn('Invalid starter pack ID, falling back to founder-ops:', { userId, packId });
+    }
 
     // Generate workspace name and slug from role
     const workspaceName = `${userRecord.firstName || 'My'}'s ${pack.name} Workspace`;
