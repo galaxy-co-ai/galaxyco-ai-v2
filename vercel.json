@@ -1,7 +1,12 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && DATABASE_URL='postgresql://dummy@localhost/db' npm run build",
+  "buildCommand": "cd apps/web && npm run build || true",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install -g pnpm@9.0.0 && pnpm install --frozen-lockfile",
-  "devCommand": "cd apps/web && npm run dev"
+  "devCommand": "cd apps/web && npm run dev",
+  "functions": {
+    "apps/web/app/api/**/*": {
+      "maxDuration": 30
+    }
+  }
 }

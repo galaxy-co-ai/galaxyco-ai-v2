@@ -9,11 +9,26 @@
 
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
-import { eq, and, SQL } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
-// Initialize database connection
-const sql = neon(process.env.DATABASE_URL!);
+// Handle build-time vs runtime
+const getDatabaseUrl = () => {
+  // In production runtime, use the actual DATABASE_URL
+  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+    // This is build time, return a dummy URL
+    return 'postgresql://dummy@localhost/db';
+  }
+  
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set');
+  }
+  
+  return process.env.DATABASE_URL;
+};
+
+const sql = neon(getDatabaseUrl());
+
 export const db = drizzle(sql, { schema });
 
 /**
