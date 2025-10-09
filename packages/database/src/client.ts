@@ -14,17 +14,25 @@ import * as schema from './schema';
 
 // Handle build-time vs runtime
 const getDatabaseUrl = () => {
-  // In production runtime, use the actual DATABASE_URL
-  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
-    // This is build time, return a dummy URL
+  // Check if we're in a build environment
+  if (typeof process.env.DATABASE_URL === 'undefined' && process.env.VERCEL_ENV === 'production') {
+    // During build, return a dummy URL to prevent errors
+    console.warn('DATABASE_URL not available during build, using dummy connection');
     return 'postgresql://dummy@localhost/db';
   }
   
-  if (!process.env.DATABASE_URL) {
+  const url = process.env.DATABASE_URL;
+  
+  if (!url) {
+    // In development, throw error; in production, return dummy to prevent crash
+    if (process.env.NODE_ENV === 'production') {
+      console.error('DATABASE_URL not set in production!');
+      return 'postgresql://dummy@localhost/db';
+    }
     throw new Error('DATABASE_URL environment variable is not set');
   }
   
-  return process.env.DATABASE_URL;
+  return url;
 };
 
 const sql = neon(getDatabaseUrl());
