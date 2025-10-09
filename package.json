@@ -11,6 +11,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
+    "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
     "release:rollback": "bash scripts/rollback.sh"
