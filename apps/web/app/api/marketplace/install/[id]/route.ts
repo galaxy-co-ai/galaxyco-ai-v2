@@ -4,6 +4,8 @@ import { db } from '@galaxyco/database/client';
 import { agentTemplates, agents, users, workspaceMembers } from '@galaxyco/database/schema';
 import { eq, and } from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * POST /api/marketplace/install/[id]
  * 

@@ -3,6 +3,8 @@ import { db } from '@galaxyco/database/client';
 import { agentTemplates } from '@galaxyco/database/schema';
 import { eq, desc, asc, and, sql, like, or } from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/marketplace/templates
  * 
