@@ -1,7 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
+  "buildCommand": "pnpm install && pnpm run build",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
-  "ignoreCommand": "exit 1"
+  "installCommand": "npm install -g pnpm@9.0.0 && pnpm install"
 }
