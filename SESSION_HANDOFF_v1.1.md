@@ -1,7 +1,7 @@
-# 🚀 GalaxyCo.ai v2 - Master Session Handoff v1.2
+# 🚀 GalaxyCo.ai v2 - Master Session Handoff v1.3
 
-**Last Updated:** October 9, 2025 - 3:23 AM EST  
-**Current Phase:** Production Deployment Complete + First-Time User Fix ✅
+**Last Updated:** October 9, 2025 - 4:05 AM EST  
+**Current Phase:** Production Stable - All Critical Errors Fixed ✅
 **Working Directory:** `/c/Users/Owner/workspace/galaxyco-ai-2.0`  
 **Branch:** `main` (merged from temp-phase9)  
 **Repository:** https://github.com/galaxy-co-ai/galaxyco-ai-v2
@@ -58,6 +58,38 @@ galaxyco-ai-2.0/
 ---
 
 ## 📋 COMPLETED WORK - RECENT SESSIONS
+
+### Session 1B: Critical Middleware Fix - API Routes Returning HTML (Oct 9, 2025 - 4:00 AM)
+**Problem:** Dashboard showing "Application error: a client-side exception has occurred" with console errors:
+- `Failed to load resource: /api/workspace/current` returning 404 HTML
+- `SyntaxError: Unexpected token '<', "<!DOCTYPE"... is not valid JSON`
+- WorkspaceProvider unable to fetch workspace data
+
+**Root Cause:**  
+- Clerk middleware was blocking ALL API routes with `auth().protect()`
+- API routes returning 404 HTML pages instead of JSON responses
+- Routes existed and compiled correctly, but middleware prevented access
+
+**Solution:**
+1. ✅ Added workspace API routes to `isPublicRoute` matcher in middleware
+2. ✅ Routes now handle authentication internally (already implemented)
+3. ✅ Verified security: routes check `await auth()` before data access
+4. ✅ Tested production deployment - returns proper JSON
+
+**Commit:** `85bc01c` - fix(middleware): allow workspace API routes to handle auth internally
+
+**Files Changed:**
+- `apps/web/middleware.ts` - Added `/api/workspace/current`, `/api/workspace/list`, `/api/webhooks/clerk` to public routes
+
+**Impact:** 
+- ✅ Dashboard loads without errors
+- ✅ WorkspaceProvider successfully fetches data
+- ✅ Clean console output
+- ✅ Proper JSON responses from API
+
+**Security Note:** Routes still validate authentication internally via `await auth()` - no security compromised.
+
+---
 
 ### Session 1A: First-Time User Workspace Initialization Fix (Oct 9, 2025 - 3:20 AM)
 **Problem:** Users signing in for the first time see 404 errors in console when accessing dashboard before creating a workspace.
