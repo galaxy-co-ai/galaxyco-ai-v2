@@ -73,6 +73,15 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       
       const data = await response.json();
       
+      // Handle null workspace (new user without workspace yet) - this is normal!
+      if (data.workspaceId === null || data.workspace === null) {
+        console.log('ℹ️ No workspace found - user needs to create one');
+        setWorkspaceIdState(null);
+        setWorkspace(null);
+        localStorage.removeItem('workspaceId');
+        return null;
+      }
+      
       setWorkspaceIdState(data.workspaceId);
       setWorkspace(data.workspace);
       

@@ -16,10 +16,11 @@ export async function GET() {
   try {
     const { id, source } = await getCurrentWorkspaceId();
     
+    // No workspace is a valid state for new users - return 200 with null
     if (!id) {
       return NextResponse.json(
-        { error: 'No workspace found', source },
-        { status: 404 }
+        { workspaceId: null, workspace: null, source },
+        { status: 200 }
       );
     }
     
