@@ -1,0 +1,379 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\playwright.config.ts",
+    "rootDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      ["list", null]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Desktop Chrome",
+        "name": "Desktop Chrome",
+        "testDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Desktop Large",
+        "name": "Desktop Large",
+        "testDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Tablet",
+        "name": "Tablet",
+        "testDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile",
+        "name": "Mobile",
+        "testDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Large",
+        "name": "Mobile Large",
+        "testDir": "C:/Users/Owner/workspace/galaxyco-ai-2.0/tests",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "changed",
+    "updateSourceMethod": "patch",
+    "version": "1.56.0",
+    "workers": 10,
+    "webServer": {
+      "command": "pnpm dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "visual\\screenshots.spec.ts",
+      "file": "visual/screenshots.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Visual Regression",
+          "file": "visual/screenshots.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "homepage screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4583,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "A snapshot doesn't exist at C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts-snapshots\\homepage-Desktop-Chrome-win32.png, writing actual.\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-10T01:27:24.998Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "homepage-expected.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts-snapshots\\homepage-Desktop-Chrome-win32.png"
+                        },
+                        {
+                          "name": "homepage-actual.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-homepage-screenshot-Desktop-Chrome\\homepage-actual.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0f726e908f7a5f9a0f2-c3f2284b7e18939dc566",
+              "file": "visual/screenshots.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "sign-in screenshot",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30236,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts",
+                            "column": 18,
+                            "line": 14
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  12 |     test(`${name} screenshot`, async ({ page }) => {\n  13 |       await page.goto(path);\n> 14 |       await page.waitForLoadState('networkidle');\n     |                  ^\n  15 |       await page.waitForTimeout(500);\n  16 |       await expect(page).toHaveScreenshot(`${name}.png`, {\n  17 |         fullPage: true,\n    at C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts:14:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-10T01:27:24.993Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-in-screenshot-Desktop-Chrome\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-in-screenshot-Desktop-Chrome\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-in-screenshot-Desktop-Chrome\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d0f726e908f7a5f9a0f2-4556d92f0b2bd68ff90c",
+              "file": "visual/screenshots.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "sign-up screenshot",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 30804,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts",
+                            "column": 18,
+                            "line": 14
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  12 |     test(`${name} screenshot`, async ({ page }) => {\n  13 |       await page.goto(path);\n> 14 |       await page.waitForLoadState('networkidle');\n     |                  ^\n  15 |       await page.waitForTimeout(500);\n  16 |       await expect(page).toHaveScreenshot(`${name}.png`, {\n  17 |         fullPage: true,\n    at C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts:14:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-10T01:27:24.992Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-up-screenshot-Desktop-Chrome\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-up-screenshot-Desktop-Chrome\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-sign-up-screenshot-Desktop-Chrome\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d0f726e908f7a5f9a0f2-1a6268abb63343cfb6cb",
+              "file": "visual/screenshots.spec.ts",
+              "line": 12,
+              "column": 9
+            },
+            {
+              "title": "marketplace screenshot",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5680,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "A snapshot doesn't exist at C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts-snapshots\\marketplace-Desktop-Chrome-win32.png, writing actual.\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-10T01:27:24.997Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "marketplace-expected.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\tests\\visual\\screenshots.spec.ts-snapshots\\marketplace-Desktop-Chrome-win32.png"
+                        },
+                        {
+                          "name": "marketplace-actual.png",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0\\test-results\\visual-screenshots-Visual-Regression-marketplace-screenshot-Desktop-Chrome\\marketplace-actual.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d0f726e908f7a5f9a0f2-779c95b4552b041c9cf9",
+              "file": "visual/screenshots.spec.ts",
+              "line": 12,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-10T01:27:24.186Z",
+    "duration": 31839.068,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

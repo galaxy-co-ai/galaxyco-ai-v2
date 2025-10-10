@@ -1,0 +1,51 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+    - generic [ref=e4]:
+        - generic [ref=e5]:
+            - generic [ref=e7]:
+                - heading "Create your account" [level=1] [ref=e8]
+                - paragraph [ref=e9]: Welcome! Please fill in the details to get started.
+            - generic [ref=e11]:
+                - generic [ref=e12]:
+                    - generic [ref=e13]:
+                        - generic [ref=e15]:
+                            - generic [ref=e16]:
+                                - generic [ref=e17]: First name
+                                - generic [ref=e18]: Optional
+                            - textbox "First name" [ref=e19]
+                        - generic [ref=e21]:
+                            - generic [ref=e22]:
+                                - generic [ref=e23]: Last name
+                                - generic [ref=e24]: Optional
+                            - textbox "Last name" [ref=e25]
+                    - generic [ref=e28]:
+                        - generic [ref=e30]: Email address
+                        - textbox "Email address" [ref=e31]:
+                            - /placeholder: Enter your email address
+                    - generic [ref=e34]:
+                        - generic [ref=e36]: Password
+                        - generic [ref=e37]:
+                            - textbox "Password" [ref=e38]:
+                                - /placeholder: Enter your password
+                            - button "Show password" [ref=e39] [cursor=pointer]:
+                                - img [ref=e40]
+                - button "Continue" [ref=e45] [cursor=pointer]:
+                    - generic [ref=e46]:
+                        - text: Continue
+                        - img [ref=e47]
+        - generic [ref=e49]:
+            - generic [ref=e50]:
+                - generic [ref=e51]: Already have an account?
+                - link "Sign in" [ref=e52] [cursor=pointer]:
+                    - /url: https://new-aphid-8.accounts.dev/sign-in?__clerk_db_jwt=dvb_33qzynn8F1M6BN08JABwVO438ND
+            - generic [ref=e54]:
+                - generic [ref=e56]:
+                    - paragraph [ref=e57]: Secured by
+                    - link "Clerk logo" [ref=e58] [cursor=pointer]:
+                        - /url: https://go.clerk.com/components
+                        - img [ref=e59]
+                - paragraph [ref=e64]: Development mode
+    - alert [ref=e65]
+```

@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+    - generic [ref=e4]:
+        - generic [ref=e5]:
+            - generic [ref=e7]:
+                - heading "Sign in to galaxyco-ai-2.0" [level=1] [ref=e8]
+                - paragraph [ref=e9]: Welcome back! Please sign in to continue
+            - generic [ref=e11]:
+                - generic [ref=e12]:
+                    - generic [ref=e15]:
+                        - generic [ref=e17]: Email address
+                        - textbox "Email address" [active] [ref=e18]:
+                            - /placeholder: Enter your email address
+                    - generic:
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic: Password
+                                - generic:
+                                    - textbox "Password":
+                                        - /placeholder: Enter your password
+                                    - button "Show password":
+                                        - img
+                - button "Continue" [ref=e20] [cursor=pointer]:
+                    - generic [ref=e21]:
+                        - text: Continue
+                        - img [ref=e22]
+        - generic [ref=e24]:
+            - generic [ref=e25]:
+                - generic [ref=e26]: Don’t have an account?
+                - link "Sign up" [ref=e27] [cursor=pointer]:
+                    - /url: https://new-aphid-8.accounts.dev/sign-up?__clerk_db_jwt=dvb_33qzymaL7dfRxSnP3nAsQHoIpSg
+            - generic [ref=e29]:
+                - generic [ref=e31]:
+                    - paragraph [ref=e32]: Secured by
+                    - link "Clerk logo" [ref=e33] [cursor=pointer]:
+                        - /url: https://go.clerk.com/components
+                        - img [ref=e34]
+                - paragraph [ref=e39]: Development mode
+    - alert [ref=e40]
+```
