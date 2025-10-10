@@ -1,6 +1,6 @@
 "use client";
 
-import AgentTemplateCard from "./AgentTemplateCard";
+import AgentTemplateCardCompact from "./AgentTemplateCardCompact";
 import { spacing } from "@/lib/constants/design-system";
 
 export default function MarketplaceGrid() {
@@ -112,18 +112,17 @@ export default function MarketplaceGrid() {
 
   return (
     <div>
-      {/* OpenSea-style: Featured Section - Larger cards (2-column on desktop) */}
+      {/* OpenSea-style: Featured Section - Larger cards (3-column on desktop) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(min(100%, 450px), 1fr))",
-          gap: spacing.xl,
-          marginBottom: spacing["3xl"],
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: spacing.lg,
+          marginBottom: spacing["2xl"],
         }}
       >
-        {allTemplates.slice(0, 2).map((template) => (
-          <AgentTemplateCard
+        {allTemplates.slice(0, 3).map((template) => (
+          <AgentTemplateCardCompact
             key={template.id}
             template={template}
             isFeatured={true}
@@ -131,16 +130,16 @@ export default function MarketplaceGrid() {
         ))}
       </div>
 
-      {/* OpenSea-style: Main Grid - Smaller cards (3-4 column on desktop) */}
+      {/* OpenSea-style: Main Grid - Smaller cards (4-5 column on desktop, tighter spacing) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: spacing.lg,
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gap: spacing.md,
         }}
       >
-        {allTemplates.slice(2).map((template) => (
-          <AgentTemplateCard
+        {allTemplates.slice(3).map((template) => (
+          <AgentTemplateCardCompact
             key={template.id}
             template={template}
             isFeatured={false}
