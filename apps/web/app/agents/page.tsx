@@ -1,11 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useAgentList } from '../../hooks/use-agent-list';
-import { AgentListCard } from '../../components/agents/AgentListCard';
-import { EmptyState } from '../../components/ui/EmptyState';
-import { colors, spacing, typography, radius } from '../../lib/constants/design-system';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAgentList } from "../../hooks/use-agent-list";
+import { AgentListCard } from "../../components/agents/AgentListCard";
+import { EmptyState } from "../../components/ui/EmptyState";
+import {
+  colors,
+  spacing,
+  typography,
+  radius,
+} from "../../lib/constants/design-system";
 
 export default function AgentsPage() {
   const {
@@ -23,8 +28,10 @@ export default function AgentsPage() {
     refresh,
   } = useAgentList();
 
-  const [searchInput, setSearchInput] = useState('');
-  const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(
+    null,
+  );
 
   // Debounced search
   useEffect(() => {
@@ -46,28 +53,40 @@ export default function AgentsPage() {
   }, [searchInput]);
 
   const statusTabs = [
-    { value: 'all' as const, label: 'All', count: totalCount },
-    { value: 'active' as const, label: 'Active' },
-    { value: 'draft' as const, label: 'Draft' },
-    { value: 'paused' as const, label: 'Paused' },
+    { value: "all" as const, label: "All", count: totalCount },
+    { value: "active" as const, label: "Active" },
+    { value: "draft" as const, label: "Draft" },
+    { value: "paused" as const, label: "Paused" },
   ];
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: colors.background.tertiary }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: colors.background.tertiary,
+      }}
+    >
       {/* Header */}
       <div
         style={{
           backgroundColor: colors.background.primary,
           borderBottom: `1px solid ${colors.border.default}`,
-          padding: `${spacing.xl} ${spacing['2xl']}`,
+          padding: `${spacing.xl} ${spacing["2xl"]}`,
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: spacing.lg,
+            }}
+          >
             <div>
               <h1
                 style={{
-                  fontSize: typography.sizes['3xl'],
+                  fontSize: typography.sizes["3xl"],
                   fontWeight: typography.weights.bold,
                   color: colors.text.primary,
                   margin: 0,
@@ -83,10 +102,10 @@ export default function AgentsPage() {
                   margin: 0,
                 }}
               >
-                {totalCount} agent{totalCount !== 1 ? 's' : ''} total
+                {totalCount} agent{totalCount !== 1 ? "s" : ""} total
               </p>
             </div>
-            <Link href="/agents/new" style={{ textDecoration: 'none' }}>
+            <Link href="/agents/new" style={{ textDecoration: "none" }}>
               <button
                 type="button"
                 style={{
@@ -95,16 +114,16 @@ export default function AgentsPage() {
                   fontWeight: typography.weights.semibold,
                   color: colors.background.primary,
                   backgroundColor: colors.primaryColor,
-                  border: 'none',
+                  border: "none",
                   borderRadius: radius.md,
-                  cursor: 'pointer',
-                  transition: 'opacity 200ms',
+                  cursor: "pointer",
+                  transition: "opacity 200ms",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '0.9';
+                  e.currentTarget.style.opacity = "0.9";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.opacity = "1";
                 }}
               >
                 + New Agent
@@ -119,8 +138,8 @@ export default function AgentsPage() {
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search agents..."
             style={{
-              width: '100%',
-              maxWidth: '500px',
+              width: "100%",
+              maxWidth: "500px",
               padding: `${spacing.sm} ${spacing.md}`,
               fontSize: typography.sizes.base,
               fontFamily: typography.fontFamily.sans,
@@ -128,7 +147,7 @@ export default function AgentsPage() {
               backgroundColor: colors.background.tertiary,
               border: `1px solid ${colors.border.default}`,
               borderRadius: radius.md,
-              outline: 'none',
+              outline: "none",
             }}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = colors.primaryColor;
@@ -139,7 +158,9 @@ export default function AgentsPage() {
           />
 
           {/* Status Filter Tabs */}
-          <div style={{ display: 'flex', gap: spacing.sm, marginTop: spacing.lg }}>
+          <div
+            style={{ display: "flex", gap: spacing.sm, marginTop: spacing.lg }}
+          >
             {statusTabs.map((tab) => (
               <button
                 key={tab.value}
@@ -149,21 +170,28 @@ export default function AgentsPage() {
                   padding: `${spacing.sm} ${spacing.lg}`,
                   fontSize: typography.sizes.sm,
                   fontWeight: typography.weights.medium,
-                  color: statusFilter === tab.value ? colors.primaryColor : colors.text.secondary,
-                  backgroundColor: statusFilter === tab.value ? colors.background.tertiary : 'transparent',
+                  color:
+                    statusFilter === tab.value
+                      ? colors.primaryColor
+                      : colors.text.secondary,
+                  backgroundColor:
+                    statusFilter === tab.value
+                      ? colors.background.tertiary
+                      : "transparent",
                   border: `1px solid ${statusFilter === tab.value ? colors.primaryColor : colors.border.default}`,
                   borderRadius: radius.md,
-                  cursor: 'pointer',
-                  transition: 'all 200ms',
+                  cursor: "pointer",
+                  transition: "all 200ms",
                 }}
                 onMouseEnter={(e) => {
                   if (statusFilter !== tab.value) {
-                    e.currentTarget.style.backgroundColor = colors.background.tertiary;
+                    e.currentTarget.style.backgroundColor =
+                      colors.background.tertiary;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (statusFilter !== tab.value) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.backgroundColor = "transparent";
                   }
                 }}
               >
@@ -176,11 +204,24 @@ export default function AgentsPage() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `${spacing['2xl']}` }}>
+      <div
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+          padding: `${spacing["2xl"]}`,
+        }}
+      >
         {/* Loading State */}
         {isLoading && (
-          <div style={{ textAlign: 'center', padding: spacing['4xl'] }}>
-            <p style={{ fontSize: typography.sizes.lg, color: colors.text.tertiary }}>Loading agents...</p>
+          <div style={{ textAlign: "center", padding: spacing["4xl"] }}>
+            <p
+              style={{
+                fontSize: typography.sizes.lg,
+                color: colors.text.tertiary,
+              }}
+            >
+              Loading agents...
+            </p>
           </div>
         )}
 
@@ -195,7 +236,13 @@ export default function AgentsPage() {
               marginBottom: spacing.xl,
             }}
           >
-            <p style={{ margin: 0, fontSize: typography.sizes.base, fontWeight: typography.weights.medium }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: typography.sizes.base,
+                fontWeight: typography.weights.medium,
+              }}
+            >
               ⚠️ {error}
             </p>
           </div>
@@ -205,16 +252,44 @@ export default function AgentsPage() {
         {!isLoading && agents.length === 0 && (
           <EmptyState
             icon="🤖"
-            title="No agents yet"
+            iconType="emoji"
+            title={search ? "No agents found" : "No agents yet"}
             description={
               search
-                ? `No agents match "${search}". Try a different search.`
-                : "Get started by creating your first agent"
+                ? `No agents match "${search}". Try adjusting your search or create a new agent.`
+                : "Get started by creating your first AI agent. Agents can automate tasks, process data, and integrate with your tools."
+            }
+            helpText={
+              !search
+                ? "Tip: Start with a simple agent to learn the platform"
+                : undefined
+            }
+            steps={
+              !search
+                ? [
+                    "Click the 'Create Agent' button below",
+                    "Choose a template or start from scratch",
+                    "Configure your agent's behavior and triggers",
+                    "Test and deploy your agent",
+                  ]
+                : undefined
             }
             action={{
-              label: '+ Create Agent',
-              onClick: () => (window.location.href = '/agents/new'),
+              label: "+ Create Agent",
+              onClick: () => (window.location.href = "/agents/new"),
+              variant: "primary",
             }}
+            secondaryAction={
+              search
+                ? {
+                    label: "Clear Search",
+                    onClick: () => {
+                      setSearchInput("");
+                      setSearch("");
+                    },
+                  }
+                : undefined
+            }
           />
         )}
 
@@ -223,8 +298,8 @@ export default function AgentsPage() {
           <>
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
                 gap: spacing.lg,
                 marginBottom: spacing.xl,
               }}
@@ -236,7 +311,13 @@ export default function AgentsPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', gap: spacing.sm }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: spacing.sm,
+                }}
+              >
                 <button
                   type="button"
                   onClick={() => setPage(page - 1)}
@@ -245,11 +326,12 @@ export default function AgentsPage() {
                     padding: `${spacing.sm} ${spacing.lg}`,
                     fontSize: typography.sizes.sm,
                     fontWeight: typography.weights.medium,
-                    color: page === 1 ? colors.text.tertiary : colors.text.primary,
-                    backgroundColor: 'transparent',
+                    color:
+                      page === 1 ? colors.text.tertiary : colors.text.primary,
+                    backgroundColor: "transparent",
                     border: `1px solid ${colors.border.default}`,
                     borderRadius: radius.md,
-                    cursor: page === 1 ? 'not-allowed' : 'pointer',
+                    cursor: page === 1 ? "not-allowed" : "pointer",
                     opacity: page === 1 ? 0.5 : 1,
                   }}
                 >
@@ -272,11 +354,14 @@ export default function AgentsPage() {
                     padding: `${spacing.sm} ${spacing.lg}`,
                     fontSize: typography.sizes.sm,
                     fontWeight: typography.weights.medium,
-                    color: page === totalPages ? colors.text.tertiary : colors.text.primary,
-                    backgroundColor: 'transparent',
+                    color:
+                      page === totalPages
+                        ? colors.text.tertiary
+                        : colors.text.primary,
+                    backgroundColor: "transparent",
                     border: `1px solid ${colors.border.default}`,
                     borderRadius: radius.md,
-                    cursor: page === totalPages ? 'not-allowed' : 'pointer',
+                    cursor: page === totalPages ? "not-allowed" : "pointer",
                     opacity: page === totalPages ? 0.5 : 1,
                   }}
                 >
