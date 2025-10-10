@@ -18,9 +18,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.56.0",
+    "axe-core": "^4.11.0",
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.0.0",
     "husky": "^9.1.7",
+    "lighthouse": "^12.8.2",
     "lint-staged": "^16.2.3",
     "next": "14.2.33",
     "prettier": "^3.3.0",
