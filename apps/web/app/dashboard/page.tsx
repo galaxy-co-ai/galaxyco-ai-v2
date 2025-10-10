@@ -1,98 +1,203 @@
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
-import { getUserWorkspaces } from '@/lib/actions/workspace-actions';
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { getUserWorkspaces } from "@/lib/actions/workspace-actions";
+import { Card } from "@/components/ui/Card";
+import { colors, typography, spacing } from "@/lib/constants/design-system";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
   const user = await currentUser();
 
   if (!userId) {
-    redirect('/sign-in');
+    redirect("/sign-in");
   }
 
   // Check if user has any workspaces
   const workspaces = await getUserWorkspaces();
   if (workspaces.length === 0) {
-    redirect('/onboarding');
+    redirect("/onboarding");
   }
 
   // Get current workspace (first one for now, we'll add switching later)
   const currentWorkspace = workspaces[0];
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'system-ui', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1>🚀 Dashboard</h1>
-        <p style={{ color: '#666' }}>Welcome to GalaxyCo.ai 2.0</p>
+    <div
+      style={{
+        padding: spacing["2xl"],
+        maxWidth: "1200px",
+        margin: "0 auto",
+        fontFamily: typography.fontFamily.sans,
+      }}
+    >
+      {/* Page Header */}
+      <div style={{ marginBottom: spacing["2xl"] }}>
+        <h1
+          style={{
+            fontSize: typography.sizes["3xl"],
+            fontWeight: typography.weights.bold,
+            color: colors.text.primary,
+            margin: 0,
+            marginBottom: spacing.xs,
+          }}
+        >
+          🚀 Dashboard
+        </h1>
+        <p
+          style={{
+            fontSize: typography.sizes.base,
+            color: colors.text.secondary,
+            margin: 0,
+          }}
+        >
+          Welcome to GalaxyCo.ai 2.0
+        </p>
       </div>
 
+      {/* Cards Grid - 24px spacing between cards */}
       <div
-        style={{
-          padding: '1.5rem',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '12px',
-          color: 'white',
-          marginBottom: '2rem',
-        }}
+        style={{ display: "flex", flexDirection: "column", gap: spacing.xl }}
       >
-        <h2 style={{ marginTop: 0, fontSize: '1.5rem' }}>🏢 Current Workspace</h2>
-        <div style={{ display: 'grid', gap: '0.5rem', fontSize: '1.1rem' }}>
-          <div>
-            <strong>Name:</strong> {currentWorkspace.name}
-          </div>
-          <div>
-            <strong>Role:</strong> {currentWorkspace.role.toUpperCase()}
-          </div>
-          <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>
-            URL: galaxyco.ai/{currentWorkspace.slug}
-          </div>
-        </div>
-      </div>
-
-      <div
-        style={{
-          padding: '1.5rem',
-          background: '#f8f9fa',
-          borderRadius: '12px',
-          border: '1px solid #e0e0e0',
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>👤 User Profile</h2>
-        <div style={{ display: 'grid', gap: '0.5rem' }}>
-          <div>
-            <strong>Clerk User ID:</strong> {userId}
-          </div>
-          {user?.emailAddresses?.[0]?.emailAddress && (
-            <div>
-              <strong>Email:</strong> {user.emailAddresses[0].emailAddress}
+        {/* Current Workspace Card - Converted to white with accent border */}
+        <Card variant="outlined" hover>
+          <div
+            style={{
+              borderLeft: `4px solid ${colors.primary[500]}`,
+              paddingLeft: spacing.lg,
+              marginLeft: `-${spacing.xl}`,
+            }}
+          >
+            <h2
+              style={{
+                marginTop: 0,
+                marginBottom: spacing.lg,
+                fontSize: typography.sizes["2xl"],
+                fontWeight: typography.weights.semibold,
+                color: colors.text.primary,
+              }}
+            >
+              🏢 Current Workspace
+            </h2>
+            <div
+              style={{
+                display: "grid",
+                gap: spacing.sm,
+                fontSize: typography.sizes.base,
+              }}
+            >
+              <div style={{ color: colors.text.primary }}>
+                <strong>Name:</strong>{" "}
+                <span style={{ color: colors.text.secondary }}>
+                  {currentWorkspace.name}
+                </span>
+              </div>
+              <div style={{ color: colors.text.primary }}>
+                <strong>Role:</strong>{" "}
+                <span
+                  style={{
+                    color: colors.primary[600],
+                    fontWeight: typography.weights.semibold,
+                    textTransform: "uppercase",
+                    fontSize: typography.sizes.sm,
+                  }}
+                >
+                  {currentWorkspace.role}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: typography.sizes.sm,
+                  color: colors.text.tertiary,
+                  marginTop: spacing.xs,
+                }}
+              >
+                URL: galaxyco.ai/{currentWorkspace.slug}
+              </div>
             </div>
-          )}
-          {user?.firstName && (
-            <div>
-              <strong>Name:</strong> {user.firstName} {user.lastName}
-            </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </Card>
 
-      <div
-        style={{
-          marginTop: '2rem',
-          padding: '1.5rem',
-          background: '#d4edda',
-          borderRadius: '12px',
-          border: '1px solid #28a745',
-        }}
-      >
-        <h3 style={{ marginTop: 0, color: '#155724' }}>✅ Phase 6 Progress</h3>
-        <ul style={{ marginBottom: 0, color: '#155724' }}>
-          <li>✅ Step 1: Clerk authentication integrated</li>
-          <li>✅ Step 2: User sync to database via webhooks</li>
-          <li>✅ Step 3: Workspace creation flow complete</li>
-          <li>✅ Step 4: Workspace switching with persistence</li>
-          <li>🔄 Step 5: API authentication guards (next)</li>
-          <li>🔄 Step 6: End-to-end testing</li>
-        </ul>
+        {/* User Profile Card */}
+        <Card hover>
+          <h2
+            style={{
+              marginTop: 0,
+              marginBottom: spacing.lg,
+              fontSize: typography.sizes["2xl"],
+              fontWeight: typography.weights.semibold,
+              color: colors.text.primary,
+            }}
+          >
+            👤 User Profile
+          </h2>
+          <div style={{ display: "grid", gap: spacing.sm }}>
+            <div style={{ fontSize: typography.sizes.sm }}>
+              <strong style={{ color: colors.text.primary }}>
+                Clerk User ID:
+              </strong>{" "}
+              <span
+                style={{
+                  color: colors.text.secondary,
+                  fontFamily: typography.fontFamily.mono,
+                }}
+              >
+                {userId}
+              </span>
+            </div>
+            {user?.emailAddresses?.[0]?.emailAddress && (
+              <div style={{ fontSize: typography.sizes.sm }}>
+                <strong style={{ color: colors.text.primary }}>Email:</strong>{" "}
+                <span style={{ color: colors.text.secondary }}>
+                  {user.emailAddresses[0].emailAddress}
+                </span>
+              </div>
+            )}
+            {user?.firstName && (
+              <div style={{ fontSize: typography.sizes.sm }}>
+                <strong style={{ color: colors.text.primary }}>Name:</strong>{" "}
+                <span style={{ color: colors.text.secondary }}>
+                  {user.firstName} {user.lastName}
+                </span>
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {/* Phase 6 Progress Card */}
+        <Card
+          variant="outlined"
+          style={{
+            backgroundColor: colors.success.light,
+            borderColor: colors.success.DEFAULT,
+          }}
+        >
+          <h3
+            style={{
+              marginTop: 0,
+              marginBottom: spacing.lg,
+              fontSize: typography.sizes.xl,
+              fontWeight: typography.weights.semibold,
+              color: colors.success.dark,
+            }}
+          >
+            ✅ Phase 6 Progress
+          </h3>
+          <ul
+            style={{
+              marginBottom: 0,
+              paddingLeft: spacing.xl,
+              color: colors.success.dark,
+              lineHeight: 1.8,
+            }}
+          >
+            <li>✅ Step 1: Clerk authentication integrated</li>
+            <li>✅ Step 2: User sync to database via webhooks</li>
+            <li>✅ Step 3: Workspace creation flow complete</li>
+            <li>✅ Step 4: Workspace switching with persistence</li>
+            <li>🔄 Step 5: API authentication guards (next)</li>
+            <li>🔄 Step 6: End-to-end testing</li>
+          </ul>
+        </Card>
       </div>
     </div>
   );

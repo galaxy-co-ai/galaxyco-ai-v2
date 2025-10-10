@@ -1,19 +1,46 @@
-import { colors, radius, shadows, animation, typography } from '@/lib/constants/design-system';
-import { CSSProperties, ButtonHTMLAttributes, ReactNode } from 'react';
+"use client";
+
+import {
+  colors,
+  radius,
+  shadows,
+  animation,
+  typography,
+  spacing,
+} from "@/lib/constants/design-system";
+import { CSSProperties, ButtonHTMLAttributes, ReactNode } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
-  icon?: ReactNode;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   loading?: boolean;
 }
 
+/**
+ * Standardized Button Component
+ *
+ * Variants:
+ * - primary: Blue background, white text (main actions)
+ * - secondary: White background, gray text with border (secondary actions)
+ * - outline: Transparent with blue border (tertiary actions)
+ * - ghost: Transparent minimal (low-priority actions)
+ * - danger: Red background for destructive actions
+ *
+ * Sizes:
+ * - sm: px-4 py-2 text-sm
+ * - md: px-6 py-3 text-base (default)
+ * - lg: px-8 py-4 text-lg
+ */
+
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   fullWidth = false,
-  icon,
+  leftIcon,
+  rightIcon,
   loading = false,
   children,
   disabled,
@@ -22,57 +49,86 @@ export function Button({
 }: ButtonProps) {
   const baseStyles: CSSProperties = {
     fontFamily: typography.fontFamily.sans,
-    fontWeight: typography.fontWeight.semibold,
-    border: 'none',
-    borderRadius: radius.md,
-    cursor: disabled || loading ? 'not-allowed' : 'pointer',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '0.5rem',
+    fontWeight: typography.weights.semibold,
+    border: "none",
+    borderRadius: radius.lg,
+    cursor: disabled || loading ? "not-allowed" : "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
     transition: `all ${animation.timing.fast} ${animation.easing.default}`,
-    width: fullWidth ? '100%' : 'auto',
+    width: fullWidth ? "100%" : "auto",
     opacity: disabled || loading ? 0.6 : 1,
-    textDecoration: 'none',
+    textDecoration: "none",
+    whiteSpace: "nowrap",
   };
 
   const variantStyles: Record<string, CSSProperties> = {
     primary: {
       background: colors.primary[500],
-      color: colors.neutral[0],
+      color: colors.text.inverse,
       boxShadow: shadows.sm,
     },
     secondary: {
-      background: colors.neutral[0],
-      color: colors.primary[500],
-      border: `2px solid ${colors.primary[500]}`,
+      background: colors.background.primary,
+      color: colors.text.primary,
+      border: `1px solid ${colors.border.default}`,
+      boxShadow: shadows.sm,
+    },
+    outline: {
+      background: "transparent",
+      color: colors.primary[600],
+      border: `1px solid ${colors.primary[500]}`,
+      boxShadow: "none",
     },
     ghost: {
-      background: 'transparent',
-      color: colors.neutral[700],
-      border: `1px solid ${colors.neutral[200]}`,
+      background: "transparent",
+      color: colors.text.secondary,
+      border: "none",
+      boxShadow: "none",
+    },
+    danger: {
+      background: colors.error.DEFAULT,
+      color: colors.text.inverse,
+      boxShadow: shadows.sm,
     },
   };
 
   const sizeStyles: Record<string, CSSProperties> = {
     sm: {
-      padding: '0.5rem 1rem',
-      fontSize: typography.fontSize.sm,
+      padding: `${spacing.sm} ${spacing.lg}`,
+      fontSize: typography.sizes.sm,
     },
     md: {
-      padding: '0.75rem 1.5rem',
-      fontSize: typography.fontSize.base,
+      padding: `${spacing.md} ${spacing.xl}`,
+      fontSize: typography.sizes.base,
     },
     lg: {
-      padding: '1rem 2rem',
-      fontSize: typography.fontSize.lg,
+      padding: `${spacing.lg} ${spacing["2xl"]}`,
+      fontSize: typography.sizes.lg,
     },
   };
 
-  const hoverStyles = {
-    transform: !disabled && !loading ? 'translateY(-1px)' : undefined,
-    boxShadow: !disabled && !loading ? shadows.md : undefined,
-    filter: !disabled && !loading ? 'brightness(1.05)' : undefined,
+  const hoverStyles: Record<string, CSSProperties> = {
+    primary: {
+      background: colors.primary[600],
+      boxShadow: shadows.md,
+    },
+    secondary: {
+      background: colors.neutral[50],
+      boxShadow: shadows.md,
+    },
+    outline: {
+      background: colors.primary[50],
+    },
+    ghost: {
+      background: colors.neutral[100],
+    },
+    danger: {
+      background: colors.error.dark,
+      boxShadow: shadows.md,
+    },
   };
 
   return (
@@ -87,20 +143,42 @@ export function Button({
       }}
       onMouseEnter={(e) => {
         if (!disabled && !loading) {
-          Object.assign(e.currentTarget.style, hoverStyles);
+          Object.assign(e.currentTarget.style, hoverStyles[variant]);
         }
       }}
       onMouseLeave={(e) => {
-        Object.assign(e.currentTarget.style, {
-          transform: 'translateY(0)',
-          boxShadow: variantStyles[variant].boxShadow || 'none',
-          filter: 'brightness(1)',
-        });
+        if (!disabled && !loading) {
+          Object.assign(e.currentTarget.style, {
+            background: variantStyles[variant].background as string,
+            boxShadow: (variantStyles[variant].boxShadow as string) || "none",
+          });
+        }
       }}
     >
-      {loading && <span>⏳</span>}
-      {icon && !loading && <span>{icon}</span>}
+      {loading && (
+        <span
+          style={{
+            display: "inline-block",
+            width: "1em",
+            height: "1em",
+            border: "2px solid currentColor",
+            borderTopColor: "transparent",
+            borderRadius: "50%",
+            animation: "spin 0.6s linear infinite",
+          }}
+        />
+      )}
+      {leftIcon && !loading && (
+        <span style={{ display: "flex", alignItems: "center" }}>
+          {leftIcon}
+        </span>
+      )}
       {children}
+      {rightIcon && !loading && (
+        <span style={{ display: "flex", alignItems: "center" }}>
+          {rightIcon}
+        </span>
+      )}
     </button>
   );
 }
