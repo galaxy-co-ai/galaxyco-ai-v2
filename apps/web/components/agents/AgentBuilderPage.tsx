@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useAgentBuilder } from '@/hooks/use-agent-builder';
-import { BasicInfoForm } from './BasicInfoForm';
-import { ConfigurationForm } from './ConfigurationForm';
-import { AdvancedSettings } from './AdvancedSettings';
-import { PublishConfirmationModal } from './PublishConfirmationModal';
-import { TestPanel } from './TestPanel';
-import { TemplateLibrary } from './TemplateLibrary';
-import { AgentTemplate } from '@/lib/constants/agent-templates';
-import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
+import React, { useState, useEffect } from "react";
+import { useAgentBuilder } from "@/hooks/use-agent-builder";
+import { BasicInfoForm } from "./BasicInfoForm";
+import { ConfigurationForm } from "./ConfigurationForm";
+import { AdvancedSettings } from "./AdvancedSettings";
+import { PublishConfirmationModal } from "./PublishConfirmationModal";
+import { TestPanelImproved as TestPanel } from "./TestPanelImproved";
+import { TemplateLibrary } from "./TemplateLibrary";
+import { AgentTemplate } from "@/lib/constants/agent-templates";
+import {
+  colors,
+  spacing,
+  typography,
+  radius,
+  shadows,
+} from "@/lib/constants/design-system";
 
 export const AgentBuilderPage: React.FC = () => {
   const {
@@ -70,14 +76,14 @@ export const AgentBuilderPage: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+S / Ctrl+S to save
-      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
         e.preventDefault();
         if (state.isDirty && !state.isSaving) {
           handleSaveDraft();
         }
       }
       // Cmd+Enter / Ctrl+Enter to publish
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
         e.preventDefault();
         if (!state.isSaving) {
           setShowPublishModal(true);
@@ -85,14 +91,14 @@ export const AgentBuilderPage: React.FC = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [state.isDirty, state.isSaving]);
 
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: "100vh",
         backgroundColor: colors.background.tertiary,
       }}
     >
@@ -109,7 +115,7 @@ export const AgentBuilderPage: React.FC = () => {
       {/* Publish Confirmation Modal */}
       {showPublishModal && (
         <PublishConfirmationModal
-          agentName={state.basicInfo.name || 'Untitled Agent'}
+          agentName={state.basicInfo.name || "Untitled Agent"}
           onConfirm={handlePublish}
           onCancel={() => setShowPublishModal(false)}
           isPublishing={state.isSaving}
@@ -119,7 +125,8 @@ export const AgentBuilderPage: React.FC = () => {
       {/* Test Panel */}
       <TestPanel
         agentId={state.agentId}
-        agentName={state.basicInfo.name || 'Untitled Agent'}
+        agentName={state.basicInfo.name || "Untitled Agent"}
+        agentType={"custom"}
         isOpen={showTestPanel}
         onClose={() => setShowTestPanel(false)}
       />
@@ -127,7 +134,7 @@ export const AgentBuilderPage: React.FC = () => {
       {/* Top Toolbar */}
       <div
         style={{
-          position: 'sticky',
+          position: "sticky",
           top: 0,
           zIndex: 10,
           backgroundColor: colors.background.primary,
@@ -137,33 +144,43 @@ export const AgentBuilderPage: React.FC = () => {
       >
         <div
           style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            maxWidth: "1200px",
+            margin: "0 auto",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           {/* Left Side - Title & Status */}
           <div>
             <h1
               style={{
-                fontSize: typography.sizes['2xl'],
+                fontSize: typography.sizes["2xl"],
                 fontWeight: typography.weights.bold,
                 color: colors.text.primary,
                 margin: 0,
               }}
             >
-              {state.agentId ? 'Edit Agent' : 'Create New Agent'}
+              {state.agentId ? "Edit Agent" : "Create New Agent"}
             </h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: spacing.sm,
+                marginTop: spacing.xs,
+              }}
+            >
               <span
                 style={{
                   fontSize: typography.sizes.sm,
                   color: colors.text.tertiary,
                 }}
               >
-                Status: <strong style={{ color: colors.text.secondary }}>{state.status}</strong>
+                Status:{" "}
+                <strong style={{ color: colors.text.secondary }}>
+                  {state.status}
+                </strong>
               </span>
               {state.isDirty && !state.isSaving && (
                 <span
@@ -200,7 +217,7 @@ export const AgentBuilderPage: React.FC = () => {
           </div>
 
           {/* Right Side - Actions */}
-          <div style={{ display: 'flex', gap: spacing.sm }}>
+          <div style={{ display: "flex", gap: spacing.sm }}>
             <button
               type="button"
               onClick={() => setShowTemplateLibrary(true)}
@@ -210,20 +227,21 @@ export const AgentBuilderPage: React.FC = () => {
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.medium,
                 color: colors.text.secondary,
-                backgroundColor: 'transparent',
+                backgroundColor: "transparent",
                 border: `1px solid ${colors.border.default}`,
                 borderRadius: radius.md,
-                cursor: state.isSaving ? 'not-allowed' : 'pointer',
+                cursor: state.isSaving ? "not-allowed" : "pointer",
                 opacity: state.isSaving ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
               }}
               onMouseEnter={(e) => {
                 if (!state.isSaving) {
-                  e.currentTarget.style.backgroundColor = colors.background.secondary;
+                  e.currentTarget.style.backgroundColor =
+                    colors.background.secondary;
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
               📚 Change Template
@@ -238,20 +256,21 @@ export const AgentBuilderPage: React.FC = () => {
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.medium,
                 color: colors.text.secondary,
-                backgroundColor: 'transparent',
+                backgroundColor: "transparent",
                 border: `1px solid ${colors.border.default}`,
                 borderRadius: radius.md,
-                cursor: state.isSaving ? 'not-allowed' : 'pointer',
+                cursor: state.isSaving ? "not-allowed" : "pointer",
                 opacity: state.isSaving ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
               }}
               onMouseEnter={(e) => {
                 if (!state.isSaving) {
-                  e.currentTarget.style.backgroundColor = colors.background.secondary;
+                  e.currentTarget.style.backgroundColor =
+                    colors.background.secondary;
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
               🧪 Test
@@ -267,20 +286,21 @@ export const AgentBuilderPage: React.FC = () => {
                 fontWeight: typography.weights.medium,
                 color: colors.background.primary,
                 backgroundColor: colors.text.secondary,
-                border: 'none',
+                border: "none",
                 borderRadius: radius.md,
-                cursor: state.isSaving || !state.isDirty ? 'not-allowed' : 'pointer',
+                cursor:
+                  state.isSaving || !state.isDirty ? "not-allowed" : "pointer",
                 opacity: state.isSaving || !state.isDirty ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
               }}
               onMouseEnter={(e) => {
                 if (!state.isSaving && state.isDirty) {
-                  e.currentTarget.style.opacity = '0.9';
+                  e.currentTarget.style.opacity = "0.9";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!state.isSaving && state.isDirty) {
-                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.opacity = "1";
                 }
               }}
             >
@@ -297,22 +317,22 @@ export const AgentBuilderPage: React.FC = () => {
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
                 backgroundColor: colors.primaryColor,
-                border: 'none',
+                border: "none",
                 borderRadius: radius.md,
-                cursor: state.isSaving ? 'not-allowed' : 'pointer',
+                cursor: state.isSaving ? "not-allowed" : "pointer",
                 opacity: state.isSaving ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
                 boxShadow: shadows.sm,
               }}
               onMouseEnter={(e) => {
                 if (!state.isSaving) {
-                  e.currentTarget.style.opacity = '0.9';
+                  e.currentTarget.style.opacity = "0.9";
                   e.currentTarget.style.boxShadow = shadows.md;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!state.isSaving) {
-                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.opacity = "1";
                   e.currentTarget.style.boxShadow = shadows.sm;
                 }
               }}
@@ -327,7 +347,7 @@ export const AgentBuilderPage: React.FC = () => {
       {(saveSuccess || publishSuccess) && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: spacing.xl,
             right: spacing.xl,
             zIndex: 100,
@@ -338,11 +358,11 @@ export const AgentBuilderPage: React.FC = () => {
             boxShadow: shadows.lg,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
-            animation: 'fadeIn 200ms ease-in-out',
+            animation: "fadeIn 200ms ease-in-out",
           }}
         >
-          {saveSuccess && '✓ Draft saved successfully!'}
-          {publishSuccess && '✓ Agent published successfully!'}
+          {saveSuccess && "✓ Draft saved successfully!"}
+          {publishSuccess && "✓ Agent published successfully!"}
         </div>
       )}
 
@@ -350,7 +370,7 @@ export const AgentBuilderPage: React.FC = () => {
       {(state.errors.save || state.errors.publish) && (
         <div
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: spacing.xl,
             right: spacing.xl,
             zIndex: 100,
@@ -361,7 +381,7 @@ export const AgentBuilderPage: React.FC = () => {
             boxShadow: shadows.lg,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
-            animation: 'fadeIn 200ms ease-in-out',
+            animation: "fadeIn 200ms ease-in-out",
           }}
         >
           {state.errors.save || state.errors.publish}
@@ -371,9 +391,9 @@ export const AgentBuilderPage: React.FC = () => {
       {/* Main Content */}
       <div
         style={{
-          maxWidth: '900px',
-          margin: '0 auto',
-          padding: `${spacing['3xl']} ${spacing.xl}`,
+          maxWidth: "900px",
+          margin: "0 auto",
+          padding: `${spacing["3xl"]} ${spacing.xl}`,
         }}
       >
         {/* Form Container */}
@@ -381,7 +401,7 @@ export const AgentBuilderPage: React.FC = () => {
           style={{
             backgroundColor: colors.background.primary,
             borderRadius: radius.xl,
-            padding: spacing['3xl'],
+            padding: spacing["3xl"],
             boxShadow: shadows.md,
           }}
         >
@@ -396,9 +416,9 @@ export const AgentBuilderPage: React.FC = () => {
           {/* Divider */}
           <div
             style={{
-              height: '2px',
+              height: "2px",
               backgroundColor: colors.border.default,
-              margin: `${spacing['2xl']} 0`,
+              margin: `${spacing["2xl"]} 0`,
             }}
           />
 
@@ -413,18 +433,20 @@ export const AgentBuilderPage: React.FC = () => {
           {/* Advanced Settings */}
           <AdvancedSettings
             settings={advancedSettings}
-            onChange={(updates) => setAdvancedSettings({ ...advancedSettings, ...updates })}
+            onChange={(updates) =>
+              setAdvancedSettings({ ...advancedSettings, ...updates })
+            }
             disabled={state.isSaving}
           />
 
           {/* Bottom Action Bar (Mobile Friendly) */}
           <div
             style={{
-              marginTop: spacing['2xl'],
+              marginTop: spacing["2xl"],
               paddingTop: spacing.xl,
               borderTop: `1px solid ${colors.border.default}`,
-              display: 'flex',
-              justifyContent: 'flex-end',
+              display: "flex",
+              justifyContent: "flex-end",
               gap: spacing.sm,
             }}
           >
@@ -438,11 +460,12 @@ export const AgentBuilderPage: React.FC = () => {
                 fontWeight: typography.weights.medium,
                 color: colors.background.primary,
                 backgroundColor: colors.text.secondary,
-                border: 'none',
+                border: "none",
                 borderRadius: radius.md,
-                cursor: state.isSaving || !state.isDirty ? 'not-allowed' : 'pointer',
+                cursor:
+                  state.isSaving || !state.isDirty ? "not-allowed" : "pointer",
                 opacity: state.isSaving || !state.isDirty ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
               }}
             >
               💾 Save Draft
@@ -453,16 +476,16 @@ export const AgentBuilderPage: React.FC = () => {
               onClick={() => setShowPublishModal(true)}
               disabled={state.isSaving}
               style={{
-                padding: `${spacing.md} ${spacing['2xl']}`,
+                padding: `${spacing.md} ${spacing["2xl"]}`,
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
                 backgroundColor: colors.primaryColor,
-                border: 'none',
+                border: "none",
                 borderRadius: radius.md,
-                cursor: state.isSaving ? 'not-allowed' : 'pointer',
+                cursor: state.isSaving ? "not-allowed" : "pointer",
                 opacity: state.isSaving ? 0.6 : 1,
-                transition: 'all 200ms',
+                transition: "all 200ms",
                 boxShadow: shadows.sm,
               }}
             >
@@ -475,12 +498,13 @@ export const AgentBuilderPage: React.FC = () => {
         <p
           style={{
             marginTop: spacing.xl,
-            textAlign: 'center',
+            textAlign: "center",
             fontSize: typography.sizes.sm,
             color: colors.text.tertiary,
           }}
         >
-          Changes are automatically saved every 30 seconds. You can also save manually anytime.
+          Changes are automatically saved every 30 seconds. You can also save
+          manually anytime.
         </p>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { TestPanel } from "../../../components/agents/TestPanel";
+import { TestPanelImproved as TestPanel } from "../../../components/agents/TestPanelImproved";
 import { mockAgents, type MockAgent } from "../../../lib/mock-agents";
 import {
   colors,
@@ -493,6 +493,7 @@ export default function AgentDetailPage() {
       <TestPanel
         agentId={agent.id}
         agentName={agent.name}
+        agentType={agent.type}
         isOpen={isTestPanelOpen}
         onClose={() => setIsTestPanelOpen(false)}
       />
