@@ -3,32 +3,33 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { Rocket, Satellite, Globe, Users } from "lucide-react";
 import { colors, radius } from "@/lib/constants/design-system";
 
-// Main navigation items
+// Main navigation items with space-themed icons
 const MAIN_NAV_ITEMS = [
   {
     id: "dashboard",
     name: "Dashboard",
-    icon: "🏠",
+    icon: Rocket,
     path: "/dashboard",
   },
   {
     id: "knowledge",
     name: "Knowledge",
-    icon: "📚",
+    icon: Satellite,
     path: "/knowledge",
   },
   {
     id: "marketplace",
     name: "Marketplace",
-    icon: "🏪",
+    icon: Globe, // Planet-like icon
     path: "/marketplace",
   },
   {
     id: "agents",
     name: "Agents",
-    icon: "🤖",
+    icon: Users, // Team of agents/astronauts
     path: "/agents",
   },
 ];
@@ -116,9 +117,12 @@ export default function MainSidebar() {
               color: colors.primary[500],
               whiteSpace: "nowrap",
               textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
             }}
           >
-            {isExpanded ? "GalaxyCo.ai" : "🌌"}
+            {isExpanded ? "GalaxyCo.ai" : <Globe size={24} strokeWidth={2.5} />}
           </Link>
 
           {/* Pin Button */}
@@ -195,9 +199,7 @@ export default function MainSidebar() {
               }}
               title={isExpanded ? undefined : item.name}
             >
-              <span style={{ fontSize: "1.25rem", flexShrink: 0 }}>
-                {item.icon}
-              </span>
+              <item.icon size={20} strokeWidth={2} style={{ flexShrink: 0 }} />
               {isExpanded && (
                 <span
                   style={{
