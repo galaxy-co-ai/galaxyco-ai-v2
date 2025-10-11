@@ -95,27 +95,8 @@ export default function MarketplacePage() {
       {/* Content based on active tab */}
       {activeTab === "agents" ? (
         <>
-          {/* Featured Agents Carousel */}
-          <section style={{ padding: "3rem 1.5rem" }}>
-            <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-              <h2
-                style={{
-                  fontSize: "2rem",
-                  fontWeight: "700",
-                  marginBottom: "2rem",
-                  color: colors.text.primary,
-                }}
-              >
-                🔥 Featured Agents
-              </h2>
-              <Suspense fallback={<div>Loading featured...</div>}>
-                <MarketplaceFeatured />
-              </Suspense>
-            </div>
-          </section>
-
           {/* Categories */}
-          <section style={{ padding: "0 1.5rem 2rem" }}>
+          <section style={{ padding: "3rem 1.5rem 2rem" }}>
             <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
               <h2
                 style={{
@@ -255,6 +236,25 @@ export default function MarketplacePage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
+
+          {/* Featured Agents Carousel */}
+          <section style={{ padding: "0 1.5rem 3rem" }}>
+            <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+              <h2
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: "700",
+                  marginBottom: "2rem",
+                  color: colors.text.primary,
+                }}
+              >
+                🔥 Featured Agents
+              </h2>
+              <Suspense fallback={<div>Loading featured...</div>}>
+                <MarketplaceFeatured />
+              </Suspense>
             </div>
           </section>
 
