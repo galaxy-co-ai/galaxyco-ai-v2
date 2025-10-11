@@ -64,6 +64,19 @@ export type {
   ExecutionResult,
 } from "./execution-service";
 
+// Guardrails
+export {
+  createInputSafetyGuardrail,
+  createOutputValidationGuardrail,
+  createCostLimitGuardrail,
+  createToolApprovalGuardrail,
+} from "./guardrails";
+export type {
+  InputSafetyConfig,
+  CostLimitConfig,
+  ToolApprovalConfig,
+} from "./guardrails";
+
 // Tools (only database tools implemented so far)
 export {
   getAllTools,

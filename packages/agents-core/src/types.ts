@@ -141,12 +141,15 @@ export interface GuardrailResult {
   passed: boolean;
   reason?: string;
   metadata?: Record<string, any>;
+  action?: "block" | "redact" | "warn"; // What action to take if failed
+  redactedContent?: string; // If action is redact, the redacted version
 }
 
 export interface Guardrail {
   name: string;
   description: string;
-  type: "input" | "output" | "tool";
+  type: "input" | "output" | "tool" | "cost";
+  enabled?: boolean; // Allow disabling guardrails
 
   check(input: any, context?: Record<string, any>): Promise<GuardrailResult>;
 }
