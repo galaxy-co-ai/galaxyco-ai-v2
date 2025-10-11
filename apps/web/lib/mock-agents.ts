@@ -88,20 +88,46 @@ const defaultMockAgents: MockAgent[] = [
 
 class MockAgentService {
   private agents: MockAgent[] = [];
+  private initialized = false;
 
   constructor() {
-    // Initialize with default agents if none exist
-    const stored = localStorage.getItem("mockAgents");
-    if (stored) {
-      this.agents = JSON.parse(stored);
-    } else {
+    // Don't initialize in constructor - wait for client-side call
+  }
+
+  private initialize() {
+    if (this.initialized) return;
+
+    // Only initialize on client side
+    if (typeof window === "undefined") {
       this.agents = defaultMockAgents;
-      this.persist();
+      this.initialized = true;
+      return;
     }
+
+    try {
+      const stored = localStorage.getItem("mockAgents");
+      if (stored) {
+        this.agents = JSON.parse(stored);
+      } else {
+        this.agents = defaultMockAgents;
+        this.persist();
+      }
+    } catch (error) {
+      console.error("Failed to load mock agents from localStorage:", error);
+      this.agents = defaultMockAgents;
+    }
+
+    this.initialized = true;
   }
 
   private persist() {
-    localStorage.setItem("mockAgents", JSON.stringify(this.agents));
+    if (typeof window === "undefined") return;
+
+    try {
+      localStorage.setItem("mockAgents", JSON.stringify(this.agents));
+    } catch (error) {
+      console.error("Failed to persist mock agents to localStorage:", error);
+    }
   }
 
   /**
@@ -113,6 +139,7 @@ class MockAgentService {
     limit?: number;
     offset?: number;
   }) {
+    this.initialize();
     let filtered = [...this.agents];
 
     // Status filter
@@ -147,6 +174,7 @@ class MockAgentService {
    * Get single agent by ID
    */
   getAgent(id: string): MockAgent | null {
+    this.initialize();
     return this.agents.find((agent) => agent.id === id) || null;
   }
 
@@ -154,6 +182,7 @@ class MockAgentService {
    * Create a new agent
    */
   createAgent(data: Partial<MockAgent>): MockAgent {
+    this.initialize();
     const newAgent: MockAgent = {
       id: `agent-${Date.now()}`,
       name: data.name || "Unnamed Agent",
@@ -180,6 +209,7 @@ class MockAgentService {
    * Update existing agent
    */
   updateAgent(id: string, data: Partial<MockAgent>): MockAgent | null {
+    this.initialize();
     const index = this.agents.findIndex((agent) => agent.id === id);
     if (index === -1) return null;
 
@@ -197,6 +227,7 @@ class MockAgentService {
    * Delete (archive) agent
    */
   deleteAgent(id: string): boolean {
+    this.initialize();
     const index = this.agents.findIndex((agent) => agent.id === id);
     if (index === -1) return false;
 
@@ -211,7 +242,9 @@ class MockAgentService {
    * Reset to default agents (for testing)
    */
   resetToDefaults() {
-    this.agents = defaultMockAgents;
+    this.initialized = false; // Force re-initialization
+    this.agents = [...defaultMockAgents]; // Create new array
+    this.initialized = true;
     this.persist();
   }
 }
