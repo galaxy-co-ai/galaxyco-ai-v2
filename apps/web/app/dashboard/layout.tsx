@@ -21,8 +21,9 @@ export default function DashboardLayout({
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: "🏠" },
-    { href: "/marketplace", label: "Marketplace", icon: "🏪" },
+    { href: "/knowledge", label: "Knowledge", icon: "📚" },
     { href: "/agents", label: "Agents", icon: "🤖" },
+    { href: "/marketplace", label: "Marketplace", icon: "🏪" },
   ];
 
   const isActive = (href: string) => {
