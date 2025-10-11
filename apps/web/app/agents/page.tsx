@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useMockAgentList } from "../../hooks/use-mock-agent-list";
+import { useAgentList } from "../../hooks/use-agent-list";
 import { AgentListCard } from "../../components/agents/AgentListCard";
 import { EmptyState } from "../../components/ui/EmptyState";
 import {
@@ -26,8 +26,7 @@ export default function AgentsPage() {
     setStatusFilter,
     setPage,
     refresh,
-    resetToDefaults,
-  } = useMockAgentList();
+  } = useAgentList();
 
   const [searchInput, setSearchInput] = useState("");
   const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(
@@ -248,40 +247,22 @@ export default function AgentsPage() {
             >
               ⚠️ {error}
             </p>
-            <div style={{ display: "flex", gap: spacing.sm }}>
-              <button
-                type="button"
-                onClick={refresh}
-                style={{
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  fontSize: typography.sizes.sm,
-                  fontWeight: typography.weights.medium,
-                  color: colors.background.primary,
-                  backgroundColor: colors.primaryColor,
-                  border: "none",
-                  borderRadius: radius.sm,
-                  cursor: "pointer",
-                }}
-              >
-                🔄 Retry
-              </button>
-              <button
-                type="button"
-                onClick={resetToDefaults}
-                style={{
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  fontSize: typography.sizes.sm,
-                  fontWeight: typography.weights.medium,
-                  color: colors.text.primary,
-                  backgroundColor: "transparent",
-                  border: `1px solid ${colors.border.default}`,
-                  borderRadius: radius.sm,
-                  cursor: "pointer",
-                }}
-              >
-                🎭 Reset Demo Data
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={refresh}
+              style={{
+                padding: `${spacing.sm} ${spacing.md}`,
+                fontSize: typography.sizes.sm,
+                fontWeight: typography.weights.medium,
+                color: colors.background.primary,
+                backgroundColor: colors.primaryColor,
+                border: "none",
+                borderRadius: radius.sm,
+                cursor: "pointer",
+              }}
+            >
+              🔄 Retry
+            </button>
           </div>
         )}
 
@@ -298,7 +279,7 @@ export default function AgentsPage() {
                 marginBottom: spacing.md,
               }}
             >
-              {search ? "No agents found" : "Ready to test agent execution!"}
+              {search ? "No agents found" : "No agents yet"}
             </h2>
             <p
               style={{
@@ -312,8 +293,8 @@ export default function AgentsPage() {
               }}
             >
               {search
-                ? `No agents match "${search}". Try adjusting your search or load demo data.`
-                : "Load some demo agents to test the new execution feature with mock and live modes."}
+                ? `No agents match "${search}". Try adjusting your search or create a new agent.`
+                : "Create your first agent to get started with AI automation."}
             </p>
             <div
               style={{
@@ -322,22 +303,23 @@ export default function AgentsPage() {
                 justifyContent: "center",
               }}
             >
-              <button
-                type="button"
-                onClick={resetToDefaults}
-                style={{
-                  padding: `${spacing.md} ${spacing.xl}`,
-                  fontSize: typography.sizes.base,
-                  fontWeight: typography.weights.semibold,
-                  color: colors.background.primary,
-                  backgroundColor: colors.primaryColor,
-                  border: "none",
-                  borderRadius: radius.md,
-                  cursor: "pointer",
-                }}
-              >
-                🎭 Load Demo Agents
-              </button>
+              <Link href="/agents/new" style={{ textDecoration: "none" }}>
+                <button
+                  type="button"
+                  style={{
+                    padding: `${spacing.md} ${spacing.xl}`,
+                    fontSize: typography.sizes.base,
+                    fontWeight: typography.weights.semibold,
+                    color: colors.background.primary,
+                    backgroundColor: colors.primaryColor,
+                    border: "none",
+                    borderRadius: radius.md,
+                    cursor: "pointer",
+                  }}
+                >
+                  + Create Agent
+                </button>
+              </Link>
               {search && (
                 <button
                   type="button"

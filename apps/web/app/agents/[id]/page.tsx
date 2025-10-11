@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { TestPanelImproved as TestPanel } from "../../../components/agents/TestPanelImproved";
-import { mockAgents, type MockAgent } from "../../../lib/mock-agents";
 import {
   colors,
   spacing,
@@ -12,23 +11,35 @@ import {
   radius,
 } from "../../../lib/constants/design-system";
 
+interface Agent {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  status: "draft" | "active" | "paused" | "archived";
+  type: string;
+  trigger: string;
+  aiProvider: string;
+  model: string;
+  systemPrompt?: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
 export default function AgentDetailPage() {
   const params = useParams();
   const agentId = params.id as string;
 
-  const [agent, setAgent] = useState<MockAgent | null>(null);
+  const [agent, setAgent] = useState<Agent | null>(null);
   const [isTestPanelOpen, setIsTestPanelOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadAgent = async () => {
       setIsLoading(true);
-
-      // Simulate loading for realistic UX
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const foundAgent = mockAgents.get(agentId);
-      setAgent(foundAgent);
+      // TODO: Fetch from database API
+      // For now, just set loading false and show not found
+      setAgent(null);
       setIsLoading(false);
     };
 
@@ -126,12 +137,20 @@ export default function AgentDetailPage() {
     );
   }
 
-  const statusColor = {
+  const statusColor =
+    {
+      draft: colors.warningColor,
+      active: colors.successColor,
+      paused: colors.text.tertiary,
+      archived: colors.text.tertiary,
+    }[agent.status as keyof typeof statusColors] || colors.text.tertiary;
+
+  const statusColors = {
     draft: colors.warningColor,
     active: colors.successColor,
     paused: colors.text.tertiary,
     archived: colors.text.tertiary,
-  }[agent.status];
+  };
 
   return (
     <>

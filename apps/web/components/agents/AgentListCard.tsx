@@ -10,10 +10,20 @@ import {
   shadows,
 } from "@/lib/constants/design-system";
 
-import type { MockAgent } from "@/lib/mock-agents";
+interface Agent {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  status: "draft" | "active" | "paused" | "archived";
+  type: string;
+  trigger: string;
+  aiProvider: string;
+  model: string;
+}
 
 interface AgentListCardProps {
-  agent: MockAgent;
+  agent: Agent;
 }
 
 export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
