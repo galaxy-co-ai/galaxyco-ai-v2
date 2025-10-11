@@ -1,20 +1,20 @@
-import { auth } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
-import { db } from '@galaxyco/database';
-import { agents, workspaces } from '@galaxyco/database/schema';
-import { eq, and } from 'drizzle-orm';
-import { AIGatewayService } from '@/lib/ai-gateway';
-import type { AIGatewayRequest } from '@/lib/ai-gateway';
-import { decryptApiKey } from '@/lib/crypto';
-import { retryWithBackoff } from '@/lib/retry';
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { db } from "@galaxyco/database";
+import { agents, workspaces } from "@galaxyco/database/schema";
+import { eq, and } from "drizzle-orm";
+import { AIGatewayService } from "@/lib/ai-gateway";
+import type { AIGatewayRequest } from "@/lib/ai-gateway";
+import { decryptApiKey } from "@/lib/crypto";
+import { retryWithBackoff } from "@/lib/retry";
 import {
   startExecution,
   completeExecution,
   failExecution,
-} from '@/lib/execution-tracker';
-import type { AIProviderType } from '@/lib/ai/types';
+} from "@/lib/execution-tracker";
+import type { AIProviderType } from "@/lib/ai/types";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 /**
  * POST /api/agents/[id]/execute
@@ -22,23 +22,28 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const { userId } = await auth();
-    
+
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { inputs, mode = 'live' } = body;
+    const { inputs, mode = "live" } = body;
 
     if (!inputs) {
       return NextResponse.json(
-        { error: 'Inputs are required' },
-        { status: 400 }
+        { error: "Inputs are required" },
+        { status: 400 },
       );
+    }
+
+    // Handle mock mode - return mock response without calling AI
+    if (mode === "mock") {
+      return handleMockExecution(params.id, inputs);
     }
 
     // Get agent with workspace info
@@ -50,7 +55,7 @@ export async function POST(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
+      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
     const workspace = await db.query.workspaces.findFirst({
@@ -58,31 +63,38 @@ export async function POST(
     });
 
     if (!workspace) {
-      return NextResponse.json({ error: 'Workspace not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Workspace not found" },
+        { status: 404 },
+      );
     }
 
     // Check if API key exists for the agent's AI provider
     const aiProvider = agent.config.aiProvider as AIProviderType;
     const encryptedKeys = workspace.encryptedApiKeys || {};
-    
+
     // Type guard to ensure aiProvider is a valid key
-    if (aiProvider !== 'openai' && aiProvider !== 'anthropic' && aiProvider !== 'google') {
+    if (
+      aiProvider !== "openai" &&
+      aiProvider !== "anthropic" &&
+      aiProvider !== "google"
+    ) {
       return NextResponse.json(
-        { 
+        {
           error: `Unsupported AI provider: ${aiProvider}`,
           message: `Only OpenAI, Anthropic, and Google are currently supported`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    
+
     if (!encryptedKeys[aiProvider]) {
       return NextResponse.json(
-        { 
+        {
           error: `${aiProvider} API key not configured`,
           message: `Please add your ${aiProvider} API key in settings`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -92,7 +104,7 @@ export async function POST(
     });
 
     if (!userRecord) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Start execution tracking
@@ -101,33 +113,34 @@ export async function POST(
       workspaceId: agent.workspaceId,
       userId: userRecord.id,
       input: inputs,
-      triggerType: 'manual',
+      triggerType: "manual",
     });
 
     try {
       // Decrypt API key and set as environment variable for AI Gateway
       const apiKey = decryptApiKey(encryptedKeys[aiProvider]!);
-      
+
       // Temporarily set the API key for this request
-      const envKey = 
-        aiProvider === 'openai' 
-          ? 'OPENAI_API_KEY' 
-          : aiProvider === 'anthropic'
-          ? 'ANTHROPIC_API_KEY'
-          : aiProvider === 'google'
-          ? 'GOOGLE_GENERATIVE_AI_API_KEY'
-          : '';
+      const envKey =
+        aiProvider === "openai"
+          ? "OPENAI_API_KEY"
+          : aiProvider === "anthropic"
+            ? "ANTHROPIC_API_KEY"
+            : aiProvider === "google"
+              ? "GOOGLE_GENERATIVE_AI_API_KEY"
+              : "";
       const originalKey = process.env[envKey];
       process.env[envKey] = apiKey;
 
       // Build messages from system prompt and inputs
       const messages = [
         {
-          role: 'system' as const,
-          content: agent.config.systemPrompt || 'You are a helpful AI assistant.',
+          role: "system" as const,
+          content:
+            agent.config.systemPrompt || "You are a helpful AI assistant.",
         },
         {
-          role: 'user' as const,
+          role: "user" as const,
           content: JSON.stringify(inputs),
         },
       ];
@@ -137,7 +150,7 @@ export async function POST(
         tenantId: agent.workspaceId,
         userId: userRecord.id,
         agentId: agent.id,
-        model: agent.config.model || 'gpt-3.5-turbo',
+        model: agent.config.model || "gpt-3.5-turbo",
         messages,
         temperature: agent.config.temperature ?? 0.7,
         maxTokens: agent.config.maxTokens,
@@ -151,11 +164,14 @@ export async function POST(
           baseDelayMs: 1000,
           maxDelayMs: 10000,
           onRetry: (attempt, error) => {
-            console.log(`Retry attempt ${attempt} for agent ${agent.id}:`, error.message);
+            console.log(
+              `Retry attempt ${attempt} for agent ${agent.id}:`,
+              error.message,
+            );
           },
-        }
+        },
       );
-      
+
       // Restore original API key
       if (originalKey) {
         process.env[envKey] = originalKey;
@@ -198,22 +214,139 @@ export async function POST(
         error,
       });
 
-      console.error('Agent execution error:', error);
-      
+      console.error("Agent execution error:", error);
+
       return NextResponse.json(
         {
           success: false,
-          error: error.message || 'Execution failed',
+          error: error.message || "Execution failed",
           executionId,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error: any) {
-    console.error('Agent execute API error:', error);
+    console.error("Agent execute API error:", error);
     return NextResponse.json(
-      { error: 'Failed to execute agent' },
-      { status: 500 }
+      { error: "Failed to execute agent" },
+      { status: 500 },
+    );
+  }
+}
+
+/**
+ * Handle mock execution with deterministic responses
+ * Does not require AI provider keys
+ */
+async function handleMockExecution(
+  agentId: string,
+  inputs: Record<string, any>,
+) {
+  try {
+    // Get agent info for mock response
+    const agent = await db.query.agents.findFirst({
+      where: eq(agents.id, agentId),
+    });
+
+    if (!agent) {
+      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+    }
+
+    // Generate mock output based on agent type
+    const mockOutputs: Record<string, Record<string, any>> = {
+      scope: {
+        summary: "Analyzed input and extracted key insights",
+        actionItems: [
+          "Review provided content for priority items",
+          "Schedule follow-up discussion",
+          "Document key findings",
+        ],
+        priority: "medium",
+        sentiment: "neutral",
+        confidence: 0.85,
+      },
+      email: {
+        subject: "Re: " + (inputs.subject || "Your inquiry"),
+        body: "Thank you for your message. Based on the information provided, here is our response: [Generated response would appear here]",
+        tone: "professional",
+        wordCount: 127,
+        suggestedAction: "send",
+      },
+      call: {
+        summary: "Call processed and analyzed successfully",
+        keyPoints: [
+          "Customer expressed interest in our services",
+          "Budget discussion scheduled for next week",
+          "Technical requirements documented",
+        ],
+        nextSteps: ["Send proposal", "Schedule technical demo"],
+        sentiment: "positive",
+      },
+      note: {
+        processedNote: "Note has been analyzed and categorized",
+        tags: ["meeting", "action-required", "follow-up"],
+        summary: "Key insights extracted from the provided note content",
+        relatedTopics: ["project-planning", "team-coordination"],
+      },
+      task: {
+        taskCreated: true,
+        taskId: `TASK-${Date.now()}`,
+        priority: "medium",
+        estimatedDuration: "2-3 hours",
+        assignedTo: "auto-detect",
+        status: "created",
+      },
+      roadmap: {
+        analysis: "Feature request analyzed and mapped to roadmap",
+        priorityScore: 7.5,
+        estimatedEffort: "1-2 weeks",
+        dependencies: ["API updates", "UI components"],
+        recommendedQuarter: "Q2 2025",
+      },
+      content: {
+        contentGenerated: true,
+        wordCount: 350,
+        readabilityScore: 8.2,
+        seoOptimized: true,
+        topics: ["productivity", "automation", "efficiency"],
+      },
+      custom: {
+        result: "Mock execution completed successfully",
+        processedInputs: Object.keys(inputs).length,
+        agentType: agent.type,
+        timestamp: new Date().toISOString(),
+      },
+    };
+
+    const output = mockOutputs[agent.type] || {
+      result: "Mock execution completed",
+      inputsReceived: inputs,
+      agentType: agent.type,
+      status: "success",
+    };
+
+    // Simulate processing time
+    const mockLatency = Math.floor(Math.random() * 800) + 200;
+
+    return NextResponse.json({
+      success: true,
+      output,
+      metrics: {
+        tokens: Math.floor(Math.random() * 400) + 100,
+        promptTokens: Math.floor(Math.random() * 200) + 50,
+        completionTokens: Math.floor(Math.random() * 200) + 50,
+        cost: 0.0023, // Mock cost
+        latencyMs: mockLatency,
+        model: "mock-model",
+      },
+      executionId: `mock-${agentId}-${Date.now()}`,
+      mode: "mock",
+    });
+  } catch (error: any) {
+    console.error("Mock execution error:", error);
+    return NextResponse.json(
+      { error: "Mock execution failed" },
+      { status: 500 },
     );
   }
 }

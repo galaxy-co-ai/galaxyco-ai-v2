@@ -2,14 +2,18 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-} from '@nestjs/common';
-import { db } from '@galaxyco/database/client';
-import { agents } from '@galaxyco/database/schema';
-import { eq, and, like, desc } from 'drizzle-orm';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
-import { TestAgentDto, TestResult } from './dto/test-agent.dto';
-import { randomUUID } from 'crypto';
+} from "@nestjs/common";
+import { db } from "@galaxyco/database/client";
+import { agents } from "@galaxyco/database/schema";
+import { eq, and, like, desc } from "drizzle-orm";
+import { CreateAgentDto } from "./dto/create-agent.dto";
+import { UpdateAgentDto } from "./dto/update-agent.dto";
+import {
+  TestAgentDto,
+  TestResult,
+  PythonServiceResponse,
+} from "./dto/test-agent.dto";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class AgentsService {
@@ -30,7 +34,7 @@ export class AgentsService {
         name: createAgentDto.name,
         description: createAgentDto.description,
         type: createAgentDto.type,
-        status: 'draft', // Always start as draft
+        status: "draft", // Always start as draft
         config: {
           aiProvider: createAgentDto.aiProvider,
           model: createAgentDto.model,
@@ -54,7 +58,7 @@ export class AgentsService {
   async findAll(
     workspaceId: string,
     filters?: {
-      status?: 'draft' | 'active' | 'paused' | 'archived';
+      status?: "draft" | "active" | "paused" | "archived";
       search?: string;
       limit?: number;
       offset?: number;
@@ -165,18 +169,17 @@ export class AgentsService {
     await db
       .update(agents)
       .set({
-        status: 'archived',
+        status: "archived",
         updatedAt: new Date(),
       })
       .where(and(eq(agents.id, id), eq(agents.workspaceId, workspaceId)));
 
-    return { success: true, message: 'Agent archived successfully' };
+    return { success: true, message: "Agent archived successfully" };
   }
 
   /**
-   * Test agent execution (mock mode)
-   * Phase 8: Returns deterministic mock results
-   * Phase 9: Will call Python service for live execution
+   * Test agent execution
+   * Supports both mock mode (fixtures) and live mode (Python service)
    */
   async test(
     id: string,
@@ -188,8 +191,8 @@ export class AgentsService {
 
     const startTime = Date.now();
 
-    // Phase 8: Mock execution
-    if (testDto.mode === 'mock' || !testDto.mode) {
+    // Mock execution (deterministic fixtures)
+    if (testDto.mode === "mock" || !testDto.mode) {
       const mockOutput = this.getMockOutput(agent.type, testDto.inputs);
       const durationMs = Date.now() - startTime + Math.random() * 500; // Simulate latency
 
@@ -207,8 +210,75 @@ export class AgentsService {
       };
     }
 
-    // Phase 9: Live execution (stub for now)
-    throw new Error('Live mode not yet implemented. Coming in Phase 9!');
+    // Live execution - call Python agent service
+    return this.executeLive(agent, testDto, workspaceId);
+  }
+
+  /**
+   * Execute agent via Python service (live mode)
+   * Calls FastAPI service at services/agents
+   */
+  private async executeLive(
+    agent: any,
+    testDto: TestAgentDto,
+    workspaceId: string,
+  ): Promise<TestResult> {
+    const pythonServiceUrl =
+      process.env.PYTHON_AGENTS_URL || "http://localhost:5001";
+
+    try {
+      const response = await fetch(`${pythonServiceUrl}/execute`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          agent_id: agent.id,
+          workspace_id: workspaceId,
+          user_id: "system", // TODO: Get from context
+          agent_type: agent.type,
+          inputs: testDto.inputs,
+          config: agent.config,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`Python service error (${response.status}): ${error}`);
+      }
+
+      const result = (await response.json()) as PythonServiceResponse;
+
+      return {
+        id: result.execution_id,
+        timestamp: new Date().toISOString(),
+        inputs: testDto.inputs,
+        outputs: result.outputs,
+        success: result.success,
+        error: result.error,
+        metrics: {
+          durationMs: result.metrics.duration_ms,
+          tokensUsed: result.metrics.tokens_used || 0,
+          costUsd: result.metrics.cost_usd || 0,
+          model: result.metrics.model,
+        },
+      };
+    } catch (error: any) {
+      // Return error response
+      return {
+        id: randomUUID(),
+        timestamp: new Date().toISOString(),
+        inputs: testDto.inputs,
+        outputs: {},
+        success: false,
+        error: error?.message || "Failed to execute agent",
+        metrics: {
+          durationMs: 0,
+          tokensUsed: 0,
+          costUsd: 0,
+        },
+      };
+    }
   }
 
   /**
@@ -221,46 +291,46 @@ export class AgentsService {
   ): Record<string, any> {
     const mockOutputs: Record<string, Record<string, any>> = {
       scope: {
-        summary: 'Analyzed email thread and extracted 3 action items',
+        summary: "Analyzed email thread and extracted 3 action items",
         actionItems: [
-          'Follow up with John about Q4 budget proposal',
-          'Schedule team meeting for next week',
-          'Review and approve design mockups',
+          "Follow up with John about Q4 budget proposal",
+          "Schedule team meeting for next week",
+          "Review and approve design mockups",
         ],
-        priority: 'high',
-        sentiment: 'neutral',
+        priority: "high",
+        sentiment: "neutral",
       },
       email: {
-        subject: 'Re: ' + (inputs.subject || 'Your inquiry'),
-        body: 'Thank you for reaching out. Based on your request, here is a personalized response...',
-        sentiment: 'positive',
-        suggested_action: 'send',
+        subject: "Re: " + (inputs.subject || "Your inquiry"),
+        body: "Thank you for reaching out. Based on your request, here is a personalized response...",
+        sentiment: "positive",
+        suggested_action: "send",
       },
       call: {
-        transcript_summary: 'Customer expressed interest in enterprise plan',
+        transcript_summary: "Customer expressed interest in enterprise plan",
         key_points: [
-          'Needs multi-tenant support',
-          'Budget approved for Q1',
-          'Decision maker: Sarah (CTO)',
+          "Needs multi-tenant support",
+          "Budget approved for Q1",
+          "Decision maker: Sarah (CTO)",
         ],
-        next_steps: ['Send pricing proposal', 'Schedule demo'],
+        next_steps: ["Send pricing proposal", "Schedule demo"],
       },
       note: {
-        note_summary: 'Meeting notes processed and categorized',
-        tags: ['product', 'roadmap', 'q1-planning'],
-        related_docs: ['PRD-2024-001', 'RFC-Backend-Auth'],
+        note_summary: "Meeting notes processed and categorized",
+        tags: ["product", "roadmap", "q1-planning"],
+        related_docs: ["PRD-2024-001", "RFC-Backend-Auth"],
       },
       task: {
         task_created: true,
-        task_id: 'TASK-' + Math.floor(Math.random() * 10000),
-        assignee: 'auto-detected',
+        task_id: "TASK-" + Math.floor(Math.random() * 10000),
+        assignee: "auto-detected",
         due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       },
       roadmap: {
-        feature_analysis: 'Analyzed request and mapped to existing roadmap',
+        feature_analysis: "Analyzed request and mapped to existing roadmap",
         priority_score: 8.5,
-        estimated_effort: '3-5 days',
-        dependencies: ['API authentication', 'UI component library'],
+        estimated_effort: "3-5 days",
+        dependencies: ["API authentication", "UI component library"],
       },
       content: {
         content_generated: true,
@@ -269,17 +339,17 @@ export class AgentsService {
         seo_optimized: true,
       },
       custom: {
-        result: 'Custom agent executed successfully',
+        result: "Custom agent executed successfully",
         processed_inputs: Object.keys(inputs).length,
-        status: 'completed',
+        status: "completed",
       },
     };
 
     return (
       mockOutputs[agentType] || {
-        result: 'Mock execution completed',
+        result: "Mock execution completed",
         inputs_received: inputs,
-        status: 'success',
+        status: "success",
       }
     );
   }
