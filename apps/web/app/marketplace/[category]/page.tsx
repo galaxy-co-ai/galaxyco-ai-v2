@@ -7,7 +7,6 @@ import MarketplaceHero from "@/components/marketplace/MarketplaceHero";
 import MarketplaceCategories from "@/components/marketplace/MarketplaceCategories";
 import MarketplaceGrid from "@/components/marketplace/MarketplaceGrid";
 import SearchBar from "@/components/marketplace/SearchBar";
-import MarketplaceSidebar from "@/components/marketplace/MarketplaceSidebar";
 import CategoryChips from "@/components/marketplace/CategoryChips";
 import { useMarketplaceSearch } from "@/hooks/use-marketplace-search";
 import {
@@ -55,23 +54,11 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div
       style={{
-        display: "flex",
         minHeight: "100vh",
         background: colors.background.primary,
       }}
     >
-      {/* Sidebar Navigation */}
-      <MarketplaceSidebar activeCategory={categorySlug} />
-
-      {/* Main Content */}
-      <div
-        style={{
-          flex: 1,
-          marginLeft: "64px", // Space for collapsed sidebar
-          transition: "margin-left 0.3s ease",
-        }}
-        className="md:ml-16"
-      >
+      <div>
         {/* Search Bar */}
         <section
           style={{

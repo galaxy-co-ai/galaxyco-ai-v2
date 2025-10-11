@@ -1,26 +1,46 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { colors, radius } from "@/lib/constants/design-system";
-import { MARKETPLACE_CATEGORIES } from "@/lib/constants/marketplace-categories";
 
-interface MarketplaceSidebarProps {
-  activeCategory?: string;
-}
+// Main navigation items
+const MAIN_NAV_ITEMS = [
+  {
+    id: "dashboard",
+    name: "Dashboard",
+    icon: "🏠",
+    path: "/dashboard",
+  },
+  {
+    id: "knowledge",
+    name: "Knowledge",
+    icon: "📚",
+    path: "/knowledge",
+  },
+  {
+    id: "marketplace",
+    name: "Marketplace",
+    icon: "🏪",
+    path: "/marketplace",
+  },
+  {
+    id: "agents",
+    name: "Agents",
+    icon: "🤖",
+    path: "/agents",
+  },
+];
 
-export default function MarketplaceSidebar({
-  activeCategory,
-}: MarketplaceSidebarProps) {
-  const router = useRouter();
+export default function MainSidebar() {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
 
   // Load pinned state from localStorage on mount
   useEffect(() => {
-    const pinned =
-      localStorage.getItem("marketplace-sidebar-pinned") === "true";
+    const pinned = localStorage.getItem("main-sidebar-pinned") === "true";
     setIsPinned(pinned);
     setIsExpanded(pinned);
   }, []);
@@ -29,7 +49,7 @@ export default function MarketplaceSidebar({
   const togglePin = () => {
     const newPinned = !isPinned;
     setIsPinned(newPinned);
-    localStorage.setItem("marketplace-sidebar-pinned", String(newPinned));
+    localStorage.setItem("main-sidebar-pinned", String(newPinned));
     if (newPinned) {
       setIsExpanded(true);
     }
@@ -47,19 +67,12 @@ export default function MarketplaceSidebar({
     }
   };
 
-  const handleCategoryClick = (slug: string | null) => {
-    if (slug === null) {
-      router.push("/marketplace");
-    } else {
-      router.push(`/marketplace/${slug}`);
+  const isActive = (path: string) => {
+    // Check if current path starts with the nav item path
+    if (path === "/dashboard") {
+      return pathname === "/" || pathname === "/dashboard";
     }
-  };
-
-  const isActive = (slug: string | null) => {
-    if (slug === null) {
-      return pathname === "/marketplace";
-    }
-    return activeCategory === slug || pathname === `/marketplace/${slug}`;
+    return pathname.startsWith(path);
   };
 
   return (
@@ -95,16 +108,18 @@ export default function MarketplaceSidebar({
           }}
         >
           {/* Logo/Icon */}
-          <div
+          <Link
+            href="/dashboard"
             style={{
               fontSize: "1.5rem",
               fontWeight: "700",
               color: colors.primary[500],
               whiteSpace: "nowrap",
+              textDecoration: "none",
             }}
           >
-            {isExpanded ? "🏪 Marketplace" : "🏪"}
-          </div>
+            {isExpanded ? "GalaxyCo.ai" : "🌌"}
+          </Link>
 
           {/* Pin Button */}
           {isExpanded && (
@@ -143,91 +158,45 @@ export default function MarketplaceSidebar({
 
         {/* Navigation Items */}
         <div style={{ padding: "1rem 0" }}>
-          {/* All Categories */}
-          <button
-            onClick={() => handleCategoryClick(null)}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              padding: "0.75rem 1rem",
-              background: isActive(null) ? colors.primary[50] : "transparent",
-              border: "none",
-              borderLeft: `3px solid ${isActive(null) ? colors.primary[500] : "transparent"}`,
-              color: isActive(null) ? colors.primary[600] : colors.text.primary,
-              fontSize: "0.9375rem",
-              fontWeight: isActive(null) ? "600" : "500",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              textAlign: "left",
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive(null)) {
-                e.currentTarget.style.background = colors.background.secondary;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive(null)) {
-                e.currentTarget.style.background = "transparent";
-              }
-            }}
-          >
-            <span style={{ fontSize: "1.25rem", flexShrink: 0 }}>🌟</span>
-            {isExpanded && (
-              <span style={{ whiteSpace: "nowrap" }}>All Categories</span>
-            )}
-          </button>
-
-          {/* Divider */}
-          <div
-            style={{
-              height: "1px",
-              background: colors.border.default,
-              margin: "0.5rem 1rem",
-            }}
-          />
-
-          {/* Category Navigation */}
-          {MARKETPLACE_CATEGORIES.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => handleCategoryClick(category.slug)}
+          {MAIN_NAV_ITEMS.map((item) => (
+            <Link
+              key={item.id}
+              href={item.path}
               style={{
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
                 gap: "0.75rem",
                 padding: "0.75rem 1rem",
-                background: isActive(category.slug)
+                background: isActive(item.path)
                   ? colors.primary[50]
                   : "transparent",
                 border: "none",
-                borderLeft: `3px solid ${isActive(category.slug) ? colors.primary[500] : "transparent"}`,
-                color: isActive(category.slug)
+                borderLeft: `3px solid ${isActive(item.path) ? colors.primary[500] : "transparent"}`,
+                color: isActive(item.path)
                   ? colors.primary[600]
                   : colors.text.primary,
                 fontSize: "0.9375rem",
-                fontWeight: isActive(category.slug) ? "600" : "500",
+                fontWeight: isActive(item.path) ? "600" : "500",
                 cursor: "pointer",
                 transition: "all 0.2s",
-                textAlign: "left",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                if (!isActive(category.slug)) {
+                if (!isActive(item.path)) {
                   e.currentTarget.style.background =
                     colors.background.secondary;
                 }
               }}
               onMouseLeave={(e) => {
-                if (!isActive(category.slug)) {
+                if (!isActive(item.path)) {
                   e.currentTarget.style.background = "transparent";
                 }
               }}
-              title={isExpanded ? undefined : category.name}
+              title={isExpanded ? undefined : item.name}
             >
               <span style={{ fontSize: "1.25rem", flexShrink: 0 }}>
-                {category.icon}
+                {item.icon}
               </span>
               {isExpanded && (
                 <span
@@ -237,10 +206,10 @@ export default function MarketplaceSidebar({
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {category.name}
+                  {item.name}
                 </span>
               )}
-            </button>
+            </Link>
           ))}
         </div>
 

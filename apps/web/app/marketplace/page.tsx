@@ -7,7 +7,6 @@ import MarketplaceCategories from "@/components/marketplace/MarketplaceCategorie
 import MarketplaceGrid from "@/components/marketplace/MarketplaceGrid";
 import MarketplacePacks from "@/components/marketplace/MarketplacePacks";
 import SearchBar from "@/components/marketplace/SearchBar";
-import MarketplaceSidebar from "@/components/marketplace/MarketplaceSidebar";
 import CategoryChips from "@/components/marketplace/CategoryChips";
 import { useMarketplaceSearch } from "@/hooks/use-marketplace-search";
 import { AGENT_TEMPLATES } from "@/lib/constants/agent-templates";
@@ -32,23 +31,11 @@ export default function MarketplacePage() {
   return (
     <div
       style={{
-        display: "flex",
         minHeight: "100vh",
         background: colors.background.primary,
       }}
     >
-      {/* Sidebar Navigation */}
-      <MarketplaceSidebar />
-
-      {/* Main Content */}
-      <div
-        style={{
-          flex: 1,
-          marginLeft: "64px", // Space for collapsed sidebar
-          transition: "margin-left 0.3s ease",
-        }}
-        className="md:ml-16"
-      >
+      <div>
         {/* Search Bar - Compact OpenSea style */}
         <section
           style={{
@@ -76,11 +63,6 @@ export default function MarketplacePage() {
           <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
             <MarketplaceHero />
           </div>
-        </div>
-
-        {/* OpenSea-style Hero Section - Reduced to 300px */}
-        <div style={{ marginTop: "1rem" }}>
-          <MarketplaceHero />
         </div>
 
         {/* Tabs Navigation */}
