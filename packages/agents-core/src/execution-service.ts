@@ -8,6 +8,7 @@
 import { Agent } from "./agent";
 import { Runner } from "./runner";
 import { createTool } from "./tools";
+import { getToolsForAgentType } from "./tools";
 import type { Message, RunResult, Tool } from "./types";
 
 /**
@@ -178,11 +179,15 @@ Be creative and engaging.`,
   static async execute(
     dbAgent: DbAgent,
     request: ExecutionRequest,
-    tools: Tool[] = [],
+    additionalTools: Tool[] = [],
   ): Promise<ExecutionResult> {
     try {
+      // Get default tools for this agent type
+      const defaultTools = getToolsForAgentType(dbAgent.type);
+      const allTools = [...defaultTools, ...additionalTools];
+
       // Convert to core Agent
-      const agent = this.dbAgentToCoreAgent(dbAgent, tools);
+      const agent = this.dbAgentToCoreAgent(dbAgent, allTools);
 
       // Prepare input message
       const inputMessage = this.prepareInputMessage(

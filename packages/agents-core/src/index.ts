@@ -63,3 +63,36 @@ export type {
   ExecutionRequest,
   ExecutionResult,
 } from "./execution-service";
+
+// Tools
+export {
+  getAllTools,
+  getToolsByCategory,
+  getToolsForAgentType,
+  ToolCategory,
+  TOOL_DESCRIPTIONS,
+  // Database tools
+  createDatabaseTools,
+  createSearchAgentsTool,
+  createGetAgentTool,
+  createGetWorkspaceStatsTool,
+  // Communication tools
+  createCommunicationTools,
+  createDraftEmailTool,
+  createSendEmailTool,
+  createSendSlackMessageTool,
+  createNotificationTool,
+  // Task tools
+  createTaskTools,
+  createTaskTool,
+  createUpdateTaskTool,
+  createSearchTasksTool,
+  createMilestoneTool,
+  // Analysis tools
+  createAnalysisTools,
+  createAnalyzeTextTool,
+  createGenerateContentTool,
+  createExtractDataTool,
+  createCompareDocumentsTool,
+  createGenerateReportTool,
+} from "./tools";
