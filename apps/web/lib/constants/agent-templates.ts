@@ -8,8 +8,8 @@ export interface AgentTemplate {
   name: string;
   description: string;
   icon: string;
-  category: 'communication' | 'content' | 'support' | 'sales' | 'ops';
-  type: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
+  category: 'communication' | 'content' | 'support' | 'sales' | 'ops' | 'knowledge';
+  type: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom' | 'knowledge';
   prefilledConfig: {
     trigger: 'webhook' | 'schedule' | 'manual' | 'event';
     aiProvider: 'openai' | 'anthropic' | 'custom';
@@ -17,6 +17,12 @@ export interface AgentTemplate {
     temperature: number;
     systemPrompt: string;
     maxTokens?: number;
+    knowledgeBase?: {
+      enabled: boolean;
+      scope?: 'all' | 'collections';
+      collectionIds?: string[];
+      maxResults?: number;
+    };
   };
   sampleInputs: Record<string, any>;
   expectedOutputs: Record<string, any>;
@@ -25,6 +31,59 @@ export interface AgentTemplate {
 }
 
 export const AGENT_TEMPLATES: Record<string, AgentTemplate> = {
+  'document-qa': {
+    id: 'document-qa',
+    name: 'Document Q&A Agent',
+    description: 'Answer questions based on your uploaded documents using semantic search',
+    icon: '📚',
+    category: 'knowledge',
+    type: 'knowledge',
+    prefilledConfig: {
+      trigger: 'manual',
+      aiProvider: 'openai',
+      model: 'gpt-4-turbo-preview',
+      temperature: 0.3,
+      maxTokens: 1500,
+      systemPrompt: `You are a helpful knowledge base assistant. Your role is to answer questions accurately based on the information in the knowledge base.
+
+When responding:
+1. Use the searchKnowledgeBase tool to find relevant documents
+2. Base your answers ONLY on the information found in the knowledge base
+3. Always cite your sources by mentioning document titles
+4. If information isn't in the knowledge base, clearly state: "I don't have information about that in the knowledge base."
+5. Provide accurate, concise answers with proper citations
+6. If multiple documents are relevant, synthesize the information
+7. Include similarity scores to show confidence
+
+Format your responses:
+- Start with a direct answer
+- Support with evidence from documents
+- End with source citations
+
+Example:
+"Based on the Product Documentation (92% match), the main features include...
+
+Sources:
+[1] Product Documentation - Features Overview
+[2] User Guide - Getting Started"`,
+      knowledgeBase: {
+        enabled: true,
+        scope: 'all',
+        maxResults: 5,
+      },
+    },
+    sampleInputs: {
+      question: 'What are the main features of our product?',
+    },
+    expectedOutputs: {
+      answer: 'Based on the Product Documentation...',
+      sources: ['Product Documentation', 'Feature Guide'],
+      confidence: 0.92,
+    },
+    tags: ['knowledge', 'rag', 'qa', 'documents', 'search'],
+    sourcePackId: 'knowledge-base',
+  },
+
   'email-analyzer': {
     id: 'email-analyzer',
     name: 'Email Analyzer',
@@ -279,6 +338,151 @@ Format your response as JSON with these fields:
     tags: ['sales', 'email', 'outreach', 'sales-ops'],
     sourcePackId: 'sales-ops',
   },
+
+  'research-assistant': {
+    id: 'research-assistant',
+    name: 'Research Assistant',
+    description: 'Conduct comprehensive research using your knowledge base and provide detailed insights',
+    icon: '🔍',
+    category: 'knowledge',
+    type: 'knowledge',
+    prefilledConfig: {
+      trigger: 'manual',
+      aiProvider: 'openai',
+      model: 'gpt-4-turbo-preview',
+      temperature: 0.4,
+      maxTokens: 2000,
+      systemPrompt: `You are an expert research assistant with access to a comprehensive knowledge base. Your role is to conduct thorough research and provide detailed, well-sourced insights.
+
+When responding:
+1. Use the searchKnowledgeBase tool to gather relevant information from multiple sources
+2. Synthesize information from different documents to create a comprehensive answer
+3. Compare and contrast different perspectives if they exist
+4. Identify knowledge gaps and explicitly mention what information isn't available
+5. Organize findings in a clear, logical structure
+6. Always include citations with confidence scores
+7. Provide actionable insights and recommendations
+
+Format your responses:
+- Executive Summary (2-3 sentences)
+- Key Findings (bulleted list with sources)
+- Detailed Analysis (organized by themes/topics)
+- Confidence Assessment (how complete is this information)
+- Recommendations (if applicable)
+- Sources (complete list with relevance scores)
+
+Example:
+"Executive Summary: Based on analysis of 8 documents (avg confidence: 91%), the key trends in Q4 include...
+
+Key Findings:
+• Finding 1 [Source: Doc A, 95% match]
+• Finding 2 [Sources: Doc B, Doc C, 88% match]
+
+Detailed Analysis:
+...
+
+Confidence: High (comprehensive coverage)
+Gaps: Limited data on international markets
+
+Recommendations:
+1. Focus on...
+2. Consider..."`,
+      knowledgeBase: {
+        enabled: true,
+        scope: 'all',
+        maxResults: 10,
+      },
+    },
+    sampleInputs: {
+      query: 'What are the emerging trends in our industry based on our research documents?',
+      depth: 'comprehensive',
+      includeComparison: true,
+    },
+    expectedOutputs: {
+      executiveSummary: 'Based on analysis of 8 documents...',
+      keyFindings: ['Finding 1', 'Finding 2'],
+      confidence: 'high',
+      sources: ['Document 1', 'Document 2'],
+    },
+    tags: ['knowledge', 'research', 'analysis', 'rag', 'insights'],
+    sourcePackId: 'knowledge-base',
+  },
+
+  'knowledge-expert': {
+    id: 'knowledge-expert',
+    name: 'Knowledge Expert',
+    description: 'Answer complex questions by combining information from specific document collections',
+    icon: '🎓',
+    category: 'knowledge',
+    type: 'knowledge',
+    prefilledConfig: {
+      trigger: 'manual',
+      aiProvider: 'openai',
+      model: 'gpt-4-turbo-preview',
+      temperature: 0.2,
+      maxTokens: 1500,
+      systemPrompt: `You are a domain expert with deep knowledge from specialized document collections. Your role is to provide authoritative, accurate answers to complex questions.
+
+When responding:
+1. Use the searchKnowledgeBase tool to access relevant documents in the specified collections
+2. Demonstrate deep understanding by connecting concepts across documents
+3. Provide technical accuracy and precision
+4. Explain complex concepts clearly
+5. Acknowledge uncertainty when information is ambiguous or missing
+6. Suggest follow-up questions for deeper exploration
+7. Maintain academic rigor with proper citations
+
+Format your responses:
+- Direct Answer (clear, concise response)
+- Evidence & Reasoning (detailed explanation with sources)
+- Related Concepts (connections to other topics)
+- Confidence Level (with explanation)
+- Follow-up Questions (for deeper understanding)
+- Citations (complete references)
+
+Example:
+"Direct Answer: The optimal approach is X because...
+
+Evidence & Reasoning:
+According to the Technical Guide (97% match), this approach is recommended because...
+This is supported by Case Study B (91% match) which demonstrates...
+
+Related Concepts:
+• Concept A (see: Document X)
+• Concept B (see: Document Y)
+
+Confidence: Very High
+Based on consistent information across 5 authoritative sources with high relevance scores (92-97%)
+
+Follow-up Questions:
+1. How does this apply to scenario Z?
+2. What are the edge cases?
+
+Citations:
+[1] Technical Guide v2.0 - Chapter 3 (97% match)
+[2] Case Study B - Implementation (91% match)"`,
+      knowledgeBase: {
+        enabled: true,
+        scope: 'collections',
+        collectionIds: [],
+        maxResults: 8,
+      },
+    },
+    sampleInputs: {
+      question: 'How should we implement feature X according to our best practices?',
+      domain: 'technical',
+      requireEvidence: true,
+    },
+    expectedOutputs: {
+      answer: 'The optimal approach is...',
+      evidence: ['Source 1 states...', 'Source 2 confirms...'],
+      confidence: 'very-high',
+      citations: ['Doc 1', 'Doc 2', 'Doc 3'],
+      followUpQuestions: ['Question 1?', 'Question 2?'],
+    },
+    tags: ['knowledge', 'expert', 'rag', 'technical', 'collections'],
+    sourcePackId: 'knowledge-base',
+  },
 };
 
 // Helper functions
@@ -301,6 +505,7 @@ export const searchTemplates = (query: string): AgentTemplate[] => {
 };
 
 export const TEMPLATE_CATEGORIES = [
+  { id: 'knowledge', label: 'Knowledge', icon: '📖' },
   { id: 'communication', label: 'Communication', icon: '💬' },
   { id: 'content', label: 'Content', icon: '📝' },
   { id: 'support', label: 'Support', icon: '🎧' },

@@ -6,6 +6,11 @@ import { eq, and } from "drizzle-orm";
 import { AIGatewayService } from "@/lib/ai-gateway";
 import type { AIGatewayRequest } from "@/lib/ai-gateway";
 import { decryptApiKey } from "@/lib/crypto";
+import {
+  executeAgentWithTools,
+  type AgentExecutionOptions,
+  type AgentExecutionInput,
+} from "@/lib/ai/agent-executor";
 import { retryWithBackoff } from "@/lib/retry";
 import {
   startExecution,
@@ -117,8 +122,13 @@ export async function POST(
     });
 
     try {
-      // Decrypt API key and set as environment variable for AI Gateway
+      // Decrypt API key
       const apiKey = decryptApiKey(encryptedKeys[aiProvider]!);
+
+      // Check if agent has knowledge base enabled
+      const hasKnowledgeBase =
+        agent.config.knowledgeBase?.enabled === true;
+      const useToolExecutor = hasKnowledgeBase && aiProvider === "openai";
 
       // Temporarily set the API key for this request
       const envKey =
@@ -133,44 +143,100 @@ export async function POST(
       process.env[envKey] = apiKey;
 
       // Build messages from system prompt and inputs
-      const messages = [
-        {
-          role: "system" as const,
-          content:
+      const userMessage =
+        typeof inputs === "string" ? inputs : JSON.stringify(inputs);
+
+      // Execute with tool support if knowledge base is enabled
+      let result: any;
+
+      if (useToolExecutor) {
+        console.log(
+          `[Execute] Using tool executor with knowledge base for agent ${agent.id}`,
+        );
+
+        // Prepare execution options
+        const executionOptions: AgentExecutionOptions = {
+          agentId: agent.id,
+          workspaceId: agent.workspaceId,
+          userId: userRecord.id,
+          model: agent.config.model || "gpt-4-turbo-preview",
+          systemPrompt:
             agent.config.systemPrompt || "You are a helpful AI assistant.",
-        },
-        {
-          role: "user" as const,
-          content: JSON.stringify(inputs),
-        },
-      ];
+          temperature: agent.config.temperature ?? 0.7,
+          maxTokens: agent.config.maxTokens,
+          enableKnowledgeBase: hasKnowledgeBase,
+          knowledgeBaseConfig: agent.config.knowledgeBase,
+        };
 
-      // Prepare AI Gateway request
-      const gatewayRequest: AIGatewayRequest = {
-        tenantId: agent.workspaceId,
-        userId: userRecord.id,
-        agentId: agent.id,
-        model: agent.config.model || "gpt-3.5-turbo",
-        messages,
-        temperature: agent.config.temperature ?? 0.7,
-        maxTokens: agent.config.maxTokens,
-      };
+        const executionInput: AgentExecutionInput = {
+          messages: [
+            {
+              role: "user",
+              content: userMessage,
+            },
+          ],
+        };
 
-      // Execute with retry logic using AI Gateway
-      const result = await retryWithBackoff(
-        () => AIGatewayService.generateText(gatewayRequest),
-        {
-          maxAttempts: 3,
-          baseDelayMs: 1000,
-          maxDelayMs: 10000,
-          onRetry: (attempt, error) => {
-            console.log(
-              `Retry attempt ${attempt} for agent ${agent.id}:`,
-              error.message,
-            );
+        // Execute with tool support
+        result = await executeAgentWithTools(
+          executionOptions,
+          executionInput,
+          apiKey,
+        );
+
+        // Format result for consistency
+        result = {
+          content: result.content,
+          usage: {
+            totalTokens: result.usage.totalTokens,
+            promptTokens: result.usage.promptTokens,
+            completionTokens: result.usage.completionTokens,
           },
-        },
-      );
+          cost: result.cost,
+          latencyMs: result.latencyMs,
+          model: result.model,
+          toolCalls: result.toolCalls,
+        };
+      } else {
+        // Use standard AI Gateway (for non-OpenAI or no knowledge base)
+        const messages = [
+          {
+            role: "system" as const,
+            content:
+              agent.config.systemPrompt || "You are a helpful AI assistant.",
+          },
+          {
+            role: "user" as const,
+            content: userMessage,
+          },
+        ];
+
+        const gatewayRequest: AIGatewayRequest = {
+          tenantId: agent.workspaceId,
+          userId: userRecord.id,
+          agentId: agent.id,
+          model: agent.config.model || "gpt-3.5-turbo",
+          messages,
+          temperature: agent.config.temperature ?? 0.7,
+          maxTokens: agent.config.maxTokens,
+        };
+
+        // Execute with retry logic using AI Gateway
+        result = await retryWithBackoff(
+          () => AIGatewayService.generateText(gatewayRequest),
+          {
+            maxAttempts: 3,
+            baseDelayMs: 1000,
+            maxDelayMs: 10000,
+            onRetry: (attempt, error) => {
+              console.log(
+                `Retry attempt ${attempt} for agent ${agent.id}:`,
+                error.message,
+              );
+            },
+          },
+        );
+      }
 
       // Restore original API key
       if (originalKey) {
@@ -205,6 +271,7 @@ export async function POST(
           latencyMs: result.latencyMs,
           model: result.model,
         },
+        toolCalls: result.toolCalls || [],
         executionId,
       });
     } catch (error: any) {

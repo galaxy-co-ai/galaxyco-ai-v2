@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@galaxyco/database";
 import { knowledgeItems } from "@galaxyco/database/schema";
+import { eq } from "drizzle-orm";
 import { uploadFileToBlob, generateUniqueFilename } from "@/lib/storage";
 import {
   extractTextFromPDF,
@@ -9,6 +10,11 @@ import {
   scrapeURL,
   generateSimpleSummary,
 } from "@/lib/document-processor";
+import {
+  generateEmbedding,
+  prepareTextForEmbedding,
+  EMBEDDING_MODEL,
+} from "@/lib/embeddings";
 
 /**
  * Knowledge Base Upload API
@@ -22,6 +28,52 @@ import {
  * - File size limits enforced
  * - MIME type validation
  */
+
+/**
+ * Generate embeddings for a knowledge item in the background
+ * This function is fire-and-forget - it logs errors but doesn't block the response
+ */
+async function generateEmbeddingsInBackground(
+  itemId: string,
+  title: string,
+  content: string | null,
+): Promise<void> {
+  // Run in background without blocking
+  setImmediate(async () => {
+    try {
+      // Prepare text from title and content
+      const text = prepareTextForEmbedding(title, content);
+
+      if (!text || text.trim().length === 0) {
+        console.warn(
+          `[Embeddings] Item ${itemId} has no content for embedding generation`,
+        );
+        return;
+      }
+
+      // Generate embedding
+      const embedding = await generateEmbedding(text);
+
+      // Update item with embedding
+      await db
+        .update(knowledgeItems)
+        .set({
+          embeddings: embedding as any, // Cast to any for JSONB
+          embeddingsModel: EMBEDDING_MODEL,
+        })
+        .where(eq(knowledgeItems.id, itemId));
+
+      console.log(
+        `[Embeddings] Successfully generated embeddings for item ${itemId}`,
+      );
+    } catch (error: any) {
+      console.error(
+        `[Embeddings] Error generating embeddings for item ${itemId}:`,
+        error,
+      );
+    }
+  });
+}
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -163,12 +215,19 @@ async function handleFileUpload(
       })
       .returning();
 
-    // TODO: Queue background job to generate embeddings
+    // Generate embeddings in background (fire-and-forget)
+    if (extractedText) {
+      generateEmbeddingsInBackground(
+        knowledgeItem.id,
+        knowledgeItem.title,
+        knowledgeItem.content,
+      );
+    }
 
     return NextResponse.json({
       success: true,
       item: knowledgeItem,
-      message: "File uploaded and processed successfully",
+      message: "File uploaded and processed successfully. Embeddings generation started.",
     });
   } catch (uploadError: any) {
     console.error("File upload error:", uploadError);
@@ -228,12 +287,17 @@ async function handleJsonSubmission(
         })
         .returning();
 
-      // TODO: Generate embeddings in background
+      // Generate embeddings in background (fire-and-forget)
+      generateEmbeddingsInBackground(
+        knowledgeItem.id,
+        knowledgeItem.title,
+        knowledgeItem.content,
+      );
 
       return NextResponse.json({
         success: true,
         item: knowledgeItem,
-        message: "URL content fetched and processed successfully",
+        message: "URL content fetched and processed successfully. Embeddings generation started.",
       });
     } catch (scrapeError: any) {
       console.error("URL scrape error:", scrapeError);
@@ -264,12 +328,17 @@ async function handleJsonSubmission(
       })
       .returning();
 
-    // TODO: Generate embeddings for text in background
+    // Generate embeddings in background (fire-and-forget)
+    generateEmbeddingsInBackground(
+      knowledgeItem.id,
+      knowledgeItem.title,
+      knowledgeItem.content,
+    );
 
     return NextResponse.json({
       success: true,
       item: knowledgeItem,
-      message: "Text saved successfully",
+      message: "Text saved successfully. Embeddings generation started.",
     });
   } else {
     return NextResponse.json({ error: "Invalid type" }, { status: 400 });

@@ -7,6 +7,8 @@
 
 // Import database tools (only implemented category so far)
 export * from "./database-tools";
+// Knowledge search tool for RAG
+export * from "./knowledge-search";
 // TODO: Uncomment as tools are implemented
 // export * from "./communication-tools";
 // export * from "./task-tools";
@@ -14,6 +16,7 @@ export * from "./database-tools";
 
 // Import tool creation functions
 import { createDatabaseTools } from "./database-tools";
+import { createKnowledgeSearchTool } from "./knowledge-search";
 import type { Tool } from "../types";
 
 /**
@@ -24,14 +27,16 @@ export enum ToolCategory {
   COMMUNICATION = "communication",
   TASK = "task",
   ANALYSIS = "analysis",
+  KNOWLEDGE = "knowledge",
 }
 
 /**
- * Get all available tools (currently only database tools)
+ * Get all available tools
  */
 export function getAllTools(): Tool[] {
   return [
     ...createDatabaseTools(),
+    createKnowledgeSearchTool(),
     // TODO: Add more tool categories as they're implemented
   ];
 }
@@ -43,6 +48,8 @@ export function getToolsByCategory(category: ToolCategory): Tool[] {
   switch (category) {
     case ToolCategory.DATABASE:
       return createDatabaseTools();
+    case ToolCategory.KNOWLEDGE:
+      return [createKnowledgeSearchTool()];
     // TODO: Implement other categories
     default:
       return [];
@@ -86,4 +93,7 @@ export const TOOL_DESCRIPTIONS = {
   extract_data: "Extract data from sources",
   compare_documents: "Compare multiple documents",
   generate_report: "Generate comprehensive reports",
+  
+  // Knowledge Tools
+  searchKnowledgeBase: "Search the knowledge base using semantic search (RAG)",
 };

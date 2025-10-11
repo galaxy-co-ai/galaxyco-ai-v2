@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useAgentBuilder } from "@/hooks/use-agent-builder";
+import { useWorkspaceAuth } from "@/hooks/use-workspace-auth";
 import { BasicInfoForm } from "./BasicInfoForm";
 import { ConfigurationForm } from "./ConfigurationForm";
+import { KnowledgeConfigSection } from "./KnowledgeConfigSection";
 import { AdvancedSettings } from "./AdvancedSettings";
 import { PublishConfirmationModal } from "./PublishConfirmationModal";
 import { TestPanelImproved as TestPanel } from "./TestPanelImproved";
@@ -23,9 +25,12 @@ export const AgentBuilderPage: React.FC = () => {
     applyTemplate,
     updateBasicInfo,
     updateConfiguration,
+    updateKnowledgeBase,
     saveDraft,
     publish,
   } = useAgentBuilder();
+
+  const { workspaceId } = useWorkspaceAuth();
 
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(true);
   const [showPublishModal, setShowPublishModal] = useState(false);
@@ -429,6 +434,25 @@ export const AgentBuilderPage: React.FC = () => {
             onChange={updateConfiguration}
             disabled={state.isSaving}
           />
+
+          {/* Divider */}
+          <div
+            style={{
+              height: "2px",
+              backgroundColor: colors.border.default,
+              margin: `${spacing["2xl"]} 0`,
+            }}
+          />
+
+          {/* Knowledge Base Configuration */}
+          {workspaceId && (
+            <KnowledgeConfigSection
+              workspaceId={workspaceId}
+              config={state.knowledgeBase}
+              onChange={updateKnowledgeBase}
+              disabled={state.isSaving}
+            />
+          )}
 
           {/* Advanced Settings */}
           <AdvancedSettings

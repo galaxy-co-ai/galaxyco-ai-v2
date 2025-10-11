@@ -18,6 +18,12 @@ export interface AgentBuilderState {
     systemPrompt: string;
     maxTokens?: number;
   };
+  knowledgeBase: {
+    enabled: boolean;
+    scope?: 'all' | 'collections';
+    collectionIds?: string[];
+    maxResults?: number;
+  };
   isDirty: boolean;
   isSaving: boolean;
   errors: Record<string, string>;
@@ -43,6 +49,12 @@ export const useAgentBuilder = () => {
       model: 'gpt-4',
       temperature: 0.7,
       systemPrompt: '',
+    },
+    knowledgeBase: {
+      enabled: false,
+      scope: 'all',
+      collectionIds: [],
+      maxResults: 5,
     },
     isDirty: false,
     isSaving: false,
@@ -93,14 +105,35 @@ export const useAgentBuilder = () => {
     return errors;
   }, []);
 
+  const validateKnowledgeBase = useCallback((knowledgeBase: AgentBuilderState['knowledgeBase']): ValidationErrors => {
+    const errors: ValidationErrors = {};
+
+    // If knowledge base is enabled and scope is 'collections', ensure at least one collection is selected
+    if (knowledgeBase.enabled && knowledgeBase.scope === 'collections') {
+      if (!knowledgeBase.collectionIds || knowledgeBase.collectionIds.length === 0) {
+        errors.knowledgeBase = 'Please select at least one collection when using specific collections scope';
+      }
+    }
+
+    // Validate maxResults if knowledge base is enabled
+    if (knowledgeBase.enabled && knowledgeBase.maxResults) {
+      if (knowledgeBase.maxResults < 1 || knowledgeBase.maxResults > 20) {
+        errors.knowledgeBaseMaxResults = 'Max results must be between 1 and 20';
+      }
+    }
+
+    return errors;
+  }, []);
+
   const validateAll = useCallback((): boolean => {
     const basicInfoErrors = validateBasicInfo(state.basicInfo);
     const configurationErrors = validateConfiguration(state.configuration);
-    const allErrors = { ...basicInfoErrors, ...configurationErrors };
+    const knowledgeBaseErrors = validateKnowledgeBase(state.knowledgeBase);
+    const allErrors = { ...basicInfoErrors, ...configurationErrors, ...knowledgeBaseErrors };
 
     setState((prev) => ({ ...prev, errors: allErrors }));
     return Object.keys(allErrors).length === 0;
-  }, [state.basicInfo, state.configuration, validateBasicInfo, validateConfiguration]);
+  }, [state.basicInfo, state.configuration, state.knowledgeBase, validateBasicInfo, validateConfiguration, validateKnowledgeBase]);
 
   // Apply template
   const applyTemplate = useCallback((template: AgentTemplate) => {
@@ -119,6 +152,12 @@ export const useAgentBuilder = () => {
         temperature: template.prefilledConfig.temperature,
         systemPrompt: template.prefilledConfig.systemPrompt,
         maxTokens: template.prefilledConfig.maxTokens,
+      },
+      knowledgeBase: template.prefilledConfig.knowledgeBase || {
+        enabled: false,
+        scope: 'all',
+        collectionIds: [],
+        maxResults: 5,
       },
       isDirty: true,
     }));
@@ -154,6 +193,21 @@ export const useAgentBuilder = () => {
     });
   }, [validateConfiguration]);
 
+  // Update knowledge base configuration
+  const updateKnowledgeBase = useCallback((updates: Partial<AgentBuilderState['knowledgeBase']>) => {
+    setState((prev) => {
+      const newKnowledgeBase = { ...prev.knowledgeBase, ...updates };
+      const errors = validateKnowledgeBase(newKnowledgeBase);
+      
+      return {
+        ...prev,
+        knowledgeBase: newKnowledgeBase,
+        isDirty: true,
+        errors: { ...prev.errors, ...errors },
+      };
+    });
+  }, [validateKnowledgeBase]);
+
   // Save draft (debounced)
   const { getAuthHeaders } = useWorkspaceAuth();
 
@@ -177,6 +231,7 @@ export const useAgentBuilder = () => {
         systemPrompt: state.configuration.systemPrompt,
         temperature: state.configuration.temperature,
         maxTokens: state.configuration.maxTokens,
+        knowledgeBase: state.knowledgeBase,
         status: 'draft' as const,
       };
 
@@ -251,6 +306,7 @@ export const useAgentBuilder = () => {
         systemPrompt: state.configuration.systemPrompt,
         temperature: state.configuration.temperature,
         maxTokens: state.configuration.maxTokens,
+        knowledgeBase: state.knowledgeBase,
         status: 'active' as const,
       };
 
@@ -308,6 +364,7 @@ export const useAgentBuilder = () => {
     applyTemplate,
     updateBasicInfo,
     updateConfiguration,
+    updateKnowledgeBase,
     saveDraft,
     publish,
     validateAll,

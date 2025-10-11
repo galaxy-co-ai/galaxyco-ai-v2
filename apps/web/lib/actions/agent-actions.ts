@@ -23,6 +23,12 @@ interface CreateAgentPayload {
   systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
+  knowledgeBase?: {
+    enabled: boolean;
+    scope?: "all" | "collections";
+    collectionIds?: string[];
+    maxResults?: number;
+  };
   inputs?: Record<string, any>;
   outputs?: Record<string, any>;
   settings?: Record<string, any>;
