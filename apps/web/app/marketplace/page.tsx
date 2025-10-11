@@ -6,15 +6,50 @@ import MarketplaceFeatured from "@/components/marketplace/MarketplaceFeatured";
 import MarketplaceCategories from "@/components/marketplace/MarketplaceCategories";
 import MarketplaceGrid from "@/components/marketplace/MarketplaceGrid";
 import MarketplacePacks from "@/components/marketplace/MarketplacePacks";
+import SearchBar from "@/components/marketplace/SearchBar";
+import { useMarketplaceSearch } from "@/hooks/use-marketplace-search";
+import { AGENT_TEMPLATES } from "@/lib/constants/agent-templates";
 import { colors } from "@/lib/constants/design-system";
 
 export default function MarketplacePage() {
   const [activeTab, setActiveTab] = useState<"agents" | "packs">("agents");
 
+  // Convert templates to searchable format
+  const agents = Object.values(AGENT_TEMPLATES);
+
+  // Search hook
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredAgents,
+    hasResults,
+    isSearching,
+    clearSearch,
+  } = useMarketplaceSearch(agents);
+
   return (
     <div style={{ minHeight: "100vh", background: colors.background.primary }}>
-      {/* OpenSea-style Large Hero Section */}
-      <MarketplaceHero />
+      {/* Search Bar - Compact OpenSea style */}
+      <section
+        style={{
+          padding: "1.5rem 1.5rem 0",
+          background: colors.background.primary,
+        }}
+      >
+        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onClear={clearSearch}
+            isSearching={isSearching}
+          />
+        </div>
+      </section>
+
+      {/* OpenSea-style Hero Section - Reduced to 300px */}
+      <div style={{ marginTop: "1rem" }}>
+        <MarketplaceHero />
+      </div>
 
       {/* Tabs Navigation */}
       <section
@@ -96,21 +131,61 @@ export default function MarketplacePage() {
       {activeTab === "agents" ? (
         <>
           {/* Categories */}
-          <section style={{ padding: "3rem 1.5rem 2rem" }}>
+          <section style={{ padding: "2rem 1.5rem 1.5rem" }}>
             <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-              <h2
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: "600",
-                  marginBottom: "1.5rem",
-                  color: colors.text.primary,
-                }}
-              >
-                Browse by Category
-              </h2>
               <MarketplaceCategories />
             </div>
           </section>
+
+          {/* No Results State */}
+          {searchQuery && !hasResults && (
+            <section style={{ padding: "3rem 1.5rem" }}>
+              <div
+                style={{
+                  maxWidth: "600px",
+                  margin: "0 auto",
+                  textAlign: "center",
+                }}
+              >
+                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔍</div>
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "600",
+                    marginBottom: "0.75rem",
+                    color: colors.text.primary,
+                  }}
+                >
+                  No agents found for "{searchQuery}"
+                </h3>
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    color: colors.text.secondary,
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  Try adjusting your search or browse our categories to discover
+                  more agents.
+                </p>
+                <button
+                  onClick={clearSearch}
+                  style={{
+                    padding: "0.75rem 1.5rem",
+                    background: colors.primary[500],
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "0.9375rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                  }}
+                >
+                  Clear Search
+                </button>
+              </div>
+            </section>
+          )}
 
           {/* Trending Agents - OpenSea style compact cards */}
           <section style={{ padding: "0 1.5rem 3rem" }}>

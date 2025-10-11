@@ -3,8 +3,15 @@
 import { colors, shadows } from "@/lib/constants/design-system";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { MarketplaceCategory } from "@/lib/constants/marketplace-categories";
 
-export default function MarketplaceHero() {
+interface MarketplaceHeroProps {
+  category?: MarketplaceCategory;
+}
+
+export default function MarketplaceHero({
+  category,
+}: MarketplaceHeroProps = {}) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const heroSlides = [
@@ -68,15 +75,22 @@ export default function MarketplaceHero() {
 
   const slide = heroSlides[currentSlide];
 
+  // Use category styling if provided, otherwise use slide styling
+  const heroGradient = category ? category.gradient : slide.gradient;
+  const heroTitle = category ? category.heroTitle : slide.title;
+  const heroSubtitle = category ? category.heroSubtitle : slide.subtitle;
+
   return (
     <div
       style={{
         position: "relative",
         width: "100%",
-        height: "500px",
-        background: slide.gradient,
+        minHeight: "300px", // Reduced from 500px to match OpenSea
+        height: "min(300px, 40vh)", // Responsive but capped at 300px
+        background: heroGradient,
         overflow: "hidden",
       }}
+      className="sm:min-h-[200px] md:min-h-[300px]"
     >
       {/* Background Pattern */}
       <div
@@ -111,27 +125,29 @@ export default function MarketplaceHero() {
         >
           <h1
             style={{
-              fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
-              fontWeight: "800",
+              fontSize: "clamp(1.875rem, 4vw, 3rem)", // Reduced from 2.5-3.5rem to 1.875-3rem
+              fontWeight: "700", // Reduced from 800 to 700
               color: "white",
-              marginBottom: "1.5rem",
+              marginBottom: "1rem", // Reduced from 1.5rem
               lineHeight: "1.2",
-              textShadow: "0 2px 8px rgba(0, 0, 0, 0.15)", // Improved text shadow for readability
+              textShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
+            className="text-2xl sm:text-3xl md:text-3xl"
           >
-            {slide.title}
+            {heroTitle}
           </h1>
 
           <p
             style={{
-              fontSize: "clamp(1.125rem, 2vw, 1.375rem)",
+              fontSize: "clamp(1rem, 1.5vw, 1.125rem)", // Reduced from 1.125-1.375rem to 1-1.125rem
               color: "rgba(255, 255, 255, 0.95)",
-              marginBottom: "2.5rem",
+              marginBottom: "2rem", // Reduced from 2.5rem
               lineHeight: "1.5",
-              textShadow: "0 1px 4px rgba(0, 0, 0, 0.1)", // Subtle text shadow for better readability
+              textShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
             }}
+            className="text-base sm:text-lg"
           >
-            {slide.subtitle}
+            {heroSubtitle}
           </p>
 
           <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
@@ -139,11 +155,11 @@ export default function MarketplaceHero() {
               href={slide.link || "/marketplace"}
               style={{
                 display: "inline-block",
-                padding: "1rem 2rem",
+                padding: "0.75rem 1.5rem", // Reduced from 1rem 2rem
                 background: "white",
                 color: colors.primary[600],
                 borderRadius: "12px",
-                fontSize: "1.125rem",
+                fontSize: "1rem", // Reduced from 1.125rem
                 fontWeight: "600",
                 textDecoration: "none",
                 boxShadow: shadows.lg,
@@ -161,7 +177,7 @@ export default function MarketplaceHero() {
               {slide.cta}
             </Link>
 
-            {slide.featured && slide.badge && (
+            {!category && slide.featured && slide.badge && (
               <span
                 style={{
                   padding: "0.5rem 1rem",
