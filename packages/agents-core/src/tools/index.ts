@@ -5,17 +5,15 @@
  * Tools are categorized by their function and purpose.
  */
 
-// Import all tool categories
+// Import database tools (only implemented category so far)
 export * from "./database-tools";
-export * from "./communication-tools";
-export * from "./task-tools";
-export * from "./analysis-tools";
+// TODO: Uncomment as tools are implemented
+// export * from "./communication-tools";
+// export * from "./task-tools";
+// export * from "./analysis-tools";
 
 // Import tool creation functions
 import { createDatabaseTools } from "./database-tools";
-import { createCommunicationTools } from "./communication-tools";
-import { createTaskTools } from "./task-tools";
-import { createAnalysisTools } from "./analysis-tools";
 import type { Tool } from "../types";
 
 /**
@@ -29,14 +27,12 @@ export enum ToolCategory {
 }
 
 /**
- * Get all available tools
+ * Get all available tools (currently only database tools)
  */
 export function getAllTools(): Tool[] {
   return [
     ...createDatabaseTools(),
-    ...createCommunicationTools(),
-    ...createTaskTools(),
-    ...createAnalysisTools(),
+    // TODO: Add more tool categories as they're implemented
   ];
 }
 
@@ -47,12 +43,7 @@ export function getToolsByCategory(category: ToolCategory): Tool[] {
   switch (category) {
     case ToolCategory.DATABASE:
       return createDatabaseTools();
-    case ToolCategory.COMMUNICATION:
-      return createCommunicationTools();
-    case ToolCategory.TASK:
-      return createTaskTools();
-    case ToolCategory.ANALYSIS:
-      return createAnalysisTools();
+    // TODO: Implement other categories
     default:
       return [];
   }
@@ -60,35 +51,12 @@ export function getToolsByCategory(category: ToolCategory): Tool[] {
 
 /**
  * Get tools appropriate for a specific agent type
+ * Currently returns database tools for all types until more tools are implemented
  */
 export function getToolsForAgentType(agentType: string): Tool[] {
-  const toolMap: Record<string, Tool[]> = {
-    scope: [...createAnalysisTools(), ...createTaskTools()],
-    email: [...createCommunicationTools(), ...createAnalysisTools()],
-    call: [
-      ...createAnalysisTools(),
-      ...createTaskTools(),
-      ...createCommunicationTools().filter(
-        (t) => t.definition.function.name === "create_notification",
-      ),
-    ],
-    note: [...createAnalysisTools(), ...createDatabaseTools()],
-    task: [...createTaskTools(), ...createCommunicationTools()],
-    roadmap: [
-      ...createTaskTools(),
-      ...createAnalysisTools(),
-      ...createDatabaseTools(),
-    ],
-    content: [
-      ...createAnalysisTools(),
-      ...createCommunicationTools().filter(
-        (t) => t.definition.function.name === "draft_email",
-      ),
-    ],
-    custom: getAllTools(),
-  };
-
-  return toolMap[agentType] || [];
+  // For now, all agent types get database tools
+  // TODO: Add specialized tool sets per agent type
+  return createDatabaseTools();
 }
 
 /**

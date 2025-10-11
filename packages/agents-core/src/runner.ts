@@ -30,6 +30,13 @@ export class Runner {
     const startTime = new Date();
     const executionId = randomUUID();
 
+    // Validate required options for multi-tenant safety
+    if (!options.workspaceId || !options.userId) {
+      throw new Error(
+        "workspaceId and userId are required for agent execution (multi-tenant safety)",
+      );
+    }
+
     // Default options
     const maxIterations = options.maxIterations || 10;
     const timeout = options.timeout || 60000; // 60 seconds
@@ -202,8 +209,8 @@ export class Runner {
           // Run tool guardrails
           await this.runToolGuardrails(agent, tool, args, context);
 
-          // Execute tool
-          const result = await tool.execute(args);
+          // Execute tool with context (for database queries, etc.)
+          const result = await tool.execute(args, context);
 
           // Add tool result to messages
           const toolMessage: Message = {

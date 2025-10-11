@@ -8,7 +8,7 @@
 import { Agent } from "./agent";
 import { Runner } from "./runner";
 import { createTool } from "./tools";
-import { getToolsForAgentType } from "./tools";
+import { getToolsForAgentType } from "./tools/index";
 import type { Message, RunResult, Tool } from "./types";
 
 /**

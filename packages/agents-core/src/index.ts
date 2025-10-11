@@ -24,7 +24,7 @@ export type {
   Tool,
   ToolCall,
   ToolDefinition,
-  ToolCategory,
+  // ToolCategory exported separately from tools/index
   ToolMetadata,
 
   // Agent
@@ -64,7 +64,7 @@ export type {
   ExecutionResult,
 } from "./execution-service";
 
-// Tools
+// Tools (only database tools implemented so far)
 export {
   getAllTools,
   getToolsByCategory,
@@ -76,23 +76,5 @@ export {
   createSearchAgentsTool,
   createGetAgentTool,
   createGetWorkspaceStatsTool,
-  // Communication tools
-  createCommunicationTools,
-  createDraftEmailTool,
-  createSendEmailTool,
-  createSendSlackMessageTool,
-  createNotificationTool,
-  // Task tools
-  createTaskTools,
-  createTaskTool,
-  createUpdateTaskTool,
-  createSearchTasksTool,
-  createMilestoneTool,
-  // Analysis tools
-  createAnalysisTools,
-  createAnalyzeTextTool,
-  createGenerateContentTool,
-  createExtractDataTool,
-  createCompareDocumentsTool,
-  createGenerateReportTool,
-} from "./tools";
+  // TODO: Export other tool categories as they're implemented
+} from "./tools/index";

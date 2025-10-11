@@ -14,6 +14,20 @@ export function createTool(
   execute: (args: any) => Promise<any>,
   metadata?: Partial<ToolMetadata>,
 ): Tool {
+  // Clean parameters: remove 'required' from property definitions
+  const cleanedProperties: Record<string, any> = {};
+  const requiredFields: string[] = [];
+
+  for (const [key, value] of Object.entries(parameters)) {
+    const { required, ...cleanProp } = value;
+    cleanedProperties[key] = cleanProp;
+
+    // If required is not explicitly false, add to required array
+    if (required !== false) {
+      requiredFields.push(key);
+    }
+  }
+
   return {
     definition: {
       type: "function",
@@ -22,10 +36,8 @@ export function createTool(
         description,
         parameters: {
           type: "object",
-          properties: parameters,
-          required: Object.keys(parameters).filter(
-            (key) => parameters[key].required !== false,
-          ),
+          properties: cleanedProperties,
+          required: requiredFields,
         },
       },
     },

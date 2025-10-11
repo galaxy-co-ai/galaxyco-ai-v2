@@ -65,7 +65,7 @@ export interface ToolDefinition {
 
 export interface Tool {
   definition: ToolDefinition;
-  execute: (args: any) => Promise<any>;
+  execute: (args: any, context?: ExecutionContext) => Promise<any>;
 }
 
 export type ToolCategory = "data" | "action" | "orchestration";
@@ -189,8 +189,8 @@ export interface Handoff {
 
 export interface ExecutionContext {
   executionId: string;
-  workspaceId?: string;
-  userId?: string;
+  workspaceId: string; // Required for multi-tenant safety
+  userId: string; // Required for audit trail
   startTime: Date;
   messages: Message[];
   toolCalls: ToolCall[];
