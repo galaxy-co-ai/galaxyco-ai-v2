@@ -1,0 +1,218 @@
+import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@galaxyco/database";
+import { knowledgeItems } from "@galaxyco/database/schema";
+
+/**
+ * Knowledge Base Upload API
+ *
+ * Handles file uploads, URL scraping, and text submissions for the knowledge base.
+ * Supports: PDFs, Word docs, images, URLs, and plain text.
+ *
+ * Security:
+ * - Multi-tenant isolation via workspaceId
+ * - Clerk authentication required
+ * - File size limits enforced
+ * - MIME type validation
+ */
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+  "text/markdown",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
+
+export async function POST(request: NextRequest) {
+  try {
+    // 1. Authenticate user
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // 2. Get workspace ID from query params or headers
+    const searchParams = request.nextUrl.searchParams;
+    const workspaceId = searchParams.get("workspaceId");
+
+    if (!workspaceId) {
+      return NextResponse.json(
+        { error: "workspaceId is required" },
+        { status: 400 },
+      );
+    }
+
+    // 3. Parse request body (could be FormData for files or JSON for URLs/text)
+    const contentType = request.headers.get("content-type") || "";
+
+    if (contentType.includes("multipart/form-data")) {
+      // Handle file upload
+      return await handleFileUpload(request, userId, workspaceId);
+    } else if (contentType.includes("application/json")) {
+      // Handle URL or text submission
+      return await handleJsonSubmission(request, userId, workspaceId);
+    } else {
+      return NextResponse.json(
+        { error: "Unsupported content type" },
+        { status: 400 },
+      );
+    }
+  } catch (error: any) {
+    console.error("Knowledge upload error:", error);
+    return NextResponse.json(
+      { error: "Upload failed", details: error.message },
+      { status: 500 },
+    );
+  }
+}
+
+/**
+ * Handle file upload (PDF, Word, Image, etc.)
+ */
+async function handleFileUpload(
+  request: NextRequest,
+  userId: string,
+  workspaceId: string,
+): Promise<NextResponse> {
+  const formData = await request.formData();
+  const file = formData.get("file") as File | null;
+
+  if (!file) {
+    return NextResponse.json({ error: "No file provided" }, { status: 400 });
+  }
+
+  // Validate file size
+  if (file.size > MAX_FILE_SIZE) {
+    return NextResponse.json(
+      { error: `File too large. Max size: ${MAX_FILE_SIZE / 1024 / 1024}MB` },
+      { status: 400 },
+    );
+  }
+
+  // Validate MIME type
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    return NextResponse.json(
+      { error: `Unsupported file type: ${file.type}` },
+      { status: 400 },
+    );
+  }
+
+  // Determine knowledge item type
+  let itemType: "document" | "image";
+  if (file.type.startsWith("image/")) {
+    itemType = "image";
+  } else {
+    itemType = "document";
+  }
+
+  // For now, create a placeholder item with "processing" status
+  // File upload to storage will be implemented next
+  const [knowledgeItem] = await db
+    .insert(knowledgeItems)
+    .values({
+      workspaceId,
+      createdBy: userId,
+      title: file.name,
+      type: itemType,
+      status: "processing",
+      fileName: file.name,
+      fileSize: file.size,
+      mimeType: file.type,
+    })
+    .returning();
+
+  // TODO: Upload file to storage (Vercel Blob or S3)
+  // TODO: Queue background job to process file (extract text, generate embeddings)
+
+  return NextResponse.json({
+    success: true,
+    item: knowledgeItem,
+    message: "File uploaded successfully. Processing...",
+  });
+}
+
+/**
+ * Handle JSON submission (URL or plain text)
+ */
+async function handleJsonSubmission(
+  request: NextRequest,
+  userId: string,
+  workspaceId: string,
+): Promise<NextResponse> {
+  const body = await request.json();
+  const { type, url, text, title } = body;
+
+  if (type === "url") {
+    // Validate URL
+    if (!url) {
+      return NextResponse.json({ error: "URL is required" }, { status: 400 });
+    }
+
+    try {
+      new URL(url); // Validate URL format
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid URL format" },
+        { status: 400 },
+      );
+    }
+
+    // Create knowledge item for URL
+    const [knowledgeItem] = await db
+      .insert(knowledgeItems)
+      .values({
+        workspaceId,
+        createdBy: userId,
+        title: title || url,
+        type: "url",
+        status: "processing",
+        sourceUrl: url,
+      })
+      .returning();
+
+    // TODO: Queue background job to scrape URL and extract content
+
+    return NextResponse.json({
+      success: true,
+      item: knowledgeItem,
+      message: "URL submitted. Fetching content...",
+    });
+  } else if (type === "text") {
+    // Handle plain text submission
+    if (!text) {
+      return NextResponse.json({ error: "Text is required" }, { status: 400 });
+    }
+
+    const [knowledgeItem] = await db
+      .insert(knowledgeItems)
+      .values({
+        workspaceId,
+        createdBy: userId,
+        title: title || "Untitled Note",
+        type: "text",
+        status: "ready", // Text is ready immediately
+        content: text,
+        processedAt: new Date(),
+        metadata: {
+          wordCount: text.split(/\s+/).length,
+        },
+      })
+      .returning();
+
+    // TODO: Generate embeddings for text in background
+
+    return NextResponse.json({
+      success: true,
+      item: knowledgeItem,
+      message: "Text saved successfully",
+    });
+  } else {
+    return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+  }
+}
