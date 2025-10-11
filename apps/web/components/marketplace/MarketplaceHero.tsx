@@ -89,6 +89,7 @@ export default function MarketplaceHero({
         height: "min(300px, 40vh)", // Responsive but capped at 300px
         background: heroGradient,
         overflow: "hidden",
+        borderRadius: "16px", // Rounded corners
       }}
       className="sm:min-h-[200px] md:min-h-[300px]"
     >
