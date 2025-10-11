@@ -1,7 +1,6 @@
 "use client";
 
 import AgentTemplateCardCompact from "./AgentTemplateCardCompact";
-import { spacing } from "@/lib/constants/design-system";
 
 export default function MarketplaceGrid() {
   // Mock all agent templates - will be loaded from database
@@ -111,40 +110,51 @@ export default function MarketplaceGrid() {
   ];
 
   return (
-    <div>
-      {/* OpenSea-style: Featured Section - Larger cards (3-column on desktop) */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-          gap: spacing.lg,
-          marginBottom: spacing["2xl"],
-        }}
-      >
-        {allTemplates.slice(0, 3).map((template) => (
-          <AgentTemplateCardCompact
-            key={template.id}
-            template={template}
-            isFeatured={true}
-          />
-        ))}
+    <div className="space-y-8">
+      {/* Featured Section - Larger cards (3-column on desktop) */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <h2
+            className="text-xl font-semibold"
+            style={{ color: "var(--text-primary)" }}
+          >
+            🔥 Featured Agents
+          </h2>
+          <div className="badge badge-success">Top Rated</div>
+        </div>
+        <div className="grid grid-3 gap-6">
+          {allTemplates.slice(0, 3).map((template) => (
+            <AgentTemplateCardCompact
+              key={template.id}
+              template={template}
+              isFeatured={true}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* OpenSea-style: Main Grid - Smaller cards (4-5 column on desktop, tighter spacing) */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-          gap: spacing.md,
-        }}
-      >
-        {allTemplates.slice(3).map((template) => (
-          <AgentTemplateCardCompact
-            key={template.id}
-            template={template}
-            isFeatured={false}
-          />
-        ))}
+      {/* Main Grid - Compact OpenSea-style cards (4 columns on desktop) */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <h2
+            className="text-xl font-semibold"
+            style={{ color: "var(--text-primary)" }}
+          >
+            All Agent Templates
+          </h2>
+          <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            {allTemplates.length} agents available
+          </div>
+        </div>
+        <div className="grid grid-4 gap-4">
+          {allTemplates.slice(3).map((template) => (
+            <AgentTemplateCardCompact
+              key={template.id}
+              template={template}
+              isFeatured={false}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

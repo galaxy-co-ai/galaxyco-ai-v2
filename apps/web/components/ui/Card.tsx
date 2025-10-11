@@ -1,175 +1,202 @@
 "use client";
 
-import {
-  colors,
-  radius,
-  shadows,
-  animation,
-  spacing,
-} from "@/lib/constants/design-system";
-import { CSSProperties, ReactNode } from "react";
+import React, { forwardRef, ReactNode } from "react";
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  variant?: "default" | "elevated" | "outlined";
-  padding?: keyof typeof spacing | "none";
+  variant?: "default" | "compact" | "comfortable" | "interactive";
+  padding?: "none" | "sm" | "md" | "lg";
+  shadow?: "none" | "sm" | "md" | "lg";
   hover?: boolean;
-  onClick?: () => void;
-  style?: CSSProperties;
-  className?: string;
 }
 
 /**
- * Standardized Card Component
+ * Professional Card Component using CSS Design System
  *
- * Ensures consistent card styling across the entire application.
- * All cards use:
- * - rounded-xl (12px border radius)
- * - p-6 (24px padding) by default
- * - shadow-sm default, shadow-md on hover
- * - bg-white background
+ * Ensures consistent card styling matching StackAI/OpenSea quality.
+ * Uses CSS variables for spacing, shadows, and colors.
  *
- * @param variant - 'default' (shadow-sm), 'elevated' (shadow-md), 'outlined' (border only)
- * @param padding - Spacing value from design system (default: 'xl' = 24px)
- * @param hover - Enable hover effects (lift + shadow increase)
- * @param onClick - Makes card clickable with cursor pointer
+ * Variants:
+ * - default: Standard card with base styling
+ * - compact: Reduced padding for dense layouts (OpenSea style)
+ * - comfortable: Extra padding for spacious layouts
+ * - interactive: Hover effects for clickable cards
+ *
+ * All cards use rounded-lg (12px), subtle shadows, and proper transitions.
  */
-export function Card({
-  children,
-  variant = "default",
-  padding = "xl",
-  hover = false,
-  onClick,
-  style,
-  className = "",
-}: CardProps) {
-  const baseStyles: CSSProperties = {
-    background: colors.background.primary,
-    borderRadius: radius.xl,
-    padding: padding === "none" ? "0" : spacing[padding],
-    transition: `all ${animation.timing.fast} ${animation.easing.default}`,
-    cursor: onClick ? "pointer" : "default",
-  };
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  (
+    {
+      children,
+      variant = "default",
+      padding,
+      shadow,
+      hover = false,
+      className = "",
+      onClick,
+      style,
+      ...props
+    },
+    ref,
+  ) => {
+    // Use CSS classes from our design system
+    const baseClasses = "card";
 
-  // Variant-specific base styles
-  const variantStyles: CSSProperties = {
-    ...(variant === "default" && {
-      boxShadow: shadows.sm,
-      border: `1px solid ${colors.border.default}`,
-    }),
-    ...(variant === "elevated" && {
-      boxShadow: shadows.md,
-      border: "none",
-    }),
-    ...(variant === "outlined" && {
-      boxShadow: "none",
-      border: `1px solid ${colors.border.default}`,
-    }),
-  };
+    const variantClasses = {
+      default: "",
+      compact: "card-compact",
+      comfortable: "card-comfortable",
+      interactive: "",
+    };
 
-  // Hover styles
-  const hoverStyles: CSSProperties = hover
-    ? {
-        boxShadow: variant === "elevated" ? shadows.lg : shadows.md,
-        transform: "translateY(-2px)",
-        borderColor: variant !== "elevated" ? colors.border.focus : undefined,
+    // Build class names
+    const classes = [baseClasses, variantClasses[variant], className]
+      .filter(Boolean)
+      .join(" ");
+
+    // Custom styles for overrides
+    const customStyles: React.CSSProperties = {
+      cursor: onClick ? "pointer" : "default",
+      ...style,
+    };
+
+    // Padding override
+    if (padding) {
+      const paddingMap = {
+        none: "0",
+        sm: "var(--space-4)",
+        md: "var(--space-6)",
+        lg: "var(--space-8)",
+      };
+      customStyles.padding = paddingMap[padding];
+    }
+
+    // Shadow override
+    if (shadow) {
+      const shadowMap = {
+        none: "none",
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+      };
+      customStyles.boxShadow = shadowMap[shadow];
+    }
+
+    // Enhanced hover effect for interactive cards
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (hover || variant === "interactive") {
+        e.currentTarget.style.transform = "translateY(-2px)";
+        e.currentTarget.style.boxShadow = "var(--shadow-card-hover)";
       }
-    : {};
+    };
 
-  return (
-    <div
-      className={className}
-      onClick={onClick}
-      style={{ ...baseStyles, ...variantStyles, ...style }}
-      onMouseEnter={(e) => {
-        if (hover) {
-          Object.assign(e.currentTarget.style, hoverStyles);
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (hover) {
-          e.currentTarget.style.boxShadow =
-            variant === "elevated" ? shadows.md : shadows.sm;
-          e.currentTarget.style.transform = "translateY(0)";
-          if (variant !== "elevated") {
-            e.currentTarget.style.borderColor = colors.border.default;
-          }
-        }
-      }}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-    >
-      {children}
-    </div>
-  );
+    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (hover || variant === "interactive") {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "var(--shadow-card)";
+      }
+    };
+
+    return (
+      <div
+        ref={ref}
+        className={classes}
+        style={customStyles}
+        onClick={onClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        role={onClick ? "button" : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+Card.displayName = "Card";
+
+// Card sub-components for structured content
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
 }
 
-/**
- * Card.Header - Optional header section with consistent spacing
- */
-Card.Header = function CardHeader({
-  children,
-  style,
-}: {
-  children: ReactNode;
-  style?: CSSProperties;
-}) {
-  return (
-    <div
-      style={{
-        marginBottom: spacing.lg,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ children, className = "", style, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={className}
+        style={{
+          paddingBottom: "var(--space-4)",
+          borderBottom: "1px solid var(--border-default)",
+          marginBottom: "var(--space-6)",
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
 
-/**
- * Card.Body - Main content area with consistent spacing
- */
-Card.Body = function CardBody({
-  children,
-  style,
-}: {
-  children: ReactNode;
-  style?: CSSProperties;
-}) {
-  return (
-    <div
-      style={{
-        flex: 1,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+CardHeader.displayName = "CardHeader";
 
-/**
- * Card.Footer - Footer section with optional border-top
- */
-Card.Footer = function CardFooter({
-  children,
-  withBorder = false,
-  style,
-}: {
+interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+}
+
+export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
+  ({ children, className = "", ...props }, ref) => {
+    return (
+      <div ref={ref} className={`flex-1 ${className}`} {...props}>
+        {children}
+      </div>
+    );
+  },
+);
+
+CardBody.displayName = "CardBody";
+
+interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   withBorder?: boolean;
-  style?: CSSProperties;
-}) {
-  return (
-    <div
-      style={{
-        marginTop: spacing.lg,
-        paddingTop: withBorder ? spacing.lg : 0,
-        borderTop: withBorder ? `1px solid ${colors.border.default}` : "none",
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
+}
+
+export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
+  ({ children, withBorder = false, className = "", style, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={className}
+        style={{
+          paddingTop: withBorder ? "var(--space-4)" : "0",
+          borderTop: withBorder ? "1px solid var(--border-default)" : "none",
+          marginTop: "var(--space-6)",
+          ...style,
+        }}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+
+CardFooter.displayName = "CardFooter";
+
+// Extend Card type with sub-components
+type CardComponent = typeof Card & {
+  Header: typeof CardHeader;
+  Body: typeof CardBody;
+  Footer: typeof CardFooter;
 };
+
+// Legacy compound component API for backward compatibility
+(Card as CardComponent).Header = CardHeader;
+(Card as CardComponent).Body = CardBody;
+(Card as CardComponent).Footer = CardFooter;
+
+export default Card as CardComponent;

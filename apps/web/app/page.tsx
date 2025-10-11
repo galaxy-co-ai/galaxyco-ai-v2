@@ -1,74 +1,210 @@
-import Link from 'next/link';
-import { auth } from '@clerk/nextjs/server';
+import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Rocket, Satellite, Globe, Zap, Users, Star } from "lucide-react";
 
 export default async function Home() {
   const { userId } = await auth();
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'system-ui', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>🚀 GalaxyCo.ai 2.0</h1>
-      <p style={{ fontSize: '1.25rem', color: '#666' }}>Make multi-agent AI useful in minutes.</p>
-      
-      <div style={{ marginTop: '2rem', padding: '1.5rem', background: '#f0f0f0', borderRadius: '12px' }}>
-        <h2>✅ Web App Running</h2>
-        <ul>
-          <li>Next.js: ✅</li>
-          <li>Clerk Auth: ✅</li>
-          <li>Environment: {process.env.NEXT_PUBLIC_ENV || 'development'}</li>
-          <li>Authentication: {userId ? '✅ Signed In' : '🔒 Not Signed In'}</li>
-        </ul>
-      </div>
+    <main>
+      {/* Hero Section */}
+      <section className="section-lg">
+        <div className="container">
+          <div className="text-center">
+            {/* Hero Badge */}
+            <div
+              className="badge badge-primary"
+              style={{
+                fontSize: "var(--text-sm)",
+                marginBottom: "var(--space-6)",
+              }}
+            >
+              🚀 Platform 2.0 Now Live
+            </div>
 
-      <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
-        {userId ? (
-          <Link
-            href="/dashboard"
-            style={{
-              display: 'inline-block',
-              padding: '0.75rem 1.5rem',
-              background: '#667eea',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: '500',
-            }}
-          >
-            Go to Dashboard →
-          </Link>
-        ) : (
-          <>
-            <Link
-              href="/sign-in"
+            {/* Hero Headline */}
+            <h1
+              className="text-5xl font-bold mb-6"
               style={{
-                display: 'inline-block',
-                padding: '0.75rem 1.5rem',
-                background: '#667eea',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '8px',
-                fontWeight: '500',
+                color: "var(--text-primary)",
+                lineHeight: "var(--leading-tight)",
+                maxWidth: "800px",
+                margin: "0 auto var(--space-6)",
               }}
             >
-              Sign In
-            </Link>
-            <Link
-              href="/sign-up"
+              Make Multi-Agent AI
+              <br />
+              <span style={{ color: "var(--primary-500)" }}>
+                Useful in Minutes
+              </span>
+            </h1>
+
+            {/* Hero Description */}
+            <p
+              className="text-xl text-secondary mb-8"
               style={{
-                display: 'inline-block',
-                padding: '0.75rem 1.5rem',
-                background: 'white',
-                color: '#667eea',
-                textDecoration: 'none',
-                borderRadius: '8px',
-                fontWeight: '500',
-                border: '2px solid #667eea',
+                maxWidth: "600px",
+                margin: "0 auto var(--space-8)",
+                lineHeight: "var(--leading-relaxed)",
               }}
             >
-              Sign Up
-            </Link>
-          </>
-        )}
-      </div>
+              Personalized AI agent Packs that deliver measurable outcomes from
+              Day 1. Built for ambitious operators who need AI that actually
+              works.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex justify-center gap-4 mb-12">
+              {userId ? (
+                <Link href="/dashboard">
+                  <Button size="lg" leftIcon={<Rocket size={20} />}>
+                    Go to Dashboard →
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/sign-up">
+                    <Button size="lg" leftIcon={<Zap size={20} />}>
+                      Start Building
+                    </Button>
+                  </Link>
+                  <Link href="/sign-in">
+                    <Button variant="secondary" size="lg">
+                      Sign In
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Status Card */}
+            <Card variant="comfortable" className="animate-fade-in">
+              <div className="text-center">
+                <h3
+                  className="text-lg font-semibold mb-4"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  ✅ Platform Status
+                </h3>
+                <div className="grid grid-auto-fit gap-4">
+                  <div className="text-center">
+                    <div className="badge badge-success mb-2">Live</div>
+                    <div className="text-sm text-secondary">Next.js App</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="badge badge-success mb-2">Active</div>
+                    <div className="text-sm text-secondary">Authentication</div>
+                  </div>
+                  <div className="text-center">
+                    <div
+                      className={`badge mb-2 ${userId ? "badge-success" : "badge-warning"}`}
+                    >
+                      {userId ? "Authenticated" : "Ready"}
+                    </div>
+                    <div className="text-sm text-secondary">User Status</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="badge badge-primary mb-2">v2.0</div>
+                    <div className="text-sm text-secondary">Environment</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section
+        className="section"
+        style={{ background: "var(--bg-secondary)" }}
+      >
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2
+              className="text-3xl font-bold mb-4"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Space-Grade AI Platform
+            </h2>
+            <p className="text-lg text-secondary">
+              Enterprise-ready tools for ambitious teams
+            </p>
+          </div>
+
+          <div className="grid grid-3 gap-6">
+            <Card variant="interactive" className="text-center">
+              <div
+                style={{
+                  color: "var(--primary-500)",
+                  marginBottom: "var(--space-4)",
+                }}
+              >
+                <Rocket size={48} style={{ margin: "0 auto" }} />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Mission Control</h3>
+              <p className="text-secondary text-sm">
+                Monitor and manage your AI agents in real-time with
+                comprehensive dashboards.
+              </p>
+            </Card>
+
+            <Card variant="interactive" className="text-center">
+              <div
+                style={{
+                  color: "var(--primary-500)",
+                  marginBottom: "var(--space-4)",
+                }}
+              >
+                <Globe size={48} style={{ margin: "0 auto" }} />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Agent Marketplace</h3>
+              <p className="text-secondary text-sm">
+                Discover and deploy proven agent templates with one-click
+                installation.
+              </p>
+            </Card>
+
+            <Card variant="interactive" className="text-center">
+              <div
+                style={{
+                  color: "var(--primary-500)",
+                  marginBottom: "var(--space-4)",
+                }}
+              >
+                <Satellite size={48} style={{ margin: "0 auto" }} />
+              </div>
+              <h3 className="text-lg font-semibold mb-3">Knowledge Hub</h3>
+              <p className="text-secondary text-sm">
+                Connect your data sources and create intelligent, context-aware
+                agents.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="section">
+        <div className="container">
+          <div className="text-center">
+            <h3
+              className="text-2xl font-semibold mb-8"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Trusted by Ambitious Teams
+            </h3>
+            <div className="flex items-center justify-center gap-8 opacity-60">
+              <div className="text-lg font-medium">Enterprise Ready</div>
+              <div className="text-lg font-medium">SOC 2 Compliant</div>
+              <div className="text-lg font-medium">99.9% Uptime</div>
+              <div className="text-lg font-medium">24/7 Support</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

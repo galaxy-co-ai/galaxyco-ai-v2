@@ -4,13 +4,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAgentList } from "../../hooks/use-agent-list";
 import { AgentListCard } from "../../components/agents/AgentListCard";
-import { EmptyState } from "../../components/ui/EmptyState";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-} from "../../lib/constants/design-system";
+import { Button } from "../../components/ui/Button";
+import { Input } from "../../components/ui/Input";
+import { Card } from "../../components/ui/Card";
+import { Plus, Search, Users, Zap, RefreshCw, Filter } from "lucide-react";
 
 export default function AgentsPage() {
   const {
@@ -60,370 +57,244 @@ export default function AgentsPage() {
   ];
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: colors.background.tertiary,
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          backgroundColor: colors.background.primary,
-          borderBottom: `1px solid ${colors.border.default}`,
-          padding: `${spacing.xl} ${spacing["2xl"]}`,
-        }}
+    <div style={{ minHeight: "100vh", background: "var(--bg-primary)" }}>
+      {/* Header Section */}
+      <section
+        className="section-sm"
+        style={{ borderBottom: "1px solid var(--border-default)" }}
       >
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: spacing.lg,
-            }}
-          >
-            <div>
-              <h1
+        <div className="container">
+          {/* Page Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div
                 style={{
-                  fontSize: typography.sizes["3xl"],
-                  fontWeight: typography.weights.bold,
-                  color: colors.text.primary,
-                  margin: 0,
-                  marginBottom: spacing.xs,
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--primary-50)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                Agents
-              </h1>
-              <p
-                style={{
-                  fontSize: typography.sizes.base,
-                  color: colors.text.secondary,
-                  margin: 0,
-                }}
-              >
-                {totalCount} agent{totalCount !== 1 ? "s" : ""} total
-              </p>
+                <Users size={24} strokeWidth={2} color="var(--primary-500)" />
+              </div>
+              <div>
+                <h1
+                  className="text-3xl font-bold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  My Agents
+                </h1>
+                <p className="text-secondary">
+                  {totalCount} agent{totalCount !== 1 ? "s" : ""} • AI
+                  automation at your fingertips
+                </p>
+              </div>
             </div>
-            <Link href="/agents/new" style={{ textDecoration: "none" }}>
-              <button
-                type="button"
-                style={{
-                  padding: `${spacing.md} ${spacing.xl}`,
-                  fontSize: typography.sizes.base,
-                  fontWeight: typography.weights.semibold,
-                  color: colors.background.primary,
-                  backgroundColor: colors.primaryColor,
-                  border: "none",
-                  borderRadius: radius.md,
-                  cursor: "pointer",
-                  transition: "opacity 200ms",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.9";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                }}
-              >
-                + New Agent
-              </button>
+
+            <Link href="/agents/new">
+              <Button leftIcon={<Plus size={18} />}>Create Agent</Button>
             </Link>
           </div>
 
-          {/* Search Bar */}
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search agents..."
-            style={{
-              width: "100%",
-              maxWidth: "500px",
-              padding: `${spacing.sm} ${spacing.md}`,
-              fontSize: typography.sizes.base,
-              fontFamily: typography.fontFamily.sans,
-              color: colors.text.primary,
-              backgroundColor: colors.background.tertiary,
-              border: `1px solid ${colors.border.default}`,
-              borderRadius: radius.md,
-              outline: "none",
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = colors.primaryColor;
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = colors.border.default;
-            }}
-          />
+          {/* Search & Filters */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex-1 max-w-md">
+              <Input
+                variant="search"
+                placeholder="Search agents..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                leftIcon={<Search size={16} />}
+              />
+            </div>
+            <Button variant="ghost" leftIcon={<Filter size={16} />}>
+              Filters
+            </Button>
+          </div>
 
-          {/* Status Filter Tabs */}
-          <div
-            style={{ display: "flex", gap: spacing.sm, marginTop: spacing.lg }}
-          >
+          {/* Status Tabs */}
+          <div className="flex gap-2">
             {statusTabs.map((tab) => (
               <button
                 key={tab.value}
                 type="button"
                 onClick={() => setStatusFilter(tab.value)}
-                style={{
-                  padding: `${spacing.sm} ${spacing.lg}`,
-                  fontSize: typography.sizes.sm,
-                  fontWeight: typography.weights.medium,
-                  color:
-                    statusFilter === tab.value
-                      ? colors.primaryColor
-                      : colors.text.secondary,
-                  backgroundColor:
-                    statusFilter === tab.value
-                      ? colors.background.tertiary
-                      : "transparent",
-                  border: `1px solid ${statusFilter === tab.value ? colors.primaryColor : colors.border.default}`,
-                  borderRadius: radius.md,
-                  cursor: "pointer",
-                  transition: "all 200ms",
-                }}
-                onMouseEnter={(e) => {
-                  if (statusFilter !== tab.value) {
-                    e.currentTarget.style.backgroundColor =
-                      colors.background.tertiary;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (statusFilter !== tab.value) {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }
-                }}
+                className={`btn btn-sm ${
+                  statusFilter === tab.value ? "btn-primary" : "btn-secondary"
+                }`}
               >
                 {tab.label}
-                {tab.count !== undefined && ` (${tab.count})`}
+                {tab.count !== undefined && (
+                  <span className="badge badge-primary ml-2">{tab.count}</span>
+                )}
               </button>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Content */}
-      <div
-        style={{
-          maxWidth: "1400px",
-          margin: "0 auto",
-          padding: `${spacing["2xl"]}`,
-        }}
-      >
-        {/* Loading State */}
-        {isLoading && (
-          <div style={{ textAlign: "center", padding: spacing["4xl"] }}>
-            <p
-              style={{
-                fontSize: typography.sizes.lg,
-                color: colors.text.tertiary,
-              }}
-            >
-              Loading agents...
-            </p>
-          </div>
-        )}
+      <section className="section">
+        <div className="container">
+          {/* Loading State */}
+          {isLoading && (
+            <div className="text-center py-12">
+              <div
+                className="animate-spin mb-4"
+                style={{ margin: "0 auto", width: "32px", height: "32px" }}
+              >
+                <Zap size={32} color="var(--primary-500)" />
+              </div>
+              <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
+                Loading your agents...
+              </p>
+            </div>
+          )}
 
-        {/* Error State */}
-        {error && (
-          <div
-            style={{
-              padding: spacing.xl,
-              backgroundColor: colors.background.secondary,
-              border: `1px solid ${colors.danger}`,
-              borderRadius: radius.lg,
-              marginBottom: spacing.xl,
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                marginBottom: spacing.md,
-                fontSize: typography.sizes.base,
-                fontWeight: typography.weights.medium,
-                color: colors.danger,
-              }}
-            >
-              ⚠️ {error}
-            </p>
-            <button
-              type="button"
-              onClick={refresh}
-              style={{
-                padding: `${spacing.sm} ${spacing.md}`,
-                fontSize: typography.sizes.sm,
-                fontWeight: typography.weights.medium,
-                color: colors.background.primary,
-                backgroundColor: colors.primaryColor,
-                border: "none",
-                borderRadius: radius.sm,
-                cursor: "pointer",
-              }}
-            >
-              🔄 Retry
-            </button>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!isLoading && agents.length === 0 && (
-          <div style={{ textAlign: "center", padding: spacing["4xl"] }}>
-            <div style={{ fontSize: "64px", marginBottom: spacing.lg }}>🤖</div>
-            <h2
-              style={{
-                fontSize: typography.sizes["2xl"],
-                fontWeight: typography.weights.bold,
-                color: colors.text.primary,
-                margin: 0,
-                marginBottom: spacing.md,
-              }}
-            >
-              {search ? "No agents found" : "No agents yet"}
-            </h2>
-            <p
-              style={{
-                fontSize: typography.sizes.base,
-                color: colors.text.secondary,
-                margin: 0,
-                marginBottom: spacing.xl,
-                maxWidth: "500px",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              {search
-                ? `No agents match "${search}". Try adjusting your search or create a new agent.`
-                : "Create your first agent to get started with AI automation."}
-            </p>
-            <div
-              style={{
-                display: "flex",
-                gap: spacing.md,
-                justifyContent: "center",
-              }}
-            >
-              <Link href="/agents/new" style={{ textDecoration: "none" }}>
-                <button
-                  type="button"
+          {/* Error State */}
+          {error && (
+            <Card className="mb-6">
+              <div className="flex items-start gap-4">
+                <div
                   style={{
-                    padding: `${spacing.md} ${spacing.xl}`,
-                    fontSize: typography.sizes.base,
-                    fontWeight: typography.weights.semibold,
-                    color: colors.background.primary,
-                    backgroundColor: colors.primaryColor,
-                    border: "none",
-                    borderRadius: radius.md,
-                    cursor: "pointer",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    background: "var(--error-light)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  + Create Agent
-                </button>
-              </Link>
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchInput("");
-                    setSearch("");
-                  }}
-                  style={{
-                    padding: `${spacing.md} ${spacing.xl}`,
-                    fontSize: typography.sizes.base,
-                    fontWeight: typography.weights.medium,
-                    color: colors.text.primary,
-                    backgroundColor: "transparent",
-                    border: `1px solid ${colors.border.default}`,
-                    borderRadius: radius.md,
-                    cursor: "pointer",
-                  }}
-                >
-                  Clear Search
-                </button>
-              )}
-            </div>
-          </div>
-        )}
+                  <RefreshCw size={20} color="var(--error)" />
+                </div>
+                <div className="flex-1">
+                  <p
+                    className="text-base font-medium mb-3"
+                    style={{ color: "var(--error)" }}
+                  >
+                    Failed to load agents
+                  </p>
+                  <p
+                    className="text-sm mb-4"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {error}
+                  </p>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    leftIcon={<RefreshCw size={16} />}
+                    onClick={refresh}
+                  >
+                    Retry
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
 
-        {/* Grid */}
-        {!isLoading && agents.length > 0 && (
-          <>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                gap: spacing.lg,
-                marginBottom: spacing.xl,
-              }}
-            >
-              {agents.map((agent: any) => (
-                <AgentListCard key={agent.id} agent={agent} />
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
+          {/* Empty State */}
+          {!isLoading && agents.length === 0 && (
+            <div className="text-center py-16">
               <div
                 style={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  background: "var(--bg-secondary)",
                   display: "flex",
+                  alignItems: "center",
                   justifyContent: "center",
-                  gap: spacing.sm,
+                  margin: "0 auto var(--space-6)",
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => setPage(page - 1)}
-                  disabled={page === 1}
-                  style={{
-                    padding: `${spacing.sm} ${spacing.lg}`,
-                    fontSize: typography.sizes.sm,
-                    fontWeight: typography.weights.medium,
-                    color:
-                      page === 1 ? colors.text.tertiary : colors.text.primary,
-                    backgroundColor: "transparent",
-                    border: `1px solid ${colors.border.default}`,
-                    borderRadius: radius.md,
-                    cursor: page === 1 ? "not-allowed" : "pointer",
-                    opacity: page === 1 ? 0.5 : 1,
-                  }}
-                >
-                  ← Previous
-                </button>
-                <span
-                  style={{
-                    padding: `${spacing.sm} ${spacing.lg}`,
-                    fontSize: typography.sizes.sm,
-                    color: colors.text.secondary,
-                  }}
-                >
-                  Page {page} of {totalPages}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setPage(page + 1)}
-                  disabled={page === totalPages}
-                  style={{
-                    padding: `${spacing.sm} ${spacing.lg}`,
-                    fontSize: typography.sizes.sm,
-                    fontWeight: typography.weights.medium,
-                    color:
-                      page === totalPages
-                        ? colors.text.tertiary
-                        : colors.text.primary,
-                    backgroundColor: "transparent",
-                    border: `1px solid ${colors.border.default}`,
-                    borderRadius: radius.md,
-                    cursor: page === totalPages ? "not-allowed" : "pointer",
-                    opacity: page === totalPages ? 0.5 : 1,
-                  }}
-                >
-                  Next →
-                </button>
+                <Users size={40} color="var(--text-tertiary)" />
               </div>
-            )}
-          </>
-        )}
-      </div>
+              <h2
+                className="text-2xl font-bold mb-3"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {search
+                  ? "No agents found"
+                  : "Ready to build your first agent?"}
+              </h2>
+              <p
+                className="text-base mb-8"
+                style={{
+                  color: "var(--text-secondary)",
+                  maxWidth: "500px",
+                  margin: "0 auto var(--space-8)",
+                }}
+              >
+                {search
+                  ? `No agents match "${search}". Try adjusting your search or create a new agent.`
+                  : "Create intelligent AI agents that automate your workflows and boost productivity."}
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                <Link href="/agents/new">
+                  <Button leftIcon={<Plus size={18} />}>
+                    Create Your First Agent
+                  </Button>
+                </Link>
+                {search && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setSearchInput("");
+                      setSearch("");
+                    }}
+                  >
+                    Clear Search
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Agent Grid */}
+          {!isLoading && agents.length > 0 && (
+            <>
+              <div className="grid grid-auto-fit gap-6 mb-8">
+                {agents.map((agent: any) => (
+                  <AgentListCard key={agent.id} agent={agent} />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  >
+                    ← Previous
+                  </Button>
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    Page {page} of {totalPages}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setPage(page + 1)}
+                    disabled={page === totalPages}
+                  >
+                    Next →
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

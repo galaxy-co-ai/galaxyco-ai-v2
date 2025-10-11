@@ -19,7 +19,7 @@ interface EmptyStateProps {
   action?: {
     label: string;
     onClick: () => void;
-    variant?: "primary" | "secondary" | "outline";
+    variant?: "primary" | "secondary" | "ghost" | "danger";
   };
   secondaryAction?: {
     label: string;
@@ -201,7 +201,7 @@ export function EmptyState({
           </Button>
           {secondaryAction && (
             <Button
-              variant="outline"
+              variant="secondary"
               size="lg"
               onClick={secondaryAction.onClick}
             >

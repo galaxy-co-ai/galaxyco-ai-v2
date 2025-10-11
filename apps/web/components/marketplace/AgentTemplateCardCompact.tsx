@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  colors,
-  shadows,
-  radius,
-  spacing,
-  typography,
-} from "@/lib/constants/design-system";
 import { useState } from "react";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Star, Download, Zap, Clock } from "lucide-react";
 
 interface AgentTemplateCardProps {
   template: {
@@ -32,10 +28,11 @@ interface AgentTemplateCardProps {
 }
 
 /**
- * Compact OpenSea-style Agent Card
- * - Minimal info shown by default
- * - Details revealed on hover
- * - Much smaller footprint
+ * Professional OpenSea-style Agent Card
+ * - Clean, compact design with circular avatars
+ * - Progressive disclosure on hover
+ * - One-click deploy action
+ * - Popularity and rarity signals
  */
 export default function AgentTemplateCardCompact({
   template,
@@ -44,83 +41,106 @@ export default function AgentTemplateCardCompact({
   const [isHovered, setIsHovered] = useState(false);
   const ratingStars = (template.rating / 100).toFixed(1);
 
+  // Generate avatar color based on category
+  const getAvatarColor = (category: string) => {
+    const colors = {
+      Productivity: "var(--primary-500)",
+      Knowledge: "var(--accent-500)",
+      Development: "var(--success)",
+      Data: "var(--info)",
+      Security: "var(--error)",
+      Analytics: "var(--warning)",
+    };
+    return colors[category as keyof typeof colors] || "var(--primary-500)";
+  };
+
   return (
-    <div
+    <Card
+      variant="interactive"
+      hover={true}
+      className={`cursor-pointer transition-all duration-200 ${
+        isHovered ? "transform -translate-y-1" : ""
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
+        minHeight: isFeatured ? "200px" : "160px",
         position: "relative",
-        background: colors.background.primary,
-        border: `1px solid ${isHovered ? colors.border.focus : colors.border.default}`,
-        borderRadius: radius.lg,
-        padding: spacing.md,
-        cursor: "pointer",
-        transition: "all 0.2s ease",
-        boxShadow: isHovered ? shadows.md : shadows.sm,
-        transform: isHovered ? "translateY(-2px)" : "translateY(0)",
-        minHeight: isFeatured ? "180px" : "140px",
       }}
     >
       {/* Badge */}
       {template.badgeText && (
         <div
+          className="badge badge-primary"
           style={{
             position: "absolute",
-            top: spacing.sm,
-            right: spacing.sm,
-            padding: `2px ${spacing.sm}`,
-            background: colors.primary[500],
-            color: "white",
-            borderRadius: radius.sm,
-            fontSize: typography.sizes.xs,
-            fontWeight: typography.weights.semibold,
-            zIndex: 1,
+            top: "var(--space-3)",
+            right: "var(--space-3)",
+            fontSize: "0.75rem",
+            zIndex: 2,
           }}
         >
           {template.badgeText}
         </div>
       )}
 
-      {/* Category */}
-      <div
-        style={{
-          fontSize: typography.sizes.xs,
-          color: colors.text.tertiary,
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-          marginBottom: spacing.xs,
-        }}
-      >
-        {template.category}
+      {/* Avatar & Header */}
+      <div className="flex items-start gap-3 mb-3">
+        {/* Circular Avatar - No Emoji */}
+        <div
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            background: `linear-gradient(135deg, ${getAvatarColor(template.category)}20, ${getAvatarColor(template.category)}40)`,
+            border: `2px solid ${getAvatarColor(template.category)}30`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <Zap
+            size={18}
+            color={getAvatarColor(template.category)}
+            strokeWidth={2.5}
+          />
+        </div>
+
+        {/* Header Info */}
+        <div className="flex-1 min-w-0">
+          <div
+            className="text-xs font-medium mb-1"
+            style={{
+              color: "var(--text-tertiary)",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+            {template.category}
+          </div>
+          <h3
+            className="text-sm font-semibold leading-tight"
+            style={{
+              color: "var(--text-primary)",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {template.name}
+          </h3>
+        </div>
       </div>
 
-      {/* Name */}
-      <h3
-        style={{
-          fontSize: typography.sizes.base,
-          fontWeight: typography.weights.semibold,
-          color: colors.text.primary,
-          marginBottom: spacing.sm,
-          lineHeight: 1.3,
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          minHeight: "2.6em",
-        }}
-      >
-        {template.name}
-      </h3>
-
-      {/* Description - only on hover or featured */}
+      {/* Description - Progressive Disclosure */}
       {(isHovered || isFeatured) && (
         <p
+          className="text-xs mb-3"
           style={{
-            fontSize: typography.sizes.xs,
-            color: colors.text.secondary,
-            marginBottom: spacing.sm,
-            lineHeight: 1.5,
+            color: "var(--text-secondary)",
+            lineHeight: 1.4,
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -131,124 +151,92 @@ export default function AgentTemplateCardCompact({
         </p>
       )}
 
-      {/* Stats - compact single row */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          fontSize: typography.sizes.xs,
-          color: colors.text.secondary,
-          marginBottom: isHovered ? spacing.sm : 0,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: spacing.xs }}>
-          <span>⭐</span>
+      {/* Stats Row */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-1">
+          <Star size={12} fill="var(--warning)" color="var(--warning)" />
           <span
-            style={{
-              fontWeight: typography.weights.semibold,
-              color: colors.text.primary,
-            }}
+            className="text-xs font-semibold"
+            style={{ color: "var(--text-primary)" }}
           >
             {ratingStars}
           </span>
+          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+            ({template.reviewCount})
+          </span>
         </div>
-        <div>{template.installCount.toLocaleString()} installs</div>
+
+        {/* Install Count */}
+        <div className="flex items-center gap-1">
+          <Download size={12} color="var(--text-tertiary)" />
+          <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+            {template.installCount > 1000
+              ? `${(template.installCount / 1000).toFixed(1)}k`
+              : template.installCount}
+          </span>
+        </div>
       </div>
 
-      {/* KPIs - only on hover */}
+      {/* KPI Preview - Only on Hover */}
       {isHovered && template.kpis && (
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: spacing.xs,
-            marginBottom: spacing.sm,
-            padding: spacing.sm,
-            background: colors.background.secondary,
-            borderRadius: radius.sm,
-            fontSize: typography.sizes.xs,
-          }}
+          className="mb-3 p-2 rounded"
+          style={{ background: "var(--bg-secondary)" }}
         >
-          {template.kpis.successRate && (
-            <div>
-              <div style={{ color: colors.text.tertiary }}>Success</div>
-              <div
-                style={{
-                  fontWeight: typography.weights.semibold,
-                  color: colors.text.primary,
-                }}
-              >
-                {template.kpis.successRate}%
+          <div className="grid grid-2 gap-2 text-xs">
+            {template.kpis.successRate && (
+              <div>
+                <div style={{ color: "var(--text-tertiary)" }}>Success</div>
+                <div
+                  className="font-semibold"
+                  style={{ color: "var(--success)" }}
+                >
+                  {template.kpis.successRate}%
+                </div>
               </div>
-            </div>
-          )}
-          {template.kpis.avgTimeSaved && (
-            <div>
-              <div style={{ color: colors.text.tertiary }}>Saves</div>
-              <div
-                style={{
-                  fontWeight: typography.weights.semibold,
-                  color: colors.text.primary,
-                }}
-              >
-                {template.kpis.avgTimeSaved}
+            )}
+            {template.kpis.avgTimeSaved && (
+              <div>
+                <div style={{ color: "var(--text-tertiary)" }}>Saves</div>
+                <div
+                  className="font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {template.kpis.avgTimeSaved}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
-      {/* Action Button - only on hover */}
+      {/* Action Button - One-Click Deploy */}
       {isHovered && (
-        <button
+        <Button
+          size="sm"
+          leftIcon={<Download size={14} />}
           onClick={(e) => {
             e.stopPropagation();
-            console.log("Install agent:", template.id);
+            console.log("Deploy agent:", template.id);
           }}
-          style={{
-            width: "100%",
-            padding: `${spacing.sm} ${spacing.md}`,
-            background: colors.primary[500],
-            color: "white",
-            border: "none",
-            borderRadius: radius.md,
-            fontSize: typography.sizes.sm,
-            fontWeight: typography.weights.semibold,
-            cursor: "pointer",
-            transition: "background 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = colors.primary[600];
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = colors.primary[500];
-          }}
+          style={{ width: "100%" }}
         >
-          Install
-        </button>
+          Deploy
+        </Button>
       )}
 
-      {/* Tags - show 2 on hover */}
-      {isHovered && template.tags && template.tags.length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            gap: spacing.xs,
-            marginTop: spacing.sm,
-            flexWrap: "wrap",
-          }}
-        >
+      {/* Tags - Compact Pills */}
+      {!isHovered && template.tags && template.tags.length > 0 && (
+        <div className="flex gap-1 flex-wrap">
           {template.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
+              className="badge"
               style={{
-                padding: `2px ${spacing.sm}`,
-                background: colors.primary[50],
-                color: colors.primary[600],
-                borderRadius: radius.sm,
-                fontSize: typography.sizes.xs,
-                fontWeight: typography.weights.medium,
+                fontSize: "0.6875rem",
+                padding: "0.125rem 0.375rem",
+                background: "var(--bg-secondary)",
+                color: "var(--text-tertiary)",
               }}
             >
               {tag}
@@ -256,6 +244,6 @@ export default function AgentTemplateCardCompact({
           ))}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

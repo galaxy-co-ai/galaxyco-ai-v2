@@ -1,7 +1,14 @@
 "use client";
 
-import { Activity, CheckCircle, TrendingUp, Zap, Clock } from "lucide-react";
-import { colors, radius } from "@/lib/constants/design-system";
+import {
+  Activity,
+  CheckCircle,
+  TrendingUp,
+  Zap,
+  Clock,
+  TrendingDown,
+} from "lucide-react";
+import { Card } from "@/components/ui/Card";
 
 interface DashboardStatsProps {
   totalAgents?: number;
@@ -9,139 +16,177 @@ interface DashboardStatsProps {
   totalExecutions?: number;
   successRate?: number;
   avgResponseTime?: number;
+  weeklyGrowth?: number;
+}
+
+interface StatCard {
+  id: string;
+  label: string;
+  value: string | number;
+  icon: any;
+  trend?: {
+    value: number;
+    direction: "up" | "down" | "neutral";
+  };
+  color: "primary" | "success" | "warning" | "error" | "info";
 }
 
 export default function DashboardStats({
-  totalAgents = 0,
-  activeAgents = 0,
-  totalExecutions = 0,
-  successRate = 0,
-  avgResponseTime = 0,
+  totalAgents = 12,
+  activeAgents = 8,
+  totalExecutions = 1247,
+  successRate = 94.2,
+  avgResponseTime = 1.3,
+  weeklyGrowth = 23,
 }: DashboardStatsProps) {
-  const stats = [
+  const stats: StatCard[] = [
     {
       id: "total",
       label: "Total Agents",
       value: totalAgents,
       icon: Activity,
-      color: colors.primary[500],
-      bgColor: colors.primary[50],
+      trend: {
+        value: weeklyGrowth,
+        direction: weeklyGrowth > 0 ? "up" : "down",
+      },
+      color: "primary",
     },
     {
       id: "active",
-      label: "Active",
+      label: "Active Agents",
       value: activeAgents,
       icon: CheckCircle,
-      color: colors.success.DEFAULT,
-      bgColor: colors.success.light,
+      trend: { value: 12, direction: "up" },
+      color: "success",
     },
     {
       id: "executions",
-      label: "Executions",
+      label: "Total Executions",
       value: totalExecutions.toLocaleString(),
       icon: TrendingUp,
-      color: colors.info.DEFAULT,
-      bgColor: colors.info.light,
+      trend: { value: 8.5, direction: "up" },
+      color: "info",
     },
     {
       id: "success",
       label: "Success Rate",
       value: `${successRate}%`,
       icon: Zap,
+      trend: { value: 2.1, direction: "up" },
       color:
-        successRate >= 90
-          ? colors.success.DEFAULT
-          : successRate >= 70
-            ? colors.warning.DEFAULT
-            : colors.error.DEFAULT,
-      bgColor:
-        successRate >= 90
-          ? colors.success.light
-          : successRate >= 70
-            ? colors.warning.light
-            : colors.error.light,
+        successRate >= 90 ? "success" : successRate >= 70 ? "warning" : "error",
     },
     {
       id: "response",
-      label: "Avg Response",
+      label: "Avg Response Time",
       value: `${avgResponseTime}s`,
       icon: Clock,
-      color: colors.text.secondary,
-      bgColor: colors.background.secondary,
+      trend: { value: 15, direction: "down" },
+      color: "info",
     },
   ];
 
+  const getColorStyles = (color: string) => {
+    const colorMap = {
+      primary: {
+        iconBg: "var(--primary-50)",
+        iconColor: "var(--primary-500)",
+      },
+      success: {
+        iconBg: "var(--success-light)",
+        iconColor: "var(--success)",
+      },
+      info: {
+        iconBg: "var(--info-light)",
+        iconColor: "var(--info)",
+      },
+      warning: {
+        iconBg: "var(--warning-light)",
+        iconColor: "var(--warning)",
+      },
+      error: {
+        iconBg: "var(--error-light)",
+        iconColor: "var(--error)",
+      },
+    };
+    return colorMap[color as keyof typeof colorMap] || colorMap.primary;
+  };
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        gap: "1rem",
-      }}
-    >
+    <div className="grid grid-auto-fit gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
+        const TrendIcon =
+          stat.trend?.direction === "up" ? TrendingUp : TrendingDown;
+        const colorStyles = getColorStyles(stat.color);
+
         return (
-          <div
+          <Card
             key={stat.id}
+            variant="interactive"
+            className="animate-fade-in"
             style={{
-              background: colors.background.primary,
-              border: `1px solid ${colors.border.default}`,
-              borderRadius: radius.lg,
-              padding: "1.25rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = colors.border.focus;
-              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = colors.border.default;
-              e.currentTarget.style.boxShadow = "none";
+              padding: "var(--space-6)",
             }}
           >
-            {/* Icon */}
-            <div
-              style={{
-                width: "48px",
-                height: "48px",
-                borderRadius: radius.md,
-                background: stat.bgColor,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Icon size={24} strokeWidth={2} color={stat.color} />
+            {/* Header with Icon */}
+            <div className="flex items-center justify-between mb-4">
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "var(--radius-lg)",
+                  background: colorStyles.iconBg,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon size={24} strokeWidth={2} color={colorStyles.iconColor} />
+              </div>
+
+              {/* Trend Indicator */}
+              {stat.trend && (
+                <div
+                  className="flex items-center gap-1"
+                  style={{
+                    color:
+                      stat.trend.direction === "up"
+                        ? "var(--success)"
+                        : stat.trend.direction === "down"
+                          ? "var(--error)"
+                          : "var(--text-tertiary)",
+                  }}
+                >
+                  <TrendIcon size={16} strokeWidth={2} />
+                  <span className="text-xs font-medium">
+                    {stat.trend.value}%
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Content */}
-            <div style={{ flex: 1, minWidth: 0 }}>
+            <div>
               <div
+                className="text-sm text-secondary mb-2"
                 style={{
-                  fontSize: "0.875rem",
-                  color: colors.text.secondary,
-                  marginBottom: "0.25rem",
+                  color: "var(--text-secondary)",
                 }}
               >
                 {stat.label}
               </div>
               <div
+                className="text-3xl font-bold"
                 style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: colors.text.primary,
+                  color: "var(--text-primary)",
                   lineHeight: 1,
                 }}
               >
                 {stat.value}
               </div>
             </div>
-          </div>
+          </Card>
         );
       })}
     </div>
