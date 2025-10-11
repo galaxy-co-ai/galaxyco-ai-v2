@@ -55,3 +55,11 @@ export {
   ToolExecutionError,
   MaxIterationsError,
 } from "./types";
+
+// Execution Service
+export { AgentExecutionService } from "./execution-service";
+export type {
+  DbAgent,
+  ExecutionRequest,
+  ExecutionResult,
+} from "./execution-service";

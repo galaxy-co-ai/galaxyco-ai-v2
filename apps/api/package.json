@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
+    "@galaxyco/agents-core": "workspace:*",
+    "@galaxyco/database": "workspace:*",
     "@nestjs/common": "^10.3.0",
     "@nestjs/core": "^10.3.0",
     "@nestjs/mapped-types": "^2.1.0",
