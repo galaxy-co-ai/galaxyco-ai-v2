@@ -1,20 +1,19 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
+import React from "react";
+import Link from "next/link";
+import {
+  colors,
+  spacing,
+  typography,
+  radius,
+  shadows,
+} from "@/lib/constants/design-system";
+
+import type { MockAgent } from "@/lib/mock-agents";
 
 interface AgentListCardProps {
-  agent: {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    status: 'draft' | 'active' | 'paused' | 'archived';
-    type: string;
-    aiProvider: string;
-    model: string;
-  };
+  agent: MockAgent;
 }
 
 export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
@@ -26,7 +25,7 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
   };
 
   return (
-    <Link href={`/agents/${agent.id}`} style={{ textDecoration: 'none' }}>
+    <Link href={`/agents/${agent.id}`} style={{ textDecoration: "none" }}>
       <div
         role="article"
         aria-label={`Agent: ${agent.name}`}
@@ -36,35 +35,42 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
           border: `1px solid ${colors.border.default}`,
           borderRadius: radius.lg,
           padding: spacing.lg,
-          cursor: 'pointer',
-          transition: 'all 200ms ease-out',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+          cursor: "pointer",
+          transition: "all 200ms ease-out",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px)';
+          e.currentTarget.style.transform = "translateY(-4px)";
           e.currentTarget.style.boxShadow = shadows.lg;
           e.currentTarget.style.borderColor = colors.primaryColor;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "none";
           e.currentTarget.style.borderColor = colors.border.default;
         }}
         onFocus={(e) => {
           e.currentTarget.style.outline = `2px solid ${colors.primaryColor}`;
-          e.currentTarget.style.outlineOffset = '2px';
+          e.currentTarget.style.outlineOffset = "2px";
         }}
         onBlur={(e) => {
-          e.currentTarget.style.outline = 'none';
+          e.currentTarget.style.outline = "none";
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'start', gap: spacing.md, marginBottom: spacing.md }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "start",
+            gap: spacing.md,
+            marginBottom: spacing.md,
+          }}
+        >
           <div
             style={{
-              fontSize: '32px',
+              fontSize: "32px",
               lineHeight: 1,
             }}
           >
@@ -78,24 +84,24 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
                 color: colors.text.primary,
                 margin: 0,
                 marginBottom: spacing.xs,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
               }}
             >
               {agent.name}
             </h3>
             <div
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
+                display: "inline-flex",
+                alignItems: "center",
                 padding: `${spacing.xs} ${spacing.sm}`,
                 backgroundColor: statusColors[agent.status],
                 color: colors.background.primary,
                 fontSize: typography.sizes.xs,
                 fontWeight: typography.weights.medium,
                 borderRadius: radius.full,
-                textTransform: 'capitalize',
+                textTransform: "capitalize",
               }}
             >
               {agent.status}
@@ -111,10 +117,10 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
             margin: 0,
             marginBottom: spacing.md,
             flex: 1,
-            overflow: 'hidden',
-            display: '-webkit-box',
+            overflow: "hidden",
+            display: "-webkit-box",
             WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
+            WebkitBoxOrient: "vertical",
           }}
         >
           {agent.description}
@@ -123,7 +129,7 @@ export const AgentListCard: React.FC<AgentListCardProps> = ({ agent }) => {
         {/* Footer */}
         <div
           style={{
-            display: 'flex',
+            display: "flex",
             gap: spacing.xs,
             paddingTop: spacing.md,
             borderTop: `1px solid ${colors.border.default}`,
