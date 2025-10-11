@@ -19,6 +19,7 @@ export interface InputSafetyConfig {
 const INJECTION_PATTERNS = [
   // System prompt override attempts
   /ignore\s+(all\s+)?(previous|prior|above)\s+(instructions|prompts?|directions)/i,
+  /ignore\s+all\s+instructions/i,
   /disregard\s+(all\s+)?(previous|prior|above)\s+(instructions|prompts?|directions)/i,
   /forget\s+(all\s+)?(previous|prior|above)\s+(instructions|prompts?)/i,
 

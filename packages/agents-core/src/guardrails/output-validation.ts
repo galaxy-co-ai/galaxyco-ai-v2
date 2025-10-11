@@ -6,13 +6,17 @@
 import type { Guardrail, GuardrailResult } from "../types";
 
 const SECRET_PATTERNS = [
-  { name: "API Key", pattern: /\b[A-Za-z0-9]{32,}\b/g, risk: "high" },
   {
     name: "JWT Token",
     pattern: /eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g,
     risk: "high",
   },
   { name: "AWS Key", pattern: /AKIA[0-9A-Z]{16}/g, risk: "high" },
+  {
+    name: "API Key",
+    pattern: /\b(sk_|pk_|api_)?[A-Za-z0-9]{32,}\b/g,
+    risk: "high",
+  },
   {
     name: "Private Key",
     pattern: /-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----/g,
@@ -64,17 +68,19 @@ export function createOutputValidationGuardrail(
       if (detected.length > 0) {
         const hasHighRisk = detected.some((d) => d.risk === "high");
 
-        if (mode === "block" && hasHighRisk) {
+        if (mode === "block") {
           return {
-            passed: false,
-            action: "block",
+            passed: !hasHighRisk,
+            action: hasHighRisk ? "block" : "redact",
             reason: `Output contains sensitive information: ${detected.map((d) => d.type).join(", ")}`,
+            redactedContent:
+              mode === "block" && !hasHighRisk ? redactedText : undefined,
             metadata: { detected },
           };
         }
 
         return {
-          passed: mode === "redact",
+          passed: true,
           action: "redact",
           reason: `Output contains: ${detected.map((d) => d.type).join(", ")}`,
           redactedContent: redactedText,

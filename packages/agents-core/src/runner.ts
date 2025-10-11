@@ -117,6 +117,10 @@ export class Runner {
     let totalTokens = 0;
     let totalCost = 0;
 
+    // Add cost tracking to context metadata for guardrails
+    context.metadata.tokensUsed = 0;
+    context.metadata.costUsd = 0;
+
     // Initialize OpenAI client
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -137,6 +141,9 @@ export class Runner {
     // Execute loop
     while (context.iterations < maxIterations) {
       context.iterations++;
+
+      // Check cost limits BEFORE starting iteration (cost guardrails)
+      await this.runCostGuardrails(agent, context);
 
       // Call LLM
       const completion = await openai.chat.completions.create({
@@ -160,6 +167,10 @@ export class Runner {
         completion.usage?.prompt_tokens || 0,
         completion.usage?.completion_tokens || 0,
       );
+
+      // Update context metadata with latest cost data for guardrails
+      context.metadata.tokensUsed = totalTokens;
+      context.metadata.costUsd = totalCost;
 
       // Add assistant message to context
       const assistantMessage: Message = {
@@ -306,6 +317,26 @@ export class Runner {
       if (!result.passed) {
         throw new GuardrailError(
           `Tool guardrail failed: ${guardrail.name} - ${result.reason}`,
+          { guardrail: guardrail.name, ...result.metadata },
+        );
+      }
+    }
+  }
+
+  /**
+   * Run cost guardrails (token limits, cost limits, iteration limits)
+   */
+  private static async runCostGuardrails(
+    agent: Agent,
+    context: ExecutionContext,
+  ): Promise<void> {
+    const costGuardrails = agent.guardrails.filter((g) => g.type === "cost");
+
+    for (const guardrail of costGuardrails) {
+      const result = await guardrail.check(null, context as any);
+      if (!result.passed) {
+        throw new GuardrailError(
+          `Cost guardrail failed: ${guardrail.name} - ${result.reason}`,
           { guardrail: guardrail.name, ...result.metadata },
         );
       }

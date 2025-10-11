@@ -38,7 +38,7 @@ export function createCostLimitGuardrail(
       };
 
       // Check iterations
-      if (ctx?.iterations && ctx.iterations >= maxIterations) {
+      if (ctx?.iterations && ctx.iterations > maxIterations) {
         return {
           passed: false,
           action: "block",
@@ -48,7 +48,7 @@ export function createCostLimitGuardrail(
       }
 
       // Check tokens
-      if (ctx?.tokensUsed && ctx.tokensUsed >= maxTokens) {
+      if (ctx?.tokensUsed && ctx.tokensUsed > maxTokens) {
         return {
           passed: false,
           action: "block",
@@ -58,7 +58,7 @@ export function createCostLimitGuardrail(
       }
 
       // Check cost
-      if (ctx?.costUsd && ctx.costUsd >= maxCostUsd) {
+      if (ctx?.costUsd && ctx.costUsd > maxCostUsd) {
         return {
           passed: false,
           action: "block",
