@@ -261,6 +261,12 @@ export const agents = pgTable(
         systemPrompt?: string;
         tools?: string[];
         triggers?: { type: string; config: any }[];
+        knowledgeBase?: {
+          enabled: boolean;
+          scope?: "all" | "collections";
+          collectionIds?: string[];
+          maxResults?: number;
+        };
       }>()
       .notNull()
       .default({}),

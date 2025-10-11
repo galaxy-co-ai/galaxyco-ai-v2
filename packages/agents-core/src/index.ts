@@ -89,5 +89,7 @@ export {
   createSearchAgentsTool,
   createGetAgentTool,
   createGetWorkspaceStatsTool,
+  // Knowledge base tools
+  createKnowledgeSearchTool,
   // TODO: Export other tool categories as they're implemented
 } from "./tools/index";

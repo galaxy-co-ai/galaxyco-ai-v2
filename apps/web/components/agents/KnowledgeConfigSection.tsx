@@ -151,11 +151,11 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           alignItems: 'center',
           padding: spacing.lg,
           backgroundColor: config.enabled
-            ? colors.accent.light + '20'
+            ? colors.primary[100]
             : colors.background.secondary,
           borderRadius: radius.lg,
           marginBottom: spacing.lg,
-          border: `2px solid ${config.enabled ? colors.accent.light : colors.border.default}`,
+          border: `2px solid ${config.enabled ? colors.primary[500] : colors.border.default}`,
           cursor: disabled ? 'not-allowed' : 'pointer',
           transition: 'all 0.2s ease',
         }}
@@ -176,7 +176,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
         <div>
           <label
             style={{
-              fontSize: typography.sizes.md,
+              fontSize: typography.sizes.base,
               fontWeight: typography.weights.medium,
               color: colors.text.primary,
               cursor: disabled ? 'not-allowed' : 'pointer',
@@ -233,7 +233,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 marginBottom: spacing.sm,
                 backgroundColor: colors.background.primary,
                 borderRadius: radius.md,
-                border: `2px solid ${config.scope === 'all' ? colors.accent.light : colors.border.default}`,
+                border: `2px solid ${config.scope === 'all' ? colors.primaryColor : colors.border.default}`,
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease',
               }}
@@ -278,7 +278,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 padding: spacing.md,
                 backgroundColor: colors.background.primary,
                 borderRadius: radius.md,
-                border: `2px solid ${config.scope === 'collections' ? colors.accent.light : colors.border.default}`,
+                border: `2px solid ${config.scope === 'collections' ? colors.primaryColor : colors.border.default}`,
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease',
               }}
@@ -387,7 +387,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                           padding: spacing.md,
                           borderBottom: `1px solid ${colors.border.default}`,
                           cursor: disabled ? 'not-allowed' : 'pointer',
-                          backgroundColor: isSelected ? colors.accent.light + '10' : 'transparent',
+                          backgroundColor: isSelected ? colors.primary[100] : 'transparent',
                           transition: 'background-color 0.2s ease',
                         }}
                         onClick={() => !disabled && handleCollectionToggle(collection.id)}
@@ -399,7 +399,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                         onMouseLeave={(e) => {
                           if (!disabled) {
                             e.currentTarget.style.backgroundColor = isSelected
-                              ? colors.accent.light + '10'
+                              ? colors.primary[100]
                               : 'transparent';
                           }
                         }}

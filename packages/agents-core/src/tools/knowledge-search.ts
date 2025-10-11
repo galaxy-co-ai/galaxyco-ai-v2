@@ -81,13 +81,13 @@ export function createKnowledgeSearchTool(
         );
 
         if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
+          const errorData = await response.json().catch(() => ({})) as { error?: string };
           throw new Error(
             errorData.error || `Search API error: ${response.statusText}`
           );
         }
 
-        const data = await response.json();
+        const data = await response.json() as { results?: any[]; totalResults?: number };
 
         // Format results for LLM consumption
         if (!data.results || data.results.length === 0) {

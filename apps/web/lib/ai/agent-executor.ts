@@ -7,8 +7,8 @@
 
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam, ChatCompletionTool } from "openai/resources/chat/completions";
-import { createKnowledgeSearchTool } from "@galaxyco/agents-core/tools";
-import type { Tool, ExecutionContext } from "@galaxyco/agents-core/types";
+import { createKnowledgeSearchTool } from "../../../../packages/agents-core/src/tools/knowledge-search";
+import type { Tool, ExecutionContext } from "../../../../packages/agents-core/src/types";
 
 export interface AgentExecutionOptions {
   agentId: string;
@@ -70,6 +70,7 @@ export async function executeAgentWithTools(
     messages: [],
     toolCalls: [],
     iterations: 0,
+    metadata: {},
   };
 
   // Prepare tools array
@@ -150,6 +151,7 @@ export async function executeAgentWithTools(
       if (response.message.tool_calls && response.message.tool_calls.length > 0) {
         // Execute each tool call
         for (const toolCall of response.message.tool_calls) {
+          if (toolCall.type !== 'function' || !toolCall.function) continue;
           const toolName = toolCall.function.name;
           const toolArgs = JSON.parse(toolCall.function.arguments);
 

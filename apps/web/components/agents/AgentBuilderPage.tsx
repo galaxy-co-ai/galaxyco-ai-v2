@@ -30,7 +30,8 @@ export const AgentBuilderPage: React.FC = () => {
     publish,
   } = useAgentBuilder();
 
-  const { workspaceId } = useWorkspaceAuth();
+  const { workspace } = useWorkspaceAuth();
+  const workspaceId = workspace?.id;
 
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(true);
   const [showPublishModal, setShowPublishModal] = useState(false);
