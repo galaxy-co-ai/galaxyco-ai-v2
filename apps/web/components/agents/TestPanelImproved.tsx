@@ -190,9 +190,18 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
         {} as Record<string, string>,
       );
 
-      // Execute agent
-      const mode = useLiveMode ? "live" : "mock";
-      const result = await executeAgent(agentId, inputs, mode);
+      // Check if this is a demo agent (starts with 'agent-')
+      const isDemoAgent = agentId.startsWith("agent-");
+
+      let result;
+      if (isDemoAgent) {
+        // Handle demo agents with client-side mock
+        result = await executeMockDemo(inputs);
+      } else {
+        // Execute real agents via API
+        const mode = useLiveMode ? "live" : "mock";
+        result = await executeAgent(agentId, inputs, mode);
+      }
 
       setTestResult(result);
       onTestComplete?.(result);
@@ -201,6 +210,66 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
     } finally {
       setIsRunning(false);
     }
+  };
+
+  // Mock execution for demo agents
+  const executeMockDemo = async (inputs: Record<string, string>) => {
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    const mockOutputs: Record<string, any> = {
+      scope: {
+        summary: "Email analyzed successfully",
+        actionItems: [
+          "Review priority items",
+          "Schedule follow-up",
+          "Document findings",
+        ],
+        priority: "medium",
+        sentiment: "professional",
+      },
+      email: {
+        subject: "Re: " + (inputs.subject || "Your inquiry"),
+        body: "Thank you for your message...",
+        tone: "professional",
+      },
+      call: {
+        summary: "Call transcript processed",
+        keyPoints: ["Discussed main topics", "Identified action items"],
+        nextSteps: ["Follow up on items"],
+      },
+      note: {
+        summary: "Note analyzed",
+        tags: ["meeting", "action-required"],
+      },
+      task: {
+        taskCreated: true,
+        taskId: `TASK-${Date.now()}`,
+        priority: "medium",
+      },
+      content: {
+        contentGenerated: true,
+        topic: inputs.topic || "Generated content",
+        wordCount: 287,
+        preview: `Generated ${inputs.tone || "professional"} content about ${inputs.topic || "the topic"}...`,
+      },
+      custom: {
+        result: "Demo execution completed",
+        processedInputs: Object.keys(inputs).length,
+      },
+    };
+
+    return {
+      success: true,
+      output: mockOutputs[agentType] || mockOutputs.custom,
+      metrics: {
+        tokens: Math.floor(Math.random() * 300) + 150,
+        cost: 0.0015,
+        latencyMs: 700,
+        model: "gpt-4o-mini",
+      },
+      mode: "mock",
+    };
   };
 
   const handleClear = () => {
