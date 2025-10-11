@@ -89,11 +89,6 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
 
-        {/* Category-Themed Hero */}
-        <div style={{ marginTop: "1rem" }}>
-          <MarketplaceHero category={category} />
-        </div>
-
         {/* Breadcrumb */}
         <section style={{ padding: "1.5rem 1.5rem 0" }}>
           <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
