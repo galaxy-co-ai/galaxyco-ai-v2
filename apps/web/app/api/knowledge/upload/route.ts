@@ -2,6 +2,13 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@galaxyco/database";
 import { knowledgeItems } from "@galaxyco/database/schema";
+import { uploadFileToBlob, generateUniqueFilename } from "@/lib/storage";
+import {
+  extractTextFromPDF,
+  extractTextFromPlainText,
+  scrapeURL,
+  generateSimpleSummary,
+} from "@/lib/document-processor";
 
 /**
  * Knowledge Base Upload API
@@ -111,30 +118,65 @@ async function handleFileUpload(
     itemType = "document";
   }
 
-  // For now, create a placeholder item with "processing" status
-  // File upload to storage will be implemented next
-  const [knowledgeItem] = await db
-    .insert(knowledgeItems)
-    .values({
-      workspaceId,
-      createdBy: userId,
-      title: file.name,
-      type: itemType,
-      status: "processing",
-      fileName: file.name,
-      fileSize: file.size,
-      mimeType: file.type,
-    })
-    .returning();
+  // Get file buffer
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-  // TODO: Upload file to storage (Vercel Blob or S3)
-  // TODO: Queue background job to process file (extract text, generate embeddings)
+  try {
+    // Upload to Vercel Blob storage
+    const uniqueFilename = generateUniqueFilename(file.name);
+    const { url: blobUrl } = await uploadFileToBlob(buffer, uniqueFilename, {
+      contentType: file.type,
+    });
 
-  return NextResponse.json({
-    success: true,
-    item: knowledgeItem,
-    message: "File uploaded successfully. Processing...",
-  });
+    // Extract text content based on file type
+    let extractedText = "";
+    let title = file.name;
+
+    if (file.type === "application/pdf") {
+      const pdfData = await extractTextFromPDF(buffer);
+      extractedText = pdfData.text;
+      title = file.name.replace(".pdf", "");
+    } else if (file.type.startsWith("text/")) {
+      extractedText = await extractTextFromPlainText(buffer);
+    }
+
+    // Create knowledge item with processed content
+    const [knowledgeItem] = await db
+      .insert(knowledgeItems)
+      .values({
+        workspaceId,
+        createdBy: userId,
+        title,
+        type: itemType,
+        status: extractedText ? "ready" : "processing",
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type,
+        sourceUrl: blobUrl,
+        content: extractedText.substring(0, 50000) || null, // Limit to 50k chars
+        processedAt: extractedText ? new Date() : null,
+        metadata: {
+          wordCount: extractedText.split(/\s+/).length,
+          extractedAt: new Date().toISOString(),
+        },
+      })
+      .returning();
+
+    // TODO: Queue background job to generate embeddings
+
+    return NextResponse.json({
+      success: true,
+      item: knowledgeItem,
+      message: "File uploaded and processed successfully",
+    });
+  } catch (uploadError: any) {
+    console.error("File upload error:", uploadError);
+    return NextResponse.json(
+      { error: `Upload failed: ${uploadError.message}` },
+      { status: 500 },
+    );
+  }
 }
 
 /**
@@ -163,26 +205,43 @@ async function handleJsonSubmission(
       );
     }
 
-    // Create knowledge item for URL
-    const [knowledgeItem] = await db
-      .insert(knowledgeItems)
-      .values({
-        workspaceId,
-        createdBy: userId,
-        title: title || url,
-        type: "url",
-        status: "processing",
-        sourceUrl: url,
-      })
-      .returning();
+    // Scrape URL and extract content
+    try {
+      const scrapedData = await scrapeURL(url);
 
-    // TODO: Queue background job to scrape URL and extract content
+      // Create knowledge item with scraped content
+      const [knowledgeItem] = await db
+        .insert(knowledgeItems)
+        .values({
+          workspaceId,
+          createdBy: userId,
+          title: scrapedData.title || title || url,
+          type: "url",
+          status: "ready",
+          sourceUrl: url,
+          content: scrapedData.text,
+          processedAt: new Date(),
+          metadata: {
+            author: scrapedData.author,
+            publishDate: scrapedData.publishDate,
+          },
+        })
+        .returning();
 
-    return NextResponse.json({
-      success: true,
-      item: knowledgeItem,
-      message: "URL submitted. Fetching content...",
-    });
+      // TODO: Generate embeddings in background
+
+      return NextResponse.json({
+        success: true,
+        item: knowledgeItem,
+        message: "URL content fetched and processed successfully",
+      });
+    } catch (scrapeError: any) {
+      console.error("URL scrape error:", scrapeError);
+      return NextResponse.json(
+        { error: `Failed to fetch URL: ${scrapeError.message}` },
+        { status: 500 },
+      );
+    }
   } else if (type === "text") {
     // Handle plain text submission
     if (!text) {

@@ -15,6 +15,13 @@
       "when": 1760006460375,
       "tag": "0001_melodic_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760203932982,
+      "tag": "0002_grey_miek",
+      "breakpoints": true
     }
   ]
 }
