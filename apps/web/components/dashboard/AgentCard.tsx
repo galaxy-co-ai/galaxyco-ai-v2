@@ -69,6 +69,20 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
     }
   };
 
+  const getAvatarGradient = (category: string) => {
+    const gradients: Record<string, string> = {
+      sales: `linear-gradient(135deg, ${colors.primary[400]}, ${colors.primary[600]})`,
+      marketing: `linear-gradient(135deg, #ec4899, #be185d)`, // Pink
+      operations: `linear-gradient(135deg, #8b5cf6, #6d28d9)`, // Purple
+      support: `linear-gradient(135deg, #10b981, #059669)`, // Green
+      engineering: `linear-gradient(135deg, #f59e0b, #d97706)`, // Orange
+    };
+    return (
+      gradients[category] ||
+      `linear-gradient(135deg, ${colors.primary[400]}, ${colors.primary[600]})`
+    );
+  };
+
   const formatLastRun = (date: Date | null) => {
     if (!date) return "Never";
 
@@ -112,7 +126,7 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
           e.currentTarget.style.boxShadow = "none";
         }}
       >
-        {/* Header with Icon and Toggle */}
+        {/* Header with Avatar and Toggle */}
         <div
           style={{
             display: "flex",
@@ -121,7 +135,25 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
             marginBottom: "1rem",
           }}
         >
-          <div style={{ fontSize: "2.5rem" }}>{agent.icon}</div>
+          {/* Circular Avatar */}
+          <div
+            style={{
+              width: "56px",
+              height: "56px",
+              borderRadius: "50%",
+              background: getAvatarGradient(agent.category),
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: "1.5rem",
+              fontWeight: "600",
+              flexShrink: 0,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+          >
+            {agent.name.substring(0, 2).toUpperCase()}
+          </div>
 
           {/* Toggle Switch */}
           <button
