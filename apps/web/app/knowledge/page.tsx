@@ -6,6 +6,7 @@ import { COLORS, SPACING } from "@/lib/design-system";
 import KnowledgeItemCard from "@/components/knowledge/KnowledgeItemCard";
 import SearchFilterBar from "@/components/knowledge/SearchFilterBar";
 import { EmptyState, LoadingSkeleton } from "@/components/knowledge/EmptyState";
+import ItemDetailModal from "@/components/knowledge/ItemDetailModal";
 
 interface KnowledgeItem {
   id: string;
@@ -41,6 +42,9 @@ export default function KnowledgeBasePage() {
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Modal state
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
   // Fetch knowledge items
   const fetchItems = useCallback(async () => {
@@ -427,10 +431,7 @@ export default function KnowledgeBasePage() {
             <KnowledgeItemCard
               key={item.id}
               {...item}
-              onClick={() => {
-                // TODO: Open detail modal
-                console.log("Clicked item:", item.id);
-              }}
+              onClick={() => setSelectedItemId(item.id)}
             />
           ))}
         </div>
@@ -514,6 +515,23 @@ export default function KnowledgeBasePage() {
             Next →
           </button>
         </div>
+      )}
+
+      {/* Item Detail Modal */}
+      {selectedItemId && (
+        <ItemDetailModal
+          itemId={selectedItemId}
+          workspaceId="temp-workspace-id"
+          onClose={() => setSelectedItemId(null)}
+          onUpdate={() => {
+            // Refresh the list after update
+            fetchItems();
+          }}
+          onDelete={() => {
+            // Refresh the list after delete
+            fetchItems();
+          }}
+        />
       )}
     </div>
   );
