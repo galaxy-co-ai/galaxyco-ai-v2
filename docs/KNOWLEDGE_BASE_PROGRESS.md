@@ -1,348 +1,410 @@
-# Knowledge Base Development - Session Summary
+# Knowledge Base Development Progress
 
-**Date**: October 11, 2025  
-**Duration**: ~1.5 hours  
-**Status**: Phase 1 MVP Complete (60% of full feature)
+**Feature:** Wisebase-style Knowledge Base for GalaxyCo.ai  
+**Start Date:** Current Session  
+**Status:** 🚀 In Progress
 
 ---
 
-## 🎯 What Was Built
+## 🎯 Goal
 
-### ✅ 1. Database Schema (COMPLETE)
+Build a comprehensive knowledge base system that allows users to:
+
+1. Upload files (PDFs, docs, images, text)
+2. Add web URLs (with automatic scraping)
+3. Submit plain text notes
+4. Organize knowledge with collections and tags
+5. Search and filter knowledge items
+6. Use knowledge in AI agents (RAG - Retrieval Augmented Generation)
+
+---
+
+## 📋 Completed Features
+
+### 1. Database Schema ✅
+
+**Completed:** All knowledge base tables created with multi-tenant isolation
+
+- `knowledge_items` - Store all knowledge entries (documents, URLs, images, text)
+- `knowledge_collections` - Organize knowledge into folders/collections
+- `knowledge_tags` - Tag system for categorization
+- `knowledge_item_tags` - Many-to-many relationship table
+
+**Key Features:**
+
+- Multi-tenant isolation with `workspaceId`
+- Full-text search support with GIN indexes
+- JSONB metadata for flexible storage
+- Vector embeddings field for RAG (future)
+- Status tracking (processing, ready, error)
+- Source tracking (URLs, file uploads)
+- Favorites and archive support
+
+**Migration:** `0001_knowledge_base_tables.sql`
+
+---
+
+### 2. Upload API with Document Processing ✅
+
+**Endpoint:** `POST /api/knowledge/upload`
+
+**Capabilities:**
+
+- **File uploads (FormData):**
+  - PDFs (with text extraction using pdf-parse)
+  - Word documents (.doc, .docx)
+  - Text files (.txt, .md) with encoding detection
+  - Images (.jpg, .png, .gif, .webp)
+  - Max size: 10MB
+  - Files stored in Vercel Blob storage
+  - Automatic text extraction and metadata generation
+- **URL submissions (JSON):**
+  - Web scraping using Cheerio
+  - Extract title, description, author, publish date
+  - Clean text content extraction
+  - Remove scripts, styles, navigation elements
+- **Plain text submissions (JSON):**
+  - Direct text input
+  - Immediate processing with word count
+
+**Document Processing:**
+
+- PDF text extraction with page count
+- Plain text encoding detection
+- URL scraping with metadata extraction
+- Simple text summarization (first 500 chars)
+- Word count calculation
+- Metadata extraction (author, publish date, etc.)
+
+**Storage:**
+
+- Vercel Blob integration
+- Unique filename generation (sanitized + timestamp + random)
+- Public access URLs
+- Content type preservation
+
+**Security:**
+
+- Clerk authentication required
+- Multi-tenant isolation via `workspaceId`
+- File type validation (MIME types)
+- File size limits enforced
 
 **Files:**
 
-- `packages/database/src/schema.ts` - Full schema with 4 new tables
-- `packages/database/migrations/0002_grey_miek.sql` - Migration file
+- `apps/web/lib/document-processor.ts` - Text extraction and URL scraping
+- `apps/web/lib/storage.ts` - Vercel Blob storage helper
+- `apps/web/app/api/knowledge/upload/route.ts` - Upload endpoint
 
-**Tables Created:**
+---
 
-- `knowledge_items` - Main storage for documents, URLs, images, text
-- `knowledge_collections` - Organization/folders
-- `knowledge_tags` - Tagging system
-- `knowledge_item_tags` - Many-to-many relationship
+### 3. List API ✅
+
+**Endpoint:** `GET /api/knowledge/list`
 
 **Features:**
 
-- ✅ Multi-tenant isolation (workspace_id on all tables)
-- ✅ Support for 4 content types: document, url, image, text
-- ✅ Processing status tracking (processing, ready, failed)
-- ✅ Embeddings field for future RAG implementation
-- ✅ Metadata storage with JSONB
-- ✅ File information (name, size, MIME type, source URL)
-- ✅ User actions (favorites, archived)
-- ✅ Proper indexes for performance
-- ✅ TypeScript types auto-generated
+- Multi-tenant filtering (required `workspaceId`)
+- Search by title/content (optional `search` param)
+- Filter by type: `document`, `image`, `url`, `text` (optional `type` param)
+- Filter by collection (optional `collectionId` param)
+- Filter by tag (optional `tag` param)
+- Pagination support (`page`, `limit`)
+- Sorting options:
+  - `created_desc` (default) - Newest first
+  - `created_asc` - Oldest first
+  - `title_asc` - Alphabetical A-Z
+  - `title_desc` - Alphabetical Z-A
 
----
+**Response:**
 
-### ✅ 2. Upload API Endpoint (COMPLETE)
-
-**File:** `apps/web/app/api/knowledge/upload/route.ts`
-
-**Features:**
-
-- ✅ File upload handling (multipart/form-data)
-- ✅ URL submission (JSON)
-- ✅ Plain text submission (JSON)
-- ✅ File size validation (10MB limit)
-- ✅ MIME type validation
-- ✅ Multi-tenant security
-- ✅ Clerk authentication
-- ✅ Error handling
-
-**Supported File Types:**
-
-- PDF (application/pdf)
-- Word (.doc, .docx)
-- Text (.txt, .md)
-- Images (.jpg, .png, .gif, .webp)
-
-**API:**
-
-- `POST /api/knowledge/upload?workspaceId={id}`
-- Accepts FormData for files or JSON for URLs/text
-- Returns created knowledge item with status
-
----
-
-### ✅ 3. List API Endpoint (COMPLETE)
-
-**File:** `apps/web/app/api/knowledge/route.ts`
-
-**Features:**
-
-- ✅ List all knowledge items for workspace
-- ✅ Search by title/content
-- ✅ Filter by type (document/url/image/text)
-- ✅ Filter by status (processing/ready/failed)
-- ✅ Filter by favorites
-- ✅ Pagination support
-- ✅ Multi-tenant isolation
-- ✅ Sort by created date (newest first)
-
-**API:**
-
-- `GET /api/knowledge?workspaceId={id}&search={term}&type={type}&status={status}&favorites={bool}&limit={num}&offset={num}`
-
----
-
-### ✅ 4. Knowledge Base UI Page (COMPLETE)
-
-**File:** `apps/web/app/knowledge/page.tsx`
-
-**Features:**
-
-- ✅ Drag & drop file upload interface
-- ✅ Click to browse file picker
-- ✅ Visual drag feedback (highlighted border, shadow)
-- ✅ Multi-file upload support
-- ✅ Upload progress tracking with visual progress bars
-- ✅ Recently uploaded items grid
-- ✅ Card-based layout (OpenSea-inspired)
-- ✅ Empty state messaging
-- ✅ Type-specific icons (📄 documents, 🖼️ images, 🔗 URLs, 📝 text)
-- ✅ Responsive grid layout
-- ✅ Hover effects on cards
-- ✅ Clean, minimal design following design system
-
-**UX Flow:**
-
-1. User drags files or clicks "Choose Files"
-2. Files validate (size, type)
-3. Upload starts with progress bar
-4. Item appears in "Recently Uploaded" section
-5. Status shows "Processing..." or "Ready"
-
----
-
-### ✅ 5. Navigation Integration (COMPLETE)
-
-**File:** `apps/web/app/dashboard/layout.tsx`
-
-**Changes:**
-
-- ✅ Added "Knowledge" nav item with 📚 icon
-- ✅ Positioned between Dashboard and Agents
-- ✅ Active state styling
-- ✅ Hover effects
-
----
-
-## 📊 Architecture Decisions
-
-### Multi-Tenant Security
-
-- Every table has `workspace_id` foreign key
-- All API endpoints require `workspaceId` query param
-- Clerk authentication on all routes
-- No cross-tenant data access possible
-
-### File Upload Flow
-
-```
-User Upload → API Validates → DB Record Created (status: processing)
-                   ↓
-            TODO: Upload to Storage (Vercel Blob/S3)
-                   ↓
-            TODO: Background Job Processes File
-                   ↓
-            TODO: Extract Text/Generate Embeddings
-                   ↓
-            DB Updated (status: ready, content: extracted_text)
-```
-
-### Data Model
-
-```
-knowledge_items (main table)
-├── Basic Info (title, type, status)
-├── Source (sourceUrl, fileName, fileSize, mimeType)
-├── Processed Content (content, summary, embeddings)
-├── Organization (collectionId, tags)
-└── User Actions (isFavorite, isArchived)
+```json
+{
+  "items": [
+    {
+      "id": "uuid",
+      "title": "string",
+      "type": "document|image|url|text",
+      "status": "processing|ready|error",
+      "sourceUrl": "string|null",
+      "fileName": "string|null",
+      "fileSize": "number|null",
+      "mimeType": "string|null",
+      "tags": ["string"],
+      "isFavorite": "boolean",
+      "createdAt": "timestamp",
+      "processedAt": "timestamp|null"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "totalPages": 5
+  }
+}
 ```
 
 ---
 
-## 🚀 What's Working NOW
+### 4. Knowledge Base UI Page ✅
 
-You can:
+**Location:** `apps/web/app/knowledge/page.tsx`
 
-1. Navigate to `/knowledge` page
-2. Drag & drop files or click to browse
-3. Upload multiple files at once
-4. See upload progress
-5. View recently uploaded items
-6. Items are saved to database with proper workspace isolation
+**Features:**
 
----
-
-## 📝 What's NOT Yet Implemented
-
-### High Priority (Next Session):
-
-1. **File Storage** (2-3 hours)
-   - Integrate Vercel Blob or AWS S3
-   - Upload files to storage
-   - Store storage URLs in database
-
-2. **Document Processing** (3-4 hours)
-   - PDF text extraction (pdf-parse or similar)
-   - Word doc parsing
-   - Image OCR (Tesseract or Vision API)
-   - URL scraping (cheerio or puppeteer)
-
-3. **Library View** (2-3 hours)
-   - Full list view with search
-   - Filter dropdowns (type, status, favorites)
-   - Grid/list toggle
-   - Pagination
-
-4. **Collections Management** (2 hours)
-   - Create/edit/delete collections
-   - Move items to collections
-   - Collection sidebar navigation
-
-### Medium Priority:
-
-5. **Tagging System** (1-2 hours)
-   - Add/remove tags
-   - Tag filtering
-   - Tag autocomplete
-
-6. **Item Detail View** (1 hour)
-   - Full content preview
-   - Edit metadata
-   - Download original file
-
-7. **RAG Integration** (3-4 hours)
-   - Generate embeddings (OpenAI)
-   - Semantic search
-   - Context selection for agents
-
-### Low Priority:
-
-8. **Bulk Actions** (1 hour)
-   - Select multiple items
-   - Bulk delete, archive, tag
-
-9. **Advanced Features**
-   - URL content preview
-   - Auto-summarization
-   - Related items suggestions
+- Drag & drop file upload component
+  - Visual drop zone with hover states
+  - File type validation
+  - Multiple file support
+- Upload progress tracking
+  - Individual progress bars per file
+  - Success/error states
+  - Auto-dismiss on success
+- Recently uploaded grid
+  - Card-based layout (4 columns)
+  - Type-specific icons (📄 for documents, 🔗 for URLs, 📝 for text, 🖼️ for images)
+  - Processing/Ready status indicators
+  - Timestamps
+- Clean, minimal design using design system constants
 
 ---
 
-## 🎯 Current Progress
+### 5. Dashboard Navigation ✅
 
-**Knowledge Base Feature: 60% Complete**
+**Change:** Added "Knowledge" link to dashboard sidebar
 
-- ✅ Database Schema (100%)
-- ✅ Upload API (100%)
-- ✅ List API (100%)
-- ✅ Basic UI (100%)
-- ⏳ File Storage (0%)
-- ⏳ Document Processing (0%)
-- ⏳ Library View (0%)
-- ⏳ Collections (0%)
-- ⏳ RAG Integration (0%)
+**Location:** `apps/web/app/dashboard/layout.tsx`
+
+- Icon: 📚
+- Route: `/knowledge`
+- Positioned in main navigation menu
 
 ---
 
-## 🔥 Next Steps Recommendation
+### 6. Dependencies Installed ✅
 
-### Option A: Quick Win Path (2-3 hours)
+**Packages:**
 
-Complete the upload → storage → basic processing pipeline:
-
-1. Add Vercel Blob integration
-2. Text extraction for PDFs
-3. URL scraping
-4. Full library view with filters
-
-**Result:** Fully functional knowledge base for text documents and URLs
-
-### Option B: Visual Polish Path (2-3 hours)
-
-Polish the UI before backend processing:
-
-1. Library view with search/filters
-2. Collections UI
-3. Tagging UI
-4. Item detail views
-
-**Result:** Beautiful, complete UI (backend processing can come later)
-
-### Option C: RAG-First Path (4-5 hours)
-
-Focus on AI integration:
-
-1. Embeddings generation
-2. Semantic search
-3. Agent context integration
-4. File storage + basic processing
-
-**Result:** AI-powered knowledge base ready for agent use
-
----
-
-## 📦 Dependencies Needed (Not Yet Installed)
-
-For document processing:
-
+- `@vercel/blob` - Vercel Blob storage SDK
 - `pdf-parse` - PDF text extraction
-- `mammoth` - Word doc parsing
-- `tesseract.js` - Image OCR
-- `cheerio` - URL scraping
-- `@vercel/blob` - File storage
-
-For embeddings/RAG:
-
-- Already have `openai` ✅
-- Need vector database or use JSONB with pgvector
+- `cheerio` - HTML parsing and web scraping
+- `@types/pdf-parse` - TypeScript types for pdf-parse
 
 ---
 
-## 💾 Database Migration Status
+## 🚧 In Progress
 
-**Migration File:** `packages/database/migrations/0002_grey_miek.sql`
-
-**Status:** Generated ✅, Not yet applied to production DB
-
-**To Apply:**
-
-1. Set `DATABASE_URL` in production environment
-2. Run `npx drizzle-kit push` or deploy (will auto-apply)
+None currently.
 
 ---
 
-## 🎉 Session Achievements
+## 📌 Next Steps
 
-**Lines of Code:** ~1,500 LOC
-**Files Created:** 5
-**Files Modified:** 3
-**Commits:** 4
-**Features:** 5 complete features
+### Priority 1: Enhanced Library View UI (Est: 2-3 hours)
 
-**Time Breakdown:**
+- Full library view with grid/list toggle
+- Search bar with real-time filtering
+- Type filters (document, image, URL, text)
+- Status filters (processing, ready, error)
+- Sort dropdown
+- Pagination controls
+- Empty states
 
-- Database Schema: 25 minutes
-- API Endpoints: 30 minutes
-- UI Development: 35 minutes
-- Testing & Fixes: 10 minutes
+**Files to create/update:**
 
----
-
-## 🔗 Related Files
-
-- Schema: `packages/database/src/schema.ts`
-- Migration: `packages/database/migrations/0002_grey_miek.sql`
-- Upload API: `apps/web/app/api/knowledge/upload/route.ts`
-- List API: `apps/web/app/api/knowledge/route.ts`
-- UI Page: `apps/web/app/knowledge/page.tsx`
-- Nav Layout: `apps/web/app/dashboard/layout.tsx`
+- `apps/web/app/knowledge/page.tsx` - Add full library view
+- `apps/web/components/knowledge/LibraryGrid.tsx` - Grid component
+- `apps/web/components/knowledge/SearchBar.tsx` - Search component
+- `apps/web/components/knowledge/FilterBar.tsx` - Filter component
 
 ---
 
-**Ready to Continue?** Pick an option (A, B, or C) or define your own path! 🚀
+### Priority 2: Knowledge Item Detail View (Est: 1-2 hours)
+
+- Modal or slide-over for item details
+- Display extracted content
+- Show metadata
+- Edit title and tags
+- Add to collections
+- Download/view source
+- Delete item
+
+**Files to create:**
+
+- `apps/web/components/knowledge/ItemDetailModal.tsx`
+- `apps/web/components/knowledge/ItemActions.tsx`
+
+---
+
+### Priority 3: Collections/Folders Management (Est: 2-3 hours)
+
+- Create/edit/delete collections
+- Collection sidebar navigation
+- Drag & drop items into collections
+- Collection stats (item count, size)
+- Collection sharing settings (future)
+
+**API Endpoints:**
+
+- `POST /api/knowledge/collections/create`
+- `GET /api/knowledge/collections/list`
+- `PUT /api/knowledge/collections/:id`
+- `DELETE /api/knowledge/collections/:id`
+
+**Files to create:**
+
+- `apps/web/components/knowledge/CollectionsSidebar.tsx`
+- `apps/web/components/knowledge/CreateCollectionModal.tsx`
+
+---
+
+### Priority 4: Tags System (Est: 1-2 hours)
+
+- Tag autocomplete input
+- Tag management UI
+- Tag filtering
+- Tag colors/badges
+- Popular tags
+
+**API Endpoints:**
+
+- `GET /api/knowledge/tags/list`
+- `POST /api/knowledge/tags/create`
+- `PUT /api/knowledge/items/:id/tags` - Add/remove tags
+
+---
+
+### Priority 5: RAG Integration (Est: 3-4 hours)
+
+- Generate embeddings for knowledge items
+- Vector search implementation
+- Agent knowledge base selection
+- Context injection into agent prompts
+- Token limit management
+
+**Dependencies:**
+
+- OpenAI embeddings API or alternative
+- Vector database or pgvector extension
+
+**API Endpoints:**
+
+- `POST /api/knowledge/embeddings/generate`
+- `POST /api/knowledge/search` - Semantic search
+
+---
+
+## 🏗️ Architecture Decisions
+
+### Storage Strategy
+
+- **Vercel Blob:** For file storage (PDFs, images, docs)
+- **Database:** For metadata, text content (up to 50k chars), and embeddings
+
+### Text Extraction
+
+- **PDF:** `pdf-parse` library
+- **Word Docs:** Future - use `mammoth` or similar
+- **URLs:** `cheerio` for web scraping
+- **Images:** Future - OCR with Tesseract or cloud OCR
+
+### Embeddings
+
+- Future: OpenAI `text-embedding-3-small` or `text-embedding-3-large`
+- Store in JSONB field (or migrate to pgvector for performance)
+
+### Search Strategy
+
+1. **Basic:** PostgreSQL full-text search (already indexed)
+2. **Advanced:** Vector similarity search with embeddings (future)
+
+---
+
+## 📊 Quick Win Path vs. Full Implementation
+
+### Quick Win (Get to working state ASAP)
+
+1. ✅ Database schema
+2. ✅ Upload API with document processing
+3. ✅ Basic UI with drag & drop
+4. 🚧 Enhanced library view with search/filter
+5. 🚧 Item detail modal
+6. ⏳ Collections (basic)
+
+**Estimated Time:** ~2-3 days (Already ~60% complete)
+
+### Full Implementation (Production-ready)
+
+1. All Quick Win items
+2. RAG integration with embeddings
+3. Advanced search (semantic)
+4. Collections with full features
+5. Tags system with autocomplete
+6. Bulk operations
+7. Export/import
+8. Sharing and permissions
+9. Analytics and usage tracking
+
+**Estimated Time:** ~1-2 weeks
+
+---
+
+## 🔐 Environment Variables Required
+
+```env
+# Vercel Blob Storage
+BLOB_READ_WRITE_TOKEN=vercel_blob_...
+
+# Optional: For embeddings (future)
+OPENAI_API_KEY=sk-...
+```
+
+**Setup Instructions:**
+
+1. Enable Vercel Blob in project settings
+2. Copy token from Vercel dashboard
+3. Add to `.env.local` and Vercel project settings
+
+---
+
+## 📝 Testing Checklist
+
+- [ ] Upload PDF and verify text extraction
+- [ ] Upload image and verify storage
+- [ ] Add URL and verify scraping
+- [ ] Submit plain text note
+- [ ] Search knowledge items
+- [ ] Filter by type
+- [ ] Test pagination
+- [ ] Test multi-tenant isolation (switch workspaces)
+- [ ] Test file size limits
+- [ ] Test unsupported file types
+
+---
+
+## 🎨 Design Notes
+
+Following GalaxyCo.ai design system:
+
+- **Colors:** Neutral grays with blue accents
+- **Layout:** Card-based, clean, spacious
+- **Typography:** Inter font, clear hierarchy
+- **Icons:** Simple, consistent type indicators
+- **States:** Clear loading, success, error states
+- **Responsive:** Mobile-first approach
+
+---
+
+## 📚 References
+
+- [Wisebase](https://wisebase.ai/) - Inspiration
+- [Drizzle ORM Docs](https://orm.drizzle.team/)
+- [Vercel Blob Docs](https://vercel.com/docs/storage/vercel-blob)
+- [pdf-parse npm](https://www.npmjs.com/package/pdf-parse)
+- [Cheerio Docs](https://cheerio.js.org/)
+
+---
+
+**Last Updated:** Current Session  
+**Next Session:** Continue with Enhanced Library View UI
