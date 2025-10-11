@@ -2,7 +2,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "../components/providers";
 import MainSidebar from "../components/layout/MainSidebar";
 import type { Metadata } from "next";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "GalaxyCo.ai - Make multi-agent AI useful in minutes",
