@@ -4,6 +4,7 @@
  */
 
 import OpenAI from "openai";
+import * as Sentry from "@sentry/nextjs";
 import {
   Agent,
   Message,
@@ -54,6 +55,21 @@ export class Runner {
     };
 
     try {
+      // Start Sentry transaction for agent execution
+      const transaction = Sentry.startTransaction({
+        op: "agent.execution",
+        name: `Agent: ${agent.name}`,
+        data: {
+          agentId: agent.id,
+          agentName: agent.name,
+          workspaceId: options.workspaceId,
+          userId: options.userId,
+          executionId,
+        },
+      });
+
+      Sentry.getCurrentScope().setSpan(transaction);
+
       // Run guardrails on input
       await this.runInputGuardrails(agent, messages, context);
 
@@ -67,6 +83,13 @@ export class Runner {
 
       const endTime = new Date();
       const durationMs = endTime.getTime() - startTime.getTime();
+
+      // Finish transaction with success
+      transaction.setStatus("ok");
+      transaction.setData("iterations", context.iterations);
+      transaction.setData("tokensUsed", result.tokensUsed);
+      transaction.setData("costUsd", result.costUsd);
+      transaction.finish();
 
       return {
         success: true,
@@ -86,6 +109,32 @@ export class Runner {
     } catch (error: any) {
       const endTime = new Date();
       const durationMs = endTime.getTime() - startTime.getTime();
+
+      // Capture error in Sentry with context
+      Sentry.captureException(error, {
+        tags: {
+          agent_id: agent.id,
+          agent_name: agent.name,
+          execution_id: executionId,
+          workspace_id: options.workspaceId,
+          error_type: error.constructor.name,
+        },
+        contexts: {
+          agent: {
+            id: agent.id,
+            name: agent.name,
+            model: agent.model,
+            tools: agent.tools.map((t) => t.definition.function.name),
+          },
+          execution: {
+            executionId,
+            iterations: context.iterations,
+            durationMs,
+            workspaceId: options.workspaceId,
+            userId: options.userId,
+          },
+        },
+      });
 
       return {
         success: false,
@@ -214,6 +263,14 @@ export class Runner {
         }
 
         try {
+          // Start span for tool execution
+          const span = Sentry.getCurrentScope()
+            .getSpan()
+            ?.startChild({
+              op: "tool.execution",
+              description: `Tool: ${toolCall.function.name}`,
+            });
+
           // Parse arguments
           const args = JSON.parse(toolCall.function.arguments);
 
@@ -222,6 +279,10 @@ export class Runner {
 
           // Execute tool with context (for database queries, etc.)
           const result = await tool.execute(args, context);
+
+          // Finish span with success
+          span?.setStatus("ok");
+          span?.finish();
 
           // Add tool result to messages
           const toolMessage: Message = {
@@ -245,6 +306,15 @@ export class Runner {
             },
           });
         } catch (error: any) {
+          // Capture tool execution error
+          Sentry.captureException(error, {
+            tags: {
+              tool_name: toolCall.function.name,
+              agent_id: agent.id,
+              execution_id: context.executionId,
+            },
+          });
+
           throw new ToolExecutionError(
             `Tool execution failed: ${error.message}`,
             toolCall.function.name,
