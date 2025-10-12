@@ -474,6 +474,58 @@ export const workspaceApiKeys = pgTable(
 );
 
 // ============================================================================
+// AGENT LOGS (Performance & Monitoring)
+// ============================================================================
+
+export const agentLogs = pgTable(
+  "agent_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key - REQUIRED FOR ALL QUERIES
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Agent execution context
+    agentId: text("agent_id").notNull(), // Can reference templates too
+    tenantId: text("tenant_id").notNull(), // Redundant with workspaceId but required for logging compatibility
+    userId: text("user_id").notNull(),
+
+    // Execution data (summarized for performance)
+    inputSummary: text("input_summary").notNull(),
+    outputSummary: text("output_summary").notNull(),
+    duration: integer("duration").notNull(), // milliseconds
+    success: boolean("success").notNull(),
+
+    // AI Provider context
+    provider: text("provider"), // 'openai', 'anthropic', 'google'
+    model: text("model"), // 'gpt-4', 'claude-3-sonnet', etc
+    
+    // Error information
+    error: text("error"), // Error message if failed
+    metadata: text("metadata"), // Additional context as JSON string
+
+    // Timestamp
+    timestamp: timestamp("timestamp").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    // Performance indexes
+    tenantTimestampIdx: index("agent_log_tenant_timestamp_idx").on(
+      table.workspaceId,
+      table.timestamp
+    ),
+    agentTimestampIdx: index("agent_log_agent_timestamp_idx").on(
+      table.agentId,
+      table.timestamp
+    ),
+    successIdx: index("agent_log_success_idx").on(table.success),
+    providerIdx: index("agent_log_provider_idx").on(table.provider),
+  })
+);
+
+// ============================================================================
 // AGENT EXECUTIONS (Audit Trail)
 // ============================================================================
 
@@ -687,6 +739,7 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   members: many(workspaceMembers),
   agents: many(agents),
   executions: many(agentExecutions),
+  agentLogs: many(agentLogs),
   knowledgeCollections: many(knowledgeCollections),
   knowledgeItems: many(knowledgeItems),
   knowledgeTags: many(knowledgeTags),
@@ -741,6 +794,16 @@ export const agentExecutionsRelations = relations(
     triggeredByUser: one(users, {
       fields: [agentExecutions.triggeredBy],
       references: [users.id],
+    }),
+  }),
+);
+
+export const agentLogsRelations = relations(
+  agentLogs,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [agentLogs.workspaceId],
+      references: [workspaces.id],
     }),
   }),
 );
@@ -828,6 +891,9 @@ export type NewAgentPack = typeof agentPacks.$inferInsert;
 
 export type AgentExecution = typeof agentExecutions.$inferSelect;
 export type NewAgentExecution = typeof agentExecutions.$inferInsert;
+
+export type AgentLog = typeof agentLogs.$inferSelect;
+export type NewAgentLog = typeof agentLogs.$inferInsert;
 
 export type KnowledgeCollection = typeof knowledgeCollections.$inferSelect;
 export type NewKnowledgeCollection = typeof knowledgeCollections.$inferInsert;

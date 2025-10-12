@@ -1,14 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Running pre-commit checks..."
+echo "🔍 Running pre-commit health checks..."
 
-# Run TypeScript check
-echo "📘 Checking TypeScript..."
-cd apps/web && pnpm typecheck || exit 1
-cd ../..
+# Run comprehensive health check
+pnpm health-check
 
-# Run lint-staged (linting on changed files)
+# Run lint-staged (formatting and linting on changed files)
 echo "🧹 Running lint-staged..."
 pnpm lint-staged
 

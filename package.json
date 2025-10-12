@@ -10,15 +10,22 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
+    "test:integration": "turbo run test:integration",
+    "test:smoke": "playwright test tests/smoke",
     "clean": "turbo run clean && rm -rf node_modules",
+    "precommit": "turbo run typecheck && turbo run lint && prettier --check .",
+    "health-check": "pnpm precommit",
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
     "release:rollback": "bash scripts/rollback.sh",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "git config commit.template .gitmessage || true"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@playwright/test": "^1.56.0",
     "axe-core": "^4.11.0",
     "drizzle-kit": "^0.31.5",

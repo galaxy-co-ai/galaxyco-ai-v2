@@ -217,7 +217,46 @@ Always confirm before executing:
 
 ## 📚 Documentation
 
-### Quick Documentation Reference
+### Documentation Organization Standards ✅ NEW
+
+**CRITICAL**: Always maintain perfect documentation organization.
+
+**Master Navigation**: `docs/README.md` (single source of truth)
+**Quick Reference**: `QUICK_REFERENCE.md` (one-page guide)
+**Quality Rules**: `DOCUMENTATION_QUALITY_RULES.md` (comprehensive standards)
+
+**Category Structure**:
+```
+docs/
+├── guides/          # Step-by-step how-to instructions
+├── technical/       # Deep technical documentation
+├── runbooks/        # Operational procedures
+├── business/        # Strategy & planning
+├── status/          # Current state & updates
+├── reference/       # Quick lookups
+├── incidents/       # Incident reports
+├── security/        # Security docs
+└── archive/         # Historical documents (YYYY-MM/)
+```
+
+**AI Assistant MUST**:
+- ✅ Check `docs/README.md` before answering ANY navigation questions
+- ✅ Verify file placement follows category structure before creating docs
+- ✅ Use kebab-case naming for all documentation files
+- ✅ Include proper frontmatter (title, category, status, last_updated, author, related)
+- ✅ Update category READMEs when adding new documents
+- ✅ Archive old docs to `docs/archive/YYYY-MM/` instead of deleting
+- ✅ Keep project root clean (only README.md, WARP.md, QUICK_REFERENCE.md)
+- ✅ Guide users by role (Developer, PM, DevOps, Designer) and task (Setup, Build, Fix, Deploy)
+
+**Navigation Shortcuts**:
+- Setup → `docs/guides/development-setup.md`
+- Architecture → `docs/technical/architecture/README.md`
+- Current Status → `docs/status/README.md`
+- Quick Commands → `QUICK_REFERENCE.md`
+- Troubleshooting → `docs/guides/troubleshooting.md`
+
+### Legacy Quick Documentation Reference
 
 - **Setup**: `docs/setup/QUICK_START.md`
 - **AI Gateway**: `docs/AI_GATEWAY_QUICK_REF.md`
