@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { getTenantFilter } from '@/lib/tenant-filter';
+import { getTenantFilter } from '@/lib/db/tenant-filter';
 import { 
   quickHealthCheck, 
   runAgentTests, 
