@@ -5,6 +5,7 @@ import DashboardStats from "@/components/dashboard/DashboardStats";
 import AgentFilters from "@/components/dashboard/AgentFilters";
 import AgentGrid from "@/components/dashboard/AgentGrid";
 import RecentActivity from "@/components/dashboard/RecentActivity";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { colors } from "@/lib/constants/design-system";
 import { mockDashboardStats } from "@/lib/mock-data/dashboard-agents";
 
@@ -29,25 +30,30 @@ export default function DashboardPage() {
           borderBottom: `1px solid ${colors.border.default}`,
         }}
       >
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <h1
-            style={{
-              fontSize: "2rem",
-              fontWeight: "700",
-              color: colors.text.primary,
-              marginBottom: "0.5rem",
-            }}
-          >
-            Mission Control
-          </h1>
-          <p
-            style={{
-              fontSize: "1rem",
-              color: colors.text.secondary,
-            }}
-          >
-            Monitor and manage your AI agents in real-time
-          </p>
+        <div style={{ maxWidth: "1400px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h1
+              style={{
+                fontSize: "2rem",
+                fontWeight: "700",
+                color: colors.text.primary,
+                marginBottom: "0.5rem",
+              }}
+            >
+              Mission Control
+            </h1>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: colors.text.secondary,
+              }}
+            >
+              Monitor and manage your AI agents in real-time
+            </p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <ThemeToggle />
+          </div>
         </div>
       </section>
 

@@ -627,52 +627,84 @@ body {
  */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    /* Light Theme - Clean, Professional */
+    --background: 0 0% 100%;                    /* Pure white */
+    --foreground: 0 0% 9%;                      /* Almost black text */
+    --card: 0 0% 100%;                          /* White cards */
+    --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --popover-foreground: 0 0% 9%;
+    
+    /* Brand Colors - Blue/Purple Primary */
+    --primary: 248 95% 70%;                     /* Blue-purple #4F46E5 */
+    --primary-foreground: 0 0% 98%;             /* White text on primary */
+    
+    /* Secondary & Muted - Light grays */
+    --secondary: 0 0% 96.1%;                    /* Light gray background */
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    --muted: 0 0% 96.1%;                        /* Very light gray */
+    --muted-foreground: 0 0% 45.1%;             /* Medium gray text */
+    
+    /* Accent - Teal highlights */
+    --accent: 178 100% 29%;                     /* Teal #14B8A6 */
+    --accent-foreground: 0 0% 98%;
+    
+    /* Semantic Colors */
+    --destructive: 0 84.2% 60.2%;               /* Red for errors */
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --success: 142 76% 36%;                     /* Green #16A34A */
+    --warning: 43 96% 56%;                      /* Amber #F59E0B */
+    
+    /* UI Elements */
+    --border: 0 0% 89.8%;                       /* Light gray borders */
+    --input: 0 0% 89.8%;                        /* Input backgrounds */
+    --ring: 248 95% 70%;                        /* Focus ring (primary) */
+    
+    /* Chart Colors */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
     --radius: 0.5rem;
   }
+  
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    /* Dark Theme - OpenSea Inspired */
+    --background: 222 84% 5%;                   /* Deep navy #0B1120 */
+    --foreground: 210 40% 98%;                  /* Off-white text #F8FAFC */
+    --card: 215 28% 17%;                        /* Dark blue-gray cards #1E293B */
+    --card-foreground: 210 40% 98%;
+    --popover: 215 28% 17%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Brand Colors - Brighter for contrast */
+    --primary: 248 95% 70%;                     /* Bright blue-purple */
+    --primary-foreground: 222 84% 5%;           /* Dark background for contrast */
+    
+    /* Secondary & Muted - Dark grays */
+    --secondary: 217 33% 17%;                   /* Dark blue-gray #1E293B */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20.2% 65.1%;       /* Light gray text */
+    
+    /* Accent - Vibrant teal */
+    --accent: 178 100% 44%;                     /* Brighter teal #22D3EE */
+    --accent-foreground: 222 84% 5%;
+    
+    /* Semantic Colors - Adjusted for dark */
+    --destructive: 0 75% 60%;                   /* Bright red */
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 76% 44%;                     /* Bright green */
+    --warning: 43 96% 60%;                      /* Bright amber */
+    
+    /* UI Elements */
+    --border: 217 33% 17%;                      /* Dark borders */
+    --input: 217 33% 17%;                       /* Dark inputs */
+    --ring: 248 95% 70%;                        /* Bright focus ring */
+    
+    /* Chart Colors - Adjusted for dark */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
