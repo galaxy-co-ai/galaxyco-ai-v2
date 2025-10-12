@@ -68,3 +68,10 @@ temp/
 *.tmp
 
 .vercel
+
+# Additional API key protection (added 2025-10-12)
+*.env.backup
+*.env.local.backup
+**/add-optional-env*.sh
+**/*.backup
+.env.*.backup
