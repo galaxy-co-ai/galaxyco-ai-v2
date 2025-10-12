@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Rocket, Satellite, Globe, Users } from "lucide-react";
-import { colors, radius } from "@/lib/constants/design-system";
+import { Rocket, Satellite, Globe, Users, Pin } from "lucide-react";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 // Main navigation items with space-themed icons
 const MAIN_NAV_ITEMS = [
@@ -23,13 +24,13 @@ const MAIN_NAV_ITEMS = [
   {
     id: "marketplace",
     name: "Marketplace",
-    icon: Globe, // Planet-like icon
+    icon: Globe,
     path: "/marketplace",
   },
   {
     id: "agents",
     name: "Agents",
-    icon: Users, // Team of agents/astronauts
+    icon: Users,
     path: "/agents",
   },
 ];
@@ -82,168 +83,71 @@ export default function MainSidebar() {
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: isExpanded ? "240px" : "64px",
-          background: colors.background.primary,
-          borderRight: `1px solid ${colors.border.default}`,
-          transition: "width 0.3s ease",
-          zIndex: 100,
-          overflowX: "hidden",
-          overflowY: "auto",
-        }}
-        className="hidden md:block"
+        className={cn(
+          "fixed left-0 top-0 bottom-0 bg-background border-r border-border z-100 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block",
+          isExpanded ? "w-60" : "w-16"
+        )}
       >
         {/* Header */}
-        <div
-          style={{
-            padding: "1rem",
-            borderBottom: `1px solid ${colors.border.default}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            minHeight: "64px",
-          }}
-        >
+        <div className="p-4 border-b border-border flex items-center justify-between min-h-16">
           {/* Logo/Icon */}
           <Link
             href="/dashboard"
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "700",
-              color: colors.primary[500],
-              whiteSpace: "nowrap",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-            }}
+            className="text-xl font-bold text-primary whitespace-nowrap no-underline flex items-center gap-2 hover:text-primary/90 transition-colors"
           >
-            {isExpanded ? "GalaxyCo.ai" : <Globe size={24} strokeWidth={2.5} />}
+            {isExpanded ? (
+              "GalaxyCo.ai"
+            ) : (
+              <Globe size={24} strokeWidth={2.5} />
+            )}
           </Link>
 
           {/* Pin Button */}
           {isExpanded && (
-            <button
+            <Button
               onClick={togglePin}
-              style={{
-                width: "32px",
-                height: "32px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: isPinned ? colors.primary[100] : "transparent",
-                border: `1px solid ${isPinned ? colors.primary[300] : colors.border.default}`,
-                borderRadius: radius.md,
-                cursor: "pointer",
-                color: isPinned ? colors.primary[600] : colors.text.tertiary,
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                if (!isPinned) {
-                  e.currentTarget.style.background =
-                    colors.background.secondary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isPinned) {
-                  e.currentTarget.style.background = "transparent";
-                }
-              }}
+              variant={isPinned ? "secondary" : "ghost"}
+              size="icon"
+              className="h-8 w-8"
               title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
             >
-              {isPinned ? "📌" : "📍"}
-            </button>
+              <Pin className={cn("h-4 w-4", isPinned && "fill-current")} />
+            </Button>
           )}
         </div>
 
         {/* Navigation Items */}
-        <div style={{ padding: "1rem 0" }}>
+        <nav className="py-4">
           {MAIN_NAV_ITEMS.map((item) => (
             <Link
               key={item.id}
               href={item.path}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                padding: "0.75rem 1rem",
-                background: isActive(item.path)
-                  ? colors.primary[50]
-                  : "transparent",
-                border: "none",
-                borderLeft: `3px solid ${isActive(item.path) ? colors.primary[500] : "transparent"}`,
-                color: isActive(item.path)
-                  ? colors.primary[600]
-                  : colors.text.primary,
-                fontSize: "0.9375rem",
-                fontWeight: isActive(item.path) ? "600" : "500",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                textDecoration: "none",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive(item.path)) {
-                  e.currentTarget.style.background =
-                    colors.background.secondary;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive(item.path)) {
-                  e.currentTarget.style.background = "transparent";
-                }
-              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-4 py-3 border-l-3 transition-all duration-200 no-underline text-sm font-medium",
+                isActive(item.path)
+                  ? "bg-primary/10 border-l-primary text-primary"
+                  : "border-l-transparent text-foreground hover:bg-secondary",
+                !isExpanded && "justify-center"
+              )}
               title={isExpanded ? undefined : item.name}
             >
-              <item.icon size={20} strokeWidth={2} style={{ flexShrink: 0 }} />
+              <item.icon size={20} strokeWidth={2} className="flex-shrink-0" />
               {isExpanded && (
-                <span
-                  style={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
+                <span className="whitespace-nowrap overflow-hidden text-ellipsis">
                   {item.name}
                 </span>
               )}
             </Link>
           ))}
-        </div>
+        </nav>
 
         {/* Footer Hint */}
         {!isPinned && isExpanded && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              padding: "1rem",
-              fontSize: "0.75rem",
-              color: colors.text.tertiary,
-              textAlign: "center",
-              borderTop: `1px solid ${colors.border.default}`,
-              background: colors.background.secondary,
-            }}
-          >
+          <div className="absolute bottom-0 left-0 right-0 p-4 text-xs text-muted-foreground text-center border-t border-border bg-secondary/50">
             💡 Pin to keep open
           </div>
         )}
       </div>
-
-      {/* Mobile Overlay (when needed) */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .sidebar-container {
-            display: none;
-          }
-        }
-      `}</style>
     </>
   );
 }
