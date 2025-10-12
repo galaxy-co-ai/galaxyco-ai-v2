@@ -2,12 +2,15 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { COLORS, SPACING } from "@/lib/design-system";
 import KnowledgeItemCard from "@/components/knowledge/KnowledgeItemCard";
 import SearchFilterBar from "@/components/knowledge/SearchFilterBar";
 import { EmptyState, LoadingSkeleton } from "@/components/knowledge/EmptyState";
 import ItemDetailModal from "@/components/knowledge/ItemDetailModal";
 import CollectionsSidebar from "@/components/knowledge/CollectionsSidebar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Upload, Database, FileText, Image, Link as LinkIcon } from "lucide-react";
 
 interface KnowledgeItem {
   id: string;
@@ -199,374 +202,196 @@ export default function KnowledgeBasePage() {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: COLORS.background.tertiary,
-      }}
-    >
-      <CollectionsSidebar
-        workspaceId="temp-workspace-id"
-        selectedCollectionId={selectedCollectionId}
-        onSelectCollection={setSelectedCollectionId}
-        totalItemsCount={totalItems}
-      />
-      <div
-        style={{ flex: 1, overflow: "auto", padding: SPACING.xxl }}
-        onDrag={handleDrag}
-        onDragStart={handleDrag}
-        onDragEnd={handleDrag}
-        onDragOver={handleDragIn}
-        onDragEnter={handleDragIn}
-        onDragLeave={handleDragOut}
-        onDrop={handleDrop}
-      >
-        {/* Header */}
-        <div style={{ marginBottom: SPACING.xxl }}>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "32px",
-              fontWeight: "700",
-              color: COLORS.text.primary,
-              marginBottom: SPACING.sm,
-            }}
-          >
-            📚 Knowledge Base
-          </h1>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "16px",
-              color: COLORS.text.secondary,
-            }}
-          >
-            Upload documents, images, and URLs to build your AI-powered
-            knowledge base
-          </p>
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        {/* Collections Sidebar */}
+        <div className="w-64 border-r border-border bg-background">
+          <CollectionsSidebar
+            selectedCollectionId={selectedCollectionId}
+            onSelectCollection={setSelectedCollectionId}
+          />
         </div>
 
-        {/* Compact Upload Area */}
-        <div
-          style={{
-            backgroundColor: COLORS.background.primary,
-            border: `2px dashed ${isDragging ? COLORS.accent.primary : COLORS.border.primary}`,
-            borderRadius: SPACING.radius.lg,
-            padding: SPACING.xl,
-            textAlign: "center",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            marginBottom: SPACING.xxl,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: SPACING.md,
-            }}
-          >
-            <div style={{ fontSize: "32px" }}>{isDragging ? "📥" : "📎"}</div>
-            <div style={{ textAlign: "left" }}>
-              <h3
-                style={{
-                  margin: 0,
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  color: COLORS.text.primary,
-                  marginBottom: "2px",
-                }}
-              >
-                {isDragging
-                  ? "Drop files here"
-                  : "Drag & drop files, or click to browse"}
-              </h3>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "13px",
-                  color: COLORS.text.secondary,
-                }}
-              >
-                Supports: PDF, Word, Images, Text files (Max 10MB)
-              </p>
-            </div>
-            <input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.txt,.md,.jpg,.jpeg,.png,.gif,.webp"
-              onChange={handleFileInputChange}
-              style={{ display: "none" }}
-              id="file-input"
-            />
-            <label htmlFor="file-input" style={{ marginLeft: "auto" }}>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("file-input")?.click();
-                }}
-                style={{
-                  backgroundColor: COLORS.accent.primary,
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: SPACING.radius.md,
-                  padding: `${SPACING.sm} ${SPACING.lg}`,
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  transition: "opacity 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.9";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                }}
-              >
-                Choose Files
-              </button>
-            </label>
-          </div>
-        </div>
-
-        {/* Upload Progress */}
-        {Object.keys(uploadProgress).length > 0 && (
-          <div
-            style={{
-              backgroundColor: COLORS.background.primary,
-              borderRadius: SPACING.radius.lg,
-              padding: SPACING.lg,
-              marginBottom: SPACING.xxl,
-              border: `1px solid ${COLORS.border.primary}`,
-            }}
-          >
-            <h4
-              style={{
-                margin: 0,
-                fontSize: "14px",
-                fontWeight: "600",
-                color: COLORS.text.primary,
-                marginBottom: SPACING.md,
-              }}
-            >
-              Uploading...
-            </h4>
-            {Object.entries(uploadProgress).map(([fileId, progress]) => (
-              <div key={fileId} style={{ marginBottom: SPACING.sm }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: SPACING.xs,
-                    fontSize: "13px",
-                  }}
-                >
-                  <span>{fileId.split("-")[0]}</span>
-                  <span style={{ color: COLORS.text.secondary }}>
-                    {progress}%
-                  </span>
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Header */}
+          <header className="border-b border-border py-6 px-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Database className="w-5 h-5 text-primary" />
                 </div>
-                <div
-                  style={{
-                    backgroundColor: COLORS.background.tertiary,
-                    borderRadius: SPACING.radius.full,
-                    height: "4px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      backgroundColor: COLORS.accent.primary,
-                      height: "100%",
-                      width: `${progress}%`,
-                      transition: "width 0.3s ease",
-                    }}
-                  />
+                <div>
+                  <h1 className="text-2xl font-bold text-foreground">Knowledge Base</h1>
+                  <p className="text-sm text-muted-foreground">
+                    {totalItems} items • Organize and search your data
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* Search and Filters */}
-        <SearchFilterBar
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          selectedType={selectedType}
-          onTypeChange={setSelectedType}
-          selectedStatus={selectedStatus}
-          onStatusChange={setSelectedStatus}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-        />
+              {/* Upload Button */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileInputChange}
+                  className="hidden"
+                  id="file-upload"
+                  accept=".pdf,.doc,.docx,.txt,.md,.csv,.json,.png,.jpg,.jpeg,.gif,.webp"
+                />
+                <label htmlFor="file-upload">
+                  <Button>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Files
+                  </Button>
+                </label>
+              </div>
+            </div>
 
-        {/* Results Header */}
-        {!isLoading && items.length > 0 && (
+            {/* Search and Filters */}
+            <SearchFilterBar
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedType={selectedType}
+              onTypeChange={setSelectedType}
+              selectedStatus={selectedStatus}
+              onStatusChange={setSelectedStatus}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+            />
+          </header>
+
+          {/* Upload Progress */}
+          {Object.keys(uploadProgress).length > 0 && (
+            <div className="p-4 border-b border-border bg-secondary/50">
+              <h4 className="text-sm font-medium mb-2">Uploading files...</h4>
+              {Object.entries(uploadProgress).map(([fileId, progress]) => (
+                <div key={fileId} className="mb-2">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                    <span>{fileId.split('-')[0]}</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <div className="w-full bg-secondary rounded-full h-1">
+                    <div 
+                      className="bg-primary h-1 rounded-full transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Drop Zone */}
           <div
-            style={{
-              marginBottom: SPACING.lg,
-              fontSize: "14px",
-              color: COLORS.text.secondary,
-            }}
+            className={`flex-1 relative ${isDragging ? 'bg-primary/5 border-primary border-dashed border-2' : ''}`}
+            onDragEnter={handleDragIn}
+            onDragLeave={handleDragOut}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
           >
-            Showing {(currentPage - 1) * itemsPerPage + 1}-
-            {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}{" "}
-            items
+            {isDragging && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80">
+                <div className="text-center">
+                  <Upload className="w-12 h-12 text-primary mx-auto mb-4" />
+                  <p className="text-lg font-medium text-foreground">Drop files to upload</p>
+                  <p className="text-sm text-muted-foreground">
+                    Supports PDFs, documents, images, and more
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Content Area */}
+            <div className="p-6">
+              {/* Loading State */}
+              {isLoading && <LoadingSkeleton />}
+
+              {/* Error State */}
+              {error && (
+                <Card className="p-6">
+                  <div className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
+                      <Database className="w-6 h-6 text-destructive" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                      Failed to load knowledge items
+                    </h3>
+                    <p className="text-muted-foreground mb-4">{error}</p>
+                    <Button onClick={fetchItems}>
+                      Try Again
+                    </Button>
+                  </div>
+                </Card>
+              )}
+
+              {/* Empty State */}
+              {!isLoading && items.length === 0 && !error && (
+                <EmptyState
+                  searchQuery={searchQuery}
+                  hasFilters={!!(selectedType || selectedStatus)}
+                  onClearFilters={() => {
+                    setSearchQuery("");
+                    setSelectedType(null);
+                    setSelectedStatus(null);
+                  }}
+                  onFileUpload={() => document.getElementById('file-upload')?.click()}
+                />
+              )}
+
+              {/* Items Grid */}
+              {!isLoading && items.length > 0 && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+                    {items.map((item) => (
+                      <KnowledgeItemCard
+                        key={item.id}
+                        item={item}
+                        onSelect={setSelectedItemId}
+                        onRefresh={fetchItems}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm text-muted-foreground">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
-        )}
-
-        {/* Loading State */}
-        {isLoading && <LoadingSkeleton />}
-
-        {/* Error State */}
-        {error && !isLoading && (
-          <EmptyState
-            icon="⚠️"
-            title="Error Loading Items"
-            description={error}
-            action={{
-              label: "Try Again",
-              onClick: fetchItems,
-            }}
-          />
-        )}
-
-        {/* Items Grid */}
-        {!isLoading && !error && items.length > 0 && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: SPACING.md,
-              marginBottom: SPACING.xxl,
-            }}
-          >
-            {items.map((item) => (
-              <KnowledgeItemCard
-                key={item.id}
-                {...item}
-                onClick={() => setSelectedItemId(item.id)}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!isLoading && !error && items.length === 0 && (
-          <EmptyState
-            icon={
-              searchQuery ||
-              selectedType ||
-              selectedStatus ||
-              selectedCollectionId
-                ? "🔍"
-                : "📚"
-            }
-            title={
-              searchQuery ||
-              selectedType ||
-              selectedStatus ||
-              selectedCollectionId
-                ? "No items found"
-                : "No knowledge items yet"
-            }
-            description={
-              searchQuery ||
-              selectedType ||
-              selectedStatus ||
-              selectedCollectionId
-                ? "Try adjusting your filters or search query"
-                : "Upload your first document to get started!"
-            }
-            action={
-              searchQuery ||
-              selectedType ||
-              selectedStatus ||
-              selectedCollectionId
-                ? {
-                    label: "Clear Filters",
-                    onClick: () => {
-                      setSearchQuery("");
-                      setSelectedType(null);
-                      setSelectedStatus(null);
-                      setSelectedCollectionId(null);
-                    },
-                  }
-                : undefined
-            }
-          />
-        )}
-
-        {/* Pagination */}
-        {!isLoading && !error && totalPages > 1 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: SPACING.md,
-              marginTop: SPACING.xxl,
-            }}
-          >
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              style={{
-                padding: `${SPACING.sm} ${SPACING.md}`,
-                fontSize: "14px",
-                border: `1px solid ${COLORS.border.primary}`,
-                borderRadius: SPACING.radius.md,
-                backgroundColor: COLORS.background.primary,
-                color: COLORS.text.primary,
-                cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                opacity: currentPage === 1 ? 0.5 : 1,
-              }}
-            >
-              ← Previous
-            </button>
-
-            <span style={{ fontSize: "14px", color: COLORS.text.secondary }}>
-              Page {currentPage} of {totalPages}
-            </span>
-
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              style={{
-                padding: `${SPACING.sm} ${SPACING.md}`,
-                fontSize: "14px",
-                border: `1px solid ${COLORS.border.primary}`,
-                borderRadius: SPACING.radius.md,
-                backgroundColor: COLORS.background.primary,
-                color: COLORS.text.primary,
-                cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-                opacity: currentPage === totalPages ? 0.5 : 1,
-              }}
-            >
-              Next →
-            </button>
-          </div>
-        )}
-
-        {/* Item Detail Modal */}
-        {selectedItemId && (
-          <ItemDetailModal
-            itemId={selectedItemId}
-            workspaceId="temp-workspace-id"
-            onClose={() => setSelectedItemId(null)}
-            onUpdate={() => {
-              // Refresh the list after update
-              fetchItems();
-            }}
-            onDelete={() => {
-              // Refresh the list after delete
-              fetchItems();
-            }}
-          />
-        )}
+        </div>
       </div>
+
+      {/* Item Detail Modal */}
+      {selectedItemId && (
+        <ItemDetailModal
+          itemId={selectedItemId}
+          onClose={() => setSelectedItemId(null)}
+          onRefresh={fetchItems}
+        />
+      )}
     </div>
   );
 }

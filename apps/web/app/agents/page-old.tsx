@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useAgentList } from "../../hooks/use-agent-list";
 import { AgentListCard } from "../../components/agents/AgentListCard";
 import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { FormInput as Input } from "../../components/ui/form-input";
 import { Card } from "../../components/ui/card";
-import { Badge } from "../../components/ui/badge";
 import { Plus, Search, Users, Zap, RefreshCw, Filter } from "lucide-react";
 
 export default function AgentsPage() {
@@ -65,14 +64,27 @@ export default function AgentsPage() {
           {/* Page Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Users size={24} strokeWidth={2} className="text-primary" />
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--primary-50)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Users size={24} strokeWidth={2} color="var(--primary-500)" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-foreground">
+                <h1
+                  className="text-3xl font-bold"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   My Agents
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-secondary">
                   {totalCount} agent{totalCount !== 1 ? "s" : ""} • AI
                   automation at your fingertips
                 </p>
@@ -80,26 +92,22 @@ export default function AgentsPage() {
             </div>
 
             <Link href="/agents/new">
-              <Button>
-                <Plus size={18} className="mr-2" />
-                Create Agent
-              </Button>
+              <Button leftIcon={<Plus size={18} />}>Create Agent</Button>
             </Link>
           </div>
 
           {/* Search & Filters */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 max-w-md relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="flex-1 max-w-md">
               <Input
+                variant="search"
                 placeholder="Search agents..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-10"
+                leftIcon={<Search size={16} />}
               />
             </div>
-            <Button variant="outline">
-              <Filter size={16} className="mr-2" />
+            <Button variant="ghost" leftIcon={<Filter size={16} />}>
               Filters
             </Button>
           </div>
@@ -107,35 +115,37 @@ export default function AgentsPage() {
           {/* Status Tabs */}
           <div className="flex gap-2">
             {statusTabs.map((tab) => (
-              <Button
+              <button
                 key={tab.value}
-                variant={statusFilter === tab.value ? "default" : "outline"}
-                size="sm"
+                type="button"
                 onClick={() => setStatusFilter(tab.value)}
-                className="relative"
+                className={`btn btn-sm ${
+                  statusFilter === tab.value ? "btn-primary" : "btn-secondary"
+                }`}
               >
                 {tab.label}
                 {tab.count !== undefined && (
-                  <Badge variant="secondary" className="ml-2">
-                    {tab.count}
-                  </Badge>
+                  <span className="badge badge-primary ml-2">{tab.count}</span>
                 )}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="px-6 py-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="section">
+        <div className="container">
           {/* Loading State */}
           {isLoading && (
             <div className="text-center py-12">
-              <div className="animate-spin mb-4 mx-auto w-8 h-8">
-                <Zap size={32} className="text-primary" />
+              <div
+                className="animate-spin mb-4"
+                style={{ margin: "0 auto", width: "32px", height: "32px" }}
+              >
+                <Zap size={32} color="var(--primary-500)" />
               </div>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
                 Loading your agents...
               </p>
             </div>
@@ -143,22 +153,40 @@ export default function AgentsPage() {
 
           {/* Error State */}
           {error && (
-            <Card className="mb-6 p-6">
+            <Card className="mb-6">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-                  <RefreshCw size={20} className="text-destructive" />
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    background: "var(--error-light)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <RefreshCw size={20} color="var(--error)" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-base font-medium mb-3 text-destructive">
+                  <p
+                    className="text-base font-medium mb-3"
+                    style={{ color: "var(--error)" }}
+                  >
                     Failed to load agents
                   </p>
-                  <p className="text-sm mb-4 text-muted-foreground">{error}</p>
+                  <p
+                    className="text-sm mb-4"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {error}
+                  </p>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
+                    leftIcon={<RefreshCw size={16} />}
                     onClick={refresh}
                   >
-                    <RefreshCw size={16} className="mr-2" />
                     Retry
                   </Button>
                 </div>
@@ -169,29 +197,49 @@ export default function AgentsPage() {
           {/* Empty State */}
           {!isLoading && agents.length === 0 && (
             <div className="text-center py-16">
-              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mx-auto mb-6">
-                <Users size={40} className="text-muted-foreground" />
+              <div
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  background: "var(--bg-secondary)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto var(--space-6)",
+                }}
+              >
+                <Users size={40} color="var(--text-tertiary)" />
               </div>
-              <h2 className="text-2xl font-bold mb-3 text-foreground">
+              <h2
+                className="text-2xl font-bold mb-3"
+                style={{ color: "var(--text-primary)" }}
+              >
                 {search
                   ? "No agents found"
                   : "Ready to build your first agent?"}
               </h2>
-              <p className="text-base mb-8 text-muted-foreground max-w-lg mx-auto">
+              <p
+                className="text-base mb-8"
+                style={{
+                  color: "var(--text-secondary)",
+                  maxWidth: "500px",
+                  margin: "0 auto var(--space-8)",
+                }}
+              >
                 {search
                   ? `No agents match "${search}". Try adjusting your search or create a new agent.`
                   : "Create intelligent AI agents that automate your workflows and boost productivity."}
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link href="/agents/new">
-                  <Button>
-                    <Plus size={18} className="mr-2" />
+                  <Button leftIcon={<Plus size={18} />}>
                     Create Your First Agent
                   </Button>
                 </Link>
                 {search && (
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={() => {
                       setSearchInput("");
                       setSearch("");
@@ -207,7 +255,7 @@ export default function AgentsPage() {
           {/* Agent Grid */}
           {!isLoading && agents.length > 0 && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-auto-fit gap-6 mb-8">
                 {agents.map((agent: any) => (
                   <AgentListCard key={agent.id} agent={agent} />
                 ))}
@@ -217,18 +265,21 @@ export default function AgentsPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-4">
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1}
                   >
                     ← Previous
                   </Button>
-                  <span className="text-sm text-muted-foreground">
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
                     Page {page} of {totalPages}
                   </span>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     onClick={() => setPage(page + 1)}
                     disabled={page === totalPages}
