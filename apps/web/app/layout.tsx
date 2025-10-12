@@ -3,6 +3,7 @@ import { Providers } from "../components/providers";
 import MainSidebar from "../components/layout/MainSidebar";
 import { TopBar } from "../components/layout/TopBar";
 import { Toaster } from "../components/ui/toaster";
+import { Toaster as Sonner } from "sonner";
 import type { Metadata } from "next";
 import "../styles/globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
               {children}
             </main>
             <Toaster />
+            <Sonner position="bottom-right" richColors />
           </Providers>
         </body>
       </html>
