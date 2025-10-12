@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Select, Textarea, Input } from '@/components/ui/Input';
+import { FormInput as Input } from '@/components/ui/form-input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FormTextarea as Textarea } from '@/components/ui/form-textarea';
 import { AgentBuilderState } from '@/hooks/use-agent-builder';
 import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 
