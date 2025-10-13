@@ -15,6 +15,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "precommit": "turbo run typecheck && turbo run lint && prettier --check .",
     "health-check": "pnpm precommit",
+    "db:seed": "npx tsx scripts/seed-database.ts",
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
