@@ -1,11 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Search, Bell } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 interface TopBarProps {
   className?: string;
@@ -21,14 +23,27 @@ interface TopBarProps {
  * - User profile menu
  */
 export function TopBar({ className }: TopBarProps) {
+  const { isExpanded } = useSidebar();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div
       className={cn(
         "fixed top-0 right-0 left-0 h-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
-        "border-b border-border z-50",
+        "border-b border-border z-50 transition-all duration-300 ease-in-out",
         className
       )}
-      style={{ marginLeft: "64px" }} // Offset for sidebar
+      style={{ marginLeft: isMobile ? "0" : (isExpanded ? "240px" : "64px") }} // Responsive offset for sidebar
     >
       <div className="flex h-full items-center justify-between px-6 gap-4">
         {/* Left: Search */}

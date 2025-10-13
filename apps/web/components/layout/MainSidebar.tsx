@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Rocket, Satellite, Globe, Users, Pin } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 // Main navigation items with space-themed icons
 const MAIN_NAV_ITEMS = [
@@ -37,25 +37,7 @@ const MAIN_NAV_ITEMS = [
 
 export default function MainSidebar() {
   const pathname = usePathname();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
-
-  // Load pinned state from localStorage on mount
-  useEffect(() => {
-    const pinned = localStorage.getItem("main-sidebar-pinned") === "true";
-    setIsPinned(pinned);
-    setIsExpanded(pinned);
-  }, []);
-
-  // Save pinned state to localStorage
-  const togglePin = () => {
-    const newPinned = !isPinned;
-    setIsPinned(newPinned);
-    localStorage.setItem("main-sidebar-pinned", String(newPinned));
-    if (newPinned) {
-      setIsExpanded(true);
-    }
-  };
+  const { isExpanded, isPinned, setIsExpanded, togglePin } = useSidebar();
 
   const handleMouseEnter = () => {
     if (!isPinned) {
@@ -84,7 +66,7 @@ export default function MainSidebar() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={cn(
-          "fixed left-0 top-0 bottom-0 bg-background border-r border-border z-100 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block",
+          "fixed left-0 top-0 bottom-0 bg-background border-r border-border z-40 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block",
           isExpanded ? "w-60" : "w-16"
         )}
       >

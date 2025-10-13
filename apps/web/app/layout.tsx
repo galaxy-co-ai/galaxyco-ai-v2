@@ -1,6 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "../components/providers";
+import { SidebarProvider } from "../contexts/SidebarContext";
 import MainSidebar from "../components/layout/MainSidebar";
+import MainContent from "../components/layout/MainContent";
 import { TopBar } from "../components/layout/TopBar";
 import { Toaster } from "../components/ui/toaster";
 import { Toaster as Sonner } from "sonner";
@@ -23,20 +25,13 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body>
           <Providers>
-            <MainSidebar />
-            <TopBar />
-            <main
-              style={{
-                marginLeft: "64px", // Space for collapsed sidebar
-                paddingTop: "64px", // Space for top bar
-                minHeight: "100vh",
-              }}
-              className="main-content-wrapper"
-            >
-              {children}
-            </main>
-            <Toaster />
-            <Sonner position="bottom-right" richColors />
+            <SidebarProvider>
+              <MainSidebar />
+              <TopBar />
+              <MainContent>{children}</MainContent>
+              <Toaster />
+              <Sonner position="bottom-right" richColors />
+            </SidebarProvider>
           </Providers>
         </body>
       </html>
