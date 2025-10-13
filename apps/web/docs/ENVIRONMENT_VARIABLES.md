@@ -7,7 +7,7 @@
 ## 📋 Quick Setup Checklist
 
 - [ ] Copy `.env.example` to `.env.local` for development
-- [ ] Generate encryption key: `14318febf9b623df37dfd8bbe1e68ff930ccbeac440041f9d3430515b48a453b`
+- [ ] Generate encryption key using secure method (see guide below)
 - [ ] Set up Neon PostgreSQL database
 - [ ] Configure Clerk authentication
 - [ ] Add AI provider API keys
@@ -62,7 +62,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_1234567890abcdef1234567890abcdef123456
 
 ```bash
 # 32-byte hex string for encrypting API keys in database
-ENCRYPTION_KEY=14318febf9b623df37dfd8bbe1e68ff930ccbeac440041f9d3430515b48a453b
+ENCRYPTION_KEY=your_32_byte_hex_string_generated_securely_replace_this_value
 ```
 
 **How to generate:**
