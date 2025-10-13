@@ -8,7 +8,7 @@ import {
   Clock,
   TrendingDown,
 } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/ui/card";
 
 interface DashboardStatsProps {
   totalAgents?: number;
@@ -123,8 +123,7 @@ export default function DashboardStats({
         return (
           <Card
             key={stat.id}
-            variant="interactive"
-            className="animate-fade-in"
+            className="animate-fade-in hover:shadow-md transition-shadow cursor-pointer"
             style={{
               padding: "var(--space-6)",
             }}

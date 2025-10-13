@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
 import {
   ROLES,
   PAIN_POINTS,
@@ -172,7 +172,7 @@ export function OnboardingWizard({ onComplete, isLoading = false }: OnboardingWi
           )}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: spacing.lg }}>
             {step < totalSteps && (
-              <Button onClick={handleNext} disabled={!isStepValid()} fullWidth={step === 1}>
+              <Button onClick={handleNext} disabled={!isStepValid()} className={step === 1 ? 'w-full' : ''}>
                 {step === 1 ? 'Get Started' : 'Continue →'}
               </Button>
             )}

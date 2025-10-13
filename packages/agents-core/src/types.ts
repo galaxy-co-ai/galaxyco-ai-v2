@@ -92,6 +92,7 @@ export interface AgentConfig {
 }
 
 export interface Agent {
+  id: string;
   name: string;
   instructions: string;
   model: string;

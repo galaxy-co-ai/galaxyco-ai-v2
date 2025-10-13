@@ -100,9 +100,9 @@ body {
   --warning: #ffc107;
   --warning-dark: #856404;
   
-  --error-light: #fee;
+  --error-light: #fee2e2;
   --error: #dc3545;
-  --error-dark: #c33;
+  --error-dark: #cc3333;
   
   --info-light: #d1ecf1;
   --info: #17a2b8;

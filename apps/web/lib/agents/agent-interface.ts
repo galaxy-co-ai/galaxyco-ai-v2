@@ -105,8 +105,8 @@ export abstract class BaseAgent {
   private readonly requiredEnvVars: string[] = [];
 
   constructor() {
-    // Validate required environment variables
-    this.validateEnvironment();
+    // Environment validation will be done lazily when needed
+    // This prevents issues during build-time when subclass properties aren't initialized yet
   }
 
   /**
@@ -124,6 +124,9 @@ export abstract class BaseAgent {
     if (this.aiWrapper) {
       return this.aiWrapper;
     }
+
+    // Validate environment now that subclass is fully initialized
+    this.validateEnvironment();
 
     // Get primary provider config
     const primaryConfig = getProviderConfigFromEnv(this.aiProvider.primary);
@@ -443,6 +446,12 @@ export abstract class BaseAgent {
    */
   private validateEnvironment(): void {
     const missingVars: string[] = [];
+
+    // Check if aiProvider is defined (might not be during build-time instantiation)
+    if (!this.aiProvider) {
+      console.warn(`[AGENT ${this.id || 'unknown'}] AI provider not defined, skipping environment validation`);
+      return;
+    }
 
     // Check AI provider keys
     if (this.aiProvider.primary === 'openai' && !process.env.OPENAI_API_KEY) {

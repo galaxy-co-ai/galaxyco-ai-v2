@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Star, Download, Zap, Clock } from "lucide-react";
 
 interface AgentTemplateCardProps {
@@ -56,9 +56,7 @@ export default function AgentTemplateCardCompact({
 
   return (
     <Card
-      variant="interactive"
-      hover={true}
-      className={`cursor-pointer transition-all duration-200 ${
+      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
         isHovered ? "transform -translate-y-1" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -214,13 +212,13 @@ export default function AgentTemplateCardCompact({
       {isHovered && (
         <Button
           size="sm"
-          leftIcon={<Download size={14} />}
           onClick={(e) => {
             e.stopPropagation();
             console.log("Deploy agent:", template.id);
           }}
-          style={{ width: "100%" }}
+          className="w-full"
         >
+          <Download size={14} className="mr-2" />
           Deploy
         </Button>
       )}

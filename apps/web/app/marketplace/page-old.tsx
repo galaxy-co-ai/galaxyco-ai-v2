@@ -10,8 +10,8 @@ import SearchBar from "@/components/marketplace/SearchBar";
 import CategoryChips from "@/components/marketplace/CategoryChips";
 import { useMarketplaceSearch } from "@/hooks/use-marketplace-search";
 import { AGENT_TEMPLATES } from "@/lib/constants/agent-templates";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Search,
   Filter,
@@ -63,11 +63,12 @@ export default function MarketplacePage() {
               <Button
                 variant="ghost"
                 size="sm"
-                leftIcon={<Grid3X3 size={16} />}
               >
+                <Grid3X3 size={16} className="mr-2" />
                 Grid
               </Button>
-              <Button variant="ghost" size="sm" leftIcon={<Filter size={16} />}>
+              <Button variant="ghost" size="sm">
+                <Filter size={16} className="mr-2" />
                 Filters
               </Button>
             </div>

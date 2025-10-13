@@ -86,14 +86,23 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
       </div>
 
       {/* Trigger */}
-      <Select
-        label="Trigger Type"
-        value={configuration.trigger}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ trigger: e.target.value as any })}
-        options={TRIGGER_OPTIONS}
-        disabled={disabled}
-        helperText="Choose how this agent should be triggered"
-      />
+      {/* TODO: Fix Select component props */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">Trigger Type</label>
+        <select 
+          value={configuration.trigger}
+          onChange={(e) => onChange({ trigger: e.target.value as any })}
+          disabled={disabled}
+          className="w-full p-2 border border-input rounded-md"
+        >
+          {TRIGGER_OPTIONS.map(option => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+        <p className="text-sm text-muted-foreground mt-1">
+          {disabled ? 'Component disabled' : 'How should this agent be triggered?'}
+        </p>
+      </div>
 
       {/* Divider */}
       <div
@@ -127,25 +136,39 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         </p>
 
         {/* AI Provider */}
-        <Select
-          label="AI Provider"
-          value={configuration.aiProvider}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ aiProvider: e.target.value as any })}
-          options={AI_PROVIDER_OPTIONS}
-          disabled={disabled}
-          required
-        />
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">AI Provider *</label>
+          <select 
+            value={configuration.aiProvider}
+            onChange={(e) => onChange({ aiProvider: e.target.value as any })}
+            disabled={disabled}
+            required
+            className="w-full p-2 border border-input rounded-md"
+          >
+            {AI_PROVIDER_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </div>
 
         {/* Model */}
-        <Select
-          label="Model"
-          value={displayModel}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange({ model: e.target.value })}
-          options={currentModelOptions}
-          disabled={disabled}
-          required
-          helperText="Choose the AI model to power this agent"
-        />
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Model *</label>
+          <select 
+            value={displayModel}
+            onChange={(e) => onChange({ model: e.target.value })}
+            disabled={disabled}
+            required
+            className="w-full p-2 border border-input rounded-md"
+          >
+            {currentModelOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+          <p className="text-sm text-muted-foreground mt-1">
+            Choose the AI model to power this agent
+          </p>
+        </div>
 
         {/* Temperature Slider */}
         <div style={{ marginBottom: spacing.lg }}>

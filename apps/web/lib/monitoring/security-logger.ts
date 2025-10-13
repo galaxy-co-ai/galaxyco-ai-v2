@@ -52,7 +52,15 @@ export function logCrossTenantAttempt(
     scope.setTag('security_incident', true);
     scope.setTag('incident_type', 'cross_tenant_access');
     scope.setLevel('error');
-    scope.setContext('security_incident', incident);
+    scope.setContext('security_incident', {
+      type: incident.type,
+      userId: incident.userId || 'unknown',
+      tenantId: incident.tenantId || 'unknown',
+      requestedTenantId: incident.requestedTenantId || 'unknown',
+      timestamp: incident.timestamp,
+      severity: incident.severity,
+      details: JSON.stringify(incident.details || {})
+    });
     
     Sentry.captureException(
       new Error(`Cross-tenant access attempt: User ${userId} (tenant: ${userTenantId}) attempted to access tenant ${requestedTenantId}`)
@@ -97,7 +105,15 @@ export function logUnauthorizedAccess(
     scope.setTag('security_incident', true);
     scope.setTag('incident_type', 'unauthorized_access');
     scope.setLevel('warning');
-    scope.setContext('security_incident', incident);
+    scope.setContext('security_incident', {
+      type: incident.type,
+      path: incident.path || 'unknown',
+      method: incident.method || 'unknown',
+      userAgent: incident.userAgent || 'unknown',
+      ip: incident.ip || 'unknown',
+      timestamp: incident.timestamp,
+      severity: incident.severity
+    });
     
     Sentry.captureMessage(`Unauthorized access attempt to ${method} ${path}`);
   });
@@ -131,7 +147,13 @@ export function logSuspiciousActivity(
     scope.setTag('security_incident', true);
     scope.setTag('incident_type', 'suspicious_activity');
     scope.setLevel('warning');
-    scope.setContext('security_incident', incident);
+    scope.setContext('security_incident', {
+      type: incident.type,
+      userId: incident.userId || 'unknown',
+      timestamp: incident.timestamp,
+      severity: incident.severity,
+      details: JSON.stringify(incident.details || {})
+    });
     
     Sentry.captureMessage(`Suspicious activity: ${activity}`);
   });

@@ -207,8 +207,10 @@ export default function KnowledgeBasePage() {
         {/* Collections Sidebar */}
         <div className="w-64 border-r border-border bg-background">
           <CollectionsSidebar
+            workspaceId="temp-workspace-id"
             selectedCollectionId={selectedCollectionId}
             onSelectCollection={setSelectedCollectionId}
+            totalItemsCount={totalItems}
           />
         </div>
 
@@ -328,14 +330,13 @@ export default function KnowledgeBasePage() {
               {/* Empty State */}
               {!isLoading && items.length === 0 && !error && (
                 <EmptyState
-                  searchQuery={searchQuery}
-                  hasFilters={!!(selectedType || selectedStatus)}
-                  onClearFilters={() => {
-                    setSearchQuery("");
-                    setSelectedType(null);
-                    setSelectedStatus(null);
+                  icon="📭"
+                  title={searchQuery ? "No results found" : "No knowledge items yet"}
+                  description={searchQuery ? `No items match your search for "${searchQuery}". Try adjusting your filters or upload new content.` : "Start building your knowledge base by uploading documents, images, or other files."}
+                  action={{
+                    label: "Upload Files",
+                    onClick: () => document.getElementById('file-upload')?.click()
                   }}
-                  onFileUpload={() => document.getElementById('file-upload')?.click()}
                 />
               )}
 
@@ -346,9 +347,8 @@ export default function KnowledgeBasePage() {
                     {items.map((item) => (
                       <KnowledgeItemCard
                         key={item.id}
-                        item={item}
-                        onSelect={setSelectedItemId}
-                        onRefresh={fetchItems}
+                        {...item}
+                        onClick={() => setSelectedItemId(item.id)}
                       />
                     ))}
                   </div>
@@ -388,8 +388,10 @@ export default function KnowledgeBasePage() {
       {selectedItemId && (
         <ItemDetailModal
           itemId={selectedItemId}
+          workspaceId="temp-workspace-id"
           onClose={() => setSelectedItemId(null)}
-          onRefresh={fetchItems}
+          onUpdate={fetchItems}
+          onDelete={fetchItems}
         />
       )}
     </div>

@@ -1,5 +1,4 @@
-// @ts-ignore - pdf-parse has default export but types are incorrect
-import pdf from "pdf-parse";
+const pdf = require("pdf-parse");
 import * as cheerio from "cheerio";
 
 /**

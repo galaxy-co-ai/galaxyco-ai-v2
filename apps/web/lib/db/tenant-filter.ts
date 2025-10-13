@@ -129,3 +129,16 @@ export function belongsToTenant(
 ): resource is { tenantId: string } {
   return resource.tenantId === tenantId;
 }
+
+/**
+ * Get tenant filter for API routes (backwards compatibility)
+ * @returns Tenant context or null if not authenticated
+ */
+export async function getTenantFilter(): Promise<{ tenantId: string | null }> {
+  try {
+    const context = await getCurrentTenantContext();
+    return { tenantId: context.tenantId };
+  } catch (error) {
+    return { tenantId: null };
+  }
+}

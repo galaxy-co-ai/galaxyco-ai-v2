@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
-import { Button } from "../components/ui/Button";
-import { Card } from "../components/ui/Card";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
 import { Rocket, Satellite, Globe, Zap, Users, Star } from "lucide-react";
 
 export default async function Home() {
@@ -59,14 +59,16 @@ export default async function Home() {
             <div className="flex justify-center gap-4 mb-12">
               {userId ? (
                 <Link href="/dashboard">
-                  <Button size="lg" leftIcon={<Rocket size={20} />}>
+                  <Button size="lg">
+                    <Rocket size={20} className="mr-2" />
                     Go to Dashboard →
                   </Button>
                 </Link>
               ) : (
                 <>
                   <Link href="/sign-up">
-                    <Button size="lg" leftIcon={<Zap size={20} />}>
+                    <Button size="lg">
+                      <Zap size={20} className="mr-2" />
                       Start Building
                     </Button>
                   </Link>
@@ -80,7 +82,7 @@ export default async function Home() {
             </div>
 
             {/* Status Card */}
-            <Card variant="comfortable" className="animate-fade-in">
+            <Card className="animate-fade-in p-8">
               <div className="text-center">
                 <h3
                   className="text-lg font-semibold mb-4"
@@ -135,7 +137,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-3 gap-6">
-            <Card variant="interactive" className="text-center">
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow cursor-pointer">
               <div
                 style={{
                   color: "var(--primary-500)",
@@ -151,7 +153,7 @@ export default async function Home() {
               </p>
             </Card>
 
-            <Card variant="interactive" className="text-center">
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow cursor-pointer">
               <div
                 style={{
                   color: "var(--primary-500)",
@@ -167,7 +169,7 @@ export default async function Home() {
               </p>
             </Card>
 
-            <Card variant="interactive" className="text-center">
+            <Card className="text-center p-6 hover:shadow-lg transition-shadow cursor-pointer">
               <div
                 style={{
                   color: "var(--primary-500)",

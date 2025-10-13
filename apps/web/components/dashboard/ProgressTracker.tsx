@@ -1,4 +1,4 @@
-import { Card } from '../ui/Card';
+import { Card } from '../ui/card';
 import { colors, typography, spacing, radius } from '@/lib/constants/design-system';
 
 interface Step {

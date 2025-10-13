@@ -168,7 +168,7 @@ async function callProvider(
       const genModel = client.getGenerativeModel({ model });
       
       const response = await genModel.generateContent({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           maxOutputTokens: maxTokens,
           temperature,

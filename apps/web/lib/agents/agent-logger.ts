@@ -11,6 +11,7 @@
 
 import { db } from '@galaxyco/database';
 import { agentLogs } from '@galaxyco/database/schema';
+import { and, eq, gte, desc } from 'drizzle-orm';
 import * as Sentry from '@sentry/nextjs';
 
 export interface AgentLog {
@@ -61,6 +62,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
   const logEntry = {
     agentId: log.agentId,
     tenantId: log.tenantId,
+    workspaceId: log.tenantId, // Use tenantId as workspaceId for compatibility
     userId: log.userId,
     inputSummary: summarizeData(log.input),
     outputSummary: summarizeData(log.output),
@@ -178,13 +180,13 @@ export async function getAgentMetrics(
       .select()
       .from(agentLogs)
       .where(
-        db.and(
-          db.eq(agentLogs.agentId, agentId),
-          db.eq(agentLogs.tenantId, tenantId),
-          db.gte(agentLogs.timestamp, since)
+        and(
+          eq(agentLogs.agentId, agentId),
+          eq(agentLogs.tenantId, tenantId),
+          gte(agentLogs.timestamp, since)
         )
       )
-      .orderBy(db.desc(agentLogs.timestamp));
+      .orderBy(desc(agentLogs.timestamp));
 
     const totalExecutions = executions.length;
     const successfulExecutions = executions.filter(e => e.success).length;
@@ -247,9 +249,9 @@ export async function getTenantAgentOverview(
       .select()
       .from(agentLogs)
       .where(
-        db.and(
-          db.eq(agentLogs.tenantId, tenantId),
-          db.gte(agentLogs.timestamp, since)
+        and(
+          eq(agentLogs.tenantId, tenantId),
+          gte(agentLogs.timestamp, since)
         )
       );
 
@@ -278,7 +280,7 @@ export async function getTenantAgentOverview(
         failedExecutions,
         successRate,
         averageDuration,
-        lastExecution: Math.max(...agentExecutions.map(e => e.timestamp.getTime())),
+        lastExecution: new Date(Math.max(...agentExecutions.map(e => e.timestamp.getTime()))),
       };
     }
 

@@ -5,6 +5,7 @@
 import { Agent as IAgent, AgentConfig, Tool, Guardrail } from "./types";
 
 export class Agent implements IAgent {
+  public readonly id: string;
   public readonly name: string;
   public readonly instructions: string;
   public readonly model: string;
@@ -13,7 +14,8 @@ export class Agent implements IAgent {
   public readonly tools: Tool[];
   public readonly guardrails: Guardrail[];
 
-  constructor(config: AgentConfig) {
+  constructor(config: AgentConfig & { id?: string }) {
+    this.id = config.id || `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.name = config.name;
     this.instructions = config.instructions;
     this.model = config.model || "gpt-4o-mini";
@@ -140,6 +142,7 @@ export class Agent implements IAgent {
    */
   toJSON() {
     return {
+      id: this.id,
       name: this.name,
       model: this.model,
       temperature: this.temperature,

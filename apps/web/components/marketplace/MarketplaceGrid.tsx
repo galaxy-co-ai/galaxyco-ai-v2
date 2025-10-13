@@ -2,9 +2,14 @@
 
 import AgentTemplateCardCompact from "./AgentTemplateCardCompact";
 
-export default function MarketplaceGrid() {
+interface MarketplaceGridProps {
+  agents?: any[];
+  isSearchResult?: boolean;
+}
+
+export default function MarketplaceGrid({ agents, isSearchResult = false }: MarketplaceGridProps) {
   // Mock all agent templates - will be loaded from database
-  const allTemplates = [
+  const mockTemplates = [
     {
       id: "5",
       name: "Cross-App Do-It-For-Me",
@@ -108,6 +113,9 @@ export default function MarketplaceGrid() {
       tags: ["analytics", "ranking", "marketplace"],
     },
   ];
+
+  // Use passed agents or fallback to mock data
+  const allTemplates = agents && agents.length > 0 ? agents : mockTemplates;
 
   return (
     <div className="space-y-8">

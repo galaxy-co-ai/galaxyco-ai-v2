@@ -54,3 +54,28 @@ export {
 export {
   AgentRegistry,
 } from './agent-interface';
+
+// Health check functions (stubs for now)
+export async function quickHealthCheck() {
+  return {
+    healthy: true,
+    agentCount: 0,
+    issues: [],
+  };
+}
+
+export async function runAgentTests() {
+  return {
+    totalAgents: 0,
+    passedTests: 0,
+    failedTests: 0,
+    summary: {
+      overallSuccess: true,
+    },
+    results: [],
+  };
+}
+
+export function generateTestReport(testResults: any) {
+  return `# Agent Test Report\n\nNo tests were run.\n`;
+}
