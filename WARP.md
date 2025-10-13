@@ -1,8 +1,9 @@
 # GalaxyCo.ai 2.0 - Project Rules
 
-**Last Updated**: January 10, 2025  
+**Last Updated**: January 12, 2025  
 **Project**: GalaxyCo.ai 2.0 - Make multi-agent AI useful in minutes  
-**Current Phase**: Phase 9B - Live Execution & Testing
+**Current Phase**: Deployment & UI Polish  
+**Latest Session**: January 12, 2025 - Responsive sidebar + deployment fixes
 
 ---
 
@@ -143,6 +144,33 @@ TestPanel (React) → /api/agents/[id]/execute → Python FastAPI → AI Provide
 - ✅ Professional UI with loading states
 - ✅ Comprehensive error handling
 - ✅ Mobile-responsive test panel
+
+### Responsive Sidebar Layout ✅ NEW (Jan 12, 2025)
+
+**Global State Management**: All pages now respond smoothly to sidebar expansion/collapse
+
+```
+SidebarProvider (Context) → { isExpanded, isPinned, setIsExpanded, togglePin }
+        ↓               ↓                  ↓
+  MainSidebar      TopBar           MainContent
+  (w-16/w-60)    (ml: 64/240)     (ml: 64/240)
+```
+
+**Key Files**:
+
+- `apps/web/contexts/SidebarContext.tsx` - Global sidebar state (Context API)
+- `apps/web/components/layout/MainContent.tsx` - Responsive content wrapper
+- `apps/web/components/layout/MainSidebar.tsx` - Sidebar with hover/pin
+- `apps/web/components/layout/TopBar.tsx` - Responsive top navigation
+
+**Behavior**:
+
+- ✅ Smooth 300ms transitions on all layout changes
+- ✅ Synchronized movement (TopBar + content)
+- ✅ Hover to expand (if not pinned)
+- ✅ Pin to keep expanded (persists to localStorage)
+- ✅ Mobile responsive (< 768px hides sidebar offset)
+- ✅ Proper z-index layering (sidebar z-40, topbar z-50)
 
 ### Git Commit Standards
 
@@ -381,11 +409,13 @@ pnpm build
 
 ## 📊 Project Metadata
 
-- **Current Phase**: Phase 9B - Live Execution & Testing
+- **Current Phase**: Deployment & UI Polish
 - **Repository**: `galaxyco-ai-2.0`
 - **Organization**: `galaxyco-ai`
 - **Primary Developer**: galaxy-co-ai
 - **Development Hours**: High intensity (70 hrs/week target)
+- **Latest Deploy**: January 12, 2025 - Preview (deployment-ready branch)
+- **Status**: ✅ Building on Vercel, ready for production merge
 
 ---
 
