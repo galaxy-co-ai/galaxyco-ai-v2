@@ -40,7 +40,7 @@ DATABASE_URL=postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.n
 
 ```bash
 # Server-side secret key (NEVER expose publicly)
-CLERK_SECRET_KEY=sk_test_1234567890abcdef1234567890abcdef12345678
+CLERK_SECRET_KEY=sk_test_your_clerk_secret_key_here
 
 # Client-side publishable key (safe for frontend)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_1234567890abcdef1234567890abcdef12345678
@@ -120,7 +120,7 @@ ANTHROPIC_API_KEY=sk-ant-api03-1234567890abcdef1234567890abcdef1234567890abcdef-
 
 ```bash
 # Clerk webhook signing secret
-CLERK_WEBHOOK_SECRET=whsec_1234567890abcdef1234567890abcdef12345678
+CLERK_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 ```
 
 **How to get:**
@@ -145,7 +145,7 @@ CLERK_WEBHOOK_SECRET=whsec_1234567890abcdef1234567890abcdef12345678
 NEXT_PUBLIC_SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.us.sentry.io/1234567
 
 # Auth token for source maps upload (optional)
-SENTRY_AUTH_TOKEN=sntrys_1234567890abcdef1234567890abcdef1234567890abcdef
+SENTRY_AUTH_TOKEN=sntrys_your_auth_token_here
 ```
 
 **How to get:**
@@ -173,11 +173,11 @@ NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 
 ```bash
 # Stripe API keys (not yet implemented)
-STRIPE_SECRET_KEY=sk_test_1234567890abcdef1234567890abcdef1234567890abcdef
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_1234567890abcdef1234567890abcdef1234567890abcdef
 
 # Webhook endpoint secret
-STRIPE_WEBHOOK_SECRET=whsec_1234567890abcdef1234567890abcdef1234567890abcdef
+STRIPE_WEBHOOK_SECRET=whsec_your_stripe_webhook_secret_here
 ```
 
 ---

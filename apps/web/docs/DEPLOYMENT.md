@@ -26,22 +26,22 @@ Copy these to your Vercel project environment variables:
 DATABASE_URL=postgresql://user:password@host.neon.tech/database
 
 # Authentication (Required)
-CLERK_SECRET_KEY=sk_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+CLERK_SECRET_KEY=sk_live_your_clerk_secret_key_here
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_clerk_publishable_key_here
 
 # Data Encryption (Required)
 ENCRYPTION_KEY=your_32_byte_hex_string_generated_securely_replace_this_value
 
 # AI Providers (Recommended)
-OPENAI_API_KEY=sk-proj-XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-ANTHROPIC_API_KEY=sk-ant-XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+OPENAI_API_KEY=sk-proj-your_openai_api_key_here
+ANTHROPIC_API_KEY=sk-ant-your_anthropic_api_key_here
 
 # Webhook Security (Recommended)
-CLERK_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+CLERK_WEBHOOK_SECRET=whsec_your_clerk_webhook_secret_here
 
 # Error Tracking (Optional)
-NEXT_PUBLIC_SENTRY_DSN=https://XXXXXXXXXXXX@sentry.io/XXXXXXX
-SENTRY_AUTH_TOKEN=sntrys_XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+NEXT_PUBLIC_SENTRY_DSN=https://your_sentry_dsn@sentry.io/project_id
+SENTRY_AUTH_TOKEN=sntrys_your_sentry_auth_token_here
 
 # Environment Indicator (Optional)
 NEXT_PUBLIC_ENV=production
