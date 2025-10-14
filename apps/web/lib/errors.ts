@@ -165,7 +165,7 @@ export async function withRetry<T>(
   delay: number = 1000,
   backoff: number = 2
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | undefined;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -191,7 +191,7 @@ export async function withRetry<T>(
     }
   }
 
-  throw lastError;
+  throw lastError || new Error("Operation failed after retries");
 }
 
 /**

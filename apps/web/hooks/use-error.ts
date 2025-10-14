@@ -2,8 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
-import { logError, getErrorMessage, isRetryableError } from "@/lib/errors";
-import { ToastError } from "@/components/error/error-display";
+import { logError as logErrorUtil, getErrorMessage, isRetryableError } from "@/lib/errors";
 
 interface UseErrorOptions {
   showToast?: boolean;
@@ -32,13 +31,12 @@ export function useError(options: UseErrorOptions = {}) {
 
     // Log error if enabled
     if (shouldLogError) {
-      logError(error, context);
+      logErrorUtil(error, context);
     }
 
     // Show toast notification if enabled
     if (showToast) {
-      toast.error("", {
-        description: <ToastError error={error} />,
+      toast.error(getErrorMessage(error), {
         duration: 5000,
       });
     }
@@ -48,6 +46,11 @@ export function useError(options: UseErrorOptions = {}) {
       onError(error);
     }
   }, [shouldLogError, showToast, onError]);
+
+  // Overload for backward compatibility
+  const handleErrorSingle = useCallback((error: unknown) => {
+    handleError(error, {});
+  }, [handleError]);
 
   const clearError = useCallback(() => {
     setError(null);
@@ -76,7 +79,7 @@ export function useError(options: UseErrorOptions = {}) {
     isRetrying,
     errorMessage: error ? getErrorMessage(error) : null,
     isRetryable: isRetryableError(error),
-    handleError,
+    handleError: handleErrorSingle,
     clearError,
     retry,
   };
