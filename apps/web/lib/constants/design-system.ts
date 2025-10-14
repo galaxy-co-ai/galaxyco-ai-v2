@@ -1,12 +1,22 @@
 /**
- * GalaxyCo.ai Design System (DEPRECATED - Minimal Stub)
+ * GalaxyCo.ai Design System (DEPRECATED - Temporary Stub)
  * 
- * ⚠️ THIS FILE IS DEPRECATED
- * We've migrated to Pico CSS for automatic styling
- * This stub exists only for backward compatibility
+ * ⚠️ THIS FILE IS TEMPORARY
  * 
- * TODO: Gradually remove all imports of this file
- * Replace with semantic HTML + Tailwind layout utilities
+ * STATUS:
+ * - Provides fallback values for 37 legacy components
+ * - ALL components will be rebuilt from wireframes (see docs/REBUILD-PLAN.md)
+ * - Even migrated dashboard components will be replaced
+ * - This stub keeps the app functional during redesign
+ * 
+ * REBUILD APPROACH:
+ * - New components go in /components/v2/
+ * - Use semantic HTML + Tailwind + Pico CSS
+ * - NO imports from this file in new components
+ * - See docs/NEW-COMPONENT-GUIDE.md for patterns
+ * 
+ * DO NOT SPEND TIME MIGRATING THESE LEGACY COMPONENTS!
+ * They will be completely replaced during the UI rebuild.
  */
 
 export const colors = {
