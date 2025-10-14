@@ -226,7 +226,7 @@ export default function MarketplaceHero({
                 marginTop: "var(--space-6)",
               }}
             >
-              {slide.stats.map((stat, i) => (
+              {slide.stats?.map((stat, i) => (
                 <div key={i}>
                   <div
                     style={{
