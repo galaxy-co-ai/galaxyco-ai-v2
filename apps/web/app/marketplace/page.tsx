@@ -39,12 +39,30 @@ export default function MarketplacePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header with Search */}
-      <section className="py-8 px-6">
+      <section 
+        style={{
+          padding: "var(--container-padding-y) var(--container-padding-x)", /* 20px 24px - compact */
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Search Bar - Top Left Positioning */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-foreground">
+          <div 
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "var(--space-4)", /* 16px - tighter spacing */
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+              <h1 
+                style={{
+                  fontSize: "var(--text-xl)", /* 18px - compact page title */
+                  fontWeight: "var(--font-bold)",
+                  lineHeight: "var(--leading-tight)",
+                  color: "var(--text-primary)",
+                }}
+              >
                 Agent Marketplace
               </h1>
               <Badge variant="default">2.0</Badge>

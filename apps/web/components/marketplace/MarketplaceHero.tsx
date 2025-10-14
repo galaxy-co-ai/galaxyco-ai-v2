@@ -85,8 +85,8 @@ export default function MarketplaceHero({
       style={{
         position: "relative",
         width: "100%",
-        minHeight: "300px", // Reduced from 500px to match OpenSea
-        height: "min(300px, 40vh)", // Responsive but capped at 300px
+        minHeight: "var(--hero-height)", // 300px from design tokens
+        height: "var(--hero-height)", // Consistent height
         background: heroGradient,
         overflow: "hidden",
         borderRadius: "16px", // Rounded corners

@@ -123,15 +123,26 @@ export default function MarketplaceGrid({ agents, isSearchResult = false }: Mark
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2
-            className="text-xl font-semibold"
-            style={{ color: "var(--text-primary)" }}
+            style={{
+              fontSize: "var(--text-lg)", /* 16px - compact section headers */
+              fontWeight: "var(--font-semibold)",
+              lineHeight: "var(--leading-tight)",
+              color: "var(--text-primary)",
+            }}
           >
             🔥 Featured Agents
           </h2>
           <div className="badge badge-success">Top Rated</div>
         </div>
-        <div className="grid grid-3 gap-6">
-          {allTemplates.slice(0, 3).map((template) => (
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)", /* 4 cards per row for density */
+            gap: "var(--grid-gap)", /* 18px - compact spacing */
+          }}
+          className="grid-compact" /* Apply responsive grid from design tokens */
+        >
+          {allTemplates.slice(0, 4).map((template) => ( /* Show 4 featured instead of 3 */
             <AgentTemplateCardCompact
               key={template.id}
               template={template}
@@ -145,17 +156,33 @@ export default function MarketplaceGrid({ agents, isSearchResult = false }: Mark
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2
-            className="text-xl font-semibold"
-            style={{ color: "var(--text-primary)" }}
+            style={{
+              fontSize: "var(--text-lg)", /* 16px - compact section headers */
+              fontWeight: "var(--font-semibold)",
+              lineHeight: "var(--leading-tight)",
+              color: "var(--text-primary)",
+            }}
           >
             All Agent Templates
           </h2>
-          <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          <div 
+            style={{
+              fontSize: "var(--text-xs)", /* 11px - compact meta text */
+              color: "var(--text-secondary)",
+            }}
+          >
             {allTemplates.length} agents available
           </div>
         </div>
-        <div className="grid grid-4 gap-4">
-          {allTemplates.slice(3).map((template) => (
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(5, 1fr)", /* 5 cards per row for maximum density */
+            gap: "var(--grid-gap)", /* 18px - compact spacing */
+          }}
+          className="grid-compact" /* Apply responsive grid from design tokens */
+        >
+          {allTemplates.slice(4).map((template) => ( /* Start from 4 since featured shows 4 */
             <AgentTemplateCardCompact
               key={template.id}
               template={template}

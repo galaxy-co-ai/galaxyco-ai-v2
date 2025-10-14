@@ -41,21 +41,15 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
       {/* All Chip */}
       <button
         onClick={() => handleCategoryClick(null)}
+        className="pill-compact" /* Use design token class */
         style={{
-          padding: "0.375rem 0.875rem",
           background: isActive(null)
             ? colors.primary[500]
             : colors.background.primary,
           color: isActive(null) ? "white" : colors.text.primary,
           border: `1px solid ${isActive(null) ? "transparent" : colors.border.default}`,
-          borderRadius: radius.full,
-          fontSize: "0.8125rem",
-          fontWeight: "500",
           cursor: "pointer",
           whiteSpace: "nowrap",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.375rem",
           transition: "all 0.2s",
           flexShrink: 0,
         }}
@@ -81,21 +75,15 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
         <button
           key={category.id}
           onClick={() => handleCategoryClick(category.slug)}
+          className="pill-compact" /* Use design token class */
           style={{
-            padding: "0.375rem 0.875rem",
             background: isActive(category.slug)
               ? colors.primary[500]
               : colors.background.primary,
             color: isActive(category.slug) ? "white" : colors.text.primary,
             border: `1px solid ${isActive(category.slug) ? "transparent" : colors.border.default}`,
-            borderRadius: radius.full,
-            fontSize: "0.8125rem",
-            fontWeight: "500",
             cursor: "pointer",
             whiteSpace: "nowrap",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.375rem",
             transition: "all 0.2s",
             flexShrink: 0,
           }}
