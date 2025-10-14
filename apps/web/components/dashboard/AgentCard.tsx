@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MoreVertical, Edit, Copy, Trash2 } from "lucide-react";
-import { colors, radius } from "@/lib/constants/design-system";
 
 interface AgentStats {
   executionsToday: number;
@@ -46,13 +45,13 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
   const getStatusColor = (status: Agent["status"]) => {
     switch (status) {
       case "active":
-        return colors.success.DEFAULT;
+        return "#10B981"; // green
       case "paused":
-        return colors.text.tertiary;
+        return "#9CA3AF"; // gray
       case "error":
-        return colors.error.DEFAULT;
+        return "#EF4444"; // red
       default:
-        return colors.text.tertiary;
+        return "#9CA3AF";
     }
   };
 
@@ -71,16 +70,13 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
 
   const getAvatarGradient = (category: string) => {
     const gradients: Record<string, string> = {
-      sales: `linear-gradient(135deg, ${colors.primary[400]}, ${colors.primary[600]})`,
-      marketing: `linear-gradient(135deg, #ec4899, #be185d)`, // Pink
-      operations: `linear-gradient(135deg, #8b5cf6, #6d28d9)`, // Purple
-      support: `linear-gradient(135deg, #10b981, #059669)`, // Green
-      engineering: `linear-gradient(135deg, #f59e0b, #d97706)`, // Orange
+      sales: `linear-gradient(135deg, #60A5FA, #2563EB)`, // blue
+      marketing: `linear-gradient(135deg, #EC4899, #BE185D)`, // pink
+      operations: `linear-gradient(135deg, #8B5CF6, #6D28D9)`, // purple
+      support: `linear-gradient(135deg, #10B981, #059669)`, // green
+      engineering: `linear-gradient(135deg, #F59E0B, #D97706)`, // orange
     };
-    return (
-      gradients[category] ||
-      `linear-gradient(135deg, ${colors.primary[400]}, ${colors.primary[600]})`
-    );
+    return gradients[category] || `linear-gradient(135deg, #60A5FA, #2563EB)`;
   };
 
   const formatLastRun = (date: Date | null) => {
@@ -101,56 +97,17 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
   return (
     <Link
       href={`/agents/${agent.id}`}
-      style={{
-        display: "block",
-        textDecoration: "none",
-        color: "inherit",
-      }}
+      className="block no-underline text-inherit"
     >
-      <div
-        style={{
-          background: "white",
-          border: "1px solid #E5E7EB",
-          borderRadius: "12px",
-          padding: "var(--spacing-card)",
-          cursor: "pointer",
-          transition: "all 0.2s",
-          position: "relative",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = colors.border.focus;
-          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = colors.border.default;
-          e.currentTarget.style.boxShadow = "none";
-        }}
+      <article
+        className="bg-white border border-gray-200 rounded-xl p-6 cursor-pointer transition-all hover:border-blue-500 hover:shadow-md relative"
       >
         {/* Header with Avatar and Toggle */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            marginBottom: "var(--spacing-default)",
-          }}
-        >
+        <div className="flex items-start justify-between mb-4">
           {/* Circular Avatar */}
           <div
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              background: getAvatarGradient(agent.category),
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "white",
-              fontSize: "var(--text-body)",
-              fontWeight: "600",
-              flexShrink: 0,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold shadow-md shrink-0"
+            style={{ background: getAvatarGradient(agent.category) }}
           >
             {agent.name.substring(0, 2).toUpperCase()}
           </div>
@@ -159,139 +116,66 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
           <button
             onClick={handleToggle}
             disabled={isToggling}
+            className="relative w-11 h-6 rounded-full border-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              position: "relative",
-              width: "44px",
-              height: "24px",
-              background: agent.isActive
-                ? colors.success.DEFAULT
-                : colors.background.tertiary,
-              border: "none",
-              borderRadius: "12px",
-              cursor: isToggling ? "not-allowed" : "pointer",
-              transition: "background 0.2s",
-              opacity: isToggling ? 0.5 : 1,
+              background: agent.isActive ? "#10B981" : "#F3F4F6",
             }}
           >
             <div
-              style={{
-                position: "absolute",
-                top: "2px",
-                left: agent.isActive ? "22px" : "2px",
-                width: "20px",
-                height: "20px",
-                background: "white",
-                borderRadius: "50%",
-                transition: "left 0.2s",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              }}
+              className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all"
+              style={{ left: agent.isActive ? "22px" : "2px" }}
             />
           </button>
         </div>
 
         {/* Agent Name */}
-        <h3
-          style={{
-            fontSize: "var(--text-heading-md)",
-            fontWeight: "600",
-            marginBottom: "var(--spacing-tight)",
-            color: "#111827",
-          }}
-        >
+        <h3 className="text-lg font-semibold mb-2 text-gray-900">
           {agent.name}
         </h3>
 
         {/* Status Indicator */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            marginBottom: "var(--spacing-default)",
-          }}
-        >
+        <div className="flex items-center gap-2 mb-4">
           <div
-            style={{
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: getStatusColor(agent.status),
-            }}
+            className="w-2 h-2 rounded-full"
+            style={{ background: getStatusColor(agent.status) }}
           />
-          <span
-            style={{
-              fontSize: "var(--text-label)",
-              color: "#6B7280",
-              fontWeight: "500",
-            }}
-          >
+          <span className="text-sm text-gray-600 font-medium">
             {getStatusLabel(agent.status)}
           </span>
         </div>
 
         {/* Stats */}
-        <div
-          style={{
-            display: "grid",
-            gap: "var(--spacing-tight)",
-            fontSize: "var(--text-label)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#6B7280" }}>Today:</span>
-            <span style={{ color: "#111827", fontWeight: "600" }}>
+        <div className="grid gap-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Today:</span>
+            <span className="text-gray-900 font-semibold">
               {agent.stats.executionsToday} runs
             </span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#6B7280" }}>Success:</span>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Success:</span>
             <span
+              className="font-semibold"
               style={{
-                color:
-                  agent.stats.successRate >= 90
-                    ? "#10B981"
-                    : "#F59E0B",
-                fontWeight: "600",
+                color: agent.stats.successRate >= 90 ? "#10B981" : "#F59E0B",
               }}
             >
               {agent.stats.successRate}%
             </span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "#6B7280" }}>Last run:</span>
-            <span style={{ color: "#111827", fontWeight: "500" }}>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Last run:</span>
+            <span className="text-gray-900 font-medium">
               {formatLastRun(agent.stats.lastRunAt)}
             </span>
           </div>
         </div>
 
         {/* View Details Button */}
-        <button
-          style={{
-            width: "100%",
-            marginTop: "var(--spacing-default)",
-            padding: "8px 12px",
-            background: "#F9FAFB",
-            border: "1px solid #E5E7EB",
-            borderRadius: "8px",
-            color: "#111827",
-            fontSize: "var(--text-label)",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#F3F4F6";
-            e.currentTarget.style.borderColor = "#D1D5DB";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#F9FAFB";
-            e.currentTarget.style.borderColor = "#E5E7EB";
-          }}
-        >
+        <button className="w-full mt-4 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 text-sm font-semibold transition-colors hover:bg-gray-100 hover:border-gray-300">
           View Details →
         </button>
-      </div>
+      </article>
     </Link>
   );
 }
