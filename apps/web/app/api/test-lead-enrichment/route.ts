@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tasks, runs } from "@trigger.dev/sdk/v3";
-import type { enrichLead } from "@/src/trigger/lead-intel-agent";
+import type { enrichLead } from "../../../src/trigger/lead-intel-agent";
 
 /**
  * Test Lead Enrichment API Endpoint (No Authentication Required)
