@@ -2,7 +2,7 @@
 
 **Date:** January 2025  
 **Branch:** `feature/sales-workflow-foundation`  
-**Commit:** `c951c68`
+**Commits:** `c951c68`, `ccc32dd`
 
 ## Overview
 Removed demo/mock data from the dashboard and marketplace to present a clean, production-ready app without placeholder content.
@@ -28,8 +28,18 @@ Removed demo/mock data from the dashboard and marketplace to present a clean, pr
 **After:**
 - Removed entirely - uses passed `agents` prop or empty array `[]`
 
-### 3. What Was NOT Removed
-- **Agent Templates** (`apps/web/lib/constants/agent-templates.ts`) - These are functional starter configurations, not demo data
+### 3. Marketplace Agent Templates (`apps/web/app/marketplace/page.tsx` + `MarketplaceGrid.tsx`)
+**Before:**
+- `agents`: Used `Object.values(AGENT_TEMPLATES)` - 8 pre-made templates
+- MarketplaceGrid showed templates without empty state
+
+**After:**
+- `agents`: Empty array `[]` with TODO comment
+- **Added empty state** with rocket emoji and CTAs
+- Shows "No agents in the marketplace yet" message
+
+### 4. What Was NOT Removed
+- **Agent Templates file** (`lib/constants/agent-templates.ts`) - Kept for potential future use as starter templates
 - **Mock execution mode** in API route - Useful testing feature to avoid AI credit consumption
 
 ## Component Empty States
