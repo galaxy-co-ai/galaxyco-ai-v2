@@ -1,6 +1,12 @@
 /**
- * GalaxyCo.ai Design System
- * Inspired by: StackAI (enterprise polish), OpenSea (card-based), OpenAI Builder (simplicity)
+ * GalaxyCo.ai Design System (DEPRECATED - Minimal Stub)
+ * 
+ * ⚠️ THIS FILE IS DEPRECATED
+ * We've migrated to Pico CSS for automatic styling
+ * This stub exists only for backward compatibility
+ * 
+ * TODO: Gradually remove all imports of this file
+ * Replace with semantic HTML + Tailwind layout utilities
  */
 
 export const colors = {
