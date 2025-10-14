@@ -129,7 +129,6 @@ export default function MarketplacePage() {
               onClick={() => setActiveTab("agents")}
               style={{
                 padding: "var(--space-3) var(--space-2)", // 12px 8px
-                borderBottom: `2px solid ${activeTab === "agents" ? "var(--primary-500)" : "transparent"}`,
                 fontSize: "var(--text-base)", // 14px
                 fontWeight: "var(--weight-semibold)",
                 color: activeTab === "agents" ? "var(--primary-500)" : "var(--text-secondary)",
