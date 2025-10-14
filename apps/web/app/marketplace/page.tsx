@@ -23,8 +23,9 @@ import {
 export default function MarketplacePage() {
   const [activeTab, setActiveTab] = useState<"agents" | "packs">("agents");
 
-  // Convert templates to searchable format
-  const agents = Object.values(AGENT_TEMPLATES);
+  // Use empty array until real agents are created
+  // TODO: Fetch from database/API when ready
+  const agents: any[] = [];
 
   // Search hook
   const {
