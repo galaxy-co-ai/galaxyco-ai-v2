@@ -145,7 +145,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                   color: colors.text.primary,
                 }}
               >
-                No agents found for "{searchQuery}"
+                No agents found for &quot;{searchQuery}&quot;
               </h3>
               <p
                 style={{
@@ -350,7 +350,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
                   marginBottom: "1.5rem",
                 }}
               >
-                We're building amazing {category.name.toLowerCase()} agents.
+                We&apos;re building amazing {category.name.toLowerCase()} agents.
                 Check back soon!
               </p>
               <Link

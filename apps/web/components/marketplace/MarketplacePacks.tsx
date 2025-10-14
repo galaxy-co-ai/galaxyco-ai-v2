@@ -247,7 +247,7 @@ export default function MarketplacePacks({ onInstallPack, onPreviewPack }: Marke
           color: colors.text.primary,
           marginBottom: '0.5rem'
         }}>
-          Can't find the perfect pack?
+          Can&apos;t find the perfect pack?
         </h3>
         <p style={{
           fontSize: '1rem',

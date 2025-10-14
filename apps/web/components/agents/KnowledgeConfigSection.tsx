@@ -554,7 +554,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           </div>
           <div style={{ fontSize: typography.sizes.xs, color: colors.text.tertiary }}>
             Make sure to include instructions in the system prompt about citing sources and
-            handling cases where information isn't found in the knowledge base.
+            handling cases where information isn&apos;t found in the knowledge base.
           </div>
         </div>
       )}
