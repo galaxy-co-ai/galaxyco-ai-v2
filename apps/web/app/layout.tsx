@@ -7,6 +7,7 @@ import { TopBar } from "../components/layout/TopBar";
 import { Toaster } from "../components/ui/toaster";
 import { Toaster as Sonner } from "sonner";
 import type { Metadata } from "next";
+import "@picocss/pico/css/pico.min.css"; // Classless CSS framework for automatic styling
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
