@@ -100,37 +100,67 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Hero Section */}
-      <div className="px-6 mb-8">
+      {/* Hero Section - Compact */}
+      <div 
+        style={{
+          padding: "0 var(--container-padding-x)",
+          marginBottom: "var(--space-4)", // 16px - tighter
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <MarketplaceHero />
         </div>
       </div>
 
-      {/* Tabs Navigation */}
-      <section className="border-b-2 border-border sticky top-16 bg-background z-10 px-6 py-4">
+      {/* Tabs Navigation - Compact */}
+      <section 
+        style={{
+          borderBottom: "1px solid var(--border-default)",
+          position: "sticky",
+          top: "64px",
+          background: "var(--bg-primary)",
+          zIndex: "var(--z-sticky)",
+          padding: "0 var(--container-padding-x)",
+        }}
+      >
         <div className="max-w-7xl mx-auto">
-          <div className="flex gap-8">
+          <div style={{ display: "flex", gap: "var(--space-6)" }}>
             <button
               onClick={() => setActiveTab("agents")}
-              className={`pb-4 px-2 border-b-3 font-semibold text-lg transition-all ${
-                activeTab === "agents"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              style={{
+                padding: "var(--space-3) var(--space-2)", // 12px 8px
+                borderBottom: `2px solid ${activeTab === "agents" ? "var(--primary-500)" : "transparent"}`,
+                fontSize: "var(--text-base)", // 14px
+                fontWeight: "var(--weight-semibold)",
+                color: activeTab === "agents" ? "var(--primary-500)" : "var(--text-secondary)",
+                background: "transparent",
+                border: "none",
+                borderBottom: `2px solid ${activeTab === "agents" ? "var(--primary-500)" : "transparent"}`,
+                cursor: "pointer",
+                transition: "var(--transition-base)",
+              }}
             >
               Individual Agents
             </button>
             <button
               onClick={() => setActiveTab("packs")}
-              className={`pb-4 px-2 border-b-3 font-semibold text-lg transition-all relative ${
-                activeTab === "packs"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              style={{
+                padding: "var(--space-3) var(--space-2)",
+                borderBottom: `2px solid ${activeTab === "packs" ? "var(--primary-500)" : "transparent"}`,
+                fontSize: "var(--text-base)",
+                fontWeight: "var(--weight-semibold)",
+                color: activeTab === "packs" ? "var(--primary-500)" : "var(--text-secondary)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                transition: "var(--transition-base)",
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--space-2)",
+              }}
             >
-              Agent Packs
-              <Badge variant="secondary" className="ml-2">
+              <span>Agent Packs</span>
+              <Badge variant="secondary" style={{ fontSize: "var(--text-xs)" }}>
                 5
               </Badge>
             </button>
@@ -141,8 +171,12 @@ export default function MarketplacePage() {
       {/* Content based on active tab */}
       {activeTab === "agents" ? (
         <>
-          {/* Categories */}
-          <section className="px-6 py-8">
+          {/* Categories - Compact */}
+          <section 
+            style={{
+              padding: "var(--space-4) var(--container-padding-x)", // 16px vertical
+            }}
+          >
             <div className="max-w-7xl mx-auto">
               <MarketplaceCategories />
             </div>
@@ -168,17 +202,25 @@ export default function MarketplacePage() {
             </section>
           )}
 
-          {/* Featured Agents */}
+          {/* Featured Agents - Compact */}
           {!searchQuery && (
-            <section className="px-6 py-8">
+            <section 
+              style={{
+                padding: "var(--space-4) var(--container-padding-x)",
+              }}
+            >
               <div className="max-w-7xl mx-auto">
                 <MarketplaceFeatured />
               </div>
             </section>
           )}
 
-          {/* Agent Grid */}
-          <section className="px-6 pb-12">
+          {/* Agent Grid - Compact */}
+          <section 
+            style={{
+              padding: "0 var(--container-padding-x) var(--space-8)", // 32px bottom
+            }}
+          >
             <div className="max-w-7xl mx-auto">
               <MarketplaceGrid
                 agents={searchQuery ? filteredAgents : agents}
@@ -188,8 +230,12 @@ export default function MarketplacePage() {
           </section>
         </>
       ) : (
-        /* Agent Packs */
-        <section className="px-6 py-8">
+        /* Agent Packs - Compact */
+        <section 
+          style={{
+            padding: "var(--space-4) var(--container-padding-x)",
+          }}
+        >
           <div className="max-w-7xl mx-auto">
             <MarketplacePacks />
           </div>

@@ -39,13 +39,13 @@ export default function AgentTemplateCard({
       onMouseLeave={() => setIsHovered(false)}
       style={{
         position: "relative",
-        background: colors.background.primary,
-        border: `1px solid ${isHovered ? colors.border.focus : colors.border.default}`,
-        borderRadius: radius.lg,
-        padding: "1.5rem",
+        background: "var(--bg-primary)",
+        border: `1px solid ${isHovered ? "var(--border-focus)" : "var(--border-default)"}`,
+        borderRadius: "var(--radius-lg)",
+        padding: "var(--space-4)", // 16px - compact card padding
         cursor: "pointer",
-        transition: "all 0.2s ease",
-        boxShadow: isHovered ? shadows.cardHover : shadows.card,
+        transition: "var(--transition-base)",
+        boxShadow: isHovered ? "var(--shadow-card-hover)" : "var(--shadow-card)",
         transform: isHovered ? "translateY(-2px)" : "translateY(0)",
         height: "100%",
         display: "flex",
@@ -57,18 +57,18 @@ export default function AgentTemplateCard({
         <div
           style={{
             position: "absolute",
-            top: "1rem",
-            right: "1rem",
-            padding: "0.25rem 0.75rem",
+            top: "var(--space-3)",
+            right: "var(--space-3)",
+            padding: "var(--space-1) var(--space-2)", // 4px 8px - compact badge
             background: template.badgeText.includes("TRENDING")
               ? "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
               : template.badgeText === "NEW"
                 ? colors.success.DEFAULT
                 : colors.primary[500],
             color: "white",
-            borderRadius: radius.sm,
-            fontSize: "0.75rem",
-            fontWeight: "600",
+            borderRadius: "var(--radius-sm)",
+            fontSize: "var(--text-xs)", // 11px
+            fontWeight: "var(--weight-semibold)",
             letterSpacing: "0.5px",
           }}
         >
@@ -79,36 +79,36 @@ export default function AgentTemplateCard({
       {/* Category & Type */}
       <div
         style={{
-          fontSize: "0.75rem",
-          color: colors.text.tertiary,
+          fontSize: "var(--text-xs)", // 11px - compact label
+          color: "var(--text-tertiary)",
           textTransform: "uppercase",
           letterSpacing: "0.5px",
-          marginBottom: "0.75rem",
+          marginBottom: "var(--space-2)", // 8px
         }}
       >
         {template.category}
       </div>
 
-      {/* Name - Increased to text-xl for better hierarchy */}
+      {/* Name - Compact sizing */}
       <h3
         style={{
-          fontSize: "1.25rem", // text-xl
-          fontWeight: "600",
-          color: colors.text.primary,
-          marginBottom: "0.5rem",
-          lineHeight: "1.3",
+          fontSize: "var(--text-lg)", // 16px - card title
+          fontWeight: "var(--weight-semibold)",
+          color: "var(--text-primary)",
+          marginBottom: "var(--space-2)", // 8px
+          lineHeight: "var(--leading-tight)",
         }}
       >
         {template.name}
       </h3>
 
-      {/* Description - Reduced to text-sm with more breathing room */}
+      {/* Description - Compact sizing */}
       <p
         style={{
-          fontSize: "0.875rem", // text-sm
-          color: colors.text.secondary,
-          marginBottom: "1.5rem",
-          lineHeight: "1.6",
+          fontSize: "var(--text-sm)", // 13px - compact description
+          color: "var(--text-secondary)",
+          marginBottom: "var(--space-3)", // 12px
+          lineHeight: "var(--leading-snug)",
           flex: 1,
         }}
       >
@@ -121,23 +121,23 @@ export default function AgentTemplateCard({
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "0.75rem",
-            marginBottom: "1.25rem",
-            padding: "1rem",
-            background: colors.background.secondary,
-            borderRadius: radius.md,
+            gap: "var(--space-2)", // 8px - tighter
+            marginBottom: "var(--space-3)", // 12px
+            padding: "var(--space-3)", // 12px - compact inner padding
+            background: "var(--bg-secondary)",
+            borderRadius: "var(--radius-md)",
           }}
         >
           {template.kpis.successRate && (
             <div>
-              <div style={{ fontSize: "0.75rem", color: colors.text.tertiary }}>
+              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
                 Success Rate
               </div>
               <div
                 style={{
-                  fontSize: "1.125rem",
-                  fontWeight: "600",
-                  color: colors.text.primary,
+                  fontSize: "var(--text-lg)", // 16px
+                  fontWeight: "var(--weight-semibold)",
+                  color: "var(--text-primary)",
                 }}
               >
                 {template.kpis.successRate}%
@@ -146,14 +146,14 @@ export default function AgentTemplateCard({
           )}
           {template.kpis.avgTimeSaved && (
             <div>
-              <div style={{ fontSize: "0.75rem", color: colors.text.tertiary }}>
+              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
                 Time Saved
               </div>
               <div
                 style={{
-                  fontSize: "1.125rem",
-                  fontWeight: "600",
-                  color: colors.text.primary,
+                  fontSize: "var(--text-lg)",
+                  fontWeight: "var(--weight-semibold)",
+                  color: "var(--text-primary)",
                 }}
               >
                 {template.kpis.avgTimeSaved}
@@ -163,74 +163,74 @@ export default function AgentTemplateCard({
         </div>
       )}
 
-      {/* Stats Row - Better icon spacing and hierarchy */}
+      {/* Stats Row - Compact */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: "0.75rem",
-          marginBottom: "1.25rem",
-          padding: "0.75rem",
-          background: colors.background.secondary,
-          borderRadius: radius.md,
+          gap: "var(--space-2)",
+          marginBottom: "var(--space-3)",
+          padding: "var(--space-2)", // 8px - compact stats padding
+          background: "var(--bg-secondary)",
+          borderRadius: "var(--radius-md)",
         }}
       >
         {/* Rating with icon */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "1rem" }}>⭐</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+          <span style={{ fontSize: "var(--text-sm)" }}>⭐</span>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0.125rem",
+              gap: "var(--space-1)",
             }}
           >
             <span
               style={{
-                fontWeight: "600",
-                fontSize: "0.9375rem",
-                color: colors.text.primary,
+                fontWeight: "var(--weight-semibold)",
+                fontSize: "var(--text-sm)",
+                color: "var(--text-primary)",
               }}
             >
               {ratingStars}
             </span>
-            <span style={{ fontSize: "0.75rem", color: colors.text.tertiary }}>
-              {template.reviewCount} reviews
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
+              {template.reviewCount}
             </span>
           </div>
         </div>
 
         {/* Installs with icon */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ fontSize: "1rem" }}>👥</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+          <span style={{ fontSize: "var(--text-sm)" }}>🔥</span>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0.125rem",
+              gap: "var(--space-1)",
             }}
           >
             <span
               style={{
-                fontWeight: "600",
-                fontSize: "0.9375rem",
-                color: colors.text.primary,
+                fontWeight: "var(--weight-semibold)",
+                fontSize: "var(--text-sm)",
+                color: "var(--text-primary)",
               }}
             >
-              {template.installCount.toLocaleString()}
+              {template.installCount > 1000 ? `${(template.installCount / 1000).toFixed(1)}k` : template.installCount}
             </span>
-            <span style={{ fontSize: "0.75rem", color: colors.text.tertiary }}>
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
               installs
             </span>
           </div>
         </div>
       </div>
 
-      {/* Action Buttons - Standardized with better spacing */}
+      {/* Action Buttons - Compact */}
       <div
         style={{
           display: "flex",
-          gap: "0.75rem",
+          gap: "var(--space-2)",
         }}
       >
         <button
@@ -240,16 +240,16 @@ export default function AgentTemplateCard({
           }}
           style={{
             flex: 1,
-            padding: "0.75rem 1.5rem",
-            background: colors.primary[500],
+            padding: "var(--space-2) var(--space-4)", // 8px 16px
+            background: "var(--primary-500)",
             color: "white",
             border: "none",
-            borderRadius: radius.lg,
-            fontSize: "0.9375rem",
-            fontWeight: "600",
+            borderRadius: "var(--radius-md)",
+            fontSize: "var(--text-sm)", // 13px
+            fontWeight: "var(--weight-semibold)",
             cursor: "pointer",
-            transition: "all 0.2s",
-            boxShadow: shadows.sm,
+            transition: "var(--transition-base)",
+            boxShadow: "var(--shadow-sm)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = colors.primary[600];
@@ -268,16 +268,16 @@ export default function AgentTemplateCard({
             console.log("Preview agent:", template.id);
           }}
           style={{
-            padding: "0.75rem 1.25rem",
-            background: colors.background.primary,
-            color: colors.text.primary,
-            border: `1px solid ${colors.border.default}`,
-            borderRadius: radius.lg,
-            fontSize: "0.9375rem",
-            fontWeight: "600",
+            padding: "var(--space-2) var(--space-3)", // 8px 12px
+            background: "var(--bg-primary)",
+            color: "var(--text-primary)",
+            border: "1px solid var(--border-default)",
+            borderRadius: "var(--radius-md)",
+            fontSize: "var(--text-sm)",
+            fontWeight: "var(--weight-semibold)",
             cursor: "pointer",
-            transition: "all 0.2s",
-            boxShadow: shadows.sm,
+            transition: "var(--transition-base)",
+            boxShadow: "var(--shadow-sm)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = colors.neutral[50];

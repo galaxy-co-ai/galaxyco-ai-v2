@@ -17,14 +17,14 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Page Header */}
-      <section className="border-b border-border py-8 px-6">
+      <section className="border-b border-border" style={{ padding: "var(--spacing-relaxed) var(--spacing-relaxed)" }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">
+              <h1 style={{ fontSize: "var(--text-heading-lg)", fontWeight: "700", marginBottom: "4px" }}>
                 Mission Control
               </h1>
-              <p className="text-muted-foreground">
+              <p style={{ fontSize: "var(--text-body)", color: "#6B7280" }}>
                 Monitor and manage your AI agents in real-time
               </p>
             </div>
@@ -33,14 +33,14 @@ export default function DashboardPage() {
       </section>
 
       {/* KPI Stats Bar */}
-      <section className="px-6 py-6">
+      <section style={{ padding: "var(--spacing-relaxed) var(--spacing-relaxed)" }}>
         <div className="max-w-7xl mx-auto">
           <DashboardStats {...mockDashboardStats} />
         </div>
       </section>
 
       {/* Filters & Search */}
-      <section className="px-6 py-4">
+      <section style={{ padding: "0 var(--spacing-relaxed) var(--spacing-default) var(--spacing-relaxed)" }}>
         <div className="max-w-7xl mx-auto">
           <AgentFilters
             searchQuery={searchQuery}
@@ -54,7 +54,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Agent Grid */}
-      <section className="px-6 pb-8">
+      <section style={{ padding: "0 var(--spacing-relaxed) var(--spacing-relaxed) var(--spacing-relaxed)" }}>
         <div className="max-w-7xl mx-auto">
           <AgentGrid
             searchQuery={searchQuery}
@@ -65,7 +65,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Recent Activity */}
-      <section className="px-6 pb-12">
+      <section style={{ padding: "0 var(--spacing-relaxed) var(--spacing-relaxed) var(--spacing-relaxed)" }}>
         <div className="max-w-7xl mx-auto">
           <RecentActivity />
         </div>

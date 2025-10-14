@@ -82,8 +82,8 @@ export default function MarketplaceFeatured() {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-      gap: '1.5rem'
+      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', // Slightly tighter min width
+      gap: 'var(--space-4)' // 16px - compact grid gap
     }}>
       {featuredAgents.map((agent) => (
         <AgentTemplateCard

@@ -113,7 +113,7 @@ export default function DashboardStats({
   };
 
   return (
-    <div className="grid grid-auto-fit gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         const TrendIcon =
@@ -125,30 +125,31 @@ export default function DashboardStats({
             key={stat.id}
             className="animate-fade-in hover:shadow-md transition-shadow cursor-pointer"
             style={{
-              padding: "var(--space-6)",
+              padding: "var(--spacing-card)",
             }}
           >
             {/* Header with Icon */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between" style={{ marginBottom: "var(--spacing-tight)" }}>
               <div
                 style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "var(--radius-lg)",
+                  width: "var(--size-icon-md)",
+                  height: "var(--size-icon-md)",
+                  borderRadius: "8px",
                   background: colorStyles.iconBg,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Icon size={24} strokeWidth={2} color={colorStyles.iconColor} />
+                <Icon size={20} strokeWidth={2} color={colorStyles.iconColor} />
               </div>
 
               {/* Trend Indicator */}
               {stat.trend && (
                 <div
-                  className="flex items-center gap-1"
+                  className="flex items-center"
                   style={{
+                    gap: "4px",
                     color:
                       stat.trend.direction === "up"
                         ? "var(--success)"
@@ -157,8 +158,8 @@ export default function DashboardStats({
                           : "var(--text-tertiary)",
                   }}
                 >
-                  <TrendIcon size={16} strokeWidth={2} />
-                  <span className="text-xs font-medium">
+                  <TrendIcon size={14} strokeWidth={2} />
+                  <span style={{ fontSize: "var(--text-label)", fontWeight: "600" }}>
                     {stat.trend.value}%
                   </span>
                 </div>
@@ -168,17 +169,19 @@ export default function DashboardStats({
             {/* Content */}
             <div>
               <div
-                className="text-sm text-secondary mb-2"
                 style={{
-                  color: "var(--text-secondary)",
+                  fontSize: "var(--text-label)",
+                  color: "#6B7280",
+                  marginBottom: "4px",
                 }}
               >
                 {stat.label}
               </div>
               <div
-                className="text-3xl font-bold"
                 style={{
-                  color: "var(--text-primary)",
+                  fontSize: "var(--text-stat)",
+                  fontWeight: "700",
+                  color: "#111827",
                   lineHeight: 1,
                 }}
               >

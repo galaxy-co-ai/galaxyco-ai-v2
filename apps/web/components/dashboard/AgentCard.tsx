@@ -109,10 +109,10 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
     >
       <div
         style={{
-          background: colors.background.primary,
-          border: `1px solid ${colors.border.default}`,
-          borderRadius: radius.lg,
-          padding: "1.5rem",
+          background: "white",
+          border: "1px solid #E5E7EB",
+          borderRadius: "12px",
+          padding: "var(--spacing-card)",
           cursor: "pointer",
           transition: "all 0.2s",
           position: "relative",
@@ -132,21 +132,21 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",
-            marginBottom: "1rem",
+            marginBottom: "var(--spacing-default)",
           }}
         >
           {/* Circular Avatar */}
           <div
             style={{
-              width: "56px",
-              height: "56px",
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
               background: getAvatarGradient(agent.category),
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "white",
-              fontSize: "1.5rem",
+              fontSize: "var(--text-body)",
               fontWeight: "600",
               flexShrink: 0,
               boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
@@ -192,10 +192,10 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
         {/* Agent Name */}
         <h3
           style={{
-            fontSize: "1.125rem",
+            fontSize: "var(--text-heading-md)",
             fontWeight: "600",
-            marginBottom: "0.5rem",
-            color: colors.text.primary,
+            marginBottom: "var(--spacing-tight)",
+            color: "#111827",
           }}
         >
           {agent.name}
@@ -206,8 +206,8 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
-            marginBottom: "1rem",
+            gap: "6px",
+            marginBottom: "var(--spacing-default)",
           }}
         >
           <div
@@ -220,8 +220,8 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
           />
           <span
             style={{
-              fontSize: "0.875rem",
-              color: colors.text.secondary,
+              fontSize: "var(--text-label)",
+              color: "#6B7280",
               fontWeight: "500",
             }}
           >
@@ -233,24 +233,24 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
         <div
           style={{
             display: "grid",
-            gap: "0.75rem",
-            fontSize: "0.875rem",
+            gap: "var(--spacing-tight)",
+            fontSize: "var(--text-label)",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: colors.text.secondary }}>Today:</span>
-            <span style={{ color: colors.text.primary, fontWeight: "600" }}>
+            <span style={{ color: "#6B7280" }}>Today:</span>
+            <span style={{ color: "#111827", fontWeight: "600" }}>
               {agent.stats.executionsToday} runs
             </span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: colors.text.secondary }}>Success:</span>
+            <span style={{ color: "#6B7280" }}>Success:</span>
             <span
               style={{
                 color:
                   agent.stats.successRate >= 90
-                    ? colors.success.DEFAULT
-                    : colors.warning.DEFAULT,
+                    ? "#10B981"
+                    : "#F59E0B",
                 fontWeight: "600",
               }}
             >
@@ -258,8 +258,8 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
             </span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: colors.text.secondary }}>Last run:</span>
-            <span style={{ color: colors.text.primary, fontWeight: "500" }}>
+            <span style={{ color: "#6B7280" }}>Last run:</span>
+            <span style={{ color: "#111827", fontWeight: "500" }}>
               {formatLastRun(agent.stats.lastRunAt)}
             </span>
           </div>
@@ -269,24 +269,24 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
         <button
           style={{
             width: "100%",
-            marginTop: "1rem",
-            padding: "0.5rem",
-            background: colors.background.secondary,
-            border: `1px solid ${colors.border.default}`,
-            borderRadius: radius.md,
-            color: colors.text.primary,
-            fontSize: "0.875rem",
+            marginTop: "var(--spacing-default)",
+            padding: "8px 12px",
+            background: "#F9FAFB",
+            border: "1px solid #E5E7EB",
+            borderRadius: "8px",
+            color: "#111827",
+            fontSize: "var(--text-label)",
             fontWeight: "600",
             cursor: "pointer",
             transition: "all 0.2s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = colors.background.tertiary;
-            e.currentTarget.style.borderColor = colors.border.focus;
+            e.currentTarget.style.background = "#F3F4F6";
+            e.currentTarget.style.borderColor = "#D1D5DB";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = colors.background.secondary;
-            e.currentTarget.style.borderColor = colors.border.default;
+            e.currentTarget.style.background = "#F9FAFB";
+            e.currentTarget.style.borderColor = "#E5E7EB";
           }}
         >
           View Details →
