@@ -16,6 +16,11 @@ build/
 out/
 *.tsbuildinfo
 
+# Package build artifacts
+packages/*/dist/
+packages/*/build/
+packages/*/.turbo/
+
 # Environment variables
 .env
 .env.local
@@ -42,6 +47,9 @@ SECRETS_CHECKLIST_FILLED.md
 # Testing
 coverage/
 .nyc_output/
+playwright-report/
+test-results/
+*.spec.ts.snap
 *.log
 
 # Terraform
@@ -66,6 +74,15 @@ pnpm-debug.log*
 tmp/
 temp/
 *.tmp
+
+# Documentation artifacts
+docs/**/*.tmp
+docs/**/.DS_Store
+
+# Script temporary files
+scripts/**/*.log
+scripts/**/*.tmp
+scripts/**/*.backup
 
 .vercel
 
