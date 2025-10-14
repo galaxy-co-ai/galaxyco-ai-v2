@@ -187,7 +187,7 @@ export default function MarketplacePage() {
               <div className="max-w-2xl mx-auto text-center">
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="text-2xl font-semibold mb-3 text-foreground">
-                  No agents found for "{searchQuery}"
+                  No agents found for &quot;{searchQuery}&quot;
                 </h3>
                 <p className="text-muted-foreground mb-6">
                   Try adjusting your search terms or browse our categories

@@ -205,7 +205,7 @@ export default function MarketplacePage() {
                     color: colors.text.primary,
                   }}
                 >
-                  No agents found for "{searchQuery}"
+                  No agents found for &quot;{searchQuery}&quot;
                 </h3>
                 <p
                   style={{

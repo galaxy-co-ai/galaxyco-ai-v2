@@ -114,7 +114,7 @@ export default function AgentDetailPage() {
               marginBottom: spacing.xl,
             }}
           >
-            The agent you're looking for doesn't exist or has been removed.
+            The agent you&apos;re looking for doesn&apos;t exist or has been removed.
           </p>
           <Link href="/agents" style={{ textDecoration: "none" }}>
             <button

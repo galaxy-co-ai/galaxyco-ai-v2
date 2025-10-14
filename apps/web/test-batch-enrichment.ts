@@ -91,14 +91,31 @@ async function runBatchTest() {
         successCount++;
         const lead = result.enrichedLead;
 
+        // Ensure lead is properly defined
+        if (!lead) {
+          failureCount++;
+          console.log(`❌ Failed: No enriched lead data returned`);
+          results.push({
+            company: company.name,
+            domain: company.domain,
+            success: false,
+            error: "No enriched lead data returned",
+            duration,
+          });
+          continue;
+        }
+
         console.log(`✅ Success (${duration}ms)`);
-        console.log(`   Company: ${lead.companyName}`);
-        console.log(`   Industry: ${lead.industry}`);
-        console.log(`   ICP Score: ${lead.icpFitScore}/100`);
-        console.log(`   Confidence: ${lead.confidenceLevel}`);
-        console.log(`   Tech Stack: ${lead.techStack.slice(0, 3).join(", ")}${lead.techStack.length > 3 ? "..." : ""}`);
-        console.log(`   News Found: ${lead.recentNews.length} articles`);
-        console.log(`   Data Completeness: ${result.metadata?.dataCompleteness}%`);
+        console.log(`   Company: ${lead.companyName ?? 'N/A'}`);
+        console.log(`   Industry: ${lead.industry ?? 'N/A'}`);
+        console.log(`   ICP Score: ${(lead.icpFitScore ?? 0)}/100`);
+        console.log(`   Confidence: ${lead.confidenceLevel ?? 'N/A'}`);
+        const techStackPreview = Array.isArray(lead.techStack)
+          ? `${lead.techStack.slice(0, 3).join(", ")}${lead.techStack.length > 3 ? "..." : ""}`
+          : 'N/A';
+        console.log(`   Tech Stack: ${techStackPreview}`);
+        console.log(`   News Found: ${Array.isArray(lead.recentNews) ? lead.recentNews.length : 0} articles`);
+        console.log(`   Data Completeness: ${result.metadata?.dataCompleteness ?? 0}%`);
 
         results.push({
           company: company.name,
@@ -175,11 +192,14 @@ async function runBatchTest() {
   console.log("-".repeat(70));
 
   results.forEach((r) => {
-    const company = r.company.padEnd(25);
-    const score = r.success && "icpScore" in r ? `${r.icpScore}/100`.padEnd(12) : "N/A".padEnd(12);
-    const conf = r.success && "confidence" in r ? r.confidence.padEnd(12) : "N/A".padEnd(12);
-    const dur = `${(r.duration / 1000).toFixed(1)}s`.padEnd(12);
-    const status = r.success ? "✅" : "❌";
+    const company = String(r.company).padEnd(25);
+    const score = (r as any).success && "icpScore" in (r as any)
+      ? `${(r as any).icpScore}/100`.padEnd(12)
+      : "N/A".padEnd(12);
+    const confVal = (r as any).success && "confidence" in (r as any) ? (r as any).confidence : "N/A";
+    const conf = String(confVal).padEnd(12);
+    const dur = `${((r as any).duration / 1000).toFixed(1)}s`.padEnd(12);
+    const status = (r as any).success ? "✅" : "❌";
 
     console.log(`${company}${score}${conf}${dur}${status}`);
   });

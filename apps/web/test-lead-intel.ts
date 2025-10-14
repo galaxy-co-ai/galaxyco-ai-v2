@@ -21,17 +21,17 @@ async function testLeadIntelAgent() {
     console.log("\n✅ Enrichment Result:");
     console.log("Success:", result.success);
     
-    if (result.success && "enrichedLead" in result) {
+    if (result.success && "enrichedLead" in result && result.enrichedLead) {
       const lead = result.enrichedLead;
       console.log("\n📊 Lead Intelligence:");
-      console.log("Company:", lead.companyName);
-      console.log("Industry:", lead.industry);
-      console.log("ICP Fit Score:", lead.icpFitScore);
-      console.log("Confidence:", lead.confidenceLevel);
-      console.log("Tech Stack:", lead.techStack.join(", "));
-      console.log("Pain Points:", lead.painPointsInferred);
-      console.log("Outreach Angle:", lead.outreachAngle);
-      console.log("Recent News Count:", lead.recentNews.length);
+      console.log("Company:", lead?.companyName ?? 'N/A');
+      console.log("Industry:", lead?.industry ?? 'N/A');
+      console.log("ICP Fit Score:", lead?.icpFitScore ?? 'N/A');
+      console.log("Confidence:", lead?.confidenceLevel ?? 'N/A');
+      console.log("Tech Stack:", Array.isArray(lead?.techStack) ? lead!.techStack.join(", ") : 'N/A');
+      console.log("Pain Points:", lead?.painPointsInferred ?? 'N/A');
+      console.log("Outreach Angle:", lead?.outreachAngle ?? 'N/A');
+      console.log("Recent News Count:", Array.isArray(lead?.recentNews) ? lead!.recentNews.length : 0);
       
       if (result.metadata) {
         console.log("\n⏱️  Performance:");
