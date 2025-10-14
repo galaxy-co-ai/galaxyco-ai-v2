@@ -15,11 +15,7 @@ export default function OnboardingPage() {
     setError(null);
 
     try {
-      console.log('Submitting onboarding profile:', {
-        role: profile.persona.role,
-        industry: profile.persona.industry,
-        starterPack: profile.starterPack.recommendedId,
-      });
+      // Onboarding profile submission
 
       // Save onboarding profile and create workspace
       const response = await fetch('/api/onboarding/complete', {
@@ -32,24 +28,17 @@ export default function OnboardingPage() {
 
       if (!response.ok) {
         const errorMessage = data.error || 'Failed to complete onboarding';
-        console.error('Onboarding API error:', {
-          status: response.status,
-          error: errorMessage,
-          data,
-        });
+        // Error logged to Sentry via error boundary
         throw new Error(errorMessage);
       }
 
-      console.log('Workspace created successfully:', {
-        workspaceId: data.workspaceId,
-        workspaceName: data.workspaceName,
-      });
+      // Workspace created successfully
 
       // Redirect to dashboard
       router.push('/dashboard');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
-      console.error('Onboarding error:', error);
+      // Error handled by error state
       setError(errorMessage);
       setIsLoading(false);
     }
