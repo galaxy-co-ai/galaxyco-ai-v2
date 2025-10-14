@@ -1,4 +1,4 @@
-import { enrichLeadCore } from "./src/trigger/lead-intel-agent";
+import { enrichLeadCore } from "../src/trigger/lead-intel-agent";
 import dotenv from "dotenv";
 
 // Load environment variables
