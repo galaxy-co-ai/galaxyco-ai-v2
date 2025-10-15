@@ -65,8 +65,8 @@ const navigationItems = [
     description: 'Email campaigns'
   },
   {
-    title: 'Collections',
-    href: '/collections',
+    title: 'Knowledge',
+    href: '/knowledge',
     icon: FolderOpen,
     description: 'Knowledge & documents'
   },

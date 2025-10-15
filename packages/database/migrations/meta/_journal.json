@@ -29,6 +29,13 @@
       "when": 1760295529277,
       "tag": "0003_safe_night_nurse",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1760541130235,
+      "tag": "0004_tricky_blizzard",
+      "breakpoints": true
     }
   ]
 }

@@ -31,7 +31,7 @@ export function useChat(conversationId?: string | null) {
 
     const loadConversation = async () => {
       try {
-        const res = await fetch(`/api/conversations/${conversationId}/messages`);
+        const res = await fetch(`/api/ai/conversations/${conversationId}`);
         if (!res.ok) throw new Error('Failed to load conversation');
         const data = await res.json();
         const loadedMessages: ChatMessage[] = (data.messages || []).map((m: any) => ({
@@ -42,8 +42,8 @@ export function useChat(conversationId?: string | null) {
         }));
         setMessages(loadedMessages);
         setCurrentConversationId(conversationId);
-      } catch {
-        // Fail silently
+      } catch (error) {
+        console.error('Failed to load conversation:', error);
       }
     };
 
@@ -73,7 +73,10 @@ export function useChat(conversationId?: string | null) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          message: text,
+          messages: [
+            ...messages.slice(-10).map(m => ({ role: m.role, content: m.content })),
+            { role: 'user', content: text }
+          ],
           conversationId: currentConversationId 
         }),
         signal: abortRef.current.signal,
