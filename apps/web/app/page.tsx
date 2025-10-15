@@ -5,6 +5,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react'
 
 export default function HomePage() {
@@ -18,15 +19,20 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">G</span>
               </div>
-              <span className="text-xl font-bold">GalaxyCo.ai</span>
+              <span className="text-xl font-bold text-neutral-900 dark:text-white">GalaxyCo.ai</span>
             </div>
             
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Link href="/sign-in">
-                <Button variant="ghost">Sign In</Button>
+                <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Sign In
+                </button>
               </Link>
               <Link href="/sign-up">
-                <Button>Get Started</Button>
+                <button className="px-6 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
+                  Get Started
+                </button>
               </Link>
             </div>
           </div>
@@ -51,15 +57,15 @@ export default function HomePage() {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link href="/sign-up">
-              <Button size="lg" className="text-lg px-8">
+              <button className="flex items-center px-8 py-3 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-semibold text-lg transition-colors">
                 Start Free Trial
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              </button>
             </Link>
             <Link href="/sign-in">
-              <Button size="lg" variant="outline" className="text-lg px-8">
+              <button className="px-8 py-3 border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg font-semibold text-lg transition-colors">
                 View Demo
-              </Button>
+              </button>
             </Link>
           </div>
 
@@ -69,7 +75,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">AI Agents</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">AI Agents</h3>
               <p className="text-neutral-600 dark:text-neutral-400">
                 Research, email, and CRM agents working 24/7 to grow your business
               </p>
@@ -79,7 +85,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <Workflow className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Smart Workflows</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Smart Workflows</h3>
               <p className="text-neutral-600 dark:text-neutral-400">
                 End-to-end automation pipelines that adapt to your business needs
               </p>
@@ -89,7 +95,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Real Analytics</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Real Analytics</h3>
               <p className="text-neutral-600 dark:text-neutral-400">
                 Track measurable outcomes and ROI from every AI action
               </p>

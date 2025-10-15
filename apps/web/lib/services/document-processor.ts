@@ -7,7 +7,6 @@
 
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import * as PDFParse from "pdf-parse";
 import mammoth from "mammoth";
 import * as XLSX from "xlsx";
 import sharp from "sharp";
@@ -117,7 +116,9 @@ export class DocumentProcessor {
 
     // PDF
     if (mimeType === "application/pdf") {
-      const data = await (PDFParse as any).default(Buffer.from(buffer));
+      // Dynamic import for pdf-parse (CommonJS module)
+      const PDFParse = (await import("pdf-parse")).default;
+      const data = await PDFParse(Buffer.from(buffer));
       return data.text;
     }
 

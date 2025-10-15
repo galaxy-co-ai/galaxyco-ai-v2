@@ -9,6 +9,7 @@ import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import '@/styles/globals.css'
 import { cn } from '@/lib/utils'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 
 // Configure Inter font
 const inter = Inter({ 
@@ -109,26 +110,33 @@ export default function RootLayout({ children }: RootLayoutProps) {
         },
       }}
     >
-      <html lang="en" className={cn(inter.variable)}>
+      <html lang="en" className={cn(inter.variable)} suppressHydrationWarning>
         <body className={cn(
           'min-h-screen bg-background font-sans antialiased',
           'selection:bg-primary-100 selection:text-primary-900'
         )}>
-          {/* Skip to main content for accessibility */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] bg-primary-600 text-white px-4 py-2 rounded-md"
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
           >
-            Skip to main content
-          </a>
-          
-          {/* Main App Content */}
-          <div id="main-content">
-            {children}
-          </div>
-          
-          {/* Toast Notifications Container */}
-          <div id="toast-container" className="fixed top-0 right-0 z-[200] p-4" />
+            {/* Skip to main content for accessibility */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] bg-primary-600 text-white px-4 py-2 rounded-md"
+            >
+              Skip to main content
+            </a>
+            
+            {/* Main App Content */}
+            <div id="main-content">
+              {children}
+            </div>
+            
+            {/* Toast Notifications Container */}
+            <div id="toast-container" className="fixed top-0 right-0 z-[200] p-4" />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
