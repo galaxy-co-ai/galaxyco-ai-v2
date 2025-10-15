@@ -7,8 +7,17 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react'
+import { currentUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await currentUser()
+  
+  // If user is authenticated, redirect to dashboard
+  if (user) {
+    redirect('/dashboard')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-neutral-950 dark:to-neutral-900">
       {/* Navigation */}
