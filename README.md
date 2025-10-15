@@ -157,9 +157,16 @@ pnpm --filter api db:migrate
 
 ## 📚 Documentation
 
+### **For AI Assistants**
+- **[AI_CONTEXT.md](./AI_CONTEXT.md)** - 🤖 **START HERE** - Complete project context for AI assistants (451 lines)
+- **[WARP.md](./WARP.md)** - Comprehensive project rules and standards (authoritative)
+- **[.github/AI_INSTRUCTIONS.md](./.github/AI_INSTRUCTIONS.md)** - GitHub AI tooling integration (Copilot, Cursor, etc.)
+
+### **For Humans**
 - **[SECRETS_CHECKLIST.md](./SECRETS_CHECKLIST.md)** - Complete guide to all environment variables and secrets
 - **[GALAXYCO_2.0_ANALYSIS_AND_PLAN.md](./GALAXYCO_2.0_ANALYSIS_AND_PLAN.md)** - Comprehensive project plan and phased roadmap
 - **[docs/](./docs/)** - Full product documentation (specs, architecture, wireframes)
+- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Quick commands and shortcuts
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Development guidelines (coming soon)
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical architecture deep dive (coming soon)
 

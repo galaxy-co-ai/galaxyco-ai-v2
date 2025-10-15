@@ -1,210 +1,124 @@
-import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
-import { Button } from "../components/ui/Button";
-import { Card } from "../components/ui/Card";
-import { Rocket, Satellite, Globe, Zap, Users, Star } from "lucide-react";
+/**
+ * GalaxyCo.ai Landing Page
+ * October 15, 2025
+ */
 
-export default async function Home() {
-  const { userId } = await auth();
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react'
+import { currentUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
+
+export default async function HomePage() {
+  const user = await currentUser()
+  
+  // If user is authenticated, redirect to dashboard
+  if (user) {
+    redirect('/dashboard')
+  }
 
   return (
-    <main>
+    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-neutral-950 dark:to-neutral-900">
+      {/* Navigation */}
+      <nav className="border-b border-neutral-200 dark:border-neutral-800">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">G</span>
+              </div>
+              <span className="text-xl font-bold text-neutral-900 dark:text-white">GalaxyCo.ai</span>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <Link href="/sign-in">
+                <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Sign In
+                </button>
+              </Link>
+              <Link href="/sign-up">
+                <button className="px-6 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
+                  Get Started
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section className="section-lg">
-        <div className="container">
-          <div className="text-center">
-            {/* Hero Badge */}
-            <div
-              className="badge badge-primary"
-              style={{
-                fontSize: "var(--text-sm)",
-                marginBottom: "var(--space-6)",
-              }}
-            >
-              🚀 Platform 2.0 Now Live
+      <main className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl lg:text-6xl font-bold text-neutral-900 dark:text-white mb-6">
+            Make Multi-Agent AI
+            <br />
+            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+              Useful in Minutes
+            </span>
+          </h1>
+          
+          <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
+            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that deliver measurable outcomes from Day 1. 
+            No setup. No waiting. Just results.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Link href="/sign-up">
+              <button className="flex items-center px-8 py-3 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-semibold text-lg transition-colors">
+                Start Free Trial
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </button>
+            </Link>
+            <Link href="/sign-in">
+              <button className="px-8 py-3 border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg font-semibold text-lg transition-colors">
+                View Demo
+              </button>
+            </Link>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">AI Agents</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Research, email, and CRM agents working 24/7 to grow your business
+              </p>
             </div>
-
-            {/* Hero Headline */}
-            <h1
-              className="text-5xl font-bold mb-6"
-              style={{
-                color: "var(--text-primary)",
-                lineHeight: "var(--leading-tight)",
-                maxWidth: "800px",
-                margin: "0 auto var(--space-6)",
-              }}
-            >
-              Make Multi-Agent AI
-              <br />
-              <span style={{ color: "var(--primary-500)" }}>
-                Useful in Minutes
-              </span>
-            </h1>
-
-            {/* Hero Description */}
-            <p
-              className="text-xl text-secondary mb-8"
-              style={{
-                maxWidth: "600px",
-                margin: "0 auto var(--space-8)",
-                lineHeight: "var(--leading-relaxed)",
-              }}
-            >
-              Personalized AI agent Packs that deliver measurable outcomes from
-              Day 1. Built for ambitious operators who need AI that actually
-              works.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex justify-center gap-4 mb-12">
-              {userId ? (
-                <Link href="/dashboard">
-                  <Button size="lg" leftIcon={<Rocket size={20} />}>
-                    Go to Dashboard →
-                  </Button>
-                </Link>
-              ) : (
-                <>
-                  <Link href="/sign-up">
-                    <Button size="lg" leftIcon={<Zap size={20} />}>
-                      Start Building
-                    </Button>
-                  </Link>
-                  <Link href="/sign-in">
-                    <Button variant="secondary" size="lg">
-                      Sign In
-                    </Button>
-                  </Link>
-                </>
-              )}
+            
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Workflow className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Smart Workflows</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                End-to-end automation pipelines that adapt to your business needs
+              </p>
             </div>
-
-            {/* Status Card */}
-            <Card variant="comfortable" className="animate-fade-in">
-              <div className="text-center">
-                <h3
-                  className="text-lg font-semibold mb-4"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  ✅ Platform Status
-                </h3>
-                <div className="grid grid-auto-fit gap-4">
-                  <div className="text-center">
-                    <div className="badge badge-success mb-2">Live</div>
-                    <div className="text-sm text-secondary">Next.js App</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="badge badge-success mb-2">Active</div>
-                    <div className="text-sm text-secondary">Authentication</div>
-                  </div>
-                  <div className="text-center">
-                    <div
-                      className={`badge mb-2 ${userId ? "badge-success" : "badge-warning"}`}
-                    >
-                      {userId ? "Authenticated" : "Ready"}
-                    </div>
-                    <div className="text-sm text-secondary">User Status</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="badge badge-primary mb-2">v2.0</div>
-                    <div className="text-sm text-secondary">Environment</div>
-                  </div>
-                </div>
+            
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section
-        className="section"
-        style={{ background: "var(--bg-secondary)" }}
-      >
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2
-              className="text-3xl font-bold mb-4"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Space-Grade AI Platform
-            </h2>
-            <p className="text-lg text-secondary">
-              Enterprise-ready tools for ambitious teams
-            </p>
-          </div>
-
-          <div className="grid grid-3 gap-6">
-            <Card variant="interactive" className="text-center">
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-4)",
-                }}
-              >
-                <Rocket size={48} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Mission Control</h3>
-              <p className="text-secondary text-sm">
-                Monitor and manage your AI agents in real-time with
-                comprehensive dashboards.
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Real Analytics</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Track measurable outcomes and ROI from every AI action
               </p>
-            </Card>
-
-            <Card variant="interactive" className="text-center">
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-4)",
-                }}
-              >
-                <Globe size={48} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Agent Marketplace</h3>
-              <p className="text-secondary text-sm">
-                Discover and deploy proven agent templates with one-click
-                installation.
-              </p>
-            </Card>
-
-            <Card variant="interactive" className="text-center">
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-4)",
-                }}
-              >
-                <Satellite size={48} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 className="text-lg font-semibold mb-3">Knowledge Hub</h3>
-              <p className="text-secondary text-sm">
-                Connect your data sources and create intelligent, context-aware
-                agents.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="section">
-        <div className="container">
-          <div className="text-center">
-            <h3
-              className="text-2xl font-semibold mb-8"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Trusted by Ambitious Teams
-            </h3>
-            <div className="flex items-center justify-center gap-8 opacity-60">
-              <div className="text-lg font-medium">Enterprise Ready</div>
-              <div className="text-lg font-medium">SOC 2 Compliant</div>
-              <div className="text-lg font-medium">99.9% Uptime</div>
-              <div className="text-lg font-medium">24/7 Support</div>
             </div>
           </div>
         </div>
-      </section>
-    </main>
-  );
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-neutral-200 dark:border-neutral-800 py-8 mt-16">
+        <div className="container mx-auto px-4 text-center text-neutral-600 dark:text-neutral-400">
+          <p>© 2025 GalaxyCo.ai — AI tools that get sh*t done.</p>
+        </div>
+      </footer>
+    </div>
+  )
 }

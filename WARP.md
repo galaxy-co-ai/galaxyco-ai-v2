@@ -1,8 +1,31 @@
 # GalaxyCo.ai 2.0 - Project Rules
 
-**Last Updated**: January 10, 2025  
+**Last Updated**: October 14, 2025  
 **Project**: GalaxyCo.ai 2.0 - Make multi-agent AI useful in minutes  
-**Current Phase**: Phase 9B - Live Execution & Testing
+**Current Phase**: Deployment & UI Polish  
+**Latest Session**: October 14, 2025 - AI Context System Implementation
+
+---
+
+## 🤖 **AI Assistant Context Loading**
+
+### **Automatic Context Loading Rule**
+
+**CRITICAL**: All AI assistants working on this project MUST read `AI_CONTEXT.md` at the start of each new conversation session.
+
+**Why**: This file contains essential project DNA, current status, architecture overview, and navigation guide that enables AI to work effectively from the first interaction.
+
+**Implementation**:
+```
+1. New conversation starts
+2. AI reads AI_CONTEXT.md first (before any other files)
+3. AI gains complete project context in ~2-3 minutes
+4. AI can assist confidently with full understanding
+```
+
+**File Location**: `./AI_CONTEXT.md` (root level, 451 lines)
+
+**Auto-Update Rule**: Update AI_CONTEXT.md current state section after each major session.
 
 ---
 
@@ -144,6 +167,33 @@ TestPanel (React) → /api/agents/[id]/execute → Python FastAPI → AI Provide
 - ✅ Comprehensive error handling
 - ✅ Mobile-responsive test panel
 
+### Responsive Sidebar Layout ✅ NEW (Oct 12, 2025)
+
+**Global State Management**: All pages now respond smoothly to sidebar expansion/collapse
+
+```
+SidebarProvider (Context) → { isExpanded, isPinned, setIsExpanded, togglePin }
+        ↓               ↓                  ↓
+  MainSidebar      TopBar           MainContent
+  (w-16/w-60)    (ml: 64/240)     (ml: 64/240)
+```
+
+**Key Files**:
+
+- `apps/web/contexts/SidebarContext.tsx` - Global sidebar state (Context API)
+- `apps/web/components/layout/MainContent.tsx` - Responsive content wrapper
+- `apps/web/components/layout/MainSidebar.tsx` - Sidebar with hover/pin
+- `apps/web/components/layout/TopBar.tsx` - Responsive top navigation
+
+**Behavior**:
+
+- ✅ Smooth 300ms transitions on all layout changes
+- ✅ Synchronized movement (TopBar + content)
+- ✅ Hover to expand (if not pinned)
+- ✅ Pin to keep expanded (persists to localStorage)
+- ✅ Mobile responsive (< 768px hides sidebar offset)
+- ✅ Proper z-index layering (sidebar z-40, topbar z-50)
+
 ### Git Commit Standards
 
 Follow Conventional Commits format:
@@ -217,7 +267,70 @@ Always confirm before executing:
 
 ## 📚 Documentation
 
-### Quick Documentation Reference
+### Documentation Organization Standards ✅ NEW
+
+**CRITICAL**: Always maintain perfect documentation organization.
+
+**Master Navigation**: `docs/README.md` (single source of truth)
+**Quick Reference**: `QUICK_REFERENCE.md` (one-page guide)
+**AI Context**: `AI_CONTEXT.md` (AI onboarding)
+**Quality Rules**: `DOCUMENTATION_QUALITY_RULES.md` (comprehensive standards)
+
+### **Duplication Prevention System** 🚨
+
+**CRITICAL**: Prevent documentation confusion and maintain single source of truth.
+
+**Hierarchy (Most Authoritative → Least)**:
+1. `WARP.md` - **AUTHORITATIVE** project rules (detailed)
+2. `AI_CONTEXT.md` - **SUMMARY** for AI onboarding (references WARP.md)
+3. `docs/` - **SPECIALIZED** deep-dive documentation
+4. `README.md` - **OVERVIEW** for humans
+
+**Rules**:
+- ✅ `AI_CONTEXT.md` **LINKS** to WARP.md (never duplicates content)
+- ✅ Use line references: "See WARP.md lines 58-62 for multi-tenancy rules"
+- ✅ Update `AI_CONTEXT.md` current state after major sessions only
+- ✅ WARP.md remains the authoritative source for all detailed rules
+- ❌ NEVER copy-paste rules between files
+- ❌ NEVER contradict information across files
+
+**Maintenance**:
+- When WARP.md structure changes → Update AI_CONTEXT.md line references
+- When project phase changes → Update AI_CONTEXT.md current state section
+- When major architecture changes → Update both files strategically
+
+**Category Structure**:
+```
+docs/
+├── guides/          # Step-by-step how-to instructions
+├── technical/       # Deep technical documentation
+├── runbooks/        # Operational procedures
+├── business/        # Strategy & planning
+├── status/          # Current state & updates
+├── reference/       # Quick lookups
+├── incidents/       # Incident reports
+├── security/        # Security docs
+└── archive/         # Historical documents (YYYY-MM/)
+```
+
+**AI Assistant MUST**:
+- ✅ Check `docs/README.md` before answering ANY navigation questions
+- ✅ Verify file placement follows category structure before creating docs
+- ✅ Use kebab-case naming for all documentation files
+- ✅ Include proper frontmatter (title, category, status, last_updated, author, related)
+- ✅ Update category READMEs when adding new documents
+- ✅ Archive old docs to `docs/archive/YYYY-MM/` instead of deleting
+- ✅ Keep project root clean (only README.md, WARP.md, QUICK_REFERENCE.md)
+- ✅ Guide users by role (Developer, PM, DevOps, Designer) and task (Setup, Build, Fix, Deploy)
+
+**Navigation Shortcuts**:
+- Setup → `docs/guides/development-setup.md`
+- Architecture → `docs/technical/architecture/README.md`
+- Current Status → `docs/status/README.md`
+- Quick Commands → `QUICK_REFERENCE.md`
+- Troubleshooting → `docs/guides/troubleshooting.md`
+
+### Legacy Quick Documentation Reference
 
 - **Setup**: `docs/setup/QUICK_START.md`
 - **AI Gateway**: `docs/AI_GATEWAY_QUICK_REF.md`
@@ -342,11 +455,13 @@ pnpm build
 
 ## 📊 Project Metadata
 
-- **Current Phase**: Phase 9B - Live Execution & Testing
+- **Current Phase**: Deployment & UI Polish
 - **Repository**: `galaxyco-ai-2.0`
 - **Organization**: `galaxyco-ai`
 - **Primary Developer**: galaxy-co-ai
 - **Development Hours**: High intensity (70 hrs/week target)
+- **Latest Deploy**: October 12, 2025 - Preview (deployment-ready branch)
+- **Status**: ✅ Deployed to preview, ready for production merge
 
 ---
 

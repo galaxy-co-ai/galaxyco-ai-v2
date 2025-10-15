@@ -474,6 +474,58 @@ export const workspaceApiKeys = pgTable(
 );
 
 // ============================================================================
+// AGENT LOGS (Performance & Monitoring)
+// ============================================================================
+
+export const agentLogs = pgTable(
+  "agent_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key - REQUIRED FOR ALL QUERIES
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Agent execution context
+    agentId: text("agent_id").notNull(), // Can reference templates too
+    tenantId: text("tenant_id").notNull(), // Redundant with workspaceId but required for logging compatibility
+    userId: text("user_id").notNull(),
+
+    // Execution data (summarized for performance)
+    inputSummary: text("input_summary").notNull(),
+    outputSummary: text("output_summary").notNull(),
+    duration: integer("duration").notNull(), // milliseconds
+    success: boolean("success").notNull(),
+
+    // AI Provider context
+    provider: text("provider"), // 'openai', 'anthropic', 'google'
+    model: text("model"), // 'gpt-4', 'claude-3-sonnet', etc
+    
+    // Error information
+    error: text("error"), // Error message if failed
+    metadata: text("metadata"), // Additional context as JSON string
+
+    // Timestamp
+    timestamp: timestamp("timestamp").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    // Performance indexes
+    tenantTimestampIdx: index("agent_log_tenant_timestamp_idx").on(
+      table.workspaceId,
+      table.timestamp
+    ),
+    agentTimestampIdx: index("agent_log_agent_timestamp_idx").on(
+      table.agentId,
+      table.timestamp
+    ),
+    successIdx: index("agent_log_success_idx").on(table.success),
+    providerIdx: index("agent_log_provider_idx").on(table.provider),
+  })
+);
+
+// ============================================================================
 // AGENT EXECUTIONS (Audit Trail)
 // ============================================================================
 
@@ -687,9 +739,12 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   members: many(workspaceMembers),
   agents: many(agents),
   executions: many(agentExecutions),
+  agentLogs: many(agentLogs),
   knowledgeCollections: many(knowledgeCollections),
   knowledgeItems: many(knowledgeItems),
   knowledgeTags: many(knowledgeTags),
+  aiConversations: many(aiConversations),
+  aiUserPreferences: many(aiUserPreferences),
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -699,6 +754,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   triggeredExecutions: many(agentExecutions),
   createdKnowledgeCollections: many(knowledgeCollections),
   createdKnowledgeItems: many(knowledgeItems),
+  aiConversations: many(aiConversations),
+  aiPreferences: many(aiUserPreferences),
 }));
 
 export const workspaceMembersRelations = relations(
@@ -741,6 +798,16 @@ export const agentExecutionsRelations = relations(
     triggeredByUser: one(users, {
       fields: [agentExecutions.triggeredBy],
       references: [users.id],
+    }),
+  }),
+);
+
+export const agentLogsRelations = relations(
+  agentLogs,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [agentLogs.workspaceId],
+      references: [workspaces.id],
     }),
   }),
 );
@@ -805,6 +872,200 @@ export const knowledgeItemTagsRelations = relations(
 );
 
 // ============================================================================
+// AI ASSISTANT - CONVERSATIONS
+// ============================================================================
+
+export const aiConversations = pgTable(
+  "ai_conversations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Conversation info
+    title: text("title").notNull(), // Auto-generated from first message
+    
+    // Context - what was the user doing when they started this conversation?
+    context: jsonb("context")
+      .$type<{
+        page?: string; // '/agents', '/prospects/123', etc
+        selectedItems?: {
+          agentId?: string;
+          prospectId?: string;
+          workflowId?: string;
+        };
+        documentIds?: string[]; // Related documents
+        timestamp?: string;
+      }>()
+      .default({}),
+
+    // Organization
+    tags: text("tags").array().default([]),
+    isPinned: boolean("is_pinned").notNull().default(false),
+    
+    // Metadata
+    messageCount: integer("message_count").notNull().default(0),
+    lastMessageAt: timestamp("last_message_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantUserIdx: index("ai_conversation_tenant_user_idx").on(
+      table.workspaceId,
+      table.userId,
+    ),
+    userIdx: index("ai_conversation_user_idx").on(table.userId),
+    lastMessageIdx: index("ai_conversation_last_message_idx").on(
+      table.lastMessageAt,
+    ),
+  }),
+);
+
+export const aiMessages = pgTable(
+  "ai_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Conversation reference
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => aiConversations.id, { onDelete: "cascade" }),
+
+    // Message content
+    role: text("role").notNull(), // 'user' | 'assistant' | 'system'
+    content: text("content").notNull(),
+
+    // Metadata - for RAG, function calls, etc
+    metadata: jsonb("metadata")
+      .$type<{
+        sources?: Array<{
+          type: "document" | "knowledge_item" | "agent" | "prospect";
+          id: string;
+          title: string;
+          relevanceScore?: number;
+        }>;
+        model?: string; // 'gpt-4', 'claude-3-5-sonnet', etc
+        tokensUsed?: number;
+        durationMs?: number;
+        functionCalls?: Array<{
+          name: string;
+          args: any;
+          result: any;
+        }>;
+      }>()
+      .default({}),
+
+    // Metadata
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    conversationIdx: index("ai_message_conversation_idx").on(
+      table.conversationId,
+    ),
+    createdAtIdx: index("ai_message_created_at_idx").on(table.createdAt),
+  }),
+);
+
+// ============================================================================
+// AI ASSISTANT - USER PREFERENCES
+// ============================================================================
+
+export const aiUserPreferences = pgTable(
+  "ai_user_preferences",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Learned preferences
+    communicationStyle: text("communication_style").default("balanced"), // 'concise' | 'detailed' | 'balanced'
+    topicsOfInterest: text("topics_of_interest").array().default([]),
+    frequentQuestions: text("frequent_questions").array().default([]),
+    
+    // Corrections - learn from user feedback
+    corrections: jsonb("corrections")
+      .$type<Array<{
+        wrong: string;
+        correct: string;
+        timestamp: string;
+      }>>()
+      .default([]),
+
+    // Settings
+    defaultModel: text("default_model").default("gpt-4"), // 'gpt-4', 'claude-3-5-sonnet', etc
+    enableRag: boolean("enable_rag").notNull().default(true),
+    enableProactiveInsights: boolean("enable_proactive_insights")
+      .notNull()
+      .default(true),
+
+    // Metadata
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantUserIdx: uniqueIndex("ai_user_preferences_tenant_user_idx").on(
+      table.workspaceId,
+      table.userId,
+    ),
+  }),
+);
+
+// ============================================================================
+// RELATIONS FOR AI CONVERSATIONS
+// ============================================================================
+
+export const aiConversationsRelations = relations(
+  aiConversations,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [aiConversations.workspaceId],
+      references: [workspaces.id],
+    }),
+    user: one(users, {
+      fields: [aiConversations.userId],
+      references: [users.id],
+    }),
+    messages: many(aiMessages),
+  }),
+);
+
+export const aiMessagesRelations = relations(
+  aiMessages,
+  ({ one }) => ({
+    conversation: one(aiConversations, {
+      fields: [aiMessages.conversationId],
+      references: [aiConversations.id],
+    }),
+  }),
+);
+
+export const aiUserPreferencesRelations = relations(
+  aiUserPreferences,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [aiUserPreferences.workspaceId],
+      references: [workspaces.id],
+    }),
+    user: one(users, {
+      fields: [aiUserPreferences.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -829,6 +1090,9 @@ export type NewAgentPack = typeof agentPacks.$inferInsert;
 export type AgentExecution = typeof agentExecutions.$inferSelect;
 export type NewAgentExecution = typeof agentExecutions.$inferInsert;
 
+export type AgentLog = typeof agentLogs.$inferSelect;
+export type NewAgentLog = typeof agentLogs.$inferInsert;
+
 export type KnowledgeCollection = typeof knowledgeCollections.$inferSelect;
 export type NewKnowledgeCollection = typeof knowledgeCollections.$inferInsert;
 
@@ -840,3 +1104,12 @@ export type NewKnowledgeItem = typeof knowledgeItems.$inferInsert;
 
 export type KnowledgeItemTag = typeof knowledgeItemTags.$inferSelect;
 export type NewKnowledgeItemTag = typeof knowledgeItemTags.$inferInsert;
+
+export type AiConversation = typeof aiConversations.$inferSelect;
+export type NewAiConversation = typeof aiConversations.$inferInsert;
+
+export type AiMessage = typeof aiMessages.$inferSelect;
+export type NewAiMessage = typeof aiMessages.$inferInsert;
+
+export type AiUserPreferences = typeof aiUserPreferences.$inferSelect;
+export type NewAiUserPreferences = typeof aiUserPreferences.$inferInsert;

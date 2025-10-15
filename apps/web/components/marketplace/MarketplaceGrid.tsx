@@ -2,112 +2,59 @@
 
 import AgentTemplateCardCompact from "./AgentTemplateCardCompact";
 
-export default function MarketplaceGrid() {
-  // Mock all agent templates - will be loaded from database
-  const allTemplates = [
-    {
-      id: "5",
-      name: "Cross-App Do-It-For-Me",
-      shortDescription:
-        "Executes multi-app requests in one prompt (calendar, email, docs)",
-      category: "Productivity",
-      type: "cross-app",
-      rating: 475,
-      reviewCount: 89,
-      installCount: 1234,
-      installs24h: 45,
-      kpis: {
-        successRate: 90,
-        avgTimeSaved: "1.5 hrs/day",
-      },
-      tags: ["productivity", "automation", "multi-app"],
-    },
-    {
-      id: "6",
-      name: "Research & Web Summary",
-      shortDescription:
-        "Synthesizes web + internal sources; produces brief with citations",
-      category: "Knowledge",
-      type: "research",
-      rating: 465,
-      reviewCount: 76,
-      installCount: 892,
-      installs24h: 28,
-      kpis: {
-        successRate: 87,
-        avgTimeSaved: "45 min/query",
-      },
-      tags: ["research", "knowledge", "web"],
-    },
-    {
-      id: "7",
-      name: "Code & Data Assistant",
-      shortDescription:
-        "Refactors code, writes tests, reviews PRs; SQL/Notebooks",
-      category: "Development",
-      type: "code",
-      rating: 480,
-      reviewCount: 134,
-      installCount: 1678,
-      installs24h: 52,
-      kpis: {
-        successRate: 93,
-        avgTimeSaved: "3 hrs/day",
-      },
-      tags: ["code", "development", "testing"],
-    },
-    {
-      id: "8",
-      name: "Data Extraction Agent",
-      shortDescription:
-        "Monitors pages, extracts structured data, pushes to Sheets/DB",
-      category: "Data",
-      type: "data",
-      rating: 470,
-      reviewCount: 98,
-      installCount: 1123,
-      installs24h: 34,
-      kpis: {
-        successRate: 94,
-        avgTimeSaved: "5 hrs/week",
-      },
-      tags: ["data", "extraction", "automation"],
-    },
-    {
-      id: "9",
-      name: "Trust & Security Checker",
-      shortDescription:
-        "Runs static checks on agents; shows grade and remediation",
-      category: "Security",
-      type: "security",
-      badgeText: "NEW",
-      rating: 455,
-      reviewCount: 42,
-      installCount: 567,
-      installs24h: 23,
-      kpis: {
-        successRate: 96,
-        avgTimeSaved: "30 min/agent",
-      },
-      tags: ["security", "trust", "compliance"],
-    },
-    {
-      id: "10",
-      name: "Trending Ranking Agent",
-      shortDescription: "Computes Trending/Top leaderboards for Agents/Packs",
-      category: "Analytics",
-      type: "trending",
-      rating: 460,
-      reviewCount: 54,
-      installCount: 734,
-      installs24h: 19,
-      kpis: {
-        successRate: 99,
-        avgTimeSaved: "2 hrs/week",
-      },
-      tags: ["analytics", "ranking", "marketplace"],
-    },
-  ];
+interface MarketplaceGridProps {
+  agents?: any[];
+  isSearchResult?: boolean;
+}
+
+export default function MarketplaceGrid({ agents, isSearchResult = false }: MarketplaceGridProps) {
+  // Use passed agents or empty array if none provided
+  const allTemplates = agents && agents.length > 0 ? agents : [];
+
+  // Empty state - no agents in marketplace
+  if (allTemplates.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <div className="text-7xl mb-6">🚀</div>
+        <h3 
+          className="text-2xl font-semibold mb-3"
+          style={{ color: "var(--text-primary)" }}
+        >
+          No agents in the marketplace yet
+        </h3>
+        <p 
+          className="text-base mb-8 max-w-md mx-auto"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          Be the first to create and share an agent with the community.
+          Build custom agents for your workflows and publish them here.
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <a
+            href="/agents/create"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-white transition-colors"
+            style={{
+              backgroundColor: "var(--primary-500)",
+              textDecoration: "none",
+            }}
+          >
+            Create Your First Agent
+          </a>
+          <a
+            href="/agents"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold border transition-colors"
+            style={{
+              color: "var(--text-primary)",
+              borderColor: "var(--border-default)",
+              textDecoration: "none",
+            }}
+          >
+            View My Agents
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -115,15 +62,26 @@ export default function MarketplaceGrid() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2
-            className="text-xl font-semibold"
-            style={{ color: "var(--text-primary)" }}
+            style={{
+              fontSize: "var(--text-lg)", /* 16px - compact section headers */
+              fontWeight: "var(--font-semibold)",
+              lineHeight: "var(--leading-tight)",
+              color: "var(--text-primary)",
+            }}
           >
             🔥 Featured Agents
           </h2>
           <div className="badge badge-success">Top Rated</div>
         </div>
-        <div className="grid grid-3 gap-6">
-          {allTemplates.slice(0, 3).map((template) => (
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)", /* 4 cards per row for density */
+            gap: "var(--grid-gap)", /* 18px - compact spacing */
+          }}
+          className="grid-compact" /* Apply responsive grid from design tokens */
+        >
+          {allTemplates.slice(0, 4).map((template) => ( /* Show 4 featured instead of 3 */
             <AgentTemplateCardCompact
               key={template.id}
               template={template}
@@ -137,17 +95,33 @@ export default function MarketplaceGrid() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2
-            className="text-xl font-semibold"
-            style={{ color: "var(--text-primary)" }}
+            style={{
+              fontSize: "var(--text-lg)", /* 16px - compact section headers */
+              fontWeight: "var(--font-semibold)",
+              lineHeight: "var(--leading-tight)",
+              color: "var(--text-primary)",
+            }}
           >
             All Agent Templates
           </h2>
-          <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          <div 
+            style={{
+              fontSize: "var(--text-xs)", /* 11px - compact meta text */
+              color: "var(--text-secondary)",
+            }}
+          >
             {allTemplates.length} agents available
           </div>
         </div>
-        <div className="grid grid-4 gap-4">
-          {allTemplates.slice(3).map((template) => (
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(5, 1fr)", /* 5 cards per row for maximum density */
+            gap: "var(--grid-gap)", /* 18px - compact spacing */
+          }}
+          className="grid-compact" /* Apply responsive grid from design tokens */
+        >
+          {allTemplates.slice(4).map((template) => ( /* Start from 4 since featured shows 4 */
             <AgentTemplateCardCompact
               key={template.id}
               template={template}

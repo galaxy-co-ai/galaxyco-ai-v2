@@ -1,9 +1,11 @@
 /**
  * Agent API Client Actions
  * Handles all API calls to the agents endpoints
+ * 
+ * Now using Next.js API routes (/api/agents) instead of external NestJS backend
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_BASE_URL = "/api"; // Use Next.js API routes
 
 interface CreateAgentPayload {
   name: string;
@@ -47,11 +49,13 @@ interface TestAgentPayload {
 /**
  * Get auth headers (Clerk token + workspace ID)
  * Note: These functions are called from client components with useWorkspaceAuth hook
+ * 
+ * For Next.js API routes, we don't need to pass Authorization header (Clerk handles it)
+ * Just pass workspace ID for tenant isolation
  */
 function buildHeaders(token: string, workspaceId: string): HeadersInit {
   return {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
     "x-workspace-id": workspaceId,
   };
 }
@@ -63,15 +67,44 @@ export async function createAgent(
   payload: CreateAgentPayload,
   headers: HeadersInit,
 ): Promise<any> {
+  // Extract workspace ID from headers
+  const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
+  
+  // Transform payload to match new API structure
+  const apiPayload = {
+    name: payload.name,
+    description: payload.description,
+    type: payload.type,
+    workspaceId,
+    config: {
+      aiProvider: payload.aiProvider || "openai",
+      model: payload.model || "gpt-4",
+      temperature: payload.temperature || 0.7,
+      maxTokens: payload.maxTokens || 1000,
+      systemPrompt: payload.systemPrompt || "",
+      tools: [],
+      triggers: payload.trigger ? [{ type: payload.trigger, config: {} }] : [],
+      knowledgeBase: payload.knowledgeBase || {
+        enabled: false,
+        scope: "all",
+        collectionIds: [],
+        maxResults: 5,
+      },
+    },
+  };
+
   const response = await fetch(`${API_BASE_URL}/agents`, {
     method: "POST",
-    headers,
-    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Include cookies for Clerk auth
+    body: JSON.stringify(apiPayload),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to create agent");
+    throw new Error(error.error || error.message || "Failed to create agent");
   }
 
   return response.json();
@@ -90,6 +123,13 @@ export async function listAgents(
   },
 ): Promise<any> {
   const queryParams = new URLSearchParams();
+  
+  // Extract workspace ID from headers
+  const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
+  if (workspaceId) {
+    queryParams.set("workspaceId", workspaceId);
+  }
+  
   if (filters?.status) queryParams.set("status", filters.status);
   if (filters?.search) queryParams.set("search", filters.search);
   if (filters?.limit) queryParams.set("limit", filters.limit.toString());
@@ -99,11 +139,12 @@ export async function listAgents(
 
   const response = await fetch(url, {
     method: "GET",
-    headers,
+    credentials: "include", // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch agents");
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch agents");
   }
 
   return response.json();
@@ -118,11 +159,12 @@ export async function getAgent(
 ): Promise<any> {
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: "GET",
-    headers,
+    credentials: "include", // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch agent");
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch agent");
   }
 
   return response.json();
@@ -136,15 +178,45 @@ export async function updateAgent(
   payload: UpdateAgentPayload,
   headers: HeadersInit,
 ): Promise<any> {
+  // Transform payload to match new API structure if config fields are present
+  const apiPayload: any = {
+    name: payload.name,
+    description: payload.description,
+    status: payload.status,
+    type: payload.type,
+  };
+
+  // If any config fields are present, build config object
+  if (
+    payload.aiProvider ||
+    payload.model ||
+    payload.temperature !== undefined ||
+    payload.maxTokens !== undefined ||
+    payload.systemPrompt !== undefined ||
+    payload.knowledgeBase
+  ) {
+    apiPayload.config = {
+      ...(payload.aiProvider && { aiProvider: payload.aiProvider }),
+      ...(payload.model && { model: payload.model }),
+      ...(payload.temperature !== undefined && { temperature: payload.temperature }),
+      ...(payload.maxTokens !== undefined && { maxTokens: payload.maxTokens }),
+      ...(payload.systemPrompt !== undefined && { systemPrompt: payload.systemPrompt }),
+      ...(payload.knowledgeBase && { knowledgeBase: payload.knowledgeBase }),
+    };
+  }
+
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: "PUT",
-    headers,
-    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Include cookies for Clerk auth
+    body: JSON.stringify(apiPayload),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to update agent");
+    throw new Error(error.error || error.message || "Failed to update agent");
   }
 
   return response.json();
@@ -159,11 +231,12 @@ export async function deleteAgent(
 ): Promise<any> {
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
     method: "DELETE",
-    headers,
+    credentials: "include", // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
-    throw new Error("Failed to delete agent");
+    const error = await response.json();
+    throw new Error(error.error || "Failed to delete agent");
   }
 
   return response.json();

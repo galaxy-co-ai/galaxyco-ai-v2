@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Star, Download, Zap, Clock } from "lucide-react";
 
 interface AgentTemplateCardProps {
@@ -56,15 +56,15 @@ export default function AgentTemplateCardCompact({
 
   return (
     <Card
-      variant="interactive"
-      hover={true}
-      className={`cursor-pointer transition-all duration-200 ${
+      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
         isHovered ? "transform -translate-y-1" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        minHeight: isFeatured ? "200px" : "160px",
+        height: "var(--card-height)", /* 260px - consistent height for all cards */
+        minHeight: "var(--card-height)",
+        padding: "var(--card-padding)", /* 14px - compact padding */
         position: "relative",
       }}
     >
@@ -89,8 +89,8 @@ export default function AgentTemplateCardCompact({
         {/* Circular Avatar - No Emoji */}
         <div
           style={{
-            width: "40px",
-            height: "40px",
+            width: "32px", /* Reduced from 40px for density */
+            height: "32px",
             borderRadius: "50%",
             background: `linear-gradient(135deg, ${getAvatarColor(template.category)}20, ${getAvatarColor(template.category)}40)`,
             border: `2px solid ${getAvatarColor(template.category)}30`,
@@ -101,7 +101,7 @@ export default function AgentTemplateCardCompact({
           }}
         >
           <Zap
-            size={18}
+            size={14} /* Reduced from 18px */
             color={getAvatarColor(template.category)}
             strokeWidth={2.5}
           />
@@ -110,23 +110,29 @@ export default function AgentTemplateCardCompact({
         {/* Header Info */}
         <div className="flex-1 min-w-0">
           <div
-            className="text-xs font-medium mb-1"
             style={{
+              fontSize: "var(--text-xs)", /* 11px - compact labels */
+              fontWeight: "var(--font-medium)",
               color: "var(--text-tertiary)",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
+              lineHeight: "var(--leading-tight)",
+              marginBottom: "var(--space-1)", /* 4px */
             }}
           >
             {template.category}
           </div>
           <h3
-            className="text-sm font-semibold leading-tight"
             style={{
+              fontSize: "var(--text-sm)", /* 13px - compact card titles */
+              fontWeight: "var(--font-semibold)",
+              lineHeight: "var(--leading-tight)", /* 1.25 for tighter spacing */
               color: "var(--text-primary)",
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
+              marginBottom: "var(--space-2)", /* 8px */
             }}
           >
             {template.name}
@@ -137,39 +143,60 @@ export default function AgentTemplateCardCompact({
       {/* Description - Progressive Disclosure */}
       {(isHovered || isFeatured) && (
         <p
-          className="text-xs mb-3"
           style={{
+            fontSize: "var(--text-xs)", /* 11px - compact description */
+            lineHeight: "var(--leading-snug)", /* 1.375 - compact line height */
             color: "var(--text-secondary)",
-            lineHeight: 1.4,
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
+            marginBottom: "var(--space-2)", /* 8px */
           }}
         >
           {template.shortDescription}
         </p>
       )}
 
-      {/* Stats Row */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-1">
-          <Star size={12} fill="var(--warning)" color="var(--warning)" />
+      {/* Stats Row - Compact */}
+      <div 
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "var(--space-2)", /* 8px - tighter spacing */
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-1)" }}>
+          <Star size={10} fill="var(--warning)" color="var(--warning)" /> {/* Smaller icon */}
           <span
-            className="text-xs font-semibold"
-            style={{ color: "var(--text-primary)" }}
+            style={{
+              fontSize: "var(--text-xs)", /* 11px */
+              fontWeight: "var(--font-semibold)",
+              color: "var(--text-primary)",
+            }}
           >
             {ratingStars}
           </span>
-          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+          <span 
+            style={{
+              fontSize: "var(--text-xs)",
+              color: "var(--text-tertiary)",
+            }}
+          >
             ({template.reviewCount})
           </span>
         </div>
 
         {/* Install Count */}
-        <div className="flex items-center gap-1">
-          <Download size={12} color="var(--text-tertiary)" />
-          <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-1)" }}>
+          <Download size={10} color="var(--text-tertiary)" /> {/* Smaller icon */}
+          <span 
+            style={{
+              fontSize: "var(--text-xs)",
+              color: "var(--text-secondary)",
+            }}
+          >
             {template.installCount > 1000
               ? `${(template.installCount / 1000).toFixed(1)}k`
               : template.installCount}
@@ -214,13 +241,13 @@ export default function AgentTemplateCardCompact({
       {isHovered && (
         <Button
           size="sm"
-          leftIcon={<Download size={14} />}
           onClick={(e) => {
             e.stopPropagation();
             console.log("Deploy agent:", template.id);
           }}
-          style={{ width: "100%" }}
+          className="w-full"
         >
+          <Download size={14} className="mr-2" />
           Deploy
         </Button>
       )}

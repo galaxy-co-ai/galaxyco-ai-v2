@@ -1,5 +1,5 @@
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 import { colors, typography, spacing, radius } from '@/lib/constants/design-system';
 
 interface Agent {
@@ -25,7 +25,7 @@ interface AgentCardProps {
 
 export function AgentCard({ agent, onView, onToggle, isInstalled = false }: AgentCardProps) {
   return (
-    <Card hover={true} onClick={() => onView?.(agent)}>
+    <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => onView?.(agent)}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md }}>
@@ -159,8 +159,8 @@ export function AgentCard({ agent, onView, onToggle, isInstalled = false }: Agen
           <div style={{ display: 'flex', gap: spacing.md, paddingTop: spacing.md, borderTop: `1px solid ${colors.neutral[200]}` }}>
             <Button
               size="sm"
-              variant={isInstalled ? 'secondary' : 'primary'}
-              fullWidth
+              variant={isInstalled ? 'secondary' : 'default'}
+              className="w-full"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggle(agent);

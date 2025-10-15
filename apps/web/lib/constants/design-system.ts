@@ -1,6 +1,22 @@
 /**
- * GalaxyCo.ai Design System
- * Inspired by: StackAI (enterprise polish), OpenSea (card-based), OpenAI Builder (simplicity)
+ * GalaxyCo.ai Design System (DEPRECATED - Temporary Stub)
+ * 
+ * ⚠️ THIS FILE IS TEMPORARY
+ * 
+ * STATUS:
+ * - Provides fallback values for 37 legacy components
+ * - ALL components will be rebuilt from wireframes (see docs/REBUILD-PLAN.md)
+ * - Even migrated dashboard components will be replaced
+ * - This stub keeps the app functional during redesign
+ * 
+ * REBUILD APPROACH:
+ * - New components go in /components/v2/
+ * - Use semantic HTML + Tailwind + Pico CSS
+ * - NO imports from this file in new components
+ * - See docs/NEW-COMPONENT-GUIDE.md for patterns
+ * 
+ * DO NOT SPEND TIME MIGRATING THESE LEGACY COMPONENTS!
+ * They will be completely replaced during the UI rebuild.
  */
 
 export const colors = {

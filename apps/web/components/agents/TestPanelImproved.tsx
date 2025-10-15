@@ -826,7 +826,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                 }}
               >
                 💡 <strong>Tip:</strong> Fill in the form fields above and click
-                "Run Test". Toggle Live Mode to test with real AI (requires API
+                &quot;Run Test&quot;. Toggle Live Mode to test with real AI (requires API
                 keys in settings). Mock mode gives you instant results without
                 using API credits!
               </p>

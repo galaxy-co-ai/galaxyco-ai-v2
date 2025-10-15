@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useWorkspace } from '@/hooks/useWorkspace';
 import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Card } from "../ui/card";
 
 interface ApiKeyManagerProps {
   className?: string;
@@ -294,15 +294,36 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
         </select>
       </div>
 
-      <Input
-        label="API Key"
-        type="password"
-        value={apiKey}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiKey(e.target.value)}
-        placeholder={`Enter your ${selectedProvider} API key`}
-        disabled={isLoading}
-        helperText="Your API key is encrypted and stored securely"
-      />
+      <div style={{ marginBottom: spacing.lg }}>
+        <label
+          style={{
+            display: 'block',
+            marginBottom: spacing.xs,
+            fontSize: typography.sizes.sm,
+            fontWeight: typography.weights.medium,
+            color: colors.text.primary,
+          }}
+        >
+          API Key
+        </label>
+        <Input
+          type="password"
+          value={apiKey}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiKey(e.target.value)}
+          placeholder={`Enter your ${selectedProvider} API key`}
+          disabled={isLoading}
+          className="w-full"
+        />
+        <p
+          style={{
+            marginTop: spacing.xs,
+            fontSize: typography.sizes.xs,
+            color: colors.text.tertiary,
+          }}
+        >
+          Your API key is encrypted and stored securely
+        </p>
+      </div>
 
       {/* Message */}
       {message && (

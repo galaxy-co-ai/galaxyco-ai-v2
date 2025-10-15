@@ -85,13 +85,13 @@ export default function MarketplaceHero({
       style={{
         position: "relative",
         width: "100%",
-        minHeight: "300px", // Reduced from 500px to match OpenSea
-        height: "min(300px, 40vh)", // Responsive but capped at 300px
+        minHeight: "200px", // Reduced from 300px for compactness
+        height: "200px", // Compact height
         background: heroGradient,
         overflow: "hidden",
-        borderRadius: "16px", // Rounded corners
+        borderRadius: "var(--radius-lg)", // Use design token
       }}
-      className="sm:min-h-[200px] md:min-h-[300px]"
+      className="sm:min-h-[160px] md:min-h-[200px]"
     >
       {/* Background Pattern */}
       <div
@@ -126,45 +126,45 @@ export default function MarketplaceHero({
         >
           <h1
             style={{
-              fontSize: "clamp(1.875rem, 4vw, 3rem)", // Reduced from 2.5-3.5rem to 1.875-3rem
-              fontWeight: "700", // Reduced from 800 to 700
+              fontSize: "var(--text-2xl)", // 24px - compact page title
+              fontWeight: "var(--weight-bold)",
               color: "white",
-              marginBottom: "1rem", // Reduced from 1.5rem
-              lineHeight: "1.2",
+              marginBottom: "var(--space-2)", // 8px - tighter
+              lineHeight: "var(--leading-tight)",
               textShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
             }}
-            className="text-2xl sm:text-3xl md:text-3xl"
+            className="text-xl sm:text-2xl"
           >
             {heroTitle}
           </h1>
 
           <p
             style={{
-              fontSize: "clamp(1rem, 1.5vw, 1.125rem)", // Reduced from 1.125-1.375rem to 1-1.125rem
+              fontSize: "var(--text-sm)", // 13px - compact body
               color: "rgba(255, 255, 255, 0.95)",
-              marginBottom: "2rem", // Reduced from 2.5rem
-              lineHeight: "1.5",
+              marginBottom: "var(--space-4)", // 16px - tighter
+              lineHeight: "var(--leading-snug)",
               textShadow: "0 1px 4px rgba(0, 0, 0, 0.1)",
             }}
-            className="text-base sm:text-lg"
+            className="text-sm"
           >
             {heroSubtitle}
           </p>
 
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "center" }}>
             <Link
               href={slide.link || "/marketplace"}
               style={{
                 display: "inline-block",
-                padding: "0.75rem 1.5rem", // Reduced from 1rem 2rem
+                padding: "var(--space-2) var(--space-4)", // 8px 16px - compact button
                 background: "white",
                 color: colors.primary[600],
-                borderRadius: "12px",
-                fontSize: "1rem", // Reduced from 1.125rem
-                fontWeight: "600",
+                borderRadius: "var(--radius-md)",
+                fontSize: "var(--text-sm)", // 13px
+                fontWeight: "var(--weight-semibold)",
                 textDecoration: "none",
-                boxShadow: shadows.lg,
-                transition: "transform 0.2s, box-shadow 0.2s",
+                boxShadow: "var(--shadow-sm)",
+                transition: "var(--transition-base)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-2px)";
@@ -217,21 +217,21 @@ export default function MarketplaceHero({
             )}
           </div>
 
-          {/* Stats */}
-          {slide.stats && (
+          {/* Stats - Hidden for compact hero */}
+          {false && slide.stats && (
             <div
               style={{
                 display: "flex",
-                gap: "3rem",
-                marginTop: "3rem",
+                gap: "var(--space-8)",
+                marginTop: "var(--space-6)",
               }}
             >
-              {slide.stats.map((stat, i) => (
+              {slide.stats?.map((stat, i) => (
                 <div key={i}>
                   <div
                     style={{
-                      fontSize: "2rem",
-                      fontWeight: "700",
+                      fontSize: "var(--text-xl)",
+                      fontWeight: "var(--weight-bold)",
                       color: "white",
                     }}
                   >
@@ -239,9 +239,9 @@ export default function MarketplaceHero({
                   </div>
                   <div
                     style={{
-                      fontSize: "0.875rem",
+                      fontSize: "var(--text-xs)",
                       color: "rgba(255, 255, 255, 0.8)",
-                      marginTop: "0.25rem",
+                      marginTop: "var(--space-1)",
                     }}
                   >
                     {stat.label}
@@ -252,15 +252,10 @@ export default function MarketplaceHero({
           )}
         </div>
 
-        {/* Right Visual */}
+        {/* Right Visual - Hidden for compact hero */}
         <div
           style={{
-            position: "relative",
-            width: "500px",
-            height: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: "none", // Hide preview cards in compact mode
           }}
         >
           {/* Floating Cards Preview */}

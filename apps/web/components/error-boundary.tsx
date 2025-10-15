@@ -59,7 +59,7 @@ export default function ErrorBoundary({
             marginBottom: spacing.xl,
           }}
         >
-          We've been notified and are looking into it. Please try again.
+          We&apos;ve been notified and are looking into it. Please try again.
         </p>
         {error.digest && (
           <p

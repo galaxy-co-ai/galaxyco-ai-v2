@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Input, Textarea } from '@/components/ui/Input';
+import { FormInput as Input } from '@/components/ui/form-input';
+import { FormTextarea as Textarea } from '@/components/ui/form-textarea';
 import { AgentBuilderState } from '@/hooks/use-agent-builder';
 import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 

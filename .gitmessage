@@ -1,0 +1,13 @@
+type(scope): subject
+
+# Types: feat, fix, docs, refactor, test, chore
+# Scopes: scope-agent, call-agent, email-agent, note-agent, task-agent,
+#         roadmap-agent, content-agent, api, web, db, infra
+#
+# Examples:
+# feat(scope-agent): add multi-page PDF support
+# fix(api): handle missing Clerk session
+# docs(readme): update deployment instructions
+# refactor(web): standardize error handling
+# test(db): add tenant isolation tests
+# chore(infra): update CI/CD pipeline
