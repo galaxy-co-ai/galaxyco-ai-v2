@@ -107,7 +107,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-neutral-200 dark:border-neutral-800 py-8 mt-16">
         <div className="container mx-auto px-4 text-center text-neutral-600 dark:text-neutral-400">
-          <p>© 2025 GalaxyCo.ai. Built with ❤️ to make multi-agent AI useful in minutes.</p>
+          <p>© 2025 GalaxyCo.ai — AI tools that get sh*t done.</p>
         </div>
       </footer>
     </div>
