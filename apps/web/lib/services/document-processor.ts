@@ -116,8 +116,8 @@ export class DocumentProcessor {
 
     // PDF
     if (mimeType === "application/pdf") {
-      // Dynamic import for pdf-parse (CommonJS module)
-      const PDFParse = (await import("pdf-parse")).default;
+      // Use require for pdf-parse (CommonJS module)
+      const PDFParse = require("pdf-parse");
       const data = await PDFParse(Buffer.from(buffer));
       return data.text;
     }
