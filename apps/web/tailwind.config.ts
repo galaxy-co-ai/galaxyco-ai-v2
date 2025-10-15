@@ -8,6 +8,7 @@ import { colors, typography, spacing, borderRadius, boxShadow, breakpoints, zInd
  */
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
