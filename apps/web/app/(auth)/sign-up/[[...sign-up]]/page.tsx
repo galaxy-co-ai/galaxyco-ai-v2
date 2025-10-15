@@ -1,28 +1,36 @@
-import { SignUp } from '@clerk/nextjs';
+/**
+ * GalaxyCo.ai Sign Up Page
+ * Clerk authentication sign up
+ * October 15, 2025
+ */
+
+import { SignUp } from '@clerk/nextjs'
 
 export default function SignUpPage() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      }}
-    >
-      <SignUp
-        appearance={{
-          elements: {
-            rootBox: {
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950 px-4">
+      <div className="w-full max-w-md">
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+            Start using GalaxyCo.ai
+          </h1>
+          <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+            Create your account and get started in minutes
+          </p>
+        </div>
+        
+        <SignUp
+          appearance={{
+            elements: {
+              rootBox: 'mx-auto',
+              card: 'shadow-xl',
             },
-            card: {
-              borderRadius: '16px',
-            },
-          },
-        }}
-      />
+          }}
+          routing="path"
+          path="/sign-up"
+          signInUrl="/sign-in"
+        />
+      </div>
     </div>
-  );
+  )
 }

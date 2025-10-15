@@ -1,285 +1,109 @@
-import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
-import { Button } from "../components/ui/button";
-import { Card } from "../components/ui/card";
-import { Rocket, Satellite, Globe, Zap, Users, Star } from "lucide-react";
+/**
+ * GalaxyCo.ai Landing Page
+ * October 15, 2025
+ */
 
-export default async function Home() {
-  const { userId } = await auth();
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react'
 
+export default function HomePage() {
   return (
-    <main>
+    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white dark:from-neutral-950 dark:to-neutral-900">
+      {/* Navigation */}
+      <nav className="border-b border-neutral-200 dark:border-neutral-800">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">G</span>
+              </div>
+              <span className="text-xl font-bold">GalaxyCo.ai</span>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Link href="/sign-in">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/sign-up">
+                <Button>Get Started</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section style={{
-        paddingTop: "var(--space-16)",
-        paddingBottom: "var(--space-12)"
-      }}>
-        <div className="container">
-          <div className="text-center">
-            {/* Hero Badge */}
-            <div
-              className="badge badge-primary"
-              style={{
-                fontSize: "var(--text-xs)",
-                marginBottom: "var(--space-4)",
-              }}
-            >
-              🚀 Platform 2.0 Now Live
-            </div>
+      <main className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl lg:text-6xl font-bold text-neutral-900 dark:text-white mb-6">
+            Make Multi-Agent AI
+            <br />
+            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+              Useful in Minutes
+            </span>
+          </h1>
+          
+          <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
+            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that deliver measurable outcomes from Day 1. 
+            No setup. No waiting. Just results.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Link href="/sign-up">
+              <Button size="lg" className="text-lg px-8">
+                Start Free Trial
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/sign-in">
+              <Button size="lg" variant="outline" className="text-lg px-8">
+                View Demo
+              </Button>
+            </Link>
+          </div>
 
-            {/* Hero Headline */}
-            <h1
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "var(--text-4xl)",
-                fontWeight: "var(--font-bold)",
-                lineHeight: "var(--leading-tight)",
-                maxWidth: "800px",
-                margin: "0 auto var(--space-5)",
-              }}
-            >
-              Make Multi-Agent AI
-              <br />
-              <span style={{ color: "var(--primary-500)" }}>
-                Useful in Minutes
-              </span>
-            </h1>
-
-            {/* Hero Description */}
-            <p
-              style={{
-                fontSize: "var(--text-base)",
-                color: "var(--text-secondary)",
-                maxWidth: "600px",
-                margin: "0 auto var(--space-6)",
-                lineHeight: "var(--leading-relaxed)",
-              }}
-            >
-              Personalized AI agent Packs that deliver measurable outcomes from
-              Day 1. Built for ambitious operators who need AI that actually
-              works.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex justify-center gap-4" style={{ marginBottom: "var(--space-8)" }}>
-              {userId ? (
-                <Link href="/dashboard">
-                  <Button size="lg">
-                    <Rocket size={20} className="mr-2" />
-                    Go to Dashboard →
-                  </Button>
-                </Link>
-              ) : (
-                <>
-                  <Link href="/sign-up">
-                    <Button size="lg">
-                      <Zap size={20} className="mr-2" />
-                      Start Building
-                    </Button>
-                  </Link>
-                  <Link href="/sign-in">
-                    <Button variant="secondary" size="lg">
-                      Sign In
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Platform Status - Horizontal KPI Cards */}
-            <div className="animate-fade-in">
-              <div className="text-center mb-4">
-                <h3
-                  className="text-base font-medium"
-                  style={{ 
-                    color: "var(--text-primary)",
-                    fontSize: "var(--text-sm)",
-                    marginBottom: "var(--space-3)"
-                  }}
-                >
-                  ✅ Platform Status
-                </h3>
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Card className="p-3 bg-white border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-medium text-gray-600 mb-1">Next.js App</div>
-                      <div className="badge badge-success text-xs px-2 py-1">Live</div>
-                    </div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  </div>
-                </Card>
-                
-                <Card className="p-3 bg-white border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-medium text-gray-600 mb-1">Authentication</div>
-                      <div className="badge badge-success text-xs px-2 py-1">Active</div>
-                    </div>
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  </div>
-                </Card>
-                
-                <Card className="p-3 bg-white border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-medium text-gray-600 mb-1">User Status</div>
-                      <div className={`badge text-xs px-2 py-1 ${userId ? "badge-success" : "badge-warning"}`}>
-                        {userId ? "Authenticated" : "Ready"}
-                      </div>
-                    </div>
-                    <div className={`w-2 h-2 rounded-full ${userId ? "bg-green-500" : "bg-yellow-500"}`}></div>
-                  </div>
-                </Card>
-                
-                <Card className="p-3 bg-white border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-medium text-gray-600 mb-1">Environment</div>
-                      <div className="badge badge-primary text-xs px-2 py-1">v2.0</div>
-                    </div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  </div>
-                </Card>
+              <h3 className="text-lg font-semibold mb-2">AI Agents</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Research, email, and CRM agents working 24/7 to grow your business
+              </p>
+            </div>
+            
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Workflow className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
+              <h3 className="text-lg font-semibold mb-2">Smart Workflows</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                End-to-end automation pipelines that adapt to your business needs
+              </p>
+            </div>
+            
+            <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Real Analytics</h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Track measurable outcomes and ROI from every AI action
+              </p>
             </div>
           </div>
         </div>
-      </section>
+      </main>
 
-      {/* Features Section */}
-      <section
-        className="section"
-        style={{ 
-          background: "var(--bg-secondary)",
-          paddingTop: "var(--space-12)",
-          paddingBottom: "var(--space-12)"
-        }}
-      >
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: "var(--space-8)" }}>
-            <h2
-              style={{ 
-                color: "var(--text-primary)",
-                fontSize: "var(--text-2xl)",
-                fontWeight: "var(--font-semibold)",
-                marginBottom: "var(--space-2)"
-              }}
-            >
-              Space-Grade AI Platform
-            </h2>
-            <p style={{ 
-              fontSize: "var(--text-sm)",
-              color: "var(--text-secondary)"
-            }}>
-              Enterprise-ready tools for ambitious teams
-            </p>
-          </div>
-
-          <div className="grid grid-3 gap-4">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer" style={{ padding: "var(--space-5)" }}>
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Rocket size={32} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 style={{ 
-                fontSize: "var(--text-base)",
-                fontWeight: "var(--font-semibold)",
-                marginBottom: "var(--space-2)"
-              }}>Mission Control</h3>
-              <p style={{ 
-                color: "var(--text-secondary)",
-                fontSize: "var(--text-xs)",
-                lineHeight: "var(--leading-relaxed)"
-              }}>
-                Monitor and manage your AI agents in real-time with
-                comprehensive dashboards.
-              </p>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer" style={{ padding: "var(--space-5)" }}>
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Globe size={32} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 style={{ 
-                fontSize: "var(--text-base)",
-                fontWeight: "var(--font-semibold)",
-                marginBottom: "var(--space-2)"
-              }}>Agent Marketplace</h3>
-              <p style={{ 
-                color: "var(--text-secondary)",
-                fontSize: "var(--text-xs)",
-                lineHeight: "var(--leading-relaxed)"
-              }}>
-                Discover and deploy proven agent templates with one-click
-                installation.
-              </p>
-            </Card>
-
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer" style={{ padding: "var(--space-5)" }}>
-              <div
-                style={{
-                  color: "var(--primary-500)",
-                  marginBottom: "var(--space-3)",
-                }}
-              >
-                <Satellite size={32} style={{ margin: "0 auto" }} />
-              </div>
-              <h3 style={{ 
-                fontSize: "var(--text-base)",
-                fontWeight: "var(--font-semibold)",
-                marginBottom: "var(--space-2)"
-              }}>Knowledge Hub</h3>
-              <p style={{ 
-                color: "var(--text-secondary)",
-                fontSize: "var(--text-xs)",
-                lineHeight: "var(--leading-relaxed)"
-              }}>
-                Connect your data sources and create intelligent, context-aware
-                agents.
-              </p>
-            </Card>
-          </div>
+      {/* Footer */}
+      <footer className="border-t border-neutral-200 dark:border-neutral-800 py-8 mt-16">
+        <div className="container mx-auto px-4 text-center text-neutral-600 dark:text-neutral-400">
+          <p>© 2025 GalaxyCo.ai. Built with ❤️ to make multi-agent AI useful in minutes.</p>
         </div>
-      </section>
-
-      {/* Social Proof */}
-      <section style={{
-        paddingTop: "var(--space-12)",
-        paddingBottom: "var(--space-12)"
-      }}>
-        <div className="container">
-          <div className="text-center">
-            <h3
-              style={{ 
-                fontSize: "var(--text-xl)",
-                fontWeight: "var(--font-semibold)",
-                color: "var(--text-primary)",
-                marginBottom: "var(--space-6)"
-              }}
-            >
-              Trusted by Ambitious Teams
-            </h3>
-            <div className="flex items-center justify-center gap-8 opacity-60">
-              <div style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)" }}>Enterprise Ready</div>
-              <div style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)" }}>SOC 2 Compliant</div>
-              <div style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)" }}>99.9% Uptime</div>
-              <div style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-medium)" }}>24/7 Support</div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
+      </footer>
+    </div>
+  )
 }
