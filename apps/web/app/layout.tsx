@@ -118,9 +118,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="light"
+            enableSystem={false}
             disableTransitionOnChange
+            forcedTheme="light"
           >
             {/* Skip to main content for accessibility */}
             <a

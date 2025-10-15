@@ -68,7 +68,7 @@ export function TopBar({ className }: TopBarProps) {
           </Button>
 
           {/* Theme Toggle */}
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
 
           {/* User Profile */}
           <div className="pl-2 border-l border-border">

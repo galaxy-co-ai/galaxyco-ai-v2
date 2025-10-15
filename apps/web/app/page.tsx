@@ -32,7 +32,7 @@ export default async function HomePage() {
             </div>
             
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
               <Link href="/sign-in">
                 <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Sign In
