@@ -23,21 +23,24 @@ import {
   Mail,
   Settings,
   Bot,
-  Workflow,
+  Clock,
   Database,
   BarChart3,
   Menu,
   X,
   ChevronRight,
   Bell,
-  FolderOpen
+  FolderOpen,
+  TrendingUp,
+  User,
+  Megaphone
 } from 'lucide-react'
 
 interface SidebarProps {
   className?: string
 }
 
-// Navigation items with space-themed icons
+// Navigation items to match wireframe
 const navigationItems = [
   {
     title: 'Dashboard',
@@ -53,22 +56,16 @@ const navigationItems = [
     badge: '3'
   },
   {
-    title: 'Workflows',
-    href: '/workflows', 
-    icon: Workflow,
-    description: 'Automation pipelines'
+    title: 'Sales',
+    href: '/sales',
+    icon: TrendingUp,
+    description: 'Sales analytics & CRM'
   },
   {
-    title: 'CRM',
-    href: '/prospects',
-    icon: Users,
-    description: 'Contact database'
-  },
-  {
-    title: 'Emails',
-    href: '/emails',
-    icon: Mail,
-    description: 'Email campaigns'
+    title: 'Time Usage',
+    href: '/time-usage',
+    icon: Clock,
+    description: 'Time tracking & productivity'
   },
   {
     title: 'Library',
@@ -77,16 +74,28 @@ const navigationItems = [
     description: 'Knowledge & documents'
   },
   {
-    title: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
-    description: 'Performance insights'
+    title: 'Marketing',
+    href: '/marketing',
+    icon: Megaphone,
+    description: 'Marketing campaigns'
+  },
+  {
+    title: 'Outreach',
+    href: '/emails',
+    icon: Mail,
+    description: 'Email outreach & campaigns'
   },
   {
     title: 'Settings',
     href: '/settings',
     icon: Settings,
     description: 'Configuration'
+  },
+  {
+    title: 'Profile',
+    href: '/profile',
+    icon: User,
+    description: 'User profile & preferences'
   }
 ]
 

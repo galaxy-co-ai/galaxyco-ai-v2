@@ -392,7 +392,7 @@ export function EnhancedChatPanel({
                 </p>
                 {contextPills.length > 0 && (
                   <p className="mt-2 text-xs text-neutral-500">
-                    I can see you're on {contextPills[0]?.value} - I'll use this context to help you better.
+                    I can see you&apos;re on {contextPills[0]?.value} - I&apos;ll use this context to help you better.
                   </p>
                 )}
               </div>
