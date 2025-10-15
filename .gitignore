@@ -75,3 +75,4 @@ temp/
 **/add-optional-env*.sh
 **/*.backup
 .env.*.backup
+apps/web/backup-archive/
