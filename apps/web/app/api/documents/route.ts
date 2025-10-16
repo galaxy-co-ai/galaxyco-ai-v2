@@ -12,6 +12,47 @@ export const runtime = 'nodejs';
  */
 export async function GET(req: NextRequest) {
   try {
+    // Development bypass
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.json({
+        documents: [
+          {
+            id: '1',
+            title: 'Product Demo Script',
+            content: 'A comprehensive script for product demonstrations...',
+            type: 'document',
+            tags: ['sales', 'demo', 'script'],
+            collectionId: '1',
+            workspaceId: 'dev-workspace-123',
+            createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: '2',
+            title: 'Company Overview',
+            content: 'Overview of GalaxyCo.ai and our AI agent platform...',
+            type: 'document',
+            tags: ['company', 'overview', 'marketing'],
+            collectionId: '1',
+            workspaceId: 'dev-workspace-123',
+            createdAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: '3',
+            title: 'Email Templates Collection',
+            content: 'Various email templates for different use cases...',
+            type: 'template',
+            tags: ['email', 'templates', 'outreach'],
+            collectionId: '2',
+            workspaceId: 'dev-workspace-123',
+            createdAt: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+      });
+    }
+    
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {

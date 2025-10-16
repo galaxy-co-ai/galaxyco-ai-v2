@@ -145,6 +145,48 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
+    // Development bypass
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.json({
+        success: true,
+        agents: [
+          {
+            id: '1',
+            name: 'Demo Research Agent',
+            description: 'Researches prospects and gathers intel',
+            type: 'custom',
+            status: 'active',
+            isCustom: true,
+            version: '1.0.0',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: '2', 
+            name: 'Demo Email Agent',
+            description: 'Sends personalized outreach emails',
+            type: 'custom',
+            status: 'draft',
+            isCustom: true,
+            version: '1.0.0',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: '3',
+            name: 'Demo CRM Agent', 
+            description: 'Updates CRM with lead information',
+            type: 'custom',
+            status: 'paused',
+            isCustom: true,
+            version: '1.0.0',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+      });
+    }
+    
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
