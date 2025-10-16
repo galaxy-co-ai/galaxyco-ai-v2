@@ -24,7 +24,7 @@ export default function MainContent({ children }: MainContentProps) {
   return (
     <main
       style={{
-        marginLeft: isMobile ? "0" : (isExpanded ? "240px" : "64px"), // Responsive space for sidebar
+        marginLeft: isMobile ? "0" : isExpanded ? "240px" : "64px", // Responsive space for sidebar
         paddingTop: "64px", // Space for top bar
         minHeight: "100vh",
       }}

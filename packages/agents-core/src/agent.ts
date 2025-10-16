@@ -15,7 +15,9 @@ export class Agent implements IAgent {
   public readonly guardrails: Guardrail[];
 
   constructor(config: AgentConfig & { id?: string }) {
-    this.id = config.id || `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.id =
+      config.id ||
+      `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.name = config.name;
     this.instructions = config.instructions;
     this.model = config.model || "gpt-4o-mini";

@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { mockUser } from '@/lib/fixtures';
-import { Save } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { mockUser } from "@/lib/fixtures";
+import { Save } from "lucide-react";
 
 export default function ProfileSettingsPage() {
   const user = mockUser;
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Profile" description="Manage your personal information" />
+      <PageHeader
+        title="Profile"
+        description="Manage your personal information"
+      />
 
       <div className="card p-6">
         <form className="space-y-6">

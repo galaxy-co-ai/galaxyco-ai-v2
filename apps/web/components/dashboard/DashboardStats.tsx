@@ -129,7 +129,10 @@ export default function DashboardStats({
             }}
           >
             {/* Header with Icon */}
-            <div className="flex items-center justify-between" style={{ marginBottom: "var(--spacing-tight)" }}>
+            <div
+              className="flex items-center justify-between"
+              style={{ marginBottom: "var(--spacing-tight)" }}
+            >
               <div
                 style={{
                   width: "var(--size-icon-md)",
@@ -159,7 +162,9 @@ export default function DashboardStats({
                   }}
                 >
                   <TrendIcon size={14} strokeWidth={2} />
-                  <span style={{ fontSize: "var(--text-label)", fontWeight: "600" }}>
+                  <span
+                    style={{ fontSize: "var(--text-label)", fontWeight: "600" }}
+                  >
                     {stat.trend.value}%
                   </span>
                 </div>

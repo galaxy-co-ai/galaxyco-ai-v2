@@ -1,1 +1,5 @@
-export { documentProcessingJob, embeddingUpdateJob, documentCategorizationJob } from './document-processing';
+export {
+  documentProcessingJob,
+  embeddingUpdateJob,
+  documentCategorizationJob,
+} from "./document-processing";

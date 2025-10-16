@@ -50,12 +50,12 @@ export function ConversationHistory({
   async function handleDelete(id: string, e: React.MouseEvent) {
     e.stopPropagation();
     if (!confirm("Delete this conversation?")) return;
-    
+
     try {
       const res = await fetch(`/api/ai/conversations/${id}`, {
         method: "DELETE",
       });
-      
+
       if (res.ok) {
         setConversations((prev) => prev.filter((c) => c.id !== id));
         onDeleteConversation(id);
@@ -67,19 +67,17 @@ export function ConversationHistory({
 
   async function handlePin(id: string, e: React.MouseEvent) {
     e.stopPropagation();
-    
+
     try {
       const res = await fetch(`/api/ai/conversations/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "toggle_pin" }),
       });
-      
+
       if (res.ok) {
         setConversations((prev) =>
-          prev.map((c) =>
-            c.id === id ? { ...c, isPinned: !c.isPinned } : c
-          )
+          prev.map((c) => (c.id === id ? { ...c, isPinned: !c.isPinned } : c)),
         );
       }
     } catch (error) {
@@ -88,7 +86,7 @@ export function ConversationHistory({
   }
 
   const filteredConversations = conversations.filter((c) =>
-    c.title.toLowerCase().includes(searchQuery.toLowerCase())
+    c.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const pinnedConvos = filteredConversations.filter((c) => c.isPinned);
@@ -211,7 +209,7 @@ function ConversationItem({
         "group relative px-2 py-2 rounded-lg cursor-pointer transition-colors mb-1",
         isActive
           ? "bg-primary/10 text-primary"
-          : "hover:bg-muted text-foreground"
+          : "hover:bg-muted text-foreground",
       )}
       onClick={() => onSelect(conversation.id)}
       onMouseEnter={() => setShowActions(true)}
@@ -231,7 +229,9 @@ function ConversationItem({
               onClick={(e) => onPin(conversation.id, e)}
               className={cn(
                 "p-1 rounded hover:bg-background transition-colors",
-                conversation.isPinned ? "text-primary" : "text-muted-foreground"
+                conversation.isPinned
+                  ? "text-primary"
+                  : "text-muted-foreground",
               )}
               aria-label={conversation.isPinned ? "Unpin" : "Pin"}
             >

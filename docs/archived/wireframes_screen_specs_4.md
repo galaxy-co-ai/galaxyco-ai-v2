@@ -1,6 +1,7 @@
 # GalaxyCo.ai — Wireframes / Screen Specs (4.2)
 
 ## Scope & Principles
+
 - Covers **app screens** required for MVP → V1. Marketing site is out of scope.
 - Inspirations to emulate **only**: **StackAI** (enterprise polish), **OpenSea** (card marketplace), **OpenAI Agent Builder** (friendly building), **Sider** (human knowledge UI).
 - **Packs by default**, **PAA present on Day‑1**, **dual‑mode builder**, **citations for answers**, **KPIs on cards**.
@@ -9,6 +10,7 @@
 ---
 
 ## Global Layout & Navigation
+
 - **Top Bar**: workspace switcher, global search, notifications, user menu.
 - **Left Nav**: Dashboard, Packs, Agents, Marketplace, Builder, Knowledge, Integrations, Monitoring, Approvals, Settings.
 - **Right Rail (contextual)**: **PAA Panel** with suggestions, issues, and next best actions.
@@ -18,6 +20,7 @@
 ---
 
 ## Design Tokens & Grid (reference for comps)
+
 - **Grid**: 12‑column; 24px gutters; max content width 1280–1440px.
 - **Spacing**: 4, 8, 12, 16, 24, 32, 48.
 - **Corners & Elevation**: radius 16px (cards), shadows subtle; hover elevation +1.
@@ -28,6 +31,7 @@
 ---
 
 ## Component Patterns (reused across screens)
+
 - **Card**
   - Header: title, icon, status chip.
   - Body: 2–3 key facts or KPIs.
@@ -56,6 +60,7 @@
 ## Screens
 
 ### 1) Auth / Signup
+
 **Purpose**: get users into the workspace fast.
 **Layout**: centered card; SSO buttons; email/pass; legal links.
 **Primary actions**: Continue with Google/Microsoft; Create account.
@@ -67,40 +72,45 @@
 ---
 
 ### 2) Onboarding (6 Steps)
+
 **Purpose**: ≤90s intake; compose Starter Pack.
 **Entry**: post‑signup or from Settings → Re‑run onboarding.
 **Layout**: progress steps with back/next; right preview panel shows **Pack preview** updating live.
 **Steps**
+
 1. **Role & Industry**: role picker; industry overlays.
 2. **Top Pains**: 3 selectable chips; optional free‑text.
 3. **Preferred Outcomes**: pick 1–2 Day‑1 outcomes.
 4. **Tools**: connect or **Sim Mode**; show integration cards.
 5. **Sensitivity**: redaction toggle; approval defaults.
 6. **Summary**: show proposed **Starter Pack** agents, KPIs, and Next Best Actions.
-**Primary actions**: Next / Back / **Create my workspace**.
-**States**: loading, validation errors, “skip connection” → Sim Mode badge.
-**Copy**: “We’ll install a Starter Pack you can edit anytime.”
-**Telemetry**: `onboarding_step_*`, `starter_pack_installed`.
-**Acceptance**: creates dashboard, installs Pack + **PAA**.
+   **Primary actions**: Next / Back / **Create my workspace**.
+   **States**: loading, validation errors, “skip connection” → Sim Mode badge.
+   **Copy**: “We’ll install a Starter Pack you can edit anytime.”
+   **Telemetry**: `onboarding_step_*`, `starter_pack_installed`.
+   **Acceptance**: creates dashboard, installs Pack + **PAA**.
 
 ---
 
 ### 3) Dashboard (Home)
+
 **Purpose**: zero‑blank state; see progress and act quickly.
 **Layout**
+
 - **Today Panel**: next actions; approvals; **PAA suggestions**.
 - **KPI Snapshot**: WSAO, success %, p95 latency, cost.
 - **Agent Activity**: recent outcomes with status and links to traces.
 - **Knowledge Coverage**: % coverage, gaps list, **Fix gap** CTA.
 - **Integrations**: connected vs. suggested; connect buttons.
-**Primary actions**: Approve, Add to Pack, Connect tool, Open Builder, Explore Marketplace.
-**States**: Sim Mode badges when tools aren’t connected.
-**Telemetry**: `dashboard_first_load`, clicks per widget.
-**Acceptance**: never blank; at least one example outcome runnable.
+  **Primary actions**: Approve, Add to Pack, Connect tool, Open Builder, Explore Marketplace.
+  **States**: Sim Mode badges when tools aren’t connected.
+  **Telemetry**: `dashboard_first_load`, clicks per widget.
+  **Acceptance**: never blank; at least one example outcome runnable.
 
 ---
 
 ### 4) PAA Panel & Weekly Review
+
 **Purpose**: always‑on assistant.
 **Layout**: right rail panel with tabs: Suggestions, Issues, Reviews.
 **Weekly Review Modal**: outcomes summary, bottlenecks, proposed changes (add/remove/reorder agents), coverage tasks.
@@ -111,6 +121,7 @@
 ---
 
 ### 5) Marketplace — Browse
+
 **Purpose**: discover agents & Packs.
 **Layout**: filter bar; **card grid** (OpenSea‑style) with KPIs, ratings, verified badges.
 **Card**: title, purpose, KPIs, best pairings, updated timestamp.
@@ -122,6 +133,7 @@
 ---
 
 ### 6) Marketplace — Detail (Agent / Pack)
+
 **Purpose**: evaluate and install.
 **Layout**: hero with title and purpose; tabs for Overview, KPIs, Changelog, Reviews.
 **Demo**: **Preview with sample data** button; show output + citations.
@@ -132,6 +144,7 @@
 ---
 
 ### 7) Pack View
+
 **Purpose**: manage team of agents.
 **Layout**: header with persona/industry; goals; **Pack KPIs**.
 **List**: agents with toggles, priority drag, health status.
@@ -143,6 +156,7 @@
 ---
 
 ### 8) Agent Detail
+
 **Purpose**: inspect and test a single agent.
 **Layout**: summary, tools, knowledge refs, policies, KPIs.
 **Test Bench**: run with fixtures; see trace and citations.
@@ -153,6 +167,7 @@
 ---
 
 ### 9) Builder — Visual
+
 **Purpose**: assemble/edit flows with nodes.
 **Layout**: canvas with pan/zoom, minimap; left node palette; right properties; bottom **Test Bench**.
 **Nodes**: Input, Tool, Decision, Knowledge, LLM, Output.
@@ -164,6 +179,7 @@
 ---
 
 ### 10) Builder — DSL
+
 **Purpose**: precise control and review.
 **Layout**: code editor with schema validation, lint hints; right live preview of graph.
 **Features**: history with diffs; rollback; typeahead for actions/tools/agents.
@@ -174,6 +190,7 @@
 ---
 
 ### 11) Knowledge — Sources
+
 **Purpose**: connect and monitor sources.
 **Layout**: **tile grid** per source with icon, last sync, status, items indexed.
 **Actions**: Connect, Re‑sync, Troubleshoot, Permissions.
@@ -184,6 +201,7 @@
 ---
 
 ### 12) Knowledge — Coverage
+
 **Purpose**: understand “what we know.”
 **Layout**: topic list with coverage %, freshness; **Gaps** section with quick fixes.
 **Primary actions**: Fix gap (connect, upload, request doc), Open PAA task.
@@ -193,6 +211,7 @@
 ---
 
 ### 13) Integrations
+
 **Purpose**: authenticate and verify connectors.
 **Layout**: list of connectors with status; connection drawer with auth scopes and sample outputs.
 **Primary actions**: Connect, Test, Simulate.
@@ -202,6 +221,7 @@
 ---
 
 ### 14) Monitoring & Traces
+
 **Purpose**: see reliability/cost/perf; debug failures.
 **Layout**: top KPIs; outcome list; detail view with step timeline, tokens, latency, tool errors; **citations panel**.
 **Primary actions**: Open trace, Retry, Create issue, Rollback.
@@ -211,6 +231,7 @@
 ---
 
 ### 15) Approvals Queue
+
 **Purpose**: gate destructive/bulk actions.
 **Layout**: list with scope, requestor (agent), preview of change, risk signals.
 **Primary actions**: Approve, Deny, Ask PAA.
@@ -220,6 +241,7 @@
 ---
 
 ### 16) Settings
+
 **Purpose**: workspace and governance.
 **Sections**: Profile, Billing (light), Roles & Permissions, Policies (redaction/approval), Data residency.
 **Primary actions**: Invite user, Set role, Toggle redaction, Export audit log.
@@ -229,6 +251,7 @@
 ---
 
 ### 17) Error & Empty Pages
+
 **Purpose**: graceful failures.
 **Layouts**: 404, 500, Rate‑limit; each with retry/back and link to status page.
 **Acceptance**: never dead ends; PAA suggests next step.
@@ -236,6 +259,7 @@
 ---
 
 ### 18) Responsive Behavior
+
 **Mobile**: bottom tab bar; simplified cards; drawer modals.
 **Tablet/Desktop**: full left nav; right PAA rail visible ≥ 1280px.
 **Performance**: lazy‑load heavy sections; maintain 60fps on interactions.
@@ -243,23 +267,27 @@
 ---
 
 ## Accessibility & Performance Budgets
+
 - **A11y**: color contrast AA; focus states visible; keyboard navigation; aria labels for dynamic regions; reduced motion respect.
 - **Perf budgets**: initial dashboard ≤ 2.5s TTI on mid‑tier laptop; marketplace grid LCP ≤ 1.8s; builder canvas interactions ≤ 16ms per frame.
 
 ---
 
 ## Copy Tokens (canonical CTAs)
+
 - **Primary**: Create my workspace · Install Pack · Add to Pack · Preview with sample data · Connect tool · Open Builder · Approve
 - **Secondary**: Customize · Reorder · Fix gap · View trace · Rollback · Ask PAA
 
 ---
 
 ## Telemetry Events (global)
+
 - `ui_view:*` per route; `cta_click:*` per CTA id; `error:*` with code; `perf:*` for LCP/TTI; `a11y:*` for violations in QA.
 
 ---
 
 ## Edge Cases & States
+
 - **Sim Mode** clearly labeled everywhere sample data is used; disable destructive actions.
 - **Rate limits** show countdown and retry plan; PAA opens issue if persistent.
 - **Permission errors** prompt role owner; show request access CTA.
@@ -267,6 +295,7 @@
 ---
 
 ## V1 Acceptance Checklist (Screens)
+
 - Dashboard never blank; Starter Pack + PAA installed on first load.
 - Marketplace filters/sort; Agent/Pack cards render KPIs; detail previews run in Sim Mode.
 - Builder visual ↔ DSL sync; Test Bench + traces visible; rollback works.
@@ -274,4 +303,3 @@
 - Integrations connect with retries; Approvals queue blocks destructive scopes.
 - Monitoring & Traces show p95 latency, success %, cost; link from outcomes.
 - Settings enforce RBAC; audit export available; redaction toggle functional.
-

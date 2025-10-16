@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { db } from '@galaxyco/database';
-import { agents, workspaceMembers, users } from '@galaxyco/database/schema';
-import { eq, and } from 'drizzle-orm';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@galaxyco/database";
+import { agents, workspaceMembers, users } from "@galaxyco/database/schema";
+import { eq, and } from "drizzle-orm";
 
 /**
  * POST /api/agents
  * Save a new agent as draft
- * 
+ *
  * Requires:
  * - Authentication (Clerk)
  * - Workspace membership
@@ -18,10 +18,7 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // 2. Get request body
@@ -41,8 +38,8 @@ export async function POST(req: NextRequest) {
     // 3. Validate required fields
     if (!workspaceId || !name || !workflow) {
       return NextResponse.json(
-        { error: 'Missing required fields: workspaceId, name, workflow' },
-        { status: 400 }
+        { error: "Missing required fields: workspaceId, name, workflow" },
+        { status: 400 },
       );
     }
 
@@ -52,24 +49,21 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // 5. Verify workspace membership
     const membership = await db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, user.id)
+        eq(workspaceMembers.userId, user.id),
       ),
     });
 
     if (!membership) {
       return NextResponse.json(
-        { error: 'Forbidden: User not a member of this workspace' },
-        { status: 403 }
+        { error: "Forbidden: User not a member of this workspace" },
+        { status: 403 },
       );
     }
 
@@ -77,18 +71,18 @@ export async function POST(req: NextRequest) {
 
     // 6. Build agent config
     const config = {
-      aiProvider: 'openai' as const, // Default, can be customized later
-      model: 'gpt-4',
-      systemPrompt: enhancedPrompt || originalPrompt || '',
+      aiProvider: "openai" as const, // Default, can be customized later
+      model: "gpt-4",
+      systemPrompt: enhancedPrompt || originalPrompt || "",
       // Store workflow and metadata in a compatible way
       tools: integrations || [],
       triggers: [
         {
-          type: 'manual',
+          type: "manual",
           config: {
             workflow,
             edges: edges || [],
-            variantType: variantType || 'basic',
+            variantType: variantType || "basic",
             originalPrompt,
             enhancedPrompt,
           },
@@ -102,13 +96,13 @@ export async function POST(req: NextRequest) {
       .values({
         workspaceId,
         name,
-        description: description || '',
-        type: 'custom',
-        status: 'draft',
+        description: description || "",
+        type: "custom",
+        status: "draft",
         config,
         isCustom: true,
         createdBy: userId,
-        version: '1.0.0',
+        version: "1.0.0",
       })
       .returning();
 
@@ -124,13 +118,13 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[API] Save agent error:', error);
+    console.error("[API] Save agent error:", error);
     return NextResponse.json(
-      { 
-        error: 'Failed to save agent',
-        details: error instanceof Error ? error.message : 'Unknown error'
+      {
+        error: "Failed to save agent",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -138,7 +132,7 @@ export async function POST(req: NextRequest) {
 /**
  * GET /api/agents
  * List all agents for a workspace
- * 
+ *
  * Query params:
  * - workspaceId: required
  * - status: optional filter (draft, active, paused, archived)
@@ -148,20 +142,17 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get('workspaceId');
+    const workspaceId = searchParams.get("workspaceId");
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: 'Missing required query param: workspaceId' },
-        { status: 400 }
+        { error: "Missing required query param: workspaceId" },
+        { status: 400 },
       );
     }
 
@@ -171,24 +162,21 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // 4. Verify workspace membership
     const membership = await db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, user.id)
+        eq(workspaceMembers.userId, user.id),
       ),
     });
 
     if (!membership) {
       return NextResponse.json(
-        { error: 'Forbidden: User not a member of this workspace' },
-        { status: 403 }
+        { error: "Forbidden: User not a member of this workspace" },
+        { status: 403 },
       );
     }
 
@@ -204,10 +192,10 @@ export async function GET(req: NextRequest) {
       total: agentsList.length,
     });
   } catch (error) {
-    console.error('[API] List agents error:', error);
+    console.error("[API] List agents error:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch agents' },
-      { status: 500 }
+      { error: "Failed to fetch agents" },
+      { status: 500 },
     );
   }
 }

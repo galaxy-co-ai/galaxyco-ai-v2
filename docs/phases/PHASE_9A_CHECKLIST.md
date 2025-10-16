@@ -15,11 +15,13 @@
 ## 1. Database Schema for API Keys & Executions
 
 ### 1.1 Add API Keys Column to Workspaces
+
 - [ ] Create migration file: `packages/database/migrations/20250108_add_api_keys.sql`
 - [ ] Add `encrypted_api_keys` JSONB column to workspaces table
 - [ ] Run migration: `cd packages/database && pnpm db:push`
 
 ### 1.2 Add Agent Executions Table
+
 - [ ] Update `packages/database/src/schema.ts` - already exists, verify fields
 - [ ] Ensure indexes exist (workspace_id, agent_id, status, created_at)
 
@@ -41,24 +43,28 @@
 ## 3. AI Provider Service Layer
 
 ### 3.1 Base Types
+
 - [ ] Create `apps/web/lib/ai/types.ts`
 - [ ] Define `AIProvider` interface
 - [ ] Define `ExecuteParams` and `ExecuteResult` types
 - [ ] Define `Message` type
 
 ### 3.2 OpenAI Provider
+
 - [ ] Create `apps/web/lib/ai/providers/openai.ts`
 - [ ] Implement `OpenAIProvider` class
 - [ ] Add `execute()` method with token counting
 - [ ] Add `estimateCost()` method
 
 ### 3.3 Anthropic Provider
+
 - [ ] Create `apps/web/lib/ai/providers/anthropic.ts`
 - [ ] Implement `AnthropicProvider` class
 - [ ] Add `execute()` method with token counting
 - [ ] Add `estimateCost()` method
 
 ### 3.4 Provider Factory
+
 - [ ] Create `apps/web/lib/ai/factory.ts`
 - [ ] Implement `createProvider(type, apiKey)`
 - [ ] Add provider validation
@@ -70,12 +76,14 @@
 ## 4. API Key Management API Routes
 
 ### 4.1 Add API Key Endpoint
+
 - [ ] Create `apps/web/app/api/workspaces/[id]/api-keys/route.ts`
 - [ ] POST: Add encrypted API key
 - [ ] GET: List available providers (not keys)
 - [ ] DELETE: Remove API key
 
 ### 4.2 Test Connection Endpoint
+
 - [ ] Add POST `/api/workspaces/[id]/api-keys/test`
 - [ ] Validate key by making test call to provider
 

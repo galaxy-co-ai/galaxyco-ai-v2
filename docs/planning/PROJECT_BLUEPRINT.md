@@ -24,9 +24,11 @@
 ## Project Overview
 
 ### Vision
+
 **"Make multi-agent AI useful in minutes"**
 
 GalaxyCo.ai 2.0 is an enterprise-grade, multi-tenant platform for creating, managing, and orchestrating AI agents. It provides:
+
 - 🤖 **Multi-Agent Management** - Create and manage diverse AI agents
 - 📚 **Knowledge Base (RAG)** - Document management with semantic search
 - 🏪 **Marketplace** - Pre-built agent templates and packs
@@ -34,6 +36,7 @@ GalaxyCo.ai 2.0 is an enterprise-grade, multi-tenant platform for creating, mana
 - 🎨 **Modern UI/UX** - Clean, professional design system
 
 ### Target Users
+
 - Ambitious non-technical operators
 - Small to medium businesses
 - Development teams needing AI automation
@@ -86,41 +89,45 @@ galaxyco-ai-2.0/
 ## Tech Stack
 
 ### Frontend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Next.js** | 14.2 | React framework with App Router |
-| **React** | 18.3 | UI library |
-| **TypeScript** | 5.5 | Type safety |
-| **Clerk** | 5.7+ | Authentication & user management |
-| **Vercel** | - | Hosting & deployment |
+
+| Technology     | Version | Purpose                          |
+| -------------- | ------- | -------------------------------- |
+| **Next.js**    | 14.2    | React framework with App Router  |
+| **React**      | 18.3    | UI library                       |
+| **TypeScript** | 5.5     | Type safety                      |
+| **Clerk**      | 5.7+    | Authentication & user management |
+| **Vercel**     | -       | Hosting & deployment             |
 
 ### Backend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Node.js** | 20+ | Runtime |
-| **Drizzle ORM** | 0.44+ | Database ORM |
-| **PostgreSQL** | - | Primary database (Neon) |
-| **Vercel Blob** | 2.0 | File storage |
+
+| Technology      | Version | Purpose                 |
+| --------------- | ------- | ----------------------- |
+| **Node.js**     | 20+     | Runtime                 |
+| **Drizzle ORM** | 0.44+   | Database ORM            |
+| **PostgreSQL**  | -       | Primary database (Neon) |
+| **Vercel Blob** | 2.0     | File storage            |
 
 ### AI & ML
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **OpenAI SDK** | 6.2+ | GPT models & embeddings |
-| **Anthropic SDK** | 0.65+ | Claude models |
-| **Google AI SDK** | 0.24+ | Gemini models |
-| **Vercel AI SDK** | 5.0+ | Unified AI interface |
-| **pdf-parse** | 2.2+ | PDF text extraction |
-| **cheerio** | 1.1+ | Web scraping |
+
+| Technology        | Version | Purpose                 |
+| ----------------- | ------- | ----------------------- |
+| **OpenAI SDK**    | 6.2+    | GPT models & embeddings |
+| **Anthropic SDK** | 0.65+   | Claude models           |
+| **Google AI SDK** | 0.24+   | Gemini models           |
+| **Vercel AI SDK** | 5.0+    | Unified AI interface    |
+| **pdf-parse**     | 2.2+    | PDF text extraction     |
+| **cheerio**       | 1.1+    | Web scraping            |
 
 ### Development
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **pnpm** | 9.0+ | Package manager |
-| **Turbo** | 2.0+ | Monorepo build system |
-| **ESLint** | 9.0+ | Code linting |
-| **Prettier** | 3.3+ | Code formatting |
-| **Husky** | 9.1+ | Git hooks |
-| **Playwright** | 1.56+ | E2E testing |
+
+| Technology     | Version | Purpose               |
+| -------------- | ------- | --------------------- |
+| **pnpm**       | 9.0+    | Package manager       |
+| **Turbo**      | 2.0+    | Monorepo build system |
+| **ESLint**     | 9.0+    | Code linting          |
+| **Prettier**   | 3.3+    | Code formatting       |
+| **Husky**      | 9.1+    | Git hooks             |
+| **Playwright** | 1.56+   | E2E testing           |
 
 ---
 
@@ -129,24 +136,28 @@ galaxyco-ai-2.0/
 ### Core Entities
 
 #### 1. **Workspaces** (Tenant Boundary)
+
 - Multi-tenant container
 - Subscription & billing info
 - Encrypted API keys storage
 - Settings & configuration
 
 #### 2. **Users**
+
 - Clerk integration for auth
 - Profile information
 - User preferences
 - Last login tracking
 
 #### 3. **Workspace Members**
+
 - User ↔ Workspace relationship
 - RBAC (owner, admin, member, viewer)
 - Fine-grained permissions
 - Invitation tracking
 
 #### 4. **Agents**
+
 - Agent definitions & configurations
 - AI provider settings (OpenAI, Anthropic, Google)
 - Type: scope, call, email, note, task, roadmap, content, custom, browser, cross-app, knowledge, sales, trending, research, meeting, code, data, security
@@ -154,6 +165,7 @@ galaxyco-ai-2.0/
 - Execution tracking
 
 #### 5. **Agent Templates** (Marketplace)
+
 - Pre-built agent configurations
 - Metadata (name, description, category)
 - KPIs & metrics
@@ -161,11 +173,13 @@ galaxyco-ai-2.0/
 - Trending scores
 
 #### 6. **Agent Packs** (Marketplace)
+
 - Collections of agent templates
 - Bundled configurations
 - Pricing info
 
 #### 7. **Agent Executions**
+
 - Audit trail of agent runs
 - Input/output logging
 - Performance metrics (duration, tokens, cost)
@@ -174,15 +188,18 @@ galaxyco-ai-2.0/
 #### 8. **Knowledge Base**
 
 **Collections:**
+
 - Organizational folders for knowledge items
 - Color coding & icons
 - Item count tracking
 
 **Tags:**
+
 - Workspace-scoped tags
 - Usage count tracking
 
 **Knowledge Items:**
+
 - Types: document, url, image, text
 - Status: processing, ready, failed
 - Source tracking (file, URL)
@@ -194,12 +211,14 @@ galaxyco-ai-2.0/
 - Favorite & archive flags
 
 **Knowledge Item Tags:**
+
 - Many-to-many relationship
 - Item ↔ Tag linking
 
 ### Indexes & Performance
 
 ✅ All tables indexed on:
+
 - `workspaceId` (tenant isolation)
 - Foreign keys
 - Frequently queried fields (status, type, createdAt)
@@ -210,6 +229,7 @@ galaxyco-ai-2.0/
 ## Implemented Features
 
 ### ✅ Authentication & User Management
+
 - [x] Clerk integration for SSO
 - [x] User registration & login
 - [x] Workspace creation
@@ -219,6 +239,7 @@ galaxyco-ai-2.0/
 ### ✅ Knowledge Base (Core Feature)
 
 **Backend (API):**
+
 - [x] Upload API (files, URLs, text)
   - [x] PDF text extraction
   - [x] Plain text processing
@@ -253,6 +274,7 @@ galaxyco-ai-2.0/
   - [x] Configurable result count
 
 **Frontend (UI):**
+
 - [x] Knowledge Base page (`/knowledge`)
   - [x] Drag & drop file upload
   - [x] File browser upload
@@ -291,6 +313,7 @@ galaxyco-ai-2.0/
   - [x] Loading skeletons for better UX
 
 **Utilities:**
+
 - [x] `embeddings.ts` - Embedding generation & similarity
   - [x] Single & batch embedding generation
   - [x] Cosine similarity calculation
@@ -308,18 +331,21 @@ galaxyco-ai-2.0/
 ### ✅ Agents System
 
 **Backend:**
+
 - [x] Agent CRUD APIs (basic)
 - [x] Agent execution tracking
 - [x] AI provider factory (OpenAI, Anthropic, Google)
 - [x] Workspace API key management
 
 **Frontend:**
+
 - [x] Agents page (`/agents`)
 - [x] Agent creation page (`/agents/new`)
 - [x] Agent detail page (`/agents/[id]`)
 - [x] Agent components (cards, forms)
 
 **Core Package:**
+
 - [x] `@galaxyco/agents-core` package
 - [x] Agent orchestration logic
 - [x] Tool definitions
@@ -329,11 +355,13 @@ galaxyco-ai-2.0/
 ### ✅ Marketplace
 
 **Backend:**
+
 - [x] Agent templates schema
 - [x] Agent packs schema
 - [x] Marketplace APIs (basic)
 
 **Frontend:**
+
 - [x] Marketplace page (`/marketplace`)
 - [x] Template browsing
 - [x] Install functionality (basic)
@@ -341,6 +369,7 @@ galaxyco-ai-2.0/
 ### ✅ Dashboard
 
 **Frontend:**
+
 - [x] Dashboard layout
 - [x] Overview page
 - [x] Navigation sidebar
@@ -349,6 +378,7 @@ galaxyco-ai-2.0/
 ### ✅ Settings
 
 **Pages:**
+
 - [x] Settings page structure
 - [x] Workspace settings
 - [x] API key management
@@ -357,6 +387,7 @@ galaxyco-ai-2.0/
 ### ✅ Onboarding
 
 **Pages:**
+
 - [x] Onboarding flow
 - [x] Workspace creation
 - [x] Initial setup wizard
@@ -368,6 +399,7 @@ galaxyco-ai-2.0/
 ### Knowledge Base APIs
 
 #### Upload
+
 ```
 POST /api/knowledge/upload?workspaceId={id}
 Content-Type: multipart/form-data OR application/json
@@ -390,6 +422,7 @@ Response:
 ```
 
 #### List Items
+
 ```
 GET /api/knowledge/list?workspaceId={id}&page={n}&limit={n}&sort={field}&search={q}&type={type}&status={status}&collectionId={id}
 
@@ -406,6 +439,7 @@ Response:
 ```
 
 #### Get Item
+
 ```
 GET /api/knowledge/items/{id}?workspaceId={id}
 
@@ -416,6 +450,7 @@ Response:
 ```
 
 #### Update Item
+
 ```
 PATCH /api/knowledge/items/{id}?workspaceId={id}
 Content-Type: application/json
@@ -436,6 +471,7 @@ Response:
 ```
 
 #### Delete Item
+
 ```
 DELETE /api/knowledge/items/{id}?workspaceId={id}
 
@@ -447,6 +483,7 @@ Response:
 ```
 
 #### Collections - List
+
 ```
 GET /api/knowledge/collections?workspaceId={id}
 
@@ -467,6 +504,7 @@ Response:
 ```
 
 #### Collections - Create
+
 ```
 POST /api/knowledge/collections?workspaceId={id}
 Content-Type: application/json
@@ -487,6 +525,7 @@ Response:
 ```
 
 #### Collections - Update
+
 ```
 PATCH /api/knowledge/collections/{id}?workspaceId={id}
 Content-Type: application/json
@@ -506,6 +545,7 @@ Response:
 ```
 
 #### Collections - Delete
+
 ```
 DELETE /api/knowledge/collections/{id}?workspaceId={id}
 
@@ -517,6 +557,7 @@ Response:
 ```
 
 #### Embeddings - Generate
+
 ```
 POST /api/knowledge/embeddings?workspaceId={id}
 Content-Type: application/json
@@ -540,6 +581,7 @@ Response:
 ```
 
 #### Semantic Search
+
 ```
 POST /api/knowledge/search?workspaceId={id}
 Content-Type: application/json
@@ -570,6 +612,7 @@ Response:
 ```
 
 ### Agent APIs
+
 - `GET /api/agents` - List agents
 - `POST /api/agents` - Create agent
 - `GET /api/agents/{id}` - Get agent
@@ -578,6 +621,7 @@ Response:
 - `POST /api/agents/{id}/execute` - Execute agent
 
 ### Marketplace APIs
+
 - `GET /api/marketplace/templates` - List templates
 - `GET /api/marketplace/templates/{slug}` - Get template
 - `POST /api/marketplace/templates/{slug}/install` - Install template
@@ -587,11 +631,13 @@ Response:
 ## Frontend Components
 
 ### Layout Components
+
 - `DashboardLayout` - Main dashboard shell
 - `Sidebar` - Navigation sidebar
 - `TopBar` - Top navigation bar
 
 ### Knowledge Base Components
+
 ```
 components/knowledge/
 ├── CollectionsSidebar.tsx       ✅ Implemented
@@ -603,6 +649,7 @@ components/knowledge/
 ```
 
 ### Agent Components
+
 ```
 components/agents/
 ├── AgentCard.tsx
@@ -612,6 +659,7 @@ components/agents/
 ```
 
 ### Marketplace Components
+
 ```
 components/marketplace/
 ├── TemplateCard.tsx
@@ -620,6 +668,7 @@ components/marketplace/
 ```
 
 ### UI Components
+
 ```
 components/ui/
 ├── Button.tsx
@@ -636,6 +685,7 @@ components/ui/
 ### AI & Embeddings (`lib/`)
 
 **`embeddings.ts`**
+
 - `generateEmbedding(text)` - Single embedding
 - `generateEmbeddings(texts[])` - Batch embeddings
 - `cosineSimilarity(a, b)` - Similarity calculation
@@ -643,22 +693,26 @@ components/ui/
 - `prepareTextForEmbedding(title, content)` - Text formatting
 
 **`document-processor.ts`**
+
 - `extractTextFromPDF(buffer)` - PDF text extraction
 - `extractTextFromPlainText(buffer)` - Text file reading
 - `scrapeURL(url)` - Web scraping with metadata
 - `generateSimpleSummary(text)` - Basic summarization
 
 **`storage.ts`**
+
 - `uploadFileToBlob(buffer, filename, options)` - Vercel Blob upload
 - `generateUniqueFilename(filename)` - Unique naming
 
 ### AI Providers (`lib/ai/`)
 
 **`factory.ts`**
+
 - AI provider factory pattern
 - Unified interface for OpenAI, Anthropic, Google
 
 **`providers/`**
+
 - `openai.ts` - OpenAI GPT models
 - `anthropic.ts` - Anthropic Claude models
 - `google.ts` - Google Gemini models (future)
@@ -666,6 +720,7 @@ components/ui/
 ### Design System (`lib/design-system/`)
 
 **`COLORS`**
+
 ```typescript
 {
   text: { primary, secondary, tertiary },
@@ -676,6 +731,7 @@ components/ui/
 ```
 
 **`SPACING`**
+
 ```typescript
 {
   xs: "4px",
@@ -689,10 +745,12 @@ components/ui/
 ```
 
 ### Actions (`lib/actions/`)
+
 - `agent-actions.ts` - Server actions for agents
 - `workspace-actions.ts` - Server actions for workspaces
 
 ### Utilities
+
 - `crypto.ts` - AES-256-GCM encryption for API keys
 - `retry.ts` - Retry logic with exponential backoff
 - `execution-tracker.ts` - Agent execution tracking
@@ -706,12 +764,14 @@ components/ui/
 ### Multi-Tenant Isolation
 
 **Rule (4kR94Z3XhqK4C54vwDDwnq):**
+
 - ✅ ALL queries MUST include `workspaceId` filter
 - ✅ NEVER expose data across tenant boundaries
 - ✅ Validate `workspaceId` matches authenticated user's tenant
 - ✅ Log cross-tenant access attempts as security incidents
 
 **Implementation:**
+
 ```typescript
 // ✅ CORRECT
 const items = await db
@@ -720,29 +780,31 @@ const items = await db
   .where(eq(knowledgeItems.workspaceId, workspaceId));
 
 // ❌ WRONG - Missing tenant filter
-const items = await db
-  .select()
-  .from(knowledgeItems);
+const items = await db.select().from(knowledgeItems);
 ```
 
 ### Authentication
+
 - **Clerk** for SSO & user management
 - JWT tokens for API authentication
 - Session management
 - Organization-based access control
 
 ### Encryption
+
 - **API Keys:** AES-256-GCM encryption
 - **IV & Auth Tag:** Stored separately for security
 - **Master Key:** Environment variable only
 
 ### RBAC (Role-Based Access Control)
+
 - **Owner:** Full control
 - **Admin:** Manage workspace & members
 - **Member:** Use agents & knowledge base
 - **Viewer:** Read-only access
 
 ### Fine-Grained Permissions
+
 ```typescript
 permissions: {
   agents: { create, edit, delete, execute },
@@ -757,6 +819,7 @@ permissions: {
 ## Deployment
 
 ### Hosting
+
 - **Frontend & API:** Vercel
 - **Database:** Neon (PostgreSQL)
 - **File Storage:** Vercel Blob
@@ -765,6 +828,7 @@ permissions: {
 ### Environment Variables
 
 **Required:**
+
 ```bash
 # Database
 DATABASE_URL=postgresql://...
@@ -789,6 +853,7 @@ SENTRY_DSN=...
 ```
 
 ### Scripts
+
 ```json
 {
   "dev": "turbo run dev --parallel",
@@ -799,6 +864,7 @@ SENTRY_DSN=...
 ```
 
 ### CI/CD
+
 - Automated via Vercel Git integration
 - Preview deployments on pull requests
 - Production deployments on `main` branch
@@ -808,6 +874,7 @@ SENTRY_DSN=...
 ## Summary
 
 ### What's Working ✅
+
 1. **Knowledge Base** - Fully functional with auto-embeddings!
    - Upload (files, URLs, text)
    - Collections management
@@ -823,7 +890,8 @@ SENTRY_DSN=...
 
 5. **Design System** - Consistent, polished UI
 
-### What's Next? 
+### What's Next?
+
 See **[ROADMAP.md](./ROADMAP.md)** for detailed next steps!
 
 ---

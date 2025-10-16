@@ -10,12 +10,14 @@
 ## Component Philosophy
 
 ### Atomic Design Hierarchy
+
 1. **Atoms:** Smallest units (Button, Input, Badge)
 2. **Molecules:** Simple combinations (SearchBar = Input + Icon + Button)
 3. **Organisms:** Complex components (DataTable, Sidebar, Modal)
 4. **Templates:** Page layouts (already defined in Master Plan)
 
 ### Naming Convention
+
 - **Component:** PascalCase (e.g., `DataTable`, `SearchBar`)
 - **Props:** camelCase (e.g., `variant`, `isDisabled`)
 - **Variants:** lowercase strings (e.g., "primary", "ghost", "sm")
@@ -25,15 +27,17 @@
 ## Atoms (26 Components)
 
 ### 1. Button
+
 **Purpose:** Primary interactive element  
 **Variants:** primary, secondary, ghost, danger, outline  
 **Sizes:** xs, sm, md, lg, xl  
 **States:** default, hover, active, disabled, loading  
 **Props:**
+
 ```typescript
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   isDisabled?: boolean;
   isLoading?: boolean;
   leftIcon?: ReactNode;
@@ -42,7 +46,9 @@ interface ButtonProps {
   onClick?: () => void;
 }
 ```
-**Accessibility:** 
+
+**Accessibility:**
+
 - ARIA label when icon-only
 - Focus ring on keyboard navigation
 - Disabled cursor and opacity
@@ -50,15 +56,17 @@ interface ButtonProps {
 ---
 
 ### 2. Input
+
 **Purpose:** Text entry field  
 **Variants:** default, error, success  
 **Sizes:** sm, md, lg  
 **States:** default, focus, error, disabled, readonly  
 **Props:**
+
 ```typescript
 interface InputProps {
-  variant?: 'default' | 'error' | 'success';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "default" | "error" | "success";
+  size?: "sm" | "md" | "lg";
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -70,7 +78,9 @@ interface InputProps {
   error?: string;
 }
 ```
+
 **Accessibility:**
+
 - Label association
 - Error announcement to screen readers
 - Required indicator
@@ -78,14 +88,16 @@ interface InputProps {
 ---
 
 ### 3. Badge
+
 **Purpose:** Status indicators, tags  
 **Variants:** default, success, warning, danger, info  
 **Sizes:** sm, md, lg  
 **Props:**
+
 ```typescript
 interface BadgeProps {
-  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "default" | "success" | "warning" | "danger" | "info";
+  size?: "sm" | "md" | "lg";
   children: ReactNode;
   isDismissible?: boolean;
   onDismiss?: () => void;
@@ -95,31 +107,35 @@ interface BadgeProps {
 ---
 
 ### 4. Avatar
+
 **Purpose:** User profile images  
 **Variants:** circle, square  
 **Sizes:** xs, sm, md, lg, xl, 2xl  
 **Props:**
+
 ```typescript
 interface AvatarProps {
   src?: string;
   alt: string;
   fallback?: string; // Initials
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  variant?: 'circle' | 'square';
-  status?: 'online' | 'offline' | 'away' | 'busy'; // Shows indicator dot
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  variant?: "circle" | "square";
+  status?: "online" | "offline" | "away" | "busy"; // Shows indicator dot
 }
 ```
 
 ---
 
 ### 5. Icon
+
 **Purpose:** Visual symbols (Lucide React library)  
 **Sizes:** xs, sm, md, lg, xl  
 **Props:**
+
 ```typescript
 interface IconProps {
   name: string; // Lucide icon name
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   color?: string; // Tailwind color class
   className?: string;
 }
@@ -128,9 +144,11 @@ interface IconProps {
 ---
 
 ### 6. Checkbox
+
 **Purpose:** Multi-select option  
 **States:** unchecked, checked, indeterminate, disabled  
 **Props:**
+
 ```typescript
 interface CheckboxProps {
   isChecked?: boolean;
@@ -145,9 +163,11 @@ interface CheckboxProps {
 ---
 
 ### 7. Radio
+
 **Purpose:** Single-select option  
 **States:** unchecked, checked, disabled  
 **Props:**
+
 ```typescript
 interface RadioProps {
   isChecked?: boolean;
@@ -162,24 +182,28 @@ interface RadioProps {
 ---
 
 ### 8. Toggle (Switch)
+
 **Purpose:** On/off binary control  
 **Sizes:** sm, md, lg  
 **Props:**
+
 ```typescript
 interface ToggleProps {
   isChecked?: boolean;
   isDisabled?: boolean;
   onChange?: (checked: boolean) => void;
   label?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 ```
 
 ---
 
 ### 9. Label
+
 **Purpose:** Form field labels  
 **Props:**
+
 ```typescript
 interface LabelProps {
   htmlFor: string;
@@ -192,14 +216,16 @@ interface LabelProps {
 ---
 
 ### 10. Spinner
+
 **Purpose:** Loading indicator  
 **Sizes:** xs, sm, md, lg, xl  
 **Variants:** circular, dots, bars  
 **Props:**
+
 ```typescript
 interface SpinnerProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'circular' | 'dots' | 'bars';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  variant?: "circular" | "dots" | "bars";
   label?: string; // For screen readers
 }
 ```
@@ -207,12 +233,14 @@ interface SpinnerProps {
 ---
 
 ### 11. Skeleton
+
 **Purpose:** Loading placeholder  
 **Variants:** text, circle, rectangle  
 **Props:**
+
 ```typescript
 interface SkeletonProps {
-  variant?: 'text' | 'circle' | 'rectangle';
+  variant?: "text" | "circle" | "rectangle";
   width?: string;
   height?: string;
   count?: number; // Multiple lines
@@ -222,12 +250,14 @@ interface SkeletonProps {
 ---
 
 ### 12. Divider
+
 **Purpose:** Content separation  
 **Variants:** horizontal, vertical  
 **Props:**
+
 ```typescript
 interface DividerProps {
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   label?: string; // Centered text on line
 }
 ```
@@ -235,14 +265,16 @@ interface DividerProps {
 ---
 
 ### 13. Link
+
 **Purpose:** Navigation links  
 **Variants:** default, subtle, button  
 **States:** default, hover, visited, active  
 **Props:**
+
 ```typescript
 interface LinkProps {
   href: string;
-  variant?: 'default' | 'subtle' | 'button';
+  variant?: "default" | "subtle" | "button";
   isExternal?: boolean;
   children: ReactNode;
 }
@@ -251,15 +283,17 @@ interface LinkProps {
 ---
 
 ### 14. Text
+
 **Purpose:** Typography wrapper  
 **Variants:** display, heading, body, caption, code  
 **Sizes:** xs, sm, md, lg, xl, 2xl, 3xl, 4xl  
 **Props:**
+
 ```typescript
 interface TextProps {
-  variant?: 'display' | 'heading' | 'body' | 'caption' | 'code';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
-  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
+  variant?: "display" | "heading" | "body" | "caption" | "code";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+  weight?: "normal" | "medium" | "semibold" | "bold";
   color?: string;
   children: ReactNode;
 }
@@ -268,13 +302,15 @@ interface TextProps {
 ---
 
 ### 15. Tooltip
+
 **Purpose:** Contextual help text  
 **Placement:** top, bottom, left, right  
 **Props:**
+
 ```typescript
 interface TooltipProps {
   content: string;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
+  placement?: "top" | "bottom" | "left" | "right";
   children: ReactNode;
   delay?: number;
 }
@@ -283,15 +319,17 @@ interface TooltipProps {
 ---
 
 ### 16. Progress
+
 **Purpose:** Progress indicator  
 **Variants:** bar, circle, ring  
 **Props:**
+
 ```typescript
 interface ProgressProps {
   value: number; // 0-100
   max?: number;
-  variant?: 'bar' | 'circle' | 'ring';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "bar" | "circle" | "ring";
+  size?: "sm" | "md" | "lg";
   label?: string;
   showPercentage?: boolean;
 }
@@ -300,13 +338,15 @@ interface ProgressProps {
 ---
 
 ### 17. Chip (Interactive Badge)
+
 **Purpose:** Filters, tags with actions  
 **Variants:** default, selected, removable  
 **Props:**
+
 ```typescript
 interface ChipProps {
   label: string;
-  variant?: 'default' | 'selected';
+  variant?: "default" | "selected";
   isRemovable?: boolean;
   onRemove?: () => void;
   onClick?: () => void;
@@ -317,20 +357,24 @@ interface ChipProps {
 ---
 
 ### 18. KBD (Keyboard Key)
+
 **Purpose:** Display keyboard shortcuts  
 **Props:**
+
 ```typescript
 interface KbdProps {
   children: string; // e.g., "⌘K"
-  size?: 'sm' | 'md';
+  size?: "sm" | "md";
 }
 ```
 
 ---
 
 ### 19. Code
+
 **Purpose:** Inline code display  
 **Props:**
+
 ```typescript
 interface CodeProps {
   children: string;
@@ -342,12 +386,14 @@ interface CodeProps {
 ---
 
 ### 20. Alert
+
 **Purpose:** Inline notification/message  
 **Variants:** info, success, warning, error  
 **Props:**
+
 ```typescript
 interface AlertProps {
-  variant: 'info' | 'success' | 'warning' | 'error';
+  variant: "info" | "success" | "warning" | "error";
   title?: string;
   description: string;
   isDismissible?: boolean;
@@ -359,8 +405,10 @@ interface AlertProps {
 ---
 
 ### 21. EmptyState
+
 **Purpose:** No data placeholder  
 **Props:**
+
 ```typescript
 interface EmptyStateProps {
   icon?: ReactNode;
@@ -373,12 +421,14 @@ interface EmptyStateProps {
 ---
 
 ### 22. Card
+
 **Purpose:** Content container  
 **Variants:** default, elevated, outlined  
 **Props:**
+
 ```typescript
 interface CardProps {
-  variant?: 'default' | 'elevated' | 'outlined';
+  variant?: "default" | "elevated" | "outlined";
   isPressable?: boolean; // Hover effect
   onClick?: () => void;
   children: ReactNode;
@@ -388,8 +438,10 @@ interface CardProps {
 ---
 
 ### 23. Select (Dropdown)
+
 **Purpose:** Single-select from options  
 **Props:**
+
 ```typescript
 interface SelectProps {
   value?: string;
@@ -404,8 +456,10 @@ interface SelectProps {
 ---
 
 ### 24. Textarea
+
 **Purpose:** Multi-line text input  
 **Props:**
+
 ```typescript
 interface TextareaProps {
   value?: string;
@@ -422,8 +476,10 @@ interface TextareaProps {
 ---
 
 ### 25. Slider
+
 **Purpose:** Range input  
 **Props:**
+
 ```typescript
 interface SliderProps {
   value: number;
@@ -439,8 +495,10 @@ interface SliderProps {
 ---
 
 ### 26. DatePicker
+
 **Purpose:** Date selection  
 **Props:**
+
 ```typescript
 interface DatePickerProps {
   value?: Date;
@@ -457,8 +515,10 @@ interface DatePickerProps {
 ## Molecules (15 Components)
 
 ### 27. SearchBar
+
 **Composition:** Input + Icon + Optional Clear Button  
 **Props:**
+
 ```typescript
 interface SearchBarProps {
   value?: string;
@@ -473,8 +533,10 @@ interface SearchBarProps {
 ---
 
 ### 28. Pagination
+
 **Composition:** Buttons + Text + Select (rows per page)  
 **Props:**
+
 ```typescript
 interface PaginationProps {
   currentPage: number;
@@ -489,8 +551,10 @@ interface PaginationProps {
 ---
 
 ### 29. Breadcrumb
+
 **Composition:** Links + Divider  
 **Props:**
+
 ```typescript
 interface BreadcrumbProps {
   items: Array<{ label: string; href?: string }>;
@@ -501,22 +565,26 @@ interface BreadcrumbProps {
 ---
 
 ### 30. Tabs
+
 **Composition:** Button Group + Content Panels  
 **Props:**
+
 ```typescript
 interface TabsProps {
   tabs: Array<{ id: string; label: string; icon?: ReactNode; badge?: number }>;
   activeTab: string;
   onChange: (tabId: string) => void;
-  variant?: 'line' | 'pills';
+  variant?: "line" | "pills";
 }
 ```
 
 ---
 
 ### 31. Accordion
+
 **Composition:** Button + Collapsible Content  
 **Props:**
+
 ```typescript
 interface AccordionProps {
   items: Array<{ id: string; title: string; content: ReactNode }>;
@@ -528,11 +596,13 @@ interface AccordionProps {
 ---
 
 ### 32. Toast
+
 **Composition:** Alert + Dismiss Button  
 **Props:**
+
 ```typescript
 interface ToastProps {
-  variant: 'info' | 'success' | 'warning' | 'error';
+  variant: "info" | "success" | "warning" | "error";
   title?: string;
   description: string;
   duration?: number; // Auto-dismiss in ms
@@ -543,8 +613,10 @@ interface ToastProps {
 ---
 
 ### 33. Dropdown Menu
+
 **Composition:** Button + Menu Items  
 **Props:**
+
 ```typescript
 interface DropdownMenuProps {
   trigger: ReactNode;
@@ -556,28 +628,32 @@ interface DropdownMenuProps {
     isDivider?: boolean;
     isDestructive?: boolean;
   }>;
-  align?: 'start' | 'center' | 'end';
+  align?: "start" | "center" | "end";
 }
 ```
 
 ---
 
 ### 34. Avatar Group
+
 **Composition:** Multiple Avatars + Overflow Count  
 **Props:**
+
 ```typescript
 interface AvatarGroupProps {
   avatars: Array<{ src?: string; alt: string; fallback?: string }>;
   max?: number; // Show +N after this
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: "xs" | "sm" | "md" | "lg";
 }
 ```
 
 ---
 
 ### 35. Stat Card
+
 **Composition:** Card + Icon + Metric + Label + Trend  
 **Props:**
+
 ```typescript
 interface StatCardProps {
   label: string;
@@ -591,8 +667,10 @@ interface StatCardProps {
 ---
 
 ### 36. File Upload
+
 **Composition:** Input + Preview + Progress  
 **Props:**
+
 ```typescript
 interface FileUploadProps {
   accept?: string; // MIME types
@@ -606,8 +684,10 @@ interface FileUploadProps {
 ---
 
 ### 37. Command Palette
+
 **Composition:** SearchBar + Results List + Keyboard Nav  
 **Props:**
+
 ```typescript
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -626,8 +706,10 @@ interface CommandPaletteProps {
 ---
 
 ### 38. Filter Bar
+
 **Composition:** Chips + Dropdown + Clear All  
 **Props:**
+
 ```typescript
 interface FilterBarProps {
   filters: Array<{
@@ -644,13 +726,15 @@ interface FilterBarProps {
 ---
 
 ### 39. Form Field
+
 **Composition:** Label + Input/Select/Textarea + Error  
 **Props:**
+
 ```typescript
 interface FormFieldProps {
   label: string;
   name: string;
-  type?: 'text' | 'email' | 'password' | 'select' | 'textarea';
+  type?: "text" | "email" | "password" | "select" | "textarea";
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -663,8 +747,10 @@ interface FormFieldProps {
 ---
 
 ### 40. Tag Input
+
 **Composition:** Input + Chip List  
 **Props:**
+
 ```typescript
 interface TagInputProps {
   tags: string[];
@@ -678,14 +764,16 @@ interface TagInputProps {
 ---
 
 ### 41. Rating
+
 **Composition:** Interactive Stars/Icons  
 **Props:**
+
 ```typescript
 interface RatingProps {
   value: number;
   onChange?: (value: number) => void;
   max?: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   isReadOnly?: boolean;
   icon?: ReactNode;
 }
@@ -696,8 +784,10 @@ interface RatingProps {
 ## Organisms (12 Components)
 
 ### 42. DataTable
+
 **Composition:** Table + Sorting + Filters + Pagination + Row Actions  
 **Props:**
+
 ```typescript
 interface DataTableProps<T> {
   data: T[];
@@ -723,8 +813,10 @@ interface DataTableProps<T> {
 ---
 
 ### 43. Sidebar (Navigation)
+
 **Composition:** Logo + Nav Items + Footer  
 **Props:**
+
 ```typescript
 interface SidebarProps {
   items: Array<{
@@ -745,8 +837,10 @@ interface SidebarProps {
 ---
 
 ### 44. Bottom Navigation
+
 **Composition:** Icon Buttons + Labels  
 **Props:**
+
 ```typescript
 interface BottomNavProps {
   items: Array<{
@@ -763,8 +857,10 @@ interface BottomNavProps {
 ---
 
 ### 45. Modal
+
 **Composition:** Overlay + Card + Header + Body + Footer  
 **Props:**
+
 ```typescript
 interface ModalProps {
   isOpen: boolean;
@@ -772,7 +868,7 @@ interface ModalProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   closeOnOverlayClick?: boolean;
 }
 ```
@@ -780,8 +876,10 @@ interface ModalProps {
 ---
 
 ### 46. Drawer (Slide-out Panel)
+
 **Composition:** Overlay + Sliding Panel + Header + Body + Footer  
 **Props:**
+
 ```typescript
 interface DrawerProps {
   isOpen: boolean;
@@ -789,33 +887,37 @@ interface DrawerProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  placement?: 'left' | 'right' | 'top' | 'bottom';
-  size?: 'sm' | 'md' | 'lg' | 'full';
+  placement?: "left" | "right" | "top" | "bottom";
+  size?: "sm" | "md" | "lg" | "full";
 }
 ```
 
 ---
 
 ### 47. Stepper (Progress Steps)
+
 **Composition:** Steps + Connector Lines + Content  
 **Props:**
+
 ```typescript
 interface StepperProps {
   steps: Array<{
     id: string;
     label: string;
     description?: string;
-    status: 'complete' | 'current' | 'upcoming' | 'error';
+    status: "complete" | "current" | "upcoming" | "error";
   }>;
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
 }
 ```
 
 ---
 
 ### 48. Timeline
+
 **Composition:** List + Timestamps + Content Cards  
 **Props:**
+
 ```typescript
 interface TimelineProps {
   items: Array<{
@@ -833,8 +935,10 @@ interface TimelineProps {
 ---
 
 ### 49. Calendar
+
 **Composition:** Month Grid + Navigation + Events  
 **Props:**
+
 ```typescript
 interface CalendarProps {
   events?: Array<{
@@ -853,12 +957,14 @@ interface CalendarProps {
 ---
 
 ### 50. Chart (Dashboard Visualization)
+
 **Composition:** Tremor Chart Components  
 **Variants:** Line, Bar, Area, Donut, Pie  
 **Props:**
+
 ```typescript
 interface ChartProps {
-  type: 'line' | 'bar' | 'area' | 'donut' | 'pie';
+  type: "line" | "bar" | "area" | "donut" | "pie";
   data: Array<Record<string, any>>;
   categories: string[];
   index: string;
@@ -871,8 +977,10 @@ interface ChartProps {
 ---
 
 ### 51. Notification Panel
+
 **Composition:** Popover + Timeline + Mark All Read  
 **Props:**
+
 ```typescript
 interface NotificationPanelProps {
   notifications: Array<{
@@ -891,8 +999,10 @@ interface NotificationPanelProps {
 ---
 
 ### 52. User Menu
+
 **Composition:** Avatar + Dropdown + Profile Links  
 **Props:**
+
 ```typescript
 interface UserMenuProps {
   user: {
@@ -913,8 +1023,10 @@ interface UserMenuProps {
 ---
 
 ### 53. Settings Panel
+
 **Composition:** Form Sections + Save/Cancel + Auto-save Indicator  
 **Props:**
+
 ```typescript
 interface SettingsPanelProps {
   sections: Array<{

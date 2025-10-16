@@ -1,9 +1,11 @@
 # Vercel Deployment Fix - 404 API Routes
 
 ## Issue
+
 API routes (including `/api/onboarding/complete`) return 404 on production despite existing in the codebase and building successfully locally.
 
 ## Root Cause
+
 Vercel project's **Root Directory** setting is not configured to build from `apps/web` in the monorepo structure.
 
 ## Fix Steps

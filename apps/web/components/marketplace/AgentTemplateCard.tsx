@@ -45,7 +45,9 @@ export default function AgentTemplateCard({
         padding: "var(--space-4)", // 16px - compact card padding
         cursor: "pointer",
         transition: "var(--transition-base)",
-        boxShadow: isHovered ? "var(--shadow-card-hover)" : "var(--shadow-card)",
+        boxShadow: isHovered
+          ? "var(--shadow-card-hover)"
+          : "var(--shadow-card)",
         transform: isHovered ? "translateY(-2px)" : "translateY(0)",
         height: "100%",
         display: "flex",
@@ -130,7 +132,12 @@ export default function AgentTemplateCard({
         >
           {template.kpis.successRate && (
             <div>
-              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
+              <div
+                style={{
+                  fontSize: "var(--text-xs)",
+                  color: "var(--text-tertiary)",
+                }}
+              >
                 Success Rate
               </div>
               <div
@@ -146,7 +153,12 @@ export default function AgentTemplateCard({
           )}
           {template.kpis.avgTimeSaved && (
             <div>
-              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
+              <div
+                style={{
+                  fontSize: "var(--text-xs)",
+                  color: "var(--text-tertiary)",
+                }}
+              >
                 Time Saved
               </div>
               <div
@@ -176,7 +188,13 @@ export default function AgentTemplateCard({
         }}
       >
         {/* Rating with icon */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
+          }}
+        >
           <span style={{ fontSize: "var(--text-sm)" }}>⭐</span>
           <div
             style={{
@@ -194,14 +212,25 @@ export default function AgentTemplateCard({
             >
               {ratingStars}
             </span>
-            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
+            <span
+              style={{
+                fontSize: "var(--text-xs)",
+                color: "var(--text-tertiary)",
+              }}
+            >
               {template.reviewCount}
             </span>
           </div>
         </div>
 
         {/* Installs with icon */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-2)",
+          }}
+        >
           <span style={{ fontSize: "var(--text-sm)" }}>🔥</span>
           <div
             style={{
@@ -217,9 +246,16 @@ export default function AgentTemplateCard({
                 color: "var(--text-primary)",
               }}
             >
-              {template.installCount > 1000 ? `${(template.installCount / 1000).toFixed(1)}k` : template.installCount}
+              {template.installCount > 1000
+                ? `${(template.installCount / 1000).toFixed(1)}k`
+                : template.installCount}
             </span>
-            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-tertiary)" }}>
+            <span
+              style={{
+                fontSize: "var(--text-xs)",
+                color: "var(--text-tertiary)",
+              }}
+            >
               installs
             </span>
           </div>

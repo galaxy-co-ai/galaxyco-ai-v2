@@ -7,6 +7,7 @@
 ## 🔐 SECRETS NEEDED
 
 ### 1. AWS Setup
+
 - [ ] **AWS Account ID**: `____________` (12 digits)
 - [ ] **AWS Region**: `us-east-1` (or your choice)
 - [ ] **AWS Access Key ID**: `AKIA____________` (for Terraform user)
@@ -14,6 +15,7 @@
 - [ ] **AWS Role ARN** (for GitHub Actions OIDC): `arn:aws:iam::____________:role/GitHubActionsRole`
 
 **Where to use**:
+
 - Terraform local execution
 - GitHub Actions (secrets)
 - AWS Secrets Manager
@@ -23,20 +25,25 @@
 ### 2. Database (Neon or RDS)
 
 **Option A: Neon (Recommended for MVP)** ✅
+
 - [ ] **Neon Account**: Created at https://neon.tech
 - [ ] **Neon Project Name**: `galaxyco-ai`
 - [ ] **Database Name**: `galaxyco`
-- [ ] **Connection String**: 
+- [ ] **Connection String**:
+
   ```
   postgres://[user]:[password]@[host]/[database]?sslmode=require
   ```
+
   - Full string: `________________________________`
 
 **Option B: AWS RDS** (Provisioned via Terraform)
+
 - [ ] Will be created in Phase 3
 - [ ] Connection string will be in AWS Secrets Manager
 
 **Where to use**:
+
 - `apps/api/.env` → `DATABASE_URL`
 - `services/agents/.env` → `DATABASE_URL`
 - Vercel environment variables
@@ -47,19 +54,24 @@
 ### 3. Redis (Upstash or ElastiCache)
 
 **Option A: Upstash (Recommended for MVP)** ✅
+
 - [ ] **Upstash Account**: Created at https://upstash.com
 - [ ] **Database Name**: `galaxyco-redis`
-- [ ] **Connection String**: 
+- [ ] **Connection String**:
+
   ```
   redis://default:[password]@[host]:[port]
   ```
+
   - Full string: `________________________________`
 
 **Option B: AWS ElastiCache** (Provisioned via Terraform)
+
 - [ ] Will be created in Phase 3
 - [ ] Endpoint will be in AWS Secrets Manager
 
 **Where to use**:
+
 - `apps/api/.env` → `REDIS_URL`
 - Vercel environment variables
 - AWS Secrets Manager (production)
@@ -75,6 +87,7 @@
 - [ ] **Vercel Project Name**: `galaxyco-ai-platform`
 
 **Where to use**:
+
 - GitHub Actions secrets → `VERCEL_TOKEN`
 - GitHub Actions variables → `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
 
@@ -92,11 +105,13 @@
   - Value: `________________________________`
 
 **Where to use**:
+
 - `apps/web/.env` → `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `apps/api/.env` → `CLERK_SECRET_KEY`
 - Vercel environment variables
 
 **Configure**:
+
 - [ ] Add redirect URLs:
   - `http://localhost:3000`
   - `https://[your-vercel-domain].vercel.app`
@@ -115,6 +130,7 @@
   - Value: `________________________________`
 
 **Products & Prices to Create**:
+
 - [ ] **Free Plan** → Price ID: `price_____________`
 - [ ] **Pro Plan** ($29/month) → Price ID: `price_____________`
 - [ ] **Team Plan** ($99/month) → Price ID: `price_____________`
@@ -123,6 +139,7 @@
 - [ ] **Credit Pack - 100 credits** ($40) → Price ID: `price_____________`
 
 **Where to use**:
+
 - `apps/api/.env` → `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
 - `apps/web/.env` → `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 - Server config file → Price IDs
@@ -138,9 +155,11 @@
   - Value: `________________________________`
 
 **Set Spending Limits**:
-- [ ] Monthly limit: $____ (recommended: $100-200 for MVP)
+
+- [ ] Monthly limit: $\_\_\_\_ (recommended: $100-200 for MVP)
 
 **Where to use**:
+
 - `services/agents/.env` → `OPENAI_API_KEY`
 - AWS Secrets Manager (production)
 
@@ -153,6 +172,7 @@
   - Value: `________________________________`
 
 **Where to use**:
+
 - `services/agents/.env` → `ANTHROPIC_API_KEY`
 - AWS Secrets Manager (production)
 
@@ -171,6 +191,7 @@
   - Value: `________________________________`
 
 **Where to use**:
+
 - `apps/api/.env` → `SENTRY_DSN`
 - `apps/web/.env` → `NEXT_PUBLIC_SENTRY_DSN`
 - GitHub Actions secrets → `SENTRY_AUTH_TOKEN`
@@ -186,6 +207,7 @@
 - [ ] **Host**: `https://app.posthog.com` or `https://eu.posthog.com`
 
 **Where to use**:
+
 - `apps/web/.env` → `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`
 
 ---
@@ -200,6 +222,7 @@
 - [ ] **Site**: `datadoghq.com` or `datadoghq.eu`
 
 **Where to use**:
+
 - `apps/api/.env` → `DATADOG_API_KEY`
 - GitHub Actions secrets → `DATADOG_API_KEY`
 
@@ -213,6 +236,7 @@
 - [ ] **Region**: Same as AWS Region above
 
 **Where to use**:
+
 - `apps/api/.env` → `S3_BUCKET_NAME`, `S3_REGION`
 - Will be created via Terraform in Phase 3
 
@@ -226,6 +250,7 @@
   - Value: `________________________________`
 
 **Where to use**:
+
 - Git remote origin
 - GitHub Actions (automatic)
 
@@ -234,6 +259,7 @@
 ### 14. ECR Repository Names
 
 Will be created via Terraform, but document here:
+
 - [ ] **API Image Repository**: `[aws-account-id].dkr.ecr.[region].amazonaws.com/galaxyco-api`
 - [ ] **Agents Image Repository**: `[aws-account-id].dkr.ecr.[region].amazonaws.com/galaxyco-agents`
 
@@ -242,6 +268,7 @@ Will be created via Terraform, but document here:
 ### 15. ECS Service Names
 
 Will be created via Terraform, but document here:
+
 - [ ] **Cluster Name**: `galaxyco-cluster`
 - [ ] **API Service (Staging)**: `api-staging`
 - [ ] **API Service (Production)**: `api-prod`
@@ -253,18 +280,21 @@ Will be created via Terraform, but document here:
 ## 📋 PRIORITY ORDER (What to Set Up First)
 
 ### Immediate (Phase 1 - Required for Local Development)
+
 1. ✅ **Neon Database** - Can start immediately, free tier available
-2. ✅ **Upstash Redis** - Can start immediately, free tier available  
+2. ✅ **Upstash Redis** - Can start immediately, free tier available
 3. ✅ **OpenAI API Key** - Required for agent execution
 4. ✅ **Clerk** - Required for authentication
 
 ### Soon (Phase 1-2 - Before First Deploy)
+
 5. **Vercel Account** - For web deployment
 6. **AWS Account** - For infrastructure
 7. **GitHub Repository** - For code hosting and CI/CD
 8. **Stripe (Test Mode)** - For billing flows
 
 ### Later (Phase 3+ - As Needed)
+
 9. **Sentry** - When ready to track errors
 10. **PostHog** - When ready for analytics
 11. **Anthropic** - If using Claude models
@@ -275,15 +305,18 @@ Will be created via Terraform, but document here:
 ## 🔒 SECRETS MANAGEMENT STRATEGY
 
 ### Local Development
+
 - Use `.env.local` files (never commit!)
 - Keep a secure backup (password manager, encrypted file)
 
 ### Staging/Production
+
 - **Vercel**: Use Vercel dashboard → Settings → Environment Variables
 - **AWS**: Use AWS Secrets Manager for API/Agents services
 - **GitHub Actions**: Use repository secrets
 
 ### Security Best Practices
+
 - ✅ Never commit secrets to git
 - ✅ Rotate keys every 90 days
 - ✅ Use test keys for development
@@ -309,6 +342,7 @@ Will be created via Terraform, but document here:
 Mark items complete as you create accounts and obtain credentials:
 
 **Phase 1 Checklist**:
+
 - [ ] Neon database created + connection string obtained
 - [ ] Upstash Redis created + connection string obtained
 - [ ] Clerk app created + keys obtained
@@ -319,12 +353,14 @@ Mark items complete as you create accounts and obtain credentials:
 - [ ] AWS account ready + IAM user created
 
 **Ready for Development**:
+
 - [ ] All `.env.example` files created
 - [ ] All `.env.local` files populated with real values
 - [ ] Can run `pnpm dev` locally
 - [ ] Services can connect to Neon and Upstash
 
 **Ready for Deployment**:
+
 - [ ] GitHub Actions secrets configured
 - [ ] Vercel environment variables configured
 - [ ] AWS Secrets Manager configured

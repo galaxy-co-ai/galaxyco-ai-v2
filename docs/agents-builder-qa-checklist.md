@@ -25,6 +25,7 @@ pnpm dev
 ## Phase 1: Prompt → Variants (Critical Path)
 
 ### 1. Template Selection
+
 - [ ] Templates display in grid (6 cards visible)
 - [ ] Hover shows card elevation effect
 - [ ] Click template → prompt textarea auto-fills
@@ -32,6 +33,7 @@ pnpm dev
 - [ ] **Mobile (375px):** Templates scroll horizontally or stack vertically
 
 ### 2. Prompt Input
+
 - [ ] Textarea expands as you type (min 4 rows, max 10 rows)
 - [ ] Character count shows bottom-right when typing
 - [ ] "Enhance Prompt" button:
@@ -47,6 +49,7 @@ pnpm dev
   - Triggers progress modal
 
 ### 3. Progress Modal (ProgressStream)
+
 - [ ] Modal appears overlay with 4 steps
 - [ ] Steps update: pending → active → complete
 - [ ] Progress bar fills 0% → 100%
@@ -54,6 +57,7 @@ pnpm dev
 - [ ] Modal auto-closes when complete
 
 ### 4. Variant Grid
+
 - [ ] 3 cards display (Basic, Advanced, Minimal)
 - [ ] Each card shows:
   - Badge with type + stars (⭐)
@@ -67,6 +71,7 @@ pnpm dev
 - [ ] **Mobile:** Stack vertically or swipeable
 
 ### 5. Error Handling (Phase 1)
+
 - [ ] Prompt <10 chars → buttons stay disabled
 - [ ] API failure → toast with error message
 - [ ] Empty variants response → error toast
@@ -77,12 +82,14 @@ pnpm dev
 ## Phase 2: Iteration → Workflow Refinement (Critical Path)
 
 ### 6. Iteration View Load
+
 - [ ] After variant selection → redirects to iteration step
 - [ ] Page shows heading: "Refine Your Agent"
 - [ ] **Desktop:** Split layout (workflow left, chat right)
 - [ ] **Mobile:** Stacked layout (workflow top, chat bottom)
 
 ### 7. Workflow Visualizer (React Flow)
+
 - [ ] Workflow diagram renders with nodes connected
 - [ ] Nodes color-coded:
   - Start: Purple gradient
@@ -95,6 +102,7 @@ pnpm dev
 - [ ] **Compact view (mobile):** Shows list with numbered steps
 
 ### 8. Iteration Chat
+
 - [ ] Empty state shows instructions when no messages
 - [ ] Textarea auto-expands (1-4 lines)
 - [ ] Send button:
@@ -109,6 +117,7 @@ pnpm dev
 - [ ] Click chip → fills textarea
 
 ### 9. Live Workflow Updates
+
 - [ ] Send message: "Add Slack notification"
 - [ ] AI responds with explanation
 - [ ] **Workflow diagram updates in real-time** (new node appears)
@@ -119,10 +128,12 @@ pnpm dev
 - [ ] Previous nodes remain (additive, not replaced)
 
 ### 10. Navigation Controls
+
 - [ ] "← Choose Different Variant" button returns to variant grid
 - [ ] "Continue to Test →" button (placeholder for Phase 3)
 
 ### 11. Error Handling (Phase 2)
+
 - [ ] Empty message → send button disabled
 - [ ] API failure → error toast + system message in chat
 - [ ] Invalid workflow response → error handling
@@ -133,6 +144,7 @@ pnpm dev
 ## Cross-Cutting Concerns
 
 ### 12. Accessibility
+
 - [ ] Tab key navigates through forms
 - [ ] Enter key submits forms
 - [ ] All inputs have labels (visible or aria-label)
@@ -141,6 +153,7 @@ pnpm dev
 - [ ] Color contrast ≥4.5:1 (use DevTools)
 
 ### 13. Mobile Responsiveness (Test at 375px width)
+
 - [ ] Template cards stack or scroll
 - [ ] Prompt textarea full-width
 - [ ] Enhance/Generate buttons stack on small screens
@@ -150,6 +163,7 @@ pnpm dev
 - [ ] Chat input and suggested chips wrap properly
 
 ### 14. State Persistence (Zustand)
+
 - [ ] Fill in prompt, refresh page → prompt persists
 - [ ] Generate variants, refresh → variants persist
 - [ ] Select variant, refresh → selected variant persists
@@ -157,6 +171,7 @@ pnpm dev
 - [ ] Open DevTools → Application → Local Storage → `agent-builder-storage`
 
 ### 15. Edge Cases
+
 - [ ] Very long prompt (500+ chars) → handles gracefully
 - [ ] Special characters in prompt (`<script>`, emoji) → sanitized
 - [ ] Rapid clicking "Generate" → debounced or loading state prevents duplicates
@@ -164,6 +179,7 @@ pnpm dev
 - [ ] Multiple iterations (5-10 messages) → chat scrolls, workflow updates
 
 ### 16. Dark Mode
+
 - [ ] Toggle dark mode (system or manual)
 - [ ] All components render correctly
 - [ ] Text is readable
@@ -171,6 +187,7 @@ pnpm dev
 - [ ] Workflow nodes have dark variants
 
 ### 17. Performance
+
 - [ ] No console errors or warnings
 - [ ] Page loads <2 seconds
 - [ ] Variant generation <5 seconds
@@ -190,15 +207,18 @@ pnpm dev
 
 ## Sign-Off
 
-**Tested by:** ___________________  
-**Date:** ___________________  
+**Tested by:** **\*\*\*\***\_\_\_**\*\*\*\***  
+**Date:** **\*\*\*\***\_\_\_**\*\*\*\***  
 **Environment:** Dev (localhost:3000)  
-**Browser(s):** Chrome / Firefox / Safari  
+**Browser(s):** Chrome / Firefox / Safari
 
 **All critical paths passed:** ☐ Yes ☐ No  
-**Ready for Phase 3:** ☐ Yes ☐ No  
+**Ready for Phase 3:** ☐ Yes ☐ No
 
 **Notes / Issues Found:**
-_______________________________________________________
-_______________________________________________________
-_______________________________________________________
+
+---
+
+---
+
+---

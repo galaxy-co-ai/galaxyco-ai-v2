@@ -17,6 +17,7 @@ Before deploying to production, **always** complete this checklist:
 - [ ] Team notified in Discord #deployments
 
 **NEVER deploy:**
+
 - On Fridays after 2pm
 - Before major holidays
 - If you're not available for 2 hours post-deployment
@@ -111,10 +112,11 @@ npm run db:migrate
 ### Applying to Production
 
 1. **Test locally first**:
+
    ```bash
    # Apply to local DB
    npm run db:migrate
-   
+
    # Verify in Drizzle Studio
    npm run db:studio
    ```
@@ -148,15 +150,17 @@ npm run db:migrate
 ### Adding New Env Var
 
 1. **Add to `.env.example`** (without values):
+
    ```
    NEW_API_KEY=
    ```
 
 2. **Add to Vercel**:
+
    ```bash
    # Option 1: Via Vercel Dashboard
    # Settings > Environment Variables
-   
+
    # Option 2: Via CLI
    vercel env add NEW_API_KEY
    ```
@@ -231,6 +235,7 @@ git push -f origin main
 ### Success Criteria
 
 Deploy is successful when:
+
 - ✅ Build completed without errors
 - ✅ No TypeScript errors in logs
 - ✅ Critical user flows work (sign up, create workspace, run agent)
@@ -247,6 +252,7 @@ Deploy is successful when:
 **Cause**: Environment differences
 
 **Solution**:
+
 1. Check Node version matches (check `package.json` engine field)
 2. Verify all env vars are set in Vercel
 3. Check build logs for specific error
@@ -256,6 +262,7 @@ Deploy is successful when:
 **Cause**: Wrong DATABASE_URL or IP whitelist
 
 **Solution**:
+
 1. Verify DATABASE_URL in Vercel env vars
 2. Check Neon IP whitelist allows Vercel IPs
 3. Test connection in Vercel function logs
@@ -265,8 +272,9 @@ Deploy is successful when:
 **Cause**: Wrong domain or redirect URLs
 
 **Solution**:
+
 1. Check Clerk dashboard domain settings
-2. Verify NEXT_PUBLIC_CLERK_* env vars
+2. Verify NEXT*PUBLIC_CLERK*\* env vars
 3. Check allowed redirect URLs in Clerk
 
 ---
@@ -279,23 +287,27 @@ Copy this for each major deploy:
 ## Deploy: [Feature Name] - [Date]
 
 ### Pre-Deploy
+
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] Staging verified
 - [ ] Team notified
 
 ### Deploy Steps
+
 - [ ] PR merged to main
 - [ ] Vercel build succeeded
 - [ ] Production tested
 
 ### Post-Deploy
+
 - [ ] Critical flows verified
 - [ ] No errors in logs
 - [ ] Performance acceptable
 - [ ] Users notified (if needed)
 
 ### Rollback Plan
+
 If issues occur: [describe rollback steps]
 ```
 

@@ -1,4 +1,5 @@
 # 📐 GalaxyCo.ai Wireframe Documentation
+
 ## The Autonomous Sales Engine for B2B Professional Services
 
 **Version:** 1.0  
@@ -35,6 +36,7 @@
 3. **CRM Agent** → Auto-updates pipeline after every call (no more data entry)
 
 **The Model:** Supervised Automation
+
 - Agent does 95% of work
 - User reviews/approves in 5% of time
 - User maintains control, agent learns from feedback
@@ -91,6 +93,7 @@
 ```
 
 **Navigation Structure:**
+
 - Dashboard (home, overview metrics)
 - Agents (manage Research, Email, CRM agents)
 - Prospects (enriched lead database)
@@ -248,6 +251,7 @@
 **Purpose:** Explain supervised automation model, set expectations
 
 **Layout:**
+
 ```
 Modal Overlay (60% screen width, vertically centered)
 
@@ -286,6 +290,7 @@ Modal Overlay (60% screen width, vertically centered)
 ```
 
 **User Journey:**
+
 1. User logs in for first time
 2. Modal appears automatically
 3. Explains 3-agent model
@@ -293,6 +298,7 @@ Modal Overlay (60% screen width, vertically centered)
 5. Click "Get Started" → goes to setup wizard
 
 **Setup Wizard Flow:**
+
 ```
 Step 1: Connect your CRM (HubSpot or Pipedrive)
 Step 2: Upload initial prospect list (CSV or integrate)
@@ -309,6 +315,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Show weekly impact, direct to action items
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Dashboard                            👤 Dalton Cox     │
@@ -375,12 +382,12 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Components:**
+
 - **Metric Cards** (top row)
   - Large number (primary metric)
   - Label (what it measures)
   - Comparison (% change vs last week)
   - Color-coded (green=good, red=needs attention)
-  
 - **Action Cards** (middle section)
   - Icon + count (visual hierarchy)
   - Description (what agent did)
@@ -394,6 +401,7 @@ Step 5: Review your first agent-drafted email
   - Expandable (click to see full log)
 
 **User Journey:**
+
 1. User logs in
 2. Immediately sees impact (metrics)
 3. Sees action items (what needs review)
@@ -401,6 +409,7 @@ Step 5: Review your first agent-drafted email
 5. Dashboard refreshes as agents work
 
 **Design Notes:**
+
 - Mobile-first: cards stack vertically
 - Progressive disclosure: summary → details
 - Action-oriented: every card has a CTA
@@ -414,6 +423,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Manage all three agents, see performance
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Agents                                                 │
@@ -475,6 +485,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Agent Card Components:**
+
 - Agent icon + name (header)
 - Configure button (top-right)
 - Status indicator (Active / Waiting / Paused)
@@ -483,12 +494,14 @@ Step 5: Review your first agent-drafted email
 - Action buttons (context-specific)
 
 **Status States:**
+
 - ⚡ **Active** (green) = Agent is working now
-- ⏸️  **Waiting** (yellow) = Needs user input
-- ⏹️  **Paused** (gray) = User manually paused
-- ⚠️  **Error** (red) = Something needs attention
+- ⏸️ **Waiting** (yellow) = Needs user input
+- ⏹️ **Paused** (gray) = User manually paused
+- ⚠️ **Error** (red) = Something needs attention
 
 **User Journey:**
+
 1. User clicks "Agents" in sidebar
 2. Sees overview of all 3 agents
 3. Can configure any agent
@@ -504,6 +517,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Configure, monitor Research Agent
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  ← Back to Agents                                       │
@@ -584,6 +598,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Key Features:**
+
 - Performance metrics (volume, accuracy, speed)
 - Visual chart (trend over time)
 - Data source toggles (enable/disable)
@@ -601,6 +616,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** View all enriched prospects, search, filter
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Prospects Database                  [+ Add Prospect]   │
@@ -632,6 +648,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Row Expansion (click on row):**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Sarah Johnson  •  Acme Consulting                  [X]  │
@@ -669,6 +686,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Status Icons:**
+
 - 🆕 **New lead** = Just added, pending enrichment
 - 🔍 **Enriching** = Research Agent working now
 - 📧 **Email drafted** = Ready for user review
@@ -678,6 +696,7 @@ Step 5: Review your first agent-drafted email
 - ❌ **Bounced** = Email failed
 
 **Kebab Menu (⋮) Actions:**
+
 - View full profile
 - Edit prospect info
 - Mark as high priority
@@ -693,6 +712,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Review agent-drafted emails (supervised automation)
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  ← Back                  Email Review Queue             │
@@ -767,6 +787,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Edit Mode (click "Edit Email"):**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Editing Email to Sarah Johnson                    [×]  │
@@ -791,6 +812,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Keyboard Shortcuts:**
+
 - `E` = Edit
 - `A` = Approve
 - `S` = Skip
@@ -798,6 +820,7 @@ Step 5: Review your first agent-drafted email
 - `←` = Previous
 
 **Bulk Actions (top of queue):**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  □ Select All (43 emails)                               │
@@ -813,6 +836,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** View sent emails, track performance
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Sent Emails                                            │
@@ -837,6 +861,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Row Expansion:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Sarah Johnson  •  Acme Consulting                  [×]  │
@@ -867,6 +892,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Performance Dashboard (top of page):**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  📊 Email Performance (Last 7 Days)                     │
@@ -886,6 +912,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Review CRM updates before syncing
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  CRM Sync                                               │
@@ -946,6 +973,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **CRM Integration Status (sidebar or top):**
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🔗 Connected to HubSpot                 │
@@ -965,6 +993,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Manage company context for agents
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Knowledge Base                        [+ Add Context]  │
@@ -1044,6 +1073,7 @@ Step 5: Review your first agent-drafted email
 ```
 
 **Add Context Modal:**
+
 ```
 ┌──────────────────────────────────────────┐
 │  Add to Knowledge Base              [×]  │
@@ -1085,6 +1115,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Connect CRM, email, LinkedIn
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Settings                                               │
@@ -1141,6 +1172,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Manage team members, roles
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Settings                                               │
@@ -1176,6 +1208,7 @@ Step 5: Review your first agent-drafted email
 **Purpose:** Manage subscription, usage
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Settings                                               │
@@ -1232,54 +1265,55 @@ Step 5: Review your first agent-drafted email
 
 ```scss
 // Primary/Brand
-$brand-primary: #6366F1;      // Indigo (agents, AI features)
-$brand-secondary: #8B5CF6;    // Purple (premium features)
-$brand-accent: #10B981;       // Green (success, approvals)
+$brand-primary: #6366f1; // Indigo (agents, AI features)
+$brand-secondary: #8b5cf6; // Purple (premium features)
+$brand-accent: #10b981; // Green (success, approvals)
 
 // Backgrounds
-$bg-dark: #1F2937;           // Sidebar background (dark gray)
-$bg-light: #FFFFFF;          // Main content background
-$bg-muted: #F9FAFB;          // Subtle backgrounds (cards)
-$bg-hover: #F3F4F6;          // Hover states
+$bg-dark: #1f2937; // Sidebar background (dark gray)
+$bg-light: #ffffff; // Main content background
+$bg-muted: #f9fafb; // Subtle backgrounds (cards)
+$bg-hover: #f3f4f6; // Hover states
 
 // Text
-$text-primary: #111827;      // Headings, primary text
-$text-secondary: #6B7280;    // Body text, descriptions
-$text-muted: #9CA3AF;        // Placeholder text, disabled
+$text-primary: #111827; // Headings, primary text
+$text-secondary: #6b7280; // Body text, descriptions
+$text-muted: #9ca3af; // Placeholder text, disabled
 
 // Borders
-$border-default: #E5E7EB;    // Standard borders
-$border-focus: #6366F1;      // Focus states
+$border-default: #e5e7eb; // Standard borders
+$border-focus: #6366f1; // Focus states
 
 // Status Colors
-$status-active: #10B981;     // Green (agent active, success)
-$status-waiting: #F59E0B;    // Orange (needs review)
-$status-paused: #6B7280;     // Gray (paused, inactive)
-$status-error: #EF4444;      // Red (errors, critical)
+$status-active: #10b981; // Green (agent active, success)
+$status-waiting: #f59e0b; // Orange (needs review)
+$status-paused: #6b7280; // Gray (paused, inactive)
+$status-error: #ef4444; // Red (errors, critical)
 
 // Agent Colors (for identification)
-$agent-research: #3B82F6;    // Blue
-$agent-email: #8B5CF6;       // Purple
-$agent-crm: #10B981;         // Green
+$agent-research: #3b82f6; // Blue
+$agent-email: #8b5cf6; // Purple
+$agent-crm: #10b981; // Green
 ```
 
 ### Typography
 
 ```scss
 // Font Family
-$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", 
-               Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-primary:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  Arial, sans-serif;
 $font-mono: "SF Mono", Monaco, "Cascadia Code", "Courier New", monospace;
 
 // Font Sizes
-$text-xs: 12px;    // Captions, labels
-$text-sm: 14px;    // Body text (small), tables
-$text-base: 16px;  // Body text (default)
-$text-lg: 18px;    // Subheadings
-$text-xl: 20px;    // Section headings
-$text-2xl: 24px;   // Page headings
-$text-3xl: 30px;   // Dashboard metrics
-$text-4xl: 36px;   // Hero headings
+$text-xs: 12px; // Captions, labels
+$text-sm: 14px; // Body text (small), tables
+$text-base: 16px; // Body text (default)
+$text-lg: 18px; // Subheadings
+$text-xl: 20px; // Section headings
+$text-2xl: 24px; // Page headings
+$text-3xl: 30px; // Dashboard metrics
+$text-4xl: 36px; // Hero headings
 
 // Font Weights
 $weight-normal: 400;
@@ -1291,25 +1325,25 @@ $weight-bold: 700;
 ### Spacing Scale (Tailwind-inspired)
 
 ```scss
-$space-1: 4px;     // 0.25rem
-$space-2: 8px;     // 0.5rem
-$space-3: 12px;    // 0.75rem
-$space-4: 16px;    // 1rem
-$space-5: 20px;    // 1.25rem
-$space-6: 24px;    // 1.5rem
-$space-8: 32px;    // 2rem
-$space-10: 40px;   // 2.5rem
-$space-12: 48px;   // 3rem
-$space-16: 64px;   // 4rem
+$space-1: 4px; // 0.25rem
+$space-2: 8px; // 0.5rem
+$space-3: 12px; // 0.75rem
+$space-4: 16px; // 1rem
+$space-5: 20px; // 1.25rem
+$space-6: 24px; // 1.5rem
+$space-8: 32px; // 2rem
+$space-10: 40px; // 2.5rem
+$space-12: 48px; // 3rem
+$space-16: 64px; // 4rem
 ```
 
 ### Border Radius
 
 ```scss
-$radius-sm: 6px;    // Inputs, small buttons
-$radius-md: 8px;    // Buttons, cards
-$radius-lg: 12px;   // Modals, large cards
-$radius-xl: 16px;   // Hero cards, dashboard widgets
+$radius-sm: 6px; // Inputs, small buttons
+$radius-md: 8px; // Buttons, cards
+$radius-lg: 12px; // Modals, large cards
+$radius-xl: 16px; // Hero cards, dashboard widgets
 $radius-full: 9999px; // Pills, status badges
 ```
 
@@ -1498,22 +1532,22 @@ $glow-crm: 0 0 20px rgba(16, 185, 129, 0.3);
 
 ## Component Library Mapping (Hyper UI)
 
-| GalaxyCo Element | Hyper UI Component | Customization Notes |
-|---|---|---|
-| Sidebar Navigation | `Navigation > Sidebar` | Dark theme, agent icons |
-| Dashboard Metric Cards | `Cards > Stat Card` | Large numbers, comparison badges |
-| Action Cards | `Cards > Action Card` | Icon + description + CTA button |
-| Agent Status Cards | `Cards > Status Card` | Color-coded borders, glow effects |
-| Data Tables | `Tables > Sortable Table` | Add search, filters, expandable rows |
-| Email Review Queue | Custom Component | Card + navigation controls |
-| Review Buttons | `Buttons > Button Group` | Approve/Edit/Skip actions |
-| Prospect Detail Modal | `Overlays > Slide-over` | Right-side panel |
-| Knowledge Base Cards | `Cards > Content Card` | Edit/delete actions |
-| Settings Tabs | `Navigation > Tabs` | Horizontal tab nav |
-| Integration Cards | `Cards > Feature Card` | Logo + description + connect button |
-| Status Badges | `Badges > Status Badge` | Color-coded (active/waiting/paused) |
-| Search Bars | `Forms > Input with Icon` | Magnifying glass icon |
-| Dropdowns | `Forms > Select` | Filters, sorting |
+| GalaxyCo Element       | Hyper UI Component        | Customization Notes                  |
+| ---------------------- | ------------------------- | ------------------------------------ |
+| Sidebar Navigation     | `Navigation > Sidebar`    | Dark theme, agent icons              |
+| Dashboard Metric Cards | `Cards > Stat Card`       | Large numbers, comparison badges     |
+| Action Cards           | `Cards > Action Card`     | Icon + description + CTA button      |
+| Agent Status Cards     | `Cards > Status Card`     | Color-coded borders, glow effects    |
+| Data Tables            | `Tables > Sortable Table` | Add search, filters, expandable rows |
+| Email Review Queue     | Custom Component          | Card + navigation controls           |
+| Review Buttons         | `Buttons > Button Group`  | Approve/Edit/Skip actions            |
+| Prospect Detail Modal  | `Overlays > Slide-over`   | Right-side panel                     |
+| Knowledge Base Cards   | `Cards > Content Card`    | Edit/delete actions                  |
+| Settings Tabs          | `Navigation > Tabs`       | Horizontal tab nav                   |
+| Integration Cards      | `Cards > Feature Card`    | Logo + description + connect button  |
+| Status Badges          | `Badges > Status Badge`   | Color-coded (active/waiting/paused)  |
+| Search Bars            | `Forms > Input with Icon` | Magnifying glass icon                |
+| Dropdowns              | `Forms > Select`          | Filters, sorting                     |
 
 ### Custom Components to Build
 
@@ -1545,10 +1579,10 @@ $glow-crm: 0 0 20px rgba(16, 185, 129, 0.3);
 ### Responsive Breakpoints
 
 ```scss
-$breakpoint-sm: 640px;   // Mobile
-$breakpoint-md: 768px;   // Tablet
-$breakpoint-lg: 1024px;  // Desktop
-$breakpoint-xl: 1280px;  // Large desktop
+$breakpoint-sm: 640px; // Mobile
+$breakpoint-md: 768px; // Tablet
+$breakpoint-lg: 1024px; // Desktop
+$breakpoint-xl: 1280px; // Large desktop
 ```
 
 ### Mobile Adaptations
@@ -1585,6 +1619,7 @@ $breakpoint-xl: 1280px;  // Large desktop
 ### Phase 1: MVP (Weeks 1-4)
 
 **Must-Have Screens:**
+
 1. Onboarding (Screen 1)
 2. Dashboard (Screen 2)
 3. Agents Overview (Screen 3)
@@ -1593,6 +1628,7 @@ $breakpoint-xl: 1280px;  // Large desktop
 6. Settings - Integrations (Screen 10)
 
 **Core Features:**
+
 - Connect HubSpot/Pipedrive
 - Upload prospects (CSV)
 - Research Agent enrichment
@@ -1601,6 +1637,7 @@ $breakpoint-xl: 1280px;  // Large desktop
 - Basic knowledge base (ICP only)
 
 **Tech Stack:**
+
 - Frontend: React 18 + TypeScript, Vite, Tailwind, Radix UI
 - Backend: Node + Express (TS), Drizzle ORM, PostgreSQL
 - AI: OpenAI API, Anthropic API
@@ -1610,15 +1647,10 @@ $breakpoint-xl: 1280px;  // Large desktop
 
 ### Phase 2: Full Product (Weeks 5-8)
 
-**Additional Screens:**
-4. Research Agent Detail (Screen 4)
-7. Sent Emails (Screen 7)
-8. CRM Sync (Screen 8)
-9. Knowledge Base (Screen 9)
-11. Settings - Team (Screen 11)
-12. Settings - Billing (Screen 12)
+**Additional Screens:** 4. Research Agent Detail (Screen 4) 7. Sent Emails (Screen 7) 8. CRM Sync (Screen 8) 9. Knowledge Base (Screen 9) 11. Settings - Team (Screen 11) 12. Settings - Billing (Screen 12)
 
 **Additional Features:**
+
 - Call recording analysis (CRM Agent)
 - Advanced knowledge base (case studies, objections)
 - Team collaboration
@@ -1631,6 +1663,7 @@ $breakpoint-xl: 1280px;  // Large desktop
 ### Phase 3: Scale (Weeks 9-12)
 
 **Advanced Features:**
+
 - Agent marketplace (pre-built templates)
 - Custom agent builder
 - Advanced analytics dashboard

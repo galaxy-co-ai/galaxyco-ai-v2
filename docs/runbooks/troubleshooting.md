@@ -5,12 +5,15 @@ Quick reference for common issues and their solutions.
 ## 🚨 Emergency: Server Won't Start
 
 ### Symptoms
+
 - `pnpm dev` fails or exits immediately
 - Port already in use errors
 - Module not found errors
 
 ### Solution Steps
+
 1. **Check if port is in use**:
+
    ```bash
    netstat -ano | grep ":3000"
    # Kill process if needed (Windows):
@@ -18,11 +21,13 @@ Quick reference for common issues and their solutions.
    ```
 
 2. **Clear any lock files**:
+
    ```bash
    rm -rf .next node_modules/.cache
    ```
 
 3. **Reinstall dependencies**:
+
    ```bash
    pnpm install
    ```
@@ -42,11 +47,12 @@ Quick reference for common issues and their solutions.
 
 **Solution**: Code now has fallback - refresh and try again
 
-### Issue: "Duplicate key violation" 
+### Issue: "Duplicate key violation"
 
 **Root Cause**: Previous failed attempt left orphaned data
 
 **Solution**: Run cleanup script
+
 ```bash
 # Edit slug in script first
 node scripts/cleanup-workspace.mjs
@@ -57,11 +63,13 @@ node scripts/cleanup-workspace.mjs
 ### Issue: Can't connect to database
 
 1. **Check DATABASE_URL**:
+
    ```bash
    grep DATABASE_URL apps/web/.env.local
    ```
 
 2. **Test connection**:
+
    ```bash
    cd packages/database
    npx drizzle-kit studio
@@ -77,6 +85,7 @@ node scripts/cleanup-workspace.mjs
 ### Issue: Clerk redirects fail
 
 1. Check environment variables:
+
    ```bash
    grep CLERK apps/web/.env.local
    ```
@@ -92,12 +101,14 @@ node scripts/cleanup-workspace.mjs
 ### Issue: TypeScript compilation fails
 
 1. **Run type check**:
+
    ```bash
    cd apps/web
    pnpm typecheck
    ```
 
 2. **Clear and rebuild**:
+
    ```bash
    rm -rf .next
    pnpm build
@@ -127,6 +138,7 @@ node scripts/cleanup-workspace.mjs
 1. **Check build logs** in Vercel dashboard
 
 2. **Test build locally**:
+
    ```bash
    cd apps/web
    pnpm build
@@ -137,6 +149,7 @@ node scripts/cleanup-workspace.mjs
 ### Issue: Database migrations not applied
 
 1. **Run migrations**:
+
    ```bash
    cd packages/database
    npx drizzle-kit push
@@ -176,16 +189,19 @@ When something breaks, follow this order:
    - Frontend: Browser console (F12)
 
 2. ✅ **Run health check**
+
    ```bash
    ./scripts/health-check.sh
    ```
 
 3. ✅ **Search incidents**
+
    ```bash
    grep -r "your error message" docs/incidents/
    ```
 
 4. ✅ **Check recent changes**
+
    ```bash
    git log --oneline -10
    git diff HEAD~1

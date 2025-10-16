@@ -1,39 +1,39 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { User, Link2, Bell, Shield, CreditCard } from 'lucide-react';
-import Link from 'next/link';
+import { PageHeader } from "@/components/layout/page-header";
+import { User, Link2, Bell, Shield, CreditCard } from "lucide-react";
+import Link from "next/link";
 
 const settingsPages = [
   {
-    name: 'Profile',
-    description: 'Manage your personal information and preferences',
+    name: "Profile",
+    description: "Manage your personal information and preferences",
     icon: User,
-    href: '/settings/profile',
+    href: "/settings/profile",
   },
   {
-    name: 'Integrations',
-    description: 'Connect and manage third-party services',
+    name: "Integrations",
+    description: "Connect and manage third-party services",
     icon: Link2,
-    href: '/settings/integrations',
+    href: "/settings/integrations",
   },
   {
-    name: 'Notifications',
-    description: 'Configure email and in-app notifications',
+    name: "Notifications",
+    description: "Configure email and in-app notifications",
     icon: Bell,
-    href: '/settings/notifications',
+    href: "/settings/notifications",
   },
   {
-    name: 'Security',
-    description: 'Manage your account security settings',
+    name: "Security",
+    description: "Manage your account security settings",
     icon: Shield,
-    href: '/settings/security',
+    href: "/settings/security",
   },
   {
-    name: 'Billing',
-    description: 'View and manage your subscription and billing',
+    name: "Billing",
+    description: "View and manage your subscription and billing",
     icon: CreditCard,
-    href: '/settings/billing',
+    href: "/settings/billing",
   },
 ];
 

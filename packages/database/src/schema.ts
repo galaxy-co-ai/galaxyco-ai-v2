@@ -501,7 +501,7 @@ export const agentLogs = pgTable(
     // AI Provider context
     provider: text("provider"), // 'openai', 'anthropic', 'google'
     model: text("model"), // 'gpt-4', 'claude-3-sonnet', etc
-    
+
     // Error information
     error: text("error"), // Error message if failed
     metadata: text("metadata"), // Additional context as JSON string
@@ -514,15 +514,15 @@ export const agentLogs = pgTable(
     // Performance indexes
     tenantTimestampIdx: index("agent_log_tenant_timestamp_idx").on(
       table.workspaceId,
-      table.timestamp
+      table.timestamp,
     ),
     agentTimestampIdx: index("agent_log_agent_timestamp_idx").on(
       table.agentId,
-      table.timestamp
+      table.timestamp,
     ),
     successIdx: index("agent_log_success_idx").on(table.success),
     providerIdx: index("agent_log_provider_idx").on(table.provider),
-  })
+  }),
 );
 
 // ============================================================================
@@ -845,29 +845,23 @@ export const agentExecutionsRelations = relations(
   }),
 );
 
-export const agentSchedulesRelations = relations(
-  agentSchedules,
-  ({ one }) => ({
-    workspace: one(workspaces, {
-      fields: [agentSchedules.workspaceId],
-      references: [workspaces.id],
-    }),
-    agent: one(agents, {
-      fields: [agentSchedules.agentId],
-      references: [agents.id],
-    }),
+export const agentSchedulesRelations = relations(agentSchedules, ({ one }) => ({
+  workspace: one(workspaces, {
+    fields: [agentSchedules.workspaceId],
+    references: [workspaces.id],
   }),
-);
+  agent: one(agents, {
+    fields: [agentSchedules.agentId],
+    references: [agents.id],
+  }),
+}));
 
-export const agentLogsRelations = relations(
-  agentLogs,
-  ({ one }) => ({
-    workspace: one(workspaces, {
-      fields: [agentLogs.workspaceId],
-      references: [workspaces.id],
-    }),
+export const agentLogsRelations = relations(agentLogs, ({ one }) => ({
+  workspace: one(workspaces, {
+    fields: [agentLogs.workspaceId],
+    references: [workspaces.id],
   }),
-);
+}));
 
 export const knowledgeCollectionsRelations = relations(
   knowledgeCollections,
@@ -947,7 +941,7 @@ export const aiConversations = pgTable(
 
     // Conversation info
     title: text("title").notNull(), // Auto-generated from first message
-    
+
     // Context - what was the user doing when they started this conversation?
     context: jsonb("context")
       .$type<{
@@ -965,7 +959,7 @@ export const aiConversations = pgTable(
     // Organization
     tags: text("tags").array().default([]),
     isPinned: boolean("is_pinned").notNull().default(false),
-    
+
     // Metadata
     messageCount: integer("message_count").notNull().default(0),
     lastMessageAt: timestamp("last_message_at"),
@@ -1050,14 +1044,16 @@ export const aiUserPreferences = pgTable(
     communicationStyle: text("communication_style").default("balanced"), // 'concise' | 'detailed' | 'balanced'
     topicsOfInterest: text("topics_of_interest").array().default([]),
     frequentQuestions: text("frequent_questions").array().default([]),
-    
+
     // Corrections - learn from user feedback
     corrections: jsonb("corrections")
-      .$type<Array<{
-        wrong: string;
-        correct: string;
-        timestamp: string;
-      }>>()
+      .$type<
+        Array<{
+          wrong: string;
+          correct: string;
+          timestamp: string;
+        }>
+      >()
       .default([]),
 
     // Settings
@@ -1098,15 +1094,12 @@ export const aiConversationsRelations = relations(
   }),
 );
 
-export const aiMessagesRelations = relations(
-  aiMessages,
-  ({ one }) => ({
-    conversation: one(aiConversations, {
-      fields: [aiMessages.conversationId],
-      references: [aiConversations.id],
-    }),
+export const aiMessagesRelations = relations(aiMessages, ({ one }) => ({
+  conversation: one(aiConversations, {
+    fields: [aiMessages.conversationId],
+    references: [aiConversations.id],
   }),
-);
+}));
 
 export const aiUserPreferencesRelations = relations(
   aiUserPreferences,

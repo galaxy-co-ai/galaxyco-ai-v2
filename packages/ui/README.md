@@ -9,6 +9,7 @@ Provides reusable UI components, hooks, and utilities shared across all applicat
 ## Installation
 
 Already included via workspace protocol:
+
 ```json
 {
   "dependencies": {
@@ -20,6 +21,7 @@ Already included via workspace protocol:
 ## Key Exports
 
 ### Components
+
 - **`Button`** - Primary button component
 - **`Input`** - Form input component
 - **`Card`** - Card container component
@@ -28,11 +30,13 @@ Already included via workspace protocol:
 - **`Alert`** - Alert/notification component
 
 ### Hooks
+
 - **`useToast`** - Toast notifications
 - **`useModal`** - Modal state management
 - **`useForm`** - Form validation
 
 ### Utilities
+
 - **`cn()`** - className utility (clsx + tailwind-merge)
 - **`formatters`** - Common formatting functions
 
@@ -46,7 +50,7 @@ function MyComponent() {
 
   return (
     <Card>
-      <Button 
+      <Button
         onClick={() => toast({ title: 'Success!' })}
       >
         Click Me
@@ -67,6 +71,7 @@ pnpm typecheck    # Type check
 ## Styling
 
 Uses Tailwind CSS with shared configuration. All components support:
+
 - **Variants**: Different visual styles
 - **Sizes**: sm, md, lg
 - **Custom className**: Extend with additional classes
@@ -80,6 +85,7 @@ Uses Tailwind CSS with shared configuration. All components support:
 ## Best Practices
 
 1. **Use semantic components**:
+
    ```typescript
    <Card>  // ✅ Semantic
    <div className="...">  // ❌ Avoid raw divs
@@ -87,8 +93,8 @@ Uses Tailwind CSS with shared configuration. All components support:
 
 2. **Leverage hooks for state**:
    ```typescript
-   const { toast } = useToast();  // ✅ Centralized
-   const [show, setShow] = useState(false);  // ❌ Duplicate logic
+   const { toast } = useToast(); // ✅ Centralized
+   const [show, setShow] = useState(false); // ❌ Duplicate logic
    ```
 
 ---

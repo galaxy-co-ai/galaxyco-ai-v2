@@ -10,6 +10,7 @@
 ## ✅ What We Accomplished This Session
 
 ### 1. NestJS API Foundation (90 min)
+
 **Commit**: `feat(api): implement agents CRUD with tenant-scoped queries and mock test mode`
 
 - ✅ 3 DTOs with full validation (Create, Update, Test)
@@ -20,6 +21,7 @@
 - ✅ 541 lines across 7 files
 
 **API Endpoints**:
+
 ```
 POST   /agents              Create agent (draft)
 GET    /agents              List with filters
@@ -31,6 +33,7 @@ GET    /agents/_health      Health check
 ```
 
 ### 2. Agent Templates (30 min)
+
 **Commit**: `feat(web): add agent templates and design system constants`
 
 - ✅ 5 pre-configured templates from starter packs
@@ -39,6 +42,7 @@ GET    /agents/_health      Health check
 - ✅ 309 lines
 
 **Templates**:
+
 1. Email Analyzer 📧 (Founder Ops)
 2. Document Summarizer 📄 (Docs & Knowledge)
 3. Ticket Triage 🎫 (Support)
@@ -46,6 +50,7 @@ GET    /agents/_health      Health check
 5. Follow-up Writer ✍️ (Sales)
 
 ### 3. Template Library UI (30 min)
+
 **Commit**: `feat(web): add template library modal with OpenSea-style cards and animations`
 
 - ✅ Modal with backdrop blur overlay
@@ -58,6 +63,7 @@ GET    /agents/_health      Health check
 - ✅ 494 lines across 2 files
 
 ### 4. API Client Actions (15 min)
+
 **Commit**: `feat(web): add API client actions for agent CRUD operations`
 
 - ✅ Full CRUD client functions
@@ -77,6 +83,7 @@ GET    /agents/_health      Health check
 **Remaining**: 3-4 hours (63%)
 
 **Breakdown**:
+
 - API (NestJS): 541 lines
 - Templates: 309 lines
 - UI Components: 494 lines
@@ -135,6 +142,7 @@ GET    /agents/_health      Health check
 ### Key Features to Implement:
 
 **Form State**:
+
 ```typescript
 interface AgentBuilderState {
   basicInfo: {
@@ -144,8 +152,8 @@ interface AgentBuilderState {
     tags: string[];
   };
   configuration: {
-    trigger: 'webhook' | 'schedule' | 'manual' | 'event';
-    aiProvider: 'openai' | 'anthropic' | 'custom';
+    trigger: "webhook" | "schedule" | "manual" | "event";
+    aiProvider: "openai" | "anthropic" | "custom";
     model: string;
     temperature: number;
     systemPrompt: string;
@@ -158,6 +166,7 @@ interface AgentBuilderState {
 ```
 
 **Functionality**:
+
 - ✅ Open template selector on page load
 - ✅ Apply template → Pre-fill all fields
 - ✅ "Start from Scratch" → Empty form
@@ -168,6 +177,7 @@ interface AgentBuilderState {
 - ✅ Success toast on save
 
 **UI Design** (OpenAI-style):
+
 - Single column layout
 - Clear section headers
 - Labels above inputs
@@ -180,12 +190,14 @@ interface AgentBuilderState {
 ## 🚧 Remaining Work (After Step 4)
 
 ### Step 5: Agent Builder - Advanced (1 hour)
+
 - SchemaBuilder.tsx (JSON editor for inputs/outputs)
 - AdvancedSettings.tsx (timeout, retries, rate limits)
 - Publish flow with confirmation modal
 - Keyboard shortcut: Cmd+S to save
 
 ### Step 6: Test Mode Panel (1 hour)
+
 - TestPanel.tsx (right sidebar)
 - JSON input editor
 - Run test button (mock mode)
@@ -195,6 +207,7 @@ interface AgentBuilderState {
 - Export as JSON
 
 ### Step 7: Agent List Page (45 min)
+
 - `/agents` route
 - Status filter tabs (All, Active, Draft, Paused)
 - Search with debounce
@@ -202,6 +215,7 @@ interface AgentBuilderState {
 - Empty state with "+ New Agent" CTA
 
 ### Step 8: Polish & Testing (45 min)
+
 - Loading states everywhere
 - Error boundaries
 - Toast notifications
@@ -235,6 +249,7 @@ uvicorn app:app --reload
 ### 2. Test API with curl
 
 **Create Agent**:
+
 ```bash
 curl -X POST http://localhost:4000/agents \
   -H "Content-Type: application/json" \
@@ -252,6 +267,7 @@ curl -X POST http://localhost:4000/agents \
 ```
 
 **Test Agent (Mock)**:
+
 ```bash
 curl -X POST http://localhost:4000/agents/AGENT_ID/test \
   -H "Content-Type: application/json" \
@@ -314,18 +330,21 @@ apps/
 ## 🔑 Key Decisions & Context
 
 ### Architecture:
+
 - **Mock-only test mode**: Designed for zero-debt Phase 9 upgrade to live mode
 - **Template-first UX**: Pre-filled configs reduce setup time to <60 seconds
 - **Tenant-scoped**: Every API query uses `withTenant()` for isolation
 - **DTO validation**: All inputs validated at API with detailed errors
 
 ### UI Principles:
+
 - **OpenAI-style**: Clean, single column, progressive disclosure
 - **OpenSea cards**: Hover effects with -4px lift + shadow
 - **No blank states**: Always show sample data or CTAs
 - **Autosave**: Debounced 30sec saves to prevent data loss
 
 ### Design System:
+
 - Colors: Primary #4d6fff, Neutrals for text
 - Spacing: 8px grid (xs, sm, md, lg, xl, 2xl, 3xl, 4xl)
 - Typography: Inter font, clear hierarchy
@@ -367,6 +386,7 @@ apps/
 ## 🚀 You're Set Up for Success!
 
 **What's Working**:
+
 - ✅ Full CRUD API ready to use
 - ✅ 5 beautiful templates with pre-filled configs
 - ✅ Gorgeous modal with smooth animations
@@ -374,6 +394,7 @@ apps/
 - ✅ Design system consistent throughout
 
 **What's Next**:
+
 - Build the forms that let users create agents
 - Wire up Save Draft functionality
 - Get end-to-end flow working

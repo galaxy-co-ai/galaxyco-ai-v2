@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Search, Filter } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Search, Filter } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import type { AgentStatus } from '@/lib/agents/types';
+} from "@/components/ui/dropdown-menu";
+import type { AgentStatus } from "@/lib/agents/types";
 
 interface AgentFiltersProps {
   searchQuery: string;
@@ -24,10 +24,10 @@ interface AgentFiltersProps {
 }
 
 const STATUS_OPTIONS: { value: AgentStatus; label: string }[] = [
-  { value: 'draft', label: 'Draft' },
-  { value: 'active', label: 'Active' },
-  { value: 'paused', label: 'Paused' },
-  { value: 'archived', label: 'Archived' },
+  { value: "draft", label: "Draft" },
+  { value: "active", label: "Active" },
+  { value: "paused", label: "Paused" },
+  { value: "archived", label: "Archived" },
 ];
 
 export function AgentFilters({

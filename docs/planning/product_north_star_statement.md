@@ -2,7 +2,7 @@
 
 ### North Star (One‑Liner)
 
-**Make multi‑agent AI useful in minutes.** A new user answers a few questions and instantly gets a personalized dashboard with a Starter Pack of agents that *deliver measurable outcomes on Day 1* — and improve each week.
+**Make multi‑agent AI useful in minutes.** A new user answers a few questions and instantly gets a personalized dashboard with a Starter Pack of agents that _deliver measurable outcomes on Day 1_ — and improve each week.
 
 ### Expanded North Star
 
@@ -12,7 +12,7 @@ GalaxyCo.ai combines **StackAI’s enterprise polish**, **OpenSea’s card‑dri
 
 **Weekly Successful Agent Outcomes (WSAO) per Active Workspace.**
 
-- **Definition**: Count of agent‑completed actions that create end‑user value *and* receive an implicit/explicit success signal.
+- **Definition**: Count of agent‑completed actions that create end‑user value _and_ receive an implicit/explicit success signal.
 - **Examples**: follow‑up email sent, meeting scheduled, support ticket resolved, report generated, document summarized & filed, CRM task created.
 - **Success signal**: user approval, downstream state change, KPI delta, or validated result.
 

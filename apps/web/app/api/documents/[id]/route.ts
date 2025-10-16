@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { requireSession } from '@/lib/services/user-session';
-import { db } from '@galaxyco/database';
-import { knowledgeItems } from '@galaxyco/database/schema';
-import { and, eq } from 'drizzle-orm';
+import { NextRequest, NextResponse } from "next/server";
+import { requireSession } from "@/lib/services/user-session";
+import { db } from "@galaxyco/database";
+import { knowledgeItems } from "@galaxyco/database/schema";
+import { and, eq } from "drizzle-orm";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 /**
  * GET /api/documents/[id]
@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -23,20 +23,23 @@ export async function GET(
     const document = await db.query.knowledgeItems.findFirst({
       where: and(
         eq(knowledgeItems.id, id),
-        eq(knowledgeItems.workspaceId, workspaceId)
+        eq(knowledgeItems.workspaceId, workspaceId),
       ),
     });
 
     if (!document) {
-      return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Document not found" },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({ document });
   } catch (error) {
-    console.error('Get document error:', error);
+    console.error("Get document error:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch document' },
-      { status: 500 }
+      { error: "Failed to fetch document" },
+      { status: 500 },
     );
   }
 }
@@ -47,7 +50,7 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -75,16 +78,16 @@ export async function PATCH(
       .where(
         and(
           eq(knowledgeItems.id, id),
-          eq(knowledgeItems.workspaceId, workspaceId)
-        )
+          eq(knowledgeItems.workspaceId, workspaceId),
+        ),
       );
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Update document error:', error);
+    console.error("Update document error:", error);
     return NextResponse.json(
-      { error: 'Failed to update document' },
-      { status: 500 }
+      { error: "Failed to update document" },
+      { status: 500 },
     );
   }
 }
@@ -95,7 +98,7 @@ export async function PATCH(
  */
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -108,16 +111,16 @@ export async function DELETE(
       .where(
         and(
           eq(knowledgeItems.id, id),
-          eq(knowledgeItems.workspaceId, workspaceId)
-        )
+          eq(knowledgeItems.workspaceId, workspaceId),
+        ),
       );
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete document error:', error);
+    console.error("Delete document error:", error);
     return NextResponse.json(
-      { error: 'Failed to delete document' },
-      { status: 500 }
+      { error: "Failed to delete document" },
+      { status: 500 },
     );
   }
 }

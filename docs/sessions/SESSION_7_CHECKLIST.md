@@ -15,16 +15,19 @@
 ## 1. Fix TypeScript Path Resolution
 
 ### 1.1 Database Package Exports
+
 - [ ] Add `exports` field to `packages/database/package.json`
 - [ ] Update `packages/database/src/index.ts` with proper exports
 - [ ] Test import: `import { agents } from '@galaxyco/database'`
 
 ### 1.2 Web App Path Config
+
 - [ ] Update `apps/web/tsconfig.json` with database paths
 - [ ] Run typecheck: `cd apps/web && pnpm typecheck 2>&1 | head -20`
 - [ ] Verify error count dropped
 
 ### 1.3 Fix Remaining Imports
+
 - [ ] Fix all `@/` path imports in affected files
 - [ ] Run full typecheck: `cd apps/web && pnpm typecheck`
 - [ ] Verify 0 errors
@@ -49,15 +52,18 @@
 ## 3. Integrate Clerk Authentication
 
 ### 3.1 Create Auth Hook
+
 - [ ] Create `apps/web/hooks/use-workspace-auth.ts`
 - [ ] Implement `useWorkspaceAuth()` hook with `getAuthHeaders()`
 
 ### 3.2 Update Agent Actions
+
 - [ ] Update `apps/web/lib/actions/agent-actions.ts`
 - [ ] Replace hardcoded token with Clerk token
 - [ ] Make functions use auth hook
 
 ### 3.3 Update Components
+
 - [ ] Update `AgentBuilderPage` to use auth hook
 - [ ] Update `TestPanel` to use auth hook
 - [ ] Update agents list page to use auth hook

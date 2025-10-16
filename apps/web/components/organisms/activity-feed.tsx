@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { formatDistanceToNow, format, isToday, isYesterday, startOfDay } from 'date-fns';
-import { cn } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from "react";
+import {
+  formatDistanceToNow,
+  format,
+  isToday,
+  isYesterday,
+  startOfDay,
+} from "date-fns";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface ActivityItem {
   id: string;
@@ -30,9 +36,9 @@ export interface ActivityFeedProps {
 }
 
 function formatDateHeader(date: Date): string {
-  if (isToday(date)) return 'Today';
-  if (isYesterday(date)) return 'Yesterday';
-  return format(date, 'MMMM d, yyyy');
+  if (isToday(date)) return "Today";
+  if (isYesterday(date)) return "Yesterday";
+  return format(date, "MMMM d, yyyy");
 }
 
 function groupItemsByDate(items: ActivityItem[]): Map<string, ActivityItem[]> {
@@ -75,7 +81,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
 
   if (isLoading) {
     return (
-      <div className={cn('space-y-4', className)}>
+      <div className={cn("space-y-4", className)}>
         {Array.from({ length: loadingCount }).map((_, index) => (
           <div key={index} className="flex gap-3">
             <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
@@ -91,7 +97,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
 
   if (sortedItems.length === 0) {
     return (
-      <div className={cn('flex items-center justify-center py-12', className)}>
+      <div className={cn("flex items-center justify-center py-12", className)}>
         {emptyState || (
           <div className="text-center">
             <p className="text-muted-foreground">No activity yet</p>
@@ -105,13 +111,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
     const date = new Date(item.timestamp);
     const timeAgo = showRelativeTime
       ? formatDistanceToNow(date, { addSuffix: true })
-      : format(date, 'h:mm a');
+      : format(date, "h:mm a");
 
     return (
-      <div
-        key={item.id}
-        className="flex gap-3 group relative"
-      >
+      <div key={item.id} className="flex gap-3 group relative">
         {/* Timeline line */}
         <div className="absolute left-5 top-10 bottom-0 w-px bg-border group-last:hidden" />
 
@@ -126,7 +129,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
           ) : (
             <div className="h-10 w-10 rounded-full bg-accent flex items-center justify-center">
               <span className="text-sm font-medium text-foreground">
-                {item.actor?.name?.charAt(0) || '?'}
+                {item.actor?.name?.charAt(0) || "?"}
               </span>
             </div>
           )}
@@ -141,11 +144,11 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
                 <p className="text-sm text-foreground">
                   {item.actor && (
                     <span className="font-medium">{item.actor.name}</span>
-                  )}{' '}
+                  )}{" "}
                   <span className="text-muted-foreground">{item.action}</span>
                   {item.target && (
                     <>
-                      {' '}
+                      {" "}
                       <span className="font-medium">{item.target}</span>
                     </>
                   )}
@@ -186,7 +189,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   };
 
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn("space-y-6", className)}>
       {groupByDate && groupedItems ? (
         Array.from(groupedItems.entries())
           .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
@@ -201,12 +204,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
             </div>
           ))
       ) : (
-        <div className="space-y-0">
-          {sortedItems.map(renderActivityItem)}
-        </div>
+        <div className="space-y-0">{sortedItems.map(renderActivityItem)}</div>
       )}
     </div>
   );
 };
 
-ActivityFeed.displayName = 'ActivityFeed';
+ActivityFeed.displayName = "ActivityFeed";

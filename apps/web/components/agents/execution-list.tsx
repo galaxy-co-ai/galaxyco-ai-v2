@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle, 
-  Loader2, 
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import {
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
   XCircle,
   User,
   Calendar,
@@ -18,17 +18,17 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface ExecutionUser {
   id: string;
@@ -40,7 +40,7 @@ interface ExecutionUser {
 
 interface Execution {
   id: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  status: "pending" | "running" | "completed" | "failed" | "cancelled";
   input?: Record<string, any> | null;
   output?: Record<string, any> | null;
   error?: {
@@ -93,10 +93,14 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
   const searchParams = useSearchParams();
 
   // Filter states
-  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
-  const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
-  const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState(
+    searchParams.get("status") || "",
+  );
+  const [startDate, setStartDate] = useState(
+    searchParams.get("startDate") || "",
+  );
+  const [endDate, setEndDate] = useState(searchParams.get("endDate") || "");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchExecutions = async () => {
     setIsLoading(true);
@@ -104,16 +108,20 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
     try {
       const params = new URLSearchParams();
-      if (searchParams.get('page')) params.set('page', searchParams.get('page')!);
-      if (searchParams.get('limit')) params.set('limit', searchParams.get('limit')!);
-      if (statusFilter) params.set('status', statusFilter);
-      if (startDate) params.set('startDate', startDate);
-      if (endDate) params.set('endDate', endDate);
+      if (searchParams.get("page"))
+        params.set("page", searchParams.get("page")!);
+      if (searchParams.get("limit"))
+        params.set("limit", searchParams.get("limit")!);
+      if (statusFilter) params.set("status", statusFilter);
+      if (startDate) params.set("startDate", startDate);
+      if (endDate) params.set("endDate", endDate);
 
-      const response = await fetch(`/api/agents/${agentId}/executions?${params}`);
-      
+      const response = await fetch(
+        `/api/agents/${agentId}/executions?${params}`,
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to fetch executions');
+        throw new Error("Failed to fetch executions");
       }
 
       const data = await response.json();
@@ -121,9 +129,11 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
       setStats(data.stats || null);
       setPagination(data.pagination || null);
     } catch (err) {
-      console.error('Error fetching executions:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load executions');
-      toast.error('Failed to load executions');
+      console.error("Error fetching executions:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to load executions",
+      );
+      toast.error("Failed to load executions");
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +145,7 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
   const updateFilters = (newFilters: Record<string, string>) => {
     const params = new URLSearchParams(searchParams);
-    
+
     Object.entries(newFilters).forEach(([key, value]) => {
       if (value) {
         params.set(key, value);
@@ -145,8 +155,8 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
     });
 
     // Reset to page 1 when filters change
-    params.delete('page');
-    
+    params.delete("page");
+
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -155,8 +165,8 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
     updateFilters({ status });
   };
 
-  const handleDateChange = (field: 'startDate' | 'endDate', value: string) => {
-    if (field === 'startDate') {
+  const handleDateChange = (field: "startDate" | "endDate", value: string) => {
+    if (field === "startDate") {
       setStartDate(value);
       updateFilters({ startDate: value });
     } else {
@@ -167,28 +177,31 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', page.toString());
+    params.set("page", page.toString());
     router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleCancelExecution = async (executionId: string) => {
     setIsUpdating(executionId);
     try {
-      const response = await fetch(`/api/agents/${agentId}/executions/${executionId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'cancel' }),
-      });
+      const response = await fetch(
+        `/api/agents/${agentId}/executions/${executionId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "cancel" }),
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to cancel execution');
+        throw new Error("Failed to cancel execution");
       }
 
-      toast.success('Execution cancelled');
+      toast.success("Execution cancelled");
       await fetchExecutions(); // Refresh the list
     } catch (err) {
-      console.error('Error cancelling execution:', err);
-      toast.error('Failed to cancel execution');
+      console.error("Error cancelling execution:", err);
+      toast.error("Failed to cancel execution");
     } finally {
       setIsUpdating(null);
     }
@@ -196,36 +209,44 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />;
-      case 'failed':
-        return <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />;
-      case 'running':
-        return <Loader2 className="h-4 w-4 text-blue-600 dark:text-blue-400 animate-spin" />;
-      case 'cancelled':
+      case "completed":
+        return (
+          <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+        );
+      case "failed":
+        return (
+          <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+        );
+      case "running":
+        return (
+          <Loader2 className="h-4 w-4 text-blue-600 dark:text-blue-400 animate-spin" />
+        );
+      case "cancelled":
         return <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />;
       default:
-        return <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />;
+        return (
+          <Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        );
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'failed':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'running':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'cancelled':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+      case "completed":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "failed":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "running":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "cancelled":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
       default:
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
     }
   };
 
   const formatDuration = (ms: number | null | undefined) => {
-    if (!ms) return '—';
+    if (!ms) return "—";
     if (ms < 1000) return `${ms}ms`;
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
     return `${(ms / 60000).toFixed(1)}m`;
@@ -233,7 +254,7 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
   const formatUserName = (user: ExecutionUser) => {
     if (user.firstName || user.lastName) {
-      return `${user.firstName || ''} ${user.lastName || ''}`.trim();
+      return `${user.firstName || ""} ${user.lastName || ""}`.trim();
     }
     return user.email;
   };
@@ -276,21 +297,27 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
               <CheckCircle2 className="h-4 w-4 text-green-600" />
               Completed
             </div>
-            <div className="mt-2 text-2xl font-semibold text-green-600">{stats.completed}</div>
+            <div className="mt-2 text-2xl font-semibold text-green-600">
+              {stats.completed}
+            </div>
           </div>
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <AlertCircle className="h-4 w-4 text-red-600" />
               Failed
             </div>
-            <div className="mt-2 text-2xl font-semibold text-red-600">{stats.failed}</div>
+            <div className="mt-2 text-2xl font-semibold text-red-600">
+              {stats.failed}
+            </div>
           </div>
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 text-blue-600" />
               Running
             </div>
-            <div className="mt-2 text-2xl font-semibold text-blue-600">{stats.running}</div>
+            <div className="mt-2 text-2xl font-semibold text-blue-600">
+              {stats.running}
+            </div>
           </div>
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -322,31 +349,31 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="flex-1 min-w-[150px]">
           <label className="block text-sm font-medium mb-2">Start Date</label>
           <Input
             type="date"
             value={startDate}
-            onChange={(e) => handleDateChange('startDate', e.target.value)}
+            onChange={(e) => handleDateChange("startDate", e.target.value)}
           />
         </div>
-        
+
         <div className="flex-1 min-w-[150px]">
           <label className="block text-sm font-medium mb-2">End Date</label>
           <Input
             type="date"
             value={endDate}
-            onChange={(e) => handleDateChange('endDate', e.target.value)}
+            onChange={(e) => handleDateChange("endDate", e.target.value)}
           />
         </div>
 
         <Button
           onClick={() => {
-            setStatusFilter('');
-            setStartDate('');
-            setEndDate('');
-            updateFilters({ status: '', startDate: '', endDate: '' });
+            setStatusFilter("");
+            setStartDate("");
+            setEndDate("");
+            updateFilters({ status: "", startDate: "", endDate: "" });
           }}
           variant="outline"
         >
@@ -370,11 +397,13 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
         ) : executions.length === 0 ? (
           <div className="text-center py-12">
             <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-muted-foreground">No executions found</h3>
+            <h3 className="text-lg font-semibold text-muted-foreground">
+              No executions found
+            </h3>
             <p className="text-sm text-muted-foreground mt-2">
-              {statusFilter || startDate || endDate 
-                ? 'Try adjusting your filters to see more results.'
-                : 'This agent hasn\'t been executed yet.'}
+              {statusFilter || startDate || endDate
+                ? "Try adjusting your filters to see more results."
+                : "This agent hasn't been executed yet."}
             </p>
           </div>
         ) : (
@@ -382,20 +411,35 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
             <table className="w-full">
               <thead className="border-b">
                 <tr className="text-left">
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Status</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Duration</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Triggered By</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Started</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Actions</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">
+                    Status
+                  </th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">
+                    Duration
+                  </th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">
+                    Triggered By
+                  </th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">
+                    Started
+                  </th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {executions.map((execution) => (
-                  <tr key={execution.id} className="border-b hover:bg-muted/50 transition-colors">
+                  <tr
+                    key={execution.id}
+                    className="border-b hover:bg-muted/50 transition-colors"
+                  >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         {getStatusIcon(execution.status)}
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor(execution.status)}`}>
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor(execution.status)}`}
+                        >
                           {execution.status}
                         </span>
                       </div>
@@ -408,7 +452,9 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
                         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
                           <User className="h-3 w-3" />
                         </div>
-                        <span className="text-sm">{formatUserName(execution.triggeredByUser)}</span>
+                        <span className="text-sm">
+                          {formatUserName(execution.triggeredByUser)}
+                        </span>
                       </div>
                     </td>
                     <td className="p-4 text-sm text-muted-foreground">
@@ -419,12 +465,14 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => router.push(`${pathname}/${execution.id}`)}
+                          onClick={() =>
+                            router.push(`${pathname}/${execution.id}`)
+                          }
                         >
                           <ExternalLink className="h-4 w-4" />
                         </Button>
-                        
-                        {['pending', 'running'].includes(execution.status) && (
+
+                        {["pending", "running"].includes(execution.status) && (
                           <Button
                             variant="ghost"
                             size="sm"
@@ -451,11 +499,11 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
         {pagination && pagination.totalPages > 1 && (
           <div className="flex items-center justify-between p-4 border-t">
             <div className="text-sm text-muted-foreground">
-              Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
-              {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
-              {pagination.total} results
+              Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
+              {Math.min(pagination.page * pagination.limit, pagination.total)}{" "}
+              of {pagination.total} results
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -466,11 +514,11 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
                 <ChevronLeft className="h-4 w-4" />
                 Previous
               </Button>
-              
+
               <span className="text-sm">
                 Page {pagination.page} of {pagination.totalPages}
               </span>
-              
+
               <Button
                 variant="outline"
                 size="sm"

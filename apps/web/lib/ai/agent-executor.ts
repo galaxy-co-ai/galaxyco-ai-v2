@@ -6,9 +6,15 @@
  */
 
 import OpenAI from "openai";
-import type { ChatCompletionMessageParam, ChatCompletionTool } from "openai/resources/chat/completions";
+import type {
+  ChatCompletionMessageParam,
+  ChatCompletionTool,
+} from "openai/resources/chat/completions";
 import { createKnowledgeSearchTool } from "../../../../packages/agents-core/src/tools/knowledge-search";
-import type { Tool, ExecutionContext } from "../../../../packages/agents-core/src/types";
+import type {
+  Tool,
+  ExecutionContext,
+} from "../../../../packages/agents-core/src/types";
 
 export interface AgentExecutionOptions {
   agentId: string;
@@ -54,7 +60,7 @@ export interface AgentExecutionResult {
 export async function executeAgentWithTools(
   options: AgentExecutionOptions,
   input: AgentExecutionInput,
-  apiKey: string
+  apiKey: string,
 ): Promise<AgentExecutionResult> {
   const startTime = Date.now();
 
@@ -148,16 +154,19 @@ export async function executeAgentWithTools(
       currentMessages.push(response.message);
 
       // Check if there are tool calls
-      if (response.message.tool_calls && response.message.tool_calls.length > 0) {
+      if (
+        response.message.tool_calls &&
+        response.message.tool_calls.length > 0
+      ) {
         // Execute each tool call
         for (const toolCall of response.message.tool_calls) {
-          if (toolCall.type !== 'function' || !toolCall.function) continue;
+          if (toolCall.type !== "function" || !toolCall.function) continue;
           const toolName = toolCall.function.name;
           const toolArgs = JSON.parse(toolCall.function.arguments);
 
           // Find the tool
           const tool = availableTools.find(
-            (t) => t.definition.function.name === toolName
+            (t) => t.definition.function.name === toolName,
           );
 
           if (!tool) {
@@ -174,7 +183,10 @@ export async function executeAgentWithTools(
 
           // Execute the tool
           try {
-            console.log(`[Agent Executor] Executing tool: ${toolName}`, toolArgs);
+            console.log(
+              `[Agent Executor] Executing tool: ${toolName}`,
+              toolArgs,
+            );
             const toolResult = await tool.execute(toolArgs, context);
 
             // Track tool call
@@ -244,11 +256,13 @@ export async function executeAgentWithTools(
 /**
  * Helper to format tool execution results for display
  */
-export function formatToolCalls(toolCalls: Array<{
-  toolName: string;
-  arguments: any;
-  result: any;
-}>): string {
+export function formatToolCalls(
+  toolCalls: Array<{
+    toolName: string;
+    arguments: any;
+    result: any;
+  }>,
+): string {
   if (!toolCalls || toolCalls.length === 0) {
     return "No tools were used in this execution.";
   }

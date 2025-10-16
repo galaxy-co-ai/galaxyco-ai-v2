@@ -13,6 +13,7 @@
 ### Step 1: Generate New API Keys (10 minutes)
 
 #### OpenAI
+
 1. Go to: **https://platform.openai.com/api-keys**
 2. Click "Create new secret key"
 3. Name: "GalaxyCo-Production-2025-10-12"
@@ -20,8 +21,9 @@
 5. Save in password manager
 
 #### Anthropic
+
 1. Go to: **https://console.anthropic.com/settings/keys**
-2. Click "Create Key"  
+2. Click "Create Key"
 3. Name: "GalaxyCo-Production-2025-10-12"
 4. **COPY THE KEY IMMEDIATELY**
 5. Save in password manager
@@ -66,6 +68,7 @@ curl http://localhost:3000/api/agents/health?mode=quick
 ```
 
 Expected response should show:
+
 ```json
 {
   "status": "healthy",

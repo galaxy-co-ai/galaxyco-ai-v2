@@ -16,6 +16,7 @@
 **Why**: This file contains essential project DNA, current status, architecture overview, and navigation guide that enables AI to work effectively from the first interaction.
 
 **Implementation**:
+
 ```
 1. New conversation starts
 2. AI reads AI_CONTEXT.md first (before any other files)
@@ -281,12 +282,14 @@ Always confirm before executing:
 **CRITICAL**: Prevent documentation confusion and maintain single source of truth.
 
 **Hierarchy (Most Authoritative → Least)**:
+
 1. `WARP.md` - **AUTHORITATIVE** project rules (detailed)
 2. `AI_CONTEXT.md` - **SUMMARY** for AI onboarding (references WARP.md)
 3. `docs/` - **SPECIALIZED** deep-dive documentation
 4. `README.md` - **OVERVIEW** for humans
 
 **Rules**:
+
 - ✅ `AI_CONTEXT.md` **LINKS** to WARP.md (never duplicates content)
 - ✅ Use line references: "See WARP.md lines 58-62 for multi-tenancy rules"
 - ✅ Update `AI_CONTEXT.md` current state after major sessions only
@@ -295,11 +298,13 @@ Always confirm before executing:
 - ❌ NEVER contradict information across files
 
 **Maintenance**:
+
 - When WARP.md structure changes → Update AI_CONTEXT.md line references
 - When project phase changes → Update AI_CONTEXT.md current state section
 - When major architecture changes → Update both files strategically
 
 **Category Structure**:
+
 ```
 docs/
 ├── guides/          # Step-by-step how-to instructions
@@ -314,6 +319,7 @@ docs/
 ```
 
 **AI Assistant MUST**:
+
 - ✅ Check `docs/README.md` before answering ANY navigation questions
 - ✅ Verify file placement follows category structure before creating docs
 - ✅ Use kebab-case naming for all documentation files
@@ -324,6 +330,7 @@ docs/
 - ✅ Guide users by role (Developer, PM, DevOps, Designer) and task (Setup, Build, Fix, Deploy)
 
 **Navigation Shortcuts**:
+
 - Setup → `docs/guides/development-setup.md`
 - Architecture → `docs/technical/architecture/README.md`
 - Current Status → `docs/status/README.md`

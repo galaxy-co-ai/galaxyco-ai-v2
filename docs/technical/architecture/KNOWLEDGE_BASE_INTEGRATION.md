@@ -117,7 +117,7 @@ When creating or editing an agent, you'll find the **Knowledge Base Access** sec
 
 ```typescript
 knowledgeBase: {
-  enabled: boolean;  // Turn knowledge base access on/off
+  enabled: boolean; // Turn knowledge base access on/off
 }
 ```
 
@@ -159,6 +159,7 @@ knowledgeBase: {
 ```
 
 **Guidelines**:
+
 - **1-3 results**: Fast, focused answers (best for specific queries)
 - **4-7 results**: Balanced approach (default, recommended)
 - **8-15 results**: Comprehensive research (slower, more tokens)
@@ -192,29 +193,29 @@ CREATE TABLE agents (
 ### Programmatic Configuration
 
 ```typescript
-import { useAgentBuilder } from '@/hooks/use-agent-builder';
+import { useAgentBuilder } from "@/hooks/use-agent-builder";
 
 const MyComponent = () => {
   const { state, updateKnowledgeBase } = useAgentBuilder();
-  
+
   // Enable knowledge base with all collections
   updateKnowledgeBase({
     enabled: true,
-    scope: 'all',
-    maxResults: 5
+    scope: "all",
+    maxResults: 5,
   });
-  
+
   // Enable with specific collections
   updateKnowledgeBase({
     enabled: true,
-    scope: 'collections',
-    collectionIds: ['collection-uuid-1', 'collection-uuid-2'],
-    maxResults: 8
+    scope: "collections",
+    collectionIds: ["collection-uuid-1", "collection-uuid-2"],
+    maxResults: 8,
   });
-  
+
   // Disable knowledge base
   updateKnowledgeBase({
-    enabled: false
+    enabled: false,
   });
 };
 ```
@@ -290,15 +291,15 @@ Format:
 ### Executing Knowledge-Enabled Agents
 
 ```typescript
-import { executeAgent } from '@/lib/actions/agent-actions';
+import { executeAgent } from "@/lib/actions/agent-actions";
 
 // Execute agent with knowledge base query
 const result = await executeAgent(
   agentId,
   {
-    question: "What is our remote work policy?"
+    question: "What is our remote work policy?",
   },
-  "live"
+  "live",
 );
 
 console.log(result.output);
@@ -330,6 +331,7 @@ console.log(result.toolCalls);
 **Purpose**: Simple question-answering over your knowledge base
 
 **Configuration**:
+
 ```typescript
 {
   model: "gpt-4-turbo-preview",
@@ -344,6 +346,7 @@ console.log(result.toolCalls);
 ```
 
 **Use Cases**:
+
 - Employee onboarding questions
 - Product documentation lookup
 - Policy clarification
@@ -354,6 +357,7 @@ console.log(result.toolCalls);
 **Purpose**: Comprehensive research with multi-document synthesis
 
 **Configuration**:
+
 ```typescript
 {
   model: "gpt-4-turbo-preview",
@@ -368,6 +372,7 @@ console.log(result.toolCalls);
 ```
 
 **Use Cases**:
+
 - Market research
 - Competitive analysis
 - Literature review
@@ -378,6 +383,7 @@ console.log(result.toolCalls);
 **Purpose**: Technical expert with collection-specific knowledge
 
 **Configuration**:
+
 ```typescript
 {
   model: "gpt-4-turbo-preview",
@@ -393,6 +399,7 @@ console.log(result.toolCalls);
 ```
 
 **Use Cases**:
+
 - Technical support
 - Implementation guidance
 - Best practice recommendations
@@ -494,12 +501,14 @@ Response:
 ### 1. Optimize System Prompts
 
 ✅ **DO**:
+
 - Explicitly instruct to use `searchKnowledgeBase` tool
 - Require source citations
 - Set expectations for "not found" scenarios
 - Define response format
 
 ❌ **DON'T**:
+
 - Assume the agent will automatically search
 - Allow answers without citations
 - Use vague instructions
@@ -507,12 +516,14 @@ Response:
 ### 2. Collection Organization
 
 ✅ **DO**:
+
 - Create topic-specific collections
 - Use descriptive collection names
 - Limit agents to relevant collections
 - Regularly update and maintain collections
 
 ❌ **DON'T**:
+
 - Put everything in one collection
 - Use generic collection names
 - Give agents access to unrelated documents
@@ -520,12 +531,14 @@ Response:
 ### 3. Document Preparation
 
 ✅ **DO**:
+
 - Use clear, descriptive document titles
 - Break large documents into logical chunks
 - Include metadata and context
 - Remove duplicate content
 
 ❌ **DON'T**:
+
 - Upload files with generic names like "doc1.pdf"
 - Upload extremely large files (>10MB) without chunking
 - Include scanned images without OCR
@@ -533,12 +546,14 @@ Response:
 ### 4. Max Results Tuning
 
 **Start Conservative**: Begin with 5 results and adjust based on:
+
 - Query complexity (simple = fewer, complex = more)
 - Token budget (more results = more tokens)
 - Response time requirements (fewer = faster)
 - Answer quality (monitor and adjust)
 
 **Performance Impact**:
+
 ```
 Results | Avg Tokens | Avg Latency | Use Case
 --------|-----------|-------------|----------
@@ -551,6 +566,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 ### 5. Testing and Monitoring
 
 ✅ **DO**:
+
 - Test agents with known questions
 - Review tool call logs
 - Monitor answer quality
@@ -558,6 +574,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 - Adjust configurations based on results
 
 ❌ **DON'T**:
+
 - Deploy without testing
 - Ignore low similarity scores
 - Skip validation of citations
@@ -565,14 +582,17 @@ Results | Avg Tokens | Avg Latency | Use Case
 ### 6. Cost Optimization
 
 **Embedding Costs** (one-time per document):
+
 - text-embedding-3-small: ~$0.00002 per 1K tokens
 - Average document (5K tokens): ~$0.0001
 
 **Inference Costs** (per agent execution):
+
 - GPT-4 Turbo: ~$0.01-0.03 per query
 - GPT-3.5 Turbo: ~$0.002-0.005 per query
 
 **Cost Reduction Strategies**:
+
 1. Use GPT-3.5 for simple Q&A
 2. Limit max results to 5-7
 3. Implement caching for common queries
@@ -581,12 +601,14 @@ Results | Avg Tokens | Avg Latency | Use Case
 ### 7. Security and Privacy
 
 ✅ **DO**:
+
 - Use collection-based access control
 - Restrict sensitive documents to specific agents
 - Audit agent access patterns
 - Implement row-level security
 
 ❌ **DON'T**:
+
 - Give all agents access to all documents
 - Store PII without proper controls
 - Share collections across tenants
@@ -598,6 +620,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Agent responds without searching documents
 
 **Solutions**:
+
 1. Verify `knowledgeBase.enabled = true` in agent config
 2. Check system prompt includes instructions to use the tool
 3. Ensure agent uses OpenAI (Anthropic support coming soon)
@@ -608,6 +631,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Search returns empty or low-relevance results
 
 **Solutions**:
+
 1. Check document embeddings are generated
 2. Verify collection filters are correct
 3. Review search query phrasing
@@ -619,6 +643,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Agent doesn't cite sources properly
 
 **Solutions**:
+
 1. Update system prompt with explicit citation requirements
 2. Provide citation format examples
 3. Ensure document titles are descriptive
@@ -629,6 +654,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Slow response times
 
 **Solutions**:
+
 1. Reduce `maxResults` to 5 or fewer
 2. Use collection filtering to narrow search
 3. Check document sizes (large docs = slow retrieval)
@@ -640,6 +666,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Execution fails due to context length
 
 **Solutions**:
+
 1. Reduce `maxResults`
 2. Decrease `maxTokens` in agent config
 3. Shorten system prompt
@@ -651,6 +678,7 @@ Results | Avg Tokens | Avg Latency | Use Case
 **Symptom**: Cross-workspace data leakage
 
 **Solutions**:
+
 1. Verify `workspaceId` filter in all queries
 2. Check row-level security policies
 3. Audit agent access patterns
@@ -717,16 +745,19 @@ Agent 3: Report Writer (formats final output)
 ### Roadmap
 
 **Q2 2025**:
+
 - [ ] Anthropic function calling support
 - [ ] Search analytics dashboard
 - [ ] Advanced filtering (date, type, metadata)
 
 **Q3 2025**:
+
 - [ ] Hybrid search with reranking
 - [ ] Auto-chunking for large documents
 - [ ] Query caching system
 
 **Q4 2025**:
+
 - [ ] Multi-modal search (images, audio)
 - [ ] Custom embedding models
 - [ ] Graph-based document relationships
@@ -749,6 +780,7 @@ For issues or questions:
 ### Version 1.0.0 (2025-01-15)
 
 **Initial Release**:
+
 - Knowledge base search tool
 - Agent configuration UI
 - Three pre-built templates

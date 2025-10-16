@@ -9,6 +9,7 @@ Provides centralized configuration, environment variable validation, and shared 
 ## Installation
 
 Already included via workspace protocol:
+
 ```json
 {
   "dependencies": {
@@ -26,7 +27,7 @@ Already included via workspace protocol:
 ## Usage
 
 ```typescript
-import { env, constants } from '@galaxyco/config';
+import { env, constants } from "@galaxyco/config";
 
 // Access validated environment variables
 console.log(env.DATABASE_URL);

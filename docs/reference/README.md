@@ -5,12 +5,14 @@ Quick reference materials and comprehensive lists for GalaxyCo.ai development.
 ## Quick References
 
 ### Essential
+
 - [Environment Variables](environment-variables.md) - All configuration options
 - [CLI Commands](cli-commands.md) - Useful development commands
 - [API Quick Reference](api-quick-reference.md) - Common API patterns
 - [Glossary](glossary.md) - Terms and definitions
 
 ### Technical
+
 - [Database Schema Reference](database-schema-reference.md) - Complete schema
 - [Component Reference](components.md) - UI component library
 - [Utility Functions](utility-functions.md) - Helper functions
@@ -111,12 +113,14 @@ See [glossary.md](glossary.md) for complete definitions.
 ## External Resources
 
 ### Documentation
+
 - [Next.js Docs](https://nextjs.org/docs)
 - [React Docs](https://react.dev)
 - [Clerk Docs](https://clerk.com/docs)
 - [Drizzle ORM Docs](https://orm.drizzle.team)
 
 ### Tools
+
 - [Vercel Dashboard](https://vercel.com/dashboard)
 - [GitHub Repository](https://github.com/galaxyco-ai/galaxyco-ai-2.0)
 
@@ -127,9 +131,9 @@ See [external-links.md](external-links.md) for more resources.
 ### UI Components
 
 ```typescript
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 ```
 
 See [components.md](components.md) for complete component reference.
@@ -137,18 +141,21 @@ See [components.md](components.md) for complete component reference.
 ## Conventions
 
 ### File Naming
+
 - Components: `PascalCase.tsx`
 - Utilities: `camelCase.ts`
 - Types: `PascalCase.types.ts`
 - Tests: `*.test.ts`
 
 ### Code Style
+
 - Use TypeScript for all code
 - Follow ESLint configuration
 - Use Prettier for formatting
 - Write descriptive commit messages
 
 ### Git Workflow
+
 - Branch naming: `feat/`, `fix/`, `chore/`
 - Commit format: Conventional Commits
 - Pull requests required for main branch

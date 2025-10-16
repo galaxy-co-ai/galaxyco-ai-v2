@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { useChat } from '@/hooks/use-chat';
-import { ChatMessageComponent } from './chat-message';
-import { Bot, Send, X, Trash2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef } from "react";
+import { useChat } from "@/hooks/use-chat";
+import { ChatMessageComponent } from "./chat-message";
+import { Bot, Send, X, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ChatPanelProps {
   isOpen: boolean;
@@ -13,13 +13,14 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
-  const { messages, input, setInput, send, clear, isTyping } = useChat(conversationId);
+  const { messages, input, setInput, send, clear, isTyping } =
+    useChat(conversationId);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   }, [messages, isTyping]);
 
@@ -33,7 +34,10 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
   return (
     <div className="fixed inset-0 z-modal flex items-end justify-end p-4 md:items-center md:p-0">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
       {/* Panel */}
       <div className="relative z-10 flex h-[600px] w-full flex-col rounded-lg border bg-white shadow-2xl dark:bg-neutral-900 md:m-4 md:h-[700px] md:w-[420px]">
@@ -78,10 +82,10 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
                 <Bot className="relative h-16 w-16 text-primary" />
               </div>
               <h4 className="mt-6 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-                🔥 Let's automate your business!
+                🔥 Let&apos;s automate your business!
               </h4>
               <p className="mt-3 max-w-xs text-sm text-neutral-600 dark:text-neutral-400">
-                I'm your AI automation expert. Ask me about:
+                I&apos;m your AI automation expert. Ask me about:
               </p>
               <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
                 <div className="rounded-lg bg-primary/10 px-3 py-2 text-primary font-medium">
@@ -131,8 +135,8 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
               type="submit"
               disabled={!input.trim() || isTyping}
               className={cn(
-                'flex h-10 w-10 items-center justify-center rounded-md bg-primary text-white transition-opacity hover:bg-primary/90',
-                (!input.trim() || isTyping) && 'cursor-not-allowed opacity-50'
+                "flex h-10 w-10 items-center justify-center rounded-md bg-primary text-white transition-opacity hover:bg-primary/90",
+                (!input.trim() || isTyping) && "cursor-not-allowed opacity-50",
               )}
             >
               <Send className="h-4 w-4" />

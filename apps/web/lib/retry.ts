@@ -4,21 +4,24 @@
 export class RetryableError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'RetryableError';
+    this.name = "RetryableError";
   }
 }
 
 export class NonRetryableError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'NonRetryableError';
+    this.name = "NonRetryableError";
   }
 }
 
 export class RateLimitError extends RetryableError {
-  constructor(message: string, public retryAfter?: number) {
+  constructor(
+    message: string,
+    public retryAfter?: number,
+  ) {
     super(message);
-    this.name = 'RateLimitError';
+    this.name = "RateLimitError";
   }
 }
 
@@ -46,7 +49,7 @@ const DEFAULT_OPTIONS: RetryOptions = {
  */
 export async function retryWithBackoff<T>(
   fn: () => Promise<T>,
-  options: Partial<RetryOptions> = {}
+  options: Partial<RetryOptions> = {},
 ): Promise<T> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   let lastError: Error;
@@ -64,10 +67,10 @@ export async function retryWithBackoff<T>(
 
       // Don't retry on auth errors (401, 403)
       if (
-        error.message.includes('401') ||
-        error.message.includes('403') ||
-        error.message.includes('Unauthorized') ||
-        error.message.includes('Forbidden')
+        error.message.includes("401") ||
+        error.message.includes("403") ||
+        error.message.includes("Unauthorized") ||
+        error.message.includes("Forbidden")
       ) {
         throw new NonRetryableError(error.message);
       }
@@ -96,7 +99,7 @@ export async function retryWithBackoff<T>(
       opts.onRetry?.(attempt, error);
 
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -118,21 +121,25 @@ export function isRetryableError(error: any): boolean {
 
   // Network errors are retryable
   if (
-    error.message.includes('ECONNREFUSED') ||
-    error.message.includes('ETIMEDOUT') ||
-    error.message.includes('ENOTFOUND') ||
-    error.message.includes('network')
+    error.message.includes("ECONNREFUSED") ||
+    error.message.includes("ETIMEDOUT") ||
+    error.message.includes("ENOTFOUND") ||
+    error.message.includes("network")
   ) {
     return true;
   }
 
   // 5xx errors are retryable
-  if (error.message.includes('500') || error.message.includes('502') || error.message.includes('503')) {
+  if (
+    error.message.includes("500") ||
+    error.message.includes("502") ||
+    error.message.includes("503")
+  ) {
     return true;
   }
 
   // Rate limit errors are retryable
-  if (error.message.includes('429') || error.message.includes('rate limit')) {
+  if (error.message.includes("429") || error.message.includes("rate limit")) {
     return true;
   }
 

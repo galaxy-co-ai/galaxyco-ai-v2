@@ -1,6 +1,6 @@
 /**
  * Agent Interface & Base Class
- * 
+ *
  * Standardized interface that all agents must implement per rule OyCoQzeTnn2qmcEcvGl6v7:
  * 1) Every agent must follow the standard interface: id, name, trigger, inputs, aiProvider, process, output
  * 2) All AI provider calls must be wrapped in error handling with fallback logic
@@ -9,17 +9,23 @@
  * 5) Test agents with mock data before connecting real integrations
  */
 
-import { AIProviderWrapper, AIProvider, createAIProvider, getProviderConfigFromEnv, validateProviderConfig } from './ai-provider-wrapper';
-import { logAgentExecution } from './agent-logger';
+import {
+  AIProviderWrapper,
+  AIProvider,
+  createAIProvider,
+  getProviderConfigFromEnv,
+  validateProviderConfig,
+} from "./ai-provider-wrapper";
+import { logAgentExecution } from "./agent-logger";
 
-export type AgentTriggerType = 
-  | 'manual' 
-  | 'schedule' 
-  | 'webhook' 
-  | 'event' 
-  | 'email' 
-  | 'knowledge_update'
-  | 'user_action';
+export type AgentTriggerType =
+  | "manual"
+  | "schedule"
+  | "webhook"
+  | "event"
+  | "email"
+  | "knowledge_update"
+  | "user_action";
 
 export interface AgentTrigger {
   type: AgentTriggerType;
@@ -33,7 +39,7 @@ export interface AgentTrigger {
 
 export interface AgentInput {
   name: string;
-  type: 'text' | 'number' | 'boolean' | 'file' | 'json' | 'array';
+  type: "text" | "number" | "boolean" | "file" | "json" | "array";
   required: boolean;
   description: string;
   default?: any;
@@ -47,7 +53,7 @@ export interface AgentInput {
 
 export interface AgentOutput {
   name: string;
-  type: 'text' | 'number' | 'boolean' | 'file' | 'json' | 'array';
+  type: "text" | "number" | "boolean" | "file" | "json" | "array";
   description: string;
 }
 
@@ -56,7 +62,7 @@ export interface AgentExecutionContext {
   userId: string;
   workspaceId: string;
   executionId: string;
-  triggeredBy: 'user' | 'system' | 'schedule' | 'webhook';
+  triggeredBy: "user" | "system" | "schedule" | "webhook";
   metadata?: Record<string, any>;
 }
 
@@ -79,7 +85,7 @@ export interface AgentExecutionResult {
 
 /**
  * Standardized Agent Interface
- * 
+ *
  * All agents must implement this interface to ensure consistency
  * and proper integration with the platform.
  */
@@ -114,13 +120,15 @@ export abstract class BaseAgent {
    */
   public abstract process(
     inputs: Record<string, any>,
-    context: AgentExecutionContext
+    context: AgentExecutionContext,
   ): Promise<AgentExecutionResult>;
 
   /**
    * Initialize AI provider with error handling and fallback logic
    */
-  protected async initializeAI(context: AgentExecutionContext): Promise<AIProviderWrapper> {
+  protected async initializeAI(
+    context: AgentExecutionContext,
+  ): Promise<AIProviderWrapper> {
     if (this.aiWrapper) {
       return this.aiWrapper;
     }
@@ -130,16 +138,26 @@ export abstract class BaseAgent {
 
     // Get primary provider config
     const primaryConfig = getProviderConfigFromEnv(this.aiProvider.primary);
-    if (!primaryConfig || !validateProviderConfig(this.aiProvider.primary, primaryConfig)) {
-      throw new Error(`Failed to configure primary AI provider: ${this.aiProvider.primary}`);
+    if (
+      !primaryConfig ||
+      !validateProviderConfig(this.aiProvider.primary, primaryConfig)
+    ) {
+      throw new Error(
+        `Failed to configure primary AI provider: ${this.aiProvider.primary}`,
+      );
     }
 
     // Get fallback provider config (optional)
     let fallbackConfig = null;
     if (this.aiProvider.fallback) {
       fallbackConfig = getProviderConfigFromEnv(this.aiProvider.fallback);
-      if (!fallbackConfig || !validateProviderConfig(this.aiProvider.fallback, fallbackConfig)) {
-        console.warn(`[AGENT ${this.id}] Fallback provider unavailable: ${this.aiProvider.fallback}`);
+      if (
+        !fallbackConfig ||
+        !validateProviderConfig(this.aiProvider.fallback, fallbackConfig)
+      ) {
+        console.warn(
+          `[AGENT ${this.id}] Fallback provider unavailable: ${this.aiProvider.fallback}`,
+        );
         fallbackConfig = null;
       }
     }
@@ -153,10 +171,12 @@ export abstract class BaseAgent {
         provider: this.aiProvider.primary,
         config: primaryConfig,
       },
-      fallback: fallbackConfig ? {
-        provider: this.aiProvider.fallback!,
-        config: fallbackConfig,
-      } : undefined,
+      fallback: fallbackConfig
+        ? {
+            provider: this.aiProvider.fallback!,
+            config: fallbackConfig,
+          }
+        : undefined,
     });
 
     return this.aiWrapper;
@@ -165,42 +185,48 @@ export abstract class BaseAgent {
   /**
    * Validate all required inputs are present and valid
    */
-  protected validateInputs(inputs: Record<string, any>): { valid: boolean; errors: string[] } {
+  protected validateInputs(inputs: Record<string, any>): {
+    valid: boolean;
+    errors: string[];
+  } {
     const errors: string[] = [];
 
     for (const input of this.inputs) {
-      if (input.required && (inputs[input.name] === undefined || inputs[input.name] === null)) {
+      if (
+        input.required &&
+        (inputs[input.name] === undefined || inputs[input.name] === null)
+      ) {
         errors.push(`Required input '${input.name}' is missing`);
         continue;
       }
 
       if (inputs[input.name] !== undefined) {
         const value = inputs[input.name];
-        
+
         // Type validation
         switch (input.type) {
-          case 'text':
-            if (typeof value !== 'string') {
+          case "text":
+            if (typeof value !== "string") {
               errors.push(`Input '${input.name}' must be a string`);
             }
             break;
-          case 'number':
-            if (typeof value !== 'number') {
+          case "number":
+            if (typeof value !== "number") {
               errors.push(`Input '${input.name}' must be a number`);
             }
             break;
-          case 'boolean':
-            if (typeof value !== 'boolean') {
+          case "boolean":
+            if (typeof value !== "boolean") {
               errors.push(`Input '${input.name}' must be a boolean`);
             }
             break;
-          case 'array':
+          case "array":
             if (!Array.isArray(value)) {
               errors.push(`Input '${input.name}' must be an array`);
             }
             break;
-          case 'json':
-            if (typeof value !== 'object') {
+          case "json":
+            if (typeof value !== "object") {
               errors.push(`Input '${input.name}' must be a valid JSON object`);
             }
             break;
@@ -209,24 +235,43 @@ export abstract class BaseAgent {
         // Additional validation rules
         if (input.validation) {
           const validation = input.validation;
-          
-          if (validation.min !== undefined && typeof value === 'number' && value < validation.min) {
-            errors.push(`Input '${input.name}' must be at least ${validation.min}`);
+
+          if (
+            validation.min !== undefined &&
+            typeof value === "number" &&
+            value < validation.min
+          ) {
+            errors.push(
+              `Input '${input.name}' must be at least ${validation.min}`,
+            );
           }
-          
-          if (validation.max !== undefined && typeof value === 'number' && value > validation.max) {
-            errors.push(`Input '${input.name}' must be at most ${validation.max}`);
+
+          if (
+            validation.max !== undefined &&
+            typeof value === "number" &&
+            value > validation.max
+          ) {
+            errors.push(
+              `Input '${input.name}' must be at most ${validation.max}`,
+            );
           }
-          
-          if (validation.pattern && typeof value === 'string') {
+
+          if (validation.pattern && typeof value === "string") {
             const regex = new RegExp(validation.pattern);
             if (!regex.test(value)) {
-              errors.push(`Input '${input.name}' does not match required pattern`);
+              errors.push(
+                `Input '${input.name}' does not match required pattern`,
+              );
             }
           }
-          
-          if (validation.allowedValues && !validation.allowedValues.includes(value)) {
-            errors.push(`Input '${input.name}' must be one of: ${validation.allowedValues.join(', ')}`);
+
+          if (
+            validation.allowedValues &&
+            !validation.allowedValues.includes(value)
+          ) {
+            errors.push(
+              `Input '${input.name}' must be one of: ${validation.allowedValues.join(", ")}`,
+            );
           }
         }
       }
@@ -240,7 +285,7 @@ export abstract class BaseAgent {
    */
   public async execute(
     inputs: Record<string, any>,
-    context: AgentExecutionContext
+    context: AgentExecutionContext,
   ): Promise<AgentExecutionResult> {
     const startTime = Date.now();
     let result: AgentExecutionResult;
@@ -257,7 +302,9 @@ export abstract class BaseAgent {
       // Validate inputs
       const validation = this.validateInputs(inputs);
       if (!validation.valid) {
-        throw new Error(`Input validation failed: ${validation.errors.join(', ')}`);
+        throw new Error(
+          `Input validation failed: ${validation.errors.join(", ")}`,
+        );
       }
 
       // Execute the agent's core logic
@@ -290,17 +337,20 @@ export abstract class BaseAgent {
       });
 
       return result;
-
     } catch (error) {
       const duration = Date.now() - startTime;
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       result = {
         success: false,
         data: {},
         error: {
           message: errorMessage,
-          code: error instanceof Error && 'code' in error ? (error as any).code : 'EXECUTION_ERROR',
+          code:
+            error instanceof Error && "code" in error
+              ? (error as any).code
+              : "EXECUTION_ERROR",
         },
         metadata: {
           duration,
@@ -340,14 +390,14 @@ export abstract class BaseAgent {
     issues: string[];
   }> {
     const issues: string[] = [];
-    
+
     // Create test context
     const testContext: AgentExecutionContext = {
-      tenantId: 'test-tenant',
-      userId: 'test-user',
-      workspaceId: 'test-workspace',
+      tenantId: "test-tenant",
+      userId: "test-user",
+      workspaceId: "test-workspace",
       executionId: `test-${Date.now()}`,
-      triggeredBy: 'system',
+      triggeredBy: "system",
       metadata: { isTest: true },
     };
 
@@ -365,7 +415,9 @@ export abstract class BaseAgent {
       try {
         await this.initializeAI(testContext);
       } catch (error) {
-        issues.push(`AI provider initialization failed: ${error instanceof Error ? error.message : String(error)}`);
+        issues.push(
+          `AI provider initialization failed: ${error instanceof Error ? error.message : String(error)}`,
+        );
       }
 
       // Test execution
@@ -383,10 +435,11 @@ export abstract class BaseAgent {
         results,
         issues,
       };
-
     } catch (error) {
-      issues.push(`Test execution failed: ${error instanceof Error ? error.message : String(error)}`);
-      
+      issues.push(
+        `Test execution failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
+
       return {
         success: false,
         results: {
@@ -394,7 +447,7 @@ export abstract class BaseAgent {
           data: {},
           error: {
             message: error instanceof Error ? error.message : String(error),
-            code: 'TEST_FAILURE',
+            code: "TEST_FAILURE",
           },
         },
         issues,
@@ -415,26 +468,27 @@ export abstract class BaseAgent {
       }
 
       switch (input.type) {
-        case 'text':
-          mockInputs[input.name] = input.validation?.allowedValues?.[0] || 'test-value';
+        case "text":
+          mockInputs[input.name] =
+            input.validation?.allowedValues?.[0] || "test-value";
           break;
-        case 'number':
+        case "number":
           mockInputs[input.name] = input.validation?.min || 1;
           break;
-        case 'boolean':
+        case "boolean":
           mockInputs[input.name] = true;
           break;
-        case 'array':
-          mockInputs[input.name] = ['test-item'];
+        case "array":
+          mockInputs[input.name] = ["test-item"];
           break;
-        case 'json':
-          mockInputs[input.name] = { test: 'data' };
+        case "json":
+          mockInputs[input.name] = { test: "data" };
           break;
-        case 'file':
-          mockInputs[input.name] = 'test-file.txt';
+        case "file":
+          mockInputs[input.name] = "test-file.txt";
           break;
         default:
-          mockInputs[input.name] = 'test-value';
+          mockInputs[input.name] = "test-value";
       }
     }
 
@@ -449,19 +503,24 @@ export abstract class BaseAgent {
 
     // Check if aiProvider is defined (might not be during build-time instantiation)
     if (!this.aiProvider) {
-      console.warn(`[AGENT ${this.id || 'unknown'}] AI provider not defined, skipping environment validation`);
+      console.warn(
+        `[AGENT ${this.id || "unknown"}] AI provider not defined, skipping environment validation`,
+      );
       return;
     }
 
     // Check AI provider keys
-    if (this.aiProvider.primary === 'openai' && !process.env.OPENAI_API_KEY) {
-      missingVars.push('OPENAI_API_KEY');
+    if (this.aiProvider.primary === "openai" && !process.env.OPENAI_API_KEY) {
+      missingVars.push("OPENAI_API_KEY");
     }
-    if (this.aiProvider.primary === 'anthropic' && !process.env.ANTHROPIC_API_KEY) {
-      missingVars.push('ANTHROPIC_API_KEY');
+    if (
+      this.aiProvider.primary === "anthropic" &&
+      !process.env.ANTHROPIC_API_KEY
+    ) {
+      missingVars.push("ANTHROPIC_API_KEY");
     }
-    if (this.aiProvider.primary === 'google' && !process.env.GOOGLE_AI_KEY) {
-      missingVars.push('GOOGLE_AI_KEY');
+    if (this.aiProvider.primary === "google" && !process.env.GOOGLE_AI_KEY) {
+      missingVars.push("GOOGLE_AI_KEY");
     }
 
     // Check any additional required environment variables
@@ -472,7 +531,10 @@ export abstract class BaseAgent {
     }
 
     if (missingVars.length > 0) {
-      console.warn(`[AGENT ${this.id}] Missing environment variables:`, missingVars);
+      console.warn(
+        `[AGENT ${this.id}] Missing environment variables:`,
+        missingVars,
+      );
     }
   }
 
@@ -480,16 +542,16 @@ export abstract class BaseAgent {
    * Helper method to send AI requests with the standardized wrapper
    */
   protected async sendAIRequest(
-    messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
+    messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
     context: AgentExecutionContext,
     options?: {
       temperature?: number;
       maxTokens?: number;
       model?: string;
-    }
+    },
   ) {
     const aiWrapper = await this.initializeAI(context);
-    
+
     return await aiWrapper.sendRequest({
       model: options?.model || this.aiProvider.model,
       messages,
@@ -503,20 +565,20 @@ export abstract class BaseAgent {
  * Agent Registry - keeps track of all available agents
  */
 export class AgentRegistry {
-  private static agents = new Map<string, new() => BaseAgent>();
+  private static agents = new Map<string, new () => BaseAgent>();
 
-  static register(agentClass: new() => BaseAgent) {
+  static register(agentClass: new () => BaseAgent) {
     const instance = new agentClass();
     this.agents.set(instance.id, agentClass);
     console.info(`[AGENT REGISTRY] Registered agent: ${instance.id}`);
   }
 
-  static get(agentId: string): (new() => BaseAgent) | undefined {
+  static get(agentId: string): (new () => BaseAgent) | undefined {
     return this.agents.get(agentId);
   }
 
   static list(): Array<{ id: string; name: string; description: string }> {
-    return Array.from(this.agents.values()).map(AgentClass => {
+    return Array.from(this.agents.values()).map((AgentClass) => {
       const instance = new AgentClass();
       return {
         id: instance.id,
@@ -526,7 +588,9 @@ export class AgentRegistry {
     });
   }
 
-  static async testAll(): Promise<Record<string, { success: boolean; issues: string[] }>> {
+  static async testAll(): Promise<
+    Record<string, { success: boolean; issues: string[] }>
+  > {
     const results: Record<string, { success: boolean; issues: string[] }> = {};
 
     for (const [agentId, AgentClass] of this.agents) {

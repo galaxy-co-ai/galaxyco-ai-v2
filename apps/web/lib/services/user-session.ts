@@ -1,14 +1,14 @@
 /**
  * User Session Service
- * 
+ *
  * Maps Clerk authentication to database users and workspaces.
  * Handles user creation on first login via Clerk webhook.
  */
 
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { db } from '@galaxyco/database';
-import { users, workspaceMembers, workspaces } from '@galaxyco/database/schema';
-import { eq, and } from 'drizzle-orm';
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { db } from "@galaxyco/database";
+import { users, workspaceMembers, workspaces } from "@galaxyco/database/schema";
+import { eq, and } from "drizzle-orm";
 
 export interface UserSession {
   userId: string; // Database user ID
@@ -26,7 +26,7 @@ export class UserSessionService {
    */
   async getCurrentSession(): Promise<UserSession | null> {
     const { userId: clerkUserId } = await auth();
-    
+
     if (!clerkUserId) {
       return null;
     }
@@ -54,7 +54,7 @@ export class UserSessionService {
     });
 
     if (!membership) {
-      throw new Error('User has no workspace membership');
+      throw new Error("User has no workspace membership");
     }
 
     return {
@@ -75,7 +75,7 @@ export class UserSessionService {
   async createUserFromClerk(clerkUser: any): Promise<UserSession> {
     const email = clerkUser.emailAddresses[0]?.emailAddress;
     if (!email) {
-      throw new Error('No email address found for Clerk user');
+      throw new Error("No email address found for Clerk user");
     }
 
     // Check if user already exists
@@ -95,7 +95,7 @@ export class UserSessionService {
           avatarUrl: clerkUser.imageUrl,
         })
         .returning();
-      
+
       dbUser = newUser;
     }
 
@@ -109,10 +109,10 @@ export class UserSessionService {
 
     if (!membership) {
       // Create default workspace for user
-      const workspaceName = clerkUser.firstName 
+      const workspaceName = clerkUser.firstName
         ? `${clerkUser.firstName}'s Workspace`
-        : 'My Workspace';
-      
+        : "My Workspace";
+
       const [workspace] = await db
         .insert(workspaces)
         .values({
@@ -126,14 +126,14 @@ export class UserSessionService {
       await db.insert(workspaceMembers).values({
         workspaceId: workspace.id,
         userId: dbUser.id,
-        role: 'owner',
+        role: "owner",
       });
 
       // Fetch membership
       membership = await db.query.workspaceMembers.findFirst({
         where: and(
           eq(workspaceMembers.userId, dbUser.id),
-          eq(workspaceMembers.workspaceId, workspace.id)
+          eq(workspaceMembers.workspaceId, workspace.id),
         ),
         with: {
           workspace: true,
@@ -142,7 +142,7 @@ export class UserSessionService {
     }
 
     if (!membership) {
-      throw new Error('Failed to create workspace membership');
+      throw new Error("Failed to create workspace membership");
     }
 
     return {
@@ -187,9 +187,9 @@ export const userSessionService = new UserSessionService();
  */
 export async function requireSession(): Promise<UserSession> {
   const session = await userSessionService.getCurrentSession();
-  
+
   if (!session) {
-    throw new Error('Unauthorized - no valid session');
+    throw new Error("Unauthorized - no valid session");
   }
 
   return session;

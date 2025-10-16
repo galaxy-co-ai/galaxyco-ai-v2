@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { ConfidenceBadge } from '@/components/shared/confidence-badge';
-import { EmptyState } from '@/components/shared/empty-state';
-import { mockEmails } from '@/lib/fixtures';
-import { formatShortDate } from '@/lib/utils';
-import { Mail, Check, X, Edit3 } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { ConfidenceBadge } from "@/components/shared/confidence-badge";
+import { EmptyState } from "@/components/shared/empty-state";
+import { mockEmails } from "@/lib/fixtures";
+import { formatShortDate } from "@/lib/utils";
+import { Mail, Check, X, Edit3 } from "lucide-react";
 
 export default function EmailsPage() {
   const emails = mockEmails;
@@ -37,7 +37,7 @@ export default function EmailsPage() {
                     <ConfidenceBadge score={email.confidenceScore} />
                   </div>
                   <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                    To: {email.prospect?.email || 'Unknown'}
+                    To: {email.prospect?.email || "Unknown"}
                   </p>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400">
                     Generated {formatShortDate(email.createdAt)}
@@ -67,7 +67,10 @@ export default function EmailsPage() {
                         key={index}
                         className="flex items-start gap-2 rounded-md border bg-neutral-50 p-3 dark:bg-neutral-900"
                       >
-                        <ConfidenceBadge score={insight.confidenceScore} showLabel={false} />
+                        <ConfidenceBadge
+                          score={insight.confidenceScore}
+                          showLabel={false}
+                        />
                         <div className="flex-1">
                           <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                             {insight.title}

@@ -1,6 +1,7 @@
 # Documentation Organization Plan
 
 ## Current State
+
 - **154 markdown files** scattered across the project
 - **17 files in root** directory (should only have README.md and WARP.md)
 - Multiple duplicate/outdated completion summaries
@@ -87,18 +88,22 @@ galaxyco-ai-2.0/
 ## Organization Rules
 
 ### Root Directory
+
 **KEEP:**
+
 - `README.md` - Main project overview
 - `WARP.md` - AI collaboration rules
 - `package.json`, `tsconfig.json`, etc. - Config files
 
 **MOVE TO docs/status/:**
+
 - `TECH_STACK_IMPROVEMENTS.md`
 - `IMPLEMENTATION_SUMMARY.md`
 - `API_KEY_RECOVERY_SUMMARY.md`
 - `PASSWORD_VAULT_SETUP_COMPLETE.md`
 
 **MOVE TO docs/archive/2025-10/:**
+
 - `COMPLETION_PLAN.md`
 - `DEPLOYMENT_SUCCESS.md`
 - `DEPLOYMENT_VALIDATION.md`
@@ -110,37 +115,44 @@ galaxyco-ai-2.0/
 - `PRODUCTION_TESTING_GUIDE.md`
 
 **CONSOLIDATE:**
+
 - Multiple session handoffs → Single `docs/status/session-history.md`
 - Multiple completion summaries → Single `docs/status/completed-milestones.md`
 
 ### Documentation Categories
 
 #### 1. Guides (docs/guides/)
+
 - **Purpose:** Step-by-step instructions for common tasks
 - **Audience:** Developers, new team members
 - **Content:** Getting started, setup, workflows
 
 #### 2. Technical (docs/technical/)
+
 - **Purpose:** Deep technical documentation
 - **Audience:** Developers working on specific features
 - **Content:** Architecture, API specs, database schema
 
 #### 3. Runbooks (docs/runbooks/)
+
 - **Purpose:** Operational procedures
 - **Audience:** On-call engineers, ops team
 - **Content:** Deployment, troubleshooting, incident response
 
 #### 4. Status (docs/status/) **NEW**
+
 - **Purpose:** Current project state
 - **Audience:** Team members, stakeholders
 - **Content:** Sprint status, recent changes, priorities
 
 #### 5. Archive (docs/archive/)
+
 - **Purpose:** Historical reference
 - **Audience:** Anyone researching past decisions
 - **Content:** Completed phases, old summaries, legacy docs
 
 #### 6. Reference (docs/reference/) **NEW**
+
 - **Purpose:** Quick lookup
 - **Audience:** Everyone
 - **Content:** Commands, conventions, quick troubleshooting
@@ -148,18 +160,21 @@ galaxyco-ai-2.0/
 ## File Naming Conventions
 
 ### Use Kebab-Case
+
 - ✅ `getting-started.md`
 - ✅ `api-key-management.md`
 - ❌ `Getting_Started.md`
 - ❌ `API_KEY_MANAGEMENT.md`
 
 ### Be Descriptive
+
 - ✅ `deploy-to-production.md`
 - ✅ `fix-database-connection-issues.md`
 - ❌ `deploy.md`
 - ❌ `fix.md`
 
 ### Date-Based for Time-Sensitive Docs
+
 - ✅ `2025-10-12-api-key-incident.md`
 - ✅ `2025-10-sprint-summary.md`
 
@@ -185,12 +200,14 @@ Brief description...
 ## Archive Strategy
 
 ### When to Archive
+
 - Completed phases/sprints (after 1 week)
 - Superseded documentation
 - Old completion summaries (after 2 weeks)
 - Outdated guides (when replaced)
 
 ### Archive Organization
+
 ```
 docs/archive/
 ├── 2025-10/              # Current month
@@ -202,23 +219,29 @@ docs/archive/
 ## Navigation Strategy
 
 ### 1. Master README (docs/README.md)
+
 - Quick links to all major sections
 - "Getting Started" for new users
 - "Quick Reference" for common tasks
 
 ### 2. Category READMEs
+
 - Each subdirectory has README.md
 - Lists all docs in that category
 - Links to related categories
 
 ### 3. Breadcrumbs
+
 Every doc should have:
+
 ```markdown
 📍 **Navigation:** [Home](../README.md) > [Guides](./README.md) > Getting Started
 ```
 
 ### 4. Cross-References
+
 Use relative links:
+
 ```markdown
 See also: [Deployment Guide](../runbooks/deployment.md)
 ```

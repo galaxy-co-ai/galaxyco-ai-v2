@@ -10,16 +10,14 @@ import type { Tool, ExecutionContext } from "../types";
 
 /**
  * Create knowledge base search tool
- * 
+ *
  * This tool allows agents to semantically search uploaded documents,
  * URLs, and text in the workspace's knowledge base.
- * 
+ *
  * @param apiBaseUrl - Base URL for API calls (defaults to /api)
  * @returns Tool definition for knowledge base search
  */
-export function createKnowledgeSearchTool(
-  apiBaseUrl: string = "/api"
-): Tool {
+export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
   return createTool(
     "searchKnowledgeBase",
     "Search the workspace's knowledge base for relevant information using semantic search. Returns documents, content snippets, and relevance scores. Use this when you need to find information from uploaded documents, URLs, or text content.",
@@ -48,12 +46,12 @@ export function createKnowledgeSearchTool(
         collectionId?: string;
         limit?: number;
       },
-      context?: ExecutionContext
+      context?: ExecutionContext,
     ) => {
       // Validate context
       if (!context?.workspaceId) {
         throw new Error(
-          "Knowledge search requires workspace context. Ensure workspaceId is provided."
+          "Knowledge search requires workspace context. Ensure workspaceId is provided.",
         );
       }
 
@@ -77,17 +75,22 @@ export function createKnowledgeSearchTool(
               "Content-Type": "application/json",
             },
             body: JSON.stringify(searchPayload),
-          }
+          },
         );
 
         if (!response.ok) {
-          const errorData = await response.json().catch(() => ({})) as { error?: string };
+          const errorData = (await response.json().catch(() => ({}))) as {
+            error?: string;
+          };
           throw new Error(
-            errorData.error || `Search API error: ${response.statusText}`
+            errorData.error || `Search API error: ${response.statusText}`,
           );
         }
 
-        const data = await response.json() as { results?: any[]; totalResults?: number };
+        const data = (await response.json()) as {
+          results?: any[];
+          totalResults?: number;
+        };
 
         // Format results for LLM consumption
         if (!data.results || data.results.length === 0) {
@@ -114,7 +117,7 @@ export function createKnowledgeSearchTool(
             collectionId: result.collectionId,
             sourceId: result.id,
             createdAt: result.createdAt,
-          })
+          }),
         );
 
         return {
@@ -130,7 +133,7 @@ export function createKnowledgeSearchTool(
             averageSimilarity:
               formattedResults.reduce(
                 (sum: number, r: any) => sum + r.similarity,
-                0
+                0,
               ) / formattedResults.length,
             timestamp: new Date().toISOString(),
           },
@@ -148,13 +151,13 @@ export function createKnowledgeSearchTool(
           results: [],
         };
       }
-    }
+    },
   );
 }
 
 /**
  * Helper function to format search results for citation
- * 
+ *
  * Generates a formatted citation string from search results
  */
 export function formatResultsForCitation(results: any[]): string {
@@ -171,7 +174,7 @@ export function formatResultsForCitation(results: any[]): string {
 
 /**
  * Helper function to extract content from search results
- * 
+ *
  * Combines all search result content into a single context string
  */
 export function extractContentFromResults(results: any[]): string {

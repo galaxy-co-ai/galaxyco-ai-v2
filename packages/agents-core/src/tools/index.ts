@@ -93,7 +93,7 @@ export const TOOL_DESCRIPTIONS = {
   extract_data: "Extract data from sources",
   compare_documents: "Compare multiple documents",
   generate_report: "Generate comprehensive reports",
-  
+
   // Knowledge Tools
   searchKnowledgeBase: "Search the knowledge base using semantic search (RAG)",
 };

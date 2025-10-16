@@ -15,43 +15,45 @@
 ## 🎨 Core Design Tokens
 
 ### Colors
+
 ```tsx
 // Primary Palette
 const colors = {
   // Neutral base
   gray: {
-    50: '#F9FAFB',
-    100: '#F3F4F6',
-    200: '#E5E7EB',
-    300: '#D1D5DB',
-    500: '#6B7280',
-    700: '#374151',
-    900: '#111827',
+    50: "#F9FAFB",
+    100: "#F3F4F6",
+    200: "#E5E7EB",
+    300: "#D1D5DB",
+    500: "#6B7280",
+    700: "#374151",
+    900: "#111827",
   },
-  
+
   // Brand accents (blue-purple-teal)
   primary: {
-    50: '#EEF2FF',
-    100: '#E0E7FF',
-    500: '#6366F1', // Indigo
-    600: '#4F46E5',
-    700: '#4338CA',
+    50: "#EEF2FF",
+    100: "#E0E7FF",
+    500: "#6366F1", // Indigo
+    600: "#4F46E5",
+    700: "#4338CA",
   },
-  
+
   secondary: {
-    500: '#06B6D4', // Cyan
-    600: '#0891B2',
+    500: "#06B6D4", // Cyan
+    600: "#0891B2",
   },
-  
+
   // Status colors
-  success: '#10B981',
-  warning: '#F59E0B',
-  error: '#EF4444',
-  info: '#3B82F6',
+  success: "#10B981",
+  warning: "#F59E0B",
+  error: "#EF4444",
+  info: "#3B82F6",
 };
 ```
 
 ### Typography
+
 ```tsx
 // Font stack
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
@@ -73,6 +75,7 @@ font-bold: 700
 ```
 
 ### Spacing
+
 ```tsx
 // Use Tailwind's 4px scale
 gap-2 = 8px
@@ -83,6 +86,7 @@ gap-8 = 32px
 ```
 
 ### Shadows
+
 ```tsx
 // Card shadow
 shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05)
@@ -94,6 +98,7 @@ shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1)
 ```
 
 ### Border Radius
+
 ```tsx
 rounded-sm: 2px
 rounded: 4px
@@ -108,6 +113,7 @@ rounded-2xl: 16px // Large containers
 ## 📦 Component Patterns
 
 ### 1. Card Pattern (MOST COMMON)
+
 ```tsx
 // Standard card wrapper
 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300">
@@ -121,6 +127,7 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### 2. Button Patterns
+
 ```tsx
 // Primary action
 <button className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors">
@@ -139,9 +146,10 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### 3. Input Patterns
+
 ```tsx
 // Standard input
-<input 
+<input
   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
   type="text"
 />
@@ -149,7 +157,7 @@ rounded-2xl: 16px // Large containers
 // Search input (top-left pattern from OpenSea)
 <div className="relative">
   <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-  <input 
+  <input
     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
     placeholder="Search agents..."
   />
@@ -157,6 +165,7 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### 4. Badge Patterns
+
 ```tsx
 // Category badge
 <span className="px-2.5 py-1 bg-primary-50 text-primary-700 text-xs font-medium rounded-full">
@@ -175,6 +184,7 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### 5. Stat Display Pattern
+
 ```tsx
 // Dashboard stat card
 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
@@ -192,6 +202,7 @@ rounded-2xl: 16px // Large containers
 ## 🎯 Layout Patterns
 
 ### Dashboard Grid
+
 ```tsx
 // Stats row (4 columns)
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -205,6 +216,7 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### Marketplace Grid (Compact)
+
 ```tsx
 // Dense grid inspired by OpenSea
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -213,6 +225,7 @@ rounded-2xl: 16px // Large containers
 ```
 
 ### Search + Filter Layout (OpenSea Style)
+
 ```tsx
 <div className="space-y-4">
   {/* Top: Search bar - left aligned */}
@@ -220,14 +233,14 @@ rounded-2xl: 16px // Large containers
     <SearchInput className="w-96" />
     <FilterButtons />
   </div>
-  
+
   {/* Below search: Category pills */}
   <div className="flex gap-2 overflow-x-auto pb-2">
     <CategoryPill active>All</CategoryPill>
     <CategoryPill>Automation</CategoryPill>
     <CategoryPill>Research</CategoryPill>
   </div>
-  
+
   {/* Content grid */}
   <MarketplaceGrid />
 </div>
@@ -238,18 +251,21 @@ rounded-2xl: 16px // Large containers
 ## 🚀 Quick Decision Rules
 
 ### When to use what spacing:
+
 - **Between sections**: `gap-8` or `gap-12`
 - **Between cards**: `gap-4` or `gap-6`
 - **Inside cards**: `p-4` or `p-6`
 - **Between text elements**: `gap-2` or `space-y-2`
 
 ### When to use what shadow:
+
 - **Default cards**: `shadow-md`
 - **Hover cards**: `shadow-lg`
 - **Floating elements (modals, dropdowns)**: `shadow-xl`
 - **Subtle cards**: `shadow-sm`
 
 ### When to use what border radius:
+
 - **Everything by default**: `rounded-lg` (8px)
 - **Small badges**: `rounded-full`
 - **Buttons**: `rounded-md` (6px)
@@ -260,6 +276,7 @@ rounded-2xl: 16px // Large containers
 ## 📐 Component Size Standards
 
 ### Avatar Sizes
+
 ```tsx
 // User avatar
 sm: 32px (h-8 w-8)
@@ -273,6 +290,7 @@ lg: 96px (h-24 w-24)
 ```
 
 ### Icon Sizes
+
 ```tsx
 // In buttons/badges
 h-4 w-4 (16px)
@@ -285,6 +303,7 @@ h-6 w-6 (24px)
 ```
 
 ### Button Sizes
+
 ```tsx
 // Small (compact views)
 px-3 py-1.5 text-sm
@@ -301,6 +320,7 @@ px-6 py-3 text-lg
 ## 🎨 Reference Implementations
 
 ### OpenSea-Inspired Search Bar
+
 ```tsx
 <div className="mb-6">
   <div className="relative max-w-md">
@@ -311,7 +331,7 @@ px-6 py-3 text-lg
       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
     />
   </div>
-  
+
   <div className="flex gap-2 mt-3 overflow-x-auto">
     <button className="px-4 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-full">
       All
@@ -325,6 +345,7 @@ px-6 py-3 text-lg
 ```
 
 ### Vercel-Inspired Dashboard Card
+
 ```tsx
 <div className="bg-white rounded-lg border border-gray-200 p-6 hover:border-gray-300 transition-colors">
   <div className="flex items-start justify-between mb-4">
@@ -341,11 +362,11 @@ px-6 py-3 text-lg
       Active
     </span>
   </div>
-  
+
   <p className="text-sm text-gray-600 mb-4">
     Automatically processes and responds to customer emails using AI.
   </p>
-  
+
   <div className="flex items-center justify-between text-sm">
     <div className="flex gap-4 text-gray-600">
       <span>127 runs</span>
@@ -376,12 +397,14 @@ px-6 py-3 text-lg
 5. **When stuck** → Reference Tailwind UI examples
 
 **This eliminates:**
+
 - ❌ Endless tweaking
 - ❌ Inconsistent styling
 - ❌ Code churn
 - ❌ Design paralysis
 
 **This enables:**
+
 - ✅ Fast decisions
 - ✅ Consistent UI
 - ✅ Clean codebase

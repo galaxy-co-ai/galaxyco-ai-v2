@@ -5,13 +5,14 @@ This document outlines the required steps and checks before deploying to product
 ## 🚨 Deployment Restrictions
 
 - **⛔ Never deploy on Fridays after 2pm** (Rule enforced in CI/CD)
-- **⛔ Never deploy before major holidays** 
+- **⛔ Never deploy before major holidays**
 - **⛔ Require approval from 2 team members minimum**
 - **⛔ No deployments without passing smoke tests**
 
 ## 📋 Pre-Deploy Checklist (Required)
 
 ### Code Quality
+
 - [ ] All CI/CD health checks pass (TypeScript, ESLint, Prettier)
 - [ ] No TypeScript errors (`pnpm typecheck`)
 - [ ] No ESLint warnings (`pnpm lint`)
@@ -20,6 +21,7 @@ This document outlines the required steps and checks before deploying to product
 - [ ] All integration tests pass (`pnpm test:integration`)
 
 ### Security
+
 - [ ] Security scan passed (Trivy in CI)
 - [ ] No exposed secrets in code
 - [ ] Multi-tenancy checks pass
@@ -27,6 +29,7 @@ This document outlines the required steps and checks before deploying to product
 - [ ] Sensitive data properly encrypted
 
 ### Database
+
 - [ ] Database migrations tested on dev environment
 - [ ] Database migrations applied to staging successfully
 - [ ] Migrations include rollback plan in comments
@@ -34,6 +37,7 @@ This document outlines the required steps and checks before deploying to product
 - [ ] Migration verified with test queries
 
 ### Testing
+
 - [ ] All smoke tests pass on staging (`pnpm test:smoke`)
 - [ ] Critical user flows verified manually
 - [ ] Agent execution tested in staging
@@ -41,6 +45,7 @@ This document outlines the required steps and checks before deploying to product
 - [ ] API endpoints returning expected responses
 
 ### Monitoring
+
 - [ ] Sentry shows no new errors in staging (last 24h)
 - [ ] Agent performance metrics acceptable:
   - Success rate > 95%
@@ -49,6 +54,7 @@ This document outlines the required steps and checks before deploying to product
 - [ ] Redis connection health verified
 
 ### Documentation
+
 - [ ] Rollback plan documented in PR description
 - [ ] CHANGELOG.md updated
 - [ ] Breaking changes documented
@@ -57,6 +63,7 @@ This document outlines the required steps and checks before deploying to product
 ## 🚀 Deployment Process
 
 ### 1. Pre-Deployment (15 minutes before)
+
 ```bash
 # Verify all checks pass
 pnpm health-check
@@ -72,6 +79,7 @@ pnpm test:smoke
 ```
 
 ### 2. Deployment Execution
+
 ```bash
 # Deploy via CI/CD (automatic on merge to main)
 git push origin main
@@ -84,12 +92,14 @@ vercel --prod
 ### 3. Post-Deployment Verification (First 30 minutes)
 
 #### Immediate Checks (First 5 minutes)
+
 - [ ] Production health endpoint responds: `curl https://galaxyco-ai-20.vercel.app/api/health`
 - [ ] Database health check passes: `curl https://galaxyco-ai-20.vercel.app/api/health/db`
 - [ ] Homepage loads successfully
 - [ ] Authentication works (test sign-in)
 
 #### Extended Monitoring (Next 25 minutes)
+
 - [ ] Monitor Sentry for new errors (0 critical errors acceptable)
 - [ ] Check agent execution success rate (should match staging)
 - [ ] Verify key user flows:
@@ -101,12 +111,14 @@ vercel --prod
 - [ ] Monitor CloudWatch/Vercel logs for errors
 
 #### Performance Checks
+
 - [ ] Page load times < 5 seconds
 - [ ] API response times < 2 seconds
 - [ ] No memory leaks (check Vercel metrics)
 - [ ] Database query performance acceptable
 
 ### 4. Extended Monitoring (Next 2 hours)
+
 - [ ] Continue monitoring Sentry
 - [ ] Check agent execution logs
 - [ ] Verify no spike in error rates
@@ -115,6 +127,7 @@ vercel --prod
 ## 🔄 Rollback Procedures
 
 ### When to Rollback
+
 - Critical errors in production (5xx errors)
 - Agent execution failures > 5%
 - Database connection issues
@@ -124,6 +137,7 @@ vercel --prod
 ### Rollback Steps (Emergency)
 
 #### Quick Rollback (Vercel)
+
 ```bash
 # Get previous deployment
 vercel ls --prod
@@ -136,6 +150,7 @@ vercel promote <deployment-url> --prod
 ```
 
 #### Full Rollback (Database + Code)
+
 ```bash
 # 1. Rollback code
 vercel promote <previous-deployment> --prod
@@ -151,6 +166,7 @@ curl https://galaxyco-ai-20.vercel.app/api/health
 ```
 
 ### Post-Rollback
+
 - [ ] Document what went wrong
 - [ ] Create hotfix PR
 - [ ] Test hotfix in staging
@@ -159,6 +175,7 @@ curl https://galaxyco-ai-20.vercel.app/api/health
 ## 📊 Monitoring & Alerts
 
 ### Sentry Monitoring
+
 - **Location**: https://sentry.io/organizations/galaxyco/
 - **What to monitor**:
   - Error count (should be < 10/hour)
@@ -166,6 +183,7 @@ curl https://galaxyco-ai-20.vercel.app/api/health
   - Affected users (< 1% of total)
 
 ### Vercel Metrics
+
 - **Location**: https://vercel.com/galaxyco-ai/dashboard
 - **What to monitor**:
   - Build status
@@ -174,6 +192,7 @@ curl https://galaxyco-ai-20.vercel.app/api/health
   - Edge network performance
 
 ### Database Metrics
+
 - **Location**: Neon Dashboard
 - **What to monitor**:
   - Connection count
@@ -193,30 +212,36 @@ Create a new entry in `DEPLOYMENT_LOG.md`:
 **Commit**: [hash]
 
 ### Changes
+
 - [List main changes]
 
 ### Pre-Deploy Checks
+
 - ✅ All tests passed
 - ✅ Smoke tests passed on staging
 - ✅ No Sentry errors
 - ✅ Team notified
 
 ### Post-Deploy Verification
+
 - ✅ Health checks pass
 - ✅ Auth works
 - ✅ No errors in first 30 minutes
 - ✅ Performance metrics normal
 
 ### Issues
+
 - None / [List any issues]
 
 ### Rollback
+
 - N/A / [If rolled back, explain why]
 ```
 
 ## 🎯 Success Criteria
 
 A deployment is considered successful when:
+
 - ✅ All pre-deploy checks pass
 - ✅ No critical errors in first 2 hours
 - ✅ Agent success rate > 95%

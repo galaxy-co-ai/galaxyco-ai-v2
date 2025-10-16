@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import { Bell, Check, CheckCheck, Trash2, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from "react";
+import { formatDistanceToNow } from "date-fns";
+import { Bell, Check, CheckCheck, Trash2, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface Notification {
   id: string;
@@ -14,7 +14,7 @@ export interface Notification {
   timestamp: Date | string;
   isRead: boolean;
   icon?: React.ReactNode;
-  type?: 'info' | 'success' | 'warning' | 'error';
+  type?: "info" | "success" | "warning" | "error";
   action?: {
     label: string;
     href?: string;
@@ -22,7 +22,7 @@ export interface Notification {
   };
 }
 
-export type NotificationFilter = 'all' | 'unread' | 'read';
+export type NotificationFilter = "all" | "unread" | "read";
 
 export interface NotificationListProps {
   notifications: Notification[];
@@ -39,21 +39,21 @@ export interface NotificationListProps {
 }
 
 const filterTabs: Array<{ value: NotificationFilter; label: string }> = [
-  { value: 'all', label: 'All' },
-  { value: 'unread', label: 'Unread' },
-  { value: 'read', label: 'Read' },
+  { value: "all", label: "All" },
+  { value: "unread", label: "Unread" },
+  { value: "read", label: "Read" },
 ];
 
 const typeStyles = {
-  info: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-  success: 'bg-green-500/10 text-green-500 border-green-500/20',
-  warning: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  error: 'bg-red-500/10 text-red-500 border-red-500/20',
+  info: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  success: "bg-green-500/10 text-green-500 border-green-500/20",
+  warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+  error: "bg-red-500/10 text-red-500 border-red-500/20",
 };
 
 export const NotificationList: React.FC<NotificationListProps> = ({
   notifications,
-  filter = 'all',
+  filter = "all",
   onFilterChange,
   onMarkAsRead,
   onMarkAllAsRead,
@@ -65,10 +65,10 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   className,
 }) => {
   const filteredNotifications = React.useMemo(() => {
-    if (filter === 'unread') {
+    if (filter === "unread") {
       return notifications.filter((n) => !n.isRead);
     }
-    if (filter === 'read') {
+    if (filter === "read") {
       return notifications.filter((n) => n.isRead);
     }
     return notifications;
@@ -80,9 +80,12 @@ export const NotificationList: React.FC<NotificationListProps> = ({
 
   if (isLoading) {
     return (
-      <div className={cn('space-y-4', className)}>
+      <div className={cn("space-y-4", className)}>
         {Array.from({ length: loadingCount }).map((_, index) => (
-          <div key={index} className="flex gap-3 p-4 border border-border rounded-lg">
+          <div
+            key={index}
+            className="flex gap-3 p-4 border border-border rounded-lg"
+          >
             <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
             <div className="flex-1 space-y-2">
               <Skeleton className="h-4 w-3/4" />
@@ -96,7 +99,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Header with filter tabs and actions */}
       <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
         {/* Filter Tabs */}
@@ -107,15 +110,15 @@ export const NotificationList: React.FC<NotificationListProps> = ({
                 key={tab.value}
                 onClick={() => onFilterChange(tab.value)}
                 className={cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200',
-                  'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                  "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
+                  "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
                   filter === tab.value
-                    ? 'bg-accent text-accent-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 )}
               >
                 {tab.label}
-                {tab.value === 'unread' && unreadCount > 0 && (
+                {tab.value === "unread" && unreadCount > 0 && (
                   <span className="ml-1.5 px-1.5 py-0.5 text-xs font-semibold rounded-full bg-primary text-primary-foreground">
                     {unreadCount}
                   </span>
@@ -159,7 +162,9 @@ export const NotificationList: React.FC<NotificationListProps> = ({
             <div className="text-center">
               <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
               <p className="text-muted-foreground">
-                {filter === 'unread' ? 'No unread notifications' : 'No notifications'}
+                {filter === "unread"
+                  ? "No unread notifications"
+                  : "No notifications"}
               </p>
             </div>
           )}
@@ -174,19 +179,20 @@ export const NotificationList: React.FC<NotificationListProps> = ({
               <div
                 key={notification.id}
                 className={cn(
-                  'group relative flex gap-3 p-4 rounded-lg border transition-all duration-200',
+                  "group relative flex gap-3 p-4 rounded-lg border transition-all duration-200",
                   notification.isRead
-                    ? 'bg-card border-border hover:border-border-hover'
-                    : 'bg-accent/50 border-accent hover:border-accent-foreground'
+                    ? "bg-card border-border hover:border-border-hover"
+                    : "bg-accent/50 border-accent hover:border-accent-foreground",
                 )}
               >
                 {/* Icon */}
                 <div className="flex-shrink-0 relative">
                   <div
                     className={cn(
-                      'h-10 w-10 rounded-full flex items-center justify-center border',
+                      "h-10 w-10 rounded-full flex items-center justify-center border",
                       notification.type && typeStyles[notification.type],
-                      !notification.type && 'bg-accent text-muted-foreground border-border'
+                      !notification.type &&
+                        "bg-accent text-muted-foreground border-border",
                     )}
                   >
                     {notification.icon || <Bell className="h-5 w-5" />}
@@ -260,4 +266,4 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   );
 };
 
-NotificationList.displayName = 'NotificationList';
+NotificationList.displayName = "NotificationList";

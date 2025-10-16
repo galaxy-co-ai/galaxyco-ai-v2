@@ -45,9 +45,10 @@
 ### Your Follow-Up Request
 
 > "I need you to brainstorm with me:
+>
 > - I feel like we haven't defined what our dashboard should actually show users
 > - I also feel like we haven't defined our first 3 real agents and their functions
-> 
+>
 > If we did this, I think you would have a better understanding of how to structure the UI, layout the dashboard, and also how to get the agents actually functioning"
 
 **Your request:** "I do not want you to just automatically build this. I want you to assess this, give me HONEST feedback, and help me refine so we can actually build something of value."
@@ -59,6 +60,7 @@
 ### Architecture Vision
 
 **Multi-tenant Structure:**
+
 - Company: GalaxyCo.ai
 - Users: dalton@galaxyco.ai (each user has own dashboard)
 - Admins: Can view agent usage per employee + company-wide
@@ -68,22 +70,26 @@
 ### Navigation Structure
 
 **Top Bar Navigation:**
+
 - Dashboard
 - Library (knowledge base)
 - Marketplace
 - Documentation
 
 **User Dashboard Left Sidebar:**
+
 - **Home button:** Shows overall KPIs, recent activity (user + agents), company info
 - **Agent navigation:** Each agent type listed below Home
   - Each agent gets its own dedicated page (not cramming everything on one dashboard)
   - Agent pages show: activity, customizable instructions, knowledge base uploads
 
 **Search/Command Input:**
+
 - Positioned at top of dashboard (underneath topbar navigation)
 - Users can search keywords to navigate to related pages
 
 **AI Assistant:**
+
 - Dedicated page in user dashboard
 - Always-accessible chat window in bottom right (persistent across all logged-in pages)
 
@@ -106,12 +112,14 @@
 **Issue:** Your marketing promises role-specific packs for different teams, but you're building generic productivity agents.
 
 **Question:** Who is your ACTUAL first customer?
+
 - Sales teams at B2B companies?
 - Marketing agencies?
 - Solopreneurs/small business owners?
 - Enterprise operations teams?
 
 **Each requires different agents:**
+
 - **Sales teams need:** Lead enrichment, outreach automation, CRM sync
 - **Marketing agencies need:** Content generation, campaign analytics, client reporting
 - **Solopreneurs need:** All-in-one productivity
@@ -124,6 +132,7 @@
 ### Problem 2: Agent Definition Too Vague
 
 #### "Lead Generator"
+
 - **What it does:** ??? (Scrape LinkedIn? Create fake emails? Run ad campaigns?)
 - **Inputs needed:** Target audience criteria, budget, channels
 - **Outputs produced:** List of contacts? Or qualified conversations?
@@ -131,6 +140,7 @@
 - **Issue:** Too vague to build
 
 #### "Marketing Director"
+
 - **What it does:** ??? (Creates strategy? Runs campaigns? Reviews performance?)
 - **Inputs needed:** Business context, goals, budget
 - **Outputs produced:** Strategy docs? Ad copy? Analytics reports?
@@ -138,6 +148,7 @@
 - **Issue:** This is a human role, not a specific task
 
 #### "Document Organizer"
+
 - **What it does:** ??? (Auto-tags files? Creates folder structures? Summarizes documents?)
 - **Inputs needed:** Messy documents
 - **Outputs produced:** Organized folders? Searchable database? Summary reports?
@@ -149,12 +160,14 @@
 ### Problem 3: Dashboard Information Architecture Undefined
 
 **Your description:**
+
 - Home page: Overall KPIs, recent activity, company info
 - Each agent: Own page with activity, customization, knowledge base uploads
 
 **Critical questions:**
 
 **A) What are the "Overall KPIs"?**
+
 - Total agent runs?
 - Success rate?
 - Cost per execution?
@@ -162,12 +175,14 @@
 - Revenue generated (if measurable)?
 
 **B) What does "recent activity" mean?**
+
 - Last 10 agent runs?
 - Last 10 documents processed?
 - Team member actions?
 - Agent-generated insights?
 
 **C) What is "company info"?**
+
 - Billing status?
 - Team member count?
 - Usage vs. plan limits?
@@ -184,18 +199,21 @@
 **Critical questions:**
 
 **A) What prevents knowledge base chaos?**
+
 - If 50 employees upload random PDFs, how do agents know what's relevant?
 - Collections/folders/tags?
 - Automatic categorization?
 - Who manages KB quality?
 
 **B) How do agents USE the knowledge base?**
+
 - RAG (Retrieval Augmented Generation) - searching docs for context?
 - Fine-tuning models on company data?
 - Structured data extraction?
 - Vector embeddings for semantic search?
 
 **C) What file types ACTUALLY work?**
+
 - PDFs? (Easy)
 - Images? (OCR needed)
 - Spreadsheets? (Structured data extraction)
@@ -213,27 +231,32 @@
 **Their 3 agents:**
 
 #### 1. Lead Enrichment Agent
+
 - **Input:** LinkedIn URL or email
 - **Output:** Full profile (company, role, pain points, recent activity)
 - **Value:** Saves 15 min per lead
 
 #### 2. Outreach Sequence Agent
+
 - **Input:** Lead profile + your product description
 - **Output:** Personalized 5-email sequence
 - **Value:** 3x reply rates vs. generic emails
 
 #### 3. CRM Sync Agent
+
 - **Input:** Email threads, meeting notes
 - **Output:** Auto-updated CRM fields, next steps
 - **Value:** Reps spend time selling, not data entry
 
 **Dashboard KPIs:**
+
 - Leads enriched this week
 - Emails sent / reply rate
 - CRM records updated
 - Time saved (calculated)
 
 **Knowledge Base:**
+
 - Product documentation
 - Competitor analysis
 - Customer success stories
@@ -248,21 +271,25 @@
 If you want to stay broad:
 
 #### 1. Research Agent (instead of "Lead Generator")
+
 - **Input:** "Research the top 10 competitors in the CRM space"
 - **Process:** Searches web, compiles report with key findings
 - **Output:** Formatted doc with sources cited
 
 #### 2. Content Repurposer Agent (instead of "Marketing Director")
+
 - **Input:** Long-form blog post upload
 - **Process:** Creates 10 LinkedIn posts, 5 tweets, email newsletter
 - **Output:** Multi-format content package
 
 #### 3. Meeting Summary Agent (instead of "Document Organizer")
+
 - **Input:** Zoom transcript upload
 - **Process:** Creates summary, action items, assigns owners
 - **Output:** Shareable doc + calendar invites
 
 **Dashboard KPIs:**
+
 - Research reports generated
 - Content pieces created
 - Meetings summarized
@@ -275,6 +302,7 @@ If you want to stay broad:
 > "Lets focus on sales teams, then once we have this complete, we will add on for marketing agencies, then once we have both of those, we will add on for enterprise ops. This seems the most realistic to me"
 
 **Expansion roadmap:**
+
 1. **Phase 1:** Sales teams (B2B SaaS) ← START HERE
 2. **Phase 2:** Marketing agencies (after sales proven)
 3. **Phase 3:** Enterprise ops (after both proven)
@@ -299,6 +327,7 @@ Be hyper-specific. Answer all of these:
 - **What they're currently doing manually:** (Describe their current painful workflow)
 
 **Example answer format:**
+
 > "Our first customer is a 25-person B2B SaaS startup doing $2M ARR. They have 5 sales reps using HubSpot CRM and LinkedIn Sales Navigator. Currently, reps spend 2 hours/day manually researching leads on LinkedIn, copying info into HubSpot, and writing personalized cold emails. They hate this and want more time actually talking to prospects."
 
 ---
@@ -315,6 +344,7 @@ Pick the #1 most painful thing sales reps do manually:
 **Option D:** Something else (describe it)
 
 **Then answer:**
+
 - How much time does this task take per day? (e.g., "2-3 hours")
 - How much does it cost the company? (e.g., "Sales rep makes $75k/year = $36/hour × 2.5 hours = $90/day wasted")
 - What's the quality issue? (e.g., "Reps rush research so they miss key insights" or "CRM is always out of date")
@@ -330,6 +360,7 @@ Be realistic about pricing:
 - **Usage-based?** (e.g., "$0.50 per lead enriched" or "$1 per AI-generated email")
 
 **Also answer:**
+
 - What do competing tools cost? (e.g., "LinkedIn Sales Navigator is $99/month, Apollo.io is $49/month")
 - Why would they switch to us vs. using those? (Your differentiation)
 
@@ -340,13 +371,15 @@ Be realistic about pricing:
 #### Question 4: Lead Intel Agent - Define the EXACT workflow
 
 **INPUT (be specific):**
-- What does the user provide? 
+
+- What does the user provide?
   - LinkedIn profile URL?
   - Just company domain?
   - Email address?
   - CSV upload with multiple leads?
 
 **PROCESS (what data sources):**
+
 - LinkedIn scraping? (Costs $$ and has rate limits - are you okay with this?)
 - Company websites? (Free but requires web scraping)
 - Crunchbase? (API costs money)
@@ -357,7 +390,8 @@ Be realistic about pricing:
 **Which of these do you ACTUALLY want to support in V1?** Rank them 1-5 (1 = must have, 5 = nice to have later)
 
 **OUTPUT:**
-- What format? 
+
+- What format?
   - JSON for API integrations?
   - Formatted text document?
   - Auto-filled form fields?
@@ -365,6 +399,7 @@ Be realistic about pricing:
 
 **What SPECIFIC fields should the output include?**
 Example:
+
 - Full name
 - Job title
 - Company name
@@ -382,24 +417,28 @@ Example:
 #### Question 5: Outreach Writer Agent - Define the EXACT workflow
 
 **INPUT:**
+
 - Lead profile from Agent #1?
 - User's product description (from knowledge base)?
 - User manually types context?
 - Templates from knowledge base?
 
 **PROCESS:**
+
 - Does it generate a single email or a sequence (e.g., 3-5 follow-ups)?
 - What tone? (Professional? Casual? User-configurable?)
 - Does it pull case studies/testimonials from knowledge base?
 - Does it reference recent news about the lead's company?
 
 **OUTPUT:**
+
 - Just text that user copies?
 - Directly integrates with email (Gmail API)?
 - Saves as draft in user's email?
 - Creates HubSpot/Salesforce email task?
 
 **What does "good output" look like?**
+
 - Word count? (e.g., "150-200 words for cold email")
 - Structure? (Hook → Value prop → CTA?)
 - Personalization level? (Name + company + 1 specific insight?)
@@ -411,12 +450,14 @@ Example:
 #### Question 6: CRM Sync Agent - Define the EXACT workflow
 
 **INPUT:**
+
 - Email threads (how does agent access these? Gmail API? User forwards emails?)
 - Meeting transcripts (Zoom? Google Meet? User uploads?)
 - Manual notes user types?
 - All of the above?
 
 **PROCESS:**
+
 - What does it extract?
   - Next steps / action items?
   - Deal stage changes?
@@ -426,12 +467,14 @@ Example:
   - Competitors mentioned?
 
 **OUTPUT:**
+
 - Updates CRM automatically (via API)?
 - Creates suggested updates for user to approve?
 - Generates summary document?
 - Creates tasks/reminders?
 
 **Which CRMs should we support FIRST?**
+
 - HubSpot (has good API)
 - Salesforce (complex but widely used)
 - Pipedrive (simple, startup-friendly)
@@ -448,6 +491,7 @@ Example:
 For a sales team, what documents/data should be uploaded?
 
 **Check all that apply + add your own:**
+
 - [ ] Product documentation / feature sheets
 - [ ] Case studies / customer success stories
 - [ ] Competitor analysis / battlecards
@@ -458,9 +502,10 @@ For a sales team, what documents/data should be uploaded?
 - [ ] Email templates
 - [ ] Call scripts
 - [ ] Demo recordings
-- [ ] Other: ______________
+- [ ] Other: **\*\***\_\_**\*\***
 
 **How should knowledge be organized?**
+
 - Option A: Flat structure (all files in one bucket, search to find)
 - Option B: Collections (e.g., "Product Info", "Competitors", "Objection Handling")
 - Option C: Tags (files can have multiple tags)
@@ -473,16 +518,19 @@ For a sales team, what documents/data should be uploaded?
 #### Question 8: How do agents USE the knowledge base?
 
 **When Lead Intel Agent runs:**
+
 - Does it check knowledge base for ICP fit? (e.g., "Is this lead in our target industry?")
 - Does it reference uploaded competitor info to identify competitive threats?
 - Does it pull relevant case studies for similar companies?
 
 **When Outreach Writer Agent runs:**
+
 - Does it pull specific case studies that match the lead's industry?
 - Does it reference objection handling for anticipated pushback?
 - Does it use approved messaging/templates from knowledge base?
 
 **When CRM Sync Agent runs:**
+
 - Does it check for mentioned competitors against your competitor list?
 - Does it flag objections that match your objection handling docs?
 
@@ -497,21 +545,25 @@ For a sales team, what documents/data should be uploaded?
 These should prove that agents are delivering value. Pick your top 3-5:
 
 **Option A - Activity Metrics:**
+
 - [ ] Total leads enriched this week
 - [ ] Total emails generated this week
 - [ ] Total CRM updates this week
 
 **Option B - Efficiency Metrics:**
+
 - [ ] Time saved this week (calculated)
 - [ ] Cost per lead enriched
 - [ ] Agent success rate (% of runs that worked)
 
 **Option C - Business Impact Metrics:**
+
 - [ ] Reply rate on AI-generated emails (requires email tracking)
 - [ ] Meetings booked from AI outreach
 - [ ] Deals influenced by AI research
 
 **Option D - Usage Metrics:**
+
 - [ ] Active users this week
 - [ ] Most-used agent
 - [ ] Knowledge base documents accessed
@@ -527,22 +579,26 @@ These should prove that agents are delivering value. Pick your top 3-5:
 Walk me through the onboarding and "aha moment":
 
 **Day 1 - User signs up:**
+
 - What happens first?
   - Create account → Upload knowledge base docs → Run first agent?
   - Watch tutorial video?
   - Pre-filled demo data to explore?
 
 **Day 1 - First agent run:**
+
 - Which agent do they try first? (Lead Intel? Outreach Writer?)
 - Do we provide a sample lead to test with?
 - What result convinces them "this works"?
 
 **Day 3 - Building habits:**
+
 - What's the daily workflow? (Upload leads in morning → Agent enriches → Write emails → CRM sync at end of day?)
 - How many times per day should they interact with agents?
 
 **Day 7 - Success metric:**
-- What result proves value? 
+
+- What result proves value?
   - "Saved 5+ hours this week"?
   - "Enriched 50+ leads"?
   - "Booked 2 meetings from AI emails"?
@@ -555,6 +611,7 @@ Walk me through the onboarding and "aha moment":
 ## 🎯 Refined Architecture Proposal (from AI)
 
 ### Top Navigation (Global)
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ [Logo] Dashboard | Library | Marketplace | Docs | [User]│
@@ -641,6 +698,7 @@ Walk me through the onboarding and "aha moment":
 **Answer ALL 10 questions above in detail.**
 
 The more specific you are, the better AI can:
+
 1. Design the exact agent workflows
 2. Define the database schema
 3. Create realistic wireframes
@@ -742,6 +800,7 @@ During this session, AI created the following reference documents:
 **You made the right call to pause and think strategically.**
 
 Before writing more code:
+
 - ✅ Define target customer precisely
 - ✅ Define agent workflows specifically
 - ✅ Define success metrics clearly
@@ -760,4 +819,4 @@ Before writing more code:
 
 ---
 
-*End of Strategic Planning Session Archive*
+_End of Strategic Planning Session Archive_

@@ -11,6 +11,7 @@
 **Alignment Score**: **7.5/10** (Good foundation, clear path forward)
 
 ### **Key Findings**
+
 - ✅ **Core architecture aligns well** - Multi-tenant, knowledge base, agent framework
 - ✅ **Lead Intel Agent validates approach** - Proves technical feasibility
 - ⚠️ **Database schema needs extension** - Sales-specific tables missing
@@ -18,11 +19,13 @@
 - ⚠️ **User feedback loops missing** - Approve/reject mechanisms need UI
 
 ### **Strategic Strengths**
+
 1. Multi-tenant foundation is production-ready
 2. Knowledge base system exceeds strategic plan (better than expected)
 3. Agent framework is flexible enough to support all planned agents
 
 ### **Critical Gaps**
+
 1. Sales-specific database tables not yet created
 2. Outreach Writer and CRM Sync agents not started
 3. Supervised automation UI (approve/reject) incomplete
@@ -61,12 +64,14 @@
 
 ### **Analysis**
 
-**Good News**: 
+**Good News**:
+
 - Existing schema is well-designed and follows strategic plan patterns
 - No conflicting structures (can add new tables safely)
 - Multi-tenant security already implemented
 
 **Action Needed**:
+
 - Add 7 new tables for sales workflow
 - Extend `agentTypeEnum` to include lead_intel, outreach_writer, crm_sync
 - Create migration scripts (Drizzle)
@@ -79,16 +84,16 @@
 
 ### **Lead Intel Agent** 📊
 
-| Feature | Strategic Plan | Current Implementation | Gap | Priority |
-|---|---|---|---|---|
-| **Website scraping** | Cheerio + multiple selectors | ✅ Implemented | None | ✅ |
-| **News search** | Google Custom Search | ✅ Implemented | None | ✅ |
-| **AI synthesis** | GPT-4o-mini | ✅ Implemented | None | ✅ |
-| **ICP scoring** | 0-100 fit score | ✅ Implemented (basic) | Could enhance | 🟡 |
-| **Database save** | Store in leads table | ❌ Returns data only | **Critical** | 🔴 |
-| **Learning loop** | User feedback → improve | ❌ Not implemented | Important | 🟡 |
-| **Batch processing** | 25 leads at once | ✅ Implemented | None | ✅ |
-| **Cost tracking** | Track per-lead cost | ❌ Not tracked | Nice-to-have | 🟡 |
+| Feature              | Strategic Plan               | Current Implementation | Gap           | Priority |
+| -------------------- | ---------------------------- | ---------------------- | ------------- | -------- |
+| **Website scraping** | Cheerio + multiple selectors | ✅ Implemented         | None          | ✅       |
+| **News search**      | Google Custom Search         | ✅ Implemented         | None          | ✅       |
+| **AI synthesis**     | GPT-4o-mini                  | ✅ Implemented         | None          | ✅       |
+| **ICP scoring**      | 0-100 fit score              | ✅ Implemented (basic) | Could enhance | 🟡       |
+| **Database save**    | Store in leads table         | ❌ Returns data only   | **Critical**  | 🔴       |
+| **Learning loop**    | User feedback → improve      | ❌ Not implemented     | Important     | 🟡       |
+| **Batch processing** | 25 leads at once             | ✅ Implemented         | None          | ✅       |
+| **Cost tracking**    | Track per-lead cost          | ❌ Not tracked         | Nice-to-have  | 🟡       |
 
 **Gap Summary**: **85% complete**, needs database integration
 
@@ -96,14 +101,14 @@
 
 ### **Outreach Writer Agent** 📧
 
-| Feature | Strategic Plan | Current Implementation | Gap | Priority |
-|---|---|---|---|---|
-| **Email generation** | 3-email sequences | ❌ Not started | **Critical** | 🔴 |
-| **KB integration** | Pull case studies | 🟡 Infrastructure exists | Needs RAG queries | 🔴 |
-| **Personalization** | Company-specific details | ❌ Not started | **Critical** | 🔴 |
-| **User review UI** | Edit before sending | ❌ Not started | **Critical** | 🔴 |
-| **Learning from edits** | Improve based on changes | ❌ Not started | Important | 🟡 |
-| **Send options** | Gmail/Resend/Copy | ❌ Not started | Important | 🟡 |
+| Feature                 | Strategic Plan           | Current Implementation   | Gap               | Priority |
+| ----------------------- | ------------------------ | ------------------------ | ----------------- | -------- |
+| **Email generation**    | 3-email sequences        | ❌ Not started           | **Critical**      | 🔴       |
+| **KB integration**      | Pull case studies        | 🟡 Infrastructure exists | Needs RAG queries | 🔴       |
+| **Personalization**     | Company-specific details | ❌ Not started           | **Critical**      | 🔴       |
+| **User review UI**      | Edit before sending      | ❌ Not started           | **Critical**      | 🔴       |
+| **Learning from edits** | Improve based on changes | ❌ Not started           | Important         | 🟡       |
+| **Send options**        | Gmail/Resend/Copy        | ❌ Not started           | Important         | 🟡       |
 
 **Gap Summary**: **0% complete** (agent not started, but KB foundation ready)
 
@@ -111,13 +116,13 @@
 
 ### **CRM Sync Agent** 📋
 
-| Feature | Strategic Plan | Current Implementation | Gap | Priority |
-|---|---|---|---|---|
-| **Meeting extraction** | Parse notes → fields | ❌ Not started | **Critical** | 🟡 |
-| **Next steps ID** | Find action items | ❌ Not started | **Critical** | 🟡 |
-| **Deal stage rec** | Suggest pipeline stage | ❌ Not started | Important | 🟡 |
-| **HubSpot sync** | OAuth + API | ❌ Not started | **Critical** | 🟡 |
-| **User review UI** | Approve before sync | ❌ Not started | **Critical** | 🟡 |
+| Feature                | Strategic Plan         | Current Implementation | Gap          | Priority |
+| ---------------------- | ---------------------- | ---------------------- | ------------ | -------- |
+| **Meeting extraction** | Parse notes → fields   | ❌ Not started         | **Critical** | 🟡       |
+| **Next steps ID**      | Find action items      | ❌ Not started         | **Critical** | 🟡       |
+| **Deal stage rec**     | Suggest pipeline stage | ❌ Not started         | Important    | 🟡       |
+| **HubSpot sync**       | OAuth + API            | ❌ Not started         | **Critical** | 🟡       |
+| **User review UI**     | Approve before sync    | ❌ Not started         | **Critical** | 🟡       |
 
 **Gap Summary**: **0% complete** (lowest priority, dependency on Outreach Writer)
 
@@ -128,6 +133,7 @@
 ### **Dashboard & Core UI** ✅ **EXCEEDS PLAN**
 
 **Current State**: Production-quality dashboard with:
+
 - Agent overview cards with stats
 - Knowledge base management
 - Marketplace and templates
@@ -142,14 +148,14 @@
 
 ### **Sales Workflow UI** ⚠️ **MISSING**
 
-| Feature | Strategic Plan | Current Implementation | Gap | Priority |
-|---|---|---|---|---|
-| **Lead list view** | Paginated with filters | ❌ Not started | **Critical** | 🔴 |
-| **Lead detail** | Full enrichment display | ❌ Not started | **Critical** | 🔴 |
-| **Approve/reject** | Lead status actions | ❌ Not started | **Critical** | 🔴 |
-| **Email editor** | Review/edit sequences | ❌ Not started | **Critical** | 🔴 |
-| **CRM preview** | Review before sync | ❌ Not started | Important | 🟡 |
-| **Analytics** | ROI metrics dashboard | 🟡 Partial (general analytics) | Need sales metrics | 🟡 |
+| Feature            | Strategic Plan          | Current Implementation         | Gap                | Priority |
+| ------------------ | ----------------------- | ------------------------------ | ------------------ | -------- |
+| **Lead list view** | Paginated with filters  | ❌ Not started                 | **Critical**       | 🔴       |
+| **Lead detail**    | Full enrichment display | ❌ Not started                 | **Critical**       | 🔴       |
+| **Approve/reject** | Lead status actions     | ❌ Not started                 | **Critical**       | 🔴       |
+| **Email editor**   | Review/edit sequences   | ❌ Not started                 | **Critical**       | 🔴       |
+| **CRM preview**    | Review before sync      | ❌ Not started                 | Important          | 🟡       |
+| **Analytics**      | ROI metrics dashboard   | 🟡 Partial (general analytics) | Need sales metrics | 🟡       |
 
 **Gap Summary**: **0% complete** for sales-specific UI (but strong foundation exists)
 
@@ -160,6 +166,7 @@
 ### **Existing APIs** ✅ **GOOD COVERAGE**
 
 Strategic plan didn't specify these, but we have:
+
 - ✅ `/api/agents/*` - Comprehensive agent management
 - ✅ `/api/knowledge/*` - KB operations (better than expected)
 - ✅ `/api/marketplace/*` - Template discovery
@@ -171,14 +178,14 @@ Strategic plan didn't specify these, but we have:
 
 ### **Missing Sales APIs** ❌ **CRITICAL GAP**
 
-| Endpoint | Strategic Plan | Current | Gap | Priority |
-|---|---|---|---|---|
-| `POST /api/leads/enrich` | Trigger enrichment | ✅ Exists | None | ✅ |
-| `GET /api/leads` | List with filters | ❌ Missing | **Critical** | 🔴 |
-| `POST /api/leads/[id]/approve` | Approve lead | ❌ Missing | **Critical** | 🔴 |
-| `POST /api/leads/[id]/reject` | Reject lead | ❌ Missing | **Critical** | 🔴 |
-| `POST /api/outreach/generate` | Generate emails | ❌ Missing | **Critical** | 🔴 |
-| `POST /api/crm/sync` | Process notes | ❌ Missing | Important | 🟡 |
+| Endpoint                       | Strategic Plan     | Current    | Gap          | Priority |
+| ------------------------------ | ------------------ | ---------- | ------------ | -------- |
+| `POST /api/leads/enrich`       | Trigger enrichment | ✅ Exists  | None         | ✅       |
+| `GET /api/leads`               | List with filters  | ❌ Missing | **Critical** | 🔴       |
+| `POST /api/leads/[id]/approve` | Approve lead       | ❌ Missing | **Critical** | 🔴       |
+| `POST /api/leads/[id]/reject`  | Reject lead        | ❌ Missing | **Critical** | 🔴       |
+| `POST /api/outreach/generate`  | Generate emails    | ❌ Missing | **Critical** | 🔴       |
+| `POST /api/crm/sync`           | Process notes      | ❌ Missing | Important    | 🟡       |
 
 **Gap Summary**: 5 critical endpoints missing, clear implementation path
 
@@ -191,7 +198,7 @@ Strategic plan didn't specify these, but we have:
 ```
 Lead Intel Agent
   ↓ (auto-trigger on approval)
-Outreach Writer Agent  
+Outreach Writer Agent
   ↓ (auto-log when sent)
 CRM Sync Agent
 ```
@@ -207,11 +214,13 @@ Lead Intel Agent
 ```
 
 **Gap Analysis**:
+
 - ✅ Individual agents can be triggered
 - ❌ No automatic chaining between agents
 - ❌ No shared context/data passing
 
 **Action Needed**:
+
 1. Add agent_run_id foreign keys for tracking
 2. Implement Trigger.dev onSuccess hooks
 3. Create workflow status tracking table
@@ -225,6 +234,7 @@ Lead Intel Agent
 ### **Strategic Plan Expectation**
 
 All agent outputs persisted to database:
+
 - Enriched leads stored permanently
 - Email sequences saved for review
 - CRM updates logged for audit trail
@@ -240,6 +250,7 @@ All agent outputs persisted to database:
 **Critical Issue**: Lead Intel Agent works but doesn't save results!
 
 **Action Needed**:
+
 1. Add leads + lead_enrichments tables
 2. Modify Lead Intel Agent to save to DB
 3. Update /api/leads/enrich to return lead_id for tracking
@@ -253,6 +264,7 @@ All agent outputs persisted to database:
 ### **Strategic Plan**
 
 Knowledge base used for:
+
 - ICP definition (lead scoring)
 - Case studies (email personalization)
 - Objection handling (email content)
@@ -270,6 +282,7 @@ Knowledge base used for:
 **Gap**: Infrastructure exists but not connected to agents!
 
 **Action Needed**:
+
 1. Add category field to knowledge_items (or use tags)
 2. Implement similarity search queries
 3. Connect to Lead Intel for ICP scoring
@@ -298,6 +311,7 @@ Knowledge base used for:
 **Gap Summary**: Schema ready, Stripe integration needed
 
 **Action Needed**:
+
 1. Stripe SDK integration
 2. Webhook endpoints for subscription events
 3. Usage tracking (leads enriched, emails sent)
@@ -325,6 +339,7 @@ This is the **key differentiator** from competitors.
 **Critical Gap**: The core value prop isn't fully implemented!
 
 **Action Needed**:
+
 1. Build approve/reject UI components
 2. Create approval API endpoints
 3. Store user feedback for learning
@@ -355,6 +370,7 @@ This is the **key differentiator** from competitors.
 **Gap Summary**: Logging exists but not surfaced to users
 
 **Action Needed**:
+
 1. Create usage_metrics table
 2. Calculate time savings (enrichment time vs. manual)
 3. Build analytics dashboard page
@@ -458,19 +474,22 @@ This is the **key differentiator** from competitors.
 
 ## 🎬 NEXT STEPS
 
-### **Immediate (Current Session)** 
+### **Immediate (Current Session)**
+
 1. ✅ Complete gap analysis (this document)
 2. 🚧 Extend database schema
 3. 🚧 Build lead management APIs
 4. 🚧 Create lead management UI
 
 ### **This Week**
+
 1. Connect Lead Intel to database
 2. Build approve/reject workflow
 3. Test end-to-end: upload lead → enrich → approve
 4. Begin Outreach Writer Agent
 
 ### **Next Week**
+
 1. Complete Outreach Writer with KB integration
 2. Build email review/edit UI
 3. Test lead → enrich → email workflow

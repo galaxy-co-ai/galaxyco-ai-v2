@@ -1,8 +1,22 @@
 "use client";
 
-import { AlertCircle, RefreshCw, Wifi, Lock, AlertTriangle, Search, ServerCrash } from "lucide-react";
+import {
+  AlertCircle,
+  RefreshCw,
+  Wifi,
+  Lock,
+  AlertTriangle,
+  Search,
+  ServerCrash,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getErrorType, isRetryableError } from "@/lib/errors";
 
 interface ErrorDisplayProps {
@@ -16,7 +30,7 @@ interface ErrorDisplayProps {
 
 /**
  * Generic Error Display Component
- * 
+ *
  * Displays appropriate error messages and actions based on error type
  */
 export function ErrorDisplay({
@@ -33,7 +47,7 @@ export function ErrorDisplay({
 
   const sizeClasses = {
     sm: "text-sm",
-    md: "text-base", 
+    md: "text-base",
     lg: "text-lg",
   };
 
@@ -46,24 +60,32 @@ export function ErrorDisplay({
             <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>
           </div>
         )}
-        {!showIcon && <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>}
+        {!showIcon && (
+          <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>
+        )}
         <CardDescription className={sizeClasses[size]}>
           {config.getDescription(error)}
         </CardDescription>
       </CardHeader>
-      
+
       {(onRetry || onDismiss) && (
-        <CardContent className={`flex space-x-2 ${size === "sm" ? "p-4 pt-0" : "pt-0"}`}>
+        <CardContent
+          className={`flex space-x-2 ${size === "sm" ? "p-4 pt-0" : "pt-0"}`}
+        >
           {onRetry && canRetry && (
-            <Button onClick={onRetry} size={size === "sm" ? "sm" : "default"} className="flex-1">
+            <Button
+              onClick={onRetry}
+              size={size === "sm" ? "sm" : "default"}
+              className="flex-1"
+            >
               <RefreshCw className="mr-2 h-4 w-4" />
               Try Again
             </Button>
           )}
           {onDismiss && (
-            <Button 
-              onClick={onDismiss} 
-              variant="outline" 
+            <Button
+              onClick={onDismiss}
+              variant="outline"
               size={size === "sm" ? "sm" : "default"}
               className={onRetry && canRetry ? "" : "flex-1"}
             >
@@ -79,17 +101,17 @@ export function ErrorDisplay({
 /**
  * Inline Error Component (for form fields, etc.)
  */
-export function InlineError({ 
-  error, 
-  className = "text-sm text-red-600 dark:text-red-400" 
-}: { 
-  error: unknown; 
-  className?: string; 
+export function InlineError({
+  error,
+  className = "text-sm text-red-600 dark:text-red-400",
+}: {
+  error: unknown;
+  className?: string;
 }) {
   if (!error) return null;
 
   const message = error instanceof Error ? error.message : String(error);
-  
+
   return (
     <div className={`flex items-center space-x-1 ${className}`}>
       <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -104,7 +126,7 @@ export function InlineError({
 export function ToastError({ error }: { error: unknown }) {
   const errorType = getErrorType(error);
   const config = getErrorConfig(errorType);
-  
+
   return (
     <div className="flex items-start space-x-3">
       <config.icon className={`h-5 w-5 mt-0.5 ${config.color}`} />
@@ -200,7 +222,8 @@ function getErrorConfig(errorType: string) {
       icon: Wifi,
       color: "text-orange-600 dark:text-orange-400",
       title: "Connection Problem",
-      getDescription: () => "Please check your internet connection and try again.",
+      getDescription: () =>
+        "Please check your internet connection and try again.",
     },
     auth: {
       icon: Lock,
@@ -212,13 +235,17 @@ function getErrorConfig(errorType: string) {
       icon: Lock,
       color: "text-red-600 dark:text-red-400",
       title: "Access Denied",
-      getDescription: () => "You don't have permission to access this resource.",
+      getDescription: () =>
+        "You don't have permission to access this resource.",
     },
     validation: {
       icon: AlertTriangle,
       color: "text-yellow-600 dark:text-yellow-400",
       title: "Invalid Input",
-      getDescription: (error: unknown) => error instanceof Error ? error.message : "Please check your input and try again.",
+      getDescription: (error: unknown) =>
+        error instanceof Error
+          ? error.message
+          : "Please check your input and try again.",
     },
     notFound: {
       icon: Search,
@@ -230,25 +257,31 @@ function getErrorConfig(errorType: string) {
       icon: AlertTriangle,
       color: "text-yellow-600 dark:text-yellow-400",
       title: "Conflict",
-      getDescription: (error: unknown) => error instanceof Error ? error.message : "There was a conflict with your request.",
+      getDescription: (error: unknown) =>
+        error instanceof Error
+          ? error.message
+          : "There was a conflict with your request.",
     },
     rateLimit: {
       icon: AlertTriangle,
       color: "text-orange-600 dark:text-orange-400",
       title: "Rate Limited",
-      getDescription: () => "Too many requests. Please wait a moment and try again.",
+      getDescription: () =>
+        "Too many requests. Please wait a moment and try again.",
     },
     server: {
       icon: ServerCrash,
       color: "text-red-600 dark:text-red-400",
       title: "Server Error",
-      getDescription: () => "Something went wrong on our end. Please try again later.",
+      getDescription: () =>
+        "Something went wrong on our end. Please try again later.",
     },
     api: {
       icon: AlertCircle,
       color: "text-red-600 dark:text-red-400",
       title: "API Error",
-      getDescription: (error: unknown) => error instanceof Error ? error.message : "An API error occurred.",
+      getDescription: (error: unknown) =>
+        error instanceof Error ? error.message : "An API error occurred.",
     },
     unknown: {
       icon: AlertCircle,

@@ -38,7 +38,7 @@ Startup founder / small‑team owner. Pains: scattered follow‑ups, investor up
 
 **Connectors**
 
-- Required: *none for Sim Mode*
+- Required: _none for Sim Mode_
 - Optional (live): Gmail, Google Calendar, HubSpot/Salesforce, Google Drive/Sheets, Slack
 
 **Sim Mode Fixtures**\
@@ -311,4 +311,3 @@ pack "Founder Ops" {
 - Guardrails enforced; approvals function
 - PAA Weekly Review summarizes outcomes and proposes next best actions
 - Marketplace detail page: demo preview, KPIs, changelog, required/optional connectors, best pairings
-

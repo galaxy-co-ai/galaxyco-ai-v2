@@ -24,12 +24,14 @@ DATABASE_URL=postgresql://username:password@hostname.neon.tech/databasename?sslm
 ```
 
 **How to get:**
+
 1. Visit [Neon Console](https://console.neon.tech)
 2. Create project → Database
 3. Go to Dashboard → Connection Details
 4. Copy Pooled Connection string (recommended for serverless)
 
 **Example:**
+
 ```bash
 DATABASE_URL=postgresql://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
 ```
@@ -47,12 +49,14 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_1234567890abcdef1234567890abcdef123456
 ```
 
 **How to get:**
+
 1. Visit [Clerk Dashboard](https://dashboard.clerk.com)
 2. Create new application or select existing
 3. Go to Developers → API Keys
 4. Copy both Secret Key and Publishable Key
 
 **Development vs Production:**
+
 - Development: `sk_test_...` and `pk_test_...`
 - Production: `sk_live_...` and `pk_live_...`
 
@@ -66,6 +70,7 @@ ENCRYPTION_KEY=your_32_byte_hex_string_generated_securely_replace_this_value
 ```
 
 **How to generate:**
+
 ```bash
 # Method 1: Node.js
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -78,6 +83,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
 **⚠️ CRITICAL SECURITY NOTES:**
+
 - Generate a NEW key for production (don't use example above)
 - Never commit this key to version control
 - Store securely - if lost, encrypted data becomes unrecoverable
@@ -93,23 +99,26 @@ python -c "import secrets; print(secrets.token_hex(32))"
 # OpenAI API Key (for GPT models)
 OPENAI_API_KEY=sk-proj-1234567890abcdef1234567890abcdef1234567890abcdef
 
-# Anthropic API Key (for Claude models)  
+# Anthropic API Key (for Claude models)
 ANTHROPIC_API_KEY=sk-ant-api03-1234567890abcdef1234567890abcdef1234567890abcdef-ABCDEF
 ```
 
 **How to get OpenAI key:**
+
 1. Visit [OpenAI Platform](https://platform.openai.com/api-keys)
 2. Click "Create new secret key"
 3. Name: "GalaxyCo.ai Production"
 4. Set spending limits for safety
 
 **How to get Anthropic key:**
+
 1. Visit [Anthropic Console](https://console.anthropic.com/account/keys)
 2. Click "Create Key"
 3. Name: "GalaxyCo.ai Production"
 4. Set usage limits
 
 **Usage in app:**
+
 - Required for AI agent execution
 - Used by `/api/agents/*` endpoints
 - Fallback logic: OpenAI primary, Anthropic secondary
@@ -124,12 +133,14 @@ CLERK_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 ```
 
 **How to get:**
+
 1. Clerk Dashboard → Webhooks
 2. Add webhook endpoint: `https://yourdomain.com/api/webhooks/clerk`
 3. Select events: `user.created`, `user.updated`, `user.deleted`
 4. Copy "Signing Secret"
 
 **Purpose:**
+
 - Validates webhook authenticity
 - Syncs user data changes
 - Maintains security
@@ -149,6 +160,7 @@ SENTRY_AUTH_TOKEN=sntrys_your_auth_token_here
 ```
 
 **How to get:**
+
 1. Visit [Sentry.io](https://sentry.io)
 2. Create project → Next.js
 3. Copy DSN from project settings
@@ -159,7 +171,7 @@ SENTRY_AUTH_TOKEN=sntrys_your_auth_token_here
 ### Performance & Analytics
 
 ```bash
-# PostHog analytics key  
+# PostHog analytics key
 NEXT_PUBLIC_POSTHOG_KEY=phc_1234567890abcdef1234567890abcdef1234567890abcdef
 NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 
@@ -299,16 +311,19 @@ NEXT_PUBLIC_ENV=production
 ### Local Development Setup
 
 1. **Copy example file:**
+
    ```bash
    cp .env.example .env.local
    ```
 
 2. **Generate encryption key:**
+
    ```bash
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    ```
 
 3. **Add to .env.local:**
+
    ```bash
    ENCRYPTION_KEY=your_generated_key_here
    ```
@@ -349,21 +364,21 @@ Create `scripts/validate-env.js`:
 
 ```javascript
 const requiredVars = [
-  'DATABASE_URL',
-  'CLERK_SECRET_KEY',
-  'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-  'ENCRYPTION_KEY'
+  "DATABASE_URL",
+  "CLERK_SECRET_KEY",
+  "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+  "ENCRYPTION_KEY",
 ];
 
-const missingVars = requiredVars.filter(name => !process.env[name]);
+const missingVars = requiredVars.filter((name) => !process.env[name]);
 
 if (missingVars.length > 0) {
-  console.error('❌ Missing required environment variables:');
-  missingVars.forEach(name => console.error(`   - ${name}`));
+  console.error("❌ Missing required environment variables:");
+  missingVars.forEach((name) => console.error(`   - ${name}`));
   process.exit(1);
 }
 
-console.log('✅ All required environment variables are set');
+console.log("✅ All required environment variables are set");
 ```
 
 ### Test Database Connection
@@ -404,5 +419,5 @@ curl -H "Authorization: Bearer $CLERK_SECRET_KEY" \
 
 ---
 
-*Last Updated: October 2024*
-*Platform Version: 2.0.0*
+_Last Updated: October 2024_
+_Platform Version: 2.0.0_

@@ -34,24 +34,29 @@ docs/
 ### Most Important Documents
 
 **For Setup:**
+
 - `docs/setup/QUICK_START.md` - Get started in 5 minutes
 - `docs/setup/ENVIRONMENT_SETUP.md` - Complete setup guide
 
 **For Development:**
+
 - `docs/AI_GATEWAY_QUICK_REF.md` - AI Gateway quick reference
 - `docs/development/internal_dev_workflow_warp_6.md` - Dev workflow
 
 **For Deployment:**
+
 - `docs/deployment/DEPLOYMENT_GUIDE.md` - Deploy to production
 - `docs/deployment/VERCEL_FIX_INSTRUCTIONS.md` - Troubleshooting
 
 **For Project Status:**
+
 - `docs/planning/PROJECT_STATUS.md` - Current status
 - `docs/phases/` - Phase-by-phase progress
 
 ## 🔍 Finding Documents
 
 ### By Category
+
 ```bash
 # List all setup docs
 ls docs/setup/
@@ -64,6 +69,7 @@ ls docs/deployment/
 ```
 
 ### By Search
+
 ```bash
 # Find by name
 find docs/ -name "*deployment*"
@@ -78,12 +84,14 @@ find docs/ -name "*.md"
 ## 📖 Complete Index
 
 ### 🔧 Setup (4 docs)
+
 - QUICK_START.md
 - ENVIRONMENT_SETUP.md
 - ENVIRONMENT_VARIABLES_REFERENCE.md
 - setup-preview-env.md
 
 ### 💻 Development (5 docs)
+
 - BUILD_ANALYSIS_2025-10-08.md
 - AGENT_BUILDER_TESTING.md
 - internal_dev_workflow_warp_6.md
@@ -91,12 +99,14 @@ find docs/ -name "*.md"
 - WARP_HANDOFF_TYPESCRIPT_CLEANUP.md
 
 ### 🚢 Deployment (4 docs)
+
 - DEPLOYMENT_GUIDE.md
 - DEPLOYMENT_RECOVERY_SUCCESS.md
 - VERCEL_FIX_INSTRUCTIONS.md
 - ci_cd_pipeline_git_hub_actions_ecr_ecs_vercel.md
 
 ### 📅 Phases (12 docs)
+
 - PHASE_1_COMPLETE.md
 - PHASE_6_KICKOFF.md
 - PHASE_7_TESTING_CHECKLIST.md
@@ -110,6 +120,7 @@ find docs/ -name "*.md"
 - And more...
 
 ### 💬 Sessions (11 docs)
+
 - session-handoff-2025-10-08.md (latest)
 - SESSION_HANDOFF.md
 - SESSION_5_HANDOFF.md
@@ -122,6 +133,7 @@ find docs/ -name "*.md"
 - And more...
 
 ### 📋 Planning (6 docs)
+
 - PROJECT_STATUS.md
 - PROJECT_HANDOFF.md
 - PROJECT_TIME_TRACKING.md
@@ -130,6 +142,7 @@ find docs/ -name "*.md"
 - product_north_star_statement.md
 
 ### ⚙️ Technical (8 docs)
+
 - TECHNICAL_DEBT_AND_PHASE_9_PLAN.md
 - tech_stack_blueprint_end_to_end_galaxy_co.md
 - turbo_monorepo_scaffold_next_js_nest_js_python_agents.md
@@ -140,6 +153,7 @@ find docs/ -name "*.md"
 - knowledge_explainability_model_3.md
 
 ### 💼 Business (10 docs)
+
 - gtm_plan_5.md
 - pricing_business_model_5.md
 - community_strategy_5.md
@@ -152,6 +166,7 @@ find docs/ -name "*.md"
 - product_pillars_3.md
 
 ### 📦 Archived (14+ docs)
+
 - ENV_CLEANUP_SUCCESS.md
 - ENV_CLEANUP_SUMMARY.md
 - FIX_SUMMARY.md
@@ -164,6 +179,7 @@ find docs/ -name "*.md"
 ## 🔥 AI Gateway Docs (NEW!)
 
 Special section for AI Gateway:
+
 - `docs/AI_GATEWAY_QUICK_REF.md` - Quick reference
 - `docs/AI_GATEWAY_GUIDE.md` - Complete guide
 - `docs/AI_GATEWAY_IMPLEMENTATION.md` - Implementation details
@@ -172,19 +188,23 @@ Special section for AI Gateway:
 ## 🗺️ Navigation by Role
 
 ### I'm a Developer
+
 1. Start: `docs/setup/QUICK_START.md`
 2. Reference: `docs/AI_GATEWAY_QUICK_REF.md`
 3. Workflow: `docs/development/`
 
 ### I'm a DevOps Engineer
+
 1. Start: `docs/deployment/DEPLOYMENT_GUIDE.md`
 2. Reference: `docs/setup/ENVIRONMENT_VARIABLES_REFERENCE.md`
 
 ### I'm a Project Manager
+
 1. Start: `docs/planning/PROJECT_STATUS.md`
 2. Track: `docs/phases/` and `docs/sessions/`
 
 ### I'm a Stakeholder
+
 1. Start: `docs/planning/EXECUTIVE_SUMMARY.md`
 2. Business: `docs/business/gtm_plan_5.md`
 
@@ -192,17 +212,17 @@ Special section for AI Gateway:
 
 ### Where to Put New Docs
 
-| Type | Location |
-|------|----------|
-| Setup/Config | `docs/setup/` |
-| Development | `docs/development/` |
-| Deployment | `docs/deployment/` |
-| Phase work | `docs/phases/` |
-| Session notes | `docs/sessions/` |
-| Planning | `docs/planning/` |
-| Technical specs | `docs/technical/` |
-| Business | `docs/business/` |
-| Completed work | `docs/archived/` |
+| Type            | Location            |
+| --------------- | ------------------- |
+| Setup/Config    | `docs/setup/`       |
+| Development     | `docs/development/` |
+| Deployment      | `docs/deployment/`  |
+| Phase work      | `docs/phases/`      |
+| Session notes   | `docs/sessions/`    |
+| Planning        | `docs/planning/`    |
+| Technical specs | `docs/technical/`   |
+| Business        | `docs/business/`    |
+| Completed work  | `docs/archived/`    |
 
 ### Naming Conventions
 

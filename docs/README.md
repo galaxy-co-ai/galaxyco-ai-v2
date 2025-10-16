@@ -4,7 +4,8 @@ category: navigation
 status: active
 last_updated: 2025-10-14
 author: AI Assistant
-related: [../README.md, ../WARP.md, ../QUICK_REFERENCE.md, ./ORGANIZATION_PLAN.md]
+related:
+  [../README.md, ../WARP.md, ../QUICK_REFERENCE.md, ./ORGANIZATION_PLAN.md]
 ---
 
 # 📚 GalaxyCo.ai Documentation Hub
@@ -14,6 +15,7 @@ Welcome to the complete documentation for GalaxyCo.ai v2.0 - Make multi-agent AI
 ## 🚀 Quick Start
 
 **New to the project?** Start here:
+
 1. [Project Overview](../README.md) - What is GalaxyCo.ai?
 2. [Development Setup](./guides/development-setup.md) - Get up and running
 3. [Architecture Overview](./technical/architecture/README.md) - Understand the system
@@ -26,6 +28,7 @@ Welcome to the complete documentation for GalaxyCo.ai v2.0 - Make multi-agent AI
 ## 📂 Documentation Categories
 
 ### 🔧 Setup & Configuration
+
 > **Location**: `docs/setup/`
 
 Essential guides for getting the project running:
@@ -40,6 +43,7 @@ Essential guides for getting the project running:
 ---
 
 ### 📘 How-To Guides
+
 > **Location**: `docs/guides/`
 
 Step-by-step guides for common tasks:
@@ -54,6 +58,7 @@ Step-by-step guides for common tasks:
 ---
 
 ### 💻 Development
+
 > **Location**: `docs/development/`
 
 Guides for daily development work:
@@ -69,6 +74,7 @@ Guides for daily development work:
 ---
 
 ### 🚢 Deployment
+
 > **Location**: `docs/deployment/`
 
 Production deployment and DevOps:
@@ -83,6 +89,7 @@ Production deployment and DevOps:
 ---
 
 ### 📅 Project Phases
+
 > **Location**: `docs/phases/`
 
 Phase-by-phase project progression:
@@ -95,6 +102,7 @@ Phase-by-phase project progression:
 - **Phase 9B**: Live execution UI (current)
 
 Files include:
+
 - `PHASE_X_COMPLETE.md` - Completed phase summaries
 - `PHASE_X_CHECKLIST.md` - Phase task lists
 - `PHASE_X_PLAN.md` - Phase planning documents
@@ -105,6 +113,7 @@ Files include:
 ---
 
 ### 💬 Session Handoffs
+
 > **Location**: `docs/sessions/`
 
 Work session summaries and context handoffs:
@@ -119,6 +128,7 @@ Work session summaries and context handoffs:
 ---
 
 ### 📋 Planning & Project Management
+
 > **Location**: `docs/planning/`
 
 High-level project planning and tracking:
@@ -135,6 +145,7 @@ High-level project planning and tracking:
 ---
 
 ### ⚙️ Technical Architecture
+
 > **Location**: `docs/technical/`
 
 Deep technical documentation:
@@ -153,6 +164,7 @@ Deep technical documentation:
 ---
 
 ### 💼 Business & Strategy
+
 > **Location**: `docs/business/`
 
 Business strategy, go-to-market, and product planning:
@@ -173,6 +185,7 @@ Business strategy, go-to-market, and product planning:
 ---
 
 ### 🔍 Quick Reference
+
 > **Location**: `docs/reference/`
 
 Quick lookup guides and reference materials:
@@ -188,6 +201,7 @@ Quick lookup guides and reference materials:
 ---
 
 ### 📊 Current Status & Tracking
+
 > **Location**: `docs/status/`
 
 Current project state and session tracking:
@@ -203,6 +217,7 @@ Current project state and session tracking:
 ---
 
 ### 🗂️ Runbooks & Operations
+
 > **Location**: `docs/runbooks/`
 
 Operational procedures and troubleshooting:
@@ -217,6 +232,7 @@ Operational procedures and troubleshooting:
 ---
 
 ### 🔐 Security Documentation
+
 > **Location**: `docs/security/`
 
 Security policies and procedures:
@@ -231,6 +247,7 @@ Security policies and procedures:
 ---
 
 ### 📦 Archived Documents
+
 > **Location**: `docs/archive/2025-10/`
 
 Completed work and historical references:
@@ -249,6 +266,7 @@ Completed work and historical references:
 ## 🔥 AI Gateway Documentation (NEW!)
 
 ### Core AI Gateway Docs
+
 Located in `docs/`:
 
 - **`AI_GATEWAY_QUICK_REF.md`** ⭐ - Quick reference card (start here!)
@@ -258,6 +276,7 @@ Located in `docs/`:
 ### What is AI Gateway?
 
 A centralized service for all AI provider calls with:
+
 - ✅ Unified API for OpenAI & Anthropic
 - ✅ Automatic cost tracking
 - ✅ Comprehensive logging (tenant, user, agent)
@@ -265,13 +284,14 @@ A centralized service for all AI provider calls with:
 - ✅ Performance monitoring
 
 **Quick Start:**
+
 ```typescript
-import { AIGatewayService } from '@/lib/ai-gateway';
+import { AIGatewayService } from "@/lib/ai-gateway";
 
 const response = await AIGatewayService.generateText({
-  tenantId: 'workspace_123',
-  model: 'gpt-4o-mini',
-  messages: [{ role: 'user', content: 'Hello!' }],
+  tenantId: "workspace_123",
+  model: "gpt-4o-mini",
+  messages: [{ role: "user", content: "Hello!" }],
 });
 ```
 
@@ -313,6 +333,7 @@ const response = await AIGatewayService.generateText({
 ## 🆕 Recent Major Changes (October 2025)
 
 ### Production Features Deployed
+
 1. ✅ **Lead Intel Agent** - Fully deployed background job agent (Trigger.dev)
 2. ✅ **Comprehensive Error Handling** - Custom error classes, boundaries, displays
 3. ✅ **Professional Loading States** - Skeleton screens and spinners
@@ -320,6 +341,7 @@ const response = await AIGatewayService.generateText({
 5. ✅ **Agent Test UI** - Production testing interface at `/test-enrichment`
 
 ### Documentation Updates
+
 1. ✅ Documentation organization complete
 2. ✅ Session handoff system established
 3. ✅ Quality standards documented
@@ -330,58 +352,73 @@ const response = await AIGatewayService.generateText({
 ## 🧭 Navigation by Role
 
 ### I'm a Developer
+
 **Setup Path:**
+
 1. [Project Overview](../README.md)
 2. [Development Setup](./guides/development-setup.md)
 3. [WARP.md Project Rules](../WARP.md)
 4. [Dev Commands](./reference/DEV_COMMAND_CENTER.md)
 
 **Daily Work:**
+
 - [Current Status](./status/MASTER_SESSION_HANDOFF.md)
 - [AI Gateway Quick Ref](./AI_GATEWAY_QUICK_REF.md)
 - [Development Docs](./development/)
 
 ### I'm a DevOps Engineer
+
 **Setup Path:**
+
 1. [Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)
 2. [Environment Variables](./setup/ENVIRONMENT_VARIABLES_REFERENCE.md)
 3. [Runbooks](./runbooks/)
 
 **Operations:**
+
 - [Deployment Procedures](./runbooks/deployment.md)
 - [Error Monitoring](./runbooks/error-monitoring.md)
 - [Database Backup](./runbooks/database-backup-strategy.md)
 
 ### I'm a Project Manager
+
 **Overview Path:**
+
 1. [Executive Summary](./planning/EXECUTIVE_SUMMARY.md)
 2. [Current Status](./status/MASTER_SESSION_HANDOFF.md)
 3. [Roadmap](./business/ROADMAP.md)
 
 **Tracking:**
+
 - [Project Status](./planning/PROJECT_STATUS.md)
 - [Phase Progress](./phases/)
 - [Session Handoffs](./status/)
 
 ### I'm a Stakeholder
+
 **Business Path:**
+
 1. [Executive Summary](./planning/EXECUTIVE_SUMMARY.md)
 2. [Product Vision](./planning/product_north_star_statement.md)
 3. [Go-to-Market](./business/gtm_plan_5.md)
 4. [Roadmap](./business/ROADMAP.md)
 
 ### I'm an AI Assistant
+
 **Onboarding Path:**
+
 1. [AI_CONTEXT.md](../AI_CONTEXT.md) - Quick context (read first!)
 2. [WARP.md](../WARP.md) - Complete rules and standards
 3. [MASTER_SESSION_HANDOFF.md](./status/MASTER_SESSION_HANDOFF.md) - Current state
 4. [Documentation Hub](./README.md) - This file
 
 **Reference:**
+
 - [Documentation Quality Rules](./reference/DOCUMENTATION_QUALITY_RULES.md)
 - [Development Commands](./reference/DEV_COMMAND_CENTER.md)
 - [Quick Reference](../QUICK_REFERENCE.md)
-```
+
+````
 
 ---
 
@@ -470,7 +507,7 @@ grep -r "DATABASE_URL" docs/
 
 # Find deployment docs
 find docs/deployment/ -name "*.md"
-```
+````
 
 ---
 
@@ -507,4 +544,4 @@ When adding documentation:
 
 **Happy documenting! 📚**
 
-*This README is maintained as documentation evolves. Last major update: Jan 9, 2025*
+_This README is maintained as documentation evolves. Last major update: Jan 9, 2025_

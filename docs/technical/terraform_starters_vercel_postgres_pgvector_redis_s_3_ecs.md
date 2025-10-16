@@ -6,7 +6,8 @@ Copy‑ready modules and env wiring with **clean outputs** (subnets/SGs), **ECR 
 
 ---
 
-## 0) Providers & Backend (envs/*/main.tf header)
+## 0) Providers & Backend (envs/\*/main.tf header)
+
 ```hcl
 terraform {
   required_version = ">= 1.7.0"
@@ -27,7 +28,8 @@ provider "aws"    { region = var.aws_region }
 provider "vercel" { token  = var.vercel_token }
 ```
 
-### env vars (envs/*/variables.tf)
+### env vars (envs/\*/variables.tf)
+
 ```hcl
 variable "aws_region"    { type = string }
 variable "project"       { type = string }
@@ -37,6 +39,7 @@ variable "db_password"   { type = string, sensitive = true }
 ```
 
 ### sample tfvars (envs/dev/terraform.tfvars.example)
+
 ```hcl
 aws_region   = "us-east-1"
 project      = "galaxyco"
@@ -48,7 +51,9 @@ db_password  = "change-me"
 ---
 
 ## 1) Module: network (VPC, subnets, SGs)
+
 `modules/network/main.tf`
+
 ```hcl
 resource "aws_vpc" "this" {
   cidr_block           = "10.0.0.0/16"
@@ -113,6 +118,7 @@ variable "project" { type = string }
 ```
 
 `modules/network/outputs.tf`
+
 ```hcl
 output "vpc_id"         { value = aws_vpc.this.id }
 output "public_a_id"    { value = aws_subnet.public_a.id }
@@ -123,7 +129,9 @@ output "ecs_tasks_sg"   { value = aws_security_group.ecs_tasks.id }
 ---
 
 ## 2) Module: rds-postgres (pgvector‑ready)
+
 `modules/rds-postgres/main.tf`
+
 ```hcl
 variable "project"    { type = string }
 variable "subnet_ids" { type = list(string) }
@@ -164,7 +172,9 @@ output "postgres_url" {
 ---
 
 ## 3) Module: elasticache-redis
+
 `modules/elasticache-redis/main.tf`
+
 ```hcl
 variable "project"    { type = string }
 variable "subnet_ids" { type = list(string) }
@@ -188,7 +198,9 @@ output "redis_endpoint" { value = aws_elasticache_cluster.this.cache_nodes[0].ad
 ---
 
 ## 4) Module: s3-bucket (artifacts)
+
 `modules/s3-bucket/main.tf`
+
 ```hcl
 variable "project" { type = string }
 
@@ -204,7 +216,9 @@ output "bucket" { value = aws_s3_bucket.this.bucket }
 ---
 
 ## 5) Module: ecr-repos (API & Agents)
+
 `modules/ecr-repos/main.tf`
+
 ```hcl
 variable "project" { type = string }
 
@@ -227,7 +241,9 @@ output "agents_repo_url" { value = aws_ecr_repository.agents.repository_url }
 ---
 
 ## 6) Module: ecs-service (agents workers)
+
 `modules/ecs-service/main.tf`
+
 ```hcl
 variable "project"       { type = string }
 variable "cluster_name"  { type = string }
@@ -282,6 +298,7 @@ output "service_arn" { value = aws_ecs_service.svc.arn }
 ---
 
 ## 7) Env wiring (envs/dev/main.tf body)
+
 ```hcl
 module "network" {
   source  = "../modules/network"
@@ -332,6 +349,7 @@ module "artifacts" {
 ---
 
 ## 8) Commands
+
 ```bash
 cd infra/terraform/envs/dev
 terraform init
@@ -342,9 +360,9 @@ terraform apply -var-file=terraform.tfvars
 ---
 
 ## 9) Notes
+
 - **Outputs fixed**: `private_a_id`, `public_a_id`, `ecs_tasks_sg` now exported from `network`.
 - **ECR repos** provided for `api` and `agents` to match CI image pushes.
 - **ecs-service** module expects **image URI + tag** from CI, and **IAM role ARNs**.
 - For early dev, you can swap RDS with Neon; keep the interface (URL) identical to avoid app changes.
 - Vercel resources are usually easier to create in the UI; provider left optional.
-

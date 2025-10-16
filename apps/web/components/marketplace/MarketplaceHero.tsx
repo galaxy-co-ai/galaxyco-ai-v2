@@ -151,7 +151,13 @@ export default function MarketplaceHero({
             {heroSubtitle}
           </p>
 
-          <div style={{ display: "flex", gap: "var(--space-3)", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "var(--space-3)",
+              alignItems: "center",
+            }}
+          >
             <Link
               href={slide.link || "/marketplace"}
               style={{

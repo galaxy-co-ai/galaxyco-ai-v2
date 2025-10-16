@@ -1,7 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
+import React, { useState, useEffect } from "react";
+import {
+  colors,
+  spacing,
+  typography,
+  radius,
+} from "@/lib/constants/design-system";
 
 interface Collection {
   id: string;
@@ -13,7 +18,7 @@ interface Collection {
 
 interface KnowledgeBaseConfig {
   enabled: boolean;
-  scope?: 'all' | 'collections';
+  scope?: "all" | "collections";
   collectionIds?: string[];
   maxResults?: number;
 }
@@ -46,14 +51,14 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
     setIsLoadingCollections(true);
     try {
       const response = await fetch(
-        `/api/knowledge/collections?workspaceId=${workspaceId}`
+        `/api/knowledge/collections?workspaceId=${workspaceId}`,
       );
       if (response.ok) {
         const data = await response.json();
         setCollections(data.collections || []);
       }
     } catch (error) {
-      console.error('Error fetching collections:', error);
+      console.error("Error fetching collections:", error);
     } finally {
       setIsLoadingCollections(false);
     }
@@ -63,7 +68,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
     if (enabled) {
       onChange({
         enabled: true,
-        scope: 'all',
+        scope: "all",
         maxResults: 5,
         collectionIds: [],
       });
@@ -77,11 +82,11 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
     }
   };
 
-  const handleScopeChange = (scope: 'all' | 'collections') => {
+  const handleScopeChange = (scope: "all" | "collections") => {
     onChange({
       ...config,
       scope,
-      collectionIds: scope === 'all' ? [] : config.collectionIds || [],
+      collectionIds: scope === "all" ? [] : config.collectionIds || [],
     });
   };
 
@@ -105,11 +110,11 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
   };
 
   const selectedCollections = collections.filter((c) =>
-    config.collectionIds?.includes(c.id)
+    config.collectionIds?.includes(c.id),
   );
 
   return (
-    <div style={{ marginBottom: spacing['2xl'] }}>
+    <div style={{ marginBottom: spacing["2xl"] }}>
       {/* Section Header */}
       <div
         style={{
@@ -118,8 +123,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           borderBottom: `1px solid ${colors.border.default}`,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
-          <span style={{ fontSize: '24px' }}>📚</span>
+        <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+          <span style={{ fontSize: "24px" }}>📚</span>
           <div style={{ flex: 1 }}>
             <h3
               style={{
@@ -138,7 +143,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 margin: 0,
               }}
             >
-              Enable semantic search over your uploaded documents, URLs, and notes
+              Enable semantic search over your uploaded documents, URLs, and
+              notes
             </p>
           </div>
         </div>
@@ -147,8 +153,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
       {/* Enable/Disable Toggle */}
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
+          display: "flex",
+          alignItems: "center",
           padding: spacing.lg,
           backgroundColor: config.enabled
             ? colors.primary[100]
@@ -156,8 +162,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           borderRadius: radius.lg,
           marginBottom: spacing.lg,
           border: `2px solid ${config.enabled ? colors.primary[500] : colors.border.default}`,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          transition: 'all 0.2s ease',
+          cursor: disabled ? "not-allowed" : "pointer",
+          transition: "all 0.2s ease",
         }}
         onClick={() => !disabled && handleEnabledChange(!config.enabled)}
       >
@@ -167,9 +173,9 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           onChange={(e) => handleEnabledChange(e.target.checked)}
           disabled={disabled}
           style={{
-            width: '20px',
-            height: '20px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
+            width: "20px",
+            height: "20px",
+            cursor: disabled ? "not-allowed" : "pointer",
             marginRight: spacing.md,
           }}
         />
@@ -179,8 +185,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
               fontSize: typography.sizes.base,
               fontWeight: typography.weights.medium,
               color: colors.text.primary,
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              display: 'block',
+              cursor: disabled ? "not-allowed" : "pointer",
+              display: "block",
               marginBottom: spacing.xs,
             }}
           >
@@ -194,8 +200,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
             }}
           >
             {config.enabled
-              ? 'Agent can search and retrieve information from your knowledge base'
-              : 'Agent will not have access to your knowledge base'}
+              ? "Agent can search and retrieve information from your knowledge base"
+              : "Agent will not have access to your knowledge base"}
           </p>
         </div>
       </div>
@@ -214,7 +220,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           <div style={{ marginBottom: spacing.xl }}>
             <label
               style={{
-                display: 'block',
+                display: "block",
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.medium,
                 color: colors.text.primary,
@@ -227,26 +233,26 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
             {/* All Collections Option */}
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 padding: spacing.md,
                 marginBottom: spacing.sm,
                 backgroundColor: colors.background.primary,
                 borderRadius: radius.md,
-                border: `2px solid ${config.scope === 'all' ? colors.primaryColor : colors.border.default}`,
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
+                border: `2px solid ${config.scope === "all" ? colors.primaryColor : colors.border.default}`,
+                cursor: disabled ? "not-allowed" : "pointer",
+                transition: "all 0.2s ease",
               }}
-              onClick={() => !disabled && handleScopeChange('all')}
+              onClick={() => !disabled && handleScopeChange("all")}
             >
               <input
                 type="radio"
-                checked={config.scope === 'all'}
-                onChange={() => handleScopeChange('all')}
+                checked={config.scope === "all"}
+                onChange={() => handleScopeChange("all")}
                 disabled={disabled}
                 style={{
                   marginRight: spacing.md,
-                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  cursor: disabled ? "not-allowed" : "pointer",
                 }}
               />
               <div>
@@ -273,25 +279,25 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
             {/* Specific Collections Option */}
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 padding: spacing.md,
                 backgroundColor: colors.background.primary,
                 borderRadius: radius.md,
-                border: `2px solid ${config.scope === 'collections' ? colors.primaryColor : colors.border.default}`,
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
+                border: `2px solid ${config.scope === "collections" ? colors.primaryColor : colors.border.default}`,
+                cursor: disabled ? "not-allowed" : "pointer",
+                transition: "all 0.2s ease",
               }}
-              onClick={() => !disabled && handleScopeChange('collections')}
+              onClick={() => !disabled && handleScopeChange("collections")}
             >
               <input
                 type="radio"
-                checked={config.scope === 'collections'}
-                onChange={() => handleScopeChange('collections')}
+                checked={config.scope === "collections"}
+                onChange={() => handleScopeChange("collections")}
                 disabled={disabled}
                 style={{
                   marginRight: spacing.md,
-                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  cursor: disabled ? "not-allowed" : "pointer",
                 }}
               />
               <div style={{ flex: 1 }}>
@@ -317,11 +323,11 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           </div>
 
           {/* Collection Selector (only show when scope is 'collections') */}
-          {config.scope === 'collections' && (
+          {config.scope === "collections" && (
             <div style={{ marginBottom: spacing.xl }}>
               <label
                 style={{
-                  display: 'block',
+                  display: "block",
                   fontSize: typography.sizes.sm,
                   fontWeight: typography.weights.medium,
                   color: colors.text.primary,
@@ -335,7 +341,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 <div
                   style={{
                     padding: spacing.lg,
-                    textAlign: 'center',
+                    textAlign: "center",
                     color: colors.text.tertiary,
                     fontSize: typography.sizes.sm,
                   }}
@@ -346,13 +352,19 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 <div
                   style={{
                     padding: spacing.lg,
-                    textAlign: 'center',
+                    textAlign: "center",
                     backgroundColor: colors.background.primary,
                     borderRadius: radius.md,
                     border: `1px dashed ${colors.border.default}`,
                   }}
                 >
-                  <span style={{ fontSize: '32px', display: 'block', marginBottom: spacing.sm }}>
+                  <span
+                    style={{
+                      fontSize: "32px",
+                      display: "block",
+                      marginBottom: spacing.sm,
+                    }}
+                  >
                     📁
                   </span>
                   <p
@@ -362,45 +374,52 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                       margin: 0,
                     }}
                   >
-                    No collections yet. Create collections in the Knowledge Base to organize your
-                    documents.
+                    No collections yet. Create collections in the Knowledge Base
+                    to organize your documents.
                   </p>
                 </div>
               ) : (
                 <div
                   style={{
-                    maxHeight: '300px',
-                    overflowY: 'auto',
+                    maxHeight: "300px",
+                    overflowY: "auto",
                     border: `1px solid ${colors.border.default}`,
                     borderRadius: radius.md,
                     backgroundColor: colors.background.primary,
                   }}
                 >
                   {collections.map((collection) => {
-                    const isSelected = config.collectionIds?.includes(collection.id);
+                    const isSelected = config.collectionIds?.includes(
+                      collection.id,
+                    );
                     return (
                       <div
                         key={collection.id}
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
+                          display: "flex",
+                          alignItems: "center",
                           padding: spacing.md,
                           borderBottom: `1px solid ${colors.border.default}`,
-                          cursor: disabled ? 'not-allowed' : 'pointer',
-                          backgroundColor: isSelected ? colors.primary[100] : 'transparent',
-                          transition: 'background-color 0.2s ease',
+                          cursor: disabled ? "not-allowed" : "pointer",
+                          backgroundColor: isSelected
+                            ? colors.primary[100]
+                            : "transparent",
+                          transition: "background-color 0.2s ease",
                         }}
-                        onClick={() => !disabled && handleCollectionToggle(collection.id)}
+                        onClick={() =>
+                          !disabled && handleCollectionToggle(collection.id)
+                        }
                         onMouseEnter={(e) => {
                           if (!disabled) {
-                            e.currentTarget.style.backgroundColor = colors.background.secondary;
+                            e.currentTarget.style.backgroundColor =
+                              colors.background.secondary;
                           }
                         }}
                         onMouseLeave={(e) => {
                           if (!disabled) {
                             e.currentTarget.style.backgroundColor = isSelected
                               ? colors.primary[100]
-                              : 'transparent';
+                              : "transparent";
                           }
                         }}
                       >
@@ -411,14 +430,14 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                           disabled={disabled}
                           style={{
                             marginRight: spacing.md,
-                            cursor: disabled ? 'not-allowed' : 'pointer',
+                            cursor: disabled ? "not-allowed" : "pointer",
                           }}
                         />
                         <div
                           style={{
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
                             backgroundColor: collection.color,
                             marginRight: spacing.sm,
                           }}
@@ -461,14 +480,14 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 </div>
               )}
 
-              {config.scope === 'collections' &&
+              {config.scope === "collections" &&
                 config.collectionIds &&
                 config.collectionIds.length === 0 && (
                   <div
                     style={{
                       marginTop: spacing.sm,
                       padding: spacing.sm,
-                      backgroundColor: colors.warning.light + '20',
+                      backgroundColor: colors.warning.light + "20",
                       borderRadius: radius.sm,
                       fontSize: typography.sizes.xs,
                       color: colors.warning.dark,
@@ -484,7 +503,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           <div>
             <label
               style={{
-                display: 'block',
+                display: "block",
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.medium,
                 color: colors.text.primary,
@@ -501,15 +520,15 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
               onChange={(e) => handleMaxResultsChange(parseInt(e.target.value))}
               disabled={disabled}
               style={{
-                width: '100%',
+                width: "100%",
                 marginBottom: spacing.xs,
-                cursor: disabled ? 'not-allowed' : 'pointer',
+                cursor: disabled ? "not-allowed" : "pointer",
               }}
             />
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
+                display: "flex",
+                justifyContent: "space-between",
                 fontSize: typography.sizes.xs,
                 color: colors.text.tertiary,
               }}
@@ -525,7 +544,8 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
                 color: colors.text.tertiary,
               }}
             >
-              More results provide better context but increase response time and token usage.
+              More results provide better context but increase response time and
+              token usage.
             </p>
           </div>
         </div>
@@ -537,7 +557,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
           style={{
             marginTop: spacing.lg,
             padding: spacing.md,
-            backgroundColor: colors.info.light + '20',
+            backgroundColor: colors.info.light + "20",
             borderRadius: radius.md,
             border: `1px solid ${colors.info.light}`,
           }}
@@ -549,12 +569,18 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
               marginBottom: spacing.xs,
             }}
           >
-            💡 <strong>Tip:</strong> The agent will automatically search your knowledge base when
-            answering questions
+            💡 <strong>Tip:</strong> The agent will automatically search your
+            knowledge base when answering questions
           </div>
-          <div style={{ fontSize: typography.sizes.xs, color: colors.text.tertiary }}>
-            Make sure to include instructions in the system prompt about citing sources and
-            handling cases where information isn&apos;t found in the knowledge base.
+          <div
+            style={{
+              fontSize: typography.sizes.xs,
+              color: colors.text.tertiary,
+            }}
+          >
+            Make sure to include instructions in the system prompt about citing
+            sources and handling cases where information isn&apos;t found in the
+            knowledge base.
           </div>
         </div>
       )}

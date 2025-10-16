@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Check } from 'lucide-react';
-import type { AgentVariant } from '@/lib/stores/agent-builder-store';
+import { Check } from "lucide-react";
+import type { AgentVariant } from "@/lib/stores/agent-builder-store";
 
 interface VariantGridProps {
   variants: AgentVariant[];
@@ -9,9 +9,21 @@ interface VariantGridProps {
 }
 
 const VARIANT_COLORS = {
-  basic: { bg: 'bg-purple-100 dark:bg-purple-900/20', text: 'text-purple-700 dark:text-purple-300', border: 'border-purple-300 dark:border-purple-700' },
-  advanced: { bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-700 dark:text-blue-300', border: 'border-blue-300 dark:border-blue-700' },
-  minimal: { bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-700 dark:text-green-300', border: 'border-green-300 dark:border-green-700' },
+  basic: {
+    bg: "bg-purple-100 dark:bg-purple-900/20",
+    text: "text-purple-700 dark:text-purple-300",
+    border: "border-purple-300 dark:border-purple-700",
+  },
+  advanced: {
+    bg: "bg-blue-100 dark:bg-blue-900/20",
+    text: "text-blue-700 dark:text-blue-300",
+    border: "border-blue-300 dark:border-blue-700",
+  },
+  minimal: {
+    bg: "bg-green-100 dark:bg-green-900/20",
+    text: "text-green-700 dark:text-green-300",
+    border: "border-green-300 dark:border-green-700",
+  },
 };
 
 export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
@@ -27,7 +39,12 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
       <div className="grid gap-6 md:grid-cols-3">
         {variants.map((variant) => {
           const colors = VARIANT_COLORS[variant.type];
-          const stars = variant.type === 'basic' ? '⭐⭐' : variant.type === 'advanced' ? '⭐⭐⭐' : '⭐';
+          const stars =
+            variant.type === "basic"
+              ? "⭐⭐"
+              : variant.type === "advanced"
+                ? "⭐⭐⭐"
+                : "⭐";
 
           return (
             <div
@@ -35,7 +52,9 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
               className={`group relative flex flex-col rounded-lg border-2 ${colors.border} bg-white dark:bg-neutral-900 p-6 hover:shadow-lg transition-all`}
             >
               {/* Badge */}
-              <div className={`inline-flex w-fit items-center gap-2 rounded-full ${colors.bg} px-3 py-1 text-xs font-medium ${colors.text} uppercase tracking-wide mb-4`}>
+              <div
+                className={`inline-flex w-fit items-center gap-2 rounded-full ${colors.bg} px-3 py-1 text-xs font-medium ${colors.text} uppercase tracking-wide mb-4`}
+              >
                 {variant.type} {stars}
               </div>
 
@@ -47,16 +66,23 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
               {/* Metadata */}
               <div className="space-y-2 text-sm mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-600 dark:text-neutral-400">⚙️ {variant.estimatedSteps} Steps</span>
-                </div>
-                <div className="flex items-center gap-2">
                   <span className="text-neutral-600 dark:text-neutral-400">
-                    🔌 {variant.integrations.join(', ')}
+                    ⚙️ {variant.estimatedSteps} Steps
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-neutral-600 dark:text-neutral-400">
-                    ⏱️ {variant.complexity === 'low' ? '~2 min setup' : variant.complexity === 'medium' ? '~5 min setup' : '~10 min setup'}
+                    🔌 {variant.integrations.join(", ")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-neutral-600 dark:text-neutral-400">
+                    ⏱️{" "}
+                    {variant.complexity === "low"
+                      ? "~2 min setup"
+                      : variant.complexity === "medium"
+                        ? "~5 min setup"
+                        : "~10 min setup"}
                   </span>
                 </div>
               </div>
@@ -66,7 +92,10 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
                 <p className="text-xs text-neutral-500 mb-2">Workflow Steps:</p>
                 <div className="space-y-1">
                   {variant.workflow.slice(0, 3).map((node, idx) => (
-                    <div key={node.id} className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
+                    <div
+                      key={node.id}
+                      className="text-xs text-neutral-600 dark:text-neutral-400 truncate"
+                    >
                       {idx + 1}. {node.label}
                     </div>
                   ))}

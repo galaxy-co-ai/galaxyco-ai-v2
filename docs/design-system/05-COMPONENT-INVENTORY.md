@@ -18,6 +18,7 @@ Atoms (Basic building blocks)
 ## Atoms (30 components)
 
 ### 1. Typography
+
 - **Heading** (H1-H6)
 - **Paragraph**
 - **Label**
@@ -25,11 +26,13 @@ Atoms (Basic building blocks)
 - **Code** (inline)
 
 ### 2. Buttons
+
 - **Button** (primary, secondary, destructive, ghost, outline)
 - **IconButton**
 - **ButtonGroup**
 
 ### 3. Form Elements
+
 - **Input** (text, email, password, number, search)
 - **Textarea**
 - **Checkbox**
@@ -38,6 +41,7 @@ Atoms (Basic building blocks)
 - **Select** (native dropdown)
 
 ### 4. Indicators
+
 - **Badge** (status indicator)
 - **Tag** (removable label)
 - **Spinner** (loading)
@@ -46,16 +50,19 @@ Atoms (Basic building blocks)
 - **Dot** (unread indicator)
 
 ### 5. Icons & Media
+
 - **Icon** (Lucide React wrapper)
 - **Avatar**
 - **Logo**
 - **Image**
 
 ### 6. Dividers
+
 - **Separator** (horizontal/vertical)
 - **Divider** (with text)
 
 ### 7. Interactive
+
 - **Link**
 - **Tooltip**
 - **Kbd** (keyboard shortcut display)
@@ -65,6 +72,7 @@ Atoms (Basic building blocks)
 ## Molecules (25 components)
 
 ### 1. Form Molecules
+
 - **FormField** (Label + Input + Error message)
 - **PasswordInput** (Input + toggle visibility)
 - **SearchInput** (Input + search icon)
@@ -73,6 +81,7 @@ Atoms (Basic building blocks)
 - **FileUpload** (Input + drag-drop zone + preview)
 
 ### 2. Navigation Molecules
+
 - **Breadcrumb**
 - **Tab** (single tab item)
 - **TabsList** (horizontal tab navigation)
@@ -80,6 +89,7 @@ Atoms (Basic building blocks)
 - **NavItem** (sidebar navigation item)
 
 ### 3. Content Molecules
+
 - **KPICard** (Metric card with icon, value, trend)
 - **StatCard** (Simple stat display)
 - **EmptyState** (Icon + message + CTA)
@@ -88,11 +98,13 @@ Atoms (Basic building blocks)
 - **WarningMessage** (Icon + text)
 
 ### 4. Interactive Molecules
+
 - **Dropdown** (Radix DropdownMenu)
 - **Combobox** (Searchable select)
 - **ContextMenu** (Right-click menu)
 
 ### 5. Media Molecules
+
 - **AvatarGroup** (Stacked avatars)
 - **ThumbnailGrid** (Image grid)
 - **VideoPlayer** (Video with controls)
@@ -102,6 +114,7 @@ Atoms (Basic building blocks)
 ## Organisms (35 components)
 
 ### 1. Navigation Organisms
+
 - **Sidebar** (Logo + nav items + footer)
 - **TopNav** (Logo + actions + user menu)
 - **BottomNav** (Mobile navigation)
@@ -109,6 +122,7 @@ Atoms (Basic building blocks)
 - **SettingsNav** (Grouped nav items)
 
 ### 2. Data Display Organisms
+
 - **DataTable** (Table + sorting + pagination)
 - **CardGrid** (Grid of cards with filters)
 - **ListItem** (Complex list row)
@@ -117,6 +131,7 @@ Atoms (Basic building blocks)
 - **SearchResults** (Grouped search results)
 
 ### 3. Forms Organisms
+
 - **LoginForm** (Email + password + OAuth)
 - **SignupForm** (Multi-field registration)
 - **SettingsForm** (Grouped settings sections)
@@ -124,6 +139,7 @@ Atoms (Basic building blocks)
 - **FilterPanel** (Collapsible filter groups)
 
 ### 4. Content Organisms
+
 - **DashboardHeader** (Title + actions + breadcrumb)
 - **HeroSection** (Title + description + search)
 - **CategoryGrid** (Grid of category cards)
@@ -132,6 +148,7 @@ Atoms (Basic building blocks)
 - **ProseContent** (Styled article content)
 
 ### 5. Modal/Overlay Organisms
+
 - **Modal** (Dialog with header, body, footer)
 - **Drawer** (Slide-out panel)
 - **Sheet** (Bottom sheet for mobile)
@@ -139,11 +156,13 @@ Atoms (Basic building blocks)
 - **CommandPalette** (Cmd+K search)
 
 ### 6. Feedback Organisms
+
 - **Toast** (Temporary notification)
 - **Alert** (Persistent notification)
 - **ConfirmDialog** (Yes/No prompt)
 
 ### 7. Charts (Tremor)
+
 - **LineChart**
 - **BarChart**
 - **AreaChart**
@@ -158,24 +177,31 @@ Atoms (Basic building blocks)
 **Purpose:** Primary interactive element for actions
 
 **Variants:**
+
 ```tsx
-type ButtonVariant = 'primary' | 'secondary' | 'destructive' | 'ghost' | 'outline'
-type ButtonSize = 'sm' | 'md' | 'lg'
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "destructive"
+  | "ghost"
+  | "outline";
+type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
-  variant?: ButtonVariant
-  size?: ButtonSize
-  disabled?: boolean
-  loading?: boolean
-  icon?: React.ReactNode
-  iconPosition?: 'left' | 'right'
-  fullWidth?: boolean
-  onClick?: () => void
-  children: React.ReactNode
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  disabled?: boolean;
+  loading?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
+  fullWidth?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
 }
 ```
 
 **States:**
+
 - Default
 - Hover
 - Active (pressed)
@@ -184,29 +210,32 @@ interface ButtonProps {
 - Loading (spinner replaces content)
 
 **Sizes:**
+
 - Small: `px-3 py-1.5 text-sm` (12px × 6px, 14px text)
 - Medium: `px-4 py-2 text-sm` (16px × 8px, 14px text)
 - Large: `px-6 py-3 text-base` (24px × 12px, 16px text)
 
 **Tailwind Classes:**
+
 ```tsx
 // Primary
-"bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active"
+"bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active";
 
 // Secondary
-"bg-secondary text-secondary-foreground hover:bg-secondary-hover"
+"bg-secondary text-secondary-foreground hover:bg-secondary-hover";
 
 // Destructive
-"bg-destructive text-destructive-foreground hover:bg-destructive/90"
+"bg-destructive text-destructive-foreground hover:bg-destructive/90";
 
 // Ghost
-"text-foreground hover:bg-hover active:bg-active"
+"text-foreground hover:bg-hover active:bg-active";
 
 // Outline
-"border border-border bg-background hover:bg-hover"
+"border border-border bg-background hover:bg-hover";
 ```
 
 **Accessibility:**
+
 - Always has `type="button"` (unless in form)
 - Has `aria-disabled` when disabled
 - Has `aria-label` when icon-only
@@ -219,23 +248,32 @@ interface ButtonProps {
 **Purpose:** Text input for forms
 
 **Types:**
+
 ```tsx
-type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url'
+type InputType =
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "search"
+  | "tel"
+  | "url";
 
 interface InputProps {
-  type?: InputType
-  value: string
-  onChange: (value: string) => void
-  placeholder?: string
-  disabled?: boolean
-  error?: string
-  icon?: React.ReactNode
-  iconPosition?: 'left' | 'right'
-  required?: boolean
+  type?: InputType;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  error?: string;
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
+  required?: boolean;
 }
 ```
 
 **States:**
+
 - Default
 - Focus
 - Error
@@ -243,11 +281,13 @@ interface InputProps {
 - Read-only
 
 **Sizes:**
+
 - Small: `px-3 py-1.5 text-sm` (12px × 6px)
 - Medium: `px-4 py-2 text-sm` (16px × 8px) - default
 - Large: `px-4 py-3 text-base` (16px × 12px)
 
 **Tailwind Classes:**
+
 ```tsx
 // Default
 "w-full px-4 py-2 rounded-lg border border-border bg-background-subtle
@@ -263,6 +303,7 @@ interface InputProps {
 ```
 
 **Accessibility:**
+
 - Always has associated `<label>` with `htmlFor`
 - Has `aria-invalid` when error present
 - Has `aria-describedby` pointing to error message
@@ -275,36 +316,39 @@ interface InputProps {
 **Purpose:** Container for grouped content
 
 **Variants:**
+
 ```tsx
-type CardVariant = 'default' | 'elevated' | 'outline'
+type CardVariant = "default" | "elevated" | "outline";
 
 interface CardProps {
-  variant?: CardVariant
-  interactive?: boolean // Adds hover state
-  padding?: 'none' | 'sm' | 'md' | 'lg'
-  children: React.ReactNode
+  variant?: CardVariant;
+  interactive?: boolean; // Adds hover state
+  padding?: "none" | "sm" | "md" | "lg";
+  children: React.ReactNode;
 }
 ```
 
 **Sizes (Padding):**
+
 - None: `p-0`
 - Small: `p-4` (16px)
 - Medium: `p-6` (24px) - default
 - Large: `p-8` (32px)
 
 **Tailwind Classes:**
+
 ```tsx
 // Default
-"bg-background-elevated border border-border rounded-lg"
+"bg-background-elevated border border-border rounded-lg";
 
 // Elevated (with shadow)
-"bg-background-elevated border border-border rounded-lg shadow-md"
+"bg-background-elevated border border-border rounded-lg shadow-md";
 
 // Outline
-"bg-background border-2 border-border rounded-lg"
+"bg-background border-2 border-border rounded-lg";
 
 // Interactive
-"hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer"
+"hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer";
 ```
 
 ---
@@ -314,21 +358,29 @@ interface CardProps {
 **Purpose:** Status indicator or label
 
 **Variants:**
+
 ```tsx
-type BadgeVariant = 'default' | 'success' | 'warning' | 'destructive' | 'outline'
+type BadgeVariant =
+  | "default"
+  | "success"
+  | "warning"
+  | "destructive"
+  | "outline";
 
 interface BadgeProps {
-  variant?: BadgeVariant
-  size?: 'sm' | 'md'
-  children: React.ReactNode
+  variant?: BadgeVariant;
+  size?: "sm" | "md";
+  children: React.ReactNode;
 }
 ```
 
 **Sizes:**
+
 - Small: `px-2 py-0.5 text-xs` (8px × 2px, 12px text)
 - Medium: `px-2 py-1 text-sm` (8px × 4px, 14px text)
 
 **Tailwind Classes:**
+
 ```tsx
 // Default
 "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
@@ -351,6 +403,7 @@ interface BadgeProps {
 **Purpose:** Display and interact with tabular data
 
 **Features:**
+
 - Column sorting
 - Row selection (checkboxes)
 - Pagination
@@ -361,51 +414,55 @@ interface BadgeProps {
 - Sticky header (optional)
 
 **Props:**
+
 ```tsx
 interface DataTableProps<T> {
-  data: T[]
-  columns: ColumnDef<T>[]
-  loading?: boolean
+  data: T[];
+  columns: ColumnDef<T>[];
+  loading?: boolean;
   pagination?: {
-    page: number
-    pageSize: number
-    total: number
-    onPageChange: (page: number) => void
-  }
+    page: number;
+    pageSize: number;
+    total: number;
+    onPageChange: (page: number) => void;
+  };
   sorting?: {
-    sortBy: string
-    sortOrder: 'asc' | 'desc'
-    onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void
-  }
+    sortBy: string;
+    sortOrder: "asc" | "desc";
+    onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
+  };
   selection?: {
-    selectedRows: string[]
-    onSelectionChange: (selectedRows: string[]) => void
-  }
-  onRowClick?: (row: T) => void
-  emptyState?: React.ReactNode
+    selectedRows: string[];
+    onSelectionChange: (selectedRows: string[]) => void;
+  };
+  onRowClick?: (row: T) => void;
+  emptyState?: React.ReactNode;
 }
 ```
 
 **Column Definition:**
+
 ```tsx
 interface ColumnDef<T> {
-  id: string
-  header: string | React.ReactNode
-  accessor: keyof T | ((row: T) => any)
-  cell?: (value: any, row: T) => React.ReactNode
-  sortable?: boolean
-  width?: string
-  align?: 'left' | 'center' | 'right'
+  id: string;
+  header: string | React.ReactNode;
+  accessor: keyof T | ((row: T) => any);
+  cell?: (value: any, row: T) => React.ReactNode;
+  sortable?: boolean;
+  width?: string;
+  align?: "left" | "center" | "right";
 }
 ```
 
 **States:**
+
 - Loading (skeleton rows)
 - Empty (empty state component)
 - Error (error message)
 - Loaded (data displayed)
 
 **Responsive:**
+
 - Desktop: Full table with all columns
 - Tablet: Hide less important columns
 - Mobile: Convert to card view (stacked data)
@@ -417,20 +474,22 @@ interface ColumnDef<T> {
 **Purpose:** Dialog overlay for focused interactions
 
 **Props:**
+
 ```tsx
 interface ModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  title?: string
-  description?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
-  children: React.ReactNode
-  footer?: React.ReactNode
-  closeButton?: boolean
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title?: string;
+  description?: string;
+  size?: "sm" | "md" | "lg" | "xl" | "full";
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  closeButton?: boolean;
 }
 ```
 
 **Sizes:**
+
 - Small: `max-w-sm` (384px)
 - Medium: `max-w-md` (448px) - default
 - Large: `max-w-lg` (512px)
@@ -438,38 +497,41 @@ interface ModalProps {
 - Full: `max-w-full` (responsive padding)
 
 **Structure:**
+
 ```jsx
 <Modal open={open} onOpenChange={setOpen}>
   <ModalHeader>
     <ModalTitle>Title</ModalTitle>
     <ModalDescription>Description</ModalDescription>
   </ModalHeader>
-  <ModalBody>
-    {/* Content */}
-  </ModalBody>
+  <ModalBody>{/* Content */}</ModalBody>
   <ModalFooter>
-    <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+    <Button variant="outline" onClick={() => setOpen(false)}>
+      Cancel
+    </Button>
     <Button onClick={handleSubmit}>Confirm</Button>
   </ModalFooter>
 </Modal>
 ```
 
 **Animation (Framer Motion):**
+
 ```tsx
 const modalVariants = {
   initial: { opacity: 0, scale: 0.95, y: 20 },
   animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.95, y: 20 }
-}
+  exit: { opacity: 0, scale: 0.95, y: 20 },
+};
 
 const overlayVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  exit: { opacity: 0 }
-}
+  exit: { opacity: 0 },
+};
 ```
 
 **Accessibility:**
+
 - Traps focus inside modal
 - Returns focus to trigger on close
 - ESC key closes modal
@@ -485,42 +547,46 @@ const overlayVariants = {
 **Purpose:** Temporary notification message
 
 **Props:**
+
 ```tsx
 interface ToastProps {
-  title: string
-  description?: string
-  variant?: 'default' | 'success' | 'warning' | 'destructive'
-  duration?: number // ms (default 5000)
+  title: string;
+  description?: string;
+  variant?: "default" | "success" | "warning" | "destructive";
+  duration?: number; // ms (default 5000)
   action?: {
-    label: string
-    onClick: () => void
-  }
+    label: string;
+    onClick: () => void;
+  };
 }
 ```
 
 **Position:**
+
 - Desktop: Bottom-right (`bottom-4 right-4`)
 - Mobile: Bottom-center (`bottom-20 left-4 right-4`)
 
 **Animation:**
+
 ```tsx
 const toastVariants = {
   initial: { opacity: 0, y: 50, scale: 0.3 },
   animate: { opacity: 1, y: 0, scale: 1 },
-  exit: { opacity: 0, y: 20, scale: 0.5 }
-}
+  exit: { opacity: 0, y: 20, scale: 0.5 },
+};
 ```
 
 **Usage:**
+
 ```tsx
 // Using a toast hook
-const { toast } = useToast()
+const { toast } = useToast();
 
 toast({
   title: "Agent deployed",
   description: "Your sales agent is now live",
-  variant: "success"
-})
+  variant: "success",
+});
 ```
 
 ---
@@ -528,6 +594,7 @@ toast({
 ## Component Dependencies
 
 ### Core Libraries
+
 - **React 18**: Base framework
 - **Radix UI**: Accessible primitives (Dialog, Dropdown, Tabs, etc.)
 - **Tailwind CSS**: Utility-first styling
@@ -537,6 +604,7 @@ toast({
 - **Zod**: Form validation
 
 ### Recommended Structure
+
 ```
 src/
 ├── components/
@@ -567,6 +635,7 @@ src/
 ## Implementation Priority
 
 ### Phase 1: Core Atoms (Week 1)
+
 1. Button
 2. Input
 3. Label
@@ -575,6 +644,7 @@ src/
 6. Icon
 
 ### Phase 2: Form Molecules (Week 1)
+
 1. FormField
 2. PasswordInput
 3. SearchInput
@@ -582,23 +652,27 @@ src/
 5. Select
 
 ### Phase 3: Layout Organisms (Week 2)
+
 1. Sidebar
 2. TopNav
 3. BottomNav
 4. Card
 
 ### Phase 4: Data Organisms (Week 2)
+
 1. DataTable
 2. CardGrid
 3. ActivityFeed
 
 ### Phase 5: Overlay Organisms (Week 3)
+
 1. Modal
 2. Toast
 3. Drawer
 4. Popover
 
 ### Phase 6: Chart Components (Week 3)
+
 1. LineChart (Tremor)
 2. BarChart (Tremor)
 3. KPICard

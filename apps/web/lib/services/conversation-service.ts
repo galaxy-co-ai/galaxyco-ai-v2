@@ -1,6 +1,6 @@
 /**
  * Conversation Service
- * 
+ *
  * Manages AI chat conversations, message history, context tracking,
  * and user preferences.
  */
@@ -67,7 +67,7 @@ export class ConversationService {
    * Create a new conversation
    */
   async createConversation(
-    params: CreateConversationParams
+    params: CreateConversationParams,
   ): Promise<AiConversation> {
     const { userId, workspaceId, title, context } = params;
 
@@ -90,12 +90,12 @@ export class ConversationService {
    */
   async getConversation(
     conversationId: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<ConversationContext | null> {
     const conversation = await db.query.aiConversations.findFirst({
       where: and(
         eq(aiConversations.id, conversationId),
-        eq(aiConversations.workspaceId, workspaceId)
+        eq(aiConversations.workspaceId, workspaceId),
       ),
       with: {
         messages: {
@@ -112,7 +112,7 @@ export class ConversationService {
     // Get user preferences
     const userPreferences = await this.getUserPreferences(
       conversation.userId,
-      workspaceId
+      workspaceId,
     );
 
     return {
@@ -128,12 +128,12 @@ export class ConversationService {
   async getUserConversations(
     userId: string,
     workspaceId: string,
-    limit: number = 20
+    limit: number = 20,
   ): Promise<AiConversation[]> {
     const conversations = await db.query.aiConversations.findMany({
       where: and(
         eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId)
+        eq(aiConversations.workspaceId, workspaceId),
       ),
       orderBy: (conversations, { desc }) => [desc(conversations.lastMessageAt)],
       limit,
@@ -189,12 +189,13 @@ export class ConversationService {
    */
   private async generateConversationTitle(
     conversationId: string,
-    firstMessage: string
+    firstMessage: string,
   ): Promise<void> {
     // Simple title generation - take first 50 chars
-    const title = firstMessage.length > 50
-      ? firstMessage.slice(0, 47) + "..."
-      : firstMessage;
+    const title =
+      firstMessage.length > 50
+        ? firstMessage.slice(0, 47) + "..."
+        : firstMessage;
 
     await db
       .update(aiConversations)
@@ -210,12 +211,12 @@ export class ConversationService {
    */
   async getUserPreferences(
     userId: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<AiUserPreferences | null> {
     const preferences = await db.query.aiUserPreferences.findFirst({
       where: and(
         eq(aiUserPreferences.userId, userId),
-        eq(aiUserPreferences.workspaceId, workspaceId)
+        eq(aiUserPreferences.workspaceId, workspaceId),
       ),
     });
 
@@ -228,7 +229,7 @@ export class ConversationService {
   async updateUserPreferences(
     userId: string,
     workspaceId: string,
-    updates: Partial<AiUserPreferences>
+    updates: Partial<AiUserPreferences>,
   ): Promise<AiUserPreferences> {
     // Check if preferences exist
     const existing = await this.getUserPreferences(userId, workspaceId);
@@ -244,8 +245,8 @@ export class ConversationService {
         .where(
           and(
             eq(aiUserPreferences.userId, userId),
-            eq(aiUserPreferences.workspaceId, workspaceId)
-          )
+            eq(aiUserPreferences.workspaceId, workspaceId),
+          ),
         )
         .returning();
 
@@ -271,15 +272,15 @@ export class ConversationService {
    */
   async deleteConversation(
     conversationId: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<boolean> {
     const result = await db
       .delete(aiConversations)
       .where(
         and(
           eq(aiConversations.id, conversationId),
-          eq(aiConversations.workspaceId, workspaceId)
-        )
+          eq(aiConversations.workspaceId, workspaceId),
+        ),
       );
 
     return !!result;
@@ -291,13 +292,13 @@ export class ConversationService {
   async searchConversations(
     userId: string,
     workspaceId: string,
-    query: string
+    query: string,
   ): Promise<AiConversation[]> {
     // Get conversations with matching titles or content
     const conversations = await db.query.aiConversations.findMany({
       where: and(
         eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId)
+        eq(aiConversations.workspaceId, workspaceId),
       ),
       with: {
         messages: {
@@ -312,7 +313,7 @@ export class ConversationService {
     const filtered = conversations.filter(
       (conv) =>
         conv.title.toLowerCase().includes(query.toLowerCase()) ||
-        conv.messages.length > 0
+        conv.messages.length > 0,
     );
 
     return filtered;
@@ -323,12 +324,12 @@ export class ConversationService {
    */
   async togglePinConversation(
     conversationId: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<boolean> {
     const conversation = await db.query.aiConversations.findFirst({
       where: and(
         eq(aiConversations.id, conversationId),
-        eq(aiConversations.workspaceId, workspaceId)
+        eq(aiConversations.workspaceId, workspaceId),
       ),
     });
 
@@ -353,7 +354,7 @@ export class ConversationService {
   async updateConversationTags(
     conversationId: string,
     workspaceId: string,
-    tags: string[]
+    tags: string[],
   ): Promise<void> {
     await db
       .update(aiConversations)
@@ -364,8 +365,8 @@ export class ConversationService {
       .where(
         and(
           eq(aiConversations.id, conversationId),
-          eq(aiConversations.workspaceId, workspaceId)
-        )
+          eq(aiConversations.workspaceId, workspaceId),
+        ),
       );
   }
 
@@ -374,7 +375,7 @@ export class ConversationService {
    */
   async getConversationStats(
     userId: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<{
     totalConversations: number;
     totalMessages: number;
@@ -384,7 +385,7 @@ export class ConversationService {
     const conversations = await db.query.aiConversations.findMany({
       where: and(
         eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId)
+        eq(aiConversations.workspaceId, workspaceId),
       ),
       with: {
         messages: true,
@@ -394,10 +395,12 @@ export class ConversationService {
     const totalConversations = conversations.length;
     const allMessages = conversations.flatMap((c) => c.messages);
     const totalMessages = allMessages.length;
-    
-    const averageMessageLength = allMessages.length > 0
-      ? allMessages.reduce((sum, m) => sum + m.content.length, 0) / allMessages.length
-      : 0;
+
+    const averageMessageLength =
+      allMessages.length > 0
+        ? allMessages.reduce((sum, m) => sum + m.content.length, 0) /
+          allMessages.length
+        : 0;
 
     // Count tags
     const tagCounts = new Map<string, number>();

@@ -1,6 +1,6 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 /**
  * Label component using GalaxyCo.ai Design System tokens
@@ -9,49 +9,49 @@ import { cn } from "@/lib/utils"
 const labelVariants = cva(
   [
     "text-sm font-medium leading-none",
-    "peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    "peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
   ],
   {
     variants: {
       variant: {
         default: "text-foreground",
         muted: "text-foreground-muted",
-        subtle: "text-foreground-subtle"
+        subtle: "text-foreground-subtle",
       },
       size: {
         sm: "text-xs",
-        default: "text-sm", 
-        lg: "text-base"
+        default: "text-sm",
+        lg: "text-base",
       },
       required: {
         true: "after:content-['*'] after:ml-0.5 after:text-destructive",
-        false: ""
-      }
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
-      required: false
-    }
-  }
-)
+      required: false,
+    },
+  },
+);
 
-export interface LabelProps 
+export interface LabelProps
   extends React.LabelHTMLAttributes<HTMLLabelElement>,
     VariantProps<typeof labelVariants> {
   /** Whether this field is required (shows asterisk) */
-  required?: boolean
+  required?: boolean;
 }
 
 const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, variant, size, required, ...props }, ref) => (
-    <label 
-      ref={ref} 
-      className={cn(labelVariants({ variant, size, required, className }))} 
-      {...props} 
+    <label
+      ref={ref}
+      className={cn(labelVariants({ variant, size, required, className }))}
+      {...props}
     />
-  )
-)
-Label.displayName = "Label"
+  ),
+);
+Label.displayName = "Label";
 
-export { Label, labelVariants }
+export { Label, labelVariants };

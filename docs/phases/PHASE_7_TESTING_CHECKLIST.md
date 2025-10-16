@@ -28,11 +28,13 @@ uvicorn app:app --reload
 ```
 
 ### 2. Database Check
+
 - [ ] Neon database is accessible
 - [ ] Drizzle schema is up to date
 - [ ] No pending migrations
 
 ### 3. Environment Variables
+
 - [ ] Clerk keys are set
 - [ ] Database URL is correct
 - [ ] All `.env.local` files are present
@@ -46,6 +48,7 @@ uvicorn app:app --reload
 **Goal**: Test complete onboarding flow for a Founder persona
 
 **Steps**:
+
 1. [ ] Visit `http://localhost:3000`
 2. [ ] Click "Sign Up"
 3. [ ] Create a new account (use test email: `test+founder@example.com`)
@@ -83,6 +86,7 @@ uvicorn app:app --reload
     - [ ] No errors in browser console
 
 **Expected Results**:
+
 - ✅ Workspace created with name like "First's Founder Ops Workspace"
 - ✅ Onboarding profile saved in `workspaces.settings`
 - ✅ User added as workspace owner
@@ -94,6 +98,7 @@ uvicorn app:app --reload
 **Goal**: Verify personalized dashboard renders correctly
 
 **Steps**:
+
 1. [ ] **Header Section**:
    - [ ] See "Welcome back, [Name]! 👋"
    - [ ] See workspace name
@@ -149,6 +154,7 @@ uvicorn app:app --reload
    - [ ] Refresh page - tour does NOT appear again
 
 **Expected Results**:
+
 - ✅ All sections render correctly
 - ✅ No blank states (sample data everywhere)
 - ✅ Progress tracker shows correct completion
@@ -161,6 +167,7 @@ uvicorn app:app --reload
 **Goal**: Test pack derivation for Sales persona
 
 **Steps**:
+
 1. [ ] Sign out (if logged in)
 2. [ ] Create new account: `test+sales@example.com`
 3. [ ] Complete onboarding:
@@ -177,6 +184,7 @@ uvicorn app:app --reload
    - [ ] 3 Sales Ops agents visible with correct icons
 
 **Expected Results**:
+
 - ✅ Correct pack derived (Sales Ops, not Founder Ops)
 - ✅ Dashboard personalized for Sales role
 
@@ -187,6 +195,7 @@ uvicorn app:app --reload
 **Goal**: Test pack derivation for Support persona
 
 **Steps**:
+
 1. [ ] Sign out
 2. [ ] Create new account: `test+support@example.com`
 3. [ ] Complete onboarding:
@@ -203,6 +212,7 @@ uvicorn app:app --reload
    - [ ] 3 Support agents visible
 
 **Expected Results**:
+
 - ✅ Correct pack derived (Support Excellence)
 - ✅ Sensitivity flag saved in settings
 
@@ -213,6 +223,7 @@ uvicorn app:app --reload
 **Goal**: Test back button preserves state
 
 **Steps**:
+
 1. [ ] Start new onboarding flow
 2. [ ] Step 2: Select "Product" role, "Healthcare" industry
 3. [ ] Click "Continue →"
@@ -231,6 +242,7 @@ uvicorn app:app --reload
 12. [ ] Verify tools are still selected
 
 **Expected Results**:
+
 - ✅ All form state is preserved on back navigation
 - ✅ No data loss
 
@@ -241,6 +253,7 @@ uvicorn app:app --reload
 **Goal**: Test form validation
 
 **Steps**:
+
 1. [ ] Start new onboarding
 2. [ ] Step 1: Click "Get Started"
 3. [ ] Step 2: Try clicking "Continue →" without selecting role
@@ -261,6 +274,7 @@ uvicorn app:app --reload
     - [ ] **Verify**: Button is enabled
 
 **Expected Results**:
+
 - ✅ Required fields are enforced
 - ✅ Optional fields don't block progress
 
@@ -271,6 +285,7 @@ uvicorn app:app --reload
 **Goal**: Verify design system implementation
 
 **Steps**:
+
 1. [ ] **Typography**:
    - [ ] All text uses Inter/system fonts
    - [ ] Headings have proper hierarchy (H1 > H2 > H3)
@@ -293,6 +308,7 @@ uvicorn app:app --reload
    - [ ] Loading states show when appropriate
 
 **Expected Results**:
+
 - ✅ Design system is consistently applied
 - ✅ No visual bugs or inconsistencies
 
@@ -303,6 +319,7 @@ uvicorn app:app --reload
 **Goal**: Test mobile layouts
 
 **Steps**:
+
 1. [ ] Open browser DevTools (F12)
 2. [ ] Toggle device toolbar (Ctrl+Shift+M)
 3. [ ] Test iPhone 12 Pro (390x844)
@@ -316,6 +333,7 @@ uvicorn app:app --reload
    - [ ] Agent cards stack vertically
 
 **Expected Results**:
+
 - ✅ Usable on mobile (basic responsiveness)
 
 ---
@@ -324,11 +342,11 @@ uvicorn app:app --reload
 
 As you test, document any issues here:
 
-| Issue | Severity | Description | Status |
-|-------|----------|-------------|--------|
-| Example | Low | Tour button has typo | Fixed |
-|  |  |  |  |
-|  |  |  |  |
+| Issue   | Severity | Description          | Status |
+| ------- | -------- | -------------------- | ------ |
+| Example | Low      | Tour button has typo | Fixed  |
+|         |          |                      |        |
+|         |          |                      |        |
 
 ---
 
@@ -345,15 +363,16 @@ After completing all tests above:
 
 ---
 
-**Testing Completed By**: _________________  
-**Date**: _________________  
-**Sign-Off**: _________________  
+**Testing Completed By**: **\*\*\*\***\_**\*\*\*\***  
+**Date**: **\*\*\*\***\_**\*\*\*\***  
+**Sign-Off**: **\*\*\*\***\_**\*\*\*\***
 
 ---
 
 ## 🚀 Next Steps After Testing
 
 Once Phase 7 testing is complete:
+
 1. Update `PHASE_7_COMPLETE.md` with test results
 2. Commit all Phase 7 changes
 3. Update `SESSION_HANDOFF.md`

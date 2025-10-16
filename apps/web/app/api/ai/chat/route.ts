@@ -1,11 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import { auth } from '@clerk/nextjs/server';
-import { db } from '@galaxyco/database';
-import { users, workspaceMembers, knowledgeItems } from '@galaxyco/database/schema';
-import { eq, like, desc } from 'drizzle-orm';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@galaxyco/database";
+import {
+  users,
+  workspaceMembers,
+  knowledgeItems,
+} from "@galaxyco/database/schema";
+import { eq, like, desc } from "drizzle-orm";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are the BADASS AI Assistant for GalaxyCo.ai! 🚀
 
@@ -49,7 +53,7 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // 2. Get user and workspace
@@ -58,7 +62,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -66,7 +70,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!membership) {
-      return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "No workspace found" },
+        { status: 404 },
+      );
     }
 
     const userId = user.id;
@@ -76,50 +83,57 @@ export async function POST(req: NextRequest) {
     const { messages, conversationId, context } = body;
 
     if (!Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: 'Invalid messages' }, { status: 400 });
+      return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
     }
 
     const lastMessage = messages[messages.length - 1];
-    if (!lastMessage || lastMessage.role !== 'user') {
-      return NextResponse.json({ error: 'Last message must be from user' }, { status: 400 });
+    if (!lastMessage || lastMessage.role !== "user") {
+      return NextResponse.json(
+        { error: "Last message must be from user" },
+        { status: 400 },
+      );
     }
 
     // Generate conversation ID if not provided
     let activeConversationId = conversationId || crypto.randomUUID();
-    
+
     const userQuery = lastMessage.content;
-    
+
     // Get relevant documents from user's knowledge base
-    const relevantDocs = await db.select({
-      id: knowledgeItems.id,
-      title: knowledgeItems.title,
-      content: knowledgeItems.content,
-      summary: knowledgeItems.summary,
-    })
-    .from(knowledgeItems)
-    .where(eq(knowledgeItems.workspaceId, workspaceId))
-    .limit(3);
-    
+    const relevantDocs = await db
+      .select({
+        id: knowledgeItems.id,
+        title: knowledgeItems.title,
+        content: knowledgeItems.content,
+        summary: knowledgeItems.summary,
+      })
+      .from(knowledgeItems)
+      .where(eq(knowledgeItems.workspaceId, workspaceId))
+      .limit(3);
+
     // Simple text matching for relevant docs (can be enhanced with embeddings later)
-    const contextDocs = relevantDocs.filter(doc => {
+    const contextDocs = relevantDocs.filter((doc) => {
       if (!doc.content) return false;
       const queryLower = userQuery.toLowerCase();
       const contentLower = doc.content.toLowerCase();
-      return contentLower.includes(queryLower) || 
-             doc.title.toLowerCase().includes(queryLower) ||
-             (doc.summary && doc.summary.toLowerCase().includes(queryLower));
+      return (
+        contentLower.includes(queryLower) ||
+        doc.title.toLowerCase().includes(queryLower) ||
+        (doc.summary && doc.summary.toLowerCase().includes(queryLower))
+      );
     });
 
     // Build BADASS enhanced system prompt with context
     let enhancedSystemPrompt = SYSTEM_PROMPT;
-    
+
     if (contextDocs.length > 0) {
       const docContext = contextDocs
-        .map((doc, idx) => 
-          `[Document ${idx + 1}: "${doc.title}"]\n${doc.summary || doc.content?.slice(0, 300)}`
+        .map(
+          (doc, idx) =>
+            `[Document ${idx + 1}: "${doc.title}"]\n${doc.summary || doc.content?.slice(0, 300)}`,
         )
-        .join('\n\n');
-      
+        .join("\n\n");
+
       enhancedSystemPrompt += `\n\n🧠 **KNOWLEDGE FROM USER'S DOCUMENTS:**\n${docContext}\n\nUse this knowledge to provide INCREDIBLY relevant and personalized answers!`;
     }
 
@@ -138,8 +152,8 @@ export async function POST(req: NextRequest) {
 
     if (!openaiKey && !anthropicKey) {
       return NextResponse.json(
-        { error: 'No AI API keys configured' },
-        { status: 500 }
+        { error: "No AI API keys configured" },
+        { status: 500 },
       );
     }
 
@@ -151,11 +165,11 @@ export async function POST(req: NextRequest) {
     if (openaiKey) {
       // Use OpenAI
       const openai = new OpenAI({ apiKey: openaiKey });
-      
+
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: enhancedSystemPrompt },
+          { role: "system", content: enhancedSystemPrompt },
           ...messages.slice(-10).map((m: any) => ({
             role: m.role,
             content: m.content,
@@ -167,24 +181,25 @@ export async function POST(req: NextRequest) {
         frequency_penalty: 0.1, // Reduce repetition
       });
 
-      reply = completion.choices[0]?.message?.content || 'No response generated';
-      modelUsed = 'gpt-4o-mini';
+      reply =
+        completion.choices[0]?.message?.content || "No response generated";
+      modelUsed = "gpt-4o-mini";
       tokensUsed = completion.usage?.total_tokens;
     } else {
       // Use Anthropic
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey!,
-          'anthropic-version': '2023-06-01',
+          "Content-Type": "application/json",
+          "x-api-key": anthropicKey!,
+          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
+          model: "claude-3-5-sonnet-20241022",
           max_tokens: 800,
           system: enhancedSystemPrompt,
           messages: messages.slice(-10).map((m: any) => ({
-            role: m.role === 'assistant' ? 'assistant' : 'user',
+            role: m.role === "assistant" ? "assistant" : "user",
             content: m.content,
           })),
         }),
@@ -195,8 +210,8 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await response.json();
-      reply = data.content[0]?.text || 'No response generated';
-      modelUsed = 'claude-3-5-sonnet';
+      reply = data.content[0]?.text || "No response generated";
+      modelUsed = "claude-3-5-sonnet";
       tokensUsed = data.usage?.input_tokens + data.usage?.output_tokens;
     }
 
@@ -205,14 +220,14 @@ export async function POST(req: NextRequest) {
     // Store conversation for future reference (simplified for demo)
     // In production, save to conversations table
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       reply,
       conversationId: activeConversationId,
-      sources: contextDocs.map(doc => ({
+      sources: contextDocs.map((doc) => ({
         id: doc.id,
         title: doc.title,
         relevanceScore: 0.9, // High relevance for matched docs
-        snippet: doc.summary || doc.content?.slice(0, 200) || '',
+        snippet: doc.summary || doc.content?.slice(0, 200) || "",
       })),
       metadata: {
         model: modelUsed,
@@ -222,10 +237,10 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Chat API error:', error);
+    console.error("Chat API error:", error);
     return NextResponse.json(
-      { error: 'Failed to generate AI response' },
-      { status: 500 }
+      { error: "Failed to generate AI response" },
+      { status: 500 },
     );
   }
 }

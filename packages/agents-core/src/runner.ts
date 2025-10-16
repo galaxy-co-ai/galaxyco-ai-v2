@@ -8,13 +8,17 @@ import OpenAI from "openai";
 // For standalone usage, this should be replaced with a generic error tracking solution
 let Sentry: any;
 try {
-  Sentry = require('@sentry/nextjs');
+  Sentry = require("@sentry/nextjs");
 } catch {
   // Fallback for environments without Sentry
   Sentry = {
-    startTransaction: () => ({ setStatus: () => {}, setData: () => {}, finish: () => {} }),
+    startTransaction: () => ({
+      setStatus: () => {},
+      setData: () => {},
+      finish: () => {},
+    }),
     getCurrentScope: () => ({ setSpan: () => {} }),
-    captureException: console.error
+    captureException: console.error,
   };
 }
 import {

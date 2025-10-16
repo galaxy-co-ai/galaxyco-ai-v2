@@ -233,6 +233,7 @@ GalaxyCo.ai
 ## User Flows
 
 ### Flow 1: Create New Agent
+
 ```
 1. /agents (List)
    → Click "+ New Agent"
@@ -246,6 +247,7 @@ GalaxyCo.ai
 ```
 
 ### Flow 2: Run Analytics Report
+
 ```
 1. /analytics (Dashboard)
    → Click "Create Report"
@@ -259,6 +261,7 @@ GalaxyCo.ai
 ```
 
 ### Flow 3: Onboard New User
+
 ```
 1. /signup (Auth)
    → Create account
@@ -274,6 +277,7 @@ GalaxyCo.ai
 ```
 
 ### Flow 4: Purchase Marketplace Pack
+
 ```
 1. /marketplace (List + Filters)
    → Browse packs
@@ -287,6 +291,7 @@ GalaxyCo.ai
 ```
 
 ### Flow 5: Get Support
+
 ```
 1. /help (Content Hub)
    → Search articles
@@ -305,28 +310,30 @@ OR
 
 ### Template Usage Summary
 
-| Template | Pages Using | Count |
-|----------|-------------|-------|
-| Dashboard | `/sales`, `/analytics`, `/admin`, etc. | 12 |
-| List + Filters | `/agents`, `/workflows`, `/marketplace`, etc. | 35 |
-| Detail/Editor | `/agents/[id]`, `/reports/[reportId]`, etc. | 22 |
-| Settings | `/settings/*`, `/billing/*` | 15 |
-| Form/Wizard | `/onboarding`, `/packs/create`, etc. | 8 |
-| Authentication | `/login`, `/signup`, etc. | 6 |
-| Content Hub | `/resources`, `/docs`, `/university` | 8 |
-| Documentation | `/docs/*`, `/help/articles/*` | 10 |
-| Search/Results | `/search`, `/help/search` | 3 |
-| Notification Center | `/notifications`, `/activity` | 2 |
-| Error | `/404`, `/500`, etc. | 5 |
-| Mobile Companion | `/m/*` | 3 |
-| **TOTAL** | | **100** |
+| Template            | Pages Using                                   | Count   |
+| ------------------- | --------------------------------------------- | ------- |
+| Dashboard           | `/sales`, `/analytics`, `/admin`, etc.        | 12      |
+| List + Filters      | `/agents`, `/workflows`, `/marketplace`, etc. | 35      |
+| Detail/Editor       | `/agents/[id]`, `/reports/[reportId]`, etc.   | 22      |
+| Settings            | `/settings/*`, `/billing/*`                   | 15      |
+| Form/Wizard         | `/onboarding`, `/packs/create`, etc.          | 8       |
+| Authentication      | `/login`, `/signup`, etc.                     | 6       |
+| Content Hub         | `/resources`, `/docs`, `/university`          | 8       |
+| Documentation       | `/docs/*`, `/help/articles/*`                 | 10      |
+| Search/Results      | `/search`, `/help/search`                     | 3       |
+| Notification Center | `/notifications`, `/activity`                 | 2       |
+| Error               | `/404`, `/500`, etc.                          | 5       |
+| Mobile Companion    | `/m/*`                                        | 3       |
+| **TOTAL**           |                                               | **100** |
 
 ---
 
 ## Access Control (User Roles)
 
 ### Free Tier
+
 **Access:**
+
 - Dashboard (limited metrics)
 - Agents (max 2)
 - Workflows (max 5)
@@ -335,6 +342,7 @@ OR
 - Basic support tickets
 
 **Restricted:**
+
 - Analytics (limited)
 - Marketplace (view only)
 - Integrations (limited)
@@ -344,7 +352,9 @@ OR
 ---
 
 ### Pro Tier
+
 **Access:**
+
 - Everything in Free
 - Unlimited agents & workflows
 - Full analytics
@@ -355,6 +365,7 @@ OR
 - Priority support
 
 **Restricted:**
+
 - Admin panel
 - Audit logs
 - Enterprise integrations
@@ -364,7 +375,9 @@ OR
 ---
 
 ### Enterprise Tier
+
 **Access:**
+
 - Everything in Pro
 - Admin panel
 - Audit logs
@@ -382,17 +395,18 @@ OR
 
 ```tsx
 interface PageMeta {
-  title: string // Max 60 chars
-  description: string // Max 160 chars
-  ogImage?: string
-  canonical?: string
-  robots?: 'index,follow' | 'noindex,nofollow'
+  title: string; // Max 60 chars
+  description: string; // Max 160 chars
+  ogImage?: string;
+  canonical?: string;
+  robots?: "index,follow" | "noindex,nofollow";
 }
 ```
 
 ### Example Implementations
 
 **Homepage:**
+
 ```tsx
 {
   title: "GalaxyCo.ai - AI Automation Platform",
@@ -404,6 +418,7 @@ interface PageMeta {
 ```
 
 **Marketplace Pack:**
+
 ```tsx
 {
   title: "[Pack Name] - GalaxyCo Marketplace",
@@ -415,6 +430,7 @@ interface PageMeta {
 ```
 
 **Docs:**
+
 ```tsx
 {
   title: "[Article Title] - GalaxyCo Docs",
@@ -426,6 +442,7 @@ interface PageMeta {
 ```
 
 **Settings:**
+
 ```tsx
 {
   title: "Settings - GalaxyCo.ai",
@@ -439,6 +456,7 @@ interface PageMeta {
 ## Breadcrumb Patterns
 
 ### Dashboard Pages
+
 ```
 Home > Dashboard
 Home > Sales Dashboard
@@ -446,6 +464,7 @@ Home > Analytics > Agents
 ```
 
 ### Agent Management
+
 ```
 Home > Agents
 Home > Agents > Sales Agent
@@ -453,6 +472,7 @@ Home > Agents > Sales Agent > Settings
 ```
 
 ### Settings
+
 ```
 Home > Settings
 Home > Settings > Profile
@@ -460,6 +480,7 @@ Home > Settings > Team > Invite Member
 ```
 
 ### Marketplace
+
 ```
 Home > Marketplace
 Home > Marketplace > Category Name
@@ -467,6 +488,7 @@ Home > Marketplace > Pack Name
 ```
 
 ### Docs
+
 ```
 Home > Docs
 Home > Docs > Getting Started
@@ -478,6 +500,7 @@ Home > Docs > API Reference > Authentication
 ## URL Naming Conventions
 
 ### Rules
+
 1. **Lowercase only:** `/agents` not `/Agents`
 2. **Kebab-case:** `/api-keys` not `/api_keys`
 3. **No trailing slashes:** `/dashboard` not `/dashboard/`
@@ -486,6 +509,7 @@ Home > Docs > API Reference > Authentication
 6. **Meaningful slugs:** `/blog/how-to-build-agents` not `/blog/post-123`
 
 ### Dynamic Segments
+
 - IDs: `/agents/[id]` (e.g., `/agents/abc123`)
 - Slugs: `/blog/[slug]` (e.g., `/blog/getting-started`)
 - Codes: `/invite/[code]` (e.g., `/invite/xyz789`)
@@ -545,12 +569,14 @@ const AgentDetail = lazy(() => import('./pages/AgentDetail'))
 ```
 
 ### Critical Routes (Load Immediately)
+
 - `/dashboard`
 - `/agents`
 - `/workflows`
 - `/settings`
 
 ### Lazy Routes (Load on Demand)
+
 - `/marketplace`
 - `/university`
 - `/admin`
@@ -561,21 +587,23 @@ const AgentDetail = lazy(() => import('./pages/AgentDetail'))
 ## Analytics Events
 
 ### Page View Tracking
+
 ```tsx
 trackPageView({
-  path: '/agents/[id]',
-  title: 'Agent Detail - Sales Agent',
-  userId: user.id
-})
+  path: "/agents/[id]",
+  title: "Agent Detail - Sales Agent",
+  userId: user.id,
+});
 ```
 
 ### Navigation Events
+
 ```tsx
 trackNavigation({
-  from: '/agents',
-  to: '/agents/[id]',
-  method: 'click' | 'keyboard' | 'back-button'
-})
+  from: "/agents",
+  to: "/agents/[id]",
+  method: "click" | "keyboard" | "back-button",
+});
 ```
 
 ---

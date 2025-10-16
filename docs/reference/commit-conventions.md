@@ -24,6 +24,7 @@ type(scope): subject
 ## Valid Scopes
 
 ### Agent Scopes
+
 - **scope-agent**: Multi-page document analysis agent
 - **call-agent**: Phone call automation agent
 - **email-agent**: Email processing and response agent
@@ -33,6 +34,7 @@ type(scope): subject
 - **content-agent**: Content generation and editing agent
 
 ### Infrastructure Scopes
+
 - **api**: Backend API (NestJS)
 - **web**: Frontend web app (Next.js)
 - **db**: Database schema and migrations
@@ -41,6 +43,7 @@ type(scope): subject
 ## Examples
 
 ### Good Commits
+
 ```bash
 feat(scope-agent): add multi-page PDF support
 fix(api): handle missing Clerk session
@@ -51,6 +54,7 @@ chore(infra): update CI/CD pipeline
 ```
 
 ### Bad Commits
+
 ```bash
 # Missing scope
 feat: add new feature
@@ -68,6 +72,7 @@ feat(random): add something
 ## Enforcement
 
 Commits are enforced via:
+
 - **Husky commit-msg hook**: Validates commit messages locally
 - **GitHub Actions**: Validates commit messages in pull requests
 - **Commitlint**: Provides clear error messages for invalid commits
@@ -93,6 +98,7 @@ git commit --no-verify -m "emergency: fix critical production issue"
 ## Automated Benefits
 
 Following these conventions enables:
+
 - **Automated versioning**: Semantic version bumps based on commit types
 - **Changelog generation**: Automatically generated release notes
 - **Release automation**: Automated releases based on conventional commits

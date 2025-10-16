@@ -1,11 +1,15 @@
-'use server';
+"use server";
 
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { db, workspaces, workspaceMembers, users } from '@galaxyco/database';
-import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { generateSlug, validateWorkspaceName, validateSlug } from '../workspace-utils';
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { db, workspaces, workspaceMembers, users } from "@galaxyco/database";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import {
+  generateSlug,
+  validateWorkspaceName,
+  validateSlug,
+} from "../workspace-utils";
 
 /**
  * Create a new workspace for the authenticated user
@@ -14,7 +18,10 @@ export async function createWorkspace(formData: FormData) {
   // 1. Verify user is authenticated
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
-    return { success: false, error: 'You must be signed in to create a workspace' };
+    return {
+      success: false,
+      error: "You must be signed in to create a workspace",
+    };
   }
 
   // 2. Get or create user in database
@@ -26,14 +33,14 @@ export async function createWorkspace(formData: FormData) {
   if (!user) {
     const clerkUser = await currentUser();
     if (!clerkUser) {
-      return { success: false, error: 'Unable to fetch user information' };
+      return { success: false, error: "Unable to fetch user information" };
     }
 
     const [newUser] = await db
       .insert(users)
       .values({
         clerkUserId: clerkUserId,
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+        email: clerkUser.emailAddresses[0]?.emailAddress || "",
         firstName: clerkUser.firstName || null,
         lastName: clerkUser.lastName || null,
         avatarUrl: clerkUser.imageUrl || null,
@@ -45,7 +52,7 @@ export async function createWorkspace(formData: FormData) {
   }
 
   // 3. Validate workspace name
-  const name = formData.get('name') as string;
+  const name = formData.get("name") as string;
   const nameValidation = validateWorkspaceName(name);
   if (!nameValidation.valid) {
     return { success: false, error: nameValidation.error };
@@ -64,7 +71,7 @@ export async function createWorkspace(formData: FormData) {
   });
 
   if (!user) {
-    return { success: false, error: 'User not found in database' };
+    return { success: false, error: "User not found in database" };
   }
 
   if (existingWorkspace) {
@@ -79,7 +86,11 @@ export async function createWorkspace(formData: FormData) {
 /**
  * Helper function to create workspace with a specific slug
  */
-async function createWorkspaceWithSlug(name: string, slug: string, userId: string) {
+async function createWorkspaceWithSlug(
+  name: string,
+  slug: string,
+  userId: string,
+) {
   try {
     // Create workspace
     const [workspace] = await db
@@ -88,8 +99,8 @@ async function createWorkspaceWithSlug(name: string, slug: string, userId: strin
         name,
         slug,
         clerkOrganizationId: null, // For personal workspaces
-        subscriptionTier: 'free',
-        subscriptionStatus: 'active',
+        subscriptionTier: "free",
+        subscriptionStatus: "active",
         isActive: true,
       })
       .returning();
@@ -98,7 +109,7 @@ async function createWorkspaceWithSlug(name: string, slug: string, userId: strin
     await db.insert(workspaceMembers).values({
       workspaceId: workspace.id,
       userId: userId,
-      role: 'owner',
+      role: "owner",
       isActive: true,
       permissions: {
         agents: { create: true, edit: true, delete: true, execute: true },
@@ -111,11 +122,14 @@ async function createWorkspaceWithSlug(name: string, slug: string, userId: strin
     console.log(`✅ Workspace created: ${workspace.name} (${workspace.slug})`);
 
     // Revalidate and redirect
-    revalidatePath('/dashboard');
+    revalidatePath("/dashboard");
     redirect(`/dashboard?workspace=${workspace.id}`);
   } catch (error) {
-    console.error('Error creating workspace:', error);
-    return { success: false, error: 'Failed to create workspace. Please try again.' };
+    console.error("Error creating workspace:", error);
+    return {
+      success: false,
+      error: "Failed to create workspace. Please try again.",
+    };
   }
 }
 

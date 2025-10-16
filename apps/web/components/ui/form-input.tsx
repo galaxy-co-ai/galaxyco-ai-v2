@@ -5,7 +5,8 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { cn } from "@/lib/utils";
 
-interface FormInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+interface FormInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
   error?: string;
   helper?: string;
@@ -32,7 +33,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
       required,
       ...props
     },
-    ref
+    ref,
   ) => {
     const helperMessage = helperText || helper;
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
@@ -43,9 +44,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         {label && (
           <Label htmlFor={inputId} className="text-sm font-medium">
             {label}
-            {required && (
-              <span className="text-destructive ml-1">*</span>
-            )}
+            {required && <span className="text-destructive ml-1">*</span>}
           </Label>
         )}
 
@@ -65,11 +64,15 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
               leftIcon && "pl-10",
               rightIcon && "pr-10",
               error && "border-destructive focus-visible:ring-destructive",
-              className
+              className,
             )}
             aria-invalid={error ? "true" : "false"}
             aria-describedby={
-              error ? `${inputId}-error` : helperMessage ? `${inputId}-helper` : undefined
+              error
+                ? `${inputId}-error`
+                : helperMessage
+                  ? `${inputId}-helper`
+                  : undefined
             }
             {...props}
           />
@@ -95,16 +98,13 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
         {/* Helper Text */}
         {!error && helperMessage && (
-          <p
-            id={`${inputId}-helper`}
-            className="text-sm text-muted-foreground"
-          >
+          <p id={`${inputId}-helper`} className="text-sm text-muted-foreground">
             {helperMessage}
           </p>
         )}
       </div>
     );
-  }
+  },
 );
 
 FormInput.displayName = "FormInput";

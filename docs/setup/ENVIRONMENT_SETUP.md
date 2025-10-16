@@ -51,16 +51,19 @@ pnpm dev
 These variables **MUST** be set for the application to function:
 
 ### `DATABASE_URL`
+
 **What it is:** PostgreSQL connection string for your database  
 **Where to get it:** [Neon Console](https://console.neon.tech) → Dashboard → Connection Details  
 **Format:** `postgresql://user:password@hostname.neon.tech/database?sslmode=require`
 
 **Example:**
+
 ```bash
 DATABASE_URL=postgresql://neondb_owner:abc123@ep-cool-name-123.us-east-2.aws.neon.tech/neondb?sslmode=require
 ```
 
 **How to get:**
+
 1. Log in to [console.neon.tech](https://console.neon.tech)
 2. Select your project
 3. Go to Dashboard
@@ -69,15 +72,18 @@ DATABASE_URL=postgresql://neondb_owner:abc123@ep-cool-name-123.us-east-2.aws.neo
 ---
 
 ### `CLERK_SECRET_KEY`
+
 **What it is:** Server-side authentication key (KEEP SECRET!)  
-**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → API Keys → Secret Key  
+**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → API Keys → Secret Key
 
 **Example:**
+
 ```bash
 CLERK_SECRET_KEY=sk_test_abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx
 ```
 
 **How to get:**
+
 1. Log in to [dashboard.clerk.com](https://dashboard.clerk.com)
 2. Select your application
 3. Go to "API Keys" in sidebar
@@ -88,30 +94,36 @@ CLERK_SECRET_KEY=sk_test_abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx
 ---
 
 ### `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+
 **What it is:** Client-side authentication key (safe to expose)  
-**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → API Keys → Publishable Key  
+**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → API Keys → Publishable Key
 
 **Example:**
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_YWNjdXJhdGUtZ2hvc3QtNTEuY2xlcmsuYWNjb3VudHMuZGV2JA
 ```
 
 **How to get:**
+
 1. Same dashboard as above
 2. Copy the **Publishable key** (starts with `pk_test_` or `pk_live_`)
 
 ---
 
 ### `ENCRYPTION_KEY`
+
 **What it is:** 32-byte hex string for encrypting sensitive data (API keys) in database  
 **How to generate:** Run `pnpm run generate-encryption-key`
 
 **Example:**
+
 ```bash
 ENCRYPTION_KEY=a1b2c3d4e5f67890abcdef1234567890a1b2c3d4e5f67890abcdef1234567890
 ```
 
 **Security Notes:**
+
 - ⚠️ **CRITICAL**: Keep this secret! Anyone with this key can decrypt your stored API keys
 - Use **different keys** for development vs production
 - If compromised, rotate immediately and re-encrypt all data
@@ -124,11 +136,13 @@ ENCRYPTION_KEY=a1b2c3d4e5f67890abcdef1234567890a1b2c3d4e5f67890abcdef1234567890
 These variables enable additional features but aren't required for basic functionality:
 
 ### `OPENAI_API_KEY` (Recommended)
+
 **What it is:** API key for OpenAI GPT models  
 **Where to get it:** [OpenAI Platform](https://platform.openai.com/api-keys)  
 **Required for:** AI agent execution features
 
 **Example:**
+
 ```bash
 OPENAI_API_KEY=sk-proj-abc123def456ghi789jkl012mno345pqr678stu901vwx234
 ```
@@ -136,10 +150,12 @@ OPENAI_API_KEY=sk-proj-abc123def456ghi789jkl012mno345pqr678stu901vwx234
 ---
 
 ### `REDIS_URL` (Recommended for Production)
+
 **What it is:** Redis connection string for caching and rate limiting  
-**Where to get it:** [Upstash Console](https://console.upstash.com) → Database → Redis Connect  
+**Where to get it:** [Upstash Console](https://console.upstash.com) → Database → Redis Connect
 
 **Example:**
+
 ```bash
 REDIS_URL=redis://default:password123@hostname.upstash.io:6379
 ```
@@ -147,10 +163,12 @@ REDIS_URL=redis://default:password123@hostname.upstash.io:6379
 ---
 
 ### `CLERK_WEBHOOK_SECRET` (For User Sync)
+
 **What it is:** Secret for verifying Clerk webhook signatures  
-**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → Webhooks → Signing Secret  
+**Where to get it:** [Clerk Dashboard](https://dashboard.clerk.com) → Webhooks → Signing Secret
 
 **Example:**
+
 ```bash
 CLERK_WEBHOOK_SECRET=whsec_abcd1234efgh5678ijkl9012mnop3456
 ```
@@ -158,10 +176,12 @@ CLERK_WEBHOOK_SECRET=whsec_abcd1234efgh5678ijkl9012mnop3456
 ---
 
 ### `NEXT_PUBLIC_ENV` (Display Only)
+
 **What it is:** Environment indicator shown on homepage  
 **Options:** `development`, `staging`, `production`
 
 **Example:**
+
 ```bash
 NEXT_PUBLIC_ENV=development
 ```
@@ -244,34 +264,38 @@ pnpm dev
 
 Add each variable below, selecting appropriate environments:
 
-| Variable Name | Value Source | Environments |
-|--------------|--------------|--------------|
-| `DATABASE_URL` | Production Neon connection string | Production, Preview, Development |
-| `CLERK_SECRET_KEY` | Production Clerk secret (`sk_live_...`) | Production<br>Test key (`sk_test_...`) for Preview/Dev |
+| Variable Name                       | Value Source                                 | Environments                                           |
+| ----------------------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`                      | Production Neon connection string            | Production, Preview, Development                       |
+| `CLERK_SECRET_KEY`                  | Production Clerk secret (`sk_live_...`)      | Production<br>Test key (`sk_test_...`) for Preview/Dev |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Production Clerk publishable (`pk_live_...`) | Production<br>Test key (`pk_test_...`) for Preview/Dev |
-| `ENCRYPTION_KEY` | **NEW key** (different from dev!) | Production, Preview, Development |
-| `OPENAI_API_KEY` | OpenAI API key | Production, Preview, Development |
-| `REDIS_URL` | Production Redis URL | Production, Preview, Development |
+| `ENCRYPTION_KEY`                    | **NEW key** (different from dev!)            | Production, Preview, Development                       |
+| `OPENAI_API_KEY`                    | OpenAI API key                               | Production, Preview, Development                       |
+| `REDIS_URL`                         | Production Redis URL                         | Production, Preview, Development                       |
 
 ### Step 3: Environment-Specific Configuration
 
 #### Production Environment
+
 - Use `sk_live_` and `pk_live_` Clerk keys
 - Use **production database** (separate from dev)
 - Generate a **unique encryption key** (different from dev!)
 
 #### Preview Environment
+
 - Use `sk_test_` and `pk_test_` Clerk keys (or separate preview keys)
 - Can use same database as dev OR separate staging database
 - Use **separate encryption key** from production
 
 #### Development Environment
+
 - Not typically used (for `vercel env pull` command)
 - Mirror your local `.env.local` structure
 
 ### Step 4: Trigger Deployment
 
 After adding variables:
+
 1. Go to **Deployments** tab
 2. Click **Redeploy** on latest deployment
 3. OR push a new commit to trigger auto-deployment
@@ -337,6 +361,7 @@ After adding variables:
 **Cause:** Missing or invalid `ENCRYPTION_KEY` in environment
 
 **Solution:**
+
 ```bash
 # Generate a new key
 pnpm run generate-encryption-key
@@ -352,8 +377,10 @@ ENCRYPTION_KEY=<generated-key>
 **Cause:** Missing database connection string
 
 **Solution:**
+
 1. Get connection string from [console.neon.tech](https://console.neon.tech)
 2. Add to `apps/web/.env.local`:
+
 ```bash
 DATABASE_URL=postgresql://user:password@host.neon.tech/db?sslmode=require
 ```
@@ -365,6 +392,7 @@ DATABASE_URL=postgresql://user:password@host.neon.tech/db?sslmode=require
 **Cause:** Wrong Clerk key or mismatched environment
 
 **Solution:**
+
 1. Verify you're using the correct key type:
    - Development/Preview: `sk_test_...`
    - Production: `sk_live_...`
@@ -378,10 +406,12 @@ DATABASE_URL=postgresql://user:password@host.neon.tech/db?sslmode=require
 **Cause:** Missing or incorrect `CLERK_WEBHOOK_SECRET`
 
 **Solution:**
+
 1. Go to [Clerk Dashboard](https://dashboard.clerk.com) → Webhooks
 2. Create webhook endpoint: `https://yourdomain.com/api/webhooks/clerk`
 3. Copy the **Signing Secret**
 4. Add to environment:
+
 ```bash
 CLERK_WEBHOOK_SECRET=whsec_<your-secret>
 ```
@@ -393,6 +423,7 @@ CLERK_WEBHOOK_SECRET=whsec_<your-secret>
 **Cause:** Environment variable not set for build environment
 
 **Solution:**
+
 1. Go to Vercel → Settings → Environment Variables
 2. Ensure `DATABASE_URL` is checked for **all environments** (especially Preview)
 3. Redeploy
@@ -402,6 +433,7 @@ CLERK_WEBHOOK_SECRET=whsec_<your-secret>
 ### App works locally but fails in production
 
 **Checklist:**
+
 - [ ] All required variables set in Vercel dashboard
 - [ ] Correct environment selected (Production/Preview/Development)
 - [ ] Using production keys (`sk_live_`, `pk_live_`) in production

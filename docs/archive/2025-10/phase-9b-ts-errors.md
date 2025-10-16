@@ -1,4 +1,3 @@
-
 > web@0.1.0 typecheck
 > tsc --noEmit
 
@@ -45,7 +44,7 @@ lib/constants/design-system.ts(85,3): error TS1117: An object literal cannot hav
 lib/constants/design-system.ts(88,3): error TS1117: An object literal cannot have multiple properties with the same name.
 lib/constants/design-system.ts(90,3): error TS1117: An object literal cannot have multiple properties with the same name.
 ../../packages/database/src/client.ts(17,27): error TS2345: Argument of type '[NeonQueryFunction<false, false>, { schema: typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema"); }]' is not assignable to parameter of type '[string | NeonClient] | [string | NeonClient, DrizzleConfig<typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema")>] | [...]'.
-  Type '[NeonQueryFunction<false, false>, { schema: typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema"); }]' is not assignable to type '[string | NeonClient, DrizzleConfig<typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema")>]'.
-    Type at position 0 in source is not compatible with type at position 0 in target.
-      Type 'NeonQueryFunction<false, false>' is not assignable to type 'string | NeonClient'.
-        Type 'NeonQueryFunction<false, false>' is missing the following properties from type 'Client': connection, _handleReadyForQuery, _handleAuthCleartextPassword, startup, and 32 more.
+Type '[NeonQueryFunction<false, false>, { schema: typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema"); }]' is not assignable to type '[string | NeonClient, DrizzleConfig<typeof import("C:/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/src/schema")>]'.
+Type at position 0 in source is not compatible with type at position 0 in target.
+Type 'NeonQueryFunction<false, false>' is not assignable to type 'string | NeonClient'.
+Type 'NeonQueryFunction<false, false>' is missing the following properties from type 'Client': connection, \_handleReadyForQuery, \_handleAuthCleartextPassword, startup, and 32 more.

@@ -12,19 +12,21 @@ When working in this GalaxyCo.ai 2.0 repository:
 
 **Project Type**: Multi-agent AI platform (Next.js + NestJS + Python agents)  
 **Stage**: Production-ready, deployment phase  
-**Standards**: Enterprise-grade, no corner-cutting  
+**Standards**: Enterprise-grade, no corner-cutting
 
 ---
 
 ## 🏗️ **Code Style & Patterns**
 
 ### **TypeScript**
+
 - Strict mode enabled
 - Explicit type annotations for function parameters and returns
 - Use `interface` for object shapes, `type` for unions/intersections
 - Prefer functional components with hooks
 
 ### **React Components**
+
 ```typescript
 // Pattern: Functional component with proper TypeScript
 interface ComponentProps {
@@ -43,6 +45,7 @@ export function ComponentName({ title, onAction }: ComponentProps) {
 ```
 
 ### **API Endpoints**
+
 ```typescript
 // Pattern: Multi-tenant security + error handling
 export async function GET(request: Request) {
@@ -50,12 +53,13 @@ export async function GET(request: Request) {
     // 1. Extract tenant_id from auth
     const { userId } = auth();
     const tenantId = await getTenantId(userId);
-    
+
     // 2. Apply tenant filter to ALL queries
-    const data = await db.select()
+    const data = await db
+      .select()
       .from(table)
       .where(eq(table.tenantId, tenantId));
-    
+
     // 3. Return with proper error handling
     return Response.json({ data });
   } catch (error) {
@@ -65,6 +69,7 @@ export async function GET(request: Request) {
 ```
 
 ### **Error Handling**
+
 ```typescript
 // Always wrap components with ErrorBoundary
 export default function PageName() {
@@ -86,9 +91,11 @@ const response = await apiRequest('/api/endpoint', {}, tenantId);
 ## 🚨 **Critical Patterns (ALWAYS Follow)**
 
 ### **Multi-tenancy Security**
+
 ```typescript
 // ✅ ALWAYS filter by tenant_id
-const agents = await db.select()
+const agents = await db
+  .select()
   .from(agentsTable)
   .where(eq(agentsTable.tenantId, tenantId));
 
@@ -97,16 +104,17 @@ const agents = await db.select().from(agentsTable); // SECURITY RISK
 ```
 
 ### **AI Gateway Usage**
+
 ```typescript
 // ✅ ALWAYS use AI Gateway
-import { AIGatewayService } from '@/lib/ai-gateway';
+import { AIGatewayService } from "@/lib/ai-gateway";
 
 const response = await AIGatewayService.generateText({
   tenantId,
   userId,
   agentId,
-  model: 'gpt-4o-mini',
-  messages: [{ role: 'user', content: prompt }]
+  model: "gpt-4o-mini",
+  messages: [{ role: "user", content: prompt }],
 });
 
 // ❌ NEVER call AI providers directly
@@ -114,9 +122,10 @@ const response = await openai.chat.completions.create(); // FORBIDDEN
 ```
 
 ### **Environment Variables**
+
 ```typescript
 // ✅ Reference by name only
-console.log('Database connection configured');
+console.log("Database connection configured");
 
 // ❌ NEVER print values
 console.log(`Database URL: ${process.env.DATABASE_URL}`); // SECURITY RISK
@@ -127,19 +136,21 @@ console.log(`Database URL: ${process.env.DATABASE_URL}`); // SECURITY RISK
 ## 🎨 **Styling Conventions**
 
 ### **Tailwind CSS**
+
 - Use design tokens: `bg-primary`, `text-secondary`
 - Responsive: `md:`, `lg:` breakpoints
 - Card-based layout: `bg-white rounded-lg shadow-md border`
 
 ### **Component Architecture**
+
 ```typescript
 // Wrap with loading states and error boundaries
 function DataComponent() {
   const { data, isLoading, error } = useAsyncOperation();
-  
+
   if (isLoading) return <CardSkeleton count={3} />;
   if (error) return <ErrorDisplay error={error} />;
-  
+
   return <div>{/* render data */}</div>;
 }
 ```
@@ -149,6 +160,7 @@ function DataComponent() {
 ## 📦 **Package Manager**
 
 **ALWAYS use `pnpm`** (never npm or yarn):
+
 ```bash
 pnpm install package-name
 pnpm dev
@@ -160,6 +172,7 @@ pnpm build
 ## 🔧 **File Organization**
 
 ### **Components**
+
 ```
 apps/web/components/
 ├── error/           # Error handling components
@@ -170,6 +183,7 @@ apps/web/components/
 ```
 
 ### **API Routes**
+
 ```
 apps/web/app/api/
 ├── agents/[id]/execute/route.ts    # Agent execution
@@ -187,13 +201,14 @@ apps/web/app/api/
 ❌ **Print env values** → Reference by name only  
 ❌ **Skip error boundaries** → Wrap components  
 ❌ **Use npm/yarn** → Always use pnpm  
-❌ **Modify existing migrations** → Create new ones  
+❌ **Modify existing migrations** → Create new ones
 
 ---
 
 ## 🧪 **Testing Patterns**
 
 ### **Before Commits**
+
 ```bash
 # Run health checks
 pnpm typecheck
@@ -204,6 +219,7 @@ git commit -m "feat(web): add new component"
 ```
 
 ### **Commit Format**
+
 ```
 type(scope): description
 
@@ -233,4 +249,4 @@ docs(readme): update setup instructions
 
 ---
 
-*This project maintains high standards. When suggesting code, ensure it meets production quality.*
+_This project maintains high standards. When suggesting code, ensure it meets production quality._

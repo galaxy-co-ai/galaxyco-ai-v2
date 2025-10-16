@@ -5,7 +5,7 @@ import { Skeleton } from "./skeleton";
 
 /**
  * Loading Skeletons for Different App Sections
- * 
+ *
  * Beautiful, consistent loading states that match your design system
  */
 

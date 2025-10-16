@@ -8,12 +8,14 @@
 ## 📁 File Structure
 
 ### Pages & Routes
+
 - ✅ `/agents` - Main agents list page
 - ✅ `/agents/new` - Agent creation wizard (4 steps)
 - ⚠️ `/agents/[id]` - Individual agent detail/edit page (NOT IMPLEMENTED)
 - ⚠️ `/agents/[id]/runs` - Agent execution history (NOT IMPLEMENTED)
 
 ### Components (`components/agents/`)
+
 1. ✅ **prompt-input.tsx** - Prompt entry with enhance/generate buttons
 2. ✅ **template-gallery.tsx** - Quick-start templates grid
 3. ✅ **variant-grid.tsx** - Generated agent variants display
@@ -24,6 +26,7 @@
 8. ⚠️ **ErrorBoundary** - Implemented in `components/shared/error-boundary.tsx`
 
 ### API Endpoints (`app/api/`)
+
 1. ✅ `/api/ai/enhance-prompt` - OpenAI/Anthropic prompt enhancement
 2. ✅ `/api/ai/generate-variants` - Generate 3 workflow variants
 3. ✅ `/api/ai/iterate-workflow` - Conversational workflow refinement
@@ -34,11 +37,13 @@
 8. ❌ `/api/agents/[id]/runs` - Execution history (NOT IMPLEMENTED)
 
 ### State Management
+
 - ✅ **agent-builder-store.ts** - Zustand store for builder flow
   - Tracks: currentStep, promptText, variants, workflow, iterations, testResults
   - Persists: promptText, enhancedPrompt, selectedVariant, workflow
 
 ### Type Definitions
+
 - ✅ **lib/agents/test-types.ts** - Test execution types
 - ⚠️ Missing: Agent schema types for database persistence
 
@@ -47,9 +52,11 @@
 ## 🔄 Complete User Flow
 
 ### Step 1: Prompt Entry
+
 **Status**: ✅ Complete
 
 **Features**:
+
 - Template gallery with 6 pre-built templates
 - Free-form prompt input (textarea)
 - "Enhance with AI" button (calls OpenAI/Anthropic)
@@ -58,6 +65,7 @@
 - Loading states and error handling
 
 **Templates Included**:
+
 1. Sales Follow-up Agent
 2. Meeting Prep Agent
 3. Lead Intel Agent
@@ -66,6 +74,7 @@
 6. Customer Support Agent
 
 **Missing**:
+
 - ❌ Template filtering/search
 - ❌ Save custom templates
 - ❌ Template preview before selection
@@ -73,9 +82,11 @@
 ---
 
 ### Step 2: Variant Selection
+
 **Status**: ✅ Complete
 
 **Features**:
+
 - Displays 3 auto-generated variants:
   - **Basic**: 3-5 steps, low complexity
   - **Advanced**: 7-10 steps, high complexity
@@ -90,6 +101,7 @@
 - Loading/generation progress modal
 
 **Missing**:
+
 - ❌ Regenerate specific variant
 - ❌ Mix-and-match variant features
 - ❌ Edit variant metadata before selection
@@ -98,9 +110,11 @@
 ---
 
 ### Step 3: Iteration & Refinement
+
 **Status**: ✅ Complete
 
 **Features**:
+
 - Split layout: Workflow Visualizer + Iteration Chat
 - **Workflow Visualizer**:
   - React Flow diagram
@@ -119,6 +133,7 @@
 - Error boundaries around both panels
 
 **Missing**:
+
 - ❌ Manual node editing (drag-to-reorder)
 - ❌ Add/delete nodes via UI (only chat)
 - ❌ Undo/redo for workflow changes
@@ -128,9 +143,11 @@
 ---
 
 ### Step 4: Test Playground
+
 **Status**: ⚠️ 80% Complete
 
 **Features**:
+
 - Responsive 3-panel layout (desktop) / tabs (mobile)
 - **Input Panel**:
   - Trigger type: manual, scheduled, event
@@ -152,6 +169,7 @@
 - Back to Refine navigation
 
 **API Execution**:
+
 - ✅ Uses real OPENAI_API_KEY and ANTHROPIC_API_KEY
 - ✅ Executes AI steps (analyze, generate, summarize) with real LLM calls
 - ✅ Mocks integrations (email, calendar, Slack, CRM)
@@ -159,6 +177,7 @@
 - ✅ Handles errors gracefully
 
 **Missing**:
+
 - ❌ Test scenario presets (meeting prep, proposal, etc.)
 - ❌ Save/load test configurations
 - ❌ Compare multiple test runs
@@ -169,9 +188,11 @@
 ---
 
 ### Step 5: Deploy & Activate
+
 **Status**: ❌ NOT IMPLEMENTED
 
 **Required Features**:
+
 - ❌ Agent naming and description
 - ❌ Schedule configuration (manual, scheduled, event-based)
 - ❌ Integration permissions/OAuth flows
@@ -181,6 +202,7 @@
 - ❌ Success state with link to agent dashboard
 
 **Current State**:
+
 - "Deploy Agent" button exists but shows toast: "Deploy feature coming soon!"
 
 ---
@@ -190,12 +212,14 @@
 **Status**: ❌ NOT IMPLEMENTED
 
 **Required Tables/Schema**:
+
 - ❌ `agents` table (id, name, description, workflow, user_id, status, created_at)
 - ❌ `agent_runs` table (id, agent_id, status, inputs, outputs, logs, duration, created_at)
 - ❌ `agent_schedules` table (id, agent_id, cron, timezone, enabled)
 - ❌ `agent_integrations` table (id, agent_id, integration_type, config, credentials)
 
 **Current State**:
+
 - All data exists only in Zustand store (session-only)
 - No persistence beyond localStorage for builder state
 
@@ -206,6 +230,7 @@
 **Status**: ⚠️ Partial (Mocked Only)
 
 **Supported in UI**:
+
 - Email (Gmail, Outlook) - mocked
 - Calendar (Google Calendar) - mocked
 - Slack - mocked
@@ -213,6 +238,7 @@
 - Custom integrations - not supported
 
 **Required for Production**:
+
 - ❌ OAuth flows for each integration
 - ❌ Credential storage (encrypted)
 - ❌ Integration testing/validation
@@ -220,6 +246,7 @@
 - ❌ Webhook receivers for event-based triggers
 
 **Available in Environment**:
+
 - ✅ `GOOGLE_CUSTOM_SEARCH_API_KEY` - for enrichment
 - ✅ `GOOGLE_CUSTOM_SEARCH_ENGINE_ID`
 - ⚠️ No OAuth credentials configured
@@ -229,18 +256,22 @@
 ## 🧪 Testing & Quality
 
 ### Automated Tests
+
 **Status**: ❌ NOT IMPLEMENTED
 
 **Required**:
+
 - ❌ Unit tests for components
 - ❌ Integration tests for API endpoints
 - ❌ E2E tests for builder flow
 - ❌ Visual regression tests
 
 ### Manual QA Checklist
+
 **Status**: ⚠️ Created (`docs/agents-builder-qa-checklist.md`)
 
 **Coverage**:
+
 - ✅ Pre-flight checks
 - ✅ Phase 1 (Prompt → Variants)
 - ✅ Phase 2 (Iteration → Workflow Refinement)
@@ -254,6 +285,7 @@
 ## 🎨 UI/UX Polish
 
 ### Completed
+
 - ✅ Mobile-first responsive design
 - ✅ Dark mode support
 - ✅ Loading states for all async operations
@@ -264,6 +296,7 @@
 - ✅ Smooth transitions between steps
 
 ### Missing
+
 - ❌ Skeleton loaders during generation
 - ❌ Onboarding tooltips/tour
 - ❌ Hotkeys/shortcuts
@@ -277,12 +310,14 @@
 ## 🚀 Performance
 
 ### Optimizations
+
 - ✅ React Flow memoization
 - ✅ Debounced search/input
 - ✅ Lazy loading for heavy components
 - ⚠️ No code splitting for routes
 
 ### Missing
+
 - ❌ Image optimization for template gallery
 - ❌ API response caching
 - ❌ Infinite scroll for agent list (when implemented)
@@ -293,6 +328,7 @@
 ## ♿ Accessibility
 
 ### Implemented
+
 - ✅ Semantic HTML structure
 - ✅ All inputs have labels (htmlFor)
 - ✅ ARIA labels on icon-only buttons
@@ -301,6 +337,7 @@
 - ✅ Color contrast 4.5:1+ minimum
 
 ### Missing
+
 - ❌ Screen reader announcements for dynamic updates
 - ❌ ARIA live regions for logs panel
 - ❌ Skip to content links
@@ -312,12 +349,14 @@
 ## 🔐 Security
 
 ### Implemented
+
 - ✅ requireSession on all API routes
 - ✅ Input validation (min lengths)
 - ✅ No secrets in client code
 - ✅ Server-side AI API key usage
 
 ### Missing
+
 - ❌ Rate limiting on API endpoints
 - ❌ CSRF protection
 - ❌ Input sanitization for XSS
@@ -331,6 +370,7 @@
 **Status**: ❌ NOT IMPLEMENTED
 
 **Required**:
+
 - ❌ Track agent creation funnel
 - ❌ Monitor API latency
 - ❌ Log AI token usage/costs
@@ -339,6 +379,7 @@
 - ❌ User behavior analytics
 
 **Available Tools**:
+
 - ✅ Sentry DSN configured
 - ⚠️ Not wired into error boundaries
 
@@ -357,6 +398,7 @@
 ## 📝 Missing Features (High Priority)
 
 ### Critical for Launch
+
 1. ❌ Save agent to database
 2. ❌ Agent list page with saved agents
 3. ❌ Edit existing agents
@@ -366,6 +408,7 @@
 7. ❌ Real integration connections (OAuth)
 
 ### Nice to Have
+
 8. ❌ Duplicate agent
 9. ❌ Share agent with team
 10. ❌ Agent templates marketplace
@@ -379,6 +422,7 @@
 ## 🎯 Next Steps (Recommended)
 
 ### Immediate (Phase 4)
+
 1. Complete test scenario presets
 2. Implement deploy/activate modal with scheduling
 3. Create database schema for agents
@@ -386,6 +430,7 @@
 5. Add agent list page with CRUD operations
 
 ### Short-term
+
 6. Wire up real integrations (OAuth flows)
 7. Add execution history tracking
 8. Implement error tracking (Sentry)
@@ -393,6 +438,7 @@
 10. Complete manual QA on live deployment
 
 ### Medium-term
+
 11. Agent performance analytics
 12. Cost tracking and budgets
 13. Team collaboration features
@@ -404,6 +450,7 @@
 ## 📦 Dependencies
 
 ### Installed
+
 - `@xyflow/react` - Workflow visualization
 - `openai` - GPT API client
 - `zustand` - State management
@@ -412,6 +459,7 @@
 - `sonner` - Toast notifications
 
 ### Missing
+
 - ❌ `cron-parser` - for schedule validation
 - ❌ `@sentry/nextjs` - for error tracking (DSN exists, not configured)
 - ❌ `recharts` or similar - for analytics dashboard
@@ -421,11 +469,13 @@
 ## 🔄 API Rate Limits & Costs
 
 ### Current
+
 - OpenAI: gpt-4o-mini ($0.15/1M input, $0.60/1M output)
 - Anthropic: claude-3-5-haiku-20241022 (~$0.80/1M input, ~$4/1M output)
 - No rate limiting implemented
 
 ### Concerns
+
 - ⚠️ No per-user rate limits
 - ⚠️ No cost tracking per agent/test
 - ⚠️ No budget alerts
@@ -437,14 +487,14 @@
 
 **Overall Progress**: ~70%
 
-| Phase | Status | Completion |
-|-------|--------|-----------|
-| Phase 1: Prompt → Variants | ✅ Complete | 100% |
-| Phase 2: Iteration | ✅ Complete | 100% |
-| Phase 3: Test Playground | ⚠️ Mostly Complete | 80% |
-| Phase 4: Deploy & Save | ❌ Not Started | 0% |
-| Phase 5: Agent Management | ❌ Not Started | 0% |
-| Phase 6: Execution & History | ❌ Not Started | 0% |
+| Phase                        | Status             | Completion |
+| ---------------------------- | ------------------ | ---------- |
+| Phase 1: Prompt → Variants   | ✅ Complete        | 100%       |
+| Phase 2: Iteration           | ✅ Complete        | 100%       |
+| Phase 3: Test Playground     | ⚠️ Mostly Complete | 80%        |
+| Phase 4: Deploy & Save       | ❌ Not Started     | 0%         |
+| Phase 5: Agent Management    | ❌ Not Started     | 0%         |
+| Phase 6: Execution & History | ❌ Not Started     | 0%         |
 
 **Core Builder Flow**: ✅ Functional  
 **Production Ready**: ❌ No (missing persistence, deploy, integrations)

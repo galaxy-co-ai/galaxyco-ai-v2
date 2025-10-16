@@ -25,7 +25,7 @@ You were experiencing environment variable issues that had been blocking progres
 ```bash
 # Root level (redundant)
 ✅ .env.local
-✅ .env.production.local  
+✅ .env.production.local
 ✅ .env.vercel.local
 
 # Apps/web (managed by Vercel dashboard)
@@ -112,35 +112,35 @@ Documentation:
 
 ### Required (4 variables)
 
-| Variable | Used In | Purpose |
-|----------|---------|---------|
-| `DATABASE_URL` | packages/database/client.ts | PostgreSQL connection |
-| `CLERK_SECRET_KEY` | Clerk SDK (server-side) | Authentication |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk SDK (client-side) | Authentication |
-| `ENCRYPTION_KEY` | apps/web/lib/crypto.ts | Data encryption (API keys) |
+| Variable                            | Used In                     | Purpose                    |
+| ----------------------------------- | --------------------------- | -------------------------- |
+| `DATABASE_URL`                      | packages/database/client.ts | PostgreSQL connection      |
+| `CLERK_SECRET_KEY`                  | Clerk SDK (server-side)     | Authentication             |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk SDK (client-side)     | Authentication             |
+| `ENCRYPTION_KEY`                    | apps/web/lib/crypto.ts      | Data encryption (API keys) |
 
 ### Optional (4 variables)
 
-| Variable | Used In | Purpose |
-|----------|---------|---------|
-| `OPENAI_API_KEY` | apps/web/lib/ai/providers/openai.ts | AI agent features |
-| `REDIS_URL` | TBD (not yet implemented) | Caching & rate limiting |
-| `CLERK_WEBHOOK_SECRET` | apps/web/api/webhooks/clerk/route.ts | User sync webhooks |
-| `NEXT_PUBLIC_ENV` | apps/web/app/page.tsx | Display environment indicator |
+| Variable               | Used In                              | Purpose                       |
+| ---------------------- | ------------------------------------ | ----------------------------- |
+| `OPENAI_API_KEY`       | apps/web/lib/ai/providers/openai.ts  | AI agent features             |
+| `REDIS_URL`            | TBD (not yet implemented)            | Caching & rate limiting       |
+| `CLERK_WEBHOOK_SECRET` | apps/web/api/webhooks/clerk/route.ts | User sync webhooks            |
+| `NEXT_PUBLIC_ENV`      | apps/web/app/page.tsx                | Display environment indicator |
 
 ### Removed (9 variables)
 
-| Variable | Why Removed |
-|----------|-------------|
-| `JWT_SECRET` | Using Clerk instead of custom JWT |
-| `JWT_EXPIRES_IN` | Using Clerk instead of custom JWT |
-| `CORS_ORIGIN` | Not needed for Next.js |
-| `RATE_LIMIT_MAX` | Not implemented yet |
-| `RATE_LIMIT_WINDOW_MS` | Not implemented yet |
-| `ENABLE_MARKETPLACE` | Not used in code |
-| `ENABLE_BUILDER` | Not used in code |
-| `ENABLE_SIM_MODE` | Not used in code |
-| `ENABLE_AUTO_APPROVE` | Not used in code |
+| Variable               | Why Removed                       |
+| ---------------------- | --------------------------------- |
+| `JWT_SECRET`           | Using Clerk instead of custom JWT |
+| `JWT_EXPIRES_IN`       | Using Clerk instead of custom JWT |
+| `CORS_ORIGIN`          | Not needed for Next.js            |
+| `RATE_LIMIT_MAX`       | Not implemented yet               |
+| `RATE_LIMIT_WINDOW_MS` | Not implemented yet               |
+| `ENABLE_MARKETPLACE`   | Not used in code                  |
+| `ENABLE_BUILDER`       | Not used in code                  |
+| `ENABLE_SIM_MODE`      | Not used in code                  |
+| `ENABLE_AUTO_APPROVE`  | Not used in code                  |
 
 ---
 
@@ -172,11 +172,13 @@ pnpm dev
 All environment variables should be set in **Vercel Dashboard** → Settings → Environment Variables:
 
 **Production Environment:**
+
 - Use `sk_live_` and `pk_live_` Clerk keys
 - Use **unique ENCRYPTION_KEY** (different from dev!)
 - Use production database
 
 **Preview Environment:**
+
 - Use `sk_test_` and `pk_test_` Clerk keys
 - Can use same database as dev or separate staging DB
 
@@ -223,6 +225,7 @@ Before deploying to production, ensure:
 ### ENVIRONMENT_SETUP.md (430 lines)
 
 Complete guide covering:
+
 - ✅ 5-minute quick start
 - ✅ Detailed variable descriptions
 - ✅ Where to get each value
@@ -235,6 +238,7 @@ Complete guide covering:
 ### scripts/generate-encryption-key.js
 
 Automated tool to generate secure 256-bit encryption keys:
+
 - Uses Node.js crypto.randomBytes()
 - Outputs 64-character hex string
 - Includes clear security warnings
@@ -272,21 +276,27 @@ Automated tool to generate secure 256-bit encryption keys:
 If you need to recover your actual secret values (they were removed during cleanup):
 
 ### 1. Database URL
+
 Get from: https://console.neon.tech → Connection Details
 
 ### 2. Clerk Keys
+
 Get from: https://dashboard.clerk.com → API Keys
 
 ### 3. Encryption Key
+
 Generate new one (don't reuse old):
+
 ```bash
 pnpm run generate-encryption-key
 ```
 
 ### 4. OpenAI API Key (if you had one)
+
 Get from: https://platform.openai.com/api-keys
 
 ### 5. Redis URL (if you had one)
+
 Get from: https://console.upstash.com → Redis Connect
 
 ---
@@ -357,6 +367,7 @@ cd apps/web && pnpm dev
    - Generate NEW encryption key for production
 
 4. **Commit the cleanup**
+
    ```bash
    git add .
    git commit -m "chore(env): clean up environment variable configuration
@@ -367,7 +378,7 @@ cd apps/web && pnpm dev
    - Add comprehensive ENVIRONMENT_SETUP.md documentation
    - Create encryption key generation script
    - Replace real secrets with placeholders in services/agents/.env
-   
+
    Fixes environment variable issues that blocked progress for 2 days.
    "
    git push origin main

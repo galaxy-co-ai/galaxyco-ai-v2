@@ -4,7 +4,7 @@
  * October 15, 2025
  */
 
-import { SignUp } from '@clerk/nextjs'
+import { SignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
   return (
@@ -18,12 +18,12 @@ export default function SignUpPage() {
             Create your account and get started in minutes
           </p>
         </div>
-        
+
         <SignUp
           appearance={{
             elements: {
-              rootBox: 'mx-auto',
-              card: 'shadow-xl',
+              rootBox: "mx-auto",
+              card: "shadow-xl",
             },
           }}
           routing="path"
@@ -32,5 +32,5 @@ export default function SignUpPage() {
         />
       </div>
     </div>
-  )
+  );
 }

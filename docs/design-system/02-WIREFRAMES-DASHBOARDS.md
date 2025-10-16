@@ -91,6 +91,7 @@
 ### Component Breakdown
 
 #### 1. KPI Card
+
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6 hover:border-border-hover transition-colors duration-fast">
   <div className="flex items-center justify-between mb-2">
@@ -106,6 +107,7 @@
 ```
 
 **Measurements:**
+
 - Card padding: `p-6` (24px)
 - Border radius: `rounded-lg` (16px)
 - Metric size: `text-3xl` (30px)
@@ -113,6 +115,7 @@
 - Spacing: `gap-4` (16px) between cards
 
 **States:**
+
 - Default: `border-border`
 - Hover: `border-border-hover`
 - Positive trend: Green arrow + text
@@ -121,6 +124,7 @@
 ---
 
 #### 2. Chart Container
+
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6">
   <div className="flex items-center justify-between mb-4">
@@ -139,6 +143,7 @@
 ```
 
 **Measurements:**
+
 - Container padding: `p-6` (24px)
 - Chart height: `h-64` (256px) for compact, `h-80` (320px) for full
 - Title size: `text-lg` (18px)
@@ -147,6 +152,7 @@
 ---
 
 #### 3. Activity Feed
+
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6">
   <div className="flex items-center justify-between mb-4">
@@ -156,8 +162,11 @@
     </button>
   </div>
   <div className="space-y-3">
-    {activities.map(activity => (
-      <div key={activity.id} className="flex items-start gap-3 pb-3 border-b border-border last:border-0">
+    {activities.map((activity) => (
+      <div
+        key={activity.id}
+        className="flex items-start gap-3 pb-3 border-b border-border last:border-0"
+      >
         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
           <Icon className="w-4 h-4 text-primary" />
         </div>
@@ -172,6 +181,7 @@
 ```
 
 **Measurements:**
+
 - Item spacing: `space-y-3` (12px)
 - Icon container: `w-8 h-8` (32px × 32px)
 - Text size: `text-sm` (14px)
@@ -300,6 +310,7 @@
 ### Component Breakdown
 
 #### 1. Hero Section
+
 ```jsx
 <div className="bg-gradient-to-br from-primary/10 to-background rounded-xl p-12 mb-8">
   <div className="max-w-2xl">
@@ -323,6 +334,7 @@
 ```
 
 **Measurements:**
+
 - Padding: `p-12` (48px) desktop, `p-6` (24px) mobile
 - Title: `text-4xl` (36px)
 - Description: `text-lg` (18px)
@@ -332,6 +344,7 @@
 ---
 
 #### 2. Category Card
+
 ```jsx
 <Link
   to={category.href}
@@ -343,13 +356,12 @@
   <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary">
     {category.title}
   </h3>
-  <p className="text-sm text-foreground-muted">
-    {category.count} items
-  </p>
+  <p className="text-sm text-foreground-muted">{category.count} items</p>
 </Link>
 ```
 
 **Grid Layout:**
+
 ```jsx
 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
   {categories.map(category => <CategoryCard {...} />)}
@@ -357,6 +369,7 @@
 ```
 
 **Measurements:**
+
 - Card padding: `p-6` (24px)
 - Icon size: `text-4xl` (36px emoji or icon)
 - Title: `text-lg` (18px)
@@ -367,6 +380,7 @@
 ---
 
 #### 3. Featured Carousel
+
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6">
   <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -374,22 +388,29 @@
   </h2>
   <div className="relative">
     <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2">
-      {featured.map(item => (
+      {featured.map((item) => (
         <div key={item.id} className="flex-shrink-0 w-72 snap-start">
           <div className="bg-background border border-border rounded-lg p-4 hover:border-primary transition-colors">
-            <img src={item.thumbnail} className="w-full h-40 object-cover rounded mb-3" />
+            <img
+              src={item.thumbnail}
+              className="w-full h-40 object-cover rounded mb-3"
+            />
             <h4 className="font-medium text-foreground mb-1">{item.title}</h4>
             <p className="text-sm text-foreground-muted">{item.description}</p>
           </div>
         </div>
       ))}
     </div>
-    <button className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2
-                       w-10 h-10 rounded-full bg-background-elevated shadow-lg">
+    <button
+      className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2
+                       w-10 h-10 rounded-full bg-background-elevated shadow-lg"
+    >
       <ChevronLeft className="w-5 h-5" />
     </button>
-    <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2
-                       w-10 h-10 rounded-full bg-background-elevated shadow-lg">
+    <button
+      className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2
+                       w-10 h-10 rounded-full bg-background-elevated shadow-lg"
+    >
       <ChevronRight className="w-5 h-5" />
     </button>
   </div>
@@ -397,6 +418,7 @@
 ```
 
 **Measurements:**
+
 - Carousel item width: `w-72` (288px)
 - Item gap: `gap-4` (16px)
 - Thumbnail height: `h-40` (160px)
@@ -410,7 +432,7 @@
 
 ### Desktop Layout
 
-```
+````
 ┌──────────────────────────────────────────────────────────────────────────┐
 │ LEFT SIDEBAR (240px)  │ MAIN CONTENT (flex-1)        │ RIGHT SIDEBAR   │
 │                       │                               │ (240px)         │
@@ -446,11 +468,11 @@
 │                       │ │ Quick Start | Configuration││                 │
 │                       │ └───────────────────────────┘│                 │
 └──────────────────────────────────────────────────────────────────────────┘
-```
+````
 
 ### Mobile Layout
 
-```
+````
 ┌─────────────────────────────┐
 │ ┌─ Top Nav ────────────────┐│
 │ │ [☰] Docs           [🔍] ││
@@ -493,11 +515,12 @@
 │ │ [🏠] [📊] [➕] [🔔] [👤]││
 │ └──────────────────────────┘│
 └─────────────────────────────┘
-```
+````
 
 ### Component Breakdown
 
 #### 1. Table of Contents (Left Sidebar)
+
 ```jsx
 <nav className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 border-r border-border">
   <h3 className="text-sm font-semibold text-foreground mb-4">Table of Contents</h3>
@@ -533,6 +556,7 @@
 ```
 
 **Measurements:**
+
 - Sticky top: `top-20` (80px, accounts for header)
 - Item padding: `px-3 py-2` (12px × 8px)
 - Font size: `text-sm` (14px) for main, `text-xs` (12px) for subsections
@@ -541,20 +565,21 @@
 ---
 
 #### 2. Prose Content Area
+
 ```jsx
 <article className="prose prose-invert max-w-3xl mx-auto px-6 py-8">
   <Breadcrumb items={breadcrumbs} />
-  
+
   <h1>{article.title}</h1>
-  
+
   <div className="text-sm text-foreground-muted mb-8 flex items-center gap-4">
     <span>Last updated: {article.updatedAt}</span>
     <span>•</span>
     <span>{article.readTime} min read</span>
   </div>
-  
+
   <div dangerouslySetInnerHTML={{ __html: article.content }} />
-  
+
   <footer className="mt-12 pt-8 border-t border-border">
     <div className="flex items-center justify-between">
       {article.previous && (
@@ -581,6 +606,7 @@
 ```
 
 **Measurements:**
+
 - Max width: `max-w-3xl` (768px) for readability
 - Padding: `px-6 py-8` (24px × 32px)
 - Prose styling: Tailwind Typography plugin
@@ -589,11 +615,12 @@
 ---
 
 #### 3. On This Page (Right Sidebar)
+
 ```jsx
 <aside className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto p-6 border-l border-border">
   <h3 className="text-sm font-semibold text-foreground mb-4">On This Page</h3>
   <ul className="space-y-2">
-    {headings.map(heading => (
+    {headings.map((heading) => (
       <li key={heading.id}>
         <a
           href={`#${heading.id}`}
@@ -602,7 +629,7 @@
             activeHeading === heading.id
               ? "text-primary font-medium"
               : "text-foreground-muted hover:text-foreground",
-            heading.level === 3 && "ml-4"
+            heading.level === 3 && "ml-4",
           )}
         >
           {heading.text}
@@ -610,13 +637,18 @@
       </li>
     ))}
   </ul>
-  
+
   <div className="mt-8 pt-8 border-t border-border">
-    <h3 className="text-sm font-semibold text-foreground mb-4">Related Links</h3>
+    <h3 className="text-sm font-semibold text-foreground mb-4">
+      Related Links
+    </h3>
     <ul className="space-y-2">
-      {relatedLinks.map(link => (
+      {relatedLinks.map((link) => (
         <li key={link.id}>
-          <Link to={link.href} className="text-sm text-primary hover:text-primary-hover">
+          <Link
+            to={link.href}
+            className="text-sm text-primary hover:text-primary-hover"
+          >
             {link.title} →
           </Link>
         </li>
@@ -627,6 +659,7 @@
 ```
 
 **Measurements:**
+
 - Font size: `text-sm` (14px)
 - Spacing: `space-y-2` (8px)
 - Nested indent: `ml-4` (16px) for H3 headings
@@ -637,14 +670,17 @@
 ### Responsive Behavior
 
 **Desktop (1024px+):**
+
 - Three-column layout: Left TOC (240px) + Content (flex) + Right sidebar (240px)
 - Both sidebars sticky
 
 **Tablet (768px - 1023px):**
+
 - Two-column: Content + Right sidebar (collapsible)
 - Left TOC accessible via hamburger menu
 
 **Mobile (< 768px):**
+
 - Single column: Content only
 - TOC in hamburger drawer
 - On This Page in accordion above content

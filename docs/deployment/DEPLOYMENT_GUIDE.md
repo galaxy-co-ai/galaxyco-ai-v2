@@ -93,6 +93,7 @@ vercel --prod
 ### 2.2 Configure Environment Variables
 
 **Option A: Via Vercel Dashboard**
+
 1. Go to: https://vercel.com/dashboard
 2. Select project: `galaxyco-ai-v2-api`
 3. Go to: Settings → Environment Variables
@@ -101,6 +102,7 @@ vercel --prod
 6. Paste and save
 
 **Option B: Via CLI** (Faster)
+
 ```bash
 # From apps/api directory
 vercel env pull .env.production
@@ -123,6 +125,7 @@ curl https://galaxyco-ai-v2-api.vercel.app/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "ok",
@@ -137,6 +140,7 @@ curl https://galaxyco-ai-v2-api.vercel.app/health
 ### 2.4 Note API URL
 
 **Important:** Copy the production API URL from Vercel dashboard:
+
 ```
 https://galaxyco-ai-v2-api.vercel.app
 ```
@@ -177,6 +181,7 @@ vercel --prod
 ### 3.3 Configure Environment Variables
 
 **Via Vercel Dashboard:**
+
 1. Go to: https://vercel.com/dashboard
 2. Select project: `galaxyco-ai-platform`
 3. Go to: Settings → Environment Variables
@@ -224,14 +229,15 @@ After deploying the web app, update the API's CORS configuration:
 ### 5.2 Test API Connection
 
 Open browser console on the web app:
+
 ```javascript
-fetch('https://galaxyco-ai-v2-api.vercel.app/api/workspaces', {
+fetch("https://galaxyco-ai-v2-api.vercel.app/api/workspaces", {
   headers: {
-    'Authorization': 'Bearer <your-jwt-token>'
-  }
+    Authorization: "Bearer <your-jwt-token>",
+  },
 })
-.then(r => r.json())
-.then(console.log)
+  .then((r) => r.json())
+  .then(console.log);
 ```
 
 **Expected:** List of workspaces
@@ -266,12 +272,14 @@ fetch('https://galaxyco-ai-v2-api.vercel.app/api/workspaces', {
 ### 6.2 Set Up Custom Domain (Optional)
 
 **For Web App:**
+
 ```bash
 # From apps/web
 vercel domains add app.galaxyco.ai
 ```
 
 **For API:**
+
 ```bash
 # From apps/api
 vercel domains add api.galaxyco.ai
@@ -292,6 +300,7 @@ Update CORS and API URLs accordingly.
 ### 7.2 Set Up Error Tracking (Optional)
 
 **Sentry Integration:**
+
 1. Create account at: https://sentry.io
 2. Add environment variables:
    ```
@@ -325,6 +334,7 @@ vercel alias set galaxyco-ai-platform.vercel.app galaxyco-ai-platform-stable.ver
 ### 8.2 Rollback Procedure
 
 If issues occur:
+
 ```bash
 # List deployments
 vercel list
@@ -343,6 +353,7 @@ vercel promote <deployment-url> --prod
 ### Issue: API Returns 500 on All Requests
 
 **Solution:**
+
 1. Check Vercel logs: `vercel logs galaxyco-ai-v2-api --prod`
 2. Verify DATABASE_URL is set correctly
 3. Ensure JWT_SECRET is set
@@ -351,6 +362,7 @@ vercel promote <deployment-url> --prod
 ### Issue: Web App Shows "Network Error"
 
 **Solution:**
+
 1. Verify NEXT_PUBLIC_API_URL is correct
 2. Check browser console for CORS errors
 3. Ensure API is deployed and healthy
@@ -359,6 +371,7 @@ vercel promote <deployment-url> --prod
 ### Issue: Authentication Redirects Fail
 
 **Solution:**
+
 1. Check Clerk dashboard allowed origins
 2. Verify CLERK_SECRET_KEY matches production key
 3. Ensure NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is correct
@@ -367,6 +380,7 @@ vercel promote <deployment-url> --prod
 ### Issue: Database Connection Timeout
 
 **Solution:**
+
 1. Verify Neon database is active (not paused)
 2. Check connection string includes `?sslmode=require`
 3. Use pooled connection URL for serverless
@@ -382,7 +396,7 @@ vercel promote <deployment-url> --prod
 - [ ] Database credentials are not exposed in client code
 - [ ] Rate limiting is enabled
 - [ ] Clerk webhooks are secured with webhook secret
-- [ ] All NEXT_PUBLIC_* variables contain no secrets
+- [ ] All NEXT*PUBLIC*\* variables contain no secrets
 
 ---
 
@@ -391,11 +405,12 @@ vercel promote <deployment-url> --prod
 ### Enable Edge Functions (Optional)
 
 For API routes that don't need Node.js runtime:
+
 ```javascript
 // apps/api/src/routes/health.ts
 export const config = {
-  runtime: 'edge',
-}
+  runtime: "edge",
+};
 ```
 
 ### Enable ISR for Public Pages
@@ -404,9 +419,11 @@ export const config = {
 // apps/web/pages/marketplace.tsx
 export async function getStaticProps() {
   return {
-    props: { /* data */ },
-    revalidate: 60 // Rebuild every 60 seconds
-  }
+    props: {
+      /* data */
+    },
+    revalidate: 60, // Rebuild every 60 seconds
+  };
 }
 ```
 

@@ -139,6 +139,7 @@ galaxyco-ai-design-system/
 ## Naming Conventions
 
 ### Files
+
 - **Components:** PascalCase (e.g., `Button.tsx`, `DataTable.tsx`)
 - **Utilities:** camelCase (e.g., `utils.ts`, `formatDate.ts`)
 - **Types:** PascalCase (e.g., `Agent.ts`, `ApiResponse.ts`)
@@ -148,13 +149,15 @@ galaxyco-ai-design-system/
 - **Tests:** `*.test.tsx` or `*.spec.tsx`
 
 ### Folders
+
 - **Feature folders:** kebab-case (e.g., `agent-management/`)
 - **Component folders:** PascalCase (e.g., `Button/`, `DataTable/`)
 
 ### Variables & Functions
+
 ```typescript
 // Variables: camelCase
-const userEmail = 'user@example.com';
+const userEmail = "user@example.com";
 const isLoading = true;
 
 // Functions: camelCase
@@ -162,7 +165,7 @@ function fetchAgents() {}
 const handleClick = () => {};
 
 // Constants: UPPER_SNAKE_CASE
-const API_BASE_URL = 'https://api.example.com';
+const API_BASE_URL = "https://api.example.com";
 const MAX_RETRIES = 3;
 
 // Types/Interfaces: PascalCase
@@ -175,6 +178,7 @@ type Agent = {};
 ## Component Structure
 
 ### Standard Component Pattern
+
 ```typescript
 // Button.types.ts
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -232,6 +236,7 @@ export type { ButtonProps } from './Button.types';
 ## Import Path Aliases
 
 ### tsconfig.json
+
 ```json
 {
   "compilerOptions": {
@@ -249,15 +254,16 @@ export type { ButtonProps } from './Button.types';
 ```
 
 ### Usage
+
 ```typescript
 // ✅ Good
-import { Button } from '@/components/atoms';
-import { cn } from '@/lib/utils';
-import { useAuth } from '@/hooks';
+import { Button } from "@/components/atoms";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks";
 
 // ❌ Bad
-import { Button } from '../../../components/atoms/Button';
-import { cn } from '../../lib/utils';
+import { Button } from "../../../components/atoms/Button";
+import { cn } from "../../lib/utils";
 ```
 
 ---
@@ -265,22 +271,24 @@ import { cn } from '../../lib/utils';
 ## Barrel Exports
 
 ### Component Barrel Export Pattern
+
 ```typescript
 // src/components/atoms/index.ts
-export { Button } from './Button';
-export { Input } from './Input';
-export { Badge } from './Badge';
-export { Avatar } from './Avatar';
+export { Button } from "./Button";
+export { Input } from "./Input";
+export { Badge } from "./Badge";
+export { Avatar } from "./Avatar";
 // ... etc
 
-export type { ButtonProps } from './Button';
-export type { InputProps } from './Input';
+export type { ButtonProps } from "./Button";
+export type { InputProps } from "./Input";
 // ... etc
 ```
 
 ### Usage
+
 ```typescript
-import { Button, Input, Badge } from '@/components/atoms';
+import { Button, Input, Badge } from "@/components/atoms";
 ```
 
 ---
@@ -288,6 +296,7 @@ import { Button, Input, Badge } from '@/components/atoms';
 ## Environment Variables
 
 ### .env.example
+
 ```bash
 # API
 VITE_API_BASE_URL=https://api.galaxyco.ai
@@ -305,12 +314,13 @@ VITE_SENTRY_DSN=https://xxx@sentry.io/xxx
 ```
 
 ### Usage
+
 ```typescript
 // src/config/env.ts
 export const env = {
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL,
   clerkKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === "true",
 };
 ```
 
@@ -319,7 +329,9 @@ export const env = {
 ## Code Organization Rules
 
 ### 1. Colocation
+
 Keep related files together:
+
 ```
 Button/
 ├── Button.tsx        # Component
@@ -330,7 +342,9 @@ Button/
 ```
 
 ### 2. Feature-Based Organization (Optional)
+
 For large apps, organize by feature:
+
 ```
 src/features/
 ├── agents/
@@ -343,6 +357,7 @@ src/features/
 ```
 
 ### 3. No Deep Nesting
+
 Max 3-4 levels deep. If deeper, refactor.
 
 ---
@@ -350,6 +365,7 @@ Max 3-4 levels deep. If deeper, refactor.
 ## Git Conventions
 
 ### Branch Naming
+
 ```bash
 feature/button-component
 fix/login-redirect
@@ -358,6 +374,7 @@ docs/readme-update
 ```
 
 ### Commit Messages
+
 ```bash
 feat: add Button component with variants
 fix: resolve login redirect issue
@@ -370,6 +387,7 @@ docs: improve README setup instructions
 ## Code Style
 
 ### Prettier Config (.prettierrc)
+
 ```json
 {
   "semi": true,
@@ -382,16 +400,17 @@ docs: improve README setup instructions
 ```
 
 ### ESLint Config (.eslintrc.js)
+
 ```javascript
 module.exports = {
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   rules: {
-    'react/react-in-jsx-scope': 'off', // Not needed with Vite
-    '@typescript-eslint/no-unused-vars': 'warn',
+    "react/react-in-jsx-scope": "off", // Not needed with Vite
+    "@typescript-eslint/no-unused-vars": "warn",
   },
 };
 ```
@@ -422,7 +441,8 @@ module.exports = {
 ## Documentation Standards
 
 ### Component Documentation
-```typescript
+
+````typescript
 /**
  * A button component with multiple variants and sizes.
  *
@@ -434,20 +454,24 @@ module.exports = {
  * ```
  */
 export const Button = ({ ... }) => { ... };
-```
+````
 
 ### README per Feature
-```markdown
+
+````markdown
 # Feature Name
 
 ## Overview
+
 Brief description.
 
 ## Components
+
 - `ComponentA` - Description
 - `ComponentB` - Description
 
 ## Usage
+
 \```tsx
 import { ComponentA } from './ComponentA';
 
@@ -455,11 +479,13 @@ import { ComponentA } from './ComponentA';
 \```
 
 ## API
+
 ### ComponentA Props
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+
+| Prop | Type   | Default   | Description      |
+| ---- | ------ | --------- | ---------------- |
 | prop | string | 'default' | Prop description |
-```
+````
 
 ---
 

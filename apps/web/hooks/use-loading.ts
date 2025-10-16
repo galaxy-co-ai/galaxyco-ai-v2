@@ -9,13 +9,13 @@ interface UseLoadingOptions {
 
 /**
  * Custom hook for managing loading states
- * 
+ *
  * Provides utilities for handling loading states with optional
  * minimum loading time to prevent flashing.
  */
 export function useLoading(options: UseLoadingOptions = {}) {
   const { initialLoading = false, minLoadingTime = 0 } = options;
-  
+
   const [isLoading, setIsLoading] = useState(initialLoading);
   const loadingStartTime = useRef<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -43,17 +43,18 @@ export function useLoading(options: UseLoadingOptions = {}) {
     loadingStartTime.current = null;
   }, [minLoadingTime]);
 
-  const withLoading = useCallback(async <T>(
-    operation: () => Promise<T>
-  ): Promise<T> => {
-    startLoading();
-    try {
-      const result = await operation();
-      return result;
-    } finally {
-      stopLoading();
-    }
-  }, [startLoading, stopLoading]);
+  const withLoading = useCallback(
+    async <T>(operation: () => Promise<T>): Promise<T> => {
+      startLoading();
+      try {
+        const result = await operation();
+        return result;
+      } finally {
+        stopLoading();
+      }
+    },
+    [startLoading, stopLoading],
+  );
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -76,41 +77,51 @@ export function useLoading(options: UseLoadingOptions = {}) {
  * Hook for managing multiple loading states
  */
 export function useLoadingStates<T extends string>(
-  initialStates: Record<T, boolean> = {} as Record<T, boolean>
+  initialStates: Record<T, boolean> = {} as Record<T, boolean>,
 ) {
-  const [loadingStates, setLoadingStates] = useState<Record<T, boolean>>(initialStates);
+  const [loadingStates, setLoadingStates] =
+    useState<Record<T, boolean>>(initialStates);
 
   const setLoading = useCallback((key: T, loading: boolean) => {
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
       [key]: loading,
     }));
   }, []);
 
-  const startLoading = useCallback((key: T) => {
-    setLoading(key, true);
-  }, [setLoading]);
+  const startLoading = useCallback(
+    (key: T) => {
+      setLoading(key, true);
+    },
+    [setLoading],
+  );
 
-  const stopLoading = useCallback((key: T) => {
-    setLoading(key, false);
-  }, [setLoading]);
+  const stopLoading = useCallback(
+    (key: T) => {
+      setLoading(key, false);
+    },
+    [setLoading],
+  );
 
-  const withLoading = useCallback(async <R>(
-    key: T,
-    operation: () => Promise<R>
-  ): Promise<R> => {
-    startLoading(key);
-    try {
-      const result = await operation();
-      return result;
-    } finally {
-      stopLoading(key);
-    }
-  }, [startLoading, stopLoading]);
+  const withLoading = useCallback(
+    async <R>(key: T, operation: () => Promise<R>): Promise<R> => {
+      startLoading(key);
+      try {
+        const result = await operation();
+        return result;
+      } finally {
+        stopLoading(key);
+      }
+    },
+    [startLoading, stopLoading],
+  );
 
-  const isLoading = useCallback((key: T): boolean => {
-    return loadingStates[key] || false;
-  }, [loadingStates]);
+  const isLoading = useCallback(
+    (key: T): boolean => {
+      return loadingStates[key] || false;
+    },
+    [loadingStates],
+  );
 
   const isAnyLoading = useCallback((): boolean => {
     return Object.values(loadingStates).some(Boolean);
@@ -141,27 +152,30 @@ export function useAsyncWithProgress<T = any>() {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
-  const execute = useCallback(async (
-    operation: (updateProgress: (progress: number) => void) => Promise<T>
-  ) => {
-    setIsLoading(true);
-    setError(null);
-    setProgress(0);
+  const execute = useCallback(
+    async (
+      operation: (updateProgress: (progress: number) => void) => Promise<T>,
+    ) => {
+      setIsLoading(true);
+      setError(null);
+      setProgress(0);
 
-    try {
-      const result = await operation((newProgress) => {
-        setProgress(Math.max(0, Math.min(100, newProgress)));
-      });
-      setData(result);
-      setProgress(100);
-      return result;
-    } catch (err) {
-      setError(err as Error);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const result = await operation((newProgress) => {
+          setProgress(Math.max(0, Math.min(100, newProgress)));
+        });
+        setData(result);
+        setProgress(100);
+        return result;
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   const reset = useCallback(() => {
     setIsLoading(false);
@@ -190,12 +204,12 @@ export function useDebouncedLoading(delay: number = 300) {
 
   const startLoading = useCallback(() => {
     setIsLoading(true);
-    
+
     // Debounce showing loading state to prevent flashing
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     timeoutRef.current = setTimeout(() => {
       setShowLoading(true);
     }, delay);
@@ -204,24 +218,25 @@ export function useDebouncedLoading(delay: number = 300) {
   const stopLoading = useCallback(() => {
     setIsLoading(false);
     setShowLoading(false);
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
   }, []);
 
-  const withLoading = useCallback(async <R>(
-    operation: () => Promise<R>
-  ): Promise<R> => {
-    startLoading();
-    try {
-      const result = await operation();
-      return result;
-    } finally {
-      stopLoading();
-    }
-  }, [startLoading, stopLoading]);
+  const withLoading = useCallback(
+    async <R>(operation: () => Promise<R>): Promise<R> => {
+      startLoading();
+      try {
+        const result = await operation();
+        return result;
+      } finally {
+        stopLoading();
+      }
+    },
+    [startLoading, stopLoading],
+  );
 
   // Cleanup on unmount
   useEffect(() => {
@@ -250,10 +265,7 @@ export function useOptimisticUpdate<T>() {
   const [isOptimistic, setIsOptimistic] = useState(false);
 
   const updateOptimistically = useCallback(
-    async (
-      optimisticValue: T,
-      operation: () => Promise<T>
-    ): Promise<T> => {
+    async (optimisticValue: T, operation: () => Promise<T>): Promise<T> => {
       // Apply optimistic update
       const previousData = data;
       setData(optimisticValue);
@@ -274,7 +286,7 @@ export function useOptimisticUpdate<T>() {
         setIsLoading(false);
       }
     },
-    [data]
+    [data],
   );
 
   const setDataDirectly = useCallback((newData: T) => {

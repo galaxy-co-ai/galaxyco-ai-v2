@@ -52,6 +52,7 @@ apps/web/
 #### Key Directories
 
 **`src/app/`** - Next.js App Router
+
 - Each folder can be a route
 - `page.tsx` = page component
 - `layout.tsx` = shared layout
@@ -60,11 +61,13 @@ apps/web/
 - `route.ts` = API endpoint
 
 **`src/components/`** - React Components
+
 - `ui/` - Base components from shadcn/ui
 - Feature-specific folders (agents, workflows, etc.)
 - Reusable components
 
 **`src/lib/`** - Utility Functions
+
 - Business logic
 - API clients
 - Type definitions
@@ -115,30 +118,30 @@ const workspace = await db
 
 ### Root Level
 
-| File | Purpose |
-|------|---------|
-| `turbo.json` | Turborepo task pipeline config |
-| `pnpm-workspace.yaml` | pnpm workspace definition |
-| `package.json` | Root package & scripts |
-| `.gitignore` | Git ignore rules |
+| File                  | Purpose                        |
+| --------------------- | ------------------------------ |
+| `turbo.json`          | Turborepo task pipeline config |
+| `pnpm-workspace.yaml` | pnpm workspace definition      |
+| `package.json`        | Root package & scripts         |
+| `.gitignore`          | Git ignore rules               |
 
 ### App Level (`apps/web/`)
 
-| File | Purpose |
-|------|---------|
-| `next.config.js` | Next.js configuration |
-| `tailwind.config.js` | Tailwind CSS config |
-| `tsconfig.json` | TypeScript config |
-| `.env.local` | Local environment variables |
-| `.env.example` | Environment variable template |
+| File                 | Purpose                       |
+| -------------------- | ----------------------------- |
+| `next.config.js`     | Next.js configuration         |
+| `tailwind.config.js` | Tailwind CSS config           |
+| `tsconfig.json`      | TypeScript config             |
+| `.env.local`         | Local environment variables   |
+| `.env.example`       | Environment variable template |
 
 ### Package Level (`packages/database/`)
 
-| File | Purpose |
-|------|---------|
-| `drizzle.config.ts` | Drizzle ORM config |
-| `tsconfig.json` | TypeScript config |
-| `package.json` | Package dependencies |
+| File                | Purpose              |
+| ------------------- | -------------------- |
+| `drizzle.config.ts` | Drizzle ORM config   |
+| `tsconfig.json`     | TypeScript config    |
+| `package.json`      | Package dependencies |
 
 ---
 
@@ -233,12 +236,14 @@ npm run db:migrate
 ### File Organization
 
 **DO** ✅
+
 - Keep related files together (co-location)
 - Use feature folders (`components/agents/`, `app/agents/`)
 - Put shared utilities in `lib/`
 - Keep components small and focused
 
 **DON'T** ❌
+
 - Create deeply nested folders (max 3-4 levels)
 - Mix business logic into components
 - Put everything in one giant file
@@ -272,19 +277,19 @@ Feature/
 
 ### "Where does X live?"
 
-| What | Where |
-|------|-------|
-| Pages/Routes | `apps/web/src/app/` |
-| API Endpoints | `apps/web/src/app/api/` |
-| React Components | `apps/web/src/components/` |
-| Database Schemas | `packages/database/src/schema/` |
+| What                | Where                                   |
+| ------------------- | --------------------------------------- |
+| Pages/Routes        | `apps/web/src/app/`                     |
+| API Endpoints       | `apps/web/src/app/api/`                 |
+| React Components    | `apps/web/src/components/`              |
+| Database Schemas    | `packages/database/src/schema/`         |
 | Database Migrations | `packages/database/drizzle/migrations/` |
-| Utilities | `apps/web/src/lib/` |
-| Types | Usually co-located with components |
-| Styles | Tailwind classes (no CSS files) |
-| Environment Vars | `apps/web/.env.local` |
-| Scripts | `scripts/` |
-| Documentation | `docs/` |
+| Utilities           | `apps/web/src/lib/`                     |
+| Types               | Usually co-located with components      |
+| Styles              | Tailwind classes (no CSS files)         |
+| Environment Vars    | `apps/web/.env.local`                   |
+| Scripts             | `scripts/`                              |
+| Documentation       | `docs/`                                 |
 
 ### Search Strategies
 

@@ -52,36 +52,34 @@ NODE_ENV=development  # or 'production'
 ### Basic Text Generation
 
 ```typescript
-import { AIGatewayService } from '@/lib/ai-gateway';
+import { AIGatewayService } from "@/lib/ai-gateway";
 
 const response = await AIGatewayService.generateText({
-  tenantId: 'workspace_123',
-  userId: 'user_456',
-  agentId: 'agent_789',
-  model: 'gpt-4o-mini',
+  tenantId: "workspace_123",
+  userId: "user_456",
+  agentId: "agent_789",
+  model: "gpt-4o-mini",
   messages: [
-    { role: 'system', content: 'You are a helpful assistant.' },
-    { role: 'user', content: 'What is the weather like today?' }
+    { role: "system", content: "You are a helpful assistant." },
+    { role: "user", content: "What is the weather like today?" },
   ],
   temperature: 0.7,
   maxTokens: 1000,
 });
 
 console.log(response.content);
-console.log('Cost:', response.cost);
-console.log('Tokens:', response.usage.totalTokens);
-console.log('Latency:', response.latencyMs, 'ms');
+console.log("Cost:", response.cost);
+console.log("Tokens:", response.usage.totalTokens);
+console.log("Latency:", response.latencyMs, "ms");
 ```
 
 ### Streaming Responses
 
 ```typescript
 const streamResponse = await AIGatewayService.generateTextStream({
-  tenantId: 'workspace_123',
-  model: 'claude-3-5-sonnet-20241022',
-  messages: [
-    { role: 'user', content: 'Write a story about AI' }
-  ],
+  tenantId: "workspace_123",
+  model: "claude-3-5-sonnet-20241022",
+  messages: [{ role: "user", content: "Write a story about AI" }],
 });
 
 // Stream the response
@@ -145,12 +143,12 @@ The gateway automatically calculates costs based on:
 
 Supported models and pricing:
 
-| Model | Input (per 1M tokens) | Output (per 1M tokens) |
-|-------|----------------------|------------------------|
-| gpt-4o | $5.00 | $15.00 |
-| gpt-4o-mini | $0.15 | $0.60 |
-| claude-3-5-sonnet | $3.00 | $15.00 |
-| claude-3-5-haiku | $0.80 | $4.00 |
+| Model             | Input (per 1M tokens) | Output (per 1M tokens) |
+| ----------------- | --------------------- | ---------------------- |
+| gpt-4o            | $5.00                 | $15.00                 |
+| gpt-4o-mini       | $0.15                 | $0.60                  |
+| claude-3-5-sonnet | $3.00                 | $15.00                 |
+| claude-3-5-haiku  | $0.80                 | $4.00                  |
 
 ## Error Handling
 
@@ -164,7 +162,7 @@ try {
   // - Original error message
   // - Request ID for debugging
   // - Automatically logged to monitoring
-  console.error('AI Gateway Error:', error.message);
+  console.error("AI Gateway Error:", error.message);
 }
 ```
 
@@ -173,6 +171,7 @@ try {
 ### Built-in Logging
 
 Every request is logged with:
+
 - Timestamp
 - Tenant/User/Agent IDs
 - Model and provider
@@ -182,6 +181,7 @@ Every request is logged with:
 ### TODO: Database Storage
 
 Next steps:
+
 1. Create `ai_gateway_logs` table in database
 2. Store all logs for historical analysis
 3. Build dashboard for cost/usage analytics
@@ -189,6 +189,7 @@ Next steps:
 ### TODO: External Monitoring
 
 Integrate with monitoring services:
+
 - Sentry (error tracking)
 - DataDog (metrics & APM)
 - Custom webhooks
@@ -261,6 +262,7 @@ const result = await AIGatewayService.generateText({
 ## Support
 
 For issues or questions:
+
 - Check logs in console (development)
 - Look for Request ID in error messages
 - Review this documentation

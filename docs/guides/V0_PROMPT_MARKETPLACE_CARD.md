@@ -101,29 +101,29 @@ Make it production-ready with proper TypeScript types and accessible markup.
 V0 will generate something like:
 
 ```tsx
-import { Star } from 'lucide-react'
+import { Star } from "lucide-react";
 
 interface MarketplaceAgentCardProps {
   agent: {
-    id: string
-    name: string
-    category: string
-    description: string
-    price: string | "Free"
-    rating: number
-    totalRuns: number
-    successRate: number
-    creator: string
-    avatarGradient: { from: string, to: string }
-  }
-  onViewDetails: () => void
-  onDeploy: () => void
+    id: string;
+    name: string;
+    category: string;
+    description: string;
+    price: string | "Free";
+    rating: number;
+    totalRuns: number;
+    successRate: number;
+    creator: string;
+    avatarGradient: { from: string; to: string };
+  };
+  onViewDetails: () => void;
+  onDeploy: () => void;
 }
 
-export function MarketplaceAgentCard({ 
-  agent, 
-  onViewDetails, 
-  onDeploy 
+export function MarketplaceAgentCard({
+  agent,
+  onViewDetails,
+  onDeploy,
 }: MarketplaceAgentCardProps) {
   // [V0 will generate the rest]
 }
@@ -134,12 +134,14 @@ export function MarketplaceAgentCard({
 ## 🔄 After Generation
 
 ### **Step 1: Copy to your project**
+
 ```bash
 # Create or replace file
 /c/Users/Owner/workspace/galaxyco-ai-2.0/apps/web/components/marketplace/MarketplaceAgentCard.tsx
 ```
 
 ### **Step 2: Test it**
+
 ```tsx
 // In your marketplace page
 import { MarketplaceAgentCard } from '@/components/marketplace/MarketplaceAgentCard'
@@ -157,7 +159,7 @@ const mockAgent = {
   avatarGradient: { from: '#6366F1', to: '#06B6D4' }
 }
 
-<MarketplaceAgentCard 
+<MarketplaceAgentCard
   agent={mockAgent}
   onViewDetails={() => console.log('View details')}
   onDeploy={() => console.log('Deploy')}
@@ -165,7 +167,9 @@ const mockAgent = {
 ```
 
 ### **Step 3: If tweaks needed**
+
 Go back to V0 chat and say:
+
 - "Make the description 1 line instead of 2"
 - "Remove the rating stars, just show as text"
 - "Add a 'Popular' badge for top agents"
@@ -177,18 +181,20 @@ V0 will update the code instantly.
 ## 💡 Pro Tips for This Component
 
 ### **Make it reusable**
+
 ```tsx
 // Support optional props for flexibility
 interface MarketplaceAgentCardProps {
-  agent: Agent
-  onViewDetails: () => void
-  onDeploy?: () => void  // Optional for view-only mode
-  compact?: boolean      // Ultra-compact variant
-  featured?: boolean     // Highlight featured agents
+  agent: Agent;
+  onViewDetails: () => void;
+  onDeploy?: () => void; // Optional for view-only mode
+  compact?: boolean; // Ultra-compact variant
+  featured?: boolean; // Highlight featured agents
 }
 ```
 
 ### **Add loading state**
+
 ```tsx
 export function MarketplaceAgentCardSkeleton() {
   return (
@@ -200,15 +206,17 @@ export function MarketplaceAgentCardSkeleton() {
         {/* More skeleton elements */}
       </div>
     </div>
-  )
+  );
 }
 ```
 
 ### **Add to design system doc**
+
 After it works, add pattern to `docs/DESIGN_SYSTEM_FOUNDATION.md`:
 
 ```markdown
 ### Marketplace Card Pattern
+
 [Screenshot of the card]
 [Link to component file]
 Use this pattern for: marketplace, agent discovery, template browsing
@@ -219,6 +227,7 @@ Use this pattern for: marketplace, agent discovery, template browsing
 ## 📊 Time Comparison
 
 ### **Old way (manual coding):**
+
 - Design in browser: 1 hour
 - Tweak CSS: 2 hours
 - Responsive fixes: 1 hour
@@ -226,6 +235,7 @@ Use this pattern for: marketplace, agent discovery, template browsing
 - **Total: 4.5 hours**
 
 ### **New way (Figma + V0):**
+
 - Design in Figma (or use Untitled UI): 20 min
 - Generate with V0: 5 min
 - Copy to project: 5 min

@@ -4,7 +4,7 @@ Welcome to the GalaxyCo.ai web application! This guide will help you get up and 
 
 ## 📋 Prerequisites
 
-- **Node.js** 20+ 
+- **Node.js** 20+
 - **pnpm** 9+
 - **Git**
 - **OpenAI** or **Anthropic API key** (for AI chat feature)
@@ -88,42 +88,49 @@ apps/web/
 ## 🎯 Key Features
 
 ### AI Chat Assistant
+
 - Click the floating chat button (bottom-right)
 - Ask questions about agents, workflows, prospects
 - Powered by OpenAI (GPT-4) or Anthropic (Claude)
 - Chat history persisted in localStorage
 
 ### Dashboard
+
 - Overview of key metrics
 - Active agents list with status
 - Recent activity feed
 - Quick action buttons
 
 ### Agents
+
 - Create and manage AI agents
 - Types: Research, Email, CRM Sync
 - View metrics and configuration
 - Start/pause/configure agents
 
 ### Workflows
+
 - Multi-step automation pipelines
 - Chain agents together
 - Visual step display
 - Track execution metrics
 
 ### Prospects
+
 - Table view with enrichment data
 - Confidence scores
 - Company and contact info
 - LinkedIn integration
 
 ### Emails
+
 - Review AI-generated emails
 - Research insights with confidence scores
 - Approve, edit, or reject
 - Track email status
 
 ### Settings
+
 - Profile management
 - Integration connections (HubSpot, Gmail, LinkedIn)
 - Notification preferences
@@ -131,16 +138,19 @@ apps/web/
 ## 🎨 Design System
 
 ### Colors
+
 - **Primary**: Blue (#3b82f6)
 - **Agent Colors**: Purple (research), Pink (email), Teal (CRM)
 - **Semantic**: Green (success), Orange (warning), Red (error)
 - **Neutrals**: Complete grayscale (0-950)
 
 ### Typography
+
 - **Font**: Inter (sans), Fira Code (mono)
 - **Sizes**: xs (12px) → 5xl (48px)
 
 ### Components
+
 - All components are in `components/`
 - Shared components in `components/shared/`
 - Use `cn()` utility for className merging

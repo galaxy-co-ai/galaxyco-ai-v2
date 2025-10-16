@@ -9,7 +9,9 @@ Provides centralized database schema, client configuration, and type-safe databa
 ## Installation
 
 ### In Workspace
+
 Already included via workspace protocol:
+
 ```json
 {
   "dependencies": {
@@ -21,10 +23,12 @@ Already included via workspace protocol:
 ## Key Exports
 
 ### Database Client
+
 - **`db`** - Drizzle database client instance
 - **`sql`** - Raw SQL query builder
 
 ### Schema Tables
+
 - **`workspaces`** - Workspace/tenant data
 - **`users`** - User accounts and profiles
 - **`agents`** - Agent configurations
@@ -34,12 +38,14 @@ Already included via workspace protocol:
 - **`apiKeys`** - API key management
 
 ### Types
+
 - All schema types auto-generated from Drizzle
 - TypeScript-first with full type safety
 
 ## Usage Examples
 
 ### Query Data
+
 ```typescript
 import { db } from '@galaxyco/database';
 import { agents, workspaces } from '@galaxyco/database/schema';
@@ -59,32 +65,38 @@ const agentsWith Workspace = await db
 ```
 
 ### Insert Data
-```typescript
-import { db } from '@galaxyco/database';
-import { agents } from '@galaxyco/database/schema';
 
-const newAgent = await db.insert(agents).values({
-  name: 'My Agent',
-  workspaceId: 'workspace_123',
-  model: 'gpt-4o-mini',
-  systemPrompt: 'You are a helpful assistant',
-  createdAt: new Date()
-}).returning();
+```typescript
+import { db } from "@galaxyco/database";
+import { agents } from "@galaxyco/database/schema";
+
+const newAgent = await db
+  .insert(agents)
+  .values({
+    name: "My Agent",
+    workspaceId: "workspace_123",
+    model: "gpt-4o-mini",
+    systemPrompt: "You are a helpful assistant",
+    createdAt: new Date(),
+  })
+  .returning();
 ```
 
 ### Update Data
+
 ```typescript
-import { db } from '@galaxyco/database';
-import { agents } from '@galaxyco/database/schema';
-import { eq } from 'drizzle-orm';
+import { db } from "@galaxyco/database";
+import { agents } from "@galaxyco/database/schema";
+import { eq } from "drizzle-orm";
 
 await db
   .update(agents)
   .set({ isActive: true })
-  .where(eq(agents.id, 'agent_123'));
+  .where(eq(agents.id, "agent_123"));
 ```
 
 ### Transactions
+
 ```typescript
 import { db } from '@galaxyco/database';
 
@@ -97,6 +109,7 @@ await db.transaction(async (tx) => {
 ## Schema Overview
 
 ### Core Tables
+
 - **workspaces** - Multi-tenant workspace isolation
 - **users** - User authentication and profiles
 - **agents** - AI agent configurations
@@ -107,6 +120,7 @@ await db.transaction(async (tx) => {
 - **documents** - Vector embeddings for RAG
 
 ### Relationships
+
 ```
 workspaces
   ↓ has many
@@ -118,22 +132,26 @@ executions, documents
 ## Migrations
 
 ### Create Migration
+
 ```bash
 cd packages/database
 pnpm db:generate
 ```
 
 ### Run Migrations
+
 ```bash
 pnpm db:migrate
 ```
 
 ### Reset Database (Development Only)
+
 ```bash
 pnpm db:push  # Push schema directly without migration
 ```
 
 ### Open Drizzle Studio
+
 ```bash
 pnpm db:studio  # Opens at http://localhost:4983
 ```
@@ -163,16 +181,18 @@ pnpm typecheck
 ## Database Configuration
 
 ### Connection
+
 ```typescript
 // packages/database/src/client.ts
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle(sql);
 ```
 
 ### Environment Variable
+
 ```env
 DATABASE_URL=postgresql://user:pass@host/database?sslmode=require
 ```
@@ -182,10 +202,11 @@ DATABASE_URL=postgresql://user:pass@host/database?sslmode=require
 **CRITICAL**: Always filter by `workspaceId` / `tenant_id`
 
 ### ✅ Correct Usage
+
 ```typescript
-import { db } from '@galaxyco/database';
-import { agents } from '@galaxyco/database/schema';
-import { eq } from 'drizzle-orm';
+import { db } from "@galaxyco/database";
+import { agents } from "@galaxyco/database/schema";
+import { eq } from "drizzle-orm";
 
 // Always include workspace filter
 const myAgents = await db
@@ -195,6 +216,7 @@ const myAgents = await db
 ```
 
 ### ❌ NEVER Do This
+
 ```typescript
 // Missing workspace filter - SECURITY ISSUE!
 const allAgents = await db.select().from(agents);
@@ -203,25 +225,27 @@ const allAgents = await db.select().from(agents);
 ## Type Safety
 
 ### Schema Types
+
 ```typescript
-import type { Agent, Workspace, User } from '@galaxyco/database/schema';
+import type { Agent, Workspace, User } from "@galaxyco/database/schema";
 
 // Fully typed
 const agent: Agent = {
-  id: 'agent_123',
-  workspaceId: 'workspace_123',
-  name: 'My Agent',
+  id: "agent_123",
+  workspaceId: "workspace_123",
+  name: "My Agent",
   // ... TypeScript knows all fields
 };
 ```
 
 ### Insert Types
+
 ```typescript
-import type { NewAgent } from '@galaxyco/database/schema';
+import type { NewAgent } from "@galaxyco/database/schema";
 
 const newAgent: NewAgent = {
-  workspaceId: 'workspace_123',
-  name: 'My Agent',
+  workspaceId: "workspace_123",
+  name: "My Agent",
   // ... only required fields needed
 };
 ```
@@ -229,6 +253,7 @@ const newAgent: NewAgent = {
 ## Best Practices
 
 ### 1. Always Use Transactions for Multi-Step Operations
+
 ```typescript
 await db.transaction(async (tx) => {
   const workspace = await tx.insert(workspaces).values({...}).returning();
@@ -237,19 +262,21 @@ await db.transaction(async (tx) => {
 ```
 
 ### 2. Use Prepared Statements for Repeated Queries
+
 ```typescript
 const getAgentsByWorkspace = db
   .select()
   .from(agents)
-  .where(eq(agents.workspaceId, sql.placeholder('workspaceId')))
+  .where(eq(agents.workspaceId, sql.placeholder("workspaceId")))
   .prepare();
 
 // Reuse efficiently
-const result1 = await getAgentsByWorkspace.execute({ workspaceId: 'ws_1' });
-const result2 = await getAgentsByWorkspace.execute({ workspaceId: 'ws_2' });
+const result1 = await getAgentsByWorkspace.execute({ workspaceId: "ws_1" });
+const result2 = await getAgentsByWorkspace.execute({ workspaceId: "ws_2" });
 ```
 
 ### 3. Handle Errors Gracefully
+
 ```typescript
 try {
   await db.insert(agents).values({...});
@@ -262,7 +289,9 @@ try {
 ```
 
 ### 4. Index Frequently Queried Fields
+
 See `schema.ts` for index definitions on:
+
 - `workspaceId` on all tables
 - `userId` where applicable
 - `createdAt` for time-based queries
@@ -293,6 +322,7 @@ database/
 ## Troubleshooting
 
 ### Migration Errors
+
 ```bash
 # Check migration status
 pnpm db:check
@@ -302,11 +332,13 @@ pnpm db:generate
 ```
 
 ### Connection Issues
+
 1. Verify `DATABASE_URL` in `.env.local`
 2. Check Neon dashboard for database status
 3. Test connection: `pnpm db:studio`
 
 ### Type Errors
+
 ```bash
 # Rebuild after schema changes
 pnpm build

@@ -107,8 +107,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 ```typescript
 // src/lib/utils.ts
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -160,13 +160,13 @@ export const Modal = ({
     lg: 'max-w-lg',
     xl: 'max-w-xl',
   };
-  
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         {/* Overlay */}
         <Dialog.Overlay className="fixed inset-0 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        
+
         {/* Content */}
         <Dialog.Content
           className={cn(
@@ -195,10 +195,10 @@ export const Modal = ({
               )}
             </div>
           )}
-          
+
           {/* Body */}
           {children}
-          
+
           {/* Close Button */}
           <Dialog.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
             <X className="h-4 w-4" />
@@ -241,7 +241,7 @@ export const DropdownMenu = ({ trigger, items, align = 'end' }: DropdownMenuProp
       <DropdownMenuPrimitive.Trigger asChild>
         {trigger}
       </DropdownMenuPrimitive.Trigger>
-      
+
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           align={align}
@@ -421,7 +421,7 @@ export const LoginForm = ({ onSubmit }: { onSubmit: (data: LoginFormData) => voi
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
@@ -435,7 +435,7 @@ export const LoginForm = ({ onSubmit }: { onSubmit: (data: LoginFormData) => voi
           error={errors.email?.message}
         />
       </div>
-      
+
       <div>
         <label htmlFor="password" className="block text-sm font-medium mb-1">
           Password
@@ -447,7 +447,7 @@ export const LoginForm = ({ onSubmit }: { onSubmit: (data: LoginFormData) => voi
           error={errors.password?.message}
         />
       </div>
-      
+
       <Button type="submit" isLoading={isSubmitting} isFullWidth>
         Log in
       </Button>
@@ -491,23 +491,23 @@ function App() {
 
 ```typescript
 // src/hooks/useAgents.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchAgents, createAgent } from '@/lib/api';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchAgents, createAgent } from "@/lib/api";
 
 export const useAgents = () => {
   return useQuery({
-    queryKey: ['agents'],
+    queryKey: ["agents"],
     queryFn: fetchAgents,
   });
 };
 
 export const useCreateAgent = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['agents'] });
+      queryClient.invalidateQueries({ queryKey: ["agents"] });
     },
   });
 };
@@ -519,8 +519,8 @@ export const useCreateAgent = () => {
 
 ```typescript
 // src/store/authStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface User {
   id: string;
@@ -544,9 +544,9 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ user: null, isAuthenticated: false }),
     }),
     {
-      name: 'auth-storage',
-    }
-  )
+      name: "auth-storage",
+    },
+  ),
 );
 ```
 
@@ -560,6 +560,7 @@ export const useAuthStore = create<AuthState>()(
 2. **JetBrains Mono:** https://www.jetbrains.com/lp/mono/
 
 Place in `public/fonts/`:
+
 - `inter-var.woff2`
 - `jetbrains-mono.woff2`
 
@@ -574,12 +575,14 @@ See `14-TAILWIND-CONFIG-PRODUCTION.md` for complete font setup.
 ## Environment Variables
 
 ### .env.local
+
 ```bash
 VITE_API_BASE_URL=http://localhost:3000
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 ```
 
 ### Usage
+
 ```typescript
 // src/config/env.ts
 export const env = {
@@ -593,16 +596,19 @@ export const env = {
 ## Build & Deploy
 
 ### Build Command
+
 ```bash
 npm run build
 ```
 
 ### Preview
+
 ```bash
 npm run preview
 ```
 
 ### Deploy to Vercel
+
 ```bash
 npm install -g vercel
 vercel
@@ -620,16 +626,16 @@ npx storybook@latest init
 
 ```typescript
 // src/components/atoms/Button/Button.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
+  title: "Atoms/Button",
   component: Button,
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'ghost', 'danger', 'outline'],
+      control: "select",
+      options: ["primary", "secondary", "ghost", "danger", "outline"],
     },
   },
 };
@@ -639,14 +645,14 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    children: 'Button',
-    variant: 'primary',
+    children: "Button",
+    variant: "primary",
   },
 };
 
 export const Loading: Story = {
   args: {
-    children: 'Loading',
+    children: "Loading",
     isLoading: true,
   },
 };

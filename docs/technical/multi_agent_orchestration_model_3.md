@@ -103,7 +103,7 @@ Specify **how agents collaborate** to deliver outcomes, including roles, protoco
 
 ## Error Handling & Self‑Healing
 
-- **Taxonomy**: tool\_error, rate\_limit, model\_error, knowledge\_miss, policy\_block.
+- **Taxonomy**: tool_error, rate_limit, model_error, knowledge_miss, policy_block.
 - **Remediation**: exponential backoff, alternate model/tool, narrower query, human‑assist request.
 - **Escalation**: PAA opens an issue with reproduction, context, and recommended fix or marketplace suggestion.
 
@@ -112,7 +112,7 @@ Specify **how agents collaborate** to deliver outcomes, including roles, protoco
 ## Telemetry & Instrumentation
 
 - Emit events: `plan_created`, `step_started`, `tool_called`, `step_failed`, `step_fixed`, `outcome_success`, `outcome_failure`, `paa_suggestion`, `pack_change`, `cost_update`.
-- Update **WSAO** counter on `outcome_success`; attach: agent\_id, pack\_id, latency, tokens, \$cost, success\_signal, citations hash.
+- Update **WSAO** counter on `outcome_success`; attach: agent_id, pack_id, latency, tokens, \$cost, success_signal, citations hash.
 - Traces show step graph with inputs/outputs (redacted as needed).
 
 ---
@@ -122,7 +122,7 @@ Specify **how agents collaborate** to deliver outcomes, including roles, protoco
 - PAA provisioned for every new user at signup; visible in Dashboard with status and suggestions.
 - Orchestrator supports **plan → dispatch → execute → evaluate → summarize** loop across at least **3 Specialists**.
 - Blackboard state, traces, and citations available for every outcome.
-- Self‑healing handles at least **tool\_error** and **rate\_limit** without user intervention; logs remediation.
+- Self‑healing handles at least **tool_error** and **rate_limit** without user intervention; logs remediation.
 - Approvals enforced for destructive scopes; audit log + rollback functional.
 - Performance budgets met (p95 ≤ 12s) and **WSAO** updates recorded.
 
@@ -167,4 +167,3 @@ plan "Weekly Sales Follow‑ups" {
 
 - Onboarding installs **Starter Pack** + **PAA**.
 - PAA runs a **D+7 review**: reports outcomes, flags bottlenecks, proposes agent adds/removals from Marketplace, and can apply changes with approval.
-

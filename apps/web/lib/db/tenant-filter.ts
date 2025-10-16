@@ -1,14 +1,14 @@
 /**
  * Multi-tenancy utilities for database queries
- * 
+ *
  * SECURITY CRITICAL: All database queries MUST include tenant_id filters
  * to prevent cross-tenant data access.
  */
 
-import { eq, and, SQL } from 'drizzle-orm';
-import { auth } from '@clerk/nextjs/server';
-import { db } from '@galaxyco/database';
-import { users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and, SQL } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@galaxyco/database";
+import { users, workspaceMembers } from "@galaxyco/database/schema";
 
 export interface TenantContext {
   tenantId: string;
@@ -21,9 +21,9 @@ export interface TenantContext {
  */
 export async function getCurrentTenantContext(): Promise<TenantContext> {
   const { userId } = auth();
-  
+
   if (!userId) {
-    throw new Error('User not authenticated');
+    throw new Error("User not authenticated");
   }
 
   // First, get the internal user ID from Clerk user ID
@@ -35,14 +35,14 @@ export async function getCurrentTenantContext(): Promise<TenantContext> {
   });
 
   if (!user) {
-    throw new Error('User not found in database');
+    throw new Error("User not found in database");
   }
 
   // Then get user's active workspace membership
   const membership = await db.query.workspaceMembers.findFirst({
     where: and(
       eq(workspaceMembers.userId, user.id),
-      eq(workspaceMembers.isActive, true)
+      eq(workspaceMembers.isActive, true),
     ),
     columns: {
       workspaceId: true,
@@ -51,7 +51,7 @@ export async function getCurrentTenantContext(): Promise<TenantContext> {
   });
 
   if (!membership || !membership.workspaceId) {
-    throw new Error('User workspace not found');
+    throw new Error("User workspace not found");
   }
 
   return {
@@ -67,7 +67,7 @@ export async function getCurrentTenantContext(): Promise<TenantContext> {
  */
 export function withTenantFilter(tenantId: string, tenantColumn: any): SQL {
   if (!tenantId) {
-    throw new Error('tenant_id required for query');
+    throw new Error("tenant_id required for query");
   }
   return eq(tenantColumn, tenantId);
 }
@@ -85,11 +85,11 @@ export function withTenantAndConditions(
   ...additionalConditions: SQL[]
 ): SQL {
   const tenantFilter = withTenantFilter(tenantId, tenantColumn);
-  
+
   if (additionalConditions.length === 0) {
     return tenantFilter;
   }
-  
+
   return and(tenantFilter, ...additionalConditions)!;
 }
 
@@ -99,17 +99,20 @@ export function withTenantAndConditions(
  * @param resourceTenantId The resource's tenant ID
  * @throws {Error} If tenant IDs don't match
  */
-export function validateTenantAccess(userTenantId: string, resourceTenantId: string): void {
+export function validateTenantAccess(
+  userTenantId: string,
+  resourceTenantId: string,
+): void {
   if (userTenantId !== resourceTenantId) {
     // Log security incident
-    console.error('[SECURITY] Cross-tenant access attempt', {
+    console.error("[SECURITY] Cross-tenant access attempt", {
       userTenantId,
       resourceTenantId,
       timestamp: new Date().toISOString(),
       stack: new Error().stack,
     });
-    
-    throw new Error('Cross-tenant access denied');
+
+    throw new Error("Cross-tenant access denied");
   }
 }
 
@@ -119,7 +122,7 @@ export function validateTenantAccess(userTenantId: string, resourceTenantId: str
  * @returns Wrapped operation with tenant context
  */
 export function withTenantIsolation<T>(
-  operation: (context: TenantContext) => Promise<T>
+  operation: (context: TenantContext) => Promise<T>,
 ): () => Promise<T> {
   return async (): Promise<T> => {
     const context = await getCurrentTenantContext();
@@ -135,7 +138,7 @@ export function withTenantIsolation<T>(
  */
 export function belongsToTenant(
   resource: { tenantId?: string },
-  tenantId: string
+  tenantId: string,
 ): resource is { tenantId: string } {
   return resource.tenantId === tenantId;
 }

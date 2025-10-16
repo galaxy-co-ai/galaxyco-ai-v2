@@ -1,12 +1,14 @@
 # GalaxyCo.ai — Pricing & Business Model (5.4)
 
 ## Purpose
+
 Define how we monetize **Packs**, **Agents**, and **workspaces** without slowing adoption. Align pricing to our North Star (**WSAO**), keep PLG‑friendly, and preserve enterprise trust (governance by default). Inspirations (non‑deviating): **StackAI** (polish), **OpenSea** (marketplace dynamics), **OpenAI Agent Builder** (friendly creation), **Sider** (human knowledge UI).
 
 ---
 
 ## Principles
-- **Value‑metered**: Charge on *outcomes* (WSAO credits), not on prompts or vague compute.
+
+- **Value‑metered**: Charge on _outcomes_ (WSAO credits), not on prompts or vague compute.
 - **Try fast**: **Sim Mode** delivers proof before integrations; generous free evaluation.
 - **Simple first**: Few, memorable tiers; opinionated defaults.
 - **Fair & safe**: Guardrails, approvals, and RBAC included; no paywall for basic safety.
@@ -15,12 +17,14 @@ Define how we monetize **Packs**, **Agents**, and **workspaces** without slowing
 ---
 
 ## Core Value Metric
+
 **WSAO (Weekly Successful Agent Outcomes)** = counted when an agent action creates end‑user value and passes a success signal (approval, state change, KPI delta, or validated result).  
 We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful outcome). Test Bench runs and pure previews do **not** consume credits.
 
 ---
 
 ## Packaging Overview (proposed)
+
 - **Free — Sim Mode** (forever)
 - **Pro — Individual**
 - **Team — Small Teams**
@@ -34,6 +38,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ## Tiers & Inclusions (copy‑ready)
 
 ### Free — Sim Mode ($0)
+
 - 1 workspace · 1 user
 - **1 Starter Pack** installed by default
 - **Sim Mode only** (no external writes); demo runs unlimited within anti‑abuse limits
@@ -49,6 +54,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ### Pro — Individual ($39/user/month)
+
 - Everything in Free **+ live actions** (writes allowed with approvals)
 - 3 active **Packs** per workspace
 - **2,000 WSAO credits / month** included
@@ -64,6 +70,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ### Team — Small Teams ($199/workspace/month, up to 5 users)
+
 - Everything in Pro, plus:
 - **Unlimited Packs**; **10,000 WSAO credits / month** included
 - **10 connectors**; priority runs for Pack goals
@@ -79,9 +86,10 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ### Business — Departments ($799/workspace/month, includes 25 users)
+
 - Everything in Team, plus:
 - **50,000 WSAO credits / month** included
-- **SSO (SAML/OIDC)** *(V2 timing)*; data residency tags; advanced audit
+- **SSO (SAML/OIDC)** _(V2 timing)_; data residency tags; advanced audit
 - **Policy Engine** templates; Approvals automation; scheduled workflows
 - Creator verification fast‑track for internal listings
 - Support: priority (24h SLA) + technical onboarding
@@ -92,6 +100,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ### Enterprise — Org & Regulated (Custom)
+
 - Everything in Business, plus:
 - **SSO + SCIM**; private networking; on‑prem/isolated deployment options
 - Unlimited workspaces; custom data retention; DPA and security reviews
@@ -103,6 +112,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Credit Rules & Fair‑Use
+
 - A **WSAO credit** burns only on **`outcome_success`** events (as defined in 3.2 Orchestration Model). Failures or retries do not bill.
 - **Destructive actions** always require approval unless policy enables Auto‑Approve.
 - **Sim Mode** never bills credits.
@@ -111,6 +121,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Overage & Bundles
+
 - Overage billed at the tier’s rate (see above), aggregated monthly.
 - **Outcome Bundles** available: 10k ($180), 50k ($800), 200k ($2,800). Bundles roll over for 90 days.
 - Annual discount: **‑20%** on subscriptions; bundles unaffected.
@@ -118,6 +129,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Add‑Ons (cross‑tier)
+
 - **Advanced Connectors** (ERP/warehouse): $50/mo each
 - **Compliance Pack** (HIPAA/GxP modes): $300/mo per workspace
 - **Creator Tools Pro**: deep analytics for listings + A/B harness ($99/mo)
@@ -125,6 +137,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Marketplace Economics (V2)
+
 - **Paid listings** opt‑in for creators.
 - **Revenue share** (starter model): **80% creator / 20% GalaxyCo** after fees.
 - **Payouts** monthly with a $50 threshold; clawbacks for fraud.
@@ -134,6 +147,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Billing Architecture
+
 - Meter on `outcome_success` events with attached: workspace_id, pack_id, agent_id, latency, tokens, \$cost, approval flag.
 - Token and egress costs tracked for gross margin; **target GM ≥ 75%** on average across tiers.
 - Hard/soft budgets per workspace; PAA notifies on 80% and 100% thresholds; soft‑stop offers bundles.
@@ -141,6 +155,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Trials & Promotions
+
 - **Pro 14‑day trial** with live actions; converts to Free Sim Mode if not paid.
 - **Startup program**: 50% off Team for 12 months (eligibility: < $2M ARR, < 25 employees).
 - **Creator grants**: free Team while actively publishing and maintaining ≥2 Verified listings.
@@ -148,6 +163,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Legal & Compliance Notes
+
 - **DPA** and data residency statements published; on‑prem option gated to Enterprise.
 - Refund policy: pro‑rata for downtime beyond SLA on paid tiers.
 - No storage of customer secrets outside KMS; audit exports available by tier.
@@ -155,6 +171,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## KPIs to Monitor
+
 - Free→Pro conversion; Pro→Team expansion; WSAO/\$ by tier; overage mix.
 - CAC:LTV; churn by persona; install velocity from Collections/PAA suggestions.
 - Creator supply: net new listings, Verified %, QS median, paid adoption of listings.
@@ -162,6 +179,7 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## Risks & Mitigations
+
 - **Outcome under‑counting** → strict event contracts; QA harness; reconciliation jobs.
 - **Credit confusion** → in‑product meters, budget bars, PAA alerts; sample cost previews.
 - **Creator misalignment** → QS‑weighted payouts, verification tiers, enforcement ladder.
@@ -170,9 +188,9 @@ We bill **monthly** using a **WSAO credit** pool (1 WSAO credit per successful o
 ---
 
 ## V1 Acceptance Criteria (Pricing readiness)
+
 - Tiers live in UI with clear inclusions and meters; budget bars visible.
 - Billing meters on `outcome_success`; Sim Mode never bills; approvals always enforced.
 - Overage and bundles purchasable in‑app; invoices web‑delivered.
 - Free Sim Mode + Pro trial enabled; downgrade path safe to Free.
 - Marketplace revenue share **not** launched (flagged for V2); creator incentives documented.
-

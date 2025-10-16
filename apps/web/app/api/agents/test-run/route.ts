@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import { requireSession } from '@/lib/services/user-session';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { requireSession } from "@/lib/services/user-session";
 import type {
   TestPlaygroundInput,
   TestExecutionLog,
   TestAgentOutput,
   TestResult,
-} from '@/lib/agents/test-types';
+} from "@/lib/agents/test-types";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 60; // Allow up to 60s for test execution
 
 /**
@@ -18,7 +18,7 @@ export const maxDuration = 60; // Allow up to 60s for test execution
 export async function POST(req: NextRequest) {
   try {
     const session = await requireSession();
-    const body = await req.json() as TestPlaygroundInput & {
+    const body = (await req.json()) as TestPlaygroundInput & {
       agentName: string;
       workflowSteps: Array<{
         id: string;
@@ -39,19 +39,19 @@ export async function POST(req: NextRequest) {
     // Validate inputs
     if (!agentName || !workflowSteps || workflowSteps.length === 0) {
       return NextResponse.json(
-        { error: 'Missing required fields: agentName, workflowSteps' },
-        { status: 400 }
+        { error: "Missing required fields: agentName, workflowSteps" },
+        { status: 400 },
       );
     }
 
     // Check AI API availability
     const openaiKey = process.env.OPENAI_API_KEY;
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
-    
+
     if (!openaiKey && !anthropicKey) {
       return NextResponse.json(
-        { error: 'No AI API keys configured - cannot execute agent logic' },
-        { status: 500 }
+        { error: "No AI API keys configured - cannot execute agent logic" },
+        { status: 500 },
       );
     }
 
@@ -63,8 +63,8 @@ export async function POST(req: NextRequest) {
     // Add initial trigger log
     logs.push({
       id: `log-0`,
-      step: 'trigger',
-      status: 'running',
+      step: "trigger",
+      status: "running",
       message: `Triggered by ${triggerType}`,
       timestamp: new Date(),
     });
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       logs.push({
         id: logId,
         step: step.label,
-        status: 'running',
+        status: "running",
         message: `Executing: ${step.label}`,
         timestamp: new Date(),
       });
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
           sampleTriggerData,
           mockIntegrations,
           openaiKey,
-          anthropicKey
+          anthropicKey,
         );
 
         const duration = Date.now() - stepStartTime;
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
         // Update log to completed
         logs[logs.length - 1] = {
           ...logs[logs.length - 1],
-          status: 'completed',
+          status: "completed",
           message: `✓ ${step.label} completed`,
           duration,
           details: stepResult.details,
@@ -109,7 +109,10 @@ export async function POST(req: NextRequest) {
         if (stepResult.output) {
           outputs.push({
             id: `output-${i}`,
-            type: stepResult.output.type as 'ai-result' | 'notification' | 'data',
+            type: stepResult.output.type as
+              | "ai-result"
+              | "notification"
+              | "data",
             content: stepResult.output.content,
             timestamp: new Date(),
           });
@@ -119,14 +122,14 @@ export async function POST(req: NextRequest) {
         await new Promise((resolve) => setTimeout(resolve, 200));
       } catch (error) {
         const duration = Date.now() - stepStartTime;
-        
+
         // Update log to failed
         logs[logs.length - 1] = {
           ...logs[logs.length - 1],
-          status: 'failed',
-          message: `✗ ${step.label} failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          status: "failed",
+          message: `✗ ${step.label} failed: ${error instanceof Error ? error.message : "Unknown error"}`,
           duration,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? error.message : "Unknown error",
         };
 
         // Stop execution on failure
@@ -137,7 +140,8 @@ export async function POST(req: NextRequest) {
           totalDuration: Date.now() - startTime,
           executedSteps: i + 1,
           totalSteps: workflowSteps.length,
-          error: error instanceof Error ? error.message : 'Test execution failed',
+          error:
+            error instanceof Error ? error.message : "Test execution failed",
         };
 
         return NextResponse.json(result);
@@ -147,7 +151,7 @@ export async function POST(req: NextRequest) {
     // Mark trigger as completed
     logs[0] = {
       ...logs[0],
-      status: 'completed',
+      status: "completed",
       duration: 50,
     };
 
@@ -163,13 +167,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error('Test execution API error:', error);
+    console.error("Test execution API error:", error);
     return NextResponse.json(
-      { 
-        error: 'Test execution failed', 
-        details: error instanceof Error ? error.message : 'Unknown error',
+      {
+        error: "Test execution failed",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -182,37 +186,37 @@ async function executeStep(
   triggerData: Record<string, any>,
   mockIntegrations: boolean,
   openaiKey?: string,
-  anthropicKey?: string
+  anthropicKey?: string,
 ) {
   const stepLower = step.label.toLowerCase();
 
   // AI/LLM steps - use real API calls
   if (
-    stepLower.includes('analyze') ||
-    stepLower.includes('generate') ||
-    stepLower.includes('summarize') ||
-    stepLower.includes('extract') ||
-    stepLower.includes('classify')
+    stepLower.includes("analyze") ||
+    stepLower.includes("generate") ||
+    stepLower.includes("summarize") ||
+    stepLower.includes("extract") ||
+    stepLower.includes("classify")
   ) {
     return await executeAIStep(step, triggerData, openaiKey, anthropicKey);
   }
 
   // Integration steps - mock or real based on flag
   if (
-    stepLower.includes('send email') ||
-    stepLower.includes('calendar') ||
-    stepLower.includes('slack') ||
-    stepLower.includes('crm') ||
-    stepLower.includes('database')
+    stepLower.includes("send email") ||
+    stepLower.includes("calendar") ||
+    stepLower.includes("slack") ||
+    stepLower.includes("crm") ||
+    stepLower.includes("database")
   ) {
     return await executeIntegrationStep(step, mockIntegrations);
   }
 
   // Data transformation steps
   if (
-    stepLower.includes('format') ||
-    stepLower.includes('transform') ||
-    stepLower.includes('parse')
+    stepLower.includes("format") ||
+    stepLower.includes("transform") ||
+    stepLower.includes("parse")
   ) {
     return executeDataStep(step);
   }
@@ -231,7 +235,7 @@ async function executeAIStep(
   step: { label: string; description?: string },
   triggerData: Record<string, any>,
   openaiKey?: string,
-  anthropicKey?: string
+  anthropicKey?: string,
 ) {
   const prompt = `Execute this agent step: "${step.label}"
 Context: ${JSON.stringify(triggerData, null, 2)}
@@ -239,41 +243,43 @@ Provide a brief, realistic output for this step.`;
 
   if (openaiKey) {
     const openai = new OpenAI({ apiKey: openaiKey });
-    
+
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
-          content: 'You are simulating an AI agent step. Provide concise, realistic outputs.',
+          role: "system",
+          content:
+            "You are simulating an AI agent step. Provide concise, realistic outputs.",
         },
-        { role: 'user', content: prompt },
+        { role: "user", content: prompt },
       ],
       max_tokens: 150,
       temperature: 0.7,
     });
 
-    const result = completion.choices[0]?.message?.content || 'AI processing completed';
+    const result =
+      completion.choices[0]?.message?.content || "AI processing completed";
 
     return {
       details: `AI model: gpt-4o-mini, tokens: ${completion.usage?.total_tokens || 0}`,
       output: {
-        type: 'ai-result',
+        type: "ai-result",
         content: result,
       },
     };
   } else if (anthropicKey) {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': anthropicKey,
-        'anthropic-version': '2023-06-01',
+        "Content-Type": "application/json",
+        "x-api-key": anthropicKey,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
+        model: "claude-3-5-haiku-20241022",
         max_tokens: 150,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: "user", content: prompt }],
       }),
     });
 
@@ -282,18 +288,18 @@ Provide a brief, realistic output for this step.`;
     }
 
     const data = await response.json();
-    const result = data.content[0]?.text || 'AI processing completed';
+    const result = data.content[0]?.text || "AI processing completed";
 
     return {
       details: `AI model: claude-3-5-haiku, tokens: ${data.usage?.input_tokens + data.usage?.output_tokens || 0}`,
       output: {
-        type: 'ai-result',
+        type: "ai-result",
         content: result,
       },
     };
   }
 
-  throw new Error('No AI API key available');
+  throw new Error("No AI API key available");
 }
 
 /**
@@ -301,64 +307,66 @@ Provide a brief, realistic output for this step.`;
  */
 async function executeIntegrationStep(
   step: { label: string },
-  mockIntegrations: boolean
+  mockIntegrations: boolean,
 ) {
   // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 300 + Math.random() * 500));
+  await new Promise((resolve) =>
+    setTimeout(resolve, 300 + Math.random() * 500),
+  );
 
   if (mockIntegrations) {
     // Mock response based on integration type
     const stepLower = step.label.toLowerCase();
-    
-    if (stepLower.includes('email')) {
+
+    if (stepLower.includes("email")) {
       return {
-        details: 'Email sent (mocked)',
+        details: "Email sent (mocked)",
         output: {
-          type: 'notification',
-          content: 'Email sent successfully to recipient@example.com',
+          type: "notification",
+          content: "Email sent successfully to recipient@example.com",
         },
       };
     }
-    
-    if (stepLower.includes('calendar')) {
+
+    if (stepLower.includes("calendar")) {
       return {
-        details: 'Calendar event created (mocked)',
+        details: "Calendar event created (mocked)",
         output: {
-          type: 'notification',
-          content: 'Event created: Meeting on 2025-01-15 at 2:00 PM',
+          type: "notification",
+          content: "Event created: Meeting on 2025-01-15 at 2:00 PM",
         },
       };
     }
-    
-    if (stepLower.includes('slack')) {
+
+    if (stepLower.includes("slack")) {
       return {
-        details: 'Slack message sent (mocked)',
+        details: "Slack message sent (mocked)",
         output: {
-          type: 'notification',
-          content: 'Message posted to #general channel',
+          type: "notification",
+          content: "Message posted to #general channel",
         },
       };
     }
-    
-    if (stepLower.includes('crm') || stepLower.includes('hubspot')) {
+
+    if (stepLower.includes("crm") || stepLower.includes("hubspot")) {
       return {
-        details: 'CRM record updated (mocked)',
+        details: "CRM record updated (mocked)",
         output: {
-          type: 'data',
-          content: 'Contact record updated with new activity',
+          type: "data",
+          content: "Contact record updated with new activity",
         },
       };
     }
 
     return {
-      details: 'Integration step executed (mocked)',
+      details: "Integration step executed (mocked)",
       output: null,
     };
   }
 
   // TODO: Real integration calls when mockIntegrations = false
   // This would use actual API keys from env (GOOGLE_CUSTOM_SEARCH_API_KEY, etc.)
-  throw new Error('Real integration execution not yet implemented');
+  throw new Error("Real integration execution not yet implemented");
 }
 
 /**
@@ -366,10 +374,10 @@ async function executeIntegrationStep(
  */
 function executeDataStep(step: { label: string }) {
   return {
-    details: 'Data transformation completed',
+    details: "Data transformation completed",
     output: {
-      type: 'data',
-      content: 'Data formatted and validated successfully',
+      type: "data",
+      content: "Data formatted and validated successfully",
     },
   };
 }

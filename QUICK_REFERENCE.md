@@ -21,6 +21,7 @@ docs/reference/README.md                     # Quick lookups
 ## By Role
 
 ### Developer
+
 ```
 docs/guides/development-setup.md
 docs/technical/architecture/README.md
@@ -29,6 +30,7 @@ docs/technical/database/README.md
 ```
 
 ### Product Manager
+
 ```
 docs/business/product-strategy.md
 docs/business/roadmap.md
@@ -37,6 +39,7 @@ docs/status/sprints/
 ```
 
 ### DevOps
+
 ```
 docs/runbooks/deployment.md
 docs/runbooks/monitoring.md
@@ -46,6 +49,7 @@ docs/runbooks/incident-response.md
 ## By Task
 
 ### Setup
+
 ```bash
 # Read these in order:
 1. README.md
@@ -54,6 +58,7 @@ docs/runbooks/incident-response.md
 ```
 
 ### Build Feature
+
 ```bash
 1. docs/status/README.md                 # Check current status
 2. docs/technical/architecture/README.md # Understand system
@@ -62,6 +67,7 @@ docs/runbooks/incident-response.md
 ```
 
 ### Fix Bug
+
 ```bash
 1. docs/status/live-issues.md            # Known issues
 2. docs/guides/troubleshooting.md        # Common fixes
@@ -69,6 +75,7 @@ docs/runbooks/incident-response.md
 ```
 
 ### Deploy
+
 ```bash
 1. docs/guides/deployment.md             # Overview
 2. docs/runbooks/deployment.md           # Step-by-step
@@ -155,4 +162,5 @@ Shell:   bash 5.2.37
 **Bookmark**: `PROJECT_ORGANIZATION_GUIDE.md` for details
 
 ---
-*Updated: 2025-01-12*
+
+_Updated: 2025-01-12_

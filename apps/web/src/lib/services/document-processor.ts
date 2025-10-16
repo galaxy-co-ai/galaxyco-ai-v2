@@ -1,7 +1,7 @@
-import OpenAI from 'openai';
-import * as pdfParse from 'pdf-parse';
-import mammoth from 'mammoth';
-import * as cheerio from 'cheerio';
+import OpenAI from "openai";
+import * as pdfParse from "pdf-parse";
+import mammoth from "mammoth";
+import * as cheerio from "cheerio";
 
 export type ProcessOptions = {
   generateSummary?: boolean;
@@ -22,10 +22,14 @@ export type ProcessedDocument = {
 
 export class DocumentProcessor {
   private openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  private embeddingModel = process.env.OPENAI_EMBEDDING_MODEL || 'text-embedding-3-small';
-  private summaryModel = process.env.OPENAI_SUMMARY_MODEL || 'gpt-4o-mini';
+  private embeddingModel =
+    process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small";
+  private summaryModel = process.env.OPENAI_SUMMARY_MODEL || "gpt-4o-mini";
 
-  async processDocument(file: File, opts: ProcessOptions = {}): Promise<ProcessedDocument> {
+  async processDocument(
+    file: File,
+    opts: ProcessOptions = {},
+  ): Promise<ProcessedDocument> {
     const started = Date.now();
     const content = await this.extractText(file);
 
@@ -68,33 +72,44 @@ export class DocumentProcessor {
 
   async suggestCategories(
     content: string,
-    params: { existingCollections: string[]; documentTitle: string; documentType: string }
-  ): Promise<{ suggestedCategories: string[]; suggestedTags: string[]; confidence: number }> {
+    params: {
+      existingCollections: string[];
+      documentTitle: string;
+      documentType: string;
+    },
+  ): Promise<{
+    suggestedCategories: string[];
+    suggestedTags: string[];
+    confidence: number;
+  }> {
     const system = `You are an assistant that classifies documents into knowledge base collections and proposes tags. Return strict JSON {categories: string[], tags: string[], confidence: number(0-1)}.`;
     const user = `Title: ${params.documentTitle}\nType: ${params.documentType}\nExisting Collections: ${params.existingCollections.join(
-      ', '
+      ", ",
     )}\n---\nContent:\n${content.slice(0, 3000)}`;
 
     const chat = await this.openai.chat.completions.create({
       model: this.summaryModel,
       messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
+        { role: "system", content: system },
+        { role: "user", content: user },
       ],
       temperature: 0.2,
-      response_format: { type: 'json_object' } as any,
+      response_format: { type: "json_object" } as any,
     });
 
-    const raw = chat.choices[0]?.message?.content || '{}';
+    const raw = chat.choices[0]?.message?.content || "{}";
     let parsed: any = {};
     try {
       parsed = JSON.parse(raw);
     } catch {}
 
     return {
-      suggestedCategories: Array.isArray(parsed.categories) ? parsed.categories : [],
+      suggestedCategories: Array.isArray(parsed.categories)
+        ? parsed.categories
+        : [],
       suggestedTags: Array.isArray(parsed.tags) ? parsed.tags : [],
-      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.6,
+      confidence:
+        typeof parsed.confidence === "number" ? parsed.confidence : 0.6,
     };
   }
 
@@ -105,25 +120,32 @@ export class DocumentProcessor {
     const chat = await this.openai.chat.completions.create({
       model: this.summaryModel,
       messages: [
-        { role: 'system', content: 'You are a concise technical summarizer.' },
-        { role: 'user', content: prompt },
+        { role: "system", content: "You are a concise technical summarizer." },
+        { role: "user", content: prompt },
       ],
       temperature: 0.2,
     });
-    return chat.choices[0]?.message?.content?.trim() || '';
+    return chat.choices[0]?.message?.content?.trim() || "";
   }
 
   private async extractKeywords(text: string): Promise<string[]> {
     const chat = await this.openai.chat.completions.create({
       model: this.summaryModel,
       messages: [
-        { role: 'system', content: 'Extract 5-12 relevant keywords. Return JSON array of strings only.' },
-        { role: 'user', content: text.length > 4000 ? text.slice(0, 4000) : text },
+        {
+          role: "system",
+          content:
+            "Extract 5-12 relevant keywords. Return JSON array of strings only.",
+        },
+        {
+          role: "user",
+          content: text.length > 4000 ? text.slice(0, 4000) : text,
+        },
       ],
       temperature: 0.2,
     });
 
-    const raw = chat.choices[0]?.message?.content || '[]';
+    const raw = chat.choices[0]?.message?.content || "[]";
     try {
       const arr = JSON.parse(raw);
       return Array.isArray(arr) ? arr.map((x) => String(x)) : [];
@@ -141,26 +163,30 @@ export class DocumentProcessor {
     const type = file.type;
     const buf = Buffer.from(await file.arrayBuffer());
 
-    if (type.includes('pdf') || name.endsWith('.pdf')) {
+    if (type.includes("pdf") || name.endsWith(".pdf")) {
       const data = await (pdfParse as any)(buf);
-      return data.text || '';
+      return data.text || "";
     }
 
-    if (name.endsWith('.docx')) {
+    if (name.endsWith(".docx")) {
       const data = await mammoth.extractRawText({ buffer: buf });
-      return data.value || '';
+      return data.value || "";
     }
 
-    if (type.includes('html') || name.endsWith('.html') || name.endsWith('.htm')) {
-      const $ = cheerio.load(buf.toString('utf8'));
-      return $('body').text();
+    if (
+      type.includes("html") ||
+      name.endsWith(".html") ||
+      name.endsWith(".htm")
+    ) {
+      const $ = cheerio.load(buf.toString("utf8"));
+      return $("body").text();
     }
 
-    if (name.endsWith('.txt') || type.startsWith('text/')) {
-      return buf.toString('utf8');
+    if (name.endsWith(".txt") || type.startsWith("text/")) {
+      return buf.toString("utf8");
     }
 
     // Fallback: try to decode as UTF-8
-    return buf.toString('utf8');
+    return buf.toString("utf8");
   }
 }

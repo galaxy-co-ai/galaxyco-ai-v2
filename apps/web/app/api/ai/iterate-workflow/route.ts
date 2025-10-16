@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
 import { auth } from "@clerk/nextjs/server";
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 const ITERATION_SYSTEM_PROMPT = `You are an AI workflow architect for GalaxyCo's Agent Builder.
 
@@ -34,16 +34,20 @@ interface WorkflowNode {
   position: { x: number; y: number };
 }
 
-function createWorkflowNodes(steps: string[], variantId: string, existingNodes: WorkflowNode[]): { nodes: WorkflowNode[]; edges: any[] } {
+function createWorkflowNodes(
+  steps: string[],
+  variantId: string,
+  existingNodes: WorkflowNode[],
+): { nodes: WorkflowNode[]; edges: any[] } {
   // Reuse existing node positions where possible
   const nodes = steps.map((step, index) => {
     const existingNode = existingNodes[index];
     const isStart = index === 0;
     const isEnd = index === steps.length - 1;
-    
+
     return {
       id: existingNode?.id || `${variantId}-node-${index}`,
-      type: isStart ? 'start' : isEnd ? 'end' : 'action',
+      type: isStart ? "start" : isEnd ? "end" : "action",
       label: step,
       description: step,
       position: existingNode?.position || { x: 150, y: 100 + index * 120 },
@@ -68,70 +72,76 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { currentWorkflow, currentEdges, message, variantId } = body;
 
-    if (!message || typeof message !== 'string' || message.trim().length < 3) {
+    if (!message || typeof message !== "string" || message.trim().length < 3) {
       return NextResponse.json(
-        { error: 'Message must be at least 3 characters' },
-        { status: 400 }
+        { error: "Message must be at least 3 characters" },
+        { status: 400 },
       );
     }
 
     if (!currentWorkflow || !Array.isArray(currentWorkflow)) {
       return NextResponse.json(
-        { error: 'Current workflow is required' },
-        { status: 400 }
+        { error: "Current workflow is required" },
+        { status: 400 },
       );
     }
 
     // Extract current steps
-    const currentSteps = currentWorkflow.map((node: WorkflowNode) => node.label);
+    const currentSteps = currentWorkflow.map(
+      (node: WorkflowNode) => node.label,
+    );
 
     const openaiKey = process.env.OPENAI_API_KEY;
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
     if (!openaiKey && !anthropicKey) {
       return NextResponse.json(
-        { error: 'No AI API keys configured' },
-        { status: 500 }
+        { error: "No AI API keys configured" },
+        { status: 500 },
       );
     }
 
-    let response: { explanation: string; steps: string[]; integrations: string[] };
+    let response: {
+      explanation: string;
+      steps: string[];
+      integrations: string[];
+    };
 
     if (openaiKey) {
       const openai = new OpenAI({ apiKey: openaiKey });
 
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: ITERATION_SYSTEM_PROMPT },
+          { role: "system", content: ITERATION_SYSTEM_PROMPT },
           {
-            role: 'user',
-            content: `Current workflow steps:\n${currentSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\nUser request: "${message}"\n\nReturn updated workflow as JSON.`,
+            role: "user",
+            content: `Current workflow steps:\n${currentSteps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nUser request: "${message}"\n\nReturn updated workflow as JSON.`,
           },
         ],
         max_tokens: 800,
         temperature: 0.7,
-        response_format: { type: 'json_object' },
+        response_format: { type: "json_object" },
       });
 
-      const result = completion.choices[0]?.message?.content || '{}';
+      const result = completion.choices[0]?.message?.content || "{}";
       response = JSON.parse(result);
     } else {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey!,
-          'anthropic-version': '2023-06-01',
+          "Content-Type": "application/json",
+          "x-api-key": anthropicKey!,
+          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
+          model: "claude-3-5-sonnet-20241022",
           max_tokens: 800,
           system: ITERATION_SYSTEM_PROMPT,
           messages: [
             {
-              role: 'user',
-              content: `Current workflow steps:\n${currentSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\nUser request: "${message}"\n\nReturn updated workflow as JSON.`,
+              role: "user",
+              content: `Current workflow steps:\n${currentSteps.map((s, i) => `${i + 1}. ${s}`).join("\n")}\n\nUser request: "${message}"\n\nReturn updated workflow as JSON.`,
             },
           ],
         }),
@@ -142,11 +152,12 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await res.json();
-      const text = data.content[0]?.text || '{}';
-      
-      const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
-      const jsonText = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
-      
+      const text = data.content[0]?.text || "{}";
+
+      const jsonMatch =
+        text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
+      const jsonText = jsonMatch ? jsonMatch[1] || jsonMatch[0] : text;
+
       response = JSON.parse(jsonText);
     }
 
@@ -154,7 +165,7 @@ export async function POST(req: NextRequest) {
     const { nodes, edges } = createWorkflowNodes(
       response.steps,
       variantId || `var_${nanoid(12)}`,
-      currentWorkflow
+      currentWorkflow,
     );
 
     return NextResponse.json({
@@ -164,10 +175,10 @@ export async function POST(req: NextRequest) {
       integrations: response.integrations,
     });
   } catch (error) {
-    console.error('Iterate workflow API error:', error);
+    console.error("Iterate workflow API error:", error);
     return NextResponse.json(
-      { error: 'Failed to iterate workflow' },
-      { status: 500 }
+      { error: "Failed to iterate workflow" },
+      { status: 500 },
     );
   }
 }

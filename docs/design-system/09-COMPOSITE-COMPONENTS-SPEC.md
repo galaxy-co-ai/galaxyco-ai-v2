@@ -15,6 +15,7 @@
 **Purpose:** Search input with integrated actions
 
 **Props:**
+
 ```typescript
 interface SearchBarProps {
   value?: string;
@@ -24,11 +25,12 @@ interface SearchBarProps {
   placeholder?: string;
   shortcuts?: string; // Display "⌘K"
   isLoading?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 ```
 
 **Layout:**
+
 ```
 ┌───────────────────────────────────┐
 │ 🔍  [Search query...]      [⌘K] ✕ │
@@ -36,6 +38,7 @@ interface SearchBarProps {
 ```
 
 **Behavior:**
+
 - Clear button appears only when value exists
 - Enter key triggers onSearch
 - Escape key clears input
@@ -48,6 +51,7 @@ interface SearchBarProps {
 **Composition:** Buttons + Text + Select
 
 **Props:**
+
 ```typescript
 interface PaginationProps {
   currentPage: number;
@@ -61,6 +65,7 @@ interface PaginationProps {
 ```
 
 **Layout:**
+
 ```
 ┌──────────────────────────────────────────────┐
 │ Rows per page: [10▼]                         │
@@ -72,6 +77,7 @@ interface PaginationProps {
 ```
 
 **Behavior:**
+
 - First/last always shown
 - Ellipsis for gaps
 - Current page highlighted
@@ -84,6 +90,7 @@ interface PaginationProps {
 **Composition:** Links + Divider Icons
 
 **Props:**
+
 ```typescript
 interface BreadcrumbProps {
   items: Array<{
@@ -97,11 +104,13 @@ interface BreadcrumbProps {
 ```
 
 **Layout:**
+
 ```
 Home > Agents > Templates > Sales Outreach
 ```
 
 **Behavior:**
+
 - Last item not clickable (current page)
 - If maxItems exceeded, show: Home > ... > Current
 
@@ -112,6 +121,7 @@ Home > Agents > Templates > Sales Outreach
 **Composition:** Button Group + Content Panels
 
 **Props:**
+
 ```typescript
 interface TabsProps {
   tabs: Array<{
@@ -123,14 +133,15 @@ interface TabsProps {
   }>;
   activeTab?: string;
   onChange?: (tabId: string) => void;
-  variant?: 'line' | 'pills';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "line" | "pills";
+  size?: "sm" | "md" | "lg";
 }
 ```
 
 **Variants:**
 
 **Line (Default)**
+
 ```
 Overview | Settings | Analytics | Logs
 ────────
@@ -138,12 +149,14 @@ Overview | Settings | Analytics | Logs
 ```
 
 **Pills**
+
 ```
 [Overview] [Settings] [Analytics] [Logs]
 [Tab content here]
 ```
 
 **Behavior:**
+
 - Arrow keys navigate between tabs
 - Active tab has blue indicator/background
 - Badge shows count (e.g., "Logs (5)")
@@ -155,6 +168,7 @@ Overview | Settings | Analytics | Logs
 **Composition:** Button + Collapsible Content
 
 **Props:**
+
 ```typescript
 interface AccordionProps {
   items: Array<{
@@ -165,11 +179,12 @@ interface AccordionProps {
   }>;
   defaultOpen?: string[]; // IDs of initially open items
   allowMultiple?: boolean;
-  variant?: 'default' | 'bordered' | 'separated';
+  variant?: "default" | "bordered" | "separated";
 }
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────┐
 │ ▼ Section Title                 │
@@ -183,6 +198,7 @@ interface AccordionProps {
 ```
 
 **Animation:**
+
 - Height transitions smoothly
 - Chevron rotates 90deg
 - Duration: 200ms ease
@@ -194,6 +210,7 @@ interface AccordionProps {
 **Composition:** Trigger Button + Floating Menu
 
 **Props:**
+
 ```typescript
 interface DropdownMenuProps {
   trigger: ReactNode; // Button or custom trigger
@@ -207,12 +224,13 @@ interface DropdownMenuProps {
     isDisabled?: boolean;
     shortcut?: string; // e.g., "⌘D"
   }>;
-  align?: 'start' | 'center' | 'end';
-  side?: 'top' | 'bottom' | 'left' | 'right';
+  align?: "start" | "center" | "end";
+  side?: "top" | "bottom" | "left" | "right";
 }
 ```
 
 **Layout:**
+
 ```
 [Trigger Button ▼]
 ┌──────────────────────┐
@@ -224,6 +242,7 @@ interface DropdownMenuProps {
 ```
 
 **Behavior:**
+
 - Opens on click or keyboard (Space/Enter)
 - Arrow keys navigate items
 - Escape closes menu
@@ -236,9 +255,10 @@ interface DropdownMenuProps {
 **Composition:** Alert + Dismiss Button + Auto-dismiss Timer
 
 **Props:**
+
 ```typescript
 interface ToastProps {
-  variant: 'info' | 'success' | 'warning' | 'error';
+  variant: "info" | "success" | "warning" | "error";
   title?: string;
   description: string;
   duration?: number; // ms, 0 = persistent
@@ -251,6 +271,7 @@ interface ToastProps {
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ ✓ Success                      [✕]  │
@@ -270,6 +291,7 @@ interface ToastProps {
 **Composition:** Card + Icon + Metric + Trend
 
 **Props:**
+
 ```typescript
 interface StatCardProps {
   label: string;
@@ -286,6 +308,7 @@ interface StatCardProps {
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────┐
 │ 📊                      │
@@ -298,6 +321,7 @@ interface StatCardProps {
 ```
 
 **Skeleton State:**
+
 - Show shimmer while loading
 - Preserve layout dimensions
 
@@ -308,6 +332,7 @@ interface StatCardProps {
 **Composition:** Dropzone + File List + Progress
 
 **Props:**
+
 ```typescript
 interface FileUploadProps {
   accept?: string; // MIME types
@@ -320,6 +345,7 @@ interface FileUploadProps {
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │         ⬆️                           │
@@ -338,6 +364,7 @@ Uploaded:
 ```
 
 **States:**
+
 - Idle: Dashed border
 - Hover: Solid border
 - Uploading: Progress bar
@@ -350,6 +377,7 @@ Uploaded:
 **Composition:** Modal + SearchBar + Results List
 
 **Props:**
+
 ```typescript
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -367,6 +395,7 @@ interface CommandPaletteProps {
 ```
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────┐
 │ 🔍 Search commands...                  │
@@ -382,6 +411,7 @@ interface CommandPaletteProps {
 ```
 
 **Behavior:**
+
 - Opens with ⌘K
 - Fuzzy search across labels
 - Arrow keys navigate results
@@ -397,6 +427,7 @@ interface CommandPaletteProps {
 **Composition:** Table + Header + Sorting + Filters + Pagination + Row Actions
 
 **Props:**
+
 ```typescript
 interface DataTableProps<T> {
   data: T[];
@@ -407,7 +438,7 @@ interface DataTableProps<T> {
     filterable?: boolean;
     render?: (row: T) => ReactNode;
     width?: string;
-    align?: 'left' | 'center' | 'right';
+    align?: "left" | "center" | "right";
   }>;
   rowActions?: Array<{
     label: string;
@@ -423,12 +454,13 @@ interface DataTableProps<T> {
   isLoading?: boolean;
   emptyState?: ReactNode;
   pagination?: PaginationProps;
-  onSort?: (key: string, direction: 'asc' | 'desc') => void;
+  onSort?: (key: string, direction: "asc" | "desc") => void;
   onFilter?: (filters: Record<string, any>) => void;
 }
 ```
 
 **Features:**
+
 - Sortable columns (click header)
 - Multi-select rows (checkboxes)
 - Bulk actions toolbar
@@ -443,6 +475,7 @@ interface DataTableProps<T> {
 **Composition:** Logo + Nav Items + Sections + Footer
 
 **Props:**
+
 ```typescript
 interface SidebarProps {
   items: Array<{
@@ -466,6 +499,7 @@ interface SidebarProps {
 ```
 
 **Layout:**
+
 ```
 ┌──────────────────┐
 │ [Logo]           │
@@ -485,6 +519,7 @@ interface SidebarProps {
 ```
 
 **Behavior:**
+
 - Active item: blue left border + bg tint
 - Collapsible sub-items
 - Collapsed mode: icons only, tooltip on hover
@@ -497,6 +532,7 @@ interface SidebarProps {
 **Composition:** Icon Buttons + Labels + Badge
 
 **Props:**
+
 ```typescript
 interface BottomNavProps {
   items: Array<{
@@ -511,6 +547,7 @@ interface BottomNavProps {
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────┐
 │ [🏠]    [🤖]    [➕]    [✉️]    [☰]    │
@@ -519,6 +556,7 @@ interface BottomNavProps {
 ```
 
 **Specs:**
+
 - Height: 64px (includes safe area)
 - Icons: 24px
 - Active: primary color
@@ -532,6 +570,7 @@ interface BottomNavProps {
 **Composition:** Overlay + Card + Header + Body + Footer
 
 **Props:**
+
 ```typescript
 interface ModalProps {
   isOpen: boolean;
@@ -540,13 +579,14 @@ interface ModalProps {
   description?: string;
   children: ReactNode;
   footer?: ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
 }
 ```
 
 **Sizes:**
+
 - sm: 384px (24rem)
 - md: 512px (32rem)
 - lg: 768px (48rem)
@@ -554,6 +594,7 @@ interface ModalProps {
 - full: 100vw - padding
 
 **Animation:**
+
 ```typescript
 const modalVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -563,6 +604,7 @@ const modalVariants = {
 ```
 
 **Behavior:**
+
 - Escape key closes (if allowed)
 - Focus trap inside modal
 - Scroll locked on body
@@ -575,6 +617,7 @@ const modalVariants = {
 **Composition:** Overlay + Sliding Panel + Header + Body + Footer
 
 **Props:**
+
 ```typescript
 interface DrawerProps {
   isOpen: boolean;
@@ -582,18 +625,20 @@ interface DrawerProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  placement?: 'left' | 'right' | 'top' | 'bottom';
-  size?: 'sm' | 'md' | 'lg' | 'full';
+  placement?: "left" | "right" | "top" | "bottom";
+  size?: "sm" | "md" | "lg" | "full";
 }
 ```
 
 **Sizes (for left/right):**
+
 - sm: 320px
 - md: 480px
 - lg: 640px
 - full: 90vw
 
 **Animation:**
+
 - Slides from placement edge
 - Duration: 300ms ease-out
 - Overlay fades in
@@ -605,6 +650,7 @@ interface DrawerProps {
 **Composition:** Steps + Progress + Content + Navigation
 
 **Props:**
+
 ```typescript
 interface StepperProps {
   steps: Array<{
@@ -615,11 +661,12 @@ interface StepperProps {
   }>;
   currentStep: number;
   onStepChange: (step: number) => void;
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
 }
 ```
 
 **Layout (Horizontal):**
+
 ```
 1. Basic Info ────── 2. Details ────── 3. Review
    Complete           Current           Upcoming
@@ -630,6 +677,7 @@ interface StepperProps {
 ```
 
 **Status Indicators:**
+
 - Complete: ✓ + blue circle
 - Current: Number + blue circle
 - Upcoming: Number + gray circle
@@ -641,6 +689,7 @@ interface StepperProps {
 **Composition:** Popover + Header + Timeline + Footer
 
 **Props:**
+
 ```typescript
 interface NotificationPanelProps {
   notifications: Array<{
@@ -649,7 +698,7 @@ interface NotificationPanelProps {
     description?: string;
     timestamp: string;
     isRead: boolean;
-    type: 'info' | 'success' | 'warning' | 'error';
+    type: "info" | "success" | "warning" | "error";
     onClick?: () => void;
   }>;
   onMarkAllRead?: () => void;
@@ -658,6 +707,7 @@ interface NotificationPanelProps {
 ```
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ Notifications            Mark all   │
@@ -681,6 +731,7 @@ interface NotificationPanelProps {
 **Composition:** Month Grid + Navigation + Events
 
 **Props:**
+
 ```typescript
 interface CalendarProps {
   events?: Array<{
@@ -698,6 +749,7 @@ interface CalendarProps {
 ```
 
 **Layout:**
+
 ```
   October 2025     [<] [>]
 Su Mo Tu We Th Fr Sa
@@ -720,9 +772,10 @@ Su Mo Tu We Th Fr Sa
 **Composition:** Tremor Chart Components
 
 **Props:**
+
 ```typescript
 interface ChartProps {
-  type: 'line' | 'bar' | 'area' | 'donut' | 'pie';
+  type: "line" | "bar" | "area" | "donut" | "pie";
   data: Array<Record<string, any>>;
   categories: string[];
   index: string;
@@ -735,8 +788,9 @@ interface ChartProps {
 ```
 
 **Using Tremor:**
+
 ```tsx
-import { LineChart } from '@tremor/react';
+import { LineChart } from "@tremor/react";
 
 <LineChart
   data={data}
@@ -744,7 +798,7 @@ import { LineChart } from '@tremor/react';
   categories={["revenue", "expenses"]}
   colors={["blue", "red"]}
   valueFormatter={(v) => `$${v.toLocaleString()}`}
-/>
+/>;
 ```
 
 ---
@@ -754,6 +808,7 @@ import { LineChart } from '@tremor/react';
 **Composition:** Avatar + Dropdown + Profile Section
 
 **Props:**
+
 ```typescript
 interface UserMenuProps {
   user: {
@@ -774,6 +829,7 @@ interface UserMenuProps {
 ```
 
 **Layout:**
+
 ```
 [Avatar ▼]
 ┌──────────────────────────────┐
@@ -793,6 +849,7 @@ interface UserMenuProps {
 ## Integration Patterns
 
 ### With Forms (React Hook Form)
+
 ```typescript
 <FormField
   control={form.control}
@@ -804,19 +861,23 @@ interface UserMenuProps {
 ```
 
 ### With State Management (Zustand)
+
 ```typescript
 const useToastStore = create<ToastStore>((set) => ({
   toasts: [],
-  addToast: (toast) => set((state) => ({
-    toasts: [...state.toasts, toast]
-  })),
-  removeToast: (id) => set((state) => ({
-    toasts: state.toasts.filter(t => t.id !== id)
-  })),
+  addToast: (toast) =>
+    set((state) => ({
+      toasts: [...state.toasts, toast],
+    })),
+  removeToast: (id) =>
+    set((state) => ({
+      toasts: state.toasts.filter((t) => t.id !== id),
+    })),
 }));
 ```
 
 ### With Routing (Wouter)
+
 ```typescript
 <Sidebar items={navItems} activeItem={location} />
 ```
@@ -826,16 +887,19 @@ const useToastStore = create<ToastStore>((set) => ({
 ## Testing Strategy
 
 ### Unit Tests (Vitest)
+
 - Props render correctly
 - Event handlers fire
 - States update properly
 
 ### Integration Tests (Testing Library)
+
 - Multi-component interactions
 - Form submissions
 - Navigation flows
 
 ### Visual Tests (Playwright)
+
 - Screenshot comparisons
 - Responsive layouts
 - Dark mode

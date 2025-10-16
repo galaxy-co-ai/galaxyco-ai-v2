@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { ConfidenceBadge } from '@/components/shared/confidence-badge';
-import { EmptyState } from '@/components/shared/empty-state';
-import { mockProspects } from '@/lib/fixtures';
-import { Users, Plus, Building2, Mail, Linkedin } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { ConfidenceBadge } from "@/components/shared/confidence-badge";
+import { EmptyState } from "@/components/shared/empty-state";
+import { mockProspects } from "@/lib/fixtures";
+import { Users, Plus, Building2, Mail, Linkedin } from "lucide-react";
 
 export default function ProspectsPage() {
   const prospects = mockProspects;
@@ -27,8 +27,8 @@ export default function ProspectsPage() {
           title="No prospects yet"
           description="Add prospects to start enriching and engaging with them"
           action={{
-            label: 'Add Prospect',
-            onClick: () => console.log('Add prospect'),
+            label: "Add Prospect",
+            onClick: () => console.log("Add prospect"),
           }}
         />
       ) : (
@@ -94,7 +94,9 @@ export default function ProspectsPage() {
                     </td>
                     <td className="px-6 py-4">
                       {prospect.enrichmentData && (
-                        <ConfidenceBadge score={prospect.enrichmentData.confidenceScore} />
+                        <ConfidenceBadge
+                          score={prospect.enrichmentData.confidenceScore}
+                        />
                       )}
                     </td>
                     <td className="px-6 py-4 text-right">

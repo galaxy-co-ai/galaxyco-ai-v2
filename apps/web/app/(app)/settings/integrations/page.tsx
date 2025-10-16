@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { mockIntegrations } from '@/lib/fixtures';
-import { Check, X, Settings } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { mockIntegrations } from "@/lib/fixtures";
+import { Check, X, Settings } from "lucide-react";
 
 export default function IntegrationsPage() {
   const integrations = mockIntegrations;
@@ -26,7 +26,7 @@ export default function IntegrationsPage() {
                   {integration.type}
                 </p>
               </div>
-              {integration.status === 'connected' ? (
+              {integration.status === "connected" ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                   <Check className="h-3 w-3" />
                   Connected
@@ -39,14 +39,15 @@ export default function IntegrationsPage() {
               )}
             </div>
 
-            {integration.status === 'connected' && integration.createdAt && (
+            {integration.status === "connected" && integration.createdAt && (
               <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">
-                Connected: {new Date(integration.createdAt).toLocaleDateString()}
+                Connected:{" "}
+                {new Date(integration.createdAt).toLocaleDateString()}
               </p>
             )}
 
             <div className="mt-4 flex gap-2">
-              {integration.status === 'connected' ? (
+              {integration.status === "connected" ? (
                 <>
                   <button className="flex h-9 flex-1 items-center justify-center gap-2 rounded-md border text-sm font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800">
                     <Settings className="h-4 w-4" />

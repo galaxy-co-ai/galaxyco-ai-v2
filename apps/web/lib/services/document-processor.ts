@@ -1,6 +1,6 @@
 /**
  * Document Processing Service
- * 
+ *
  * Handles file upload, text extraction, AI summarization, auto-tagging,
  * and embedding generation for RAG.
  */
@@ -55,7 +55,9 @@ export class DocumentProcessor {
   /**
    * Main processing pipeline
    */
-  async processDocument(params: ProcessDocumentParams): Promise<ProcessedDocument> {
+  async processDocument(
+    params: ProcessDocumentParams,
+  ): Promise<ProcessedDocument> {
     const { file, userId, workspaceId } = params;
 
     // 1. Upload to Vercel Blob storage
@@ -95,9 +97,13 @@ export class DocumentProcessor {
   /**
    * Upload file to Vercel Blob storage
    */
-  private async uploadFile(file: File, workspaceId: string, userId: string): Promise<string> {
+  private async uploadFile(
+    file: File,
+    workspaceId: string,
+    userId: string,
+  ): Promise<string> {
     const fileName = `${workspaceId}/${userId}/${Date.now()}-${file.name}`;
-    
+
     const buffer = await file.arrayBuffer();
     const blob = await put(fileName, buffer, {
       access: "public",
@@ -124,15 +130,19 @@ export class DocumentProcessor {
 
     // DOCX
     if (
-      mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      mimeType ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
-      const result = await mammoth.extractRawText({ buffer: Buffer.from(buffer) });
+      const result = await mammoth.extractRawText({
+        buffer: Buffer.from(buffer),
+      });
       return result.value;
     }
 
     // Excel/CSV
     if (
-      mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      mimeType ===
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
       mimeType === "application/vnd.ms-excel" ||
       mimeType === "text/csv"
     ) {
@@ -176,7 +186,8 @@ export class DocumentProcessor {
         messages: [
           {
             role: "system",
-            content: "You are a helpful assistant that creates concise summaries of documents. Summarize in 2-3 sentences, focusing on key points.",
+            content:
+              "You are a helpful assistant that creates concise summaries of documents. Summarize in 2-3 sentences, focusing on key points.",
           },
           {
             role: "user",
@@ -207,7 +218,8 @@ export class DocumentProcessor {
         messages: [
           {
             role: "system",
-            content: "You are a helpful assistant that generates relevant tags for documents. Return only a JSON array of 3-5 tags.",
+            content:
+              "You are a helpful assistant that generates relevant tags for documents. Return only a JSON array of 3-5 tags.",
           },
           {
             role: "user",
@@ -221,7 +233,7 @@ export class DocumentProcessor {
 
     const data = await response.json();
     const tagsString = data.choices[0]?.message?.content || "[]";
-    
+
     try {
       return JSON.parse(tagsString);
     } catch {
@@ -258,7 +270,7 @@ export class DocumentProcessor {
     const englishWords = ["the", "and", "is", "to", "a", "of", "in", "for"];
     const words = text.toLowerCase().split(/\s+/).slice(0, 100);
     const englishCount = words.filter((w) => englishWords.includes(w)).length;
-    
+
     return englishCount > 5 ? "en" : "unknown";
   }
 }

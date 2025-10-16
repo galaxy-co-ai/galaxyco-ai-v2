@@ -99,9 +99,7 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
       href={`/agents/${agent.id}`}
       className="block no-underline text-inherit"
     >
-      <article
-        className="bg-white border border-gray-200 rounded-xl p-6 cursor-pointer transition-all hover:border-blue-500 hover:shadow-md relative"
-      >
+      <article className="bg-white border border-gray-200 rounded-xl p-6 cursor-pointer transition-all hover:border-blue-500 hover:shadow-md relative">
         {/* Header with Avatar and Toggle */}
         <div className="flex items-start justify-between mb-4">
           {/* Circular Avatar */}

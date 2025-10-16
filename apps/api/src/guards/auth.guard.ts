@@ -3,8 +3,8 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
-} from '@nestjs/common';
-import { clerkClient } from '@clerk/clerk-sdk-node';
+} from "@nestjs/common";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -14,12 +14,12 @@ export class AuthGuard implements CanActivate {
     // Extract token from Authorization header
     const authHeader = request.headers.authorization;
     if (!authHeader) {
-      throw new UnauthorizedException('No authorization header provided');
+      throw new UnauthorizedException("No authorization header provided");
     }
 
-    const token = authHeader.replace('Bearer ', '');
+    const token = authHeader.replace("Bearer ", "");
     if (!token) {
-      throw new UnauthorizedException('No token provided');
+      throw new UnauthorizedException("No token provided");
     }
 
     try {
@@ -36,8 +36,8 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      console.error('Token verification failed:', error);
-      throw new UnauthorizedException('Invalid or expired token');
+      console.error("Token verification failed:", error);
+      throw new UnauthorizedException("Invalid or expired token");
     }
   }
 }

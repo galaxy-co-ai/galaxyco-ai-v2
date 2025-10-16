@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import { auth } from '@clerk/nextjs/server';
+import { NextRequest, NextResponse } from "next/server";
+import OpenAI from "openai";
+import { auth } from "@clerk/nextjs/server";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 const ENHANCEMENT_SYSTEM_PROMPT = `You are an AI prompt enhancement specialist for GalaxyCo's Agent Builder.
 
@@ -23,16 +23,16 @@ export async function POST(req: NextRequest) {
     // Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await req.json();
     const { prompt, context } = body;
 
-    if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 10) {
+    if (!prompt || typeof prompt !== "string" || prompt.trim().length < 10) {
       return NextResponse.json(
-        { error: 'Prompt must be at least 10 characters' },
-        { status: 400 }
+        { error: "Prompt must be at least 10 characters" },
+        { status: 400 },
       );
     }
 
@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
 
     if (!openaiKey && !anthropicKey) {
       return NextResponse.json(
-        { error: 'No AI API keys configured' },
-        { status: 500 }
+        { error: "No AI API keys configured" },
+        { status: 500 },
       );
     }
 
@@ -55,11 +55,11 @@ export async function POST(req: NextRequest) {
       const openai = new OpenAI({ apiKey: openaiKey });
 
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: ENHANCEMENT_SYSTEM_PROMPT },
+          { role: "system", content: ENHANCEMENT_SYSTEM_PROMPT },
           {
-            role: 'user',
+            role: "user",
             content: `Enhance this agent description:\n\n"${prompt}"\n\nProvide the enhanced version and list 2-3 key improvements made.`,
           },
         ],
@@ -67,36 +67,36 @@ export async function POST(req: NextRequest) {
         temperature: 0.7,
       });
 
-      const response = completion.choices[0]?.message?.content || '';
-      
+      const response = completion.choices[0]?.message?.content || "";
+
       // Parse response (expecting format: "Enhanced: ... \n\nImprovements:\n- ...")
-      const parts = response.split('Improvements:');
-      enhanced = parts[0].replace('Enhanced:', '').trim();
-      
+      const parts = response.split("Improvements:");
+      enhanced = parts[0].replace("Enhanced:", "").trim();
+
       if (parts[1]) {
         improvements = parts[1]
-          .split('\n')
-          .filter(line => line.trim().startsWith('-'))
-          .map(line => line.replace(/^-\s*/, '').trim());
+          .split("\n")
+          .filter((line) => line.trim().startsWith("-"))
+          .map((line) => line.replace(/^-\s*/, "").trim());
       }
-      
+
       confidence = 0.85;
     } else {
       // Use Anthropic
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': anthropicKey!,
-          'anthropic-version': '2023-06-01',
+          "Content-Type": "application/json",
+          "x-api-key": anthropicKey!,
+          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
+          model: "claude-3-5-sonnet-20241022",
           max_tokens: 600,
           system: ENHANCEMENT_SYSTEM_PROMPT,
           messages: [
             {
-              role: 'user',
+              role: "user",
               content: `Enhance this agent description:\n\n"${prompt}"\n\nProvide the enhanced version and list 2-3 key improvements made.`,
             },
           ],
@@ -108,18 +108,18 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await response.json();
-      const text = data.content[0]?.text || '';
-      
-      const parts = text.split('Improvements:');
-      enhanced = parts[0].replace('Enhanced:', '').trim();
-      
+      const text = data.content[0]?.text || "";
+
+      const parts = text.split("Improvements:");
+      enhanced = parts[0].replace("Enhanced:", "").trim();
+
       if (parts[1]) {
         improvements = parts[1]
-          .split('\n')
-          .filter((line: string) => line.trim().startsWith('-'))
-          .map((line: string) => line.replace(/^-\s*/, '').trim());
+          .split("\n")
+          .filter((line: string) => line.trim().startsWith("-"))
+          .map((line: string) => line.replace(/^-\s*/, "").trim());
       }
-      
+
       confidence = 0.85;
     }
 
@@ -130,10 +130,10 @@ export async function POST(req: NextRequest) {
       confidence,
     });
   } catch (error) {
-    console.error('Enhance prompt API error:', error);
+    console.error("Enhance prompt API error:", error);
     return NextResponse.json(
-      { error: 'Failed to enhance prompt' },
-      { status: 500 }
+      { error: "Failed to enhance prompt" },
+      { status: 500 },
     );
   }
 }

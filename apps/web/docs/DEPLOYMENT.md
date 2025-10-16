@@ -54,6 +54,7 @@ NEXT_PUBLIC_ENV=production
 ### Method 1: GitHub Integration (Recommended)
 
 1. **Connect Repository to Vercel**
+
    ```bash
    # Visit https://vercel.com/new
    # Import your GitHub repository: galaxyco-ai-2.0
@@ -61,7 +62,7 @@ NEXT_PUBLIC_ENV=production
    ```
 
 2. **Configure Project Settings**
-   - **Project Name**: `galaxyco-ai-platform` 
+   - **Project Name**: `galaxyco-ai-platform`
    - **Framework**: Next.js
    - **Root Directory**: `apps/web`
    - **Build Command**: `npm run build`
@@ -79,16 +80,19 @@ NEXT_PUBLIC_ENV=production
 ### Method 2: Vercel CLI
 
 1. **Install Vercel CLI**
+
    ```bash
    npm i -g vercel
    ```
 
 2. **Login to Vercel**
+
    ```bash
    vercel login
    ```
 
 3. **Deploy to Preview**
+
    ```bash
    cd /c/Users/Owner/workspace/galaxyco-ai-2.0/apps/web
    vercel
@@ -111,6 +115,7 @@ NEXT_PUBLIC_ENV=production
    - Copy connection string
 
 2. **Run Migrations**
+
    ```bash
    cd packages/database
    npm run migrate:production
@@ -136,6 +141,7 @@ NEXT_PUBLIC_ENV=production
      - [x] GitHub OAuth (optional)
 
 2. **Configure Webhooks**
+
    ```bash
    Webhook URL: https://your-domain.vercel.app/api/webhooks/clerk
    Events: user.created, user.updated, user.deleted
@@ -181,6 +187,7 @@ NEXT_PUBLIC_ENV=production
    - Framework: Next.js
 
 2. **Configure DSN**
+
    ```bash
    NEXT_PUBLIC_SENTRY_DSN=https://your-dsn@sentry.io/project-id
    ```
@@ -198,7 +205,7 @@ NEXT_PUBLIC_ENV=production
 
 1. **Authentication**
    - [ ] Sign up with email
-   - [ ] Sign in with email  
+   - [ ] Sign in with email
    - [ ] Sign in with Google
    - [ ] Sign out
 
@@ -217,7 +224,7 @@ NEXT_PUBLIC_ENV=production
    - [ ] Workspaces created correctly
    - [ ] API keys encrypted/stored
 
-5. **AI Integration** 
+5. **AI Integration**
    - [ ] Agent execution works
    - [ ] API keys validated
    - [ ] Error handling works
@@ -290,7 +297,7 @@ vercel --prod --force  # Redeploy last commit
 ## 🆘 Emergency Contacts
 
 - **Platform Issues**: Vercel Support
-- **Database Issues**: Neon Support  
+- **Database Issues**: Neon Support
 - **Authentication Issues**: Clerk Support
 - **AI Provider Issues**: OpenAI/Anthropic Support
 
@@ -305,5 +312,5 @@ vercel --prod --force  # Redeploy last commit
 
 ---
 
-*Last Updated: {{ current_time }}*
-*Platform Version: 2.0.0*
+_Last Updated: {{ current_time }}_
+_Platform Version: 2.0.0_

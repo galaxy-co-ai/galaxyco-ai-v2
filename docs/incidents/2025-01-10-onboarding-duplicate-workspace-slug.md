@@ -23,22 +23,24 @@ User unable to complete onboarding flow. Clicking "Create My Workspace" resulted
 
 ## Timeline
 
-| Time | Event |
-|------|-------|
-| Day 1 | Problem first noticed - "User not found" error |
-| Day 1 | Fixed user creation race condition |
-| Day 1 | Server kept stopping, "Failed to fetch" errors |
+| Time  | Event                                                            |
+| ----- | ---------------------------------------------------------------- |
+| Day 1 | Problem first noticed - "User not found" error                   |
+| Day 1 | Fixed user creation race condition                               |
+| Day 1 | Server kept stopping, "Failed to fetch" errors                   |
 | Day 2 | Server running but still getting "Failed to complete onboarding" |
-| Day 2 | **Checked server logs** - found duplicate key violation |
-| Day 2 | Created cleanup script, deleted duplicate workspace |
-| Day 2 | ✅ **Verified resolution** - onboarding successful |
+| Day 2 | **Checked server logs** - found duplicate key violation          |
+| Day 2 | Created cleanup script, deleted duplicate workspace              |
+| Day 2 | ✅ **Verified resolution** - onboarding successful               |
 
 ---
 
 ## Root Cause
 
 ### What Happened
+
 Previous onboarding attempt partially succeeded:
+
 1. User record was created in database
 2. Workspace record was created with slug `dalton-s-founder-ops-workspace`
 3. Page failed to redirect or user refreshed/closed browser
@@ -46,12 +48,14 @@ Previous onboarding attempt partially succeeded:
 5. Database rejected insert due to unique constraint violation
 
 ### Why It Happened
+
 1. **No duplicate detection**: Code didn't check if workspace slug already existed
 2. **No cleanup on failure**: Failed onboarding didn't rollback database changes
 3. **Poor error messages**: Generic "Failed to complete onboarding" didn't indicate the specific issue
 4. **Logs not checked first**: Spent time fixing wrong things before checking actual error logs
 
 ### Where It Happened
+
 - **File(s)**: `apps/web/app/api/onboarding/complete/route.ts`
 - **Function(s)**: `POST()` handler, workspace insert
 - **Line(s)**: L40-57 (workspace insertion)
@@ -72,6 +76,7 @@ cause: NeonDbError: duplicate key value violates unique constraint "workspaces_s
 ```
 
 ### Key Indicators
+
 - Error code: `23505` (Postgres unique violation)
 - Stack trace highlights: `duplicate key value violates unique constraint`
 - Log patterns: `grep "DrizzleQueryError\|23505\|workspaces_slug_unique"`
@@ -81,15 +86,18 @@ cause: NeonDbError: duplicate key value violates unique constraint "workspaces_s
 ## Investigation Process
 
 ### What We Tried (That Didn't Work)
+
 1. **Fixed "User not found" error** - Added user creation fallback (was helpful but not the main issue)
 2. **Restarted dev server multiple times** - Server kept stopping due to process issues
 3. **Checked browser/network** - Assumed frontend or connectivity issue
 4. **Tried incognito mode** - Thought it might be a session issue
 
 ### What We Tried (That Worked)
+
 **Checked the server logs** (`tail -100 /tmp/nextjs-dev.log`) and found the actual database error
 
 ### Key Insight
+
 **Always check the server logs first** when getting generic error messages. The frontend only said "Failed to complete onboarding" but the backend logs had the exact error: duplicate key constraint violation.
 
 ---
@@ -121,6 +129,7 @@ await sql`
 ```
 
 ### Why This Worked
+
 Removed the duplicate workspace record that was blocking new onboarding attempts. Once removed, the unique constraint allowed the new workspace to be created.
 
 ---
@@ -128,17 +137,20 @@ Removed the duplicate workspace record that was blocking new onboarding attempts
 ## Prevention
 
 ### Short Term (Implemented Today)
+
 - [x] Created `scripts/cleanup-workspace.mjs` to clear duplicate workspaces
 - [x] Documented incident in incident learning system
 - [ ] Add better error messages to onboarding endpoint
 
 ### Medium Term (This Week)
+
 - [ ] Add duplicate slug detection before insert
 - [ ] Implement transaction rollback on onboarding failure
 - [ ] Add "Check server logs" step to debugging runbook
 - [ ] Create health check for orphaned workspaces
 
 ### Long Term (This Month)
+
 - [ ] Implement idempotent onboarding (can retry safely)
 - [ ] Add workspace slug regeneration if duplicate found
 - [ ] Set up error monitoring (Sentry) to catch DB errors in real-time
@@ -149,6 +161,7 @@ Removed the duplicate workspace record that was blocking new onboarding attempts
 ## Automation Created
 
 ### Cleanup Script
+
 **Location**: `scripts/cleanup-workspace.mjs`  
 **Purpose**: Manually delete duplicate/orphaned workspaces
 
@@ -159,6 +172,7 @@ Removed the duplicate workspace record that was blocking new onboarding attempts
 ```
 
 ### Future: Diagnostic Script
+
 **Location**: `scripts/diagnose-workspace-duplicates.sh` (to be created)  
 **Purpose**: Check for orphaned workspaces before they cause issues
 
@@ -169,7 +183,9 @@ Removed the duplicate workspace record that was blocking new onboarding attempts
 ```
 
 ### Health Check Addition
+
 To add to `scripts/health-check.sh`:
+
 - [ ] Check for workspaces without members (orphans)
 - [ ] Alert if duplicate slugs somehow exist
 - [ ] Warn if workspace created but onboarding not complete
@@ -186,18 +202,21 @@ To add to `scripts/health-check.sh`:
 ## Learnings
 
 ### Technical Lessons
+
 1. **Postgres unique constraints are strict** - No automatic handling of duplicates
 2. **Drizzle ORM errors are detailed** - Include constraint names and error codes
 3. **Partial transactions can leave orphaned data** - Need proper rollback handling
 4. **Clerk webhooks can race with onboarding** - User creation needs fallback
 
 ### Process Lessons
+
 1. **Check logs immediately** - Don't spend 2 days guessing, check actual errors first
 2. **Error messages should be specific** - "Failed to complete onboarding" hides the real issue
 3. **Failed operations need cleanup** - Don't leave partial data in database
 4. **Document while it's fresh** - Incident details fade from memory quickly
 
 ### Questions Raised
+
 - [ ] Should we use database transactions for onboarding?
 - [ ] Can we make workspace creation idempotent?
 - [ ] Should we add a cleanup cron job?

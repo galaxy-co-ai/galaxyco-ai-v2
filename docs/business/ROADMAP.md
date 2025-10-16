@@ -10,6 +10,7 @@
 ### ✅ Phase 1: Knowledge Base Foundation - **COMPLETE!**
 
 You've successfully built a **production-ready Knowledge Base** with:
+
 - ✅ Complete CRUD operations
 - ✅ Collections management UI
 - ✅ Semantic search with RAG
@@ -32,13 +33,13 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Connect agents to your knowledge base for RAG-powered responses
 
 ### 2.1 Knowledge Base Tool for Agents
+
 **Estimated Time:** 2-3 days
 
 - [ ] Create knowledge search tool for agents
   - [ ] `searchKnowledgeBase(query, collectionId?, limit?)` tool
   - [ ] Integrate with existing semantic search API
   - [ ] Return formatted results for LLM consumption
-  
 - [ ] Agent configuration updates
   - [ ] Add "Knowledge Base Access" toggle in agent config
   - [ ] Collection selection for agent scope
@@ -50,22 +51,24 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Validate citation accuracy
 
 **Why This Matters:**
+
 - Unlocks RAG capabilities for your agents
 - Differentiates your platform from basic chatbots
 - Enables domain-specific AI assistants
 
 ### 2.2 Knowledge Agent Templates
+
 **Estimated Time:** 1-2 days
 
 - [ ] Create pre-built knowledge-powered agents:
   - [ ] "Document Q&A Agent" - Answer questions from docs
   - [ ] "Research Assistant" - Analyze and summarize knowledge
   - [ ] "Content Writer" - Generate content from knowledge base
-  
 - [ ] Add to marketplace with KPIs
 - [ ] Create demo videos/screenshots
 
 **Success Metrics:**
+
 - Agents can answer questions accurately using knowledge base
 - Response time < 3 seconds for knowledge queries
 - Users can create knowledge agents in < 2 minutes
@@ -77,6 +80,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Improve agent creation, execution, and management experience
 
 ### 3.1 Agent Builder Improvements
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Natural Language Agent Creation**
@@ -97,6 +101,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Debug mode showing reasoning/tool calls
 
 ### 3.2 Agent Execution Dashboard
+
 **Estimated Time:** 2-3 days
 
 - [ ] **Execution History View**
@@ -118,6 +123,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Most used agents
 
 ### 3.3 Multi-Agent Workflows
+
 **Estimated Time:** 4-5 days
 
 - [ ] **Workflow Builder**
@@ -138,6 +144,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Pause/resume capability
 
 **Success Metrics:**
+
 - Users can create custom agents in < 5 minutes
 - Agent execution monitoring is real-time
 - Multi-agent workflows complete successfully > 95% of the time
@@ -149,6 +156,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Build a vibrant marketplace with high-quality templates
 
 ### 4.1 Marketplace UX Improvements
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Enhanced Discovery**
@@ -170,6 +178,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Configuration preview
 
 ### 4.2 Template Creation & Publishing
+
 **Estimated Time:** 2-3 days
 
 - [ ] **Template Builder for Users**
@@ -189,6 +198,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Auto-update vs manual update for users
 
 ### 4.3 Premium Templates & Monetization
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Payment Integration**
@@ -202,6 +212,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] User feedback & reviews
 
 **Success Metrics:**
+
 - 50+ quality templates in marketplace
 - Template install rate > 40% of visitors
 - User-created templates published: 10+
@@ -214,6 +225,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Make GalaxyCo.ai enterprise-ready for larger customers
 
 ### 5.1 Team Collaboration
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Workspace Members Management**
@@ -234,6 +246,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Notifications
 
 ### 5.2 Advanced Security & Compliance
+
 **Estimated Time:** 4-5 days
 
 - [ ] **Audit Logging**
@@ -252,6 +265,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Auto-provisioning
 
 ### 5.3 API & Integrations
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Public API**
@@ -272,6 +286,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] CRM integrations (Salesforce, HubSpot)
 
 **Success Metrics:**
+
 - Team collaboration features used by > 30% of workspaces
 - Enterprise inquiries: 5+ per month
 - API usage: 10,000+ calls/month
@@ -283,6 +298,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Make knowledge base more powerful and flexible
 
 ### 6.1 Advanced Content Processing
+
 **Estimated Time:** 3-4 days
 
 - [ ] **More File Types**
@@ -303,6 +319,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Scheduled re-crawling for updates
 
 ### 6.2 Knowledge Organization
+
 **Estimated Time:** 2-3 days
 
 - [ ] **Smart Collections**
@@ -322,6 +339,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Explore related content
 
 ### 6.3 Collaboration Features
+
 **Estimated Time:** 2-3 days
 
 - [ ] **Annotations & Comments**
@@ -335,6 +353,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Rollback to previous versions
 
 **Success Metrics:**
+
 - Document processing success rate > 95%
 - Search satisfaction (user feedback) > 4.5/5
 - Knowledge base used daily by > 80% of active users
@@ -346,6 +365,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 **Goal:** Add voice capabilities using OpenAI Realtime API
 
 ### 7.1 Voice Agent Infrastructure
+
 **Estimated Time:** 5-7 days
 
 - [ ] **Realtime API Integration**
@@ -361,6 +381,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Text-to-speech settings
 
 ### 7.2 Voice Agent UI
+
 **Estimated Time:** 3-4 days
 
 - [ ] **Voice Chat Interface**
@@ -375,6 +396,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
   - [ ] Call recording & transcripts
 
 **Success Metrics:**
+
 - Voice agent latency < 1 second
 - Voice recognition accuracy > 95%
 - Users create voice agents: 20+
@@ -386,6 +408,7 @@ Based on your project goals and the OpenAI documentation review, here's a priori
 These are small improvements you can do in parallel with larger features:
 
 ### UI/UX Polish
+
 - [ ] Add keyboard shortcuts (Cmd+K for search, etc.)
 - [ ] Improve loading states & skeleton screens
 - [ ] Add success/error toast notifications
@@ -393,18 +416,21 @@ These are small improvements you can do in parallel with larger features:
 - [ ] Mobile responsiveness improvements
 
 ### Performance
+
 - [ ] Add Redis caching for API responses
 - [ ] Optimize database queries (add missing indexes)
 - [ ] Implement CDN for static assets
 - [ ] Lazy load components
 
 ### Documentation
+
 - [ ] User guides for each feature
 - [ ] Video tutorials (Loom or similar)
 - [ ] Developer API docs
 - [ ] FAQ page
 
 ### Analytics & Monitoring
+
 - [ ] Add PostHog or Mixpanel for product analytics
 - [ ] Error tracking improvements (Sentry)
 - [ ] Performance monitoring (Vercel Analytics)
@@ -417,7 +443,9 @@ These are small improvements you can do in parallel with larger features:
 Based on your stated goals (polished platform ASAP, phased rollout):
 
 ### Week 1-2: Agent-Knowledge Integration
+
 **Focus:** Phase 2.1 & 2.2
+
 - Connect agents to knowledge base
 - Create knowledge agent templates
 - Test thoroughly
@@ -425,7 +453,9 @@ Based on your stated goals (polished platform ASAP, phased rollout):
 **Why:** This is your killer feature. RAG-powered agents are what will differentiate your platform.
 
 ### Week 3-4: Agent Builder Improvements
+
 **Focus:** Phase 3.1
+
 - Natural language agent creation
 - Improved config UI
 - Testing playground
@@ -433,7 +463,9 @@ Based on your stated goals (polished platform ASAP, phased rollout):
 **Why:** Lowers barrier to entry for non-technical users (your target audience).
 
 ### Week 5-6: Marketplace Expansion
+
 **Focus:** Phase 4.1 & 4.2
+
 - Better discovery & search
 - Template publishing workflow
 - Populate with 20-30 quality templates
@@ -441,7 +473,9 @@ Based on your stated goals (polished platform ASAP, phased rollout):
 **Why:** Marketplace with great templates = instant value for new users.
 
 ### Week 7-8: Execution Dashboard
+
 **Focus:** Phase 3.2
+
 - Execution history
 - Real-time monitoring
 - Performance analytics
@@ -449,7 +483,9 @@ Based on your stated goals (polished platform ASAP, phased rollout):
 **Why:** Users need visibility into agent performance to trust the platform.
 
 ### Week 9+: Choose Your Adventure
+
 Pick based on user feedback:
+
 - **Enterprise Path:** Phase 5 (Team Collaboration, Security)
 - **Power User Path:** Phase 3.3 (Multi-Agent Workflows)
 - **Creator Path:** Phase 4.3 (Monetization)
@@ -460,12 +496,14 @@ Pick based on user feedback:
 ## Success Metrics (3-Month Goals)
 
 ### User Metrics
+
 - [ ] 100+ active workspaces
 - [ ] 500+ agents created
 - [ ] 1,000+ agent executions/day
 - [ ] 10,000+ knowledge base items uploaded
 
 ### Engagement Metrics
+
 - [ ] Daily active users (DAU) > 40% of signups
 - [ ] Weekly active users (WAU) > 70% of signups
 - [ ] Average session duration > 10 minutes
@@ -475,12 +513,14 @@ Pick based on user feedback:
   - Marketplace: 50%+
 
 ### Quality Metrics
+
 - [ ] Agent execution success rate > 90%
 - [ ] API response time p95 < 500ms
 - [ ] Zero critical security incidents
 - [ ] User satisfaction (NPS) > 50
 
 ### Business Metrics
+
 - [ ] MRR (if monetized): $5,000+
 - [ ] Conversion to paid: 10%+
 - [ ] Churn rate < 10%/month
@@ -491,6 +531,7 @@ Pick based on user feedback:
 ## Notes & Considerations
 
 ### Technical Debt to Address
+
 1. **Replace temp-workspace-id** - Implement proper workspace context
 2. **Error handling** - Standardize error responses across APIs
 3. **Testing** - Add unit & integration tests (Vitest, Playwright)
@@ -498,12 +539,14 @@ Pick based on user feedback:
 5. **Database migrations** - Document all schema changes
 
 ### OpenAI API Considerations
+
 - **Vector Stores:** Consider migrating to OpenAI's hosted vector stores if costs are manageable ($0.10/GB/day)
 - **File Search Tool:** Can simplify RAG implementation vs custom
 - **Agents SDK:** Explore OpenAI's agents SDK for multi-agent workflows
 - **Realtime API:** Budget for WebSocket infrastructure and audio costs
 
 ### Infrastructure Needs
+
 - **Redis/Upstash:** For caching and rate limiting
 - **Queue System:** BullMQ or Inngest for background jobs
 - **Monitoring:** Sentry + Vercel Analytics + Custom dashboard
@@ -516,6 +559,7 @@ Pick based on user feedback:
 You've built an **excellent foundation** with the Knowledge Base. The clear next step is **Agent-Knowledge Integration** to unlock RAG capabilities. From there, focus on making agent creation easier and building a compelling marketplace.
 
 **Your platform already has:**
+
 - ✅ Rock-solid multi-tenant architecture
 - ✅ Beautiful, polished UI
 - ✅ Production-ready knowledge base

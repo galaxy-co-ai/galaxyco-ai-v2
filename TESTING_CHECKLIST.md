@@ -8,6 +8,7 @@
 ### 1. Document Upload & Processing Flow
 
 #### Upload Test
+
 - [ ] Navigate to `/collections` page
 - [ ] Click "Upload Document" button
 - [ ] Drag and drop a PDF file
@@ -17,6 +18,7 @@
 - [ ] Try uploading unsupported file type (verify error handling)
 
 #### Processing Verification
+
 ```bash
 # Check Trigger.dev job status
 pnpm --filter web trigger:dev
@@ -29,6 +31,7 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM document_chunks WHERE document_id = 
 ```
 
 #### Search Functionality
+
 - [ ] After document processes, go to chat
 - [ ] Ask a question related to uploaded document content
 - [ ] Verify AI response includes relevant context from document
@@ -39,6 +42,7 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM document_chunks WHERE document_id = 
 ### 2. Chat Conversation Persistence
 
 #### Create Conversation
+
 - [ ] Open AI Assistant chat panel (click chat widget)
 - [ ] Send first message: "What can you help me with?"
 - [ ] Verify message appears in chat
@@ -46,6 +50,7 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM document_chunks WHERE document_id = 
 - [ ] Verify conversation persists
 
 #### Conversation History
+
 - [ ] Send 3-5 messages in conversation
 - [ ] Close chat panel
 - [ ] Reopen chat panel
@@ -53,6 +58,7 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM document_chunks WHERE document_id = 
 - [ ] Check conversation appears in history (future: sidebar)
 
 #### Title Generation
+
 ```bash
 # Verify conversation title was auto-generated
 psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORDER BY created_at DESC LIMIT 5;"
@@ -63,6 +69,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 ### 3. Collections UI Functionality
 
 #### Grid/List Views
+
 - [ ] Verify grid view displays document cards correctly
 - [ ] Click list view icon
 - [ ] Verify list view shows documents in rows
@@ -70,6 +77,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 - [ ] Verify smooth transition
 
 #### Search & Filtering
+
 - [ ] Type in search box
 - [ ] Verify documents filter in real-time
 - [ ] Click category filter (e.g., "Company Info")
@@ -78,6 +86,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 - [ ] Verify all documents appear again
 
 #### Document Display
+
 - [ ] Verify each document shows:
   - Title
   - Category icon and name
@@ -91,6 +100,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 ### 4. Mobile Responsiveness
 
 #### Device Testing
+
 - [ ] Open Chrome DevTools (F12)
 - [ ] Select mobile device emulator (375px width)
 - [ ] Test collections page on mobile
@@ -101,6 +111,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 - [ ] Test chat panel on mobile
 
 #### Breakpoints
+
 - [ ] Test at 375px (mobile)
 - [ ] Test at 768px (tablet)
 - [ ] Test at 1024px (desktop)
@@ -111,6 +122,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 ### 5. Accessibility Audit
 
 #### Keyboard Navigation
+
 - [ ] Tab through collections page
 - [ ] Verify focus visible on all interactive elements
 - [ ] Press Enter/Space on upload button
@@ -118,6 +130,7 @@ psql $DATABASE_URL -c "SELECT id, title, message_count FROM ai_conversations ORD
 - [ ] Verify Escape key closes modal
 
 #### Screen Reader Testing
+
 ```bash
 # Install accessibility checker
 pnpm --filter web add -D @axe-core/cli
@@ -127,6 +140,7 @@ pnpm --filter web exec axe http://localhost:3000/collections
 ```
 
 #### Accessibility Checklist
+
 - [ ] All images have alt text
 - [ ] All inputs have associated labels
 - [ ] Color contrast meets WCAG AA (4.5:1)
@@ -140,6 +154,7 @@ pnpm --filter web exec axe http://localhost:3000/collections
 ### 6. API Integration Testing
 
 #### Test All Endpoints
+
 ```bash
 # Set auth token (get from Clerk dashboard or browser)
 export AUTH_TOKEN="your-clerk-jwt-token"
@@ -169,6 +184,7 @@ curl -X POST http://localhost:3000/api/documents/upload \
 ### 7. Error Handling
 
 #### Network Errors
+
 - [ ] Disconnect network
 - [ ] Try uploading document
 - [ ] Verify error message displays
@@ -176,6 +192,7 @@ curl -X POST http://localhost:3000/api/documents/upload \
 - [ ] Verify retry works
 
 #### Invalid Data
+
 - [ ] Try uploading 0-byte file
 - [ ] Try uploading very large file (>50MB)
 - [ ] Send empty chat message
@@ -186,11 +203,13 @@ curl -X POST http://localhost:3000/api/documents/upload \
 ### 8. Performance Testing
 
 #### Load Times
+
 - [ ] Measure collections page initial load (target: <2s)
 - [ ] Measure chat message send/receive (target: <3s)
 - [ ] Measure document upload start time (target: <500ms)
 
 #### Browser Console
+
 - [ ] Check for JavaScript errors
 - [ ] Check for unhandled promise rejections
 - [ ] Verify no memory leaks (use Performance tab)
@@ -200,6 +219,7 @@ curl -X POST http://localhost:3000/api/documents/upload \
 ## Testing Commands
 
 ### Start Development Servers
+
 ```bash
 # Terminal 1: Web app
 cd /c/Users/Owner/workspace/galaxyco-ai-2.0
@@ -213,16 +233,19 @@ pnpm --filter database db:push
 ```
 
 ### Run Type Checks
+
 ```bash
 pnpm --filter web run typecheck
 ```
 
 ### Run Linter
+
 ```bash
 pnpm --filter web run lint
 ```
 
 ### Check Build
+
 ```bash
 pnpm --filter web build
 ```
@@ -232,6 +255,7 @@ pnpm --filter web build
 ## Test Data Setup
 
 ### Create Test Documents
+
 ```bash
 # Create sample PDFs for testing
 mkdir -p /c/Users/Owner/workspace/galaxyco-ai-2.0/test-data
@@ -245,15 +269,16 @@ mkdir -p /c/Users/Owner/workspace/galaxyco-ai-2.0/test-data
 ```
 
 ### Seed Test Conversations
+
 ```sql
 -- Run in psql to create test data
 INSERT INTO ai_conversations (id, user_id, workspace_id, title, message_count)
-VALUES 
+VALUES
   ('test-conv-1', 'user_123', 'workspace_123', 'Test Conversation 1', 5),
   ('test-conv-2', 'user_123', 'workspace_123', 'Test Conversation 2', 3);
 
 INSERT INTO ai_messages (id, conversation_id, role, content)
-VALUES 
+VALUES
   ('msg-1', 'test-conv-1', 'user', 'Hello, can you help me?'),
   ('msg-2', 'test-conv-1', 'assistant', 'Of course! What do you need help with?');
 ```

@@ -1,20 +1,28 @@
 {
   "extends": ["@commitlint/config-conventional"],
   "rules": {
-    "type-enum": [2, "always", ["feat", "fix", "docs", "refactor", "test", "chore"]],
-    "scope-enum": [2, "always", [
-      "scope-agent", 
-      "call-agent", 
-      "email-agent", 
-      "note-agent", 
-      "task-agent", 
-      "roadmap-agent", 
-      "content-agent",
-      "api", 
-      "web", 
-      "db", 
-      "infra"
-    ]],
+    "type-enum": [
+      2,
+      "always",
+      ["feat", "fix", "docs", "refactor", "test", "chore"]
+    ],
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "scope-agent",
+        "call-agent",
+        "email-agent",
+        "note-agent",
+        "task-agent",
+        "roadmap-agent",
+        "content-agent",
+        "api",
+        "web",
+        "db",
+        "infra"
+      ]
+    ],
     "subject-case": [2, "always", "lower-case"],
     "subject-max-length": [2, "always", 100],
     "body-max-line-length": [0, "always", "Infinity"]

@@ -229,4 +229,3 @@ agent "Lead Follower" {
 - MVP: onboarding, personalized dashboard, 5 Packs, marketplace browse+install, visual builder basics, knowledge ingestion with citations, WSAO instrumentation.
 - V1: DSL + sync, test bench, more connectors, verified creators, pack KPIs, governance layers.
 - V2: auto‑tuning agents, pack evolution suggestions, creator analytics, monetized marketplace.
-

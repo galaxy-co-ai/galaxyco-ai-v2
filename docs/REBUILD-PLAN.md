@@ -11,6 +11,7 @@ All current UI components will be rebuilt from scratch based on final wireframes
 ## Current State
 
 ### ✅ Already Cleaned
+
 - **Dashboard components** (AgentCard, AgentFilters, AgentGrid, ProgressTracker)
   - Migrated as reference/pattern
   - Will still be replaced in rebuild
@@ -18,9 +19,11 @@ All current UI components will be rebuilt from scratch based on final wireframes
 - **Design system** simplified (Pico CSS + Tailwind)
 
 ### 🔄 Legacy Components (To Be Replaced)
+
 These components use the old design-system stub and will be completely rebuilt:
 
 **Agents (12 files):**
+
 - AdvancedSettings.tsx
 - AgentBuilderPage.tsx
 - AgentCard.tsx
@@ -35,6 +38,7 @@ These components use the old design-system stub and will be completely rebuilt:
 - TestPanelImproved.tsx
 
 **Marketplace (9 files):**
+
 - AgentPackCard.tsx
 - AgentTemplateCard.tsx
 - CategoryChips.tsx
@@ -46,6 +50,7 @@ These components use the old design-system stub and will be completely rebuilt:
 - TokenCard.tsx
 
 **Knowledge (6 files):**
+
 - CollectionsSidebar.tsx
 - CreateCollectionModal.tsx
 - EmptyState.tsx
@@ -54,6 +59,7 @@ These components use the old design-system stub and will be completely rebuilt:
 - SearchFilterBar.tsx
 
 **Layout/Settings/Other (10 files):**
+
 - RequireWorkspace.tsx
 - WorkspaceSelect.tsx
 - ApiKeyManager.tsx
@@ -67,6 +73,7 @@ These components use the old design-system stub and will be completely rebuilt:
 ## Rebuild Priorities
 
 ### Phase 1: Foundation (Week 1-2)
+
 **Goal:** Core navigation and layout structure
 
 1. **New Layout System**
@@ -83,6 +90,7 @@ These components use the old design-system stub and will be completely rebuilt:
    - Component patterns
 
 ### Phase 2: Dashboard (Week 3)
+
 **Goal:** Main landing page with agent overview
 
 1. Dashboard page (`/dashboard`)
@@ -92,6 +100,7 @@ These components use the old design-system stub and will be completely rebuilt:
 5. Quick actions
 
 ### Phase 3: Agent Management (Week 4-5)
+
 **Goal:** Create, view, and configure agents
 
 1. Agent list page (`/agents`)
@@ -104,6 +113,7 @@ These components use the old design-system stub and will be completely rebuilt:
    - Publishing step
 
 ### Phase 4: Marketplace (Week 6)
+
 **Goal:** Browse and install agent templates
 
 1. Marketplace home (`/marketplace`)
@@ -113,6 +123,7 @@ These components use the old design-system stub and will be completely rebuilt:
 5. Rating/review system
 
 ### Phase 5: Knowledge Base (Week 7)
+
 **Goal:** Upload and manage documents
 
 1. Knowledge home (`/knowledge`)
@@ -122,6 +133,7 @@ These components use the old design-system stub and will be completely rebuilt:
 5. Preview/detail modals
 
 ### Phase 6: Settings & Account (Week 8)
+
 **Goal:** User settings and workspace config
 
 1. Settings page (`/settings`)
@@ -131,6 +143,7 @@ These components use the old design-system stub and will be completely rebuilt:
 5. Team management
 
 ### Phase 7: Polish & Optimization (Week 9-10)
+
 **Goal:** Final touches and performance
 
 1. Loading states
@@ -144,6 +157,7 @@ These components use the old design-system stub and will be completely rebuilt:
 ## Component Patterns for Rebuild
 
 ### File Structure
+
 ```
 components/
 ├── v2/                    # New components
@@ -157,11 +171,13 @@ components/
 ```
 
 ### Naming Convention
+
 - Prefix new components with location: `Dashboard-`, `Agent-`, etc.
 - Use semantic names: `AgentCard`, not `Card3`
 - Group related components in folders
 
 ### Code Style
+
 ```typescript
 // ✅ NEW PATTERN
 export function DashboardStatsCard({ title, value }: Props) {
@@ -188,12 +204,14 @@ export function Card() {
 ## Migration Strategy
 
 ### Option A: Parallel Development
+
 - Build new UI in `/app/v2/` routes
 - Keep old UI running
 - Switch routes when ready
 - Zero downtime
 
 ### Option B: Page-by-Page Replacement
+
 - Replace one page at a time
 - Test thoroughly before moving to next
 - Gradual rollout
@@ -204,6 +222,7 @@ export function Card() {
 ## Testing Strategy
 
 ### Before Replacing Each Page:
+
 - [ ] Design approved from wireframes
 - [ ] Component built and tested
 - [ ] Responsive on mobile/tablet/desktop
@@ -216,6 +235,7 @@ export function Card() {
 ## Rollback Plan
 
 If new UI has issues:
+
 ```bash
 # Revert to old component
 git revert <commit-hash>
@@ -230,6 +250,7 @@ export const routes = {
 ## Documentation Requirements
 
 For each rebuilt page, document:
+
 1. **Purpose** - What this page does
 2. **User flows** - How users navigate
 3. **Components** - What components are used
@@ -240,18 +261,21 @@ For each rebuilt page, document:
 ## Success Metrics
 
 ### Code Quality
+
 - Zero design-system imports
 - < 200 lines per component
 - 100% TypeScript coverage
 - Accessibility score > 95
 
 ### Performance
+
 - Lighthouse score > 90
 - FCP < 1.5s
 - LCP < 2.5s
 - CLS < 0.1
 
 ### User Experience
+
 - Mobile responsive
 - Keyboard navigable
 - Screen reader friendly
@@ -260,6 +284,7 @@ For each rebuilt page, document:
 ## Current Temporary State
 
 **All legacy components still work** via the design-system stub in:
+
 - `apps/web/lib/constants/design-system.ts`
 
 This stub provides fallback values so old components don't break while we rebuild. Once a component is rebuilt, remove its legacy version entirely.

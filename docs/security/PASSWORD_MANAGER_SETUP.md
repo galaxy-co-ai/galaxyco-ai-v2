@@ -9,9 +9,10 @@ This guide helps you set up a secure password management solution for storing AP
 ### Option 1: Cloud Password Managers (Recommended for Individual Use)
 
 #### **Bitwarden** (Free & Open Source) ⭐ RECOMMENDED
+
 - **Cost:** Free (Premium: $10/year)
 - **Platform:** Windows, Mac, Linux, iOS, Android, Browser
-- **Features:** 
+- **Features:**
   - End-to-end encryption
   - Zero-knowledge architecture
   - Open source & audited
@@ -19,6 +20,7 @@ This guide helps you set up a secure password management solution for storing AP
   - Self-hosting option available
 
 **Setup Steps:**
+
 1. Go to: https://bitwarden.com/
 2. Click "Get Started"
 3. Create account with strong master password (save this somewhere safe!)
@@ -26,6 +28,7 @@ This guide helps you set up a secure password management solution for storing AP
 5. Install browser extension for easy access
 
 **Storing API Keys:**
+
 ```
 1. Click "+" to add new item
 2. Select type: "Login" or "Secure Note"
@@ -37,26 +40,30 @@ This guide helps you set up a secure password management solution for storing AP
 ```
 
 #### **1Password**
+
 - **Cost:** $2.99/month individual
 - **Platform:** All platforms
 - **Features:** Premium UI, family sharing, travel mode
 - **Website:** https://1password.com/
 
 #### **LastPass**
+
 - **Cost:** Free (Premium: $3/month)
-- **Platform:** All platforms  
+- **Platform:** All platforms
 - **Features:** Auto-fill, password generator
 - **Website:** https://www.lastpass.com/
 
 ### Option 2: Local Encrypted Storage (For Advanced Users)
 
 #### **Pass** (Unix Password Manager)
+
 - **Cost:** Free
 - **Platform:** Linux, Mac, Windows (WSL)
 - **Features:** GPG-encrypted, git-based, command-line
 - **Setup:** See instructions below
 
 #### **KeePassXC**
+
 - **Cost:** Free & Open Source
 - **Platform:** Windows, Mac, Linux
 - **Features:** Offline, encrypted database file
@@ -65,6 +72,7 @@ This guide helps you set up a secure password management solution for storing AP
 ### Option 3: Development-Focused Tools
 
 #### **Doppler** (For Teams)
+
 - **Cost:** Free for 5 users
 - **Platform:** Web, CLI
 - **Features:** Secrets sync, audit logs, integrations
@@ -77,6 +85,7 @@ This is the easiest and most secure option for individual developers.
 ### Step 1: Install Bitwarden
 
 **Windows:**
+
 ```bash
 # Download installer
 curl -LO https://vault.bitwarden.com/download/?app=desktop&platform=windows
@@ -85,11 +94,13 @@ curl -LO https://vault.bitwarden.com/download/?app=desktop&platform=windows
 ```
 
 **Mac:**
+
 ```bash
 brew install --cask bitwarden
 ```
 
 **Linux:**
+
 ```bash
 # AppImage available at: https://bitwarden.com/download/
 ```
@@ -107,9 +118,10 @@ brew install --cask bitwarden
 ### Step 3: Add Your API Keys
 
 **OpenAI API Key:**
+
 ```
 Type: Secure Note (or Login)
-Name: GalaxyCo - OpenAI API Key  
+Name: GalaxyCo - OpenAI API Key
 Notes:
   API Key: sk-proj-YOUR_KEY_HERE
   Generated: 2025-10-12
@@ -119,6 +131,7 @@ Notes:
 ```
 
 **Anthropic API Key:**
+
 ```
 Type: Secure Note (or Login)
 Name: GalaxyCo - Anthropic API Key
@@ -131,6 +144,7 @@ Notes:
 ```
 
 **Database URL:**
+
 ```
 Type: Login
 Name: GalaxyCo - Database (Neon/Vercel)
@@ -155,17 +169,20 @@ Notes:
 Based on your project, store these:
 
 ### 1. AI Provider Keys
+
 - ✅ OpenAI API Key (NEW - Generated 2025-10-12)
 - ✅ Anthropic API Key (NEW - Generated 2025-10-12)
 - Google AI Key (if applicable)
 
 ### 2. Database & Infrastructure
+
 - Vercel Auth Token
 - Database Connection URL
 - Clerk Secret Key
 - Clerk Publishable Key
 
 ### 3. Third-Party Services
+
 - Sentry DSN
 - Any other API keys you're using
 
@@ -190,23 +207,29 @@ bw get password "GalaxyCo - OpenAI API Key" | clip
 ## Security Best Practices
 
 ### 1. Master Password
+
 - **Use a strong, unique password** (20+ characters)
 - **Never reuse** your master password
 - **Write it down** and store in a safe physical location
 - Consider using a passphrase: `correct-horse-battery-staple-2025!`
 
 ### 2. Two-Factor Authentication
+
 Enable 2FA on your password manager:
+
 1. Bitwarden → Settings → Security → Two-step Login
 2. Use Authy or Google Authenticator app
 3. Save recovery codes in a safe place
 
 ### 3. Regular Backups
+
 - Bitwarden: Settings → Export Vault (encrypted)
 - Store backup in separate secure location
 
 ### 4. Regular Key Rotation
+
 Set calendar reminders:
+
 - API Keys: Every 90 days
 - Database passwords: Every 180 days
 - Master password: Annually
@@ -216,11 +239,13 @@ Set calendar reminders:
 ### If You Forget Your Master Password
 
 **Bitwarden:**
+
 - Cannot be recovered (zero-knowledge architecture)
 - Use your emergency kit (write down password)
 - Set up Emergency Access for trusted person
 
 **Important:** Write down your master password NOW:
+
 ```
 My Bitwarden Master Password:
 _________________________________
@@ -260,6 +285,7 @@ echo "✅ Environment variables loaded from Bitwarden"
 ```
 
 Usage:
+
 ```bash
 source load-env-from-bitwarden.sh
 npm run dev

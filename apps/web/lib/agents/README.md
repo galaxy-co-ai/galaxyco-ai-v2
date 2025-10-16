@@ -29,6 +29,7 @@ lib/agents/
 ### 1. BaseAgent (agent-interface.ts)
 
 The abstract base class that all agents must extend. Provides:
+
 - Standard interface enforcement
 - Input validation
 - AI provider initialization with fallback
@@ -38,6 +39,7 @@ The abstract base class that all agents must extend. Provides:
 ### 2. AIProviderWrapper (ai-provider-wrapper.ts)
 
 Handles all AI provider interactions with:
+
 - Automatic retries with exponential backoff
 - Fallback provider logic
 - Timeout management
@@ -47,6 +49,7 @@ Handles all AI provider interactions with:
 ### 3. AgentLogger (agent-logger.ts)
 
 Centralized logging system providing:
+
 - Structured execution logs
 - Performance metrics tracking
 - Success/failure rates
@@ -56,6 +59,7 @@ Centralized logging system providing:
 ### 4. AgentRegistry (agent-interface.ts)
 
 Global registry for all agents with:
+
 - Agent registration and discovery
 - Bulk testing capabilities
 - Agent lookup by ID
@@ -65,26 +69,26 @@ Global registry for all agents with:
 ### Step 1: Create the Agent Class
 
 ```typescript
-import { 
-  BaseAgent, 
-  AgentTrigger, 
-  AgentInput, 
-  AgentOutput, 
-  AgentExecutionContext, 
-  AgentExecutionResult 
-} from '../agent-interface';
+import {
+  BaseAgent,
+  AgentTrigger,
+  AgentInput,
+  AgentOutput,
+  AgentExecutionContext,
+  AgentExecutionResult,
+} from "../agent-interface";
 
 export class MyAgent extends BaseAgent {
   // Required properties
-  public readonly id = 'my-agent-v1';
-  public readonly name = 'My Custom Agent';
-  public readonly description = 'What this agent does';
-  public readonly version = '1.0.0';
+  public readonly id = "my-agent-v1";
+  public readonly name = "My Custom Agent";
+  public readonly description = "What this agent does";
+  public readonly version = "1.0.0";
 
   // Define triggers
   public readonly triggers: AgentTrigger[] = [
     {
-      type: 'manual',
+      type: "manual",
       config: {},
     },
   ];
@@ -92,27 +96,27 @@ export class MyAgent extends BaseAgent {
   // Define inputs
   public readonly inputs: AgentInput[] = [
     {
-      name: 'inputField',
-      type: 'text',
+      name: "inputField",
+      type: "text",
       required: true,
-      description: 'Description of the input',
+      description: "Description of the input",
     },
   ];
 
   // Define outputs
   public readonly outputs: AgentOutput[] = [
     {
-      name: 'outputField',
-      type: 'text',
-      description: 'Description of the output',
+      name: "outputField",
+      type: "text",
+      description: "Description of the output",
     },
   ];
 
   // AI provider configuration
   public readonly aiProvider = {
-    primary: 'openai' as const,
-    fallback: 'anthropic' as const,
-    model: 'gpt-4',
+    primary: "openai" as const,
+    fallback: "anthropic" as const,
+    model: "gpt-4",
     temperature: 0.7,
     maxTokens: 1000,
   };
@@ -120,16 +124,16 @@ export class MyAgent extends BaseAgent {
   // Main processing logic
   public async process(
     inputs: Record<string, any>,
-    context: AgentExecutionContext
+    context: AgentExecutionContext,
   ): Promise<AgentExecutionResult> {
     try {
       // Your agent logic here
       const result = await this.sendAIRequest(
         [
-          { role: 'system', content: 'Your system prompt' },
-          { role: 'user', content: inputs.inputField },
+          { role: "system", content: "Your system prompt" },
+          { role: "user", content: inputs.inputField },
         ],
-        context
+        context,
       );
 
       return {
@@ -138,7 +142,7 @@ export class MyAgent extends BaseAgent {
           outputField: result.content,
         },
         metadata: {
-          provider: result.model.includes('gpt') ? 'openai' : 'anthropic',
+          provider: result.model.includes("gpt") ? "openai" : "anthropic",
           model: result.model,
           tokensUsed: result.usage?.totalTokens,
         },
@@ -148,8 +152,8 @@ export class MyAgent extends BaseAgent {
         success: false,
         data: {},
         error: {
-          message: error instanceof Error ? error.message : 'Processing failed',
-          code: 'PROCESSING_ERROR',
+          message: error instanceof Error ? error.message : "Processing failed",
+          code: "PROCESSING_ERROR",
         },
       };
     }
@@ -160,7 +164,7 @@ export class MyAgent extends BaseAgent {
 ### Step 2: Register the Agent
 
 ```typescript
-import { AgentRegistry } from '../agent-interface';
+import { AgentRegistry } from "../agent-interface";
 AgentRegistry.register(MyAgent);
 ```
 
@@ -170,8 +174,8 @@ AgentRegistry.register(MyAgent);
 const agent = new MyAgent();
 const testResult = await agent.test();
 
-console.log('Test passed:', testResult.success);
-console.log('Issues:', testResult.issues);
+console.log("Test passed:", testResult.success);
+console.log("Issues:", testResult.issues);
 ```
 
 ## Testing
@@ -181,7 +185,7 @@ console.log('Issues:', testResult.issues);
 Run the test runner to validate all agents:
 
 ```typescript
-import { runAgentTests } from './test-runner';
+import { runAgentTests } from "./test-runner";
 
 const results = await runAgentTests();
 console.log(`${results.passedTests}/${results.totalAgents} agents passed`);
@@ -269,8 +273,8 @@ try {
     success: false,
     data: {},
     error: {
-      message: error instanceof Error ? error.message : 'Operation failed',
-      code: 'OPERATION_ERROR',
+      message: error instanceof Error ? error.message : "Operation failed",
+      code: "OPERATION_ERROR",
     },
   };
 }
@@ -281,7 +285,7 @@ try {
 Use structured logging with context:
 
 ```typescript
-console.info('[AGENT] Starting operation', {
+console.info("[AGENT] Starting operation", {
   agent_id: this.id,
   tenant_id: context.tenantId,
   user_id: context.userId,
@@ -294,11 +298,11 @@ Always test with mock data before production:
 
 ```typescript
 const testResult = await agent.test({
-  inputField: 'test value',
+  inputField: "test value",
 });
 
 if (!testResult.success) {
-  console.error('Agent test failed:', testResult.issues);
+  console.error("Agent test failed:", testResult.issues);
 }
 ```
 
@@ -307,11 +311,11 @@ if (!testResult.success) {
 Check agent performance metrics regularly:
 
 ```typescript
-import { getAgentMetrics } from './agent-logger';
+import { getAgentMetrics } from "./agent-logger";
 
-const metrics = await getAgentMetrics('my-agent-v1', tenantId, 'day');
-console.log('Success rate:', metrics.successRate);
-console.log('Average duration:', metrics.averageDuration);
+const metrics = await getAgentMetrics("my-agent-v1", tenantId, "day");
+console.log("Success rate:", metrics.successRate);
+console.log("Average duration:", metrics.averageDuration);
 ```
 
 ## Troubleshooting
@@ -319,21 +323,24 @@ console.log('Average duration:', metrics.averageDuration);
 ### Issue: Agent not found in registry
 
 **Solution:** Ensure the agent is registered by importing it:
+
 ```typescript
-import './examples/my-agent'; // This auto-registers the agent
+import "./examples/my-agent"; // This auto-registers the agent
 ```
 
 ### Issue: AI provider errors
 
 **Solution:** Check environment variables and provider status:
+
 ```typescript
 const healthCheck = await quickHealthCheck();
-console.log('Provider status:', healthCheck.issues);
+console.log("Provider status:", healthCheck.issues);
 ```
 
 ### Issue: Database logging failures
 
 **Solution:** Verify database connection and run migrations:
+
 ```bash
 # Check database connection
 npx drizzle-kit check
@@ -345,10 +352,11 @@ npx drizzle-kit migrate
 ### Issue: Slow agent execution
 
 **Solution:** Review agent metrics and optimize:
+
 ```typescript
-const metrics = await getAgentMetrics(agentId, tenantId, 'day');
+const metrics = await getAgentMetrics(agentId, tenantId, "day");
 if (metrics.averageDuration > 30000) {
-  console.warn('Agent is slow, consider optimization');
+  console.warn("Agent is slow, consider optimization");
 }
 ```
 
@@ -357,15 +365,17 @@ if (metrics.averageDuration > 30000) {
 ### Migrating Existing Agents
 
 1. **Extend BaseAgent instead of custom class**
+
    ```typescript
    // Before
    class MyAgent { ... }
-   
+
    // After
    class MyAgent extends BaseAgent { ... }
    ```
 
 2. **Add required properties**
+
    ```typescript
    public readonly id = 'my-agent-v1';
    public readonly name = 'My Agent';
@@ -378,6 +388,7 @@ if (metrics.averageDuration > 30000) {
    ```
 
 3. **Implement process() method**
+
    ```typescript
    public async process(
      inputs: Record<string, any>,
@@ -388,17 +399,18 @@ if (metrics.averageDuration > 30000) {
    ```
 
 4. **Update AI calls to use sendAIRequest()**
+
    ```typescript
    // Before
    const response = await openai.chat.completions.create({...});
-   
+
    // After
    const response = await this.sendAIRequest(messages, context);
    ```
 
 5. **Register the agent**
    ```typescript
-   import { AgentRegistry } from '../agent-interface';
+   import { AgentRegistry } from "../agent-interface";
    AgentRegistry.register(MyAgent);
    ```
 
@@ -407,6 +419,7 @@ if (metrics.averageDuration > 30000) {
 ### Caching
 
 The AI wrapper supports response caching:
+
 - Reduces API costs
 - Improves response time
 - Configurable cache duration
@@ -414,6 +427,7 @@ The AI wrapper supports response caching:
 ### Batching
 
 For multiple agents, use batch execution:
+
 ```typescript
 const testResults = await AgentRegistry.testAll();
 ```
@@ -421,6 +435,7 @@ const testResults = await AgentRegistry.testAll();
 ### Monitoring
 
 Set up Sentry integration for real-time monitoring:
+
 - Automatic error tracking
 - Performance metrics
 - Slow execution alerts
@@ -459,6 +474,7 @@ Set up Sentry integration for real-time monitoring:
 ## Support
 
 For questions or issues:
+
 1. Check this README
 2. Review example implementations in `examples/`
 3. Run the health check endpoint
@@ -468,6 +484,7 @@ For questions or issues:
 ## Contributing
 
 When adding new agents:
+
 1. Follow the standard interface
 2. Include comprehensive tests
 3. Document inputs/outputs

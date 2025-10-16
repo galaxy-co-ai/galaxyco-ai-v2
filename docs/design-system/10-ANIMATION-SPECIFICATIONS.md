@@ -10,31 +10,34 @@
 ## Animation Principles
 
 ### 1. Performance First
+
 - Use `transform` and `opacity` only (GPU-accelerated)
 - Avoid animating `width`, `height`, `top`, `left`
 - Use `will-change` sparingly
 - Prefer CSS transforms over JS animations
 
 ### 2. Duration Guidelines
+
 - **Micro:** 100-200ms (hover, focus)
 - **Minor:** 200-300ms (dropdowns, tooltips)
 - **Major:** 300-500ms (modals, drawers)
 - **Complex:** 500-800ms (page transitions)
 
 ### 3. Easing Functions
+
 ```typescript
 const easings = {
   // Default for most animations
   easeOut: [0.16, 1, 0.3, 1],
-  
+
   // Snappy interactions
   easeInOut: [0.4, 0, 0.2, 1],
-  
+
   // Smooth exits
   easeIn: [0.4, 0, 1, 1],
-  
+
   // Spring physics
-  spring: { type: 'spring', stiffness: 500, damping: 30 },
+  spring: { type: "spring", stiffness: 500, damping: 30 },
 };
 ```
 
@@ -90,7 +93,7 @@ export const modalVariants = {
     visible: { opacity: 1 },
     exit: { opacity: 0 },
   },
-  
+
   // Modal content
   content: {
     hidden: {
@@ -120,24 +123,24 @@ export const modalVariants = {
 
 export const drawerVariants = {
   right: {
-    hidden: { x: '100%' },
+    hidden: { x: "100%" },
     visible: { x: 0 },
-    exit: { x: '100%' },
+    exit: { x: "100%" },
   },
   left: {
-    hidden: { x: '-100%' },
+    hidden: { x: "-100%" },
     visible: { x: 0 },
-    exit: { x: '-100%' },
+    exit: { x: "-100%" },
   },
   top: {
-    hidden: { y: '-100%' },
+    hidden: { y: "-100%" },
     visible: { y: 0 },
-    exit: { y: '-100%' },
+    exit: { y: "-100%" },
   },
   bottom: {
-    hidden: { y: '100%' },
+    hidden: { y: "100%" },
     visible: { y: 0 },
-    exit: { y: '100%' },
+    exit: { y: "100%" },
   },
 };
 ```
@@ -285,15 +288,15 @@ export const skeletonVariants = {
     transition: {
       duration: 1.5,
       repeat: Infinity,
-      ease: 'easeInOut',
+      ease: "easeInOut",
     },
   },
   shimmer: {
-    backgroundPosition: ['200% 0', '-200% 0'],
+    backgroundPosition: ["200% 0", "-200% 0"],
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: 'linear',
+      ease: "linear",
     },
   },
 };
@@ -314,7 +317,7 @@ export const accordionVariants = {
     },
   },
   expanded: {
-    height: 'auto',
+    height: "auto",
     opacity: 1,
     transition: {
       duration: 0.3,
@@ -331,10 +334,10 @@ export const accordionVariants = {
 ```typescript
 export const progressVariants = {
   bar: {
-    width: ['0%', '100%'],
+    width: ["0%", "100%"],
     transition: {
       duration: 2,
-      ease: 'linear',
+      ease: "linear",
     },
   },
   spinner: {
@@ -342,7 +345,7 @@ export const progressVariants = {
     transition: {
       duration: 1,
       repeat: Infinity,
-      ease: 'linear',
+      ease: "linear",
     },
   },
 };
@@ -358,7 +361,7 @@ export const progressVariants = {
 // Card hover
 const cardHover = {
   scale: 1.02,
-  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
   transition: { duration: 0.2 },
 };
 
@@ -378,14 +381,14 @@ const iconHover = {
 const focusVariants = {
   focused: {
     scale: 1.01,
-    borderColor: 'rgb(59, 130, 246)', // primary
-    boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)',
+    borderColor: "rgb(59, 130, 246)", // primary
+    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.1)",
     transition: { duration: 0.15 },
   },
   blurred: {
     scale: 1,
-    borderColor: 'rgb(229, 231, 235)', // border
-    boxShadow: 'none',
+    borderColor: "rgb(229, 231, 235)", // border
+    boxShadow: "none",
     transition: { duration: 0.15 },
   },
 };
@@ -439,14 +442,14 @@ import { useReducedMotion } from 'framer-motion';
 
 const AnimatedComponent = () => {
   const shouldReduceMotion = useReducedMotion();
-  
+
   const variants = shouldReduceMotion
     ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
     : {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
       };
-  
+
   return (
     <motion.div variants={variants} />
   );

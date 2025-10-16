@@ -4,25 +4,25 @@
  * October 15, 2025
  */
 
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface PageHeaderProps {
-  title: string
-  description?: string
-  children?: React.ReactNode
-  className?: string
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+  className?: string;
 }
 
-export function PageHeader({ 
-  title, 
-  description, 
-  children, 
-  className 
+export function PageHeader({
+  title,
+  description,
+  children,
+  className,
 }: PageHeaderProps) {
   return (
-    <div className={cn('mb-6', className)}>
+    <div className={cn("mb-6", className)}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* Title and Description */}
         <div className="min-w-0">
@@ -35,16 +35,12 @@ export function PageHeader({
             </p>
           )}
         </div>
-        
+
         {/* Actions */}
-        {children && (
-          <div className="flex items-center gap-2">
-            {children}
-          </div>
-        )}
+        {children && <div className="flex items-center gap-2">{children}</div>}
       </div>
     </div>
-  )
+  );
 }
 
-export default PageHeader
+export default PageHeader;

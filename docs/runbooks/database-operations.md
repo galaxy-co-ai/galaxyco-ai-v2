@@ -34,10 +34,11 @@ node -e "require('./src/db').db.execute('SELECT 1')"
 ### Creating a New Table
 
 1. **Define schema** in `packages/database/src/schema/`:
+
    ```typescript
    // Example: packages/database/src/schema/new-feature.ts
    import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-   
+
    export const myNewTable = pgTable("my_new_table", {
      id: uuid("id").primaryKey().defaultRandom(),
      name: text("name").notNull(),
@@ -46,22 +47,25 @@ node -e "require('./src/db').db.execute('SELECT 1')"
    ```
 
 2. **Export from index**:
+
    ```typescript
    // packages/database/src/schema/index.ts
    export * from "./new-feature";
    ```
 
 3. **Generate migration**:
+
    ```bash
    cd packages/database
    npm run db:migration:create -- add_my_new_table
    ```
 
 4. **Review and apply**:
+
    ```bash
    # Review SQL in drizzle/migrations/
    npm run db:migrate
-   
+
    # Verify in Drizzle Studio
    npm run db:studio
    ```
@@ -120,9 +124,7 @@ await db
   .where(eq(workspaces.id, workspaceId));
 
 // Delete
-await db
-  .delete(workspaces)
-  .where(eq(workspaces.id, workspaceId));
+await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
 ```
 
 ### Using Raw SQL (When Necessary)
@@ -168,21 +170,24 @@ const WORKSPACE_SLUG = "workspace-to-delete";
 // Delete workspace members first (foreign key dependency)
 await db
   .delete(workspaceMembers)
-  .where(eq(workspaceMembers.workspaceId, 
-    db.select({ id: workspaces.id })
-      .from(workspaces)
-      .where(eq(workspaces.slug, WORKSPACE_SLUG))
-  ));
+  .where(
+    eq(
+      workspaceMembers.workspaceId,
+      db
+        .select({ id: workspaces.id })
+        .from(workspaces)
+        .where(eq(workspaces.slug, WORKSPACE_SLUG)),
+    ),
+  );
 
 // Then delete workspace
-await db
-  .delete(workspaces)
-  .where(eq(workspaces.slug, WORKSPACE_SLUG));
+await db.delete(workspaces).where(eq(workspaces.slug, WORKSPACE_SLUG));
 
 console.log(`✅ Cleaned up workspace: ${WORKSPACE_SLUG}`);
 ```
 
 Run with:
+
 ```bash
 node scripts/cleanup-workspace.mjs
 ```
@@ -231,15 +236,15 @@ async function getWorkspace(workspaceId: string, userId: string) {
     .where(
       and(
         eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, userId)
-      )
+        eq(workspaceMembers.userId, userId),
+      ),
     )
     .limit(1);
-  
+
   if (!membership.length) {
     throw new Error("Access denied");
   }
-  
+
   // Then fetch workspace
   return db
     .select()
@@ -261,7 +266,7 @@ CREATE INDEX idx_agents_workspace_id ON agents(workspace_id);
 CREATE INDEX idx_agents_created_at ON agents(created_at DESC);
 
 -- Check index usage
-SELECT 
+SELECT
   schemaname,
   tablename,
   indexname,
@@ -299,12 +304,15 @@ import { db } from "@galaxyco/database";
 
 async function seedTestData() {
   // Create test workspace
-  const [workspace] = await db.insert(workspaces).values({
-    name: "Test Workspace",
-    slug: "test-workspace",
-    createdById: "test-user-id",
-  }).returning();
-  
+  const [workspace] = await db
+    .insert(workspaces)
+    .values({
+      name: "Test Workspace",
+      slug: "test-workspace",
+      createdById: "test-user-id",
+    })
+    .returning();
+
   // Create test agents
   await db.insert(agents).values([
     {
@@ -313,7 +321,7 @@ async function seedTestData() {
       // ... other fields
     },
   ]);
-  
+
   console.log("✅ Test data seeded");
 }
 
@@ -340,19 +348,15 @@ DATABASE_URL="test-branch-url" npm run db:migrate
 
 ```typescript
 // Add deletedAt column to schema
-deletedAt: timestamp("deleted_at"),
-
-// Soft delete
-await db
-  .update(table)
-  .set({ deletedAt: new Date() })
-  .where(eq(table.id, id));
+deletedAt: (timestamp("deleted_at"),
+  // Soft delete
+  await db
+    .update(table)
+    .set({ deletedAt: new Date() })
+    .where(eq(table.id, id)));
 
 // Query excluding deleted
-const active = await db
-  .select()
-  .from(table)
-  .where(isNull(table.deletedAt));
+const active = await db.select().from(table).where(isNull(table.deletedAt));
 ```
 
 ### Audit Trails
@@ -367,10 +371,10 @@ updatedById: text("updated_by_id").references(() => users.id),
 // Automatically update on change
 await db
   .update(table)
-  .set({ 
+  .set({
     ...changes,
     updatedAt: new Date(),
-    updatedById: currentUserId 
+    updatedById: currentUserId
   });
 ```
 
@@ -380,10 +384,10 @@ await db
 async function getPaginatedAgents(
   workspaceId: string,
   page = 1,
-  pageSize = 20
+  pageSize = 20,
 ) {
   const offset = (page - 1) * pageSize;
-  
+
   const agents = await db
     .select()
     .from(agents)
@@ -391,12 +395,12 @@ async function getPaginatedAgents(
     .limit(pageSize)
     .offset(offset)
     .orderBy(desc(agents.createdAt));
-  
+
   const [{ count }] = await db
     .select({ count: sql`count(*)` })
     .from(agents)
     .where(eq(agents.workspaceId, workspaceId));
-  
+
   return {
     agents,
     total: Number(count),
@@ -416,6 +420,7 @@ async function getPaginatedAgents(
 **Cause**: Migration not applied
 
 **Solution**:
+
 ```bash
 cd packages/database
 npm run db:migrate
@@ -426,6 +431,7 @@ npm run db:migrate
 **Cause**: Trying to insert duplicate unique value
 
 **Solution**:
+
 1. Check for existing record first
 2. Use `INSERT ... ON CONFLICT` if needed
 3. Clean up duplicate data (see cleanup scripts)
@@ -435,6 +441,7 @@ npm run db:migrate
 **Cause**: Too many concurrent connections
 
 **Solution**:
+
 1. Check for connection leaks in code
 2. Increase connection pool size in Neon
 3. Use connection pooling properly
@@ -444,6 +451,7 @@ npm run db:migrate
 **Cause**: Missing indexes or inefficient query
 
 **Solution**:
+
 1. Run `EXPLAIN ANALYZE` on query
 2. Add indexes on frequently filtered columns
 3. Optimize query structure

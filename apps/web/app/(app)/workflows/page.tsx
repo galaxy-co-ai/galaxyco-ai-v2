@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { PageHeader } from '@/components/layout/page-header';
-import { EmptyState } from '@/components/shared/empty-state';
-import { mockWorkflows } from '@/lib/fixtures';
-import { formatRelativeTime } from '@/lib/utils';
-import { Network, Plus, ArrowRight } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { EmptyState } from "@/components/shared/empty-state";
+import { mockWorkflows } from "@/lib/fixtures";
+import { formatRelativeTime } from "@/lib/utils";
+import { Network, Plus, ArrowRight } from "lucide-react";
 
 export default function WorkflowsPage() {
   const workflows = mockWorkflows;
@@ -27,8 +27,8 @@ export default function WorkflowsPage() {
           title="No workflows yet"
           description="Create your first workflow to chain multiple agents together"
           action={{
-            label: 'Create Workflow',
-            onClick: () => console.log('Create workflow'),
+            label: "Create Workflow",
+            onClick: () => console.log("Create workflow"),
           }}
         />
       ) : (
@@ -72,21 +72,34 @@ export default function WorkflowsPage() {
               {/* Metrics */}
               <div className="mt-4 grid grid-cols-3 gap-4 border-t pt-4">
                 <div>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Total Runs</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    Total Runs
+                  </p>
                   <p className="mt-1 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     {workflow.metrics.totalExecutions}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Success Rate</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    Success Rate
+                  </p>
                   <p className="mt-1 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                    {Math.round((workflow.metrics.successfulExecutions / workflow.metrics.totalExecutions) * 100)}%
+                    {Math.round(
+                      (workflow.metrics.successfulExecutions /
+                        workflow.metrics.totalExecutions) *
+                        100,
+                    )}
+                    %
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Last Run</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    Last Run
+                  </p>
                   <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                    {workflow.metrics.lastExecutedAt ? formatRelativeTime(workflow.metrics.lastExecutedAt) : 'Never'}
+                    {workflow.metrics.lastExecutedAt
+                      ? formatRelativeTime(workflow.metrics.lastExecutedAt)
+                      : "Never"}
                   </p>
                 </div>
               </div>

@@ -109,13 +109,11 @@ packages:
 module.exports = {
   root: true,
   env: { node: true, es2022: true, browser: true },
-  parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
-  extends: [
-    'eslint:recommended'
-  ],
+  parserOptions: { ecmaVersion: 2022, sourceType: "module" },
+  extends: ["eslint:recommended"],
   rules: {
-    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
-  }
+    "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+  },
 };
 ```
 
@@ -231,7 +229,11 @@ export default function Home() {
 ```json
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": { "declaration": true, "emitDecoratorMetadata": true, "experimentalDecorators": true },
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }
 ```
@@ -241,8 +243,8 @@ export default function Home() {
 `apps/api/src/main.ts`
 
 ```ts
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -254,8 +256,8 @@ bootstrap();
 `apps/api/src/app.module.ts`
 
 ```ts
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
 
 @Module({ controllers: [AppController] })
 export class AppModule {}
@@ -264,11 +266,11 @@ export class AppModule {}
 `apps/api/src/app.controller.ts`
 
 ```ts
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get } from "@nestjs/common";
 
 @Controller()
 export class AppController {
-  @Get('/health')
+  @Get("/health")
   health() {
     return { ok: true };
   }
@@ -322,13 +324,17 @@ uvicorn app:app --reload --port 5001
 ### `packages/types/tsconfig.json`
 
 ```json
-{ "extends": "../../tsconfig.base.json", "include": ["**/*.ts"], "exclude": ["node_modules"] }
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}
 ```
 
 ### `packages/ui/src/Button.tsx`
 
 ```tsx
-import * as React from 'react';
+import * as React from "react";
 export const Button = (p: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button className="px-3 py-2 rounded-md shadow-sm" {...p} />
 );
@@ -376,4 +382,3 @@ echo "Rolling back services to $TAG (manual ECS update handled in CI)"
 - Wire **socket.io** to stream traces to web
 - Add **PAA right rail** in web; `/health` proxy
 - Add first **Specialist** in Python and a **plan→dispatch→execute** demo endpoint
-

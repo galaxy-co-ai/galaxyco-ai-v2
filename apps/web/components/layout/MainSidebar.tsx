@@ -67,7 +67,7 @@ export default function MainSidebar() {
         onMouseLeave={handleMouseLeave}
         className={cn(
           "fixed left-0 top-0 bottom-0 bg-background border-r border-border z-40 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block",
-          isExpanded ? "w-60" : "w-16"
+          isExpanded ? "w-60" : "w-16",
         )}
       >
         {/* Header */}
@@ -77,11 +77,7 @@ export default function MainSidebar() {
             href="/dashboard"
             className="text-xl font-bold text-primary whitespace-nowrap no-underline flex items-center gap-2 hover:text-primary/90 transition-colors"
           >
-            {isExpanded ? (
-              "GalaxyCo.ai"
-            ) : (
-              <Globe size={24} strokeWidth={2.5} />
-            )}
+            {isExpanded ? "GalaxyCo.ai" : <Globe size={24} strokeWidth={2.5} />}
           </Link>
 
           {/* Pin Button */}
@@ -109,7 +105,7 @@ export default function MainSidebar() {
                 isActive(item.path)
                   ? "bg-primary/10 border-l-primary text-primary"
                   : "border-l-transparent text-foreground hover:bg-secondary",
-                !isExpanded && "justify-center"
+                !isExpanded && "justify-center",
               )}
               title={isExpanded ? undefined : item.name}
             >

@@ -23,20 +23,24 @@
 ### Critical (Must Fix Before Phase 9)
 
 #### 1. TypeScript Path Resolution Errors (49+ errors)
+
 **Location**: `apps/web/**/*.tsx`, `apps/web/**/*.ts`  
 **Issue**: Import paths not resolving correctly due to tsconfig path mapping issues
+
 - ❌ Cannot find module `@/components/agents/*`
 - ❌ Cannot find module `@/hooks/*`
 - ❌ Cannot find module `@/lib/*`
 - ❌ Cannot find module `@galaxyco/database/schema`
 
-**Impact**: 
+**Impact**:
+
 - Blocks type safety
 - Makes refactoring dangerous
 - Hides potential runtime errors
 - Prevents automated testing setup
 
 **Root Cause**:
+
 - `tsconfig.json` paths not properly exported from packages
 - Database package not exporting schema types correctly
 - Missing `exports` field in package.json files
@@ -46,19 +50,23 @@
 ---
 
 #### 2. Missing Authentication Integration
+
 **Location**: `apps/web/lib/actions/agent-actions.ts:39`  
 **Issue**: Hardcoded placeholder auth token
+
 ```typescript
-const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
+const token = "CLERK_TOKEN_HERE"; // TODO: Get from Clerk
 ```
 
 **Impact**:
+
 - All API calls will fail in production
 - No actual tenant isolation
 - Security vulnerability
 - Can't test real-world scenarios
 
 **Dependencies**:
+
 - Clerk `useAuth()` hook integration
 - Workspace context provider
 - Token refresh logic
@@ -68,10 +76,12 @@ const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
 ---
 
 #### 3. Mock-Only Test Execution
+
 **Location**: `apps/web/components/agents/TestPanel.tsx`, `services/agents/**`  
 **Issue**: Test panel only returns mock data, no real AI execution
 
 **Impact**:
+
 - Cannot validate agent logic before production
 - No way to test prompt quality
 - Can't measure actual token usage
@@ -84,16 +94,19 @@ const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
 ### High Priority (Should Fix During Phase 9)
 
 #### 4. No Schema Validation for Input/Output
+
 **Location**: Agent creation flow  
 **Issue**: Agents don't have structured input/output schemas
 
 **Impact**:
+
 - Users don't know what data to send
 - No validation at runtime
 - Type safety breaks at agent boundaries
 - Hard to build integrations
 
 **Solution Needed**:
+
 - JSON Schema editor component
 - Schema validation middleware
 - Type generation from schemas
@@ -103,14 +116,17 @@ const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
 ---
 
 #### 5. Incomplete Agent Tracking
+
 **Location**: `apps/web/components/dashboard/ProgressTracker.tsx:146-147`  
 **Issue**: Progress tracker has hardcoded false values
+
 ```typescript
 const hasAgents = false; // TODO: Query actual agent count in Phase 8
 const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ```
 
 **Impact**:
+
 - Misleading dashboard metrics
 - Users can't track real progress
 - Onboarding flow broken
@@ -120,10 +136,12 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 6. Missing Database Exports
+
 **Location**: `packages/database/src/schema.ts`  
 **Issue**: Schema not properly exported with types
 
 **Impact**:
+
 - TypeScript errors across web app
 - Can't import tables in API routes
 - Blocks type-safe database queries
@@ -135,10 +153,12 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ### Medium Priority (Can Fix After Phase 9)
 
 #### 7. No Error Retry Logic
+
 **Location**: Agent execution flow  
 **Issue**: No retry mechanism for failed AI API calls
 
 **Impact**:
+
 - Transient failures become permanent
 - Poor user experience
 - Wasted API credits on partial failures
@@ -150,10 +170,12 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 8. No Rate Limiting Implementation
+
 **Location**: Agent API endpoints  
 **Issue**: Rate limit config exists but not enforced
 
 **Impact**:
+
 - Risk of API quota exhaustion
 - Cost overruns
 - Potential service abuse
@@ -165,10 +187,12 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 9. No Agent Test History
+
 **Location**: Test panel  
 **Issue**: Test results not persisted
 
 **Impact**:
+
 - Can't compare test runs
 - No debugging history
 - Can't track prompt improvements
@@ -178,15 +202,18 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 10. TypeScript Implicit Any Types
+
 **Location**: Multiple components  
 **Issue**: 15+ implicit `any` type parameters
 
 **Examples**:
+
 - `app/agents/page.tsx:232` - `agent` parameter
 - `components/agents/AdvancedSettings.tsx` - multiple event handlers
 - `components/agents/BasicInfoForm.tsx` - tag handling
 
 **Impact**:
+
 - Loss of type safety
 - Harder to refactor
 - Potential runtime errors
@@ -198,6 +225,7 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ### Low Priority (Nice to Have)
 
 #### 11. Missing Unit Tests
+
 **Location**: Entire codebase  
 **Issue**: Zero test coverage
 
@@ -208,6 +236,7 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 12. No Performance Monitoring
+
 **Location**: Agent execution  
 **Issue**: No metrics collection for latency, errors, costs
 
@@ -216,6 +245,7 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 ---
 
 #### 13. Hardcoded Design System Values
+
 **Location**: Some components still use inline styles instead of design system
 
 **Impact**: Inconsistent UI, harder to maintain
@@ -226,13 +256,13 @@ const hasConnectedTools = false; // TODO: Query actual integrations in Phase 8
 
 ## 📊 Severity & Impact Analysis
 
-| Priority | Count | Total Fix Time | Blockers |
-|----------|-------|---------------|----------|
-| **Critical** | 3 | 7-11 hours | Phase 9 blocked |
-| **High** | 6 | 9.5 hours | Features incomplete |
-| **Medium** | 4 | 7 hours | User experience |
-| **Low** | 3 | 15+ hours | Future work |
-| **TOTAL** | 16 | 38.5+ hours | - |
+| Priority     | Count | Total Fix Time | Blockers            |
+| ------------ | ----- | -------------- | ------------------- |
+| **Critical** | 3     | 7-11 hours     | Phase 9 blocked     |
+| **High**     | 6     | 9.5 hours      | Features incomplete |
+| **Medium**   | 4     | 7 hours        | User experience     |
+| **Low**      | 3     | 15+ hours      | Future work         |
+| **TOTAL**    | 16    | 38.5+ hours    | -                   |
 
 ### Critical Path Analysis
 
@@ -249,9 +279,11 @@ Total: 3.5-5.5 hours of blocking work
 ## 🚀 Phase 9 Overview
 
 ### Goal
+
 Transform the Agent Builder from mock-only mode to **production-ready live execution** with real AI provider integration.
 
 ### Scope
+
 1. **AI Provider Integration**: Connect OpenAI, Anthropic, and custom providers
 2. **API Key Management**: Secure storage and rotation
 3. **Live Test Execution**: Real AI calls from test panel
@@ -260,6 +292,7 @@ Transform the Agent Builder from mock-only mode to **production-ready live execu
 6. **Schema Validation**: Input/output schema enforcement
 
 ### Success Criteria
+
 - ✅ Agent test panel executes real AI calls
 - ✅ All AI providers (OpenAI, Anthropic) working
 - ✅ API keys securely stored per workspace
@@ -270,6 +303,7 @@ Transform the Agent Builder from mock-only mode to **production-ready live execu
 - ✅ All TypeScript errors resolved
 
 ### Estimated Duration
+
 **12-16 hours** (includes technical debt fixes)
 
 ---
@@ -309,7 +343,9 @@ Total: 16-23 hours across 5 work sessions
 #### Step 1: Fix TypeScript Path Resolution (1.5-2h)
 
 **Tasks**:
+
 1. Update `packages/database/package.json` exports:
+
    ```json
    {
      "exports": {
@@ -321,12 +357,14 @@ Total: 16-23 hours across 5 work sessions
    ```
 
 2. Create `packages/database/src/types.ts`:
+
    ```typescript
-   export * from './schema';
-   export type { Database } from './client';
+   export * from "./schema";
+   export type { Database } from "./client";
    ```
 
 3. Update `apps/web/tsconfig.json`:
+
    ```json
    {
      "compilerOptions": {
@@ -344,6 +382,7 @@ Total: 16-23 hours across 5 work sessions
 5. Update all imports to use correct paths
 
 **Verification**:
+
 ```bash
 cd apps/web && pnpm typecheck
 # Should return 0 errors
@@ -356,31 +395,35 @@ cd apps/web && pnpm typecheck
 #### Step 2: Integrate Clerk Authentication (2-3h)
 
 **Tasks**:
+
 1. Create `apps/web/hooks/use-workspace-auth.ts`:
+
    ```typescript
    export function useWorkspaceAuth() {
      const { userId, getToken } = useAuth();
      const { workspace } = useWorkspace();
-     
+
      async function getAuthHeaders() {
        const token = await getToken();
        return {
-         'Authorization': `Bearer ${token}`,
-         'x-workspace-id': workspace.id,
+         Authorization: `Bearer ${token}`,
+         "x-workspace-id": workspace.id,
        };
      }
-     
+
      return { getAuthHeaders, userId, workspace };
    }
    ```
 
 2. Update `apps/web/lib/actions/agent-actions.ts`:
+
    ```typescript
    // Remove hardcoded token
    // Add useWorkspaceAuth integration
    ```
 
 3. Add workspace context to test panel:
+
    ```typescript
    const { getAuthHeaders } = useWorkspaceAuth();
    ```
@@ -388,6 +431,7 @@ cd apps/web && pnpm typecheck
 4. Test auth flow end-to-end
 
 **Verification**:
+
 - [ ] Can create agent with real Clerk token
 - [ ] Can list agents filtered by workspace
 - [ ] API returns 401 without valid token
@@ -399,11 +443,13 @@ cd apps/web && pnpm typecheck
 #### Step 3: Fix Database Schema Exports (30m)
 
 **Tasks**:
+
 1. Update `packages/database/src/index.ts`:
+
    ```typescript
-   export * from './client';
-   export * from './schema';
-   
+   export * from "./client";
+   export * from "./schema";
+
    // Re-export specific tables for convenience
    export {
      users,
@@ -412,19 +458,21 @@ cd apps/web && pnpm typecheck
      agents,
      agentPacks,
      // ... all tables
-   } from './schema';
+   } from "./schema";
    ```
 
 2. Add type exports:
+
    ```typescript
-   export type { User, Workspace, Agent } from './schema';
+   export type { User, Workspace, Agent } from "./schema";
    ```
 
 3. Test imports in web app
 
 **Verification**:
+
 ```typescript
-import { agents, type Agent } from '@galaxyco/database';
+import { agents, type Agent } from "@galaxyco/database";
 // Should have full type safety
 ```
 
@@ -435,14 +483,16 @@ import { agents, type Agent } from '@galaxyco/database';
 #### Step 4: Fix Dashboard Progress Tracking (30m)
 
 **Tasks**:
+
 1. Create database query hook:
+
    ```typescript
    export async function getWorkspaceStats(workspaceId: string) {
      const agentCount = await db
        .select({ count: sql`count(*)` })
        .from(agents)
        .where(eq(agents.workspaceId, workspaceId));
-     
+
      return {
        agentCount: agentCount[0].count,
        // Add other stats
@@ -452,13 +502,14 @@ import { agents, type Agent } from '@galaxyco/database';
 
 2. Update `ProgressTracker.tsx`:
    ```typescript
-   const { data: stats } = useQuery(['workspace-stats', workspace.id], 
-     () => getWorkspaceStats(workspace.id)
+   const { data: stats } = useQuery(["workspace-stats", workspace.id], () =>
+     getWorkspaceStats(workspace.id),
    );
    const hasAgents = stats.agentCount > 0;
    ```
 
 **Verification**:
+
 - [ ] Dashboard shows real agent count
 - [ ] Progress tracker updates when agent created
 
@@ -469,8 +520,10 @@ import { agents, type Agent } from '@galaxyco/database';
 #### Step 5: Fix TypeScript Implicit Any Types (1h)
 
 **Tasks**:
+
 1. Enable strict mode in affected files
 2. Add explicit types to all event handlers:
+
    ```typescript
    // Before: (e) => {}
    // After: (e: React.ChangeEvent<HTMLInputElement>) => {}
@@ -480,6 +533,7 @@ import { agents, type Agent } from '@galaxyco/database';
 4. Run typecheck and verify
 
 **Verification**:
+
 ```bash
 pnpm typecheck --strict
 # Should pass
@@ -512,7 +566,9 @@ pnpm typecheck --strict
 #### Step 1: API Key Management (1.5h)
 
 **Tasks**:
+
 1. Add API keys to workspace settings table:
+
    ```typescript
    // Migration: 20250108_add_api_keys.sql
    ALTER TABLE workspaces
@@ -520,6 +576,7 @@ pnpm typecheck --strict
    ```
 
 2. Create encryption utilities:
+
    ```typescript
    // lib/crypto.ts
    export function encryptApiKey(key: string): string;
@@ -527,6 +584,7 @@ pnpm typecheck --strict
    ```
 
 3. Build API key management UI:
+
    ```typescript
    // components/settings/ApiKeyManager.tsx
    // - Add/Edit/Delete API keys
@@ -543,12 +601,14 @@ pnpm typecheck --strict
    ```
 
 **Security Requirements**:
+
 - API keys encrypted at rest (AES-256)
 - Keys never sent to client (only existence indicator)
 - Keys stored per workspace (tenant-scoped)
 - Audit log for key rotation
 
 **Verification**:
+
 - [ ] Can add OpenAI API key
 - [ ] Can add Anthropic API key
 - [ ] Keys encrypted in database
@@ -562,7 +622,9 @@ pnpm typecheck --strict
 #### Step 2: AI Provider Service Layer (1.5h)
 
 **Tasks**:
+
 1. Create base AI provider interface:
+
    ```typescript
    // services/ai/types.ts
    export interface AIProvider {
@@ -571,7 +633,7 @@ pnpm typecheck --strict
      validateConfig(config: ProviderConfig): boolean;
      estimateCost(params: ExecuteParams): number;
    }
-   
+
    export interface ExecuteParams {
      model: string;
      messages: Message[];
@@ -579,10 +641,14 @@ pnpm typecheck --strict
      maxTokens: number;
      tools?: Tool[];
    }
-   
+
    export interface ExecuteResult {
      content: string;
-     usage: { promptTokens: number; completionTokens: number; totalTokens: number };
+     usage: {
+       promptTokens: number;
+       completionTokens: number;
+       totalTokens: number;
+     };
      latencyMs: number;
      cost: number;
      model: string;
@@ -590,11 +656,12 @@ pnpm typecheck --strict
    ```
 
 2. Create OpenAI provider:
+
    ```typescript
    // services/ai/providers/openai.ts
    export class OpenAIProvider implements AIProvider {
      private client: OpenAI;
-     
+
      async execute(params: ExecuteParams): Promise<ExecuteResult> {
        // Implementation
      }
@@ -602,6 +669,7 @@ pnpm typecheck --strict
    ```
 
 3. Create Anthropic provider:
+
    ```typescript
    // services/ai/providers/anthropic.ts
    export class AnthropicProvider implements AIProvider {
@@ -613,17 +681,20 @@ pnpm typecheck --strict
    ```typescript
    // services/ai/factory.ts
    export function createProvider(
-     type: 'openai' | 'anthropic',
-     apiKey: string
+     type: "openai" | "anthropic",
+     apiKey: string,
    ): AIProvider {
      switch (type) {
-       case 'openai': return new OpenAIProvider(apiKey);
-       case 'anthropic': return new AnthropicProvider(apiKey);
+       case "openai":
+         return new OpenAIProvider(apiKey);
+       case "anthropic":
+         return new AnthropicProvider(apiKey);
      }
    }
    ```
 
 **Verification**:
+
 - [ ] Can create OpenAI provider instance
 - [ ] Can create Anthropic provider instance
 - [ ] Provider interface enforces consistency
@@ -636,24 +707,26 @@ pnpm typecheck --strict
 #### Step 3: Usage Tracking Database (1h)
 
 **Tasks**:
+
 1. Create agent executions table:
+
    ```sql
    CREATE TABLE agent_executions (
      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
      workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
      agent_id UUID NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
-     
+
      -- Execution metadata
      status execution_status NOT NULL DEFAULT 'pending',
      started_at TIMESTAMP NOT NULL DEFAULT NOW(),
      completed_at TIMESTAMP,
      duration_ms INTEGER,
-     
+
      -- Input/output
      input JSONB NOT NULL,
      output JSONB,
      error JSONB,
-     
+
      -- AI metrics
      model TEXT NOT NULL,
      ai_provider TEXT NOT NULL,
@@ -661,22 +734,23 @@ pnpm typecheck --strict
      completion_tokens INTEGER,
      total_tokens INTEGER,
      estimated_cost NUMERIC(10, 6),
-     
+
      -- Metadata
      triggered_by UUID REFERENCES users(id),
      trigger_type TEXT NOT NULL, -- 'manual', 'webhook', 'schedule'
-     
+
      created_at TIMESTAMP NOT NULL DEFAULT NOW()
    );
-   
+
    CREATE INDEX agent_execution_tenant_idx ON agent_executions(workspace_id);
    CREATE INDEX agent_execution_agent_idx ON agent_executions(agent_id);
    CREATE INDEX agent_execution_status_idx ON agent_executions(status);
    ```
 
 2. Add Drizzle schema:
+
    ```typescript
-   export const agentExecutions = pgTable('agent_executions', {
+   export const agentExecutions = pgTable("agent_executions", {
      // ... fields
    });
    ```
@@ -690,6 +764,7 @@ pnpm typecheck --strict
    ```
 
 **Verification**:
+
 - [ ] Can create execution record
 - [ ] Can update with completion data
 - [ ] Tenant-scoped queries work
@@ -702,7 +777,9 @@ pnpm typecheck --strict
 #### Step 4: Error Retry Logic (1h)
 
 **Tasks**:
+
 1. Create retry utility:
+
    ```typescript
    // lib/retry.ts
    export async function retryWithBackoff<T>(
@@ -712,13 +789,14 @@ pnpm typecheck --strict
        baseDelayMs: number;
        maxDelayMs: number;
        onRetry?: (attempt: number, error: Error) => void;
-     }
+     },
    ): Promise<T> {
      // Exponential backoff implementation
    }
    ```
 
 2. Add retry to provider execution:
+
    ```typescript
    async execute(params: ExecuteParams): Promise<ExecuteResult> {
      return retryWithBackoff(
@@ -738,12 +816,13 @@ pnpm typecheck --strict
 3. Add error categorization:
    ```typescript
    // lib/errors.ts
-   export class RetryableError extends Error { }
-   export class NonRetryableError extends Error { }
-   export class RateLimitError extends RetryableError { }
+   export class RetryableError extends Error {}
+   export class NonRetryableError extends Error {}
+   export class RateLimitError extends RetryableError {}
    ```
 
 **Verification**:
+
 - [ ] Retries on transient failures
 - [ ] Doesn't retry on auth errors
 - [ ] Exponential backoff works
@@ -774,7 +853,9 @@ pnpm typecheck --strict
 #### Step 1: Agent Test API Endpoint (1.5h)
 
 **Tasks**:
+
 1. Update test endpoint:
+
    ```typescript
    // apps/api/src/agents/agents.controller.ts
    @Post(':id/test')
@@ -793,37 +874,39 @@ pnpm typecheck --strict
    ```
 
 2. Add DTO validation:
+
    ```typescript
    export class TestAgentDto {
      @IsObject()
      inputs: Record<string, any>;
-     
-     @IsEnum(['mock', 'live'])
+
+     @IsEnum(["mock", "live"])
      @IsOptional()
-     mode?: 'mock' | 'live' = 'live';
+     mode?: "mock" | "live" = "live";
    }
    ```
 
 3. Implement execution flow:
+
    ```typescript
    async function executeAgent(
      agent: Agent,
      inputs: any,
-     workspace: Workspace
+     workspace: Workspace,
    ): Promise<ExecuteResult> {
      // Start execution tracking
      const executionId = await startExecution({ agent, inputs });
-     
+
      try {
        // Get API key
        const apiKey = await getApiKey(workspace, agent.config.aiProvider);
-       
+
        // Create provider
        const provider = createProvider(agent.config.aiProvider, apiKey);
-       
+
        // Build messages from system prompt + inputs
        const messages = buildMessages(agent.config.systemPrompt, inputs);
-       
+
        // Execute
        const result = await provider.execute({
          model: agent.config.model,
@@ -831,10 +914,10 @@ pnpm typecheck --strict
          temperature: agent.config.temperature,
          maxTokens: agent.config.maxTokens,
        });
-       
+
        // Track completion
        await completeExecution(executionId, result);
-       
+
        return result;
      } catch (error) {
        await failExecution(executionId, error);
@@ -844,6 +927,7 @@ pnpm typecheck --strict
    ```
 
 **Verification**:
+
 - [ ] Test endpoint accepts inputs
 - [ ] Validates agent exists
 - [ ] Checks workspace has API key
@@ -858,18 +942,21 @@ pnpm typecheck --strict
 #### Step 2: Update Test Panel for Live Mode (2h)
 
 **Tasks**:
+
 1. Add mode toggle to test panel:
+
    ```typescript
-   const [mode, setMode] = useState<'mock' | 'live'>('live');
+   const [mode, setMode] = useState<"mock" | "live">("live");
    ```
 
 2. Show API key requirement:
+
    ```typescript
    {!hasApiKey && mode === 'live' && (
      <Alert variant="warning">
        <AlertIcon>⚠️</AlertIcon>
        <AlertText>
-         Live mode requires an API key. 
+         Live mode requires an API key.
          <Link to="/settings/api-keys">Add API key →</Link>
        </AlertText>
      </Alert>
@@ -877,27 +964,28 @@ pnpm typecheck --strict
    ```
 
 3. Update test execution:
+
    ```typescript
    async function runTest() {
      setIsRunning(true);
      setError(null);
-     
+
      try {
        const startTime = Date.now();
-       
+
        const result = await testAgent(
          agent.id,
          { inputs: JSON.parse(inputJson), mode },
-         workspace.id
+         workspace.id,
        );
-       
+
        const duration = Date.now() - startTime;
-       
+
        setResults({
          ...result,
          durationMs: duration,
        });
-       
+
        toast.success(`Test completed in ${duration}ms`);
      } catch (error) {
        setError(error.message);
@@ -909,27 +997,28 @@ pnpm typecheck --strict
    ```
 
 4. Show detailed metrics:
+
    ```typescript
    <MetricsDisplay>
      <Metric>
        <MetricLabel>Tokens</MetricLabel>
        <MetricValue>{results.usage.totalTokens}</MetricValue>
        <MetricDetail>
-         {results.usage.promptTokens} prompt + 
+         {results.usage.promptTokens} prompt +
          {results.usage.completionTokens} completion
        </MetricDetail>
      </Metric>
-     
+
      <Metric>
        <MetricLabel>Cost</MetricLabel>
        <MetricValue>${results.cost.toFixed(4)}</MetricValue>
      </Metric>
-     
+
      <Metric>
        <MetricLabel>Latency</MetricLabel>
        <MetricValue>{results.latencyMs}ms</MetricValue>
      </Metric>
-     
+
      <Metric>
        <MetricLabel>Model</MetricLabel>
        <MetricValue>{results.model}</MetricValue>
@@ -938,6 +1027,7 @@ pnpm typecheck --strict
    ```
 
 **Verification**:
+
 - [ ] Can toggle mock/live mode
 - [ ] Shows warning if no API key
 - [ ] Executes real AI call
@@ -951,11 +1041,13 @@ pnpm typecheck --strict
 #### Step 3: Input/Output Schema Validation (2h)
 
 **Tasks**:
+
 1. Add JSON Schema editor to agent builder:
+
    ```typescript
    // components/agents/SchemaEditor.tsx
-   export function SchemaEditor({ 
-     schema, 
+   export function SchemaEditor({
+     schema,
      onChange,
      type: 'input' | 'output'
    }) {
@@ -968,44 +1060,48 @@ pnpm typecheck --strict
    ```
 
 2. Add schemas to agent config:
+
    ```typescript
-   export const agents = pgTable('agents', {
+   export const agents = pgTable("agents", {
      // ...
-     inputSchema: jsonb('input_schema').$type<JSONSchema>(),
-     outputSchema: jsonb('output_schema').$type<JSONSchema>(),
+     inputSchema: jsonb("input_schema").$type<JSONSchema>(),
+     outputSchema: jsonb("output_schema").$type<JSONSchema>(),
    });
    ```
 
 3. Add validation middleware:
+
    ```typescript
    // lib/validation.ts
    export function validateAgainstSchema(
      data: any,
-     schema: JSONSchema
+     schema: JSONSchema,
    ): { valid: boolean; errors: string[] } {
      // Use Ajv or Zod for validation
    }
    ```
 
 4. Update test panel to validate:
+
    ```typescript
    async function runTest() {
      // Validate input
      const validation = validateAgainstSchema(
        JSON.parse(inputJson),
-       agent.inputSchema
+       agent.inputSchema,
      );
-     
+
      if (!validation.valid) {
-       setError(`Input validation failed: ${validation.errors.join(', ')}`);
+       setError(`Input validation failed: ${validation.errors.join(", ")}`);
        return;
      }
-     
+
      // Continue with execution...
    }
    ```
 
 **Verification**:
+
 - [ ] Can define input schema
 - [ ] Can define output schema
 - [ ] Input validated before execution
@@ -1019,12 +1115,14 @@ pnpm typecheck --strict
 #### Step 4: Agent Execution from Dashboard (1h)
 
 **Tasks**:
+
 1. Add "Run Agent" button to agent cards
 2. Show execution modal with input form
 3. Execute agent and show results
 4. Link to execution history
 
 **Verification**:
+
 - [ ] Can execute agent from dashboard
 - [ ] Input form matches schema
 - [ ] Results displayed clearly
@@ -1086,6 +1184,7 @@ pnpm typecheck --strict
    - [ ] Execution logs tenant-scoped
 
 **Verification**:
+
 - All scenarios pass
 - No console errors
 - Proper error messages
@@ -1096,12 +1195,14 @@ pnpm typecheck --strict
 #### Step 2: Performance Optimization (30m)
 
 **Tasks**:
+
 1. Add database indexes:
+
    ```sql
-   CREATE INDEX agent_execution_created_at_idx 
+   CREATE INDEX agent_execution_created_at_idx
    ON agent_executions(created_at DESC);
-   
-   CREATE INDEX agent_execution_workspace_created_idx 
+
+   CREATE INDEX agent_execution_workspace_created_idx
    ON agent_executions(workspace_id, created_at DESC);
    ```
 
@@ -1110,6 +1211,7 @@ pnpm typecheck --strict
 4. Add loading skeletons
 
 **Verification**:
+
 - [ ] Agent list loads <500ms
 - [ ] Test execution feels instant
 - [ ] No UI jank during execution
@@ -1119,6 +1221,7 @@ pnpm typecheck --strict
 #### Step 3: Documentation (1h)
 
 **Tasks**:
+
 1. Update README with Phase 9 features
 2. Create API key setup guide
 3. Document schema editor usage
@@ -1126,6 +1229,7 @@ pnpm typecheck --strict
 5. Update deployment checklist
 
 **Deliverables**:
+
 - `docs/PHASE_9_COMPLETE.md`
 - `docs/API_KEY_SETUP.md`
 - `docs/TROUBLESHOOTING.md`
@@ -1135,6 +1239,7 @@ pnpm typecheck --strict
 #### Step 4: Production Checklist (30m)
 
 **Before Deploy**:
+
 - [ ] All TypeScript errors resolved
 - [ ] All tests passing
 - [ ] No console warnings
@@ -1188,36 +1293,36 @@ pnpm typecheck --strict
 
 ### Phase 9 Success Criteria
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| TypeScript Errors | 0 | `pnpm typecheck` |
-| Test Pass Rate | 100% | Manual testing checklist |
-| API Response Time | <500ms | Browser DevTools |
-| Agent Execution Time | <5s | Usage metrics |
-| Error Rate | <1% | Execution logs |
-| User Satisfaction | 9/10 | Jason feedback |
+| Metric               | Target | Measurement              |
+| -------------------- | ------ | ------------------------ |
+| TypeScript Errors    | 0      | `pnpm typecheck`         |
+| Test Pass Rate       | 100%   | Manual testing checklist |
+| API Response Time    | <500ms | Browser DevTools         |
+| Agent Execution Time | <5s    | Usage metrics            |
+| Error Rate           | <1%    | Execution logs           |
+| User Satisfaction    | 9/10   | Jason feedback           |
 
 ### Technical Debt Reduction
 
-| Category | Before | After Phase 9 | After Post-Phase 9 |
-|----------|--------|---------------|---------------------|
-| Critical | 3 | 0 | 0 |
-| High | 6 | 2 | 1 |
-| Medium | 4 | 4 | 1 |
-| Low | 3 | 3 | 3 |
-| **Total** | **16** | **9** | **5** |
+| Category  | Before | After Phase 9 | After Post-Phase 9 |
+| --------- | ------ | ------------- | ------------------ |
+| Critical  | 3      | 0             | 0                  |
+| High      | 6      | 2             | 1                  |
+| Medium    | 4      | 4             | 1                  |
+| Low       | 3      | 3             | 3                  |
+| **Total** | **16** | **9**         | **5**              |
 
 ### Development Velocity
 
-| Phase | Planned Hours | Actual Hours | Variance |
-|-------|--------------|--------------|----------|
-| Phase 1-7 | - | - | - |
-| Phase 8 | 6h | 6h | 0% |
-| Pre-Phase 9 | 4-6h | TBD | TBD |
-| Phase 9A | 4-5h | TBD | TBD |
-| Phase 9B | 4-6h | TBD | TBD |
-| Phase 9C | 2-3h | TBD | TBD |
-| **Total Phase 9** | **14-20h** | **TBD** | **TBD** |
+| Phase             | Planned Hours | Actual Hours | Variance |
+| ----------------- | ------------- | ------------ | -------- |
+| Phase 1-7         | -             | -            | -        |
+| Phase 8           | 6h            | 6h           | 0%       |
+| Pre-Phase 9       | 4-6h          | TBD          | TBD      |
+| Phase 9A          | 4-5h          | TBD          | TBD      |
+| Phase 9B          | 4-6h          | TBD          | TBD      |
+| Phase 9C          | 2-3h          | TBD          | TBD      |
+| **Total Phase 9** | **14-20h**    | **TBD**      | **TBD**  |
 
 ---
 
@@ -1226,10 +1331,11 @@ pnpm typecheck --strict
 ### Session 7 Opening Message
 
 > "Ready to tackle technical debt! I see we have 3 critical blockers before Phase 9:
+>
 > 1. TypeScript path resolution errors (49+ errors)
 > 2. Clerk authentication integration (hardcoded tokens)
 > 3. Database schema export issues
-> 
+>
 > I've created a comprehensive plan to fix all critical debt in 4-6 hours.
 > Should we start with the TypeScript errors to unblock type safety?"
 
@@ -1238,6 +1344,7 @@ pnpm typecheck --strict
 ## 📋 Quick Reference Checklists
 
 ### Pre-Phase 9 Checklist
+
 - [ ] TypeScript errors: 0
 - [ ] Clerk auth integrated
 - [ ] Database schemas exported
@@ -1246,6 +1353,7 @@ pnpm typecheck --strict
 - [ ] Clean `pnpm typecheck` output
 
 ### Phase 9A Checklist
+
 - [ ] API key management UI
 - [ ] Keys encrypted in database
 - [ ] OpenAI provider implemented
@@ -1254,6 +1362,7 @@ pnpm typecheck --strict
 - [ ] Retry logic with backoff
 
 ### Phase 9B Checklist
+
 - [ ] Live test execution working
 - [ ] Test panel shows metrics
 - [ ] Schema editor implemented
@@ -1261,6 +1370,7 @@ pnpm typecheck --strict
 - [ ] Agent execution from dashboard
 
 ### Phase 9C Checklist
+
 - [ ] All test scenarios pass
 - [ ] Performance optimized
 - [ ] Documentation complete
@@ -1275,15 +1385,12 @@ pnpm typecheck --strict
 1. **API Key Security**
    - Risk: Keys leaked in logs/errors
    - Mitigation: Never log full keys, mask in errors
-   
 2. **Rate Limiting**
    - Risk: Quota exhaustion
    - Mitigation: Implement workspace-level limits
-   
 3. **Cost Overruns**
    - Risk: Unexpected AI API costs
    - Mitigation: Usage alerts, monthly caps
-   
 4. **Scope Creep**
    - Risk: Phase 9 expands beyond plan
    - Mitigation: Strict adherence to checklist
@@ -1295,12 +1402,14 @@ pnpm typecheck --strict
 ### From Phase 8
 
 **What Worked**:
+
 - ✅ Structured session handoffs
 - ✅ Incremental commits
 - ✅ Comprehensive testing checklists
 - ✅ Mock-first approach
 
 **What to Improve**:
+
 - ⚠️ Fix TypeScript issues earlier
 - ⚠️ Don't defer critical auth integration
 - ⚠️ Set up proper package exports from start
@@ -1309,6 +1418,7 @@ pnpm typecheck --strict
 ### For Phase 9
 
 **Best Practices**:
+
 1. Fix all critical debt BEFORE starting features
 2. Test auth integration end-to-end immediately
 3. Verify TypeScript after every major change

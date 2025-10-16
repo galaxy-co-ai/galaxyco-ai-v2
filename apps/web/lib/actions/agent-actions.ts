@@ -1,7 +1,7 @@
 /**
  * Agent API Client Actions
  * Handles all API calls to the agents endpoints
- * 
+ *
  * Now using Next.js API routes (/api/agents) instead of external NestJS backend
  */
 
@@ -49,7 +49,7 @@ interface TestAgentPayload {
 /**
  * Get auth headers (Clerk token + workspace ID)
  * Note: These functions are called from client components with useWorkspaceAuth hook
- * 
+ *
  * For Next.js API routes, we don't need to pass Authorization header (Clerk handles it)
  * Just pass workspace ID for tenant isolation
  */
@@ -69,7 +69,7 @@ export async function createAgent(
 ): Promise<any> {
   // Extract workspace ID from headers
   const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
-  
+
   // Transform payload to match new API structure
   const apiPayload = {
     name: payload.name,
@@ -123,13 +123,13 @@ export async function listAgents(
   },
 ): Promise<any> {
   const queryParams = new URLSearchParams();
-  
+
   // Extract workspace ID from headers
   const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
   if (workspaceId) {
     queryParams.set("workspaceId", workspaceId);
   }
-  
+
   if (filters?.status) queryParams.set("status", filters.status);
   if (filters?.search) queryParams.set("search", filters.search);
   if (filters?.limit) queryParams.set("limit", filters.limit.toString());
@@ -198,9 +198,13 @@ export async function updateAgent(
     apiPayload.config = {
       ...(payload.aiProvider && { aiProvider: payload.aiProvider }),
       ...(payload.model && { model: payload.model }),
-      ...(payload.temperature !== undefined && { temperature: payload.temperature }),
+      ...(payload.temperature !== undefined && {
+        temperature: payload.temperature,
+      }),
       ...(payload.maxTokens !== undefined && { maxTokens: payload.maxTokens }),
-      ...(payload.systemPrompt !== undefined && { systemPrompt: payload.systemPrompt }),
+      ...(payload.systemPrompt !== undefined && {
+        systemPrompt: payload.systemPrompt,
+      }),
       ...(payload.knowledgeBase && { knowledgeBase: payload.knowledgeBase }),
     };
   }

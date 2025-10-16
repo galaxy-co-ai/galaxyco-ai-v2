@@ -69,6 +69,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 2. Test Template Library
 
 **Expected Behavior**:
+
 - ✅ Template Library modal opens automatically on page load
 - ✅ See 5 template cards (Email Analyzer, Document Summarizer, etc.)
 - ✅ Search bar filters templates in real-time
@@ -79,6 +80,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Cards have hover effects (lift + shadow)
 
 **Test**:
+
 1. Click "Email Analyzer" template
 2. Verify all fields are pre-filled with template data
 3. Click "📚 Change Template" button in toolbar
@@ -89,6 +91,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 3. Test Basic Info Form
 
 **Expected Behavior**:
+
 - ✅ Name input: 3-50 chars, required
 - ✅ Icon picker: Click to open emoji grid, select emoji
 - ✅ Description textarea: 10-500 chars, required
@@ -98,6 +101,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Red error text below invalid fields
 
 **Test**:
+
 1. Clear the name field → Type "AB" → See error: "Name must be at least 3 characters"
 2. Type "ABC" → Error disappears
 3. Click icon picker → Select different emoji → Icon updates
@@ -110,6 +114,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 4. Test Configuration Form
 
 **Expected Behavior**:
+
 - ✅ Trigger dropdown: 4 options (webhook, schedule, manual, event)
 - ✅ AI Provider dropdown: 3 options (OpenAI, Anthropic, Custom)
 - ✅ Model dropdown: Updates based on provider
@@ -121,6 +126,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Max Tokens: Optional, 1-128000
 
 **Test**:
+
 1. Change AI Provider to "Anthropic" → Model dropdown updates to Claude models
 2. Change AI Provider back to "OpenAI" → Model dropdown updates to GPT models
 3. Move temperature slider → Value updates in label
@@ -133,6 +139,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 5. Test Save Draft
 
 **Expected Behavior**:
+
 - ✅ "Save Draft" button disabled if no changes
 - ✅ Button enabled when form is dirty
 - ✅ Clicking saves via API (POST /agents or PUT /agents/:id)
@@ -141,6 +148,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Button shows "Saving..." during API call
 
 **Test**:
+
 1. Fill in all required fields (name, description, system prompt)
 2. Click "💾 Save Draft" button
 3. See success toast (or error if API is not running)
@@ -151,6 +159,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 6. Test Publish
 
 **Expected Behavior**:
+
 - ✅ "Publish Agent" button always enabled
 - ✅ Validates form before publishing
 - ✅ If invalid, shows inline errors (doesn't call API)
@@ -158,6 +167,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Success toast: "✓ Agent published successfully!"
 
 **Test**:
+
 1. Clear name field → Click "🚀 Publish Agent"
 2. See validation error: "Name is required"
 3. Fill in name → Click "🚀 Publish Agent" again
@@ -168,11 +178,13 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 7. Test Autosave
 
 **Expected Behavior**:
+
 - ✅ Changes trigger autosave after 30 seconds
 - ✅ "Saving..." indicator appears during save
 - ✅ No manual action needed
 
 **Test**:
+
 1. Change name field
 2. Wait 30 seconds without clicking anything
 3. See "Saving..." indicator appear
@@ -183,6 +195,7 @@ Navigate to: **http://localhost:3000/agents/new**
 ### 8. Test Validation
 
 **Expected Behavior**:
+
 - ✅ Inline errors appear on blur
 - ✅ Errors clear when field becomes valid
 - ✅ Character counters update in real-time
@@ -190,6 +203,7 @@ Navigate to: **http://localhost:3000/agents/new**
 - ✅ Form cannot save/publish if invalid
 
 **Test**:
+
 1. Name: Type 1 char → Blur → Error
 2. Name: Type 51+ chars → Error: "must not exceed 50 characters"
 3. Description: Type 5 chars → Error: "must be at least 10 characters"
@@ -200,11 +214,11 @@ Navigate to: **http://localhost:3000/agents/new**
 
 ## 🐛 Known Limitations
 
-1. **API Not Connected**: 
+1. **API Not Connected**:
    - Save Draft and Publish will fail if NestJS API is not running
    - Expected: Connection error toast appears
 
-2. **TypeScript Errors**: 
+2. **TypeScript Errors**:
    - Some module resolution issues exist in the codebase
    - These don't affect runtime functionality
    - Forms should work correctly in the browser
@@ -253,12 +267,14 @@ Use this checklist to verify all features:
 After testing, the next steps from SESSION_5_HANDOFF.md are:
 
 ### Step 5: Agent Builder - Advanced (1 hour)
+
 - SchemaBuilder.tsx (JSON editor for inputs/outputs)
 - AdvancedSettings.tsx (timeout, retries, rate limits)
 - Publish flow with confirmation modal
 - Keyboard shortcut: Cmd+S to save
 
 ### Step 6: Test Mode Panel (1 hour)
+
 - TestPanel.tsx (right sidebar)
 - JSON input editor
 - Run test button (mock mode)
@@ -266,12 +282,14 @@ After testing, the next steps from SESSION_5_HANDOFF.md are:
 - Metrics (tokens, cost, latency)
 
 ### Step 7: Agent List Page (45 min)
+
 - `/agents` route
 - Status filter tabs
 - Search with debounce
 - Grid of agent cards
 
 ### Step 8: Polish & Testing (45 min)
+
 - Loading states
 - Error boundaries
 - Toast notifications
@@ -282,6 +300,7 @@ After testing, the next steps from SESSION_5_HANDOFF.md are:
 ## 💬 Feedback
 
 When testing, please note:
+
 - ✅ What works perfectly
 - 🐛 Any bugs or unexpected behavior
 - 💡 Suggestions for improvements

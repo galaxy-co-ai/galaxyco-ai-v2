@@ -1,15 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import {
   AGENT_TEMPLATES,
   AgentTemplate,
   TEMPLATE_CATEGORIES,
   searchTemplates,
   getTemplatesByCategory,
-} from '@/lib/constants/agent-templates';
-import { TemplateCard } from './TemplateCard';
-import { colors, spacing, radius, shadows, typography, animation, zIndex } from '@/lib/constants/design-system';
+} from "@/lib/constants/agent-templates";
+import { TemplateCard } from "./TemplateCard";
+import {
+  colors,
+  spacing,
+  radius,
+  shadows,
+  typography,
+  animation,
+  zIndex,
+} from "@/lib/constants/design-system";
 
 interface TemplateLibraryProps {
   isOpen: boolean;
@@ -24,8 +32,8 @@ export function TemplateLibrary({
   onSelectTemplate,
   onStartFromScratch,
 }: TemplateLibraryProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Filter templates based on search and category
   const filteredTemplates = useMemo(() => {
@@ -37,14 +45,14 @@ export function TemplateLibrary({
     }
 
     // Apply category filter
-    if (selectedCategory !== 'all') {
+    if (selectedCategory !== "all") {
       templates = getTemplatesByCategory(selectedCategory);
     }
 
     // Apply both filters if both are active
-    if (searchQuery.trim() && selectedCategory !== 'all') {
+    if (searchQuery.trim() && selectedCategory !== "all") {
       templates = searchTemplates(searchQuery).filter(
-        (t) => t.category === selectedCategory
+        (t) => t.category === selectedCategory,
       );
     }
 
@@ -59,53 +67,53 @@ export function TemplateLibrary({
       <div
         onClick={onClose}
         style={{
-          position: 'fixed',
+          position: "fixed",
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(4px)',
+          background: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(4px)",
           zIndex: zIndex.modal,
-          animation: 'fadeIn 200ms ease-out',
+          animation: "fadeIn 200ms ease-out",
         }}
       />
 
       {/* Modal */}
       <div
         style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           background: colors.neutral[0],
           borderRadius: radius.xl,
           boxShadow: shadows.xl,
           zIndex: zIndex.modal + 1,
-          width: '90vw',
-          maxWidth: '1200px',
-          maxHeight: '90vh',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          animation: 'slideUp 300ms ease-out',
+          width: "90vw",
+          maxWidth: "1200px",
+          maxHeight: "90vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          animation: "slideUp 300ms ease-out",
         }}
       >
         {/* Header */}
         <div
           style={{
-            padding: spacing['2xl'],
+            padding: spacing["2xl"],
             borderBottom: `1px solid ${colors.neutral[200]}`,
           }}
         >
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
               marginBottom: spacing.lg,
             }}
           >
             <h2
               style={{
-                fontSize: typography.fontSize['3xl'],
+                fontSize: typography.fontSize["3xl"],
                 fontWeight: typography.fontWeight.bold,
                 color: colors.neutral[900],
                 margin: 0,
@@ -116,11 +124,11 @@ export function TemplateLibrary({
             <button
               onClick={onClose}
               style={{
-                background: 'none',
-                border: 'none',
-                fontSize: typography.fontSize['2xl'],
+                background: "none",
+                border: "none",
+                fontSize: typography.fontSize["2xl"],
                 color: colors.neutral[500],
-                cursor: 'pointer',
+                cursor: "pointer",
                 padding: spacing.sm,
                 lineHeight: 1,
                 transition: `color ${animation.timing.fast}`,
@@ -143,12 +151,12 @@ export function TemplateLibrary({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
-              width: '100%',
+              width: "100%",
               padding: `${spacing.md} ${spacing.lg}`,
               fontSize: typography.fontSize.base,
               border: `2px solid ${colors.neutral[200]}`,
               borderRadius: radius.lg,
-              outline: 'none',
+              outline: "none",
               transition: `border-color ${animation.timing.fast}`,
               fontFamily: typography.fontFamily.sans,
             }}
@@ -164,32 +172,32 @@ export function TemplateLibrary({
         {/* Category Tabs */}
         <div
           style={{
-            display: 'flex',
+            display: "flex",
             gap: spacing.sm,
-            padding: `${spacing.lg} ${spacing['2xl']}`,
+            padding: `${spacing.lg} ${spacing["2xl"]}`,
             borderBottom: `1px solid ${colors.neutral[200]}`,
-            overflowX: 'auto',
+            overflowX: "auto",
           }}
         >
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => setSelectedCategory("all")}
             style={{
               padding: `${spacing.sm} ${spacing.lg}`,
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.medium,
-              border: 'none',
+              border: "none",
               borderRadius: radius.md,
-              cursor: 'pointer',
+              cursor: "pointer",
               background:
-                selectedCategory === 'all'
+                selectedCategory === "all"
                   ? colors.primary[500]
                   : colors.neutral[100],
               color:
-                selectedCategory === 'all'
+                selectedCategory === "all"
                   ? colors.neutral[0]
                   : colors.neutral[700],
               transition: `all ${animation.timing.fast}`,
-              whiteSpace: 'nowrap',
+              whiteSpace: "nowrap",
             }}
           >
             All Templates
@@ -202,9 +210,9 @@ export function TemplateLibrary({
                 padding: `${spacing.sm} ${spacing.lg}`,
                 fontSize: typography.fontSize.sm,
                 fontWeight: typography.fontWeight.medium,
-                border: 'none',
+                border: "none",
                 borderRadius: radius.md,
-                cursor: 'pointer',
+                cursor: "pointer",
                 background:
                   selectedCategory === category.id
                     ? colors.primary[500]
@@ -214,7 +222,7 @@ export function TemplateLibrary({
                     ? colors.neutral[0]
                     : colors.neutral[700],
                 transition: `all ${animation.timing.fast}`,
-                whiteSpace: 'nowrap',
+                whiteSpace: "nowrap",
               }}
             >
               {category.icon} {category.label}
@@ -226,15 +234,15 @@ export function TemplateLibrary({
         <div
           style={{
             flex: 1,
-            overflowY: 'auto',
-            padding: spacing['2xl'],
+            overflowY: "auto",
+            padding: spacing["2xl"],
           }}
         >
           {filteredTemplates.length > 0 ? (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
                 gap: spacing.xl,
               }}
             >
@@ -252,11 +260,11 @@ export function TemplateLibrary({
           ) : (
             <div
               style={{
-                textAlign: 'center',
-                padding: spacing['4xl'],
+                textAlign: "center",
+                padding: spacing["4xl"],
               }}
             >
-              <div style={{ fontSize: '4rem', marginBottom: spacing.lg }}>
+              <div style={{ fontSize: "4rem", marginBottom: spacing.lg }}>
                 🔍
               </div>
               <h3
@@ -285,11 +293,11 @@ export function TemplateLibrary({
         {/* Footer */}
         <div
           style={{
-            padding: spacing['2xl'],
+            padding: spacing["2xl"],
             borderTop: `1px solid ${colors.neutral[200]}`,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <span
@@ -299,7 +307,7 @@ export function TemplateLibrary({
             }}
           >
             {filteredTemplates.length} template
-            {filteredTemplates.length !== 1 ? 's' : ''} available
+            {filteredTemplates.length !== 1 ? "s" : ""} available
           </span>
           <button
             onClick={() => {
@@ -314,7 +322,7 @@ export function TemplateLibrary({
               color: colors.neutral[900],
               border: `2px solid ${colors.neutral[300]}`,
               borderRadius: radius.lg,
-              cursor: 'pointer',
+              cursor: "pointer",
               transition: `all ${animation.timing.fast}`,
             }}
             onMouseEnter={(e) => {

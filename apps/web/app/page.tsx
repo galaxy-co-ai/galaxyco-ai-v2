@@ -3,19 +3,19 @@
  * October 15, 2025
  */
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react'
-import { currentUser } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ArrowRight, Bot, Workflow, BarChart3 } from "lucide-react";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
-  const user = await currentUser()
-  
+  const user = await currentUser();
+
   // If user is authenticated, redirect to dashboard
   if (user) {
-    redirect('/dashboard')
+    redirect("/dashboard");
   }
 
   return (
@@ -28,9 +28,11 @@ export default async function HomePage() {
               <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">G</span>
               </div>
-              <span className="text-xl font-bold text-neutral-900 dark:text-white">GalaxyCo.ai</span>
+              <span className="text-xl font-bold text-neutral-900 dark:text-white">
+                GalaxyCo.ai
+              </span>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {/* <ThemeToggle /> */}
               <Link href="/sign-in">
@@ -58,12 +60,13 @@ export default async function HomePage() {
               Useful in Minutes
             </span>
           </h1>
-          
+
           <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that deliver measurable outcomes from Day 1. 
-            No setup. No waiting. Just results.
+            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that
+            deliver measurable outcomes from Day 1. No setup. No waiting. Just
+            results.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link href="/sign-up">
               <button className="flex items-center px-8 py-3 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-semibold text-lg transition-colors">
@@ -84,27 +87,35 @@ export default async function HomePage() {
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">AI Agents</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">
+                AI Agents
+              </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                Research, email, and CRM agents working 24/7 to grow your business
+                Research, email, and CRM agents working 24/7 to grow your
+                business
               </p>
             </div>
-            
+
             <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <Workflow className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Smart Workflows</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">
+                Smart Workflows
+              </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                End-to-end automation pipelines that adapt to your business needs
+                End-to-end automation pipelines that adapt to your business
+                needs
               </p>
             </div>
-            
+
             <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-neutral-700">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4 mx-auto">
                 <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">Real Analytics</h3>
+              <h3 className="text-lg font-semibold mb-2 text-neutral-900 dark:text-white">
+                Real Analytics
+              </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
                 Track measurable outcomes and ROI from every AI action
               </p>
@@ -120,5 +131,5 @@ export default async function HomePage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

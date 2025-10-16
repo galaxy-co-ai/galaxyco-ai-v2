@@ -1,6 +1,6 @@
 /**
  * Toast Notification Helpers
- * 
+ *
  * Convenient utilities for showing toast notifications
  * throughout the app using the shadcn toast system
  */
@@ -76,7 +76,7 @@ export function toastPromise<T>(
     loading: string;
     success: string;
     error: string;
-  }
+  },
 ) {
   return sonnerToast.promise(promise, {
     loading: messages.loading,
@@ -105,18 +105,19 @@ export const commonToasts = {
   agentUpdated: () => toastSuccess("Agent updated successfully!"),
   agentDeleted: () => toastSuccess("Agent deleted successfully!"),
   agentDeployed: () => toastSuccess("Agent deployed successfully!"),
-  
+
   // Knowledge operations
   fileUploaded: () => toastSuccess("File uploaded successfully!"),
-  filesUploading: (count: number) => 
-    toastLoading(`Uploading ${count} file${count > 1 ? 's' : ''}...`),
-  
+  filesUploading: (count: number) =>
+    toastLoading(`Uploading ${count} file${count > 1 ? "s" : ""}...`),
+
   // Generic operations
   saved: () => toastSuccess("Changes saved!"),
   copied: () => toastSuccess("Copied to clipboard!"),
-  
+
   // Errors
-  networkError: () => toastError("Network error. Please check your connection."),
+  networkError: () =>
+    toastError("Network error. Please check your connection."),
   unauthorized: () => toastError("You don't have permission to do that."),
   genericError: () => toastError("Something went wrong. Please try again."),
 };

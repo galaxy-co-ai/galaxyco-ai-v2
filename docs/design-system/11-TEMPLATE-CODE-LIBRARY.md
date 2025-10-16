@@ -10,6 +10,7 @@
 ## Template Implementation Guidelines
 
 ### File Structure per Template
+
 ```
 src/templates/
 ├── DashboardTemplate/
@@ -23,6 +24,7 @@ src/templates/
 ```
 
 ### TypeScript Template Props Pattern
+
 ```typescript
 interface BaseTemplateProps {
   title?: string;
@@ -40,6 +42,7 @@ interface BaseTemplateProps {
 **Used by:** `/dashboard`, `/sales`, `/analytics` (8 pages)
 
 ### Code Structure
+
 ```typescript
 // DashboardTemplate.tsx
 import { StatCard, ChartSection, DataTable } from '@/components';
@@ -65,7 +68,7 @@ export const DashboardTemplate = ({ stats, charts, table, sidebar }: DashboardTe
           {sidebar}
         </aside>
       )}
-      
+
       {/* Main content */}
       <main className="flex-1 overflow-auto p-6">
         {/* KPI Row */}
@@ -74,14 +77,14 @@ export const DashboardTemplate = ({ stats, charts, table, sidebar }: DashboardTe
             <StatCard key={i} {...stat} />
           ))}
         </div>
-        
+
         {/* Charts Section */}
         {charts && (
           <div className="mb-6">
             {charts}
           </div>
         )}
-        
+
         {/* Data Table */}
         {table && (
           <div className="bg-card rounded-lg border border-border">
@@ -95,6 +98,7 @@ export const DashboardTemplate = ({ stats, charts, table, sidebar }: DashboardTe
 ```
 
 ### Responsive Behavior
+
 ```css
 /* Mobile: Stack stats vertically */
 @media (max-width: 768px) {
@@ -118,6 +122,7 @@ export const DashboardTemplate = ({ stats, charts, table, sidebar }: DashboardTe
 **Used by:** `/agents`, `/prospects`, `/emails/campaigns` (25 pages)
 
 ### Code Structure
+
 ```typescript
 interface ListTemplateProps<T> {
   title: string;
@@ -147,7 +152,7 @@ export const ListTemplate = <T,>({
   headerActions,
 }: ListTemplateProps<T>) => {
   const [search, setSearch] = React.useState('');
-  
+
   return (
     <div className="h-screen flex">
       {/* Filters Sidebar (Desktop) */}
@@ -156,7 +161,7 @@ export const ListTemplate = <T,>({
           {filters}
         </aside>
       )}
-      
+
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
@@ -167,7 +172,7 @@ export const ListTemplate = <T,>({
               {headerActions}
             </div>
           </div>
-          
+
           {/* Search + View Toggle */}
           <div className="flex gap-4">
             <SearchBar
@@ -180,7 +185,7 @@ export const ListTemplate = <T,>({
             <ViewToggle value={viewMode} onChange={onViewModeChange} />
           </div>
         </header>
-        
+
         {/* Content Area */}
         <div className="flex-1 overflow-auto p-4">
           {data.length === 0 ? (
@@ -194,7 +199,7 @@ export const ListTemplate = <T,>({
             </div>
           )}
         </div>
-        
+
         {/* Pagination */}
         {pagination && (
           <footer className="border-t border-border p-4">
@@ -214,6 +219,7 @@ export const ListTemplate = <T,>({
 **Used by:** `/agents/[id]`, `/prospects/[id]` (20 pages)
 
 ### Code Structure
+
 ```typescript
 interface DetailTemplateProps {
   breadcrumb?: React.ReactNode;
@@ -238,7 +244,7 @@ export const DetailTemplate = ({
   sidebar,
 }: DetailTemplateProps) => {
   const [activeTab, setActiveTab] = React.useState(tabs[0]?.id);
-  
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -253,18 +259,18 @@ export const DetailTemplate = ({
             {headerActions}
           </div>
         </div>
-        
+
         {/* Tabs */}
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </header>
-      
+
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Main Content */}
         <main className="flex-1 overflow-auto p-6">
           {tabs.find(t => t.id === activeTab)?.content}
         </main>
-        
+
         {/* Sidebar (optional) */}
         {sidebar && (
           <aside className="w-80 border-l border-border p-6 overflow-auto">
@@ -284,6 +290,7 @@ export const DetailTemplate = ({
 **Used by:** `/onboarding`, `/agents/new`, `/prospects/import` (8 pages)
 
 ### Code Structure
+
 ```typescript
 interface WizardStep {
   id: string;
@@ -303,22 +310,22 @@ interface WizardTemplateProps {
 export const WizardTemplate = ({ title, steps, onComplete, onCancel }: WizardTemplateProps) => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [formData, setFormData] = React.useState({});
-  
+
   const handleNext = async () => {
     const isValid = await steps[currentStep]?.validate?.();
     if (isValid === false) return;
-    
+
     if (currentStep === steps.length - 1) {
       await onComplete(formData);
     } else {
       setCurrentStep(prev => prev + 1);
     }
   };
-  
+
   const handleBack = () => {
     setCurrentStep(prev => Math.max(0, prev - 1));
   };
-  
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -331,14 +338,14 @@ export const WizardTemplate = ({ title, steps, onComplete, onCancel }: WizardTem
           }))}
         />
       </header>
-      
+
       {/* Content */}
       <main className="flex-1 overflow-auto p-6">
         <div className="max-w-2xl mx-auto">
           {steps[currentStep]?.content}
         </div>
       </main>
-      
+
       {/* Footer */}
       <footer className="border-t border-border p-6 flex justify-between">
         <Button variant="ghost" onClick={onCancel} disabled={!onCancel}>
@@ -369,6 +376,7 @@ export const WizardTemplate = ({ title, steps, onComplete, onCancel }: WizardTem
 **Used by:** `/settings/*`, `/billing/*`, `/admin/*` (15 pages)
 
 ### Code Structure
+
 ```typescript
 interface SettingsSection {
   id: string;
@@ -415,7 +423,7 @@ export const SettingsTemplate = ({
           ))}
         </nav>
       </aside>
-      
+
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         <div className="max-w-3xl mx-auto p-6">
@@ -433,7 +441,7 @@ export const SettingsTemplate = ({
               {i < sections.length - 1 && <Divider className="mt-8" />}
             </div>
           ))}
-          
+
           {/* Save Button (Sticky) */}
           {onSave && (
             <div className="sticky bottom-0 bg-background border-t border-border pt-4 mt-8">
@@ -462,15 +470,15 @@ const AgentsPage = () => {
     queryKey: ['agents'],
     queryFn: fetchAgents,
   });
-  
+
   if (isLoading) {
     return <DashboardTemplate stats={[]} isLoading />;
   }
-  
+
   if (error) {
     return <ErrorPage error={error} />;
   }
-  
+
   return (
     <DashboardTemplate
       stats={transformToStats(data)}
@@ -485,6 +493,7 @@ const AgentsPage = () => {
 ## Loading States
 
 ### Skeleton Templates
+
 ```typescript
 export const DashboardSkeleton = () => (
   <DashboardTemplate
@@ -501,6 +510,7 @@ export const DashboardSkeleton = () => (
 ## Error States
 
 ### Error Boundary Pattern
+
 ```typescript
 <ErrorBoundary fallback={<ErrorTemplate />}>
   <DashboardTemplate {...props} />

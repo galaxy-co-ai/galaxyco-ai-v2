@@ -16,6 +16,7 @@ I've automatically set up a secure, encrypted password vault on your machine tha
 ## 🔐 What's Stored
 
 Your vault now contains:
+
 - ✅ OpenAI API Key (NEW - Generated 2025-10-12)
 - ✅ Anthropic API Key (NEW - Generated 2025-10-12)
 - ✅ Database URL
@@ -81,11 +82,13 @@ copy-openai-key
 ### DO THIS NOW:
 
 1. **Copy the key to a USB drive:**
+
    ```bash
    cp ~/.galaxyco-secrets/.vault-key /path/to/usb/galaxyco-vault-key.txt
    ```
 
 2. **Copy the backup file:**
+
    ```bash
    cp ~/galaxyco-vault-backup-*.txt /path/to/usb/
    ```
@@ -106,6 +109,7 @@ Without this key, you **cannot** decrypt your passwords!
 ## 📖 Full Documentation
 
 Complete guide with all features:
+
 - **Local:** `~/.galaxyco-secrets/README.md`
 - **View now:** `cat ~/.galaxyco-secrets/README.md`
 
@@ -138,14 +142,14 @@ Your API key recovery is complete! Here's what's done:
 
 ## 🆘 Quick Reference
 
-| Task | Command |
-|------|---------|
-| List all credentials | `vault list` |
-| Get OpenAI key | `get-openai-key` |
-| Get Anthropic key | `get-anthropic-key` |
-| Copy to clipboard | `copy-openai-key` |
-| Create backup | `backup-vault` |
-| Full help | `vault` |
+| Task                 | Command             |
+| -------------------- | ------------------- |
+| List all credentials | `vault list`        |
+| Get OpenAI key       | `get-openai-key`    |
+| Get Anthropic key    | `get-anthropic-key` |
+| Copy to clipboard    | `copy-openai-key`   |
+| Create backup        | `backup-vault`      |
+| Full help            | `vault`             |
 
 ## 💡 Pro Tips
 
@@ -167,6 +171,7 @@ Your API key recovery is complete! Here's what's done:
 ## ✨ You're All Set!
 
 Your API keys are now:
+
 - ✅ Securely encrypted
 - ✅ Easily accessible
 - ✅ Properly backed up
@@ -176,7 +181,8 @@ Just type `vault` to see all available commands!
 
 ---
 
-**Need help?** 
+**Need help?**
+
 - Full docs: `cat ~/.galaxyco-secrets/README.md`
 - Show commands: `vault`
 - Project security: `docs/security/`

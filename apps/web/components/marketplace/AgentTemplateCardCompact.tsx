@@ -62,9 +62,10 @@ export default function AgentTemplateCardCompact({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        height: "var(--card-height)", /* 260px - consistent height for all cards */
+        height:
+          "var(--card-height)" /* 260px - consistent height for all cards */,
         minHeight: "var(--card-height)",
-        padding: "var(--card-padding)", /* 14px - compact padding */
+        padding: "var(--card-padding)" /* 14px - compact padding */,
         position: "relative",
       }}
     >
@@ -89,7 +90,7 @@ export default function AgentTemplateCardCompact({
         {/* Circular Avatar - No Emoji */}
         <div
           style={{
-            width: "32px", /* Reduced from 40px for density */
+            width: "32px" /* Reduced from 40px for density */,
             height: "32px",
             borderRadius: "50%",
             background: `linear-gradient(135deg, ${getAvatarColor(template.category)}20, ${getAvatarColor(template.category)}40)`,
@@ -111,28 +112,28 @@ export default function AgentTemplateCardCompact({
         <div className="flex-1 min-w-0">
           <div
             style={{
-              fontSize: "var(--text-xs)", /* 11px - compact labels */
+              fontSize: "var(--text-xs)" /* 11px - compact labels */,
               fontWeight: "var(--font-medium)",
               color: "var(--text-tertiary)",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
               lineHeight: "var(--leading-tight)",
-              marginBottom: "var(--space-1)", /* 4px */
+              marginBottom: "var(--space-1)" /* 4px */,
             }}
           >
             {template.category}
           </div>
           <h3
             style={{
-              fontSize: "var(--text-sm)", /* 13px - compact card titles */
+              fontSize: "var(--text-sm)" /* 13px - compact card titles */,
               fontWeight: "var(--font-semibold)",
-              lineHeight: "var(--leading-tight)", /* 1.25 for tighter spacing */
+              lineHeight: "var(--leading-tight)" /* 1.25 for tighter spacing */,
               color: "var(--text-primary)",
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
-              marginBottom: "var(--space-2)", /* 8px */
+              marginBottom: "var(--space-2)" /* 8px */,
             }}
           >
             {template.name}
@@ -144,14 +145,14 @@ export default function AgentTemplateCardCompact({
       {(isHovered || isFeatured) && (
         <p
           style={{
-            fontSize: "var(--text-xs)", /* 11px - compact description */
-            lineHeight: "var(--leading-snug)", /* 1.375 - compact line height */
+            fontSize: "var(--text-xs)" /* 11px - compact description */,
+            lineHeight: "var(--leading-snug)" /* 1.375 - compact line height */,
             color: "var(--text-secondary)",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             overflow: "hidden",
-            marginBottom: "var(--space-2)", /* 8px */
+            marginBottom: "var(--space-2)" /* 8px */,
           }}
         >
           {template.shortDescription}
@@ -159,26 +160,33 @@ export default function AgentTemplateCardCompact({
       )}
 
       {/* Stats Row - Compact */}
-      <div 
+      <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: "var(--space-2)", /* 8px - tighter spacing */
+          marginBottom: "var(--space-2)" /* 8px - tighter spacing */,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-1)" }}>
-          <Star size={10} fill="var(--warning)" color="var(--warning)" /> {/* Smaller icon */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+          }}
+        >
+          <Star size={10} fill="var(--warning)" color="var(--warning)" />{" "}
+          {/* Smaller icon */}
           <span
             style={{
-              fontSize: "var(--text-xs)", /* 11px */
+              fontSize: "var(--text-xs)" /* 11px */,
               fontWeight: "var(--font-semibold)",
               color: "var(--text-primary)",
             }}
           >
             {ratingStars}
           </span>
-          <span 
+          <span
             style={{
               fontSize: "var(--text-xs)",
               color: "var(--text-tertiary)",
@@ -189,9 +197,16 @@ export default function AgentTemplateCardCompact({
         </div>
 
         {/* Install Count */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-1)" }}>
-          <Download size={10} color="var(--text-tertiary)" /> {/* Smaller icon */}
-          <span 
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+          }}
+        >
+          <Download size={10} color="var(--text-tertiary)" />{" "}
+          {/* Smaller icon */}
+          <span
             style={{
               fontSize: "var(--text-xs)",
               color: "var(--text-secondary)",

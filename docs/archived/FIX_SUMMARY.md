@@ -15,9 +15,10 @@ Application error: a client-side exception has occurred
 ```
 
 **Console Errors:**
+
 ```
 ❌ Failed to load resource: /api/workspace/current (404)
-❌ SyntaxError: Unexpected token '<', "<!DOCTYPE"... is not valid JSON  
+❌ SyntaxError: Unexpected token '<', "<!DOCTYPE"... is not valid JSON
 ❌ Error fetching workspace details
 ```
 
@@ -28,19 +29,21 @@ Application error: a client-side exception has occurred
 The issue was in the **middleware configuration** (`apps/web/middleware.ts`):
 
 ### What Was Happening:
+
 1. **Clerk middleware** was requiring authentication for **ALL** routes
 2. When WorkspaceProvider tried to fetch `/api/workspace/current`, the middleware blocked it
 3. Instead of returning JSON, Next.js returned a **404 HTML error page**
 4. The frontend tried to parse HTML as JSON → **SyntaxError**
 
 ### Why It Was Happening:
+
 ```typescript
 // OLD CODE - Blocked everything except homepage and auth pages
 const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/health',
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/health",
 ]);
 
 export default clerkMiddleware((auth, request) => {
@@ -55,20 +58,22 @@ export default clerkMiddleware((auth, request) => {
 ## ✅ The Fix
 
 ### Changed Code:
+
 ```typescript
 // NEW CODE - Allow workspace API routes to handle auth internally
 const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/health',
-  '/api/workspace/current',     // ✅ Added
-  '/api/workspace/list',         // ✅ Added
-  '/api/webhooks/clerk',         // ✅ Added
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/health",
+  "/api/workspace/current", // ✅ Added
+  "/api/workspace/list", // ✅ Added
+  "/api/webhooks/clerk", // ✅ Added
 ]);
 ```
 
 ### Why This is Secure:
+
 The API routes **already handle authentication internally**:
 
 ```typescript
@@ -77,7 +82,7 @@ export async function GET() {
   try {
     const { id, source } = await getCurrentWorkspaceId();
     // ↑ This function calls auth() internally
-    
+
     if (!id) {
       return NextResponse.json(
         { workspaceId: null, workspace: null, source },
@@ -96,12 +101,14 @@ All workspace utility functions check authentication via Clerk's `await auth()` 
 ## 🧪 Testing Results
 
 ### Before Fix:
+
 ```bash
 $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 <!DOCTYPE html>... 404 error page ...
 ```
 
 ### After Fix:
+
 ```bash
 $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 {"workspaceId":null,"workspace":null,"source":"none"}
@@ -114,10 +121,12 @@ $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 ## 📦 What Was Changed
 
 ### Files Modified:
+
 1. **`apps/web/middleware.ts`** - Added workspace routes to public matcher
 2. **`SESSION_HANDOFF_v1.1.md`** - Updated to v1.3 with fix documentation
 
 ### Commits:
+
 - `85bc01c` - fix(middleware): allow workspace API routes to handle auth internally
 - `68b28ab` - docs: document critical middleware fix in session handoff v1.3
 
@@ -127,7 +136,7 @@ $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 
 - [x] TypeScript compiles without errors
 - [x] Build passes locally
-- [x] Production deployment successful  
+- [x] Production deployment successful
 - [x] API returns JSON (not HTML)
 - [x] HTTP 200 response (not 404)
 - [x] Security maintained (routes check auth internally)
@@ -139,12 +148,14 @@ $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 ## 🎯 What This Fixes
 
 ### User Experience:
+
 - ✅ Dashboard loads without errors
 - ✅ No "Application error" message
 - ✅ Clean browser console
 - ✅ WorkspaceProvider successfully initializes
 
 ### Technical:
+
 - ✅ API routes return proper JSON responses
 - ✅ HTTP status codes are correct (200/403/500)
 - ✅ Client-side fetch calls work properly
@@ -157,6 +168,7 @@ $ curl https://galaxyco-ai-20.vercel.app/api/workspace/current
 The platform is now **stable and ready** for continued development!
 
 You can now:
+
 1. ✅ **Sign in** → No errors
 2. ✅ **Click Dashboard** → Loads properly
 3. ✅ **Create workspaces** → Works smoothly
@@ -174,6 +186,7 @@ You can now:
 4. **Multi-tenant isolation maintained** - Validated in every route handler
 
 ### Security Rules Still Enforced:
+
 - ✅ All database queries include `workspaceId` filter
 - ✅ Authentication validated before data access
 - ✅ Row-level security enforced
@@ -183,25 +196,27 @@ You can now:
 
 ## 📊 Impact Summary
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Dashboard Load | ❌ Error | ✅ Success |
-| Console Errors | 14+ errors | 0 errors |
-| API Response | HTML 404 | JSON 200 |
-| User Experience | Broken | Working |
-| Development Velocity | Blocked | Unblocked |
+| Metric               | Before     | After      |
+| -------------------- | ---------- | ---------- |
+| Dashboard Load       | ❌ Error   | ✅ Success |
+| Console Errors       | 14+ errors | 0 errors   |
+| API Response         | HTML 404   | JSON 200   |
+| User Experience      | Broken     | Working    |
+| Development Velocity | Blocked    | Unblocked  |
 
 ---
 
 ## 📝 Lessons Learned
 
 ### Key Takeaways:
+
 1. **Middleware should allow API routes to self-authenticate** when they have proper auth checks
 2. **Always verify API responses return JSON** (not HTML error pages)
 3. **Check middleware configuration** when seeing "404 for API routes"
 4. **Test production endpoints** with `curl` to catch response format issues
 
 ### Best Practices Established:
+
 - ✅ API routes handle their own authentication
 - ✅ Middleware only blocks pages, not self-validating APIs
 - ✅ Always test critical paths after middleware changes

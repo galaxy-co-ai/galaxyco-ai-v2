@@ -57,7 +57,7 @@ function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
-        "OPENAI_API_KEY environment variable is not set. Please configure it in your Trigger.dev environment."
+        "OPENAI_API_KEY environment variable is not set. Please configure it in your Trigger.dev environment.",
       );
     }
     openaiInstance = new OpenAI({
@@ -107,7 +107,7 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
         if (text && text.length < 100) {
           services.push(text);
         }
-      }
+      },
     );
 
     // Detect tech stack from visible elements and scripts
@@ -133,7 +133,7 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
 
     // Extract team size mentions
     const teamSizeMatch = html.match(
-      /(\d+)\+?\s*(employees?|team members?|people)/i
+      /(\d+)\+?\s*(employees?|team members?|people)/i,
     );
     const teamSize = teamSizeMatch ? teamSizeMatch[0] : undefined;
 
@@ -177,7 +177,7 @@ async function searchCompanyNews(companyName: string): Promise<NewsItem[]> {
     url.searchParams.set("key", process.env.GOOGLE_CUSTOM_SEARCH_API_KEY);
     url.searchParams.set(
       "cx",
-      process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || ""
+      process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || "",
     );
     url.searchParams.set("q", searchQuery);
     url.searchParams.set("num", "5");
@@ -211,7 +211,7 @@ async function searchCompanyNews(companyName: string): Promise<NewsItem[]> {
 async function generateInsights(
   websiteData: WebsiteData,
   newsItems: NewsItem[],
-  companyDomain: string
+  companyDomain: string,
 ): Promise<{
   painPoints: string[];
   buyingSignals: string[];
@@ -282,8 +282,7 @@ Provide:
               keyInsights: {
                 type: "array",
                 items: { type: "string" },
-                description:
-                  "List of 2-3 key insights to personalize outreach",
+                description: "List of 2-3 key insights to personalize outreach",
               },
               industry: {
                 type: "string",
@@ -349,7 +348,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
     // Step 2: Search news (parallel with website scrape)
     console.log("📰 Step 2: Searching recent news...");
     const newsPromise = searchCompanyNews(
-      payload.companyName || payload.companyDomain
+      payload.companyName || payload.companyDomain,
     );
 
     // Wait for both to complete
@@ -363,7 +362,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
     const insights = await generateInsights(
       websiteData,
       newsItems,
-      payload.companyDomain
+      payload.companyDomain,
     );
 
     // Calculate data completeness

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 /**
  * Loading Skeleton Components
- * 
+ *
  * Reusable skeleton components that match the structure of actual content
  * to provide smooth loading experiences.
  */
@@ -87,15 +87,17 @@ export function KnowledgeItemSkeleton({ className }: { className?: string }) {
 /**
  * Table Row Skeleton
  */
-export function TableRowSkeleton({ 
+export function TableRowSkeleton({
   columns = 4,
-  className 
-}: { 
-  columns?: number; 
+  className,
+}: {
+  columns?: number;
   className?: string;
 }) {
   return (
-    <div className={`grid grid-cols-${columns} gap-4 p-4 border-b ${className}`}>
+    <div
+      className={`grid grid-cols-${columns} gap-4 p-4 border-b ${className}`}
+    >
       {Array.from({ length: columns }).map((_, index) => (
         <Skeleton key={index} className="h-4 w-full" />
       ))}
@@ -128,12 +130,12 @@ export function DashboardStatsSkeleton({ className }: { className?: string }) {
 /**
  * List Skeleton (for agent list, knowledge list, etc.)
  */
-export function ListSkeleton({ 
-  count = 6, 
+export function ListSkeleton({
+  count = 6,
   itemComponent: ItemComponent = CardSkeleton,
-  className 
-}: { 
-  count?: number; 
+  className,
+}: {
+  count?: number;
   itemComponent?: React.ComponentType<{ className?: string }>;
   className?: string;
 }) {
@@ -149,17 +151,19 @@ export function ListSkeleton({
 /**
  * Grid Skeleton (for marketplace, etc.)
  */
-export function GridSkeleton({ 
-  count = 8, 
+export function GridSkeleton({
+  count = 8,
   itemComponent: ItemComponent = CardSkeleton,
-  className 
-}: { 
-  count?: number; 
+  className,
+}: {
+  count?: number;
   itemComponent?: React.ComponentType<{ className?: string }>;
   className?: string;
 }) {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ${className}`}>
+    <div
+      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ${className}`}
+    >
       {Array.from({ length: count }).map((_, index) => (
         <ItemComponent key={index} />
       ))}

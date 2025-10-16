@@ -3,17 +3,17 @@
 ## 🚀 Quick Start
 
 ```typescript
-import { AIGatewayService } from '@/lib/ai-gateway';
+import { AIGatewayService } from "@/lib/ai-gateway";
 
 // Simple text generation
 const response = await AIGatewayService.generateText({
   tenantId: workspaceId,
   userId: userId,
   agentId: agentId,
-  model: 'gpt-4o-mini',
+  model: "gpt-4o-mini",
   messages: [
-    { role: 'system', content: 'You are helpful.' },
-    { role: 'user', content: 'Hello!' }
+    { role: "system", content: "You are helpful." },
+    { role: "user", content: "Hello!" },
   ],
 });
 ```
@@ -21,12 +21,14 @@ const response = await AIGatewayService.generateText({
 ## 📋 Supported Models
 
 ### OpenAI (use with `OPENAI_API_KEY`)
+
 - `gpt-4o` - Latest, most capable ($5/$15 per 1M tokens)
 - `gpt-4o-mini` - Fast & cheap ($0.15/$0.60 per 1M tokens) ⭐ Recommended
 - `gpt-4-turbo` - Previous generation ($10/$30 per 1M tokens)
 - `gpt-3.5-turbo` - Legacy fast model ($0.50/$1.50 per 1M tokens)
 
 ### Anthropic (use with `ANTHROPIC_API_KEY`)
+
 - `claude-3-5-sonnet-20241022` - Best reasoning ($3/$15 per 1M tokens) ⭐ Recommended
 - `claude-3-5-haiku-20241022` - Fast & cheap ($0.80/$4 per 1M tokens)
 - `claude-3-opus-20240229` - Previous flagship ($15/$75 per 1M tokens)
@@ -34,16 +36,18 @@ const response = await AIGatewayService.generateText({
 ## 💡 Common Patterns
 
 ### With Retry Logic
+
 ```typescript
-import { retryWithBackoff } from '@/lib/retry';
+import { retryWithBackoff } from "@/lib/retry";
 
 const response = await retryWithBackoff(
   () => AIGatewayService.generateText(request),
-  { maxAttempts: 3 }
+  { maxAttempts: 3 },
 );
 ```
 
 ### Streaming Response
+
 ```typescript
 const stream = await AIGatewayService.generateTextStream({
   tenantId: workspaceId,
@@ -57,6 +61,7 @@ for await (const chunk of stream.stream) {
 ```
 
 ### With Custom Settings
+
 ```typescript
 const response = await AIGatewayService.generateText({
   tenantId: workspaceId,
@@ -99,6 +104,7 @@ ANTHROPIC_API_KEY=sk-ant-...
 ## 📝 Logging
 
 Development logs show in console:
+
 ```
 [AI Gateway] {
   requestId: 'aigw_...',
@@ -124,18 +130,18 @@ Development logs show in console:
 try {
   const response = await AIGatewayService.generateText(request);
 } catch (error) {
-  console.error('AI Gateway Error:', error.message);
+  console.error("AI Gateway Error:", error.message);
   // Error is automatically logged with request ID
 }
 ```
 
 ## 💰 Cost Examples (approximate)
 
-| Task | Model | Tokens | Cost |
-|------|-------|--------|------|
-| Short chat | gpt-4o-mini | 300 | $0.0003 |
-| Long analysis | claude-3-5-sonnet | 5000 | $0.02 |
-| Code generation | gpt-4o | 2000 | $0.01 |
+| Task            | Model             | Tokens | Cost    |
+| --------------- | ----------------- | ------ | ------- |
+| Short chat      | gpt-4o-mini       | 300    | $0.0003 |
+| Long analysis   | claude-3-5-sonnet | 5000   | $0.02   |
+| Code generation | gpt-4o            | 2000   | $0.01   |
 
 ## 🔗 Related Files
 

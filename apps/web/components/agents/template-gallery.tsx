@@ -1,7 +1,14 @@
-'use client';
+"use client";
 
-import { Calendar, Mail, FileText, MessageSquare, TrendingUp, Briefcase } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import {
+  Calendar,
+  Mail,
+  FileText,
+  MessageSquare,
+  TrendingUp,
+  Briefcase,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface Template {
   id: string;
@@ -14,52 +21,59 @@ interface Template {
 
 const TEMPLATES: Template[] = [
   {
-    id: 'meeting-prep',
-    name: 'Meeting Prep Agent',
-    description: 'Review calendar, pull LinkedIn profiles, draft personalized pre-call notes',
+    id: "meeting-prep",
+    name: "Meeting Prep Agent",
+    description:
+      "Review calendar, pull LinkedIn profiles, draft personalized pre-call notes",
     icon: Calendar,
-    category: 'Sales & Outreach',
-    prompt: 'Review my calendar every morning at 8am. For each external meeting, pull the attendee\'s LinkedIn profile, review our last 3 email threads, and draft personalized pre-call notes.',
+    category: "Sales & Outreach",
+    prompt:
+      "Review my calendar every morning at 8am. For each external meeting, pull the attendee's LinkedIn profile, review our last 3 email threads, and draft personalized pre-call notes.",
   },
   {
-    id: 'proposal-gen',
-    name: 'Proposal Generator',
-    description: 'Create customized proposals from prospect data and templates',
+    id: "proposal-gen",
+    name: "Proposal Generator",
+    description: "Create customized proposals from prospect data and templates",
     icon: FileText,
-    category: 'Document Generation',
-    prompt: 'When a new prospect is qualified, gather their company info, project requirements, and generate a customized proposal using our template. Send for review before delivery.',
+    category: "Document Generation",
+    prompt:
+      "When a new prospect is qualified, gather their company info, project requirements, and generate a customized proposal using our template. Send for review before delivery.",
   },
   {
-    id: 'email-followup',
-    name: 'Email Follow-up',
-    description: 'Track unanswered emails and send smart follow-ups',
+    id: "email-followup",
+    name: "Email Follow-up",
+    description: "Track unanswered emails and send smart follow-ups",
     icon: Mail,
-    category: 'Sales & Outreach',
-    prompt: 'Monitor my sent emails. If no reply after 3 days, draft a personalized follow-up based on the original context. Send me for approval before sending.',
+    category: "Sales & Outreach",
+    prompt:
+      "Monitor my sent emails. If no reply after 3 days, draft a personalized follow-up based on the original context. Send me for approval before sending.",
   },
   {
-    id: 'slack-digest',
-    name: 'Slack Digest',
-    description: 'Summarize important Slack messages and action items',
+    id: "slack-digest",
+    name: "Slack Digest",
+    description: "Summarize important Slack messages and action items",
     icon: MessageSquare,
-    category: 'Operations & Scheduling',
-    prompt: 'Every morning at 7am, review all Slack channels I\'m in from the past 24 hours. Summarize key discussions, action items assigned to me, and urgent mentions. Send digest via DM.',
+    category: "Operations & Scheduling",
+    prompt:
+      "Every morning at 7am, review all Slack channels I'm in from the past 24 hours. Summarize key discussions, action items assigned to me, and urgent mentions. Send digest via DM.",
   },
   {
-    id: 'lead-research',
-    name: 'Lead Research',
-    description: 'Enrich new leads with company and contact intel',
+    id: "lead-research",
+    name: "Lead Research",
+    description: "Enrich new leads with company and contact intel",
     icon: TrendingUp,
-    category: 'Research & Analysis',
-    prompt: 'When a new lead is added to CRM, research their company (revenue, employees, tech stack), find their LinkedIn profile, identify decision makers, and update CRM with enriched data.',
+    category: "Research & Analysis",
+    prompt:
+      "When a new lead is added to CRM, research their company (revenue, employees, tech stack), find their LinkedIn profile, identify decision makers, and update CRM with enriched data.",
   },
   {
-    id: 'crm-sync',
-    name: 'CRM Sync Agent',
-    description: 'Keep CRM updated with latest email interactions',
+    id: "crm-sync",
+    name: "CRM Sync Agent",
+    description: "Keep CRM updated with latest email interactions",
     icon: Briefcase,
-    category: 'Operations & Scheduling',
-    prompt: 'Monitor my email inbox. When I send or receive emails with contacts in CRM, automatically log the interaction and update the contact\'s activity timeline.',
+    category: "Operations & Scheduling",
+    prompt:
+      "Monitor my email inbox. When I send or receive emails with contacts in CRM, automatically log the interaction and update the contact's activity timeline.",
   },
 ];
 
@@ -83,7 +97,7 @@ export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {TEMPLATES.slice(0, 6).map((template) => {
           const Icon = template.icon;
-          
+
           return (
             <button
               key={template.id}

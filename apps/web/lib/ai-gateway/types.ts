@@ -3,7 +3,7 @@
  */
 
 export interface Message {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -12,17 +12,17 @@ export interface AIGatewayRequest {
   tenantId: string;
   userId?: string;
   agentId?: string;
-  
+
   // Model configuration
   model: string;
   messages: Message[];
-  
+
   // Optional parameters
   temperature?: number;
   maxTokens?: number;
   topP?: number;
   stream?: boolean;
-  
+
   // Metadata
   metadata?: Record<string, any>;
 }

@@ -10,9 +10,11 @@
 ## 🎯 Vision & Goals
 
 ### What We're Building
+
 A **visual agent creation interface** that makes building custom AI agents as easy as using ChatGPT, with the power and flexibility developers need.
 
 ### Success Criteria
+
 - [ ] User can create an agent in <5 minutes without reading docs
 - [ ] Pre-built templates reduce time-to-first-agent to <60 seconds
 - [ ] Test mode allows validation before going live
@@ -20,6 +22,7 @@ A **visual agent creation interface** that makes building custom AI agents as ea
 - [ ] Zero code required for basic agents
 
 ### Design Inspiration
+
 - **OpenAI Playground**: Clean, focused, progressive disclosure
 - **StackAI**: Professional polish, clear information hierarchy
 - **Retool**: Powerful but approachable configuration
@@ -29,9 +32,11 @@ A **visual agent creation interface** that makes building custom AI agents as ea
 ## 📋 Feature Breakdown
 
 ### 1. Agent Builder Page (`/agents/new`)
+
 **Estimated**: 2 hours
 
 #### Layout
+
 ```
 ┌─────────────────────────────────────────┐
 │  ← Back to Agents    [Test] [Save Draft]│
@@ -58,6 +63,7 @@ A **visual agent creation interface** that makes building custom AI agents as ea
 ```
 
 #### Components to Build
+
 - `AgentBuilderPage.tsx` - Main container
 - `BasicInfoForm.tsx` - Name, icon, description
 - `ConfigurationForm.tsx` - Trigger, AI provider, model, prompt
@@ -65,6 +71,7 @@ A **visual agent creation interface** that makes building custom AI agents as ea
 - `AdvancedSettings.tsx` - Timeout, retries, rate limits
 
 #### Form State Management
+
 ```typescript
 interface AgentBuilderState {
   basicInfo: {
@@ -74,8 +81,8 @@ interface AgentBuilderState {
     tags: string[];
   };
   configuration: {
-    trigger: 'webhook' | 'schedule' | 'manual';
-    aiProvider: 'openai' | 'anthropic' | 'custom';
+    trigger: "webhook" | "schedule" | "manual";
+    aiProvider: "openai" | "anthropic" | "custom";
     model: string;
     systemPrompt: string;
     temperature: number;
@@ -93,6 +100,7 @@ interface AgentBuilderState {
 ```
 
 #### Validation Rules
+
 - Name: 3-50 characters, required
 - Description: 10-500 characters, required
 - System Prompt: 20-2000 characters, required
@@ -102,9 +110,11 @@ interface AgentBuilderState {
 ---
 
 ### 2. Template Library
+
 **Estimated**: 1.5 hours
 
 #### Template Selector Modal
+
 ```
 ┌─────────────────────────────────────────┐
 │  Start from a Template                  │
@@ -124,13 +134,14 @@ interface AgentBuilderState {
 ```
 
 #### Template Structure
+
 ```typescript
 interface AgentTemplate {
   id: string;
   name: string;
   description: string;
   icon: string;
-  category: 'communication' | 'content' | 'support' | 'sales' | 'ops';
+  category: "communication" | "content" | "support" | "sales" | "ops";
   prefilledConfig: Partial<AgentBuilderState>;
   sampleInputs: Record<string, any>;
   expectedOutputs: Record<string, any>;
@@ -138,27 +149,25 @@ interface AgentTemplate {
 ```
 
 #### Templates to Include (from Starter Packs)
+
 1. **Email Analyzer** (Founder Ops)
    - Parse emails, extract action items
    - Pre-filled prompt for inbox scanning
-   
 2. **Document Summarizer** (Docs & Knowledge)
    - Extract key points from long docs
    - Output: summary, key points, questions
-   
 3. **Ticket Triage** (Support Excellence)
    - Classify & prioritize support tickets
    - Pre-filled: priority rubric, categories
-   
 4. **Lead Enrichment** (Sales Ops)
    - Research company/contact info
    - Pre-filled: data sources, format
-   
 5. **Follow-up Writer** (Sales Ops)
    - Personalized outreach emails
    - Pre-filled: tone, structure
 
 #### Components
+
 - `TemplateLibrary.tsx` - Grid view with search/filter
 - `TemplateCard.tsx` - Individual template preview
 - `TemplatePreview.tsx` - Detailed view before selection
@@ -167,9 +176,11 @@ interface AgentTemplate {
 ---
 
 ### 3. Test Mode
+
 **Estimated**: 1.5 hours
 
 #### Test Panel (Right Sidebar)
+
 ```
 ┌─────────────────────────────────┐
 │  🧪 Test Your Agent             │
@@ -200,6 +211,7 @@ interface AgentTemplate {
 ```
 
 #### Features
+
 - **Mock Mode**: Use deterministic fixtures (no AI calls)
 - **Live Mode**: Real AI provider calls (shows cost preview)
 - **History**: Last 5 test runs preserved
@@ -207,6 +219,7 @@ interface AgentTemplate {
 - **Performance**: Show latency breakdown
 
 #### Components
+
 - `TestPanel.tsx` - Right sidebar container
 - `TestInput.tsx` - JSON editor for inputs
 - `TestOutput.tsx` - Formatted result display
@@ -214,6 +227,7 @@ interface AgentTemplate {
 - `TestMetrics.tsx` - Performance & cost display
 
 #### Implementation
+
 ```typescript
 interface TestResult {
   id: string;
@@ -233,9 +247,11 @@ interface TestResult {
 ---
 
 ### 4. Agent List Page (`/agents`)
+
 **Estimated**: 1 hour
 
 #### Layout
+
 ```
 ┌─────────────────────────────────────────┐
 │  Your Agents               [+ New Agent]│
@@ -262,6 +278,7 @@ interface TestResult {
 ```
 
 #### Features
+
 - Filter by status (Active, Draft, Paused)
 - Search by name/description
 - Sort by: Recent, Most Used, Success Rate
@@ -269,6 +286,7 @@ interface TestResult {
 - Quick stats on each card
 
 #### Components
+
 - `AgentListPage.tsx` - Main container
 - `AgentListFilters.tsx` - Status tabs + search
 - `AgentListItem.tsx` - Individual agent card
@@ -277,48 +295,65 @@ interface TestResult {
 ---
 
 ### 5. API Endpoints
+
 **Estimated**: 1.5 hours
 
 #### NestJS Controller: `agents.controller.ts`
 
 ```typescript
-@Controller('agents')
+@Controller("agents")
 @UseGuards(AuthGuard)
 export class AgentsController {
   @Post()
-  async create(@User() userId: string, @Workspace() workspaceId: string, @Body() data: CreateAgentDto) {
+  async create(
+    @User() userId: string,
+    @Workspace() workspaceId: string,
+    @Body() data: CreateAgentDto,
+  ) {
     // Validate schema
     // Create agent record
     // Return created agent
   }
 
   @Get()
-  async list(@User() userId: string, @Workspace() workspaceId: string, @Query() filters: AgentFiltersDto) {
+  async list(
+    @User() userId: string,
+    @Workspace() workspaceId: string,
+    @Query() filters: AgentFiltersDto,
+  ) {
     // Multi-tenant query with workspace filter
     // Return paginated list
   }
 
-  @Get(':id')
-  async get(@Param('id') id: string, @Workspace() workspaceId: string) {
+  @Get(":id")
+  async get(@Param("id") id: string, @Workspace() workspaceId: string) {
     // Validate workspace access
     // Return agent details
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Workspace() workspaceId: string, @Body() data: UpdateAgentDto) {
+  @Put(":id")
+  async update(
+    @Param("id") id: string,
+    @Workspace() workspaceId: string,
+    @Body() data: UpdateAgentDto,
+  ) {
     // Validate ownership
     // Update agent
     // Return updated agent
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: string, @Workspace() workspaceId: string) {
+  @Delete(":id")
+  async delete(@Param("id") id: string, @Workspace() workspaceId: string) {
     // Soft delete
     // Return success
   }
 
-  @Post(':id/test')
-  async test(@Param('id') id: string, @Workspace() workspaceId: string, @Body() testData: TestAgentDto) {
+  @Post(":id/test")
+  async test(
+    @Param("id") id: string,
+    @Workspace() workspaceId: string,
+    @Body() testData: TestAgentDto,
+  ) {
     // Run agent with test inputs
     // Return result + metrics
   }
@@ -326,6 +361,7 @@ export class AgentsController {
 ```
 
 #### DTOs (Data Transfer Objects)
+
 ```typescript
 class CreateAgentDto {
   @IsString()
@@ -338,10 +374,10 @@ class CreateAgentDto {
   @MaxLength(500)
   description: string;
 
-  @IsEnum(['webhook', 'schedule', 'manual'])
+  @IsEnum(["webhook", "schedule", "manual"])
   trigger: string;
 
-  @IsEnum(['openai', 'anthropic'])
+  @IsEnum(["openai", "anthropic"])
   aiProvider: string;
 
   @IsString()
@@ -366,31 +402,40 @@ class CreateAgentDto {
 ---
 
 ### 6. Database Integration
+
 **Estimated**: 30 minutes
 
 #### Schema (Already Exists!)
+
 ```typescript
 // From packages/database/src/schema.ts
-export const agents = pgTable('agents', {
-  id: text('id').primaryKey(),
-  workspaceId: text('workspace_id').notNull().references(() => workspaces.id),
-  name: text('name').notNull(),
-  description: text('description'),
-  trigger: text('trigger', { enum: ['webhook', 'schedule', 'manual', 'event'] }).notNull(),
-  aiProvider: text('ai_provider', { enum: ['openai', 'anthropic', 'custom'] }),
-  model: text('model'),
-  systemPrompt: text('system_prompt'),
-  inputs: jsonb('inputs').$type<JsonSchema>(),
-  outputs: jsonb('outputs').$type<JsonSchema>(),
-  settings: jsonb('settings'),
-  isActive: boolean('is_active').default(true),
-  createdBy: text('created_by').notNull().references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+export const agents = pgTable("agents", {
+  id: text("id").primaryKey(),
+  workspaceId: text("workspace_id")
+    .notNull()
+    .references(() => workspaces.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  trigger: text("trigger", {
+    enum: ["webhook", "schedule", "manual", "event"],
+  }).notNull(),
+  aiProvider: text("ai_provider", { enum: ["openai", "anthropic", "custom"] }),
+  model: text("model"),
+  systemPrompt: text("system_prompt"),
+  inputs: jsonb("inputs").$type<JsonSchema>(),
+  outputs: jsonb("outputs").$type<JsonSchema>(),
+  settings: jsonb("settings"),
+  isActive: boolean("is_active").default(true),
+  createdBy: text("created_by")
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 ```
 
 #### Queries to Implement
+
 - **Create**: Insert new agent with workspace isolation
 - **List**: Get all agents for workspace with filters
 - **Get**: Retrieve single agent by ID + workspace
@@ -456,6 +501,7 @@ apps/api/
 ## 📝 Step-by-Step Implementation Plan
 
 ### Step 1: Database & API Foundation (1 hour)
+
 - [ ] Create DTOs in `apps/api/src/agents/dto/`
 - [ ] Implement `AgentsService` with CRUD operations
 - [ ] Build `AgentsController` with all endpoints
@@ -463,6 +509,7 @@ apps/api/
 - [ ] Verify multi-tenant isolation works
 
 ### Step 2: Agent Templates (1 hour)
+
 - [ ] Create `agent-templates.ts` with 5 templates
 - [ ] Build `TemplateLibrary.tsx` component
 - [ ] Build `TemplateCard.tsx` component
@@ -470,6 +517,7 @@ apps/api/
 - [ ] Test template application to builder
 
 ### Step 3: Builder UI - Basic (1.5 hours)
+
 - [ ] Create `AgentBuilderPage.tsx` layout
 - [ ] Build `BasicInfoForm.tsx` (name, icon, description)
 - [ ] Build `ConfigurationForm.tsx` (trigger, model, prompt)
@@ -477,12 +525,14 @@ apps/api/
 - [ ] Wire up to API (save draft)
 
 ### Step 4: Builder UI - Advanced (1 hour)
+
 - [ ] Build `SchemaBuilder.tsx` (JSON schema editor)
 - [ ] Add advanced settings panel
 - [ ] Implement autosave (debounced)
 - [ ] Add "Publish" flow with confirmation
 
 ### Step 5: Test Mode (1.5 hours)
+
 - [ ] Build `TestPanel.tsx` sidebar
 - [ ] Implement mock mode with fixtures
 - [ ] Implement live mode (calls Python agent service)
@@ -490,6 +540,7 @@ apps/api/
 - [ ] Display metrics (tokens, cost, latency)
 
 ### Step 6: Agent List Page (1 hour)
+
 - [ ] Create `AgentListPage.tsx`
 - [ ] Build filters (status, search, sort)
 - [ ] Implement pagination
@@ -497,6 +548,7 @@ apps/api/
 - [ ] Wire up to API
 
 ### Step 7: Polish & Testing (1 hour)
+
 - [ ] Add loading states
 - [ ] Add error boundaries
 - [ ] Implement success toasts
@@ -509,24 +561,28 @@ apps/api/
 ## 🎨 UI/UX Details
 
 ### Color Coding
+
 - **Draft**: Gray (`colors.neutral[500]`)
 - **Active**: Green (`colors.success.DEFAULT`)
 - **Paused**: Yellow (`colors.warning.DEFAULT`)
 - **Error**: Red (`colors.error.DEFAULT`)
 
 ### Animations
+
 - Form transitions: 200ms ease
 - Card hover: 120ms ease-out
 - Test run: Pulse effect during execution
 - Success state: Confetti animation (optional)
 
 ### Loading States
+
 - **Save Draft**: "Saving..." with spinner
 - **Publish**: "Publishing..." with progress bar
 - **Test**: "Running test..." with animated dots
 - **Delete**: "Deleting..." with fade out
 
 ### Error Handling
+
 - Form validation errors: Inline below fields
 - API errors: Toast notification (top-right)
 - Network errors: Retry button + explanation
@@ -537,6 +593,7 @@ apps/api/
 ## ✅ Acceptance Criteria
 
 ### Functional Requirements
+
 - [ ] User can create a new agent from scratch
 - [ ] User can create agent from template (<60s)
 - [ ] User can test agent before publishing
@@ -547,6 +604,7 @@ apps/api/
 - [ ] Multi-tenant isolation enforced everywhere
 
 ### Performance Requirements
+
 - [ ] Builder page loads in <1s
 - [ ] Template selection applies in <200ms
 - [ ] Save/update operations complete in <500ms
@@ -554,6 +612,7 @@ apps/api/
 - [ ] Test mode (live) returns in <5s (with streaming)
 
 ### Security Requirements
+
 - [ ] All API endpoints require authentication
 - [ ] Workspace ID validated on every request
 - [ ] Users can only access their workspace's agents
@@ -565,12 +624,14 @@ apps/api/
 ## 🚀 Success Metrics (Track These!)
 
 ### Product Metrics
+
 - **Time to First Agent**: Target <5 minutes
 - **Template Usage Rate**: Target >60% use templates
 - **Test Before Publish**: Target >80% test before publishing
 - **Agent Activation Rate**: Target >70% drafts → active
 
 ### Technical Metrics
+
 - **API Response Time**: p95 <500ms
 - **Error Rate**: <1% failed requests
 - **Test Success Rate**: >95% tests execute successfully
@@ -581,18 +642,22 @@ apps/api/
 ## 🐛 Known Risks & Mitigation
 
 ### Risk 1: JSON Schema Builder Complexity
+
 **Impact**: High  
 **Mitigation**: Start with simple text input; add visual builder in Phase 9
 
 ### Risk 2: Test Mode Cost
+
 **Impact**: Medium  
 **Mitigation**: Default to mock mode; require explicit opt-in for live tests with cost warning
 
 ### Risk 3: Form State Management
+
 **Impact**: Medium  
 **Mitigation**: Use React Hook Form + Zod for validation; debounce autosave
 
 ### Risk 4: Multi-Step Builder Abandonment
+
 **Impact**: Low  
 **Mitigation**: Autosave drafts; show progress indicator; allow "save & continue later"
 

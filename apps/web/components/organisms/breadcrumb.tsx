@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import Link from "next/link";
+import { ChevronRight, Home } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface BreadcrumbItem {
   label: string;
@@ -36,7 +36,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
 
     return [
       firstItem,
-      { label: '...', href: undefined, icon: undefined },
+      { label: "...", href: undefined, icon: undefined },
       ...lastItems,
     ];
   }, [items, maxItems]);
@@ -44,21 +44,18 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   return (
     <nav
       aria-label="Breadcrumb"
-      className={cn('flex items-center space-x-1 text-sm', className)}
+      className={cn("flex items-center space-x-1 text-sm", className)}
     >
       <ol className="flex items-center space-x-1">
         {displayItems.map((item, index) => {
           const isLast = index === displayItems.length - 1;
-          const isEllipsis = item.label === '...';
+          const isEllipsis = item.label === "...";
 
           return (
             <li key={`${item.label}-${index}`} className="flex items-center">
               {/* Separator */}
               {index > 0 && (
-                <span
-                  className="mx-2 text-muted-foreground"
-                  aria-hidden="true"
-                >
+                <span className="mx-2 text-muted-foreground" aria-hidden="true">
                   {separator}
                 </span>
               )}
@@ -80,9 +77,9 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
                 <Link
                   href={item.href}
                   className={cn(
-                    'flex items-center text-muted-foreground hover:text-foreground',
-                    'transition-colors duration-200',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm'
+                    "flex items-center text-muted-foreground hover:text-foreground",
+                    "transition-colors duration-200",
+                    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm",
                   )}
                 >
                   {item.icon && (
@@ -106,4 +103,4 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   );
 };
 
-Breadcrumb.displayName = 'Breadcrumb';
+Breadcrumb.displayName = "Breadcrumb";

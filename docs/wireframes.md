@@ -1,4 +1,5 @@
 # 📐 DoubleO.ai Wireframe Documentation
+
 ## Complete UX Blueprint for GalaxyCo.ai / HomeAdvice.ai
 
 **Version:** 1.0  
@@ -24,6 +25,7 @@
 ## Architecture Overview
 
 ### Core Principles
+
 - **Left sidebar navigation** (persistent, dark theme)
 - **Full-width content area** (light theme, white background)
 - **Persistent chat widget** (bottom-right, floating)
@@ -61,6 +63,7 @@
 ## Core Layout Patterns
 
 ### Pattern 1: Sidebar + Table View
+
 **Used for:** Automations, Databases  
 **Ratio:** 200px sidebar : flexible content
 
@@ -79,6 +82,7 @@
 ```
 
 ### Pattern 2: Sidebar + Grid View
+
 **Used for:** Templates  
 **Ratio:** 240px sidebar : flexible content
 
@@ -97,6 +101,7 @@
 ```
 
 ### Pattern 3: Centered Card (Modal/Simple Views)
+
 **Used for:** Onboarding, Chat selector, Simple forms
 
 ```
@@ -121,6 +126,7 @@
 ```
 
 ### Pattern 4: Settings Layout
+
 **Used for:** All settings pages
 
 ```
@@ -149,6 +155,7 @@
 **Purpose:** Introduce platform value and guide first steps
 
 **Layout:**
+
 ```
 Modal Overlay (60% screen width, vertically centered)
 
@@ -181,6 +188,7 @@ Modal Overlay (60% screen width, vertically centered)
 ```
 
 **Components:**
+
 - Modal backdrop (semi-transparent overlay)
 - Card container (white background, rounded corners)
 - Close button (X, top-right)
@@ -191,6 +199,7 @@ Modal Overlay (60% screen width, vertically centered)
 - Primary CTA button (full-width or prominent center)
 
 **User Journey:**
+
 1. User logs in for first time
 2. Modal appears automatically
 3. User reads value proposition
@@ -198,6 +207,7 @@ Modal Overlay (60% screen width, vertically centered)
 5. Modal closes → either goes to templates or automation builder
 
 **Design Notes:**
+
 - High contrast between text and background
 - Animation on agent icon (subtle pulse or wave)
 - Modal can't be dismissed accidentally (requires intentional X click or CTA)
@@ -211,6 +221,7 @@ Modal Overlay (60% screen width, vertically centered)
 **Purpose:** View, manage, and run all user-created workflows
 
 **Layout:**
+
 ```
 ┌─ Automations ───────────────────────────────────────────────┐
 │                                                              │
@@ -238,6 +249,7 @@ Modal Overlay (60% screen width, vertically centered)
 ```
 
 **Components:**
+
 - **Tab Navigation** (Automations | Systems)
   - Active tab: underlined or highlighted
   - Inactive tab: gray text
@@ -262,6 +274,7 @@ Modal Overlay (60% screen width, vertically centered)
   - "Actions" column for kebab menu
 
 **Empty State:**
+
 ```
 No automations found.
 Create your first automation to get started.
@@ -269,6 +282,7 @@ Create your first automation to get started.
 ```
 
 **User Journey:**
+
 1. User lands on /automations
 2. Sees list of existing workflows OR empty state
 3. Can search/filter
@@ -277,6 +291,7 @@ Create your first automation to get started.
 6. Can create new workflow (+ New Automation button)
 
 **Design Notes:**
+
 - Table is full-width, scrollable if needed
 - Status badges use color coding (future: green=success, red=error, gray=not run)
 - "Last Run By" shows user avatar + name
@@ -290,6 +305,7 @@ Create your first automation to get started.
 **Purpose:** Browse and use pre-built workflow templates
 
 **Layout:**
+
 ```
 ┌─ Templates ─────────────────────────────────────────────────┐
 │  🔍 Search...                            [Other Filters ▼]  │
@@ -331,6 +347,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - **Left Sidebar (Filters)**
   - Width: ~240px
   - Sections: Categories, Industry
@@ -355,6 +372,7 @@ Create your first automation to get started.
   - Click: Opens template detail (not shown)
 
 **Category Color Coding:**
+
 - Customer Support: Pink (#EC4899)
 - Finance: Green (#10B981)
 - Marketing: Blue (#3B82F6)
@@ -363,6 +381,7 @@ Create your first automation to get started.
 - Sales: Red
 
 **User Journey:**
+
 1. User navigates to Templates
 2. Browses by category/industry OR searches
 3. Clicks on a template card
@@ -372,6 +391,7 @@ Create your first automation to get started.
 7. User can edit and configure
 
 **Design Notes:**
+
 - Cards use consistent aspect ratio
 - Grid is responsive (4 cols → 3 cols → 2 cols → 1 col)
 - Category sections can be collapsed for easier browsing
@@ -385,6 +405,7 @@ Create your first automation to get started.
 **Purpose:** View and manage databases created by workflows
 
 **Layout:**
+
 ```
 ┌─ Databases ─────────────────────────────────────────────────┐
 │  🔍 Search databases...                  [+ Add Database]   │
@@ -405,6 +426,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Search bar (top-left)
 - Primary action button (+ Add Database, top-right)
 - Empty state:
@@ -414,6 +436,7 @@ Create your first automation to get started.
   - Optional CTA button (though not shown in screenshot)
 
 **Populated State** (inferred, not shown in screenshots):
+
 ```
 ┌─ Databases ─────────────────────────────────────────────────┐
 │  🔍 Search databases...                  [+ Add Database]   │
@@ -426,6 +449,7 @@ Create your first automation to get started.
 ```
 
 **User Journey:**
+
 1. User navigates to Databases
 2. Sees empty state (if first time) OR list of databases
 3. Can search existing databases
@@ -434,6 +458,7 @@ Create your first automation to get started.
 6. Clicking a database opens detail view
 
 **Design Notes:**
+
 - Empty states should be encouraging, not discouraging
 - Clear path forward (mention "from a workflow")
 - Consistent empty state pattern across all list views
@@ -446,6 +471,7 @@ Create your first automation to get started.
 **Purpose:** Select and interact with AI chatbots/agents
 
 **Layout:**
+
 ```
 ┌─ Chat ──────────────────────────────────────────────────────┐
 │                                                             │
@@ -471,6 +497,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Centered card (max-width ~600px)
 - Icon (top, centered, ~60-80px)
 - Heading (bold, 24px)
@@ -485,6 +512,7 @@ Create your first automation to get started.
   - Enabled state: primary color, clickable
 
 **User Journey:**
+
 1. User clicks "Chat" in sidebar
 2. Sees chatbot selector
 3. Opens dropdown
@@ -494,6 +522,7 @@ Create your first automation to get started.
 7. Chat interface opens (either modal or new view)
 
 **Chat Interface** (inferred, not shown):
+
 ```
 ┌─ Chat: Support Agent ───────────────────────────┐
 │  [Back]                              [⋮ Menu]   │
@@ -512,6 +541,7 @@ Create your first automation to get started.
 ```
 
 **Design Notes:**
+
 - Progressive disclosure: button disabled until valid selection
 - Clear instructions prevent user confusion
 - Centered layout emphasizes single task
@@ -525,6 +555,7 @@ Create your first automation to get started.
 **Purpose:** Manage context and knowledge agents can access
 
 **Layout:**
+
 ```
 ┌─ Knowledge Base ────────────────────────────────────────────┐
 │                                                             │
@@ -548,6 +579,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Page heading ("Knowledge Base")
 - Section heading ("Workspace context")
 - Table headers:
@@ -559,6 +591,7 @@ Create your first automation to get started.
 - Table rows (when populated)
 
 **Populated State** (inferred):
+
 ```
 ┌─ Knowledge Base ────────────────────────────────────────────┐
 │  Workspace context                          [+ Add Context] │
@@ -574,6 +607,7 @@ Create your first automation to get started.
 ```
 
 **User Journey:**
+
 1. User navigates to Knowledge Base
 2. Sees existing context items OR empty state
 3. Clicks "+ Add context item"
@@ -586,6 +620,7 @@ Create your first automation to get started.
 7. Can edit or delete existing items
 
 **Design Notes:**
+
 - This is a power-user feature (not for first-time users)
 - Clear labeling of what "context" means
 - Instructions help AI understand when to use context
@@ -599,6 +634,7 @@ Create your first automation to get started.
 **Purpose:** Update user account information and credentials
 
 **Layout:**
+
 ```
 ┌─ Settings ──────────────────────────────────────────────────┐
 │ Workspace                                                   │
@@ -634,6 +670,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Left sidebar (settings navigation)
   - Vertical list of settings sections
   - Current section has ">" indicator
@@ -645,13 +682,13 @@ Create your first automation to get started.
     - Description text
     - Form fields
     - Action button (right-aligned)
-  
+
 **Form Sections:**
+
 1. **Profile Information**
    - Name display (right side)
    - Fields (inferred): Name, Email, etc.
    - Action: "Update Profile" button
-   
 2. **Update Password**
    - Current Password field (password input)
    - New Password field (password input)
@@ -659,6 +696,7 @@ Create your first automation to get started.
    - Action: "Update Password" button
 
 **User Journey:**
+
 1. User navigates to Settings
 2. Selects "User" from sidebar
 3. Updates profile information or password
@@ -667,6 +705,7 @@ Create your first automation to get started.
 6. Changes are saved
 
 **Design Notes:**
+
 - Clear separation of form sections
 - Action buttons aligned right for consistency
 - Password fields have visibility toggle (inferred)
@@ -681,6 +720,7 @@ Create your first automation to get started.
 **Purpose:** Connect third-party applications
 
 **Layout:**
+
 ```
 ┌─ Settings ──────────────────────────────────────────────────┐
 │ Workspace                                                   │
@@ -722,6 +762,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Left sidebar (settings navigation)
 - Right content area:
   - Section heading ("Manage Integrations")
@@ -736,6 +777,7 @@ Create your first automation to get started.
   - Scrollable list
 
 **Integration Categories** (inferred from logos):
+
 - CRM: Hubspot
 - Project Management: Linear
 - HR/Recruiting: Greenhouse
@@ -744,6 +786,7 @@ Create your first automation to get started.
 - Communication: Slack
 
 **User Journey:**
+
 1. User navigates to Settings → App Integrations
 2. Browses available integrations
 3. Clicks "Connect" on desired integration
@@ -754,6 +797,7 @@ Create your first automation to get started.
 8. Integration can be used in workflows
 
 **Design Notes:**
+
 - Logos should be high-quality, recognizable
 - Clear status indicators (color + text)
 - "Add New Integration" suggests more integrations available than shown
@@ -768,6 +812,7 @@ Create your first automation to get started.
 **Purpose:** Manage workspace-level settings (inferred, not shown in detail)
 
 **Layout:**
+
 ```
 ┌─ Settings ──────────────────────────────────────────────────┐
 │ Workspace                             >                     │
@@ -821,6 +866,7 @@ Create your first automation to get started.
 **Purpose:** Quick access to AI assistant
 
 **Collapsed State:**
+
 ```
                                     ┌─────┐
                                     │ 💬  │
@@ -829,6 +875,7 @@ Create your first automation to get started.
 ```
 
 **Expanded State:**
+
 ```
                     ┌────────────────────────┐
                     │ GalaxyCo Assistant  [×]│
@@ -847,6 +894,7 @@ Create your first automation to get started.
 ```
 
 **Components:**
+
 - Floating button (collapsed)
   - Icon: Chat bubble or assistant icon
   - Badge: Notification count (if any)
@@ -857,6 +905,7 @@ Create your first automation to get started.
   - Input area: Text field + send button
 
 **User Journey:**
+
 1. Widget visible on all pages
 2. Click to expand
 3. Chat with assistant
@@ -874,54 +923,55 @@ Create your first automation to get started.
 
 ```scss
 // Primary/Brand
-$brand-primary: #F59E0B;      // Gold/Orange (CTAs, highlights)
-$brand-secondary: #3B82F6;    // Blue (links, info)
+$brand-primary: #f59e0b; // Gold/Orange (CTAs, highlights)
+$brand-secondary: #3b82f6; // Blue (links, info)
 
 // Backgrounds
-$bg-dark: #1A1A1A;           // Sidebar background
-$bg-light: #FFFFFF;          // Main content background
-$bg-muted: #F3F4F6;          // Subtle backgrounds (empty states, cards)
+$bg-dark: #1a1a1a; // Sidebar background
+$bg-light: #ffffff; // Main content background
+$bg-muted: #f3f4f6; // Subtle backgrounds (empty states, cards)
 
 // Text
-$text-primary: #111827;      // Headings, primary text
-$text-secondary: #6B7280;    // Body text, descriptions
-$text-muted: #9CA3AF;        // Placeholder text, disabled
+$text-primary: #111827; // Headings, primary text
+$text-secondary: #6b7280; // Body text, descriptions
+$text-muted: #9ca3af; // Placeholder text, disabled
 
 // Borders
-$border-default: #E5E7EB;    // Standard borders
-$border-focus: #3B82F6;      // Focus states
+$border-default: #e5e7eb; // Standard borders
+$border-focus: #3b82f6; // Focus states
 
 // Status Colors
-$success: #10B981;           // Green (completed, success)
-$warning: #F59E0B;           // Orange (warning, pending)
-$error: #EF4444;             // Red (errors, critical)
-$info: #3B82F6;              // Blue (info, neutral)
+$success: #10b981; // Green (completed, success)
+$warning: #f59e0b; // Orange (warning, pending)
+$error: #ef4444; // Red (errors, critical)
+$info: #3b82f6; // Blue (info, neutral)
 
 // Category Colors (for badges/pills)
-$category-support: #EC4899;  // Pink
-$category-finance: #10B981;  // Green
-$category-marketing: #3B82F6; // Blue
-$category-operations: #8B5CF6; // Purple
-$category-product: #F59E0B;   // Orange
-$category-sales: #EF4444;     // Red
+$category-support: #ec4899; // Pink
+$category-finance: #10b981; // Green
+$category-marketing: #3b82f6; // Blue
+$category-operations: #8b5cf6; // Purple
+$category-product: #f59e0b; // Orange
+$category-sales: #ef4444; // Red
 ```
 
 ### Typography
 
 ```scss
 // Font Family
-$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", 
-               Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-primary:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  Arial, sans-serif;
 
 // Font Sizes
-$text-xs: 12px;    // Captions, labels
-$text-sm: 14px;    // Body text (small)
-$text-base: 16px;  // Body text (default)
-$text-lg: 18px;    // Subheadings
-$text-xl: 20px;    // Section headings
-$text-2xl: 24px;   // Page headings
-$text-3xl: 30px;   // Hero headings
-$text-4xl: 36px;   // Modal/landing headings
+$text-xs: 12px; // Captions, labels
+$text-sm: 14px; // Body text (small)
+$text-base: 16px; // Body text (default)
+$text-lg: 18px; // Subheadings
+$text-xl: 20px; // Section headings
+$text-2xl: 24px; // Page headings
+$text-3xl: 30px; // Hero headings
+$text-4xl: 36px; // Modal/landing headings
 
 // Font Weights
 $weight-normal: 400;
@@ -939,16 +989,16 @@ $leading-relaxed: 1.75;
 
 ```scss
 // Spacing (Tailwind-inspired)
-$space-1: 4px;     // 0.25rem
-$space-2: 8px;     // 0.5rem
-$space-3: 12px;    // 0.75rem
-$space-4: 16px;    // 1rem
-$space-5: 20px;    // 1.25rem
-$space-6: 24px;    // 1.5rem
-$space-8: 32px;    // 2rem
-$space-10: 40px;   // 2.5rem
-$space-12: 48px;   // 3rem
-$space-16: 64px;   // 4rem
+$space-1: 4px; // 0.25rem
+$space-2: 8px; // 0.5rem
+$space-3: 12px; // 0.75rem
+$space-4: 16px; // 1rem
+$space-5: 20px; // 1.25rem
+$space-6: 24px; // 1.5rem
+$space-8: 32px; // 2rem
+$space-10: 40px; // 2.5rem
+$space-12: 48px; // 3rem
+$space-16: 64px; // 4rem
 
 // Common Usage
 // - Card padding: $space-6 (24px)
@@ -960,10 +1010,10 @@ $space-16: 64px;   // 4rem
 ### Border Radius
 
 ```scss
-$radius-sm: 4px;    // Inputs, subtle elements
-$radius-md: 8px;    // Buttons, cards
-$radius-lg: 12px;   // Modals, large cards
-$radius-xl: 16px;   // Hero cards
+$radius-sm: 4px; // Inputs, subtle elements
+$radius-md: 8px; // Buttons, cards
+$radius-lg: 12px; // Modals, large cards
+$radius-xl: 16px; // Hero cards
 $radius-full: 9999px; // Pills, circular buttons
 ```
 
@@ -983,12 +1033,12 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 ```scss
 // Primary Button
 .btn-primary {
-  background: $text-primary;  // Dark
+  background: $text-primary; // Dark
   color: white;
   padding: $space-3 $space-6;
   border-radius: $radius-md;
   font-weight: $weight-medium;
-  
+
   &:hover {
     background: lighten($text-primary, 10%);
   }
@@ -1001,16 +1051,25 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid $border-default;
   padding: $space-3 $space-6;
   border-radius: $radius-md;
-  
+
   &:hover {
     background: $bg-muted;
   }
 }
 
 // Button Sizes
-.btn-sm { padding: $space-2 $space-4; font-size: $text-sm; }
-.btn-md { padding: $space-3 $space-6; font-size: $text-base; }
-.btn-lg { padding: $space-4 $space-8; font-size: $text-lg; }
+.btn-sm {
+  padding: $space-2 $space-4;
+  font-size: $text-sm;
+}
+.btn-md {
+  padding: $space-3 $space-6;
+  font-size: $text-base;
+}
+.btn-lg {
+  padding: $space-4 $space-8;
+  font-size: $text-lg;
+}
 ```
 
 #### Cards
@@ -1021,7 +1080,7 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid $border-default;
   border-radius: $radius-md;
   padding: $space-6;
-  
+
   &:hover {
     box-shadow: $shadow-md;
     border-color: darken($border-default, 10%);
@@ -1037,11 +1096,11 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border-radius: $radius-sm;
   padding: $space-3 $space-4;
   font-size: $text-base;
-  
+
   &::placeholder {
     color: $text-muted;
   }
-  
+
   &:focus {
     outline: none;
     border-color: $border-focus;
@@ -1060,9 +1119,15 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border-radius: $radius-full;
   font-size: $text-xs;
   font-weight: $weight-medium;
-  
-  &.badge-support { background: lighten($category-support, 40%); color: $category-support; }
-  &.badge-finance { background: lighten($category-finance, 40%); color: $category-finance; }
+
+  &.badge-support {
+    background: lighten($category-support, 40%);
+    color: $category-support;
+  }
+  &.badge-finance {
+    background: lighten($category-finance, 40%);
+    color: $category-finance;
+  }
   // ... etc
 }
 ```
@@ -1073,7 +1138,7 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 .table {
   width: 100%;
   border-collapse: collapse;
-  
+
   th {
     text-align: left;
     padding: $space-3 $space-4;
@@ -1082,12 +1147,12 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     color: $text-secondary;
     border-bottom: 1px solid $border-default;
   }
-  
+
   td {
     padding: $space-4;
     border-bottom: 1px solid $border-default;
   }
-  
+
   tr:hover {
     background: $bg-muted;
   }
@@ -1245,23 +1310,23 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
 ### For Hyper UI
 
-| DoubleO Element | Hyper UI Component | Notes |
-|---|---|---|
-| Sidebar Navigation | `Navigation > Sidebar` | Dark theme, persistent |
-| Data Tables | `Tables > Sortable Table` | Add search, filters |
-| Template Cards | `Cards > Product Card` | Adapt for workflow templates |
-| Search Bars | `Forms > Input with Icon` | Use search icon prefix |
-| Primary Buttons | `Buttons > Primary` | Dark background |
-| Secondary Buttons | `Buttons > Secondary` | White with border |
-| Category Badges | `Badges > Pill Badge` | Color-coded |
-| Empty States | `Empty States > Centered` | Icon + message + CTA |
-| Modal Overlays | `Overlays > Modal` | Centered card |
-| Settings Forms | `Forms > Stacked Form` | Vertical layout |
-| Integration Cards | `Cards > Horizontal Card` | Logo + name + CTA |
-| Dropdown Selects | `Forms > Select` | With chevron icon |
-| Chat Widget | Custom Component | Build with Hyper UI primitives |
-| Action Buttons | `Buttons > Icon Button` | Kebab menu (⋮) |
-| Tab Navigation | `Navigation > Tabs` | Underline style |
+| DoubleO Element    | Hyper UI Component        | Notes                          |
+| ------------------ | ------------------------- | ------------------------------ |
+| Sidebar Navigation | `Navigation > Sidebar`    | Dark theme, persistent         |
+| Data Tables        | `Tables > Sortable Table` | Add search, filters            |
+| Template Cards     | `Cards > Product Card`    | Adapt for workflow templates   |
+| Search Bars        | `Forms > Input with Icon` | Use search icon prefix         |
+| Primary Buttons    | `Buttons > Primary`       | Dark background                |
+| Secondary Buttons  | `Buttons > Secondary`     | White with border              |
+| Category Badges    | `Badges > Pill Badge`     | Color-coded                    |
+| Empty States       | `Empty States > Centered` | Icon + message + CTA           |
+| Modal Overlays     | `Overlays > Modal`        | Centered card                  |
+| Settings Forms     | `Forms > Stacked Form`    | Vertical layout                |
+| Integration Cards  | `Cards > Horizontal Card` | Logo + name + CTA              |
+| Dropdown Selects   | `Forms > Select`          | With chevron icon              |
+| Chat Widget        | Custom Component          | Build with Hyper UI primitives |
+| Action Buttons     | `Buttons > Icon Button`   | Kebab menu (⋮)                 |
+| Tab Navigation     | `Navigation > Tabs`       | Underline style                |
 
 ### Custom Components to Build
 
@@ -1289,10 +1354,10 @@ $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 ### Responsive Breakpoints
 
 ```scss
-$breakpoint-sm: 640px;   // Mobile
-$breakpoint-md: 768px;   // Tablet
-$breakpoint-lg: 1024px;  // Desktop
-$breakpoint-xl: 1280px;  // Large desktop
+$breakpoint-sm: 640px; // Mobile
+$breakpoint-md: 768px; // Tablet
+$breakpoint-lg: 1024px; // Desktop
+$breakpoint-xl: 1280px; // Large desktop
 ```
 
 ### Mobile Adaptations

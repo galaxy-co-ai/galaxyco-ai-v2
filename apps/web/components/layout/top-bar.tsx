@@ -4,80 +4,85 @@
  * October 15, 2025
  */
 
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { cn, formatString } from '@/lib/utils'
-import useResponsive from '@/hooks/use-mobile'
-import { Button } from '@/components/ui/button'
-import { 
-  Search,
-  Menu,
-} from 'lucide-react'
+import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { cn, formatString } from "@/lib/utils";
+import useResponsive from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
+import { Search, Menu } from "lucide-react";
 
 interface TopBarProps {
-  className?: string
+  className?: string;
 }
 
 // Get page title from pathname
 const getPageTitle = (pathname: string): string => {
-  const segments = pathname.split('/').filter(Boolean)
-  const lastSegment = segments[segments.length - 1]
-  
-  if (!lastSegment || lastSegment === 'dashboard') return 'Dashboard'
-  
-  return formatString.title(lastSegment.replace(/-/g, ' '))
-}
+  const segments = pathname.split("/").filter(Boolean);
+  const lastSegment = segments[segments.length - 1];
+
+  if (!lastSegment || lastSegment === "dashboard") return "Dashboard";
+
+  return formatString.title(lastSegment.replace(/-/g, " "));
+};
 
 // Get breadcrumbs from pathname
 const getBreadcrumbs = (pathname: string): string[] => {
-  const segments = pathname.split('/').filter(Boolean)
-  return segments.map(segment => formatString.title(segment.replace(/-/g, ' ')))
-}
+  const segments = pathname.split("/").filter(Boolean);
+  return segments.map((segment) =>
+    formatString.title(segment.replace(/-/g, " ")),
+  );
+};
 
 export function TopBar({ className }: TopBarProps) {
-  const pathname = usePathname()
-  const { isMobile, isDesktop } = useResponsive()
-  const [isSidebarPinned, setIsSidebarPinned] = useState(false)
-  
-  const pageTitle = getPageTitle(pathname)
-  const breadcrumbs = getBreadcrumbs(pathname)
+  const pathname = usePathname();
+  const { isMobile, isDesktop } = useResponsive();
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false);
+
+  const pageTitle = getPageTitle(pathname);
+  const breadcrumbs = getBreadcrumbs(pathname);
 
   // Listen for sidebar pin state changes
   useEffect(() => {
     // Check initial state
-    const savedPinState = localStorage.getItem('sidebar-pinned')
-    setIsSidebarPinned(savedPinState === 'true')
+    const savedPinState = localStorage.getItem("sidebar-pinned");
+    setIsSidebarPinned(savedPinState === "true");
 
     // Listen for custom event
     const handleSidebarToggle = (e: CustomEvent) => {
-      setIsSidebarPinned(e.detail.isPinned)
-    }
+      setIsSidebarPinned(e.detail.isPinned);
+    };
 
-    window.addEventListener('sidebar-toggle' as any, handleSidebarToggle as any)
+    window.addEventListener(
+      "sidebar-toggle" as any,
+      handleSidebarToggle as any,
+    );
 
     return () => {
-      window.removeEventListener('sidebar-toggle' as any, handleSidebarToggle as any)
-    }
-  }, [])
+      window.removeEventListener(
+        "sidebar-toggle" as any,
+        handleSidebarToggle as any,
+      );
+    };
+  }, []);
 
   return (
     <header
       className={cn(
         // Fixed positioning
-        'fixed top-0 right-0 z-50',
+        "fixed top-0 right-0 z-50",
         // Responsive width (account for sidebar on desktop)
-        'transition-all duration-200 ease-in-out',
-        isSidebarPinned ? 'left-0 lg:left-60' : 'left-0 lg:left-16',
+        "transition-all duration-200 ease-in-out",
+        isSidebarPinned ? "left-0 lg:left-60" : "left-0 lg:left-16",
         // Height
-        'h-16',
+        "h-16",
         // Styling
-'bg-card',
-        'border-b border-border',
+        "bg-card",
+        "border-b border-border",
         // Backdrop blur
-        'backdrop-blur-lg bg-card/90',
-        className
+        "backdrop-blur-lg bg-card/90",
+        className,
       )}
     >
       <div className="flex items-center justify-between h-full px-4 lg:px-6">
@@ -108,7 +113,7 @@ export function TopBar({ className }: TopBarProps) {
                 ))}
               </div>
             )}
-            
+
             {/* Page Title */}
             <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 truncate">
               {pageTitle}
@@ -131,7 +136,7 @@ export function TopBar({ className }: TopBarProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default TopBar
+export default TopBar;

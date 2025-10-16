@@ -27,6 +27,7 @@
 Focus on the **Immediate** tier first (required for local development):
 
 #### 1. Neon Database (5 min) ✅ HIGH PRIORITY
+
 - Go to: https://neon.tech
 - Sign up (free tier available)
 - Create project: `galaxyco-ai`
@@ -34,12 +35,14 @@ Focus on the **Immediate** tier first (required for local development):
 - **Copy connection string** → Save to `SECRETS_CHECKLIST.md`
 
 #### 2. Upstash Redis (3 min) ✅ HIGH PRIORITY
+
 - Go to: https://upstash.com
 - Sign up (free tier available)
 - Create database: `galaxyco-redis`
 - **Copy connection string** → Save to `SECRETS_CHECKLIST.md`
 
 #### 3. Clerk Authentication (5 min) ✅ HIGH PRIORITY
+
 - Go to: https://clerk.com
 - Sign up (free for development)
 - Create application: `GalaxyCo.ai`
@@ -49,6 +52,7 @@ Focus on the **Immediate** tier first (required for local development):
   - Add: `http://localhost:3000`
 
 #### 4. OpenAI API (5 min) ✅ HIGH PRIORITY
+
 - Go to: https://platform.openai.com
 - Sign up / Log in
 - Navigate to API Keys
@@ -63,6 +67,7 @@ Focus on the **Immediate** tier first (required for local development):
 Now that you have your accounts, let's configure the apps:
 
 #### Web App (.env.local)
+
 ```bash
 cd apps/web
 cp .env.example .env.local
@@ -71,6 +76,7 @@ cp .env.example .env.local
 ```
 
 #### API (.env.local)
+
 ```bash
 cd apps/api
 cp .env.example .env.local
@@ -81,6 +87,7 @@ cp .env.example .env.local
 ```
 
 #### Agents Service (.env)
+
 ```bash
 cd services/agents
 cp .env.example .env
@@ -129,13 +136,14 @@ If there are no errors, you're ready to start building! 🎉
 We're currently in **Phase 2: Repository Initialization**.
 
 **Next tasks**:
+
 1. Initialize Next.js app in `apps/web`
 2. Initialize NestJS app in `apps/api`
 3. Set up Python FastAPI in `services/agents`
 4. Create basic health check endpoints
 5. Make first commit
 
-**I can help you with this now!** Just say: *"Let's continue with Phase 2"*
+**I can help you with this now!** Just say: _"Let's continue with Phase 2"_
 
 ---
 
@@ -144,12 +152,13 @@ We're currently in **Phase 2: Repository Initialization**.
 If you want to set up more accounts before coding:
 
 **Additional accounts to set up**:
+
 - Vercel (for web deployment)
 - AWS (for infrastructure)
 - GitHub (for code hosting & CI/CD)
 - Stripe (for billing - test mode)
 
-**I can guide you through this!** Just say: *"Let's finish Phase 1 first"*
+**I can guide you through this!** Just say: _"Let's finish Phase 1 first"_
 
 ---
 
@@ -158,17 +167,19 @@ If you want to set up more accounts before coding:
 If you want to provision AWS infrastructure with Terraform:
 
 **Prerequisites**:
+
 - AWS account ready
 - Terraform installed
 - AWS CLI configured
 
-**I can help you with this!** Just say: *"Let's set up infrastructure"*
+**I can help you with this!** Just say: _"Let's set up infrastructure"_
 
 ---
 
 ## 📋 Current Project Status
 
 ✅ **Completed**:
+
 - Project structure created
 - Git initialized
 - Configuration files ready
@@ -176,10 +187,12 @@ If you want to provision AWS infrastructure with Terraform:
 - `.env.example` templates created
 
 🔄 **In Progress**:
+
 - Phase 2: Repository Initialization
 - Need to create actual app scaffolds
 
 ⏭️ **Next Up**:
+
 - Install and configure Next.js
 - Install and configure NestJS
 - Set up Python FastAPI
@@ -192,24 +205,29 @@ If you want to provision AWS infrastructure with Terraform:
 ### Common Issues
 
 **"I don't have pnpm"**
+
 ```bash
 npm install -g pnpm@9
 ```
 
 **"I don't have Node 20+"**
+
 - Download from: https://nodejs.org (LTS version)
 
 **"I don't have Python 3.11+"**
+
 - Windows: https://www.python.org/downloads/
 - Use Python 3.11 or 3.12
 
 **"Where do I save my secrets?"**
+
 - Create a copy of `SECRETS_CHECKLIST.md` called `SECRETS_CHECKLIST_FILLED.md`
 - Add it to `.gitignore` (already included)
 - Fill in your actual values there
 
 **"Which accounts should I prioritize?"**
 For local development, you ONLY need:
+
 1. Neon (database)
 2. Upstash (redis)
 3. Clerk (auth)

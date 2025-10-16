@@ -14,13 +14,16 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 ## ✅ What Was Removed
 
 ### Files Deleted
+
 - `apps/web/styles/design-tokens.css` (210+ lines of custom tokens)
 
 ### Files Drastically Simplified
+
 - `apps/web/styles/globals.css`: **700+ lines → 31 lines** (96% reduction)
 - `apps/web/tailwind.config.ts`: **178 lines → 24 lines** (87% reduction)
 
 ### Components Simplified
+
 - `button.tsx`: Removed `class-variance-authority`, 7 variants → semantic `<button>`
 - `card.tsx`: Removed custom styles → semantic `<article>`, `<header>`, `<footer>`
 - `input.tsx`: Removed custom styling → native `<input>`
@@ -29,6 +32,7 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 - `separator.tsx`: Simplified to native `<hr>`
 
 ### Deprecated (Not Deleted)
+
 - `apps/web/lib/constants/design-system.ts`: Marked as DEPRECATED but kept functional for backward compatibility with 41+ existing components
 
 ---
@@ -36,6 +40,7 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 ## ✅ What Was Kept
 
 ### Functionality Preserved
+
 - **All Radix UI primitives** (Dialog, Dropdown, Popover, Select, Toast, Tooltip)
 - **All feature components** (Dashboard, Agents, Marketplace, Knowledge, Settings)
 - **All layouts** (Sidebar, TopBar, MainContent)
@@ -45,6 +50,7 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 - **AI integrations** (OpenAI, Anthropic, Google)
 
 ### Dependencies Retained
+
 - Radix UI (functionality)
 - Tailwind CSS (layout utilities)
 - Lucide React (icons)
@@ -57,6 +63,7 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 ## 🎨 Current Approach
 
 ### Visual Styling: Pico CSS
+
 - **What it does:** Automatically styles semantic HTML elements (buttons, forms, cards, etc.)
 - **Size:** ~10KB minified
 - **Style:** Clean, minimal, professional
@@ -73,6 +80,7 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 ```
 
 ### Layout: Tailwind CSS
+
 - **What it does:** Provides layout and spacing utilities
 - **Common classes:**
   - `flex`, `flex-col`, `items-center`, `justify-between`
@@ -103,18 +111,19 @@ Simplify the UI system to enable **rapid layout iteration** without complex styl
 
 Pico CSS automatically styles these elements:
 
-| Element | Styling Applied |
-|---------|-----------------|
-| `<button>` | Primary button with hover states |
-| `<input>`, `<textarea>`, `<select>` | Form fields with focus states |
-| `<article>` | Card-like container |
-| `<header>`, `<footer>` | Section headers/footers |
-| `<hr>` | Horizontal divider |
-| `<h1>`-`<h6>` | Heading hierarchy |
-| `<p>`, `<ul>`, `<ol>` | Typography with spacing |
-| `<a>` | Links with hover states |
+| Element                             | Styling Applied                  |
+| ----------------------------------- | -------------------------------- |
+| `<button>`                          | Primary button with hover states |
+| `<input>`, `<textarea>`, `<select>` | Form fields with focus states    |
+| `<article>`                         | Card-like container              |
+| `<header>`, `<footer>`              | Section headers/footers          |
+| `<hr>`                              | Horizontal divider               |
+| `<h1>`-`<h6>`                       | Heading hierarchy                |
+| `<p>`, `<ul>`, `<ol>`               | Typography with spacing          |
+| `<a>`                               | Links with hover states          |
 
 ### Secondary Button Example
+
 ```tsx
 // Primary button (default)
 <button>Primary Action</button>
@@ -127,18 +136,19 @@ Pico CSS automatically styles these elements:
 ```
 
 ### Form Example
+
 ```tsx
 <form>
   <label>
     Email
     <input type="email" placeholder="you@example.com" />
   </label>
-  
+
   <label>
     Message
     <textarea placeholder="Your message"></textarea>
   </label>
-  
+
   <button type="submit">Send</button>
 </form>
 ```
@@ -150,17 +160,21 @@ Pico CSS automatically styles these elements:
 When you're ready to add custom branding/styling:
 
 ### Option 1: Override Pico CSS Variables
+
 In `styles/globals.css`:
+
 ```css
 :root {
-  --primary: #4F46E5;        /* Your brand color */
-  --primary-hover: #4338CA;
+  --primary: #4f46e5; /* Your brand color */
+  --primary-hover: #4338ca;
   --border-radius: 8px;
 }
 ```
 
 ### Option 2: Add Tailwind Theme Extensions
+
 In `tailwind.config.ts`:
+
 ```ts
 theme: {
   extend: {
@@ -175,7 +189,9 @@ theme: {
 ```
 
 ### Option 3: Create Custom Component Styles
+
 Add custom classes in `styles/globals.css`:
+
 ```css
 .btn-brand {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -185,6 +201,7 @@ Add custom classes in `styles/globals.css`:
 ```
 
 ### Option 4: Replace Pico CSS Entirely
+
 1. Remove import from `app/layout.tsx`
 2. Build custom design system
 3. Update components gradually
@@ -194,21 +211,23 @@ Add custom classes in `styles/globals.css`:
 ## 📊 Before & After Comparison
 
 ### Code Complexity
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| globals.css | 700+ lines | 31 lines | -96% |
-| tailwind.config.ts | 178 lines | 24 lines | -87% |
-| button.tsx | 58 lines | 27 lines | -53% |
-| card.tsx | 77 lines | 53 lines | -31% |
-| **Total Complexity** | **High** | **Low** | **Significantly Reduced** |
+
+| Metric               | Before     | After    | Change                    |
+| -------------------- | ---------- | -------- | ------------------------- |
+| globals.css          | 700+ lines | 31 lines | -96%                      |
+| tailwind.config.ts   | 178 lines  | 24 lines | -87%                      |
+| button.tsx           | 58 lines   | 27 lines | -53%                      |
+| card.tsx             | 77 lines   | 53 lines | -31%                      |
+| **Total Complexity** | **High**   | **Low**  | **Significantly Reduced** |
 
 ### Developer Experience
-| Aspect | Before | After |
-|--------|--------|-------|
-| Add new page | Write complex className chains | Use semantic HTML |
-| Change layout | Modify multiple style files | Use Tailwind classes |
-| Visual debugging | Hunt through design tokens | See structure clearly |
-| Learning curve | High (custom system) | Low (standard HTML) |
+
+| Aspect           | Before                         | After                 |
+| ---------------- | ------------------------------ | --------------------- |
+| Add new page     | Write complex className chains | Use semantic HTML     |
+| Change layout    | Modify multiple style files    | Use Tailwind classes  |
+| Visual debugging | Hunt through design tokens     | See structure clearly |
+| Learning curve   | High (custom system)           | Low (standard HTML)   |
 
 ---
 
@@ -217,6 +236,7 @@ Add custom classes in `styles/globals.css`:
 If you need to rollback:
 
 ### Step 1: Restore from Git
+
 ```bash
 git checkout f5a7bcc apps/web/styles/
 git checkout f5a7bcc apps/web/tailwind.config.ts
@@ -226,12 +246,14 @@ git checkout f5a7bcc apps/web/lib/constants/design-system.ts
 ```
 
 ### Step 2: Uninstall Pico CSS
+
 ```bash
 cd apps/web
 pnpm remove @picocss/pico
 ```
 
 ### Step 3: Verify
+
 ```bash
 pnpm dev
 # Check that app runs correctly
@@ -242,15 +264,18 @@ pnpm dev
 ## 📚 Resources
 
 ### Pico CSS Documentation
+
 - https://picocss.com/docs
 - https://picocss.com/examples
 
 ### Tailwind CSS Utilities
+
 - https://tailwindcss.com/docs/flexbox
 - https://tailwindcss.com/docs/grid
 - https://tailwindcss.com/docs/spacing
 
 ### Migration Support
+
 - Original design system backed up in git commit `f5a7bcc`
 - Design system constants available in `design-system.ts` (deprecated but functional)
 - All Radix UI documentation: https://www.radix-ui.com/

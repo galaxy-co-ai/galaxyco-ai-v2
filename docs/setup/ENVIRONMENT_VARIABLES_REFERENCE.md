@@ -4,18 +4,19 @@
 
 ### For ALL Environments (Development, Preview, Production)
 
-| Variable Name | Description | Example Format | Where to Get It |
-|--------------|-------------|----------------|-----------------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk public key for auth | `pk_test_...` or `pk_live_...` | Clerk Dashboard → API Keys |
-| `CLERK_SECRET_KEY` | Clerk secret key (server-side) | `sk_test_...` or `sk_live_...` | Clerk Dashboard → API Keys |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host/db` | Neon Dashboard → Connection String |
-| `NEXT_PUBLIC_API_URL` | Your app's public URL | `https://galaxyco-ai-20.vercel.app` | Your Vercel deployment URL |
+| Variable Name                       | Description                    | Example Format                      | Where to Get It                    |
+| ----------------------------------- | ------------------------------ | ----------------------------------- | ---------------------------------- |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk public key for auth      | `pk_test_...` or `pk_live_...`      | Clerk Dashboard → API Keys         |
+| `CLERK_SECRET_KEY`                  | Clerk secret key (server-side) | `sk_test_...` or `sk_live_...`      | Clerk Dashboard → API Keys         |
+| `DATABASE_URL`                      | PostgreSQL connection string   | `postgresql://user:pass@host/db`    | Neon Dashboard → Connection String |
+| `NEXT_PUBLIC_API_URL`               | Your app's public URL          | `https://galaxyco-ai-20.vercel.app` | Your Vercel deployment URL         |
 
 ---
 
 ## 📋 Environment-Specific Values
 
 ### Development (Local)
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_XXXXX
 CLERK_SECRET_KEY=sk_test_XXXXX
@@ -25,6 +26,7 @@ NODE_ENV=development
 ```
 
 ### Preview (Vercel Preview Deployments)
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_XXXXX  # Use TEST keys
 CLERK_SECRET_KEY=sk_test_XXXXX                    # Use TEST keys
@@ -34,6 +36,7 @@ NODE_ENV=production
 ```
 
 ### Production (Vercel Production)
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_XXXXX  # Use LIVE keys
 CLERK_SECRET_KEY=sk_live_XXXXX                    # Use LIVE keys
@@ -73,6 +76,7 @@ These are in your Vercel project but NOT needed for the app to work:
 ### 1. NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY & CLERK_SECRET_KEY
 
 **Steps:**
+
 1. Go to https://dashboard.clerk.com
 2. Select your project (or create one)
 3. Click "API Keys" in sidebar
@@ -81,6 +85,7 @@ These are in your Vercel project but NOT needed for the app to work:
    - **Secret key** → `CLERK_SECRET_KEY`
 
 **Important:**
+
 - Use **Test** keys for Development/Preview
 - Use **Live** keys for Production
 
@@ -89,6 +94,7 @@ These are in your Vercel project but NOT needed for the app to work:
 ### 2. DATABASE_URL
 
 **Steps:**
+
 1. Go to https://console.neon.tech
 2. Select your project (or create one)
 3. Go to "Dashboard" → "Connection Details"
@@ -96,6 +102,7 @@ These are in your Vercel project but NOT needed for the app to work:
 5. Format: `postgresql://[user]:[password]@[host]/[database]?sslmode=require`
 
 **Important:**
+
 - Use a separate database for Production vs Development/Preview
 - Or use different database names on same server
 
@@ -104,14 +111,17 @@ These are in your Vercel project but NOT needed for the app to work:
 ### 3. NEXT_PUBLIC_API_URL
 
 **For Development:**
+
 ```
 http://localhost:3000
 ```
 
 **For Preview & Production:**
+
 ```
 https://galaxyco-ai-20.vercel.app
 ```
+
 (Or your custom domain once set up)
 
 ---
@@ -135,6 +145,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 ## ⚙️ How to Set in Vercel
 
 ### Method 1: Vercel Dashboard (Recommended)
+
 1. Go to https://vercel.com/daltons-projects-7f1e31bb/galaxyco-ai-2.0
 2. Settings → Environment Variables
 3. Add each variable
@@ -142,6 +153,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 5. Click "Save"
 
 ### Method 2: Vercel CLI
+
 ```bash
 # Add to Preview environment
 echo "your-actual-value" | vercel env add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY preview
@@ -167,6 +179,7 @@ After setting variables, verify:
 - [ ] API URL matches your deployment domain
 
 **Test locally:**
+
 ```bash
 cd apps/web
 pnpm dev
@@ -174,6 +187,7 @@ pnpm dev
 ```
 
 **Test on Vercel:**
+
 ```bash
 # Trigger a new deployment
 git commit --allow-empty -m "chore: test env vars"
@@ -211,14 +225,17 @@ If environment variables are messed up:
 ## 📞 Need Help?
 
 **Clerk Issues:**
+
 - Docs: https://clerk.com/docs
 - Dashboard: https://dashboard.clerk.com
 
 **Neon Issues:**
+
 - Docs: https://neon.tech/docs
 - Dashboard: https://console.neon.tech
 
 **Vercel Issues:**
+
 - Docs: https://vercel.com/docs
 - Dashboard: https://vercel.com/dashboard
 

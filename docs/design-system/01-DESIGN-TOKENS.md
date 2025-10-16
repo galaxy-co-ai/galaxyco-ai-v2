@@ -14,6 +14,7 @@ Design tokens are named variables that store visual design attributes. They ensu
 ## Color System
 
 ### Philosophy
+
 - **Semantic naming:** Colors named by purpose (primary, success) not appearance (blue, green)
 - **HSL format:** Easier to create variations (lighten/darken) than hex
 - **Dark mode first:** Optimized for dark mode, light mode derived
@@ -161,6 +162,7 @@ fontWeight: {
 ```
 
 **Guidelines:**
+
 - Body text: `font-normal` (400)
 - Interactive elements (buttons, tabs): `font-medium` (500)
 - Headings: `font-semibold` (600)
@@ -171,6 +173,7 @@ fontWeight: {
 ## Spacing System
 
 ### Philosophy
+
 - **8px base grid:** All spacing is a multiple of 4px (for consistency)
 - **T-shirt sizing:** Named for intuition (xs, sm, base, lg, xl)
 - **Composable:** Use `gap`, `p-*`, `m-*` to build layouts
@@ -197,6 +200,7 @@ spacing: {
 ```
 
 **Common Patterns:**
+
 - Button padding: `px-4 py-2` (16px × 8px)
 - Card padding: `p-6` (24px all sides)
 - Section spacing: `py-12 md:py-16` (48px mobile, 64px desktop)
@@ -219,6 +223,7 @@ borderRadius: {
 ```
 
 **Guidelines:**
+
 - Buttons/inputs: `rounded` (8px)
 - Cards: `rounded-lg` (16px)
 - Modals: `rounded-xl` (24px)
@@ -229,6 +234,7 @@ borderRadius: {
 ## Shadows (Elevation)
 
 ### Philosophy
+
 - **Subtle by default:** Avoid heavy drop shadows
 - **Elevation hierarchy:** Increasing shadow = higher elevation
 - **Dark mode:** Shadows less visible, use borders instead
@@ -237,25 +243,26 @@ borderRadius: {
 boxShadow: {
   sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
   // Small elements (dropdowns, tooltips)
-  
+
   DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
   // Cards, buttons
-  
+
   md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
   // Elevated cards, popovers
-  
+
   lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
   // Modals, drawers
-  
+
   xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
   // Floating panels
-  
+
   inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)',
   // Pressed buttons, inset inputs
 }
 ```
 
 **Dark Mode Override:**
+
 ```javascript
 // In dark mode, reduce shadow opacity and add subtle borders
 .dark .shadow-md {
@@ -291,6 +298,7 @@ transitionDuration: {
 ```
 
 **Guidelines:**
+
 - Hover states: `transition-colors duration-fast`
 - Modals opening: `transition-all duration-slow`
 - Page transitions: `duration-slower`
@@ -303,32 +311,32 @@ const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.2 }
-}
+  transition: { duration: 0.2 },
+};
 
 // Slide up (modals, toasts)
 const slideUp = {
   initial: { y: 20, opacity: 0 },
   animate: { y: 0, opacity: 1 },
   exit: { y: -20, opacity: 0 },
-  transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
-}
+  transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+};
 
 // Scale (popovers, dropdowns)
 const scale = {
   initial: { scale: 0.95, opacity: 0 },
   animate: { scale: 1, opacity: 1 },
   exit: { scale: 0.95, opacity: 0 },
-  transition: { duration: 0.15, ease: [0, 0, 0.2, 1] }
-}
+  transition: { duration: 0.15, ease: [0, 0, 0.2, 1] },
+};
 
 // Slide from right (drawers)
 const slideFromRight = {
-  initial: { x: '100%' },
+  initial: { x: "100%" },
   animate: { x: 0 },
-  exit: { x: '100%' },
-  transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
-}
+  exit: { x: "100%" },
+  transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+};
 ```
 
 ---
@@ -350,6 +358,7 @@ zIndex: {
 ```
 
 **Usage:**
+
 - Sticky headers: `z-sticky` (1100)
 - Modals: `z-modal` (1300)
 - Toasts: `z-toast` (1600)
@@ -369,6 +378,7 @@ screens: {
 ```
 
 **Mobile-First Usage:**
+
 ```jsx
 // Base styles = mobile
 <div className="p-4 sm:p-6 lg:p-8">
@@ -456,7 +466,7 @@ export default {
           light: 'hsl(0, 84%, 96%)',
           border: 'hsl(0, 84%, 65%)',
         },
-        
+
         // Dark mode neutrals (default)
         background: 'hsl(240, 10%, 4%)',
         'background-elevated': 'hsl(240, 6%, 10%)',
@@ -470,12 +480,12 @@ export default {
         active: 'hsl(240, 4%, 12%)',
         selected: 'hsl(262, 60%, 16%)',
       },
-      
+
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'monospace'],
       },
-      
+
       fontSize: {
         xs:   ['0.75rem',  '1rem'],
         sm:   ['0.875rem', '1.25rem'],
@@ -487,7 +497,7 @@ export default {
         '4xl': ['2.25rem',  '2.5rem'],
         '5xl': ['3rem',     '1'],
       },
-      
+
       borderRadius: {
         sm: '0.25rem',
         DEFAULT: '0.5rem',
@@ -495,21 +505,21 @@ export default {
         lg: '1rem',
         xl: '1.5rem',
       },
-      
+
       transitionDuration: {
         fast: '150ms',
         base: '200ms',
         slow: '300ms',
         slower: '500ms',
       },
-      
+
       transitionTimingFunction: {
         smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
         snappy: 'cubic-bezier(0.4, 0, 1, 1)',
         bounce: 'cubic-bezier(0, 0, 0.2, 1)',
         spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
       },
-      
+
       zIndex: {
         hide: '-1',
         base: '0',
@@ -535,39 +545,48 @@ export default {
 ## Usage Examples
 
 ### Button (Primary)
+
 ```jsx
-<button className="
+<button
+  className="
   bg-primary hover:bg-primary-hover active:bg-primary-active
   text-primary-foreground
   px-4 py-2 rounded font-medium
   transition-colors duration-fast
   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-">
+"
+>
   Primary Action
 </button>
 ```
 
 ### Card
+
 ```jsx
-<div className="
+<div
+  className="
   bg-background-elevated border border-border
   rounded-lg shadow-md
   p-6
   hover:border-border-hover transition-colors duration-fast
-">
+"
+>
   Card content
 </div>
 ```
 
 ### Input
+
 ```jsx
-<input className="
+<input
+  className="
   bg-background-subtle border border-border
   text-foreground placeholder:text-foreground-subtle
   px-3 py-2 rounded
   focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
   transition-all duration-fast
-" />
+"
+/>
 ```
 
 ---
@@ -575,16 +594,19 @@ export default {
 ## Accessibility Requirements
 
 ### Focus Rings
+
 - **Always visible:** Use `focus-visible:ring-2 focus-visible:ring-primary`
 - **Never remove:** Don't use `outline-none` without `focus-visible` alternative
 - **Color contrast:** Focus ring must have 3:1 contrast with background
 
 ### Color Contrast
+
 - **Body text:** 4.5:1 minimum (WCAG AA)
 - **Large text (18px+):** 3:1 minimum
 - **Interactive elements:** 4.5:1 minimum
 
 ### Typography
+
 - **Line height:** 1.5 minimum for body text (1.75 preferred)
 - **Line length:** 45-75 characters for optimal readability
 - **Font size:** 16px minimum for body text

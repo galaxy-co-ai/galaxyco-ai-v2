@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { colors, typography, spacing, radius, shadows } from '@/lib/constants/design-system';
+import { useState, useEffect } from "react";
+import { Button } from "../ui/button";
+import {
+  colors,
+  typography,
+  spacing,
+  radius,
+  shadows,
+} from "@/lib/constants/design-system";
 
 interface TourStep {
   id: string;
   title: string;
   description: string;
   target?: string; // CSS selector
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
 }
 
 interface ProductTourProps {
@@ -57,14 +63,14 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
       {/* Overlay */}
       <div
         style={{
-          position: 'fixed',
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: "rgba(0, 0, 0, 0.5)",
           zIndex: 9998,
-          animation: 'fadeIn 300ms ease',
+          animation: "fadeIn 300ms ease",
         }}
         onClick={handleSkipTour}
       />
@@ -72,13 +78,13 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
       {/* Tour Card */}
       <div
         style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           zIndex: 9999,
-          maxWidth: '500px',
-          width: '90%',
+          maxWidth: "500px",
+          width: "90%",
         }}
       >
         <div
@@ -86,20 +92,27 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
             background: colors.neutral[0],
             borderRadius: radius.xl,
             boxShadow: shadows.xl,
-            padding: spacing['2xl'],
+            padding: spacing["2xl"],
             fontFamily: typography.fontFamily.sans,
           }}
         >
           {/* Header */}
           <div style={{ marginBottom: spacing.xl }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: spacing.md,
+              }}
+            >
               <span
                 style={{
                   fontSize: typography.fontSize.sm,
                   fontWeight: typography.fontWeight.semibold,
                   color: colors.primary[500],
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
                 }}
               >
                 Step {currentStep + 1} of {steps.length}
@@ -107,11 +120,11 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
               <button
                 onClick={handleSkipTour}
                 style={{
-                  background: 'transparent',
-                  border: 'none',
+                  background: "transparent",
+                  border: "none",
                   color: colors.neutral[400],
                   fontSize: typography.fontSize.xl,
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   padding: 0,
                   lineHeight: 1,
                 }}
@@ -122,7 +135,7 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
 
             <h3
               style={{
-                fontSize: typography.fontSize['2xl'],
+                fontSize: typography.fontSize["2xl"],
                 fontWeight: typography.fontWeight.bold,
                 color: colors.neutral[900],
                 margin: 0,
@@ -144,44 +157,56 @@ export function ProductTour({ steps, onComplete, onSkip }: ProductTourProps) {
           </div>
 
           {/* Progress Dots */}
-          <div style={{ display: 'flex', gap: spacing.sm, justifyContent: 'center', marginBottom: spacing.xl }}>
+          <div
+            style={{
+              display: "flex",
+              gap: spacing.sm,
+              justifyContent: "center",
+              marginBottom: spacing.xl,
+            }}
+          >
             {steps.map((_, index) => (
               <div
                 key={index}
                 style={{
-                  width: index === currentStep ? '24px' : '8px',
-                  height: '8px',
+                  width: index === currentStep ? "24px" : "8px",
+                  height: "8px",
                   borderRadius: radius.full,
-                  background: index === currentStep ? colors.primary[500] : colors.neutral[200],
-                  transition: 'all 300ms ease',
+                  background:
+                    index === currentStep
+                      ? colors.primary[500]
+                      : colors.neutral[200],
+                  transition: "all 300ms ease",
                 }}
               />
             ))}
           </div>
 
           {/* Actions */}
-          <div style={{ display: 'flex', gap: spacing.md, justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', gap: spacing.md }}>
+          <div
+            style={{
+              display: "flex",
+              gap: spacing.md,
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", gap: spacing.md }}>
               {currentStep > 0 && (
                 <Button variant="ghost" onClick={handlePrevious}>
                   ← Previous
                 </Button>
               )}
             </div>
-            <div style={{ display: 'flex', gap: spacing.md }}>
+            <div style={{ display: "flex", gap: spacing.md }}>
               {currentStep < steps.length - 1 ? (
                 <>
                   <Button variant="ghost" onClick={handleSkipTour}>
                     Skip Tour
                   </Button>
-                  <Button onClick={handleNext}>
-                    Next →
-                  </Button>
+                  <Button onClick={handleNext}>Next →</Button>
                 </>
               ) : (
-                <Button onClick={handleComplete}>
-                  Get Started 🚀
-                </Button>
+                <Button onClick={handleComplete}>Get Started 🚀</Button>
               )}
             </div>
           </div>
@@ -211,11 +236,11 @@ export function useProductTour(tourId: string) {
   useEffect(() => {
     // Check if user has seen this tour
     const seen = localStorage.getItem(`tour_${tourId}_completed`);
-    setHasSeenTour(seen === 'true');
+    setHasSeenTour(seen === "true");
   }, [tourId]);
 
   const markTourComplete = () => {
-    localStorage.setItem(`tour_${tourId}_completed`, 'true');
+    localStorage.setItem(`tour_${tourId}_completed`, "true");
     setHasSeenTour(true);
   };
 
@@ -236,28 +261,33 @@ export function useProductTour(tourId: string) {
  */
 export const DASHBOARD_TOUR_STEPS: TourStep[] = [
   {
-    id: 'welcome',
-    title: 'Welcome to GalaxyCo.ai! 👋',
-    description: 'Let\'s take a quick tour to help you get started with your AI-powered workspace.',
+    id: "welcome",
+    title: "Welcome to GalaxyCo.ai! 👋",
+    description:
+      "Let's take a quick tour to help you get started with your AI-powered workspace.",
   },
   {
-    id: 'progress',
-    title: 'Track Your Setup Progress',
-    description: 'This panel shows your workspace setup progress. Complete each step to unlock the full power of your agents.',
+    id: "progress",
+    title: "Track Your Setup Progress",
+    description:
+      "This panel shows your workspace setup progress. Complete each step to unlock the full power of your agents.",
   },
   {
-    id: 'agents',
-    title: 'Your Agents',
-    description: 'These are the AI agents from your starter pack. Click "Enable" to activate them and start automating tasks.',
+    id: "agents",
+    title: "Your Agents",
+    description:
+      'These are the AI agents from your starter pack. Click "Enable" to activate them and start automating tasks.',
   },
   {
-    id: 'actions',
-    title: 'Next Best Actions',
-    description: 'Follow these suggested actions to get the most out of your workspace quickly.',
+    id: "actions",
+    title: "Next Best Actions",
+    description:
+      "Follow these suggested actions to get the most out of your workspace quickly.",
   },
   {
-    id: 'create',
-    title: 'Create Custom Agents',
-    description: 'Click "Create Agent" anytime to build your own custom AI agents tailored to your specific workflows.',
+    id: "create",
+    title: "Create Custom Agents",
+    description:
+      'Click "Create Agent" anytime to build your own custom AI agents tailored to your specific workflows.',
   },
 ];

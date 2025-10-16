@@ -38,6 +38,7 @@
 ### **Task 1: Fix Remaining TypeScript Errors** ⚡ HIGH PRIORITY
 
 **Current Error Pattern:**
+
 ```
 Type '{ sans: string; mono: string; }' is not assignable to type 'FontFamily | undefined'
 ```
@@ -45,20 +46,23 @@ Type '{ sans: string; mono: string; }' is not assignable to type 'FontFamily | u
 **Root Cause:** Components using `typography.fontFamily` instead of `typography.fontFamily.sans`
 
 **Files to Fix:** (Run build to see current list)
+
 ```bash
 cd apps/web && npm run build
 ```
 
 **Fix Pattern:**
+
 ```typescript
 // ❌ WRONG
 fontFamily: typography.fontFamily,
 
-// ✅ CORRECT  
+// ✅ CORRECT
 fontFamily: typography.fontFamily.sans,
 ```
 
 **Action Steps:**
+
 1. Run build to identify remaining errors
 2. For each error, replace `typography.fontFamily` with `typography.fontFamily.sans`
 3. Re-run build after each fix
@@ -67,21 +71,24 @@ fontFamily: typography.fontFamily.sans,
 ### **Task 2: Final Build Verification** ⚡ HIGH PRIORITY
 
 **Commands to Run:**
+
 ```bash
 cd apps/web
 npm run build                    # Must pass completely
-npm run typecheck               # Must pass completely  
+npm run typecheck               # Must pass completely
 npm run lint                    # Should pass (may have warnings)
 ```
 
 **Success Criteria:**
-- ✅ `npm run build` completes with "✓ Compiled successfully" 
+
+- ✅ `npm run build` completes with "✓ Compiled successfully"
 - ✅ No TypeScript errors during build
 - ✅ Ready for deployment
 
 ### **Task 3: Create Deployment Package** 🚀 MEDIUM PRIORITY
 
 **After TypeScript cleanup:**
+
 ```bash
 # Create production build
 cd apps/web
@@ -109,6 +116,7 @@ git push origin phase-9/live-execution
 ## 🔧 **TECHNICAL CONTEXT**
 
 ### **Project Structure:**
+
 ```
 /c/Users/Owner/workspace/galaxyco-ai-2.0/
 ├── apps/web/                   # Next.js application
@@ -121,20 +129,22 @@ git push origin phase-9/live-execution
 ```
 
 ### **Key Files You May Need:**
+
 - `apps/web/lib/constants/design-system.ts` - Design system (recently updated)
 - `apps/web/components/providers.tsx` - Root providers (uses workspace context)
 - `apps/web/tsconfig.json` - TypeScript config (baseUrl fixed)
 
 ### **Design System Structure:**
+
 ```typescript
 // ✅ CORRECT USAGE PATTERNS
-colors.background.primary       // Not colors.background.DEFAULT
-colors.text.primary            // Not colors.text.DEFAULT  
-colors.success                 // Not colors.success.DEFAULT
-colors.successLight           // Not colors.success.light
-typography.fontFamily.sans    // Not typography.fontFamily
-typography.sizes.base         // Not typography.fontSize.base
-typography.weights.bold       // Not typography.fontWeight.bold
+colors.background.primary; // Not colors.background.DEFAULT
+colors.text.primary; // Not colors.text.DEFAULT
+colors.success; // Not colors.success.DEFAULT
+colors.successLight; // Not colors.success.light
+typography.fontFamily.sans; // Not typography.fontFamily
+typography.sizes.base; // Not typography.fontSize.base
+typography.weights.bold; // Not typography.fontWeight.bold
 ```
 
 ---
@@ -144,12 +154,14 @@ typography.weights.bold       // Not typography.fontWeight.bold
 **After TypeScript cleanup, verify:**
 
 ### **Manual Tests:**
+
 - [ ] Navigate to `http://localhost:3000/settings` - API key management loads
 - [ ] Navigate to agents page - workspace context loads without errors
 - [ ] Open browser console - no TypeScript/runtime errors
 - [ ] Test Panel opens and shows live/mock toggle
 
 ### **Build Tests:**
+
 - [ ] `npm run build` - ✅ Completes successfully
 - [ ] `npm run typecheck` - ✅ No TypeScript errors
 - [ ] `npm run lint` - ⚠️ May have warnings (acceptable)
@@ -163,7 +175,7 @@ typography.weights.bold       // Not typography.fontWeight.bold
 - [ ] ✅ All TypeScript errors resolved
 - [ ] ✅ Production build successful
 - [ ] ✅ Workspace context system functional
-- [ ] ✅ Multi-tenant security enforced  
+- [ ] ✅ Multi-tenant security enforced
 - [ ] ✅ API key management working
 - [ ] ✅ Live agent execution ready
 - [ ] 🚀 **READY FOR PRODUCTION DEPLOYMENT**
@@ -188,11 +200,12 @@ typography.weights.bold       // Not typography.fontWeight.bold
 1. **Check Error Message:** Look for pattern of TypeScript error
 2. **Common Patterns:**
    - `fontFamily` issues → Use `.sans` or `.mono`
-   - Color property issues → Check design-system.ts structure  
+   - Color property issues → Check design-system.ts structure
    - Import issues → Verify `@/` paths are working
 3. **Debug Command:** `npm run typecheck` shows pure TypeScript errors
 
 ### **If Stuck:**
+
 - Check `BUILD_ANALYSIS_2025-10-08.md` for architectural context
 - Review recent commits for patterns used to fix similar issues
 - Focus on TypeScript errors one at a time
@@ -204,7 +217,7 @@ typography.weights.bold       // Not typography.fontWeight.bold
 You're putting the **final polish** on a **major architectural improvement**:
 
 - ✅ **Eliminated hardcoded workspace IDs** (security compliance)
-- ✅ **Implemented complete workspace context system** (multi-tenancy)  
+- ✅ **Implemented complete workspace context system** (multi-tenancy)
 - ✅ **Fixed build infrastructure issues** (Turborepo, TypeScript paths)
 - ✅ **Added live agent execution with API key management**
 

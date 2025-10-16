@@ -20,6 +20,7 @@ Phase 9B successfully delivered live agent execution UI features, but the build 
 ## 🚨 Critical Blockers (P0)
 
 ### 1. Turborepo Configuration Error
+
 **Impact:** Build completely blocked, cannot proceed with any deployment  
 **Location:** `turbo.json:3`
 
@@ -31,6 +32,7 @@ Help: Changed in 2.0: `pipeline` has been renamed to `tasks`
 **Root Cause:** Using Turbo 2.x with deprecated v1.x configuration syntax
 
 **Remediation:**
+
 ```bash
 # Simple fix - rename one key in turbo.json
 sed -i 's/"pipeline":/"tasks":/g' turbo.json
@@ -38,6 +40,7 @@ git commit -m "chore(infra): migrate turbo.json to tasks syntax (Turbo 2.0)"
 ```
 
 **Verification:**
+
 ```bash
 npm run build  # Should no longer fail on config
 ```
@@ -45,18 +48,22 @@ npm run build  # Should no longer fail on config
 ---
 
 ### 2. Hardcoded Workspace IDs (Security/Multi-Tenancy Issue)
+
 **Impact:** HIGH - Breaks multi-tenant isolation, violates security rule `4kR94Z3XhqK4C54vwDDwnq`  
 **Affected Files:**
+
 - `apps/web/components/agents/TestPanel.tsx` (lines 45, 47)
 - `apps/web/hooks/use-agent-list.ts` (line 60)
 
 **Current Code Pattern:**
+
 ```typescript
 // ❌ INSECURE - Hard-coded placeholder
-const result = await listAgents('workspace-id-placeholder', filters);
+const result = await listAgents("workspace-id-placeholder", filters);
 ```
 
 **Required Architecture:**
+
 ```typescript
 // ✅ SECURE - Dynamic workspace context
 const { workspaceId } = useWorkspace(); // Client-side
@@ -65,6 +72,7 @@ const result = await listAgents(workspaceId, filters);
 ```
 
 **Remediation Steps:**
+
 1. Create `apps/web/lib/workspace.ts` with server-side helpers
 2. Create `apps/web/hooks/useWorkspace.ts` with React hook + Context
 3. Create `apps/web/components/layout/WorkspaceSelect.tsx` UI component
@@ -72,6 +80,7 @@ const result = await listAgents(workspaceId, filters);
 5. Add workspace selection to main layout
 
 **Verification:**
+
 ```bash
 # Ensure no more hardcoded IDs
 grep -r "workspace-id-placeholder" apps/web/
@@ -83,37 +92,39 @@ grep -r "workspace-id-placeholder" apps/web/
 ## ⚠️ High Priority Issues (P1)
 
 ### 3. Missing Workspace Context Infrastructure
+
 **Impact:** Cannot properly implement multi-workspace support  
 **Dependencies:** Blocks remediation of #2
 
 **Required Components:**
 
 #### a) Server-Side Helper (`apps/web/lib/workspace.ts`)
+
 ```typescript
-'use server';
-import { auth } from '@clerk/nextjs/server';
-import { cookies } from 'next/headers';
-import { db, workspaceMembers, users } from '@galaxyco/database';
-import { eq, and } from 'drizzle-orm';
+"use server";
+import { auth } from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
+import { db, workspaceMembers, users } from "@galaxyco/database";
+import { eq, and } from "drizzle-orm";
 
 export async function getCurrentWorkspaceId(): Promise<{
   id: string;
-  source: 'cookie' | 'default' | 'none';
+  source: "cookie" | "default" | "none";
 }> {
   // 1. Check cookie
   const cookieStore = cookies();
-  const workspaceId = cookieStore.get('workspaceId')?.value;
-  
+  const workspaceId = cookieStore.get("workspaceId")?.value;
+
   if (workspaceId) {
-    return { id: workspaceId, source: 'cookie' };
+    return { id: workspaceId, source: "cookie" };
   }
-  
+
   // 2. Fallback to first workspace for user
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
-    return { id: '', source: 'none' };
+    return { id: "", source: "none" };
   }
-  
+
   const user = await db.query.users.findFirst({
     where: eq(users.clerkUserId, clerkUserId),
     with: {
@@ -123,18 +134,19 @@ export async function getCurrentWorkspaceId(): Promise<{
       },
     },
   });
-  
+
   const firstWorkspace = user?.workspaceMembers[0]?.workspaceId;
-  
+
   if (firstWorkspace) {
-    return { id: firstWorkspace, source: 'default' };
+    return { id: firstWorkspace, source: "default" };
   }
-  
-  return { id: '', source: 'none' };
+
+  return { id: "", source: "none" };
 }
 ```
 
 #### b) Client-Side Hook (`apps/web/hooks/useWorkspace.ts`)
+
 ```typescript
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -206,17 +218,18 @@ export function useWorkspace() {
 ```
 
 #### c) API Endpoint (`apps/web/app/api/workspace/current/route.ts`)
+
 ```typescript
-import { NextResponse } from 'next/server';
-import { getCurrentWorkspaceId } from '@/lib/workspace';
+import { NextResponse } from "next/server";
+import { getCurrentWorkspaceId } from "@/lib/workspace";
 
 export async function GET() {
   const { id, source } = await getCurrentWorkspaceId();
-  
+
   if (!id) {
-    return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
+    return NextResponse.json({ error: "No workspace found" }, { status: 404 });
   }
-  
+
   return NextResponse.json({ id, source });
 }
 ```
@@ -224,10 +237,12 @@ export async function GET() {
 ---
 
 ### 4. Build Health Unknown
+
 **Impact:** Cannot verify TypeScript/ESLint status until #1 is resolved  
 **Reason:** Build blocked by Turbo config error
 
 **Required Post-Fix Verification:**
+
 ```bash
 # Run after fixing turbo.json
 npm run typecheck          # Verify TS compilation
@@ -244,6 +259,7 @@ ANALYZE=true npm run build # Generate bundle analysis
 **Decision:** Cookie-based workspace selection with fallback hierarchy
 
 **Rationale:**
+
 1. ✅ Works server-side (Server Actions, API routes)
 2. ✅ Persists across page loads
 3. ✅ Compatible with Clerk authentication
@@ -251,6 +267,7 @@ ANALYZE=true npm run build # Generate bundle analysis
 5. ✅ SEO-friendly (URL parameters optional)
 
 **Fallback Hierarchy:**
+
 ```
 1. URL query parameter (?w=<workspace-id>)
    ↓ (if missing)
@@ -274,13 +291,13 @@ All database queries **MUST** include workspace filtering:
 const agents = await db.query.agents.findMany({
   where: and(
     eq(agents.workspaceId, workspaceId), // REQUIRED
-    eq(agents.status, 'active')
+    eq(agents.status, "active"),
   ),
 });
 
 // ❌ WRONG - Missing workspace filter (security violation)
 const agents = await db.query.agents.findMany({
-  where: eq(agents.status, 'active'),
+  where: eq(agents.status, "active"),
 });
 ```
 
@@ -289,11 +306,13 @@ const agents = await db.query.agents.findMany({
 ## 📝 Remediation Roadmap
 
 ### Phase 1: Unblock Build (30 minutes)
+
 - [x] Fix `turbo.json` configuration
 - [ ] Verify build completes successfully
 - [ ] Document any TS/ESLint errors
 
 ### Phase 2: Implement Workspace Context (2-3 hours)
+
 - [ ] Create server-side helper (`lib/workspace.ts`)
 - [ ] Create client-side hook (`hooks/useWorkspace.ts`)
 - [ ] Create API endpoint (`/api/workspace/current`)
@@ -302,12 +321,14 @@ const agents = await db.query.agents.findMany({
 - [ ] Write unit tests
 
 ### Phase 3: Remove Hardcoded IDs (1 hour)
+
 - [ ] Update `TestPanel.tsx` (2 locations)
 - [ ] Update `use-agent-list.ts` (1 location)
 - [ ] Search for any other instances
 - [ ] Verify with grep
 
 ### Phase 4: Final Verification (1 hour)
+
 - [ ] Run full test suite
 - [ ] TypeScript compilation clean
 - [ ] ESLint warnings = 0
@@ -315,6 +336,7 @@ const agents = await db.query.agents.findMany({
 - [ ] Generate bundle analysis report
 
 ### Phase 5: Documentation (30 minutes)
+
 - [ ] Update `BUILD_REPORT.md`
 - [ ] Document workspace architecture decision (ADR)
 - [ ] Update session handoff document
@@ -325,6 +347,7 @@ const agents = await db.query.agents.findMany({
 ## 🧪 Testing Checklist
 
 ### Pre-Deployment Testing
+
 - [ ] Mock mode works (no API keys required)
 - [ ] Live mode works (with API keys configured)
 - [ ] Workspace switching persists across page loads
@@ -335,7 +358,9 @@ const agents = await db.query.agents.findMany({
 - [ ] Error messages are user-friendly
 
 ### Smoke Tests (Staging Environment)
+
 Per deployment rule `3dAXL7TvCdKH5jA9lAD3Ij`:
+
 - [ ] All smoke tests pass on staging
 - [ ] Check Sentry for recent errors in staging
 - [ ] Confirm database migrations applied successfully to staging
@@ -348,6 +373,7 @@ Per deployment rule `3dAXL7TvCdKH5jA9lAD3Ij`:
 ## 📦 Dependencies & Environment
 
 ### Required Environment Variables
+
 ```bash
 # Clerk Authentication
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_***
@@ -365,6 +391,7 @@ ENCRYPTION_KEY=*** # 32-byte base64 string
 ```
 
 ### Package Versions
+
 ```json
 {
   "turbo": "^2.5.8",
@@ -383,6 +410,7 @@ ENCRYPTION_KEY=*** # 32-byte base64 string
 After completing remediation:
 
 ### Immediate (Phase 9C)
+
 1. **Execution History Dashboard**
    - View past agent runs
    - Filter by status, date, agent
@@ -399,6 +427,7 @@ After completing remediation:
    - Automatic retry suggestions
 
 ### Medium-Term (Phase 10)
+
 1. **Streaming Responses**
    - Real-time token streaming
    - Progress indicators
@@ -419,11 +448,13 @@ After completing remediation:
 ## 📚 References
 
 ### Documentation
+
 - [Phase 9B Handoff Document](./docs/handoff-phase-9b-live-execution-ui.md)
 - [Session Handoff 2025-10-08](./docs/session-handoff-2025-10-08.md)
 - [Database Schema](./packages/database/src/schema.ts)
 
 ### Rules Applied
+
 - `4kR94Z3XhqK4C54vwDDwnq` - Multi-tenant security (workspace filtering)
 - `3dAXL7TvCdKH5jA9lAD3Ij` - Pre-deployment checklist
 - `sEEtaBeEb0qvERiOXvkHFk` - Conventional commits

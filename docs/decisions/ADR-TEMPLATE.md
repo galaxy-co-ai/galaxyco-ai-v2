@@ -34,14 +34,16 @@ What is the change that we're proposing and/or doing?
 ## Alternatives Considered
 
 ### Option 1: [Alternative Name]
-- **Pros**: 
-- **Cons**: 
-- **Why rejected**: 
+
+- **Pros**:
+- **Cons**:
+- **Why rejected**:
 
 ### Option 2: [Alternative Name]
-- **Pros**: 
-- **Cons**: 
-- **Why rejected**: 
+
+- **Pros**:
+- **Cons**:
+- **Why rejected**:
 
 ## Implementation Notes
 

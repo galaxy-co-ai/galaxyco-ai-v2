@@ -23,9 +23,11 @@ incidents/
 ## How to Document an Incident
 
 ### 1. During the Incident
+
 Focus on solving it first. Don't document while firefighting.
 
 ### 2. Immediately After Resolution
+
 While it's fresh, create a new incident file:
 
 ```bash
@@ -39,7 +41,9 @@ git commit -m "docs(incidents): add [incident description]"
 ```
 
 ### 3. Weekly Review
+
 Every week, review recent incidents and:
+
 - Extract patterns
 - Update preventive measures
 - Create automation to prevent recurrence
@@ -78,6 +82,7 @@ grep -r "Severity: 🔴 Critical" docs/incidents/
 ## Automation from Incidents
 
 When we see the same incident twice:
+
 1. Create a diagnostic script
 2. Add to health-check.sh
 3. Create a cleanup script if applicable

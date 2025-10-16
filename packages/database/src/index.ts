@@ -1,11 +1,11 @@
 /**
  * @galaxyco/database
- * 
+ *
  * Multi-tenant database package with Drizzle ORM
  */
 
-export * from './client';
-export * from './schema';
+export * from "./client";
+export * from "./schema";
 
 // Re-export specific tables for convenience
 export {
@@ -18,7 +18,7 @@ export {
   agentExecutions,
   agentSchedules,
   workspaceApiKeys,
-} from './schema';
+} from "./schema";
 
 // Re-export types
 export type {
@@ -27,4 +27,4 @@ export type {
   agentStatusEnum,
   executionStatusEnum,
   subscriptionTierEnum,
-} from './schema';
+} from "./schema";

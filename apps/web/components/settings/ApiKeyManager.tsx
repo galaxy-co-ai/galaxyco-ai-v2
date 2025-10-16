@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useWorkspace } from '@/hooks/useWorkspace';
-import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/hooks/useWorkspace";
+import {
+  colors,
+  spacing,
+  typography,
+  radius,
+} from "@/lib/constants/design-system";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 
 interface ApiKeyManagerProps {
@@ -18,15 +23,21 @@ interface ConfiguredProviders {
 
 export function ApiKeyManager({ className }: ApiKeyManagerProps) {
   const { workspace } = useWorkspace();
-  const [selectedProvider, setSelectedProvider] = useState<'openai' | 'anthropic'>('openai');
-  const [apiKey, setApiKey] = useState('');
+  const [selectedProvider, setSelectedProvider] = useState<
+    "openai" | "anthropic"
+  >("openai");
+  const [apiKey, setApiKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [configuredProviders, setConfiguredProviders] = useState<ConfiguredProviders>({
-    openai: false,
-    anthropic: false,
-  });
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+  const [configuredProviders, setConfiguredProviders] =
+    useState<ConfiguredProviders>({
+      openai: false,
+      anthropic: false,
+    });
 
   useEffect(() => {
     loadConfiguredProviders();
@@ -42,18 +53,18 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
         setConfiguredProviders(data.providers);
       }
     } catch (error) {
-      console.error('Failed to load configured providers:', error);
+      console.error("Failed to load configured providers:", error);
     }
   };
 
   const handleTestConnection = async () => {
     if (!apiKey.trim()) {
-      setMessage({ type: 'error', text: 'Please enter an API key' });
+      setMessage({ type: "error", text: "Please enter an API key" });
       return;
     }
 
     if (!workspace) {
-      setMessage({ type: 'error', text: 'No workspace selected' });
+      setMessage({ type: "error", text: "No workspace selected" });
       return;
     }
 
@@ -61,24 +72,36 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
     setMessage(null);
 
     try {
-      const response = await fetch(`/api/workspaces/${workspace.id}/api-keys/test`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider: selectedProvider,
-          apiKey,
-        }),
-      });
+      const response = await fetch(
+        `/api/workspaces/${workspace.id}/api-keys/test`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: selectedProvider,
+            apiKey,
+          }),
+        },
+      );
 
       const data = await response.json();
 
       if (data.valid) {
-        setMessage({ type: 'success', text: `${selectedProvider} API key is valid!` });
+        setMessage({
+          type: "success",
+          text: `${selectedProvider} API key is valid!`,
+        });
       } else {
-        setMessage({ type: 'error', text: data.message || 'API key is invalid' });
+        setMessage({
+          type: "error",
+          text: data.message || "API key is invalid",
+        });
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to test connection' });
+      setMessage({
+        type: "error",
+        text: error.message || "Failed to test connection",
+      });
     } finally {
       setIsTestingConnection(false);
     }
@@ -86,12 +109,12 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
 
   const handleSaveKey = async () => {
     if (!apiKey.trim()) {
-      setMessage({ type: 'error', text: 'Please enter an API key' });
+      setMessage({ type: "error", text: "Please enter an API key" });
       return;
     }
 
     if (!workspace) {
-      setMessage({ type: 'error', text: 'No workspace selected' });
+      setMessage({ type: "error", text: "No workspace selected" });
       return;
     }
 
@@ -100,8 +123,8 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
 
     try {
       const response = await fetch(`/api/workspaces/${workspace.id}/api-keys`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           provider: selectedProvider,
           apiKey,
@@ -109,25 +132,34 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: `${selectedProvider} API key saved successfully!` });
-        setApiKey('');
+        setMessage({
+          type: "success",
+          text: `${selectedProvider} API key saved successfully!`,
+        });
+        setApiKey("");
         await loadConfiguredProviders();
       } else {
         const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to save API key' });
+        setMessage({
+          type: "error",
+          text: error.error || "Failed to save API key",
+        });
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to save API key' });
+      setMessage({
+        type: "error",
+        text: error.message || "Failed to save API key",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDeleteKey = async (provider: 'openai' | 'anthropic') => {
+  const handleDeleteKey = async (provider: "openai" | "anthropic") => {
     if (!confirm(`Remove ${provider} API key?`)) return;
 
     if (!workspace) {
-      setMessage({ type: 'error', text: 'No workspace selected' });
+      setMessage({ type: "error", text: "No workspace selected" });
       return;
     }
 
@@ -137,18 +169,24 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
     try {
       const response = await fetch(
         `/api/workspaces/${workspace.id}/api-keys?provider=${provider}`,
-        { method: 'DELETE' }
+        { method: "DELETE" },
       );
 
       if (response.ok) {
-        setMessage({ type: 'success', text: `${provider} API key removed` });
+        setMessage({ type: "success", text: `${provider} API key removed` });
         await loadConfiguredProviders();
       } else {
         const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to remove API key' });
+        setMessage({
+          type: "error",
+          text: error.error || "Failed to remove API key",
+        });
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to remove API key' });
+      setMessage({
+        type: "error",
+        text: error.message || "Failed to remove API key",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -159,7 +197,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       <div style={{ marginBottom: spacing.xl }}>
         <h2
           style={{
-            fontSize: typography.sizes['2xl'],
+            fontSize: typography.sizes["2xl"],
             fontWeight: typography.weights.bold,
             color: colors.text.primary,
             marginBottom: spacing.sm,
@@ -167,13 +205,20 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
         >
           🔑 API Keys
         </h2>
-        <p style={{ fontSize: typography.sizes.sm, color: colors.text.secondary }}>
+        <p
+          style={{
+            fontSize: typography.sizes.sm,
+            color: colors.text.secondary,
+          }}
+        >
           Configure your AI provider API keys to enable live agent execution
         </p>
       </div>
 
       {/* Configured Providers Status */}
-      <div style={{ marginBottom: spacing.xl, display: 'flex', gap: spacing.md }}>
+      <div
+        style={{ marginBottom: spacing.xl, display: "flex", gap: spacing.md }}
+      >
         <div
           style={{
             flex: 1,
@@ -185,9 +230,11 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             borderRadius: radius.md,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: spacing.xs }}
+          >
             <span style={{ fontSize: typography.sizes.lg }}>
-              {configuredProviders.openai ? '✅' : '⚪'}
+              {configuredProviders.openai ? "✅" : "⚪"}
             </span>
             <span
               style={{
@@ -201,15 +248,15 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
           </div>
           {configuredProviders.openai && (
             <button
-              onClick={() => handleDeleteKey('openai')}
+              onClick={() => handleDeleteKey("openai")}
               style={{
                 marginTop: spacing.xs,
                 fontSize: typography.sizes.xs,
                 color: colors.danger,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                textDecoration: 'underline',
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textDecoration: "underline",
               }}
             >
               Remove
@@ -228,9 +275,11 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             borderRadius: radius.md,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: spacing.xs }}
+          >
             <span style={{ fontSize: typography.sizes.lg }}>
-              {configuredProviders.anthropic ? '✅' : '⚪'}
+              {configuredProviders.anthropic ? "✅" : "⚪"}
             </span>
             <span
               style={{
@@ -244,15 +293,15 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
           </div>
           {configuredProviders.anthropic && (
             <button
-              onClick={() => handleDeleteKey('anthropic')}
+              onClick={() => handleDeleteKey("anthropic")}
               style={{
                 marginTop: spacing.xs,
                 fontSize: typography.sizes.xs,
                 color: colors.danger,
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                textDecoration: 'underline',
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textDecoration: "underline",
               }}
             >
               Remove
@@ -265,7 +314,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       <div style={{ marginBottom: spacing.lg }}>
         <label
           style={{
-            display: 'block',
+            display: "block",
             marginBottom: spacing.xs,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
@@ -276,17 +325,19 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
         </label>
         <select
           value={selectedProvider}
-          onChange={(e) => setSelectedProvider(e.target.value as 'openai' | 'anthropic')}
+          onChange={(e) =>
+            setSelectedProvider(e.target.value as "openai" | "anthropic")
+          }
           disabled={isLoading}
           style={{
-            width: '100%',
+            width: "100%",
             padding: spacing.md,
             fontSize: typography.sizes.base,
             color: colors.text.primary,
             backgroundColor: colors.background.primary,
             border: `1px solid ${colors.border.default}`,
             borderRadius: radius.md,
-            cursor: isLoading ? 'not-allowed' : 'pointer',
+            cursor: isLoading ? "not-allowed" : "pointer",
           }}
         >
           <option value="openai">OpenAI</option>
@@ -297,7 +348,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       <div style={{ marginBottom: spacing.lg }}>
         <label
           style={{
-            display: 'block',
+            display: "block",
             marginBottom: spacing.xs,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
@@ -309,7 +360,9 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
         <Input
           type="password"
           value={apiKey}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiKey(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setApiKey(e.target.value)
+          }
           placeholder={`Enter your ${selectedProvider} API key`}
           disabled={isLoading}
           className="w-full"
@@ -332,11 +385,14 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
             marginTop: spacing.md,
             padding: spacing.md,
             backgroundColor:
-              message.type === 'success' ? colors.successLight : colors.dangerLight,
-            border: `1px solid ${message.type === 'success' ? colors.successColor : colors.danger}`,
+              message.type === "success"
+                ? colors.successLight
+                : colors.dangerLight,
+            border: `1px solid ${message.type === "success" ? colors.successColor : colors.danger}`,
             borderRadius: radius.md,
             fontSize: typography.sizes.sm,
-            color: message.type === 'success' ? colors.success.dark : colors.danger,
+            color:
+              message.type === "success" ? colors.success.dark : colors.danger,
           }}
         >
           {message.text}
@@ -344,20 +400,20 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
       )}
 
       {/* Actions */}
-      <div style={{ marginTop: spacing.lg, display: 'flex', gap: spacing.md }}>
+      <div style={{ marginTop: spacing.lg, display: "flex", gap: spacing.md }}>
         <Button
           onClick={handleTestConnection}
           disabled={isLoading || isTestingConnection || !apiKey.trim()}
           style={{ flex: 1 }}
         >
-          {isTestingConnection ? 'Testing...' : 'Test Connection'}
+          {isTestingConnection ? "Testing..." : "Test Connection"}
         </Button>
         <Button
           onClick={handleSaveKey}
           disabled={isLoading || isTestingConnection || !apiKey.trim()}
           style={{ flex: 1 }}
         >
-          {isLoading ? 'Saving...' : 'Save Key'}
+          {isLoading ? "Saving..." : "Save Key"}
         </Button>
       </div>
 
@@ -372,21 +428,21 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
           color: colors.text.tertiary,
         }}
       >
-        💡 <strong>Tip:</strong> Get your API keys from{' '}
+        💡 <strong>Tip:</strong> Get your API keys from{" "}
         <a
           href="https://platform.openai.com/api-keys"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: colors.primaryColor, textDecoration: 'underline' }}
+          style={{ color: colors.primaryColor, textDecoration: "underline" }}
         >
           OpenAI
-        </a>{' '}
-        or{' '}
+        </a>{" "}
+        or{" "}
         <a
           href="https://console.anthropic.com/settings/keys"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: colors.primaryColor, textDecoration: 'underline' }}
+          style={{ color: colors.primaryColor, textDecoration: "underline" }}
         >
           Anthropic
         </a>

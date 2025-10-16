@@ -9,6 +9,7 @@ Provides common TypeScript types, interfaces, and utility types shared across al
 ## Installation
 
 Already included via workspace protocol:
+
 ```json
 {
   "dependencies": {
@@ -20,17 +21,20 @@ Already included via workspace protocol:
 ## Key Exports
 
 ### Core Types
+
 - **`Agent`** - Agent entity type
 - **`Workspace`** - Workspace/tenant type
 - **`User`** - User profile type
 - **`Execution`** - Agent execution type
 
 ### Utility Types
+
 - **`Result<T>`** - Success/error result type
 - **`Maybe<T>`** - Nullable type wrapper
 - **`AsyncResult<T>`** - Async result type
 
 ### Enums
+
 - **`AgentStatus`** - Agent status states
 - **`ExecutionStatus`** - Execution states
 - **`UserRole`** - User permission roles
@@ -38,11 +42,11 @@ Already included via workspace protocol:
 ## Usage
 
 ```typescript
-import type { Agent, Result, AgentStatus } from '@galaxyco/types';
+import type { Agent, Result, AgentStatus } from "@galaxyco/types";
 
 const agent: Agent = {
-  id: 'agent_123',
-  name: 'My Agent',
+  id: "agent_123",
+  name: "My Agent",
   status: AgentStatus.Active,
   // ...
 };
@@ -55,9 +59,10 @@ function processAgent(agent: Agent): Result<string> {
 ## Best Practices
 
 1. **Import with `type` keyword**:
+
    ```typescript
-   import type { Agent } from '@galaxyco/types';  // ✅ Good
-   import { Agent } from '@galaxyco/types';       // ❌ Runtime import
+   import type { Agent } from "@galaxyco/types"; // ✅ Good
+   import { Agent } from "@galaxyco/types"; // ❌ Runtime import
    ```
 
 2. **Use utility types for consistency**:

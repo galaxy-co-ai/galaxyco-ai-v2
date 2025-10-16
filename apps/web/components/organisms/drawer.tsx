@@ -1,20 +1,27 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 export interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  side?: 'left' | 'right' | 'top' | 'bottom';
+  side?: "left" | "right" | "top" | "bottom";
   title?: string;
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: "sm" | "md" | "lg" | "xl" | "full";
   showCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
   className?: string;
@@ -23,41 +30,41 @@ export interface DrawerProps {
 export const Drawer: React.FC<DrawerProps> = ({
   isOpen,
   onClose,
-  side = 'right',
+  side = "right",
   title,
   description,
   children,
   footer,
-  size = 'md',
+  size = "md",
   showCloseButton = true,
   closeOnOverlayClick = true,
   className,
 }) => {
   const sizeClasses = React.useMemo(() => {
-    const isVertical = side === 'left' || side === 'right';
-    
+    const isVertical = side === "left" || side === "right";
+
     if (isVertical) {
       return {
-        sm: 'w-[280px] sm:w-[320px]',
-        md: 'w-[320px] sm:w-[400px]',
-        lg: 'w-[400px] sm:w-[500px]',
-        xl: 'w-[500px] sm:w-[600px]',
-        full: 'w-full',
+        sm: "w-[280px] sm:w-[320px]",
+        md: "w-[320px] sm:w-[400px]",
+        lg: "w-[400px] sm:w-[500px]",
+        xl: "w-[500px] sm:w-[600px]",
+        full: "w-full",
       }[size];
     } else {
       return {
-        sm: 'h-[200px]',
-        md: 'h-[300px]',
-        lg: 'h-[400px]',
-        xl: 'h-[500px]',
-        full: 'h-full',
+        sm: "h-[200px]",
+        md: "h-[300px]",
+        lg: "h-[400px]",
+        xl: "h-[500px]",
+        full: "h-full",
       }[size];
     }
   }, [side, size]);
 
   return (
-    <Sheet 
-      open={isOpen} 
+    <Sheet
+      open={isOpen}
       onOpenChange={(open) => {
         if (!open && closeOnOverlayClick) {
           onClose();
@@ -66,7 +73,7 @@ export const Drawer: React.FC<DrawerProps> = ({
     >
       <SheetContent
         side={side}
-        className={cn(sizeClasses, 'flex flex-col p-0', className)}
+        className={cn(sizeClasses, "flex flex-col p-0", className)}
       >
         {/* Header */}
         {(title || description || showCloseButton) && (
@@ -101,9 +108,7 @@ export const Drawer: React.FC<DrawerProps> = ({
         )}
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
 
         {/* Footer */}
         {footer && (
@@ -116,4 +121,4 @@ export const Drawer: React.FC<DrawerProps> = ({
   );
 };
 
-Drawer.displayName = 'Drawer';
+Drawer.displayName = "Drawer";

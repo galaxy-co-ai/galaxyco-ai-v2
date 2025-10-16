@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { WorkspaceProvider as WorkspaceProviderNew } from '@/hooks/useWorkspace';
-import { WorkspaceProvider as WorkspaceProviderOld } from '@/contexts/workspace-context';
-import { ThemeProvider } from '@/components/providers/theme-provider';
+import { WorkspaceProvider as WorkspaceProviderNew } from "@/hooks/useWorkspace";
+import { WorkspaceProvider as WorkspaceProviderOld } from "@/contexts/workspace-context";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +13,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <WorkspaceProviderNew>
-        <WorkspaceProviderOld>
-          {children}
-        </WorkspaceProviderOld>
+        <WorkspaceProviderOld>{children}</WorkspaceProviderOld>
       </WorkspaceProviderNew>
     </ThemeProvider>
   );

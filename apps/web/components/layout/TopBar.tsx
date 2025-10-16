@@ -15,7 +15,7 @@ interface TopBarProps {
 
 /**
  * TopBar Component
- * 
+ *
  * Global navigation bar with:
  * - Search functionality
  * - Notifications

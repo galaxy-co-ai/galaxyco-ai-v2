@@ -167,4 +167,3 @@ Codify how we use **Warp** and **Warp Drive** to ship GalaxyCo.ai faster, safer,
 /Integrations
   └── mcp-servers.md
 ```
-

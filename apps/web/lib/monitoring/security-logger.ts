@@ -1,13 +1,13 @@
 /**
  * Security monitoring and logging utilities
- * 
+ *
  * Logs security incidents and sends alerts for immediate attention
  */
 
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from "@sentry/nextjs";
 
 export interface SecurityIncident {
-  type: 'cross_tenant_access' | 'unauthorized_access' | 'suspicious_activity';
+  type: "cross_tenant_access" | "unauthorized_access" | "suspicious_activity";
   userId?: string;
   tenantId?: string;
   resourceId?: string;
@@ -17,7 +17,7 @@ export interface SecurityIncident {
   path?: string;
   method?: string;
   timestamp: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   details?: Record<string, any>;
 }
 
@@ -29,15 +29,15 @@ export function logCrossTenantAttempt(
   userId: string,
   userTenantId: string,
   requestedTenantId: string,
-  additionalDetails?: Record<string, any>
+  additionalDetails?: Record<string, any>,
 ): void {
   const incident: SecurityIncident = {
-    type: 'cross_tenant_access',
+    type: "cross_tenant_access",
     userId,
     tenantId: userTenantId,
     requestedTenantId,
     timestamp: new Date().toISOString(),
-    severity: 'critical',
+    severity: "critical",
     details: {
       ...additionalDetails,
       stack: new Error().stack,
@@ -45,25 +45,30 @@ export function logCrossTenantAttempt(
   };
 
   // Log to console for immediate visibility
-  console.error('[SECURITY ALERT] Cross-tenant access attempt detected', incident);
+  console.error(
+    "[SECURITY ALERT] Cross-tenant access attempt detected",
+    incident,
+  );
 
   // Send to Sentry with high priority
   Sentry.withScope((scope) => {
-    scope.setTag('security_incident', true);
-    scope.setTag('incident_type', 'cross_tenant_access');
-    scope.setLevel('error');
-    scope.setContext('security_incident', {
+    scope.setTag("security_incident", true);
+    scope.setTag("incident_type", "cross_tenant_access");
+    scope.setLevel("error");
+    scope.setContext("security_incident", {
       type: incident.type,
-      userId: incident.userId || 'unknown',
-      tenantId: incident.tenantId || 'unknown',
-      requestedTenantId: incident.requestedTenantId || 'unknown',
+      userId: incident.userId || "unknown",
+      tenantId: incident.tenantId || "unknown",
+      requestedTenantId: incident.requestedTenantId || "unknown",
       timestamp: incident.timestamp,
       severity: incident.severity,
-      details: JSON.stringify(incident.details || {})
+      details: JSON.stringify(incident.details || {}),
     });
-    
+
     Sentry.captureException(
-      new Error(`Cross-tenant access attempt: User ${userId} (tenant: ${userTenantId}) attempted to access tenant ${requestedTenantId}`)
+      new Error(
+        `Cross-tenant access attempt: User ${userId} (tenant: ${userTenantId}) attempted to access tenant ${requestedTenantId}`,
+      ),
     );
   });
 
@@ -87,34 +92,34 @@ export function logUnauthorizedAccess(
   path: string,
   method: string,
   userAgent?: string,
-  ip?: string
+  ip?: string,
 ): void {
   const incident: SecurityIncident = {
-    type: 'unauthorized_access',
+    type: "unauthorized_access",
     path,
     method,
     userAgent,
     ip,
     timestamp: new Date().toISOString(),
-    severity: 'medium',
+    severity: "medium",
   };
 
-  console.warn('[SECURITY] Unauthorized access attempt', incident);
+  console.warn("[SECURITY] Unauthorized access attempt", incident);
 
   Sentry.withScope((scope) => {
-    scope.setTag('security_incident', true);
-    scope.setTag('incident_type', 'unauthorized_access');
-    scope.setLevel('warning');
-    scope.setContext('security_incident', {
+    scope.setTag("security_incident", true);
+    scope.setTag("incident_type", "unauthorized_access");
+    scope.setLevel("warning");
+    scope.setContext("security_incident", {
       type: incident.type,
-      path: incident.path || 'unknown',
-      method: incident.method || 'unknown',
-      userAgent: incident.userAgent || 'unknown',
-      ip: incident.ip || 'unknown',
+      path: incident.path || "unknown",
+      method: incident.method || "unknown",
+      userAgent: incident.userAgent || "unknown",
+      ip: incident.ip || "unknown",
       timestamp: incident.timestamp,
-      severity: incident.severity
+      severity: incident.severity,
     });
-    
+
     Sentry.captureMessage(`Unauthorized access attempt to ${method} ${path}`);
   });
 }
@@ -128,33 +133,33 @@ export function logUnauthorizedAccess(
 export function logSuspiciousActivity(
   activity: string,
   userId?: string,
-  details?: Record<string, any>
+  details?: Record<string, any>,
 ): void {
   const incident: SecurityIncident = {
-    type: 'suspicious_activity',
+    type: "suspicious_activity",
     userId,
     timestamp: new Date().toISOString(),
-    severity: 'medium',
+    severity: "medium",
     details: {
       activity,
       ...details,
     },
   };
 
-  console.warn('[SECURITY] Suspicious activity detected', incident);
+  console.warn("[SECURITY] Suspicious activity detected", incident);
 
   Sentry.withScope((scope) => {
-    scope.setTag('security_incident', true);
-    scope.setTag('incident_type', 'suspicious_activity');
-    scope.setLevel('warning');
-    scope.setContext('security_incident', {
+    scope.setTag("security_incident", true);
+    scope.setTag("incident_type", "suspicious_activity");
+    scope.setLevel("warning");
+    scope.setContext("security_incident", {
       type: incident.type,
-      userId: incident.userId || 'unknown',
+      userId: incident.userId || "unknown",
       timestamp: incident.timestamp,
       severity: incident.severity,
-      details: JSON.stringify(incident.details || {})
+      details: JSON.stringify(incident.details || {}),
     });
-    
+
     Sentry.captureMessage(`Suspicious activity: ${activity}`);
   });
 }
@@ -168,7 +173,7 @@ export function logSuspiciousActivity(
 export function createSecurityContext(
   userId: string,
   tenantId: string,
-  action: string
+  action: string,
 ): Record<string, any> {
   return {
     user_id: userId,
@@ -190,7 +195,7 @@ export function trackApiAccess(
   method: string,
   userId?: string,
   tenantId?: string,
-  responseStatus?: number
+  responseStatus?: number,
 ): void {
   const context = {
     path,
@@ -203,13 +208,13 @@ export function trackApiAccess(
 
   // Log successful tenant-scoped API access
   if (userId && tenantId && responseStatus && responseStatus < 400) {
-    console.log('[API ACCESS]', context);
+    console.log("[API ACCESS]", context);
   }
 
   // Log failed API access
   if (responseStatus && responseStatus >= 400) {
-    console.warn('[API ACCESS FAILED]', context);
-    
+    console.warn("[API ACCESS FAILED]", context);
+
     if (responseStatus === 403) {
       logUnauthorizedAccess(path, method);
     }

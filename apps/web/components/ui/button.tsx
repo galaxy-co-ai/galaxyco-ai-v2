@@ -1,7 +1,7 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 /**
  * Button component using GalaxyCo.ai Design System tokens
@@ -14,7 +14,7 @@ const buttonVariants = cva(
     "transition-colors duration-fast",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
-    "whitespace-nowrap"
+    "whitespace-nowrap",
   ],
   {
     variants: {
@@ -23,43 +23,43 @@ const buttonVariants = cva(
         default: [
           "bg-primary text-primary-foreground",
           "hover:bg-primary-hover active:bg-primary-active",
-          "shadow"
+          "shadow",
         ],
         // Primary - main brand actions
         primary: [
           "bg-primary text-primary-foreground",
           "hover:bg-primary-hover active:bg-primary-active",
-          "shadow"
+          "shadow",
         ],
         // Secondary - alternative actions
         secondary: [
           "bg-secondary text-secondary-foreground",
           "hover:bg-secondary-hover active:bg-secondary-active",
-          "shadow-sm"
+          "shadow-sm",
         ],
         // Destructive - dangerous actions
         destructive: [
           "bg-destructive text-destructive-foreground",
           "hover:bg-destructive/90 active:bg-destructive",
-          "shadow-sm"
+          "shadow-sm",
         ],
         // Outline - bordered buttons
         outline: [
           "border border-border bg-background text-foreground",
           "hover:bg-hover hover:border-border-hover",
-          "active:bg-active"
+          "active:bg-active",
         ],
         // Ghost - minimal styling
         ghost: [
           "bg-transparent text-foreground",
-          "hover:bg-hover active:bg-active"
+          "hover:bg-hover active:bg-active",
         ],
         // Link - text-only buttons
         link: [
           "bg-transparent text-primary underline-offset-4",
           "hover:underline active:text-primary-active",
-          "px-0 shadow-none"
-        ]
+          "px-0 shadow-none",
+        ],
       },
       size: {
         // Small - compact buttons
@@ -69,27 +69,39 @@ const buttonVariants = cva(
         // Large - prominent buttons
         lg: "px-6 py-3 text-base h-12",
         // Icon - square buttons for icons
-        icon: "h-10 w-10 p-0"
-      }
+        icon: "h-10 w-10 p-0",
+      },
     },
     defaultVariants: {
       variant: "primary",
-      size: "default"
-    }
-  }
-)
+      size: "default",
+    },
+  },
+);
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-  loading?: boolean
+  asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading, disabled, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      loading,
+      disabled,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = asChild ? Slot : "button";
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -125,9 +137,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           children
         )}
       </Comp>
-    )
-  }
-)
-Button.displayName = "Button"
+    );
+  },
+);
+Button.displayName = "Button";
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

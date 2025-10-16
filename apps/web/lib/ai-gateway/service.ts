@@ -1,17 +1,17 @@
-import { generateText, streamText } from 'ai';
-import { 
-  getModelInstance, 
-  getProviderFromModel, 
+import { generateText, streamText } from "ai";
+import {
+  getModelInstance,
+  getProviderFromModel,
   calculateCost,
   DEFAULT_SETTINGS,
   isModelSupported,
-} from './config';
-import type { 
-  AIGatewayRequest, 
-  AIGatewayResponse, 
+} from "./config";
+import type {
+  AIGatewayRequest,
+  AIGatewayResponse,
   AIGatewayStreamResponse,
   AIGatewayLog,
-} from './types';
+} from "./types";
 
 /**
  * AI Gateway Service
@@ -21,7 +21,9 @@ export class AIGatewayService {
   /**
    * Execute a text generation request
    */
-  static async generateText(request: AIGatewayRequest): Promise<AIGatewayResponse> {
+  static async generateText(
+    request: AIGatewayRequest,
+  ): Promise<AIGatewayResponse> {
     const startTime = Date.now();
     const requestId = this.generateRequestId();
 
@@ -34,9 +36,9 @@ export class AIGatewayService {
       // Get provider and model instance
       const provider = getProviderFromModel(request.model);
       const modelInstance = getModelInstance(request.model);
-      
+
       // Prepare messages
-      const messages = request.messages.map(msg => ({
+      const messages = request.messages.map((msg) => ({
         role: msg.role,
         content: msg.content,
       }));
@@ -55,11 +57,7 @@ export class AIGatewayService {
       // Calculate cost
       const promptTokens = (result.usage as any).promptTokens || 0;
       const completionTokens = (result.usage as any).completionTokens || 0;
-      const cost = calculateCost(
-        request.model,
-        promptTokens,
-        completionTokens
-      );
+      const cost = calculateCost(request.model, promptTokens, completionTokens);
 
       // Prepare response
       const response: AIGatewayResponse = {
@@ -68,7 +66,8 @@ export class AIGatewayService {
         usage: {
           promptTokens,
           completionTokens,
-          totalTokens: result.usage.totalTokens || (promptTokens + completionTokens),
+          totalTokens:
+            result.usage.totalTokens || promptTokens + completionTokens,
         },
         latencyMs,
         cost,
@@ -88,7 +87,8 @@ export class AIGatewayService {
         provider,
         promptTokens,
         completionTokens,
-        totalTokens: result.usage.totalTokens || (promptTokens + completionTokens),
+        totalTokens:
+          result.usage.totalTokens || promptTokens + completionTokens,
         latencyMs,
         cost,
         success: true,
@@ -98,7 +98,7 @@ export class AIGatewayService {
       return response;
     } catch (error: any) {
       const latencyMs = Date.now() - startTime;
-      
+
       // Log error
       await this.logRequest({
         requestId,
@@ -125,7 +125,7 @@ export class AIGatewayService {
    * Execute a streaming text generation request
    */
   static async generateTextStream(
-    request: AIGatewayRequest
+    request: AIGatewayRequest,
   ): Promise<AIGatewayStreamResponse> {
     const startTime = Date.now();
     const requestId = this.generateRequestId();
@@ -139,9 +139,9 @@ export class AIGatewayService {
       // Get provider and model instance
       const provider = getProviderFromModel(request.model);
       const modelInstance = getModelInstance(request.model);
-      
+
       // Prepare messages
-      const messages = request.messages.map(msg => ({
+      const messages = request.messages.map((msg) => ({
         role: msg.role,
         content: msg.content,
       }));
@@ -163,12 +163,14 @@ export class AIGatewayService {
         onFinish: async (finalResult) => {
           const latencyMs = Date.now() - startTime;
           const promptTokens = (finalResult.usage as any).promptTokens || 0;
-          const completionTokens = (finalResult.usage as any).completionTokens || 0;
-          const totalTokens = finalResult.usage.totalTokens || (promptTokens + completionTokens);
+          const completionTokens =
+            (finalResult.usage as any).completionTokens || 0;
+          const totalTokens =
+            finalResult.usage.totalTokens || promptTokens + completionTokens;
           const cost = calculateCost(
             request.model,
             promptTokens,
-            completionTokens
+            completionTokens,
           );
 
           // Log the completed stream
@@ -191,7 +193,7 @@ export class AIGatewayService {
       };
     } catch (error: any) {
       const latencyMs = Date.now() - startTime;
-      
+
       // Log error
       await this.logRequest({
         requestId,
@@ -221,8 +223,8 @@ export class AIGatewayService {
     try {
       // TODO: Store in database (ai_gateway_logs table)
       // For now, log to console in development
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[AI Gateway]', {
+      if (process.env.NODE_ENV === "development") {
+        console.log("[AI Gateway]", {
           requestId: log.requestId,
           tenantId: log.tenantId,
           model: log.model,
@@ -234,13 +236,13 @@ export class AIGatewayService {
       }
 
       // In production, you could send to external monitoring
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === "production") {
         // TODO: Send to monitoring service (e.g., Sentry, DataDog)
         // await sendToMonitoring(log);
       }
     } catch (error) {
       // Don't fail the request if logging fails
-      console.error('[AI Gateway] Failed to log request:', error);
+      console.error("[AI Gateway] Failed to log request:", error);
     }
   }
 

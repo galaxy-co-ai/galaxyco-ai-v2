@@ -1,20 +1,38 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Plus, Search, Upload, Filter, Grid, List, FileText, Image, File, Clock, Tag } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { EmptyState } from '@/components/ui/empty-state';
-import { DocumentUpload } from '@/components/knowledge/document-upload';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState, useEffect } from "react";
+import {
+  Plus,
+  Search,
+  Upload,
+  Filter,
+  Grid,
+  List,
+  FileText,
+  Image,
+  File,
+  Clock,
+  Tag,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { DocumentUpload } from "@/components/knowledge/document-upload";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface Document {
   id: string;
   title: string;
-  type: 'document' | 'url' | 'image' | 'text';
-  status: 'processing' | 'ready' | 'failed';
+  type: "document" | "url" | "image" | "text";
+  status: "processing" | "ready" | "failed";
   size?: number;
   uploadedAt: string;
   collectionId?: string;
@@ -33,9 +51,11 @@ export default function KnowledgeBasePage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(
+    null,
+  );
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 
   // Load documents and collections
@@ -46,13 +66,13 @@ export default function KnowledgeBasePage() {
 
   const loadDocuments = async () => {
     try {
-      const response = await fetch('/api/documents');
+      const response = await fetch("/api/documents");
       if (response.ok) {
         const data = await response.json();
         setDocuments(data.documents || []);
       }
     } catch (error) {
-      console.error('Failed to load documents:', error);
+      console.error("Failed to load documents:", error);
     }
     setLoading(false);
   };
@@ -60,57 +80,73 @@ export default function KnowledgeBasePage() {
   const loadCollections = async () => {
     // Mock collections for now - will be replaced with API call
     setCollections([
-      { id: '1', name: 'All Documents', color: 'bg-blue-500', documentCount: documents.length },
-      { id: '2', name: 'Company Docs', color: 'bg-green-500', documentCount: 5 },
-      { id: '3', name: 'Research', color: 'bg-purple-500', documentCount: 3 },
-      { id: '4', name: 'Templates', color: 'bg-orange-500', documentCount: 2 },
+      {
+        id: "1",
+        name: "All Documents",
+        color: "bg-blue-500",
+        documentCount: documents.length,
+      },
+      {
+        id: "2",
+        name: "Company Docs",
+        color: "bg-green-500",
+        documentCount: 5,
+      },
+      { id: "3", name: "Research", color: "bg-purple-500", documentCount: 3 },
+      { id: "4", name: "Templates", color: "bg-orange-500", documentCount: 2 },
     ]);
   };
 
   // Filter documents based on search and collection
   const filteredDocuments = documents.filter((doc) => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCollection = !selectedCollection || selectedCollection === '1' || doc.collectionId === selectedCollection;
+    const matchesSearch =
+      doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    const matchesCollection =
+      !selectedCollection ||
+      selectedCollection === "1" ||
+      doc.collectionId === selectedCollection;
     return matchesSearch && matchesCollection;
   });
 
-  const getDocumentIcon = (type: Document['type']) => {
+  const getDocumentIcon = (type: Document["type"]) => {
     switch (type) {
-      case 'image':
+      case "image":
         return <Image className="h-4 w-4" />;
-      case 'document':
+      case "document":
         return <FileText className="h-4 w-4" />;
       default:
         return <File className="h-4 w-4" />;
     }
   };
 
-  const getStatusColor = (status: Document['status']) => {
+  const getStatusColor = (status: Document["status"]) => {
     switch (status) {
-      case 'ready':
-        return 'bg-green-100 text-green-800';
-      case 'processing':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'failed':
-        return 'bg-red-100 text-red-800';
+      case "ready":
+        return "bg-green-100 text-green-800";
+      case "processing":
+        return "bg-yellow-100 text-yellow-800";
+      case "failed":
+        return "bg-red-100 text-red-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const formatFileSize = (bytes?: number) => {
-    if (!bytes) return '';
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    if (!bytes) return "";
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -132,14 +168,16 @@ export default function KnowledgeBasePage() {
               onClick={() => setSelectedCollection(collection.id)}
               className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors ${
                 selectedCollection === collection.id
-                  ? 'bg-primary/10 text-primary'
-                  : 'hover:bg-muted/50'
+                  ? "bg-primary/10 text-primary"
+                  : "hover:bg-muted/50"
               }`}
             >
               <div className={`w-3 h-3 rounded-full ${collection.color}`} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium truncate">{collection.name}</div>
-                <div className="text-sm text-muted-foreground">{collection.documentCount} documents</div>
+                <div className="text-sm text-muted-foreground">
+                  {collection.documentCount} documents
+                </div>
               </div>
             </button>
           ))}
@@ -198,17 +236,17 @@ export default function KnowledgeBasePage() {
 
             <div className="flex border rounded-md">
               <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
                 className="rounded-r-none"
               >
                 <Grid className="h-4 w-4" />
               </Button>
               <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                variant={viewMode === "list" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
                 className="rounded-l-none"
               >
                 <List className="h-4 w-4" />
@@ -227,30 +265,45 @@ export default function KnowledgeBasePage() {
             <EmptyState
               icon={<FileText className="h-12 w-12 text-muted-foreground" />}
               iconType="component"
-              title={searchQuery ? 'No documents found' : 'No documents yet'}
+              title={searchQuery ? "No documents found" : "No documents yet"}
               description={
                 searchQuery
-                  ? 'Try adjusting your search terms or filters.'
-                  : 'Upload your first document to get started with AI-powered knowledge base.'
+                  ? "Try adjusting your search terms or filters."
+                  : "Upload your first document to get started with AI-powered knowledge base."
               }
               action={
-                !searchQuery ? {
-                  label: 'Upload Documents',
-                  onClick: () => setUploadDialogOpen(true)
-                } : undefined
+                !searchQuery
+                  ? {
+                      label: "Upload Documents",
+                      onClick: () => setUploadDialogOpen(true),
+                    }
+                  : undefined
               }
             />
           ) : (
-            <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}>
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  : "space-y-4"
+              }
+            >
               {filteredDocuments.map((document) => (
-                <Card key={document.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card
+                  key={document.id}
+                  className="hover:shadow-md transition-shadow cursor-pointer"
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 min-w-0 flex-1">
                         {getDocumentIcon(document.type)}
-                        <CardTitle className="text-base truncate">{document.title}</CardTitle>
+                        <CardTitle className="text-base truncate">
+                          {document.title}
+                        </CardTitle>
                       </div>
-                      <Badge className={`ml-2 ${getStatusColor(document.status)}`}>
+                      <Badge
+                        className={`ml-2 ${getStatusColor(document.status)}`}
+                      >
                         {document.status}
                       </Badge>
                     </div>
@@ -261,11 +314,15 @@ export default function KnowledgeBasePage() {
                         {document.summary}
                       </p>
                     )}
-                    
+
                     {document.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-3">
                         {document.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             <Tag className="h-3 w-3 mr-1" />
                             {tag}
                           </Badge>

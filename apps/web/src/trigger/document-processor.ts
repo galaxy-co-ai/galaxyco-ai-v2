@@ -1,6 +1,6 @@
 /**
  * Trigger.dev Job: Document Processing Pipeline
- * 
+ *
  * Handles async document processing after upload:
  * - Text extraction
  * - Embedding generation
@@ -31,7 +31,15 @@ export const processDocumentTask = task({
   id: "process-document",
   maxDuration: 600, // 10 minutes
   run: async (payload: ProcessDocumentPayload, { ctx }) => {
-    const { documentId, userId, workspaceId, fileUrl, fileName, fileSize, mimeType } = payload;
+    const {
+      documentId,
+      userId,
+      workspaceId,
+      fileUrl,
+      fileName,
+      fileSize,
+      mimeType,
+    } = payload;
 
     logger.info(`Starting document processing for ${fileName}`);
 
@@ -44,15 +52,19 @@ export const processDocumentTask = task({
       const response = await fetch(fileUrl);
       const arrayBuffer = await response.arrayBuffer();
       const file = new File([arrayBuffer], fileName, { type: mimeType });
-      
+
       const extractedText = await (documentProcessor as any).extractText(file);
 
       logger.info(`Extracted ${extractedText.length} characters from document`);
 
       // Step 3: Generate summary and tags
-      const summaryPromise = (documentProcessor as any).generateSummary(extractedText);
-      const tagsPromise = (documentProcessor as any).generateTags(extractedText);
-      
+      const summaryPromise = (documentProcessor as any).generateSummary(
+        extractedText,
+      );
+      const tagsPromise = (documentProcessor as any).generateTags(
+        extractedText,
+      );
+
       const [summary, tags] = await Promise.all([summaryPromise, tagsPromise]);
 
       logger.info(`Generated summary and ${tags.length} tags`);

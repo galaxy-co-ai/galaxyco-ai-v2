@@ -8,17 +8,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 /* Base layer enhancements */
 @layer base {
   /* CSS Custom Properties for design system tokens */
   :root {
     /* Font families */
-    --font-sans: 'Inter', system-ui, '-apple-system', sans-serif;
-    --font-mono: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
-    
+    --font-sans: "Inter", system-ui, "-apple-system", sans-serif;
+    --font-mono: "JetBrains Mono", "Menlo", "Monaco", monospace;
+
     /* Light mode colors (for shadcn/ui compatibility) */
     --background: 0 0% 100%;
     --foreground: 240 10% 4%;
@@ -39,11 +39,11 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --ring: 262 83% 58%;
-    
+
     /* Border radius */
     --radius: 0.5rem;
   }
-  
+
   /* Dark mode colors (default theme) */
   .dark {
     --background: 240 10% 4%;
@@ -66,17 +66,16 @@
     --destructive-foreground: 0 0% 100%;
     --ring: 262 83% 58%;
   }
-  
-  
+
   /* Base HTML elements */
   * {
     border-color: hsl(var(--border));
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
@@ -84,18 +83,22 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
-    font-feature-settings: 'rlig' 1, 'calt' 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
     /* Enable smooth transitions for theme switching */
-    transition: background-color 200ms ease, color 200ms ease;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
   }
-  
+
   /* Focus styles - enhanced for accessibility */
   *:focus-visible {
     outline: 2px solid transparent;
     outline-offset: 2px;
     box-shadow: 0 0 0 2px hsl(var(--ring));
   }
-  
+
   /* Improved focus for interactive elements */
   button:focus-visible,
   a:focus-visible,
@@ -105,32 +108,32 @@
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
   }
-  
+
   /* Selection styles */
   ::selection {
     background-color: hsl(var(--primary) / 0.2);
     color: hsl(var(--foreground));
   }
-  
+
   /* Scrollbar styles - design system compliant */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--border));
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--border) / 0.8);
   }
-  
+
   /* Firefox scrollbar */
   * {
     scrollbar-width: thin;
@@ -147,63 +150,63 @@
     @apply transition-colors duration-fast;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary;
   }
-  
+
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover;
     @apply px-4 py-2 rounded font-medium;
     @apply transition-colors duration-fast;
   }
-  
+
   .btn-ghost {
     @apply bg-transparent text-foreground hover:bg-hover;
     @apply px-4 py-2 rounded font-medium;
     @apply transition-colors duration-fast;
   }
-  
+
   .btn-outline {
     @apply border border-border bg-background hover:bg-hover;
     @apply px-4 py-2 rounded font-medium;
     @apply transition-colors duration-fast;
   }
-  
+
   /* Card component with design system tokens */
   .card {
     @apply bg-background-elevated border border-border rounded-lg shadow;
     @apply p-6;
   }
-  
+
   .card-hover {
     @apply hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer;
   }
-  
+
   /* KPI Card component */
   .kpi-card {
     @apply bg-background-elevated border border-border rounded-lg p-6;
     @apply hover:border-border-hover transition-colors duration-fast;
   }
-  
+
   /* Badge variants */
   .badge {
     @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
     @apply border;
   }
-  
+
   .badge-default {
     @apply bg-background-subtle text-foreground border-border;
   }
-  
+
   .badge-success {
     @apply bg-success/10 text-success border-success/20;
   }
-  
+
   .badge-warning {
     @apply bg-warning/10 text-warning border-warning/20;
   }
-  
+
   .badge-destructive {
     @apply bg-destructive/10 text-destructive border-destructive/20;
   }
-  
+
   /* Input component with design system tokens */
   .input {
     @apply w-full px-4 py-2 rounded border border-border bg-background-subtle;
@@ -212,36 +215,46 @@
     @apply transition-colors duration-fast;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  
+
   /* Loading skeleton with design system colors */
   .skeleton {
     @apply animate-pulse rounded bg-background-subtle;
   }
-  
+
   /* Status indicators using semantic colors */
   .status-dot {
     @apply inline-block w-2 h-2 rounded-full;
   }
-  
-  .status-active { @apply bg-success; }
-  .status-idle { @apply bg-primary; }
-  .status-paused { @apply bg-warning; }
-  .status-error { @apply bg-destructive; }
-  .status-disabled { @apply bg-foreground-subtle; }
-  
+
+  .status-active {
+    @apply bg-success;
+  }
+  .status-idle {
+    @apply bg-primary;
+  }
+  .status-paused {
+    @apply bg-warning;
+  }
+  .status-error {
+    @apply bg-destructive;
+  }
+  .status-disabled {
+    @apply bg-foreground-subtle;
+  }
+
   /* Empty state component */
   .empty-state {
     @apply flex flex-col items-center justify-center py-12 text-center;
   }
-  
+
   .empty-state-icon {
     @apply w-12 h-12 text-foreground-muted mb-4;
   }
-  
+
   .empty-state-title {
     @apply text-lg font-semibold text-foreground mb-2;
   }
-  
+
   .empty-state-description {
     @apply text-foreground-muted max-w-sm;
   }
@@ -254,34 +267,34 @@
     @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
     clip: rect(0, 0, 0, 0);
   }
-  
+
   .not-sr-only {
     @apply static w-auto h-auto p-0 m-0 overflow-visible whitespace-normal;
     clip: auto;
   }
-  
+
   /* Layout utilities */
   .container {
     @apply mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   /* Text utilities */
   .text-balance {
     text-wrap: balance;
   }
-  
+
   /* Animation utilities */
   .animate-in {
     animation-duration: 0.15s;
     animation-fill-mode: both;
   }
-  
+
   .animate-out {
     animation-duration: 0.15s;
     animation-fill-mode: both;
     animation-direction: reverse;
   }
-  
+
   /* Ticker scroll animation */
   @keyframes scroll {
     0% {
@@ -291,28 +304,28 @@
       transform: translateX(-50%);
     }
   }
-  
+
   .animate-scroll {
     animation: scroll 30s linear infinite;
   }
-  
+
   .animate-scroll:hover {
     animation-play-state: paused;
   }
-  
+
   /* Safe area utilities for mobile */
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }
-  
+
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   .safe-left {
     padding-left: env(safe-area-inset-left);
   }
-  
+
   .safe-right {
     padding-right: env(safe-area-inset-right);
   }
@@ -323,7 +336,7 @@
   * {
     @apply text-black bg-white;
   }
-  
+
   .no-print {
     @apply hidden;
   }

@@ -5,6 +5,7 @@ Complete reference for environment variables in GalaxyCo.ai
 ## 📋 Overview
 
 Environment variables store sensitive configuration and API keys. They are:
+
 - **Never committed** to version control (in `.gitignore`)
 - **Different per environment** (local dev, staging, production)
 - **Managed separately** in each deployment environment
@@ -49,24 +50,30 @@ ANTHROPIC_API_KEY="sk-ant-..."
 4. Copy keys to `.env.local`
 
 ### Publishable Key
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_abc123..."
 ```
+
 - **Prefix**: `NEXT_PUBLIC_` makes it available in browser
 - **Type**: Test key for development, Live key for production
 - **Used for**: Frontend authentication UI
 
 ### Secret Key
+
 ```bash
 CLERK_SECRET_KEY="sk_test_xyz789..."
 ```
+
 - **Type**: Server-side only (NEVER expose in frontend)
 - **Used for**: API routes, middleware, backend operations
 
 ### Webhook Secret
+
 ```bash
 CLERK_WEBHOOK_SECRET="whsec_abc123..."
 ```
+
 - **Used for**: Verifying webhook signatures from Clerk
 - **Find in**: Clerk Dashboard > Webhooks > Endpoint
 
@@ -81,12 +88,14 @@ DATABASE_URL="postgresql://username:password@host.neon.tech/database?sslmode=req
 ```
 
 **Where to find**:
+
 1. Go to [Neon Console](https://console.neon.tech)
 2. Select your project
 3. Click "Connection Details"
 4. Copy "Connection string"
 
 **Connection pooling** (for serverless):
+
 ```bash
 # Use pooled connection for Vercel
 DATABASE_URL="postgresql://user:pass@host.neon.tech/db?sslmode=require&pooler=true"
@@ -103,6 +112,7 @@ OPENAI_API_KEY="sk-proj-..."
 ```
 
 **Where to find**:
+
 1. Go to [OpenAI Platform](https://platform.openai.com)
 2. Navigate to API Keys
 3. Create new key or copy existing
@@ -114,6 +124,7 @@ ANTHROPIC_API_KEY="sk-ant-..."
 ```
 
 **Where to find**:
+
 1. Go to [Anthropic Console](https://console.anthropic.com)
 2. Navigate to API Keys
 3. Create new key
@@ -147,11 +158,13 @@ vercel env pull .env.local
 ### Important Notes
 
 ⚠️ **Changing env vars doesn't trigger redeploy** - you must manually redeploy:
+
 ```bash
 vercel --prod
 ```
 
 ⚠️ **Build-time vs Runtime**:
+
 - Variables prefixed with `NEXT_PUBLIC_` are included at build time
 - Other variables are available at runtime only
 
@@ -171,6 +184,7 @@ You can create different `.env` files for different purposes:
 ```
 
 Load specific env file:
+
 ```bash
 # Using dotenv-cli
 npm install -g dotenv-cli
@@ -188,7 +202,7 @@ dotenv -e .env.test -- npm run test
 console.log("Database URL exists:", !!process.env.DATABASE_URL);
 
 // NEVER log actual values:
-// ❌ console.log(process.env.DATABASE_URL) 
+// ❌ console.log(process.env.DATABASE_URL)
 ```
 
 ### Common Issues
@@ -196,6 +210,7 @@ console.log("Database URL exists:", !!process.env.DATABASE_URL);
 **Issue**: "Environment variable not found"
 
 **Solutions**:
+
 1. Check variable name spelling matches exactly
 2. Restart dev server after changing `.env.local`
 3. Verify variable is in correct file (`.env.local` for local dev)
@@ -204,6 +219,7 @@ console.log("Database URL exists:", !!process.env.DATABASE_URL);
 **Issue**: Variable works locally but not in Vercel
 
 **Solutions**:
+
 1. Check variable is added in Vercel dashboard
 2. Redeploy after adding variable
 3. Verify correct environment (Production vs Preview)
@@ -249,26 +265,26 @@ When setting up a new environment:
 
 ### Core Application
 
-| Variable | Required | Environments | Description |
-|----------|----------|--------------|-------------|
-| `DATABASE_URL` | ✅ Yes | All | PostgreSQL connection string |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | ✅ Yes | All | Clerk public key |
-| `CLERK_SECRET_KEY` | ✅ Yes | All | Clerk secret key |
-| `CLERK_WEBHOOK_SECRET` | ⚠️ Optional | All | Clerk webhook verification |
+| Variable                            | Required    | Environments | Description                  |
+| ----------------------------------- | ----------- | ------------ | ---------------------------- |
+| `DATABASE_URL`                      | ✅ Yes      | All          | PostgreSQL connection string |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | ✅ Yes      | All          | Clerk public key             |
+| `CLERK_SECRET_KEY`                  | ✅ Yes      | All          | Clerk secret key             |
+| `CLERK_WEBHOOK_SECRET`              | ⚠️ Optional | All          | Clerk webhook verification   |
 
 ### AI Providers
 
-| Variable | Required | Environments | Description |
-|----------|----------|--------------|-------------|
-| `OPENAI_API_KEY` | ⚠️ Optional | All | OpenAI API access |
-| `ANTHROPIC_API_KEY` | ⚠️ Optional | All | Anthropic (Claude) access |
+| Variable            | Required    | Environments | Description               |
+| ------------------- | ----------- | ------------ | ------------------------- |
+| `OPENAI_API_KEY`    | ⚠️ Optional | All          | OpenAI API access         |
+| `ANTHROPIC_API_KEY` | ⚠️ Optional | All          | Anthropic (Claude) access |
 
 ### Analytics & Monitoring (Future)
 
-| Variable | Required | Environments | Description |
-|----------|----------|--------------|-------------|
-| `SENTRY_DSN` | ⚠️ Optional | Production | Error tracking |
-| `VERCEL_ANALYTICS_ID` | ⚠️ Optional | Production | Usage analytics |
+| Variable              | Required    | Environments | Description     |
+| --------------------- | ----------- | ------------ | --------------- |
+| `SENTRY_DSN`          | ⚠️ Optional | Production   | Error tracking  |
+| `VERCEL_ANALYTICS_ID` | ⚠️ Optional | Production   | Usage analytics |
 
 ---
 

@@ -4,7 +4,7 @@
  * October 15, 2025
  */
 
-import { SignIn } from '@clerk/nextjs'
+import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
   return (
@@ -18,12 +18,12 @@ export default function SignInPage() {
             Sign in to access your AI agents
           </p>
         </div>
-        
+
         <SignIn
           appearance={{
             elements: {
-              rootBox: 'mx-auto',
-              card: 'shadow-xl',
+              rootBox: "mx-auto",
+              card: "shadow-xl",
             },
           }}
           routing="path"
@@ -32,5 +32,5 @@ export default function SignInPage() {
         />
       </div>
     </div>
-  )
+  );
 }

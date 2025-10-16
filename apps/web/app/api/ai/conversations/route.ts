@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { requireSession } from '@/lib/services/user-session';
-import { conversationService } from '@/lib/services/conversation-service';
+import { NextRequest, NextResponse } from "next/server";
+import { requireSession } from "@/lib/services/user-session";
+import { conversationService } from "@/lib/services/conversation-service";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 /**
  * GET /api/ai/conversations
@@ -14,30 +14,30 @@ export async function GET(req: NextRequest) {
     const { userId, workspaceId } = session;
 
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get('limit') || '20');
-    const query = searchParams.get('query');
+    const limit = parseInt(searchParams.get("limit") || "20");
+    const query = searchParams.get("query");
 
     let conversations;
     if (query) {
       conversations = await conversationService.searchConversations(
         userId,
         workspaceId,
-        query
+        query,
       );
     } else {
       conversations = await conversationService.getUserConversations(
         userId,
         workspaceId,
-        limit
+        limit,
       );
     }
 
     return NextResponse.json({ conversations });
   } catch (error) {
-    console.error('Get conversations error:', error);
+    console.error("Get conversations error:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch conversations' },
-      { status: 500 }
+      { error: "Failed to fetch conversations" },
+      { status: 500 },
     );
   }
 }
@@ -63,10 +63,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ conversation }, { status: 201 });
   } catch (error) {
-    console.error('Create conversation error:', error);
+    console.error("Create conversation error:", error);
     return NextResponse.json(
-      { error: 'Failed to create conversation' },
-      { status: 500 }
+      { error: "Failed to create conversation" },
+      { status: 500 },
     );
   }
 }

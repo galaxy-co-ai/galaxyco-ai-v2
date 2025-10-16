@@ -7,6 +7,7 @@
 ## What Happened
 
 The GitHub repository was made public with exposed API keys in the following files:
+
 - `add-optional-env.sh` - Contains OpenAI API key
 - `apps/web/.env.local.backup` - Contains both OpenAI and Anthropic API keys
 
@@ -36,6 +37,7 @@ bash scripts/api-key-recovery.sh
 ```
 
 This will:
+
 - Remove `add-optional-env.sh` from git
 - Remove `apps/web/.env.local.backup` from git
 - Update `.gitignore` with better protection
@@ -172,6 +174,7 @@ curl http://localhost:3000/api/agents/health?mode=quick
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
@@ -271,6 +274,7 @@ fi
 ### 3. Use Secret Scanning
 
 Enable GitHub secret scanning:
+
 1. Go to: https://github.com/YOUR_USERNAME/YOUR_REPO/settings/security_analysis
 2. Enable "Secret scanning"
 3. Enable "Push protection"
@@ -278,6 +282,7 @@ Enable GitHub secret scanning:
 ### 4. Use a Secret Manager
 
 For production, consider:
+
 - **AWS Secrets Manager**
 - **HashiCorp Vault**
 - **Vercel Environment Variables** (already using)
@@ -285,6 +290,7 @@ For production, consider:
 ### 5. Regular Key Rotation
 
 Set a calendar reminder to rotate keys every 90 days:
+
 - Next rotation: 2025-01-10
 - Document in: `docs/security/key-rotation-schedule.md`
 
@@ -296,17 +302,17 @@ Set a calendar reminder to rotate keys every 90 days:
 
 ## Incident Timeline
 
-| Time | Action |
-|------|--------|
-| 2025-10-12 19:00 | Repository made public |
+| Time             | Action                             |
+| ---------------- | ---------------------------------- |
+| 2025-10-12 19:00 | Repository made public             |
 | 2025-10-12 19:05 | Keys auto-deactivated by providers |
-| 2025-10-12 19:10 | Issue discovered |
-| 2025-10-12 19:15 | Recovery scripts created |
-| TBD | Git history cleaned |
-| TBD | New keys generated |
-| TBD | All environments updated |
-| TBD | Testing completed |
-| TBD | Incident closed |
+| 2025-10-12 19:10 | Issue discovered                   |
+| 2025-10-12 19:15 | Recovery scripts created           |
+| TBD              | Git history cleaned                |
+| TBD              | New keys generated                 |
+| TBD              | All environments updated           |
+| TBD              | Testing completed                  |
+| TBD              | Incident closed                    |
 
 ## Lessons Learned
 
@@ -325,11 +331,13 @@ Set a calendar reminder to rotate keys every 90 days:
 ## Status Updates
 
 **Update 1 (2025-10-12 19:15):**
+
 - Recovery scripts created
 - Waiting for user to execute Phase 1-7
 - Old keys confirmed invalid
 
 **Final Update:**
+
 - [ ] All phases completed
 - [ ] New keys working
 - [ ] All tests passing

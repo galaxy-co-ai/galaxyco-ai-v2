@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { ChevronRight, Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from "react";
+import Link from "next/link";
+import { ChevronRight, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface SearchResult {
   id: string;
@@ -16,7 +16,7 @@ export interface SearchResult {
   icon?: React.ReactNode;
   badge?: {
     label: string;
-    variant?: 'default' | 'success' | 'warning' | 'destructive';
+    variant?: "default" | "success" | "warning" | "destructive";
   };
   metadata?: string;
   highlight?: string;
@@ -32,7 +32,9 @@ export interface SearchResultsProps {
   className?: string;
 }
 
-function groupResultsByType(results: SearchResult[]): Map<string, SearchResult[]> {
+function groupResultsByType(
+  results: SearchResult[],
+): Map<string, SearchResult[]> {
   const groups = new Map<string, SearchResult[]>();
 
   results.forEach((result) => {
@@ -46,9 +48,9 @@ function groupResultsByType(results: SearchResult[]): Map<string, SearchResult[]
 }
 
 function highlightText(text: string, query?: string): React.ReactNode {
-  if (!query || query.trim() === '') return text;
+  if (!query || query.trim() === "") return text;
 
-  const regex = new RegExp(`(${query})`, 'gi');
+  const regex = new RegExp(`(${query})`, "gi");
   const parts = text.split(regex);
 
   return parts.map((part, index) =>
@@ -61,7 +63,7 @@ function highlightText(text: string, query?: string): React.ReactNode {
       </mark>
     ) : (
       part
-    )
+    ),
   );
 }
 
@@ -81,7 +83,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   if (isLoading) {
     return (
-      <div className={cn('space-y-6', className)}>
+      <div className={cn("space-y-6", className)}>
         {Array.from({ length: 3 }).map((_, groupIndex) => (
           <div key={groupIndex} className="space-y-3">
             <Skeleton className="h-6 w-32" />
@@ -98,12 +100,12 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   if (results.length === 0) {
     return (
-      <div className={cn('flex items-center justify-center py-12', className)}>
+      <div className={cn("flex items-center justify-center py-12", className)}>
         {emptyState || (
           <div className="text-center max-w-md">
             <Search className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
             <p className="text-muted-foreground mb-1">
-              No results found{query ? ` for "${query}"` : ''}
+              No results found{query ? ` for "${query}"` : ""}
             </p>
             <p className="text-sm text-muted-foreground">
               Try different keywords or check your spelling
@@ -119,9 +121,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       key={result.id}
       href={result.href}
       className={cn(
-        'group block p-4 rounded-lg border border-border bg-card',
-        'hover:border-border-hover hover:shadow-sm transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+        "group block p-4 rounded-lg border border-border bg-card",
+        "hover:border-border-hover hover:shadow-sm transition-all duration-200",
+        "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
       )}
     >
       <div className="flex items-start gap-3">
@@ -173,7 +175,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   );
 
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn("space-y-6", className)}>
       {groupByType && groupedResults ? (
         Array.from(groupedResults.entries()).map(([type, typeResults]) => (
           <div key={type}>
@@ -185,18 +187,14 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 </span>
               </h2>
             </div>
-            <div className="space-y-2">
-              {typeResults.map(renderResult)}
-            </div>
+            <div className="space-y-2">{typeResults.map(renderResult)}</div>
           </div>
         ))
       ) : (
-        <div className="space-y-2">
-          {results.map(renderResult)}
-        </div>
+        <div className="space-y-2">{results.map(renderResult)}</div>
       )}
     </div>
   );
 };
 
-SearchResults.displayName = 'SearchResults';
+SearchResults.displayName = "SearchResults";

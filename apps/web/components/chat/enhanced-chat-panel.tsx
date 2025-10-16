@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { useChat } from '@/hooks/use-chat';
-import { ChatMessageComponent } from './chat-message';
-import { 
-  Bot, 
-  Send, 
-  X, 
-  Trash2, 
-  Plus, 
-  Search, 
-  Pin, 
+import { useEffect, useRef, useState } from "react";
+import { useChat } from "@/hooks/use-chat";
+import { ChatMessageComponent } from "./chat-message";
+import {
+  Bot,
+  Send,
+  X,
+  Trash2,
+  Plus,
+  Search,
+  Pin,
   PinOff,
   MessageSquare,
   ChevronLeft,
   Clock,
-  Hash
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+  Hash,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 interface Conversation {
   id: string;
@@ -32,7 +32,7 @@ interface Conversation {
 }
 
 interface ContextPill {
-  type: 'page' | 'item' | 'document';
+  type: "page" | "item" | "document";
   label: string;
   value: string;
 }
@@ -48,15 +48,16 @@ interface EnhancedChatPanelProps {
   };
 }
 
-export function EnhancedChatPanel({ 
-  isOpen, 
-  onClose, 
+export function EnhancedChatPanel({
+  isOpen,
+  onClose,
   conversationId: initialConversationId,
-  context 
+  context,
 }: EnhancedChatPanelProps) {
-  const { messages, input, setInput, send, clear, isTyping, conversationId } = useChat(initialConversationId);
+  const { messages, input, setInput, send, clear, isTyping, conversationId } =
+    useChat(initialConversationId);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSidebar, setShowSidebar] = useState(true);
   const [loadingConversations, setLoadingConversations] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -65,7 +66,7 @@ export function EnhancedChatPanel({
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   }, [messages, isTyping]);
 
@@ -79,13 +80,13 @@ export function EnhancedChatPanel({
   const loadConversations = async () => {
     setLoadingConversations(true);
     try {
-      const response = await fetch('/api/ai/conversations');
+      const response = await fetch("/api/ai/conversations");
       if (response.ok) {
         const data = await response.json();
         setConversations(data.conversations || []);
       }
     } catch (error) {
-      console.error('Failed to load conversations:', error);
+      console.error("Failed to load conversations:", error);
     }
     setLoadingConversations(false);
   };
@@ -98,33 +99,33 @@ export function EnhancedChatPanel({
   const deleteConversation = async (id: string) => {
     try {
       const response = await fetch(`/api/ai/conversations/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (response.ok) {
-        setConversations(prev => prev.filter(c => c.id !== id));
+        setConversations((prev) => prev.filter((c) => c.id !== id));
         if (conversationId === id) {
           clear();
         }
       }
     } catch (error) {
-      console.error('Failed to delete conversation:', error);
+      console.error("Failed to delete conversation:", error);
     }
   };
 
   const pinConversation = async (id: string, isPinned: boolean) => {
     try {
       const response = await fetch(`/api/ai/conversations/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPinned: !isPinned }),
       });
       if (response.ok) {
-        setConversations(prev => prev.map(c => 
-          c.id === id ? { ...c, isPinned: !isPinned } : c
-        ));
+        setConversations((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, isPinned: !isPinned } : c)),
+        );
       }
     } catch (error) {
-      console.error('Failed to pin conversation:', error);
+      console.error("Failed to pin conversation:", error);
     }
   };
 
@@ -134,40 +135,43 @@ export function EnhancedChatPanel({
   };
 
   // Filter conversations based on search
-  const filteredConversations = conversations.filter(conv =>
-    conv.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredConversations = conversations.filter((conv) =>
+    conv.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Sort conversations (pinned first, then by last message)
   const sortedConversations = [...filteredConversations].sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
-    return new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime();
+    return (
+      new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
+    );
   });
 
   // Generate context pills
   const contextPills: ContextPill[] = [];
   if (context?.page) {
     contextPills.push({
-      type: 'page',
-      label: 'Page',
-      value: context.page.replace(/^\//, '').replace(/\//g, ' › ') || 'Dashboard'
+      type: "page",
+      label: "Page",
+      value:
+        context.page.replace(/^\//, "").replace(/\//g, " › ") || "Dashboard",
     });
   }
   if (context?.selectedItems) {
     Object.entries(context.selectedItems).forEach(([key, value]) => {
       contextPills.push({
-        type: 'item',
+        type: "item",
         label: key,
-        value: value
+        value: value,
       });
     });
   }
   if (context?.documentIds?.length) {
     contextPills.push({
-      type: 'document',
-      label: 'Documents',
-      value: `${context.documentIds.length} selected`
+      type: "document",
+      label: "Documents",
+      value: `${context.documentIds.length} selected`,
     });
   }
 
@@ -176,15 +180,21 @@ export function EnhancedChatPanel({
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) {
-      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } else if (diffDays === 1) {
-      return 'Yesterday';
+      return "Yesterday";
     } else if (diffDays < 7) {
       return `${diffDays} days ago`;
     } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
     }
   };
 
@@ -193,11 +203,13 @@ export function EnhancedChatPanel({
   return (
     <div className="fixed inset-0 z-modal flex items-end justify-end p-4 md:items-center md:p-0">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
       {/* Panel */}
       <div className="relative z-10 flex h-[600px] w-full rounded-lg border bg-white shadow-2xl dark:bg-neutral-900 md:m-4 md:h-[700px] md:w-[800px]">
-        
         {/* Conversation Sidebar */}
         {showSidebar && (
           <div className="w-80 border-r bg-muted/30 flex flex-col">
@@ -205,12 +217,16 @@ export function EnhancedChatPanel({
             <div className="border-b p-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold">Conversations</h3>
-                <Button onClick={createNewConversation} size="sm" variant="outline">
+                <Button
+                  onClick={createNewConversation}
+                  size="sm"
+                  variant="outline"
+                >
                   <Plus className="h-4 w-4 mr-1" />
                   New
                 </Button>
               </div>
-              
+
               {/* Search */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -233,7 +249,9 @@ export function EnhancedChatPanel({
                 <div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
                   <MessageSquare className="h-12 w-12 mb-3 opacity-50" />
                   <p className="font-medium">No conversations yet</p>
-                  <p className="text-sm mt-1">Start a new conversation to get started</p>
+                  <p className="text-sm mt-1">
+                    Start a new conversation to get started
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-1">
@@ -242,7 +260,7 @@ export function EnhancedChatPanel({
                       key={conversation.id}
                       className={cn(
                         "group relative p-3 rounded-lg cursor-pointer transition-colors hover:bg-muted/50",
-                        conversationId === conversation.id && "bg-muted"
+                        conversationId === conversation.id && "bg-muted",
                       )}
                       onClick={() => {
                         // Load this conversation - this would need to be handled by the parent component
@@ -257,7 +275,10 @@ export function EnhancedChatPanel({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              pinConversation(conversation.id, conversation.isPinned);
+                              pinConversation(
+                                conversation.id,
+                                conversation.isPinned,
+                              );
                             }}
                             className="p-1 hover:bg-muted rounded"
                           >
@@ -278,7 +299,7 @@ export function EnhancedChatPanel({
                           </button>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
@@ -295,13 +316,20 @@ export function EnhancedChatPanel({
                       {conversation.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
                           {conversation.tags.slice(0, 2).map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs px-1 py-0">
+                            <Badge
+                              key={tag}
+                              variant="secondary"
+                              className="text-xs px-1 py-0"
+                            >
                               <Hash className="h-2 w-2 mr-1" />
                               {tag}
                             </Badge>
                           ))}
                           {conversation.tags.length > 2 && (
-                            <Badge variant="secondary" className="text-xs px-1 py-0">
+                            <Badge
+                              variant="secondary"
+                              className="text-xs px-1 py-0"
+                            >
                               +{conversation.tags.length - 2}
                             </Badge>
                           )}
@@ -335,7 +363,7 @@ export function EnhancedChatPanel({
                   <MessageSquare className="h-4 w-4" />
                 </button>
               )}
-              
+
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
                 <Bot className="h-4 w-4" />
               </div>
@@ -344,11 +372,11 @@ export function EnhancedChatPanel({
                   AI Assistant
                 </h3>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                  {conversationId ? 'Active conversation' : 'Ready to help'}
+                  {conversationId ? "Active conversation" : "Ready to help"}
                 </p>
               </div>
             </div>
-            
+
             <div className="flex gap-1">
               <button
                 onClick={clear}
@@ -392,7 +420,8 @@ export function EnhancedChatPanel({
                 </p>
                 {contextPills.length > 0 && (
                   <p className="mt-2 text-xs text-neutral-500">
-                    I can see you&apos;re on {contextPills[0]?.value} - I&apos;ll use this context to help you better.
+                    I can see you&apos;re on {contextPills[0]?.value} -
+                    I&apos;ll use this context to help you better.
                   </p>
                 )}
               </div>
@@ -429,8 +458,9 @@ export function EnhancedChatPanel({
                 type="submit"
                 disabled={!input.trim() || isTyping}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-md bg-primary text-white transition-opacity hover:bg-primary/90',
-                  (!input.trim() || isTyping) && 'cursor-not-allowed opacity-50'
+                  "flex h-10 w-10 items-center justify-center rounded-md bg-primary text-white transition-opacity hover:bg-primary/90",
+                  (!input.trim() || isTyping) &&
+                    "cursor-not-allowed opacity-50",
                 )}
               >
                 <Send className="h-4 w-4" />

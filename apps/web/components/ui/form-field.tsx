@@ -1,92 +1,103 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
-import { Label } from "./label"
-import { Input } from "./input"
-import { Textarea } from "./textarea"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import { Label } from "./label";
+import { Input } from "./input";
+import { Textarea } from "./textarea";
 
 /**
  * FormField molecule component using GalaxyCo.ai Design System tokens
  * Combines Label, Input/Textarea, and error messaging
  * Implements form patterns from 05-COMPONENT-INVENTORY.md
  */
-const formFieldVariants = cva(
-  ["space-y-2"],
-  {
-    variants: {
-      variant: {
-        default: "",
-        inline: "flex items-center space-y-0 space-x-3"
-      }
+const formFieldVariants = cva(["space-y-2"], {
+  variants: {
+    variant: {
+      default: "",
+      inline: "flex items-center space-y-0 space-x-3",
     },
-    defaultVariants: {
-      variant: "default"
-    }
-  }
-)
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
-export interface FormFieldProps 
+export interface FormFieldProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
     VariantProps<typeof formFieldVariants> {
   /** Label text */
-  label?: string
+  label?: string;
   /** Whether field is required */
-  required?: boolean
+  required?: boolean;
   /** Error message */
-  error?: string
+  error?: string;
   /** Help text */
-  description?: string
+  description?: string;
   /** Input type - determines whether to render Input or Textarea */
-  type?: "text" | "email" | "password" | "number" | "search" | "tel" | "url" | "textarea"
+  type?:
+    | "text"
+    | "email"
+    | "password"
+    | "number"
+    | "search"
+    | "tel"
+    | "url"
+    | "textarea";
   /** Input value */
-  value?: string
+  value?: string;
   /** Input change handler */
-  onChange?: (value: string) => void
+  onChange?: (value: string) => void;
   /** Input placeholder */
-  placeholder?: string
+  placeholder?: string;
   /** Whether input is disabled */
-  disabled?: boolean
+  disabled?: boolean;
   /** Whether input is readonly */
-  readOnly?: boolean
+  readOnly?: boolean;
   /** Unique identifier */
-  id?: string
+  id?: string;
   /** Input name attribute */
-  name?: string
+  name?: string;
   /** Auto complete attribute */
-  autoComplete?: string
+  autoComplete?: string;
   /** Input size */
-  size?: "sm" | "default" | "lg"
+  size?: "sm" | "default" | "lg";
 }
 
 const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
-  ({ 
-    className, 
-    variant,
-    label,
-    required,
-    error,
-    description,
-    type = "text",
-    value,
-    onChange,
-    placeholder,
-    disabled,
-    readOnly,
-    id,
-    name,
-    autoComplete,
-    size,
-    ...props 
-  }, ref) => {
-    const fieldId = id || `field-${React.useId()}`
-    const errorId = `${fieldId}-error`
-    const descriptionId = `${fieldId}-description`
-    
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      onChange?.(e.target.value)
-    }
+  (
+    {
+      className,
+      variant,
+      label,
+      required,
+      error,
+      description,
+      type = "text",
+      value,
+      onChange,
+      placeholder,
+      disabled,
+      readOnly,
+      id,
+      name,
+      autoComplete,
+      size,
+      ...props
+    },
+    ref,
+  ) => {
+    const generatedId = React.useId();
+    const fieldId = id || `field-${generatedId}`;
+    const errorId = `${fieldId}-error`;
+    const descriptionId = `${fieldId}-description`;
+
+    const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      onChange?.(e.target.value);
+    };
 
     return (
       <div
@@ -103,7 +114,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             {label}
           </Label>
         )}
-        
+
         {type === "textarea" ? (
           <Textarea
             id={fieldId}
@@ -118,7 +129,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             aria-invalid={error ? "true" : undefined}
             aria-describedby={cn(
               error && errorId,
-              description && descriptionId
+              description && descriptionId,
             )}
           />
         ) : (
@@ -137,33 +148,26 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             aria-invalid={error ? "true" : undefined}
             aria-describedby={cn(
               error && errorId,
-              description && descriptionId
+              description && descriptionId,
             )}
           />
         )}
-        
+
         {description && (
-          <p
-            id={descriptionId}
-            className="text-xs text-foreground-muted"
-          >
+          <p id={descriptionId} className="text-xs text-foreground-muted">
             {description}
           </p>
         )}
-        
+
         {error && (
-          <p
-            id={errorId}
-            className="text-xs text-destructive"
-            role="alert"
-          >
+          <p id={errorId} className="text-xs text-destructive" role="alert">
             {error}
           </p>
         )}
       </div>
-    )
-  }
-)
-FormField.displayName = "FormField"
+    );
+  },
+);
+FormField.displayName = "FormField";
 
-export { FormField, formFieldVariants }
+export { FormField, formFieldVariants };

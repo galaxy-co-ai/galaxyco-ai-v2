@@ -4,11 +4,11 @@
  * October 15, 2025
  */
 
-import { AppShell } from '@/components/layout/app-shell'
-import { ChatWidget } from '@/components/chat/chat-widget'
+import { AppShell } from "@/components/layout/app-shell";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 interface AppLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
@@ -17,5 +17,5 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <AppShell>{children}</AppShell>
       <ChatWidget />
     </>
-  )
+  );
 }

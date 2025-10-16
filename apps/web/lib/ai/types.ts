@@ -1,5 +1,5 @@
 export interface Message {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -29,21 +29,21 @@ export interface ExecuteResult {
 export interface AIProvider {
   readonly name: string;
   readonly supportedModels: string[];
-  
+
   /**
    * Execute an AI completion
    */
   execute(params: ExecuteParams): Promise<ExecuteResult>;
-  
+
   /**
    * Validate configuration
    */
   validateConfig(): Promise<boolean>;
-  
+
   /**
    * Estimate cost for a request (in USD)
    */
   estimateCost(params: ExecuteParams): number;
 }
 
-export type AIProviderType = 'openai' | 'anthropic' | 'google' | 'custom';
+export type AIProviderType = "openai" | "anthropic" | "google" | "custom";

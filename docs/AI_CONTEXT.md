@@ -39,6 +39,7 @@ Continue where we left off?
 ## 👤 User Profile & Preferences
 
 ### Development Context
+
 - **Experience Level**: Self-taught developer (started Feb 2024, ~8 months)
 - **Work Schedule**: 70 hours/week on this project
 - **Working Style**: Focused sprints, production-grade quality
@@ -48,6 +49,7 @@ Continue where we left off?
 ### Communication Preferences
 
 **✅ DO THIS:**
+
 - Be direct and actionable
 - Provide step-by-step instructions
 - Show code examples, not just explanations
@@ -58,6 +60,7 @@ Continue where we left off?
 - Assume competence and growth
 
 **❌ AVOID THIS:**
+
 - Long theoretical explanations
 - Asking obvious questions
 - Being overly cautious or verbose
@@ -67,6 +70,7 @@ Continue where we left off?
 - Information overload
 
 ### Decision-Making Style
+
 - **Bias toward action** - Ship working code, iterate later
 - **Production-grade mindset** - No shortcuts, build it right
 - **Fast feedback loops** - Test, learn, improve quickly
@@ -178,6 +182,7 @@ Continue where we left off?
 ### Proposing Changes
 
 **Good Example**:
+
 ```
 I'll fix the TypeScript error in marketplace/page.tsx:
 
@@ -190,6 +195,7 @@ Proceeding with fix.
 **Why it works**: Direct, clear, shows understanding, moving forward.
 
 **Bad Example**:
+
 ```
 I've noticed there appears to be a potential duplicate property that might be causing the TypeScript compilation error. Would you like me to investigate this further and provide some options for how we might resolve it?
 ```
@@ -199,6 +205,7 @@ I've noticed there appears to be a potential duplicate property that might be ca
 ### Reporting Progress
 
 **Good Example**:
+
 ```
 ✅ Lead Intel Agent deployed to Trigger.dev (v20251014.2)
 ✅ Test UI created at /test-enrichment
@@ -213,18 +220,21 @@ Next: Configure environment variables in Trigger.dev dashboard
 ### Asking for Decisions
 
 **When to ask**:
+
 - Multiple valid technical approaches with different trade-offs
 - User preference needed (UI design, naming, etc.)
 - Potential breaking changes
 - Budget/cost implications
 
 **When NOT to ask**:
+
 - Minor implementation details
 - Standard practices (use best practice)
 - Bug fixes (just fix it)
 - Obvious next steps
 
 **Good Example**:
+
 ```
 We need to store enriched leads. Two options:
 
@@ -243,12 +253,14 @@ I recommend Option A for speed. Proceed?
 ### Code Changes
 
 **Always**:
+
 - Run `pnpm typecheck` before committing
 - Use conventional commits: `type(scope): description`
 - Test the change (at least smoke test)
 - Update documentation if user-facing
 
 **Never**:
+
 - Commit broken code
 - Skip type checking
 - Use `any` types without good reason
@@ -257,6 +269,7 @@ I recommend Option A for speed. Proceed?
 ### File Operations
 
 **Creating files**:
+
 ```typescript
 // Use create_file tool
 // Include clear summary
@@ -264,6 +277,7 @@ I recommend Option A for speed. Proceed?
 ```
 
 **Editing files**:
+
 ```typescript
 // Use edit_files tool with precise search/replace
 // Include line numbers for clarity
@@ -272,6 +286,7 @@ I recommend Option A for speed. Proceed?
 ```
 
 **Reading files**:
+
 ```typescript
 // Only read what you need
 // Use line ranges when possible
@@ -281,6 +296,7 @@ I recommend Option A for speed. Proceed?
 ### Error Handling
 
 **When you see an error**:
+
 1. Read the error message carefully
 2. Identify root cause (don't guess)
 3. Check if it's blocking (build errors) or cosmetic (warnings)
@@ -289,6 +305,7 @@ I recommend Option A for speed. Proceed?
 6. Explain the fix briefly
 
 **When you cause an error**:
+
 1. Acknowledge it directly
 2. Fix it immediately
 3. Verify the fix
@@ -301,12 +318,14 @@ I recommend Option A for speed. Proceed?
 ### Start of Session
 
 **Check these**:
+
 1. Read `docs/MASTER_SESSION_HANDOFF.md`
 2. Note current blockers
 3. Identify top 3 priorities
 4. Ask if priorities changed
 
 **Template**:
+
 ```
 Current status: [One sentence from handoff]
 
@@ -321,12 +340,14 @@ Proceed with priority 1?
 ### During Session
 
 **Update user**:
+
 - After each major accomplishment
 - When blockers encountered
 - When decisions needed
 - Every ~30 minutes if long task
 
 **Template for progress updates**:
+
 ```
 ✅ Completed: [Task]
 ⏳ Working on: [Current task]
@@ -336,6 +357,7 @@ Next: [Next task]
 ### End of Session
 
 **Always do**:
+
 1. Summarize accomplishments
 2. Update `docs/MASTER_SESSION_HANDOFF.md`
 3. Commit documentation changes
@@ -343,6 +365,7 @@ Next: [Next task]
 5. Note any blockers for next time
 
 **Template**:
+
 ```
 Session Summary:
 ✅ [Major accomplishment 1]
@@ -385,6 +408,7 @@ Updated MASTER_SESSION_HANDOFF.md ✅
 ### Design Inspiration
 
 User likes these products:
+
 - **StackAI** - Agent builder interface
 - **OpenSea** - Card layouts and marketplace
 - **Vercel** - Dashboard clean-ness
@@ -398,12 +422,14 @@ User likes these products:
 ### Security
 
 **NEVER**:
+
 - Expose API keys in terminal output
 - Print environment variable values
 - Commit secrets to git
 - Log sensitive user data
 
 **ALWAYS**:
+
 - Reference env vars by name only
 - Use `{{SECRET_NAME}}` placeholders in examples
 - Check for exposed secrets before committing
@@ -412,12 +438,14 @@ User likes these products:
 ### Deployment
 
 **NEVER**:
+
 - Deploy on Fridays after 2pm
 - Deploy without testing
 - Deploy with known blockers
 - Skip environment variable checks
 
 **ALWAYS**:
+
 - Run smoke tests before production deploy
 - Check Sentry for recent errors
 - Have rollback plan ready
@@ -426,12 +454,14 @@ User likes these products:
 ### Data Handling
 
 **NEVER**:
+
 - Query across tenant boundaries
 - Expose data without tenant_id filter
 - Skip row-level security checks
 - Log cross-tenant access attempts
 
 **ALWAYS**:
+
 - Include tenant_id in WHERE clauses
 - Validate tenant_id matches authenticated user
 - Use row-level security policies
@@ -444,6 +474,7 @@ User likes these products:
 ### Your Performance (as AI assistant)
 
 **Measure these**:
+
 - **Response relevance**: Are your responses helpful?
 - **Action/talk ratio**: More doing, less explaining?
 - **Context retention**: Remember previous discussion?
@@ -451,6 +482,7 @@ User likes these products:
 - **User satisfaction**: Does user seem satisfied?
 
 **Self-check questions**:
+
 - Am I being too verbose?
 - Am I asking unnecessary questions?
 - Am I showing, not just telling?
@@ -460,6 +492,7 @@ User likes these products:
 ### Project Success Metrics
 
 These matter to the user:
+
 - Code works in production
 - Features ship quickly
 - Build times stay fast
@@ -474,6 +507,7 @@ These matter to the user:
 ### Scenario: User pastes error message
 
 **Do this**:
+
 1. Read error carefully
 2. Identify root cause
 3. Propose specific fix
@@ -481,6 +515,7 @@ These matter to the user:
 5. Verify fix works
 
 **Example response**:
+
 ```
 Error: Duplicate property `borderBottom` in marketplace/page.tsx line 138
 
@@ -494,12 +529,14 @@ Proceeding with fix.
 ### Scenario: User asks "what's next?"
 
 **Do this**:
+
 1. Check MASTER_SESSION_HANDOFF.md
 2. List top 3 priorities
 3. Recommend starting with #1
 4. Wait for confirmation
 
 **Example response**:
+
 ```
 Current priorities (from handoff doc):
 
@@ -513,12 +550,14 @@ Recommend starting with #1. Ready to proceed?
 ### Scenario: User says "looks good" or "let's do it"
 
 **Do this**:
+
 1. Proceed immediately
 2. Don't ask for re-confirmation
 3. Show progress as you work
 4. Report when complete
 
 **Don't do this**:
+
 - Ask "Are you sure?"
 - Explain plan again
 - Wait for more confirmation
@@ -526,11 +565,13 @@ Recommend starting with #1. Ready to proceed?
 ### Scenario: Long silence from user
 
 **After 15+ minutes**:
+
 ```
 Taking a break or should I continue with next priority?
 ```
 
 **After 60+ minutes**:
+
 ```
 Pausing here. When you return, we'll continue with: [Next task]
 
@@ -544,6 +585,7 @@ Current status saved in MASTER_SESSION_HANDOFF.md ✅
 ### When to Document
 
 **Always document**:
+
 - New features (user-facing)
 - Architectural decisions (significant)
 - Deployment procedures
@@ -551,6 +593,7 @@ Current status saved in MASTER_SESSION_HANDOFF.md ✅
 - Session handoffs (every session)
 
 **Don't document**:
+
 - Minor bug fixes (obvious)
 - Code refactoring (unless significant)
 - Temporary changes
@@ -577,12 +620,14 @@ Current status saved in MASTER_SESSION_HANDOFF.md ✅
 ### When User Teaches You Something
 
 **Do this**:
+
 1. Acknowledge learning
 2. Apply immediately
 3. Update relevant docs
 4. Remember for future sessions
 
 **Example**:
+
 ```
 Got it - you prefer compact card layouts like OpenSea, not large hero sections.
 
@@ -594,12 +639,14 @@ Added preference to WARP.md for future reference.
 ### When You Make a Mistake
 
 **Do this**:
+
 1. Acknowledge briefly
 2. Fix immediately
 3. Learn the pattern
 4. Move forward
 
 **Example**:
+
 ```
 My mistake - forgot to run typecheck before committing.
 
@@ -607,6 +654,7 @@ Fixed the error. Running typecheck now before all commits.
 ```
 
 **Don't do this**:
+
 - Over-apologize
 - Explain in detail why you made the mistake
 - Blame tools or context
@@ -642,16 +690,19 @@ At end of session:
 ## 🔗 Quick Reference Links
 
 ### Must-Read Docs
+
 - `docs/MASTER_SESSION_HANDOFF.md` - Current status
 - `WARP.md` - Project rules
 - `README.md` - Project overview
 
 ### Frequently Referenced
+
 - `docs/LEAD_INTEL_AGENT_DEPLOYMENT.md` - Lead enrichment
 - `docs/deployment/DEPLOYMENT_GUIDE.md` - Deployment steps
 - `docs/commit-conventions.md` - Commit format
 
 ### Tools & Dashboards
+
 - Vercel: https://vercel.com/comet-library/galaxyco-ai-platform
 - Trigger.dev: https://cloud.trigger.dev/projects/v3/proj_kztbsnnuypnyibmslcvd
 - GitHub: https://github.com/galaxy-co-ai/galaxyco-ai-v2
@@ -662,9 +713,9 @@ At end of session:
 
 ---
 
-*This document optimizes AI assistant performance for this specific project and user.*  
-*Follow these guidelines for maximum effectiveness and user satisfaction.*  
-*Update this doc if user preferences change.*
+_This document optimizes AI assistant performance for this specific project and user._  
+_Follow these guidelines for maximum effectiveness and user satisfaction._  
+_Update this doc if user preferences change._
 
 ---
 

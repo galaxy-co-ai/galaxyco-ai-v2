@@ -9,17 +9,17 @@ import {
   Query,
   UseGuards,
   ValidationPipe,
-} from '@nestjs/common';
-import { AuthGuard } from '../guards/auth.guard';
-import { User } from '../decorators/user.decorator';
-import type { AuthenticatedUser } from '../decorators/user.decorator';
-import { WorkspaceId } from '../decorators/workspace.decorator';
-import { AgentsService } from './agents.service';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
-import { TestAgentDto } from './dto/test-agent.dto';
+} from "@nestjs/common";
+import { AuthGuard } from "../guards/auth.guard";
+import { User } from "../decorators/user.decorator";
+import type { AuthenticatedUser } from "../decorators/user.decorator";
+import { WorkspaceId } from "../decorators/workspace.decorator";
+import { AgentsService } from "./agents.service";
+import { CreateAgentDto } from "./dto/create-agent.dto";
+import { UpdateAgentDto } from "./dto/update-agent.dto";
+import { TestAgentDto } from "./dto/test-agent.dto";
 
-@Controller('agents')
+@Controller("agents")
 @UseGuards(AuthGuard)
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
@@ -44,10 +44,10 @@ export class AgentsController {
   @Get()
   async findAll(
     @WorkspaceId() workspaceId: string,
-    @Query('status') status?: 'draft' | 'active' | 'paused' | 'archived',
-    @Query('search') search?: string,
-    @Query('limit') limit?: string,
-    @Query('offset') offset?: string,
+    @Query("status") status?: "draft" | "active" | "paused" | "archived",
+    @Query("search") search?: string,
+    @Query("limit") limit?: string,
+    @Query("offset") offset?: string,
   ) {
     return this.agentsService.findAll(workspaceId, {
       status,
@@ -61,11 +61,8 @@ export class AgentsController {
    * Get single agent by ID
    * GET /agents/:id
    */
-  @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @WorkspaceId() workspaceId: string,
-  ) {
+  @Get(":id")
+  async findOne(@Param("id") id: string, @WorkspaceId() workspaceId: string) {
     return this.agentsService.findOne(id, workspaceId);
   }
 
@@ -73,9 +70,9 @@ export class AgentsController {
    * Update an agent
    * PUT /agents/:id
    */
-  @Put(':id')
+  @Put(":id")
   async update(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body(ValidationPipe) updateAgentDto: UpdateAgentDto,
     @WorkspaceId() workspaceId: string,
   ) {
@@ -86,11 +83,8 @@ export class AgentsController {
    * Delete (archive) an agent
    * DELETE /agents/:id
    */
-  @Delete(':id')
-  async remove(
-    @Param('id') id: string,
-    @WorkspaceId() workspaceId: string,
-  ) {
+  @Delete(":id")
+  async remove(@Param("id") id: string, @WorkspaceId() workspaceId: string) {
     return this.agentsService.remove(id, workspaceId);
   }
 
@@ -98,9 +92,9 @@ export class AgentsController {
    * Test agent execution
    * POST /agents/:id/test
    */
-  @Post(':id/test')
+  @Post(":id/test")
   async test(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body(ValidationPipe) testDto: TestAgentDto,
     @WorkspaceId() workspaceId: string,
   ) {
@@ -110,11 +104,11 @@ export class AgentsController {
   /**
    * Health check (unprotected for monitoring)
    */
-  @Get('_health')
+  @Get("_health")
   async health() {
     return {
-      status: 'ok',
-      service: 'agents-controller',
+      status: "ok",
+      service: "agents-controller",
       timestamp: new Date().toISOString(),
     };
   }

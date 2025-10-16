@@ -39,7 +39,7 @@ cd services/agents && uvicorn app:app --reload
 
 ### Observability
 
-- Open traces dashboard → *link placeholder*
+- Open traces dashboard → _link placeholder_
 - Common errors & fixes → bullets
 
 ### Notes
@@ -51,7 +51,7 @@ cd services/agents && uvicorn app:app --reload
 
 ## 2) Workflows (copy under `/Workflows/galaxyco-ai/…`)
 
-*(YAML skeleton; adjust commands to your repo)*
+_(YAML skeleton; adjust commands to your repo)_
 
 ### `dev-start.yaml`
 
@@ -222,4 +222,3 @@ prompt: |
 - Use `` to attach this Notebook/Workflows/Rules to Agent chats.
 - Keep all YAML/MD under `/warp/` or the folders listed above and mirror them into the repo for versioning.
 - Run **Session Sharing** during incidents; capture notes in this Notebook.
-

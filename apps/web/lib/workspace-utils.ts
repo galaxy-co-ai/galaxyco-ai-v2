@@ -14,26 +14,35 @@ export function generateSlug(name: string): string {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
 }
 
 /**
  * Validate workspace name
  */
-export function validateWorkspaceName(name: string): { valid: boolean; error?: string } {
+export function validateWorkspaceName(name: string): {
+  valid: boolean;
+  error?: string;
+} {
   if (!name || name.trim().length === 0) {
-    return { valid: false, error: 'Workspace name is required' };
+    return { valid: false, error: "Workspace name is required" };
   }
 
   if (name.length < 2) {
-    return { valid: false, error: 'Workspace name must be at least 2 characters' };
+    return {
+      valid: false,
+      error: "Workspace name must be at least 2 characters",
+    };
   }
 
   if (name.length > 50) {
-    return { valid: false, error: 'Workspace name must be less than 50 characters' };
+    return {
+      valid: false,
+      error: "Workspace name must be less than 50 characters",
+    };
   }
 
   return { valid: true };
@@ -44,15 +53,18 @@ export function validateWorkspaceName(name: string): { valid: boolean; error?: s
  */
 export function validateSlug(slug: string): { valid: boolean; error?: string } {
   if (!slug || slug.trim().length === 0) {
-    return { valid: false, error: 'Slug is required' };
+    return { valid: false, error: "Slug is required" };
   }
 
   if (slug.length < 2) {
-    return { valid: false, error: 'Slug must be at least 2 characters' };
+    return { valid: false, error: "Slug must be at least 2 characters" };
   }
 
   if (!/^[a-z0-9-]+$/.test(slug)) {
-    return { valid: false, error: 'Slug can only contain lowercase letters, numbers, and hyphens' };
+    return {
+      valid: false,
+      error: "Slug can only contain lowercase letters, numbers, and hyphens",
+    };
   }
 
   return { valid: true };

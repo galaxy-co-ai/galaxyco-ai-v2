@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { requireSession } from '@/lib/services/user-session';
-import { conversationService } from '@/lib/services/conversation-service';
+import { NextRequest, NextResponse } from "next/server";
+import { requireSession } from "@/lib/services/user-session";
+import { conversationService } from "@/lib/services/conversation-service";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 
 /**
  * GET /api/ai/conversations/[id]
@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -20,22 +20,22 @@ export async function GET(
 
     const conversationContext = await conversationService.getConversation(
       id,
-      workspaceId
+      workspaceId,
     );
 
     if (!conversationContext) {
       return NextResponse.json(
-        { error: 'Conversation not found' },
-        { status: 404 }
+        { error: "Conversation not found" },
+        { status: 404 },
       );
     }
 
     return NextResponse.json(conversationContext);
   } catch (error) {
-    console.error('Get conversation error:', error);
+    console.error("Get conversation error:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch conversation' },
-      { status: 500 }
+      { error: "Failed to fetch conversation" },
+      { status: 500 },
     );
   }
 }
@@ -46,7 +46,7 @@ export async function GET(
  */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -57,22 +57,22 @@ export async function PATCH(
     const body = await req.json();
     const { action, tags } = body;
 
-    if (action === 'toggle_pin') {
+    if (action === "toggle_pin") {
       await conversationService.togglePinConversation(id, workspaceId);
       return NextResponse.json({ success: true });
     }
 
-    if (action === 'update_tags' && tags) {
+    if (action === "update_tags" && tags) {
       await conversationService.updateConversationTags(id, workspaceId, tags);
       return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error) {
-    console.error('Update conversation error:', error);
+    console.error("Update conversation error:", error);
     return NextResponse.json(
-      { error: 'Failed to update conversation' },
-      { status: 500 }
+      { error: "Failed to update conversation" },
+      { status: 500 },
     );
   }
 }
@@ -83,7 +83,7 @@ export async function PATCH(
  */
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await requireSession();
@@ -93,22 +93,22 @@ export async function DELETE(
 
     const success = await conversationService.deleteConversation(
       id,
-      workspaceId
+      workspaceId,
     );
 
     if (!success) {
       return NextResponse.json(
-        { error: 'Conversation not found' },
-        { status: 404 }
+        { error: "Conversation not found" },
+        { status: 404 },
       );
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete conversation error:', error);
+    console.error("Delete conversation error:", error);
     return NextResponse.json(
-      { error: 'Failed to delete conversation' },
-      { status: 500 }
+      { error: "Failed to delete conversation" },
+      { status: 500 },
     );
   }
 }

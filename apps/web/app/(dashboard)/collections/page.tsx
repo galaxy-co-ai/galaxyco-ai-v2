@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Plus, Search, FileText, Image, File, Grid, List } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { UploadModal } from '@/components/documents/upload-modal';
+import { useEffect, useState } from "react";
+import { Plus, Search, FileText, Image, File, Grid, List } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { UploadModal } from "@/components/documents/upload-modal";
 
 interface Document {
   id: string;
@@ -24,8 +24,8 @@ interface Collection {
 export default function CollectionsPage() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
@@ -35,10 +35,10 @@ export default function CollectionsPage() {
 
   const loadCollections = async () => {
     try {
-      const res = await fetch('/api/documents');
-      if (!res.ok) throw new Error('Failed to load documents');
+      const res = await fetch("/api/documents");
+      if (!res.ok) throw new Error("Failed to load documents");
       const data = await res.json();
-      
+
       // Group documents by category
       const grouped: Record<string, Document[]> = {};
       for (const doc of data.documents || []) {
@@ -46,15 +46,17 @@ export default function CollectionsPage() {
         grouped[doc.category].push(doc);
       }
 
-      const collectionList: Collection[] = Object.entries(grouped).map(([category, docs]) => ({
-        category,
-        count: docs.length,
-        documents: docs,
-      }));
+      const collectionList: Collection[] = Object.entries(grouped).map(
+        ([category, docs]) => ({
+          category,
+          count: docs.length,
+          documents: docs,
+        }),
+      );
 
       setCollections(collectionList);
     } catch (err) {
-      console.error('Failed to load collections:', err);
+      console.error("Failed to load collections:", err);
     } finally {
       setLoading(false);
     }
@@ -64,27 +66,52 @@ export default function CollectionsPage() {
     .filter((col) => !selectedCategory || col.category === selectedCategory)
     .flatMap((col) => col.documents)
     .filter((doc) =>
-      doc.title.toLowerCase().includes(searchQuery.toLowerCase())
+      doc.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
   const categories = [
-    { id: 'company_info', name: 'Company Info', icon: FileText, color: 'text-blue-600' },
-    { id: 'case_studies', name: 'Case Studies', icon: FileText, color: 'text-purple-600' },
-    { id: 'service_offerings', name: 'Services', icon: FileText, color: 'text-green-600' },
-    { id: 'team_bios', name: 'Team Bios', icon: FileText, color: 'text-orange-600' },
-    { id: 'brand_assets', name: 'Brand Assets', icon: Image, color: 'text-pink-600' },
+    {
+      id: "company_info",
+      name: "Company Info",
+      icon: FileText,
+      color: "text-blue-600",
+    },
+    {
+      id: "case_studies",
+      name: "Case Studies",
+      icon: FileText,
+      color: "text-purple-600",
+    },
+    {
+      id: "service_offerings",
+      name: "Services",
+      icon: FileText,
+      color: "text-green-600",
+    },
+    {
+      id: "team_bios",
+      name: "Team Bios",
+      icon: FileText,
+      color: "text-orange-600",
+    },
+    {
+      id: "brand_assets",
+      name: "Brand Assets",
+      icon: Image,
+      color: "text-pink-600",
+    },
   ];
 
   const getCategoryIcon = (category: string) => {
     const cat = categories.find((c) => c.id === category);
     const Icon = cat?.icon || File;
-    return <Icon className={cn('h-4 w-4', cat?.color || 'text-neutral-600')} />;
+    return <Icon className={cn("h-4 w-4", cat?.color || "text-neutral-600")} />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
 
   return (
@@ -123,23 +150,23 @@ export default function CollectionsPage() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => setViewMode('grid')}
+              onClick={() => setViewMode("grid")}
               className={cn(
-                'flex h-10 w-10 items-center justify-center rounded-md border transition-colors',
-                viewMode === 'grid'
-                  ? 'bg-primary text-white'
-                  : 'bg-white hover:bg-neutral-50 dark:bg-neutral-950'
+                "flex h-10 w-10 items-center justify-center rounded-md border transition-colors",
+                viewMode === "grid"
+                  ? "bg-primary text-white"
+                  : "bg-white hover:bg-neutral-50 dark:bg-neutral-950",
               )}
             >
               <Grid className="h-4 w-4" />
             </button>
             <button
-              onClick={() => setViewMode('list')}
+              onClick={() => setViewMode("list")}
               className={cn(
-                'flex h-10 w-10 items-center justify-center rounded-md border transition-colors',
-                viewMode === 'list'
-                  ? 'bg-primary text-white'
-                  : 'bg-white hover:bg-neutral-50 dark:bg-neutral-950'
+                "flex h-10 w-10 items-center justify-center rounded-md border transition-colors",
+                viewMode === "list"
+                  ? "bg-primary text-white"
+                  : "bg-white hover:bg-neutral-50 dark:bg-neutral-950",
               )}
             >
               <List className="h-4 w-4" />
@@ -152,10 +179,10 @@ export default function CollectionsPage() {
           <button
             onClick={() => setSelectedCategory(null)}
             className={cn(
-              'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+              "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
               !selectedCategory
-                ? 'border-primary bg-primary text-white'
-                : 'border-neutral-300 bg-white hover:bg-neutral-50 dark:bg-neutral-950'
+                ? "border-primary bg-primary text-white"
+                : "border-neutral-300 bg-white hover:bg-neutral-50 dark:bg-neutral-950",
             )}
           >
             All
@@ -165,10 +192,10 @@ export default function CollectionsPage() {
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
               className={cn(
-                'flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                "flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 selectedCategory === cat.id
-                  ? 'border-primary bg-primary text-white'
-                  : 'border-neutral-300 bg-white hover:bg-neutral-50 dark:bg-neutral-950'
+                  ? "border-primary bg-primary text-white"
+                  : "border-neutral-300 bg-white hover:bg-neutral-50 dark:bg-neutral-950",
               )}
             >
               <cat.icon className="h-3 w-3" />
@@ -182,7 +209,9 @@ export default function CollectionsPage() {
       <div className="flex-1 overflow-y-auto bg-neutral-50 p-6 dark:bg-neutral-950">
         {loading ? (
           <div className="flex h-full items-center justify-center">
-            <div className="text-neutral-600 dark:text-neutral-400">Loading collections...</div>
+            <div className="text-neutral-600 dark:text-neutral-400">
+              Loading collections...
+            </div>
           </div>
         ) : filteredDocuments.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -201,7 +230,7 @@ export default function CollectionsPage() {
               Upload Document
             </button>
           </div>
-        ) : viewMode === 'grid' ? (
+        ) : viewMode === "grid" ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredDocuments.map((doc) => (
               <div
@@ -216,7 +245,7 @@ export default function CollectionsPage() {
                     {doc.title}
                   </h3>
                   <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
-                    {doc.category.replace(/_/g, ' ')}
+                    {doc.category.replace(/_/g, " ")}
                   </p>
                   <div className="mt-auto flex items-center justify-between pt-3 text-xs text-neutral-500">
                     <span>{formatFileSize(doc.fileSize)}</span>
@@ -241,7 +270,7 @@ export default function CollectionsPage() {
                     {doc.title}
                   </h3>
                   <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    {doc.category.replace(/_/g, ' ')}
+                    {doc.category.replace(/_/g, " ")}
                   </p>
                 </div>
                 <div className="text-right text-xs text-neutral-500">

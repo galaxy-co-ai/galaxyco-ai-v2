@@ -20,6 +20,7 @@
 5. **Know the tech stack** before suggesting changes
 
 **When the user asks you to build something:**
+
 - Check if it's already built (see "What's Built & Working")
 - Check if it's in the TODOs (see "Known TODOs")
 - Follow the architecture patterns (see "Project Architecture")
@@ -27,11 +28,13 @@
 - Follow the code quality standards (TypeScript, ESLint passing)
 
 **Before making changes:**
+
 - Run `pnpm --filter web run typecheck` to check current state
 - Check if tests exist in `TESTING_CHECKLIST.md`
 - Understand the impact on existing features
 
 **After making changes:**
+
 - Run `pnpm --filter web run typecheck` (must pass)
 - Run `pnpm --filter web run lint` (errors must be fixed)
 - Update this document's "Recent Changes Log"
@@ -42,17 +45,20 @@
 ## Quick Project Overview
 
 **GalaxyCo.ai** is a B2B AI automation platform with three core agents:
+
 - 🔍 **Lead Intel Agent** - Research and qualify prospects
 - ✉️ **Outreach Writer** - Generate personalized emails
 - 🔄 **CRM Sync Agent** - Automated CRM integration
 
 ### Key Concepts
+
 - **Collections** = User-facing document organization (UI concept)
 - **Databases** = Backend AI storage for learning/memory (technical concept)
 - **AI Assistant** = Conversational helper with context awareness
 - **Supervised Automation** = AI does work, human approves
 
 ### Tech Stack
+
 - **Frontend**: Next.js 14, React 18, TypeScript, Tailwind, Wouter, Zustand
 - **Backend**: Next.js API Routes, Drizzle ORM, PostgreSQL (Neon)
 - **AI**: OpenAI GPT-4o/mini, Pinecone vector DB, LangChain
@@ -65,11 +71,13 @@
 ## Recent Changes Log
 
 ### Session: 2025-10-15 (Today)
+
 **Duration**: ~2 hours  
 **Focus**: Complete 17-step implementation checklist  
 **Status**: ✅ All 17 steps completed
 
 **What Was Built:**
+
 1. Collections page with document grid/list views
 2. Document upload modal with drag-drop and progress tracking
 3. Chat system updated with conversation persistence
@@ -81,6 +89,7 @@
 7. Fixed all TypeScript and ESLint errors
 
 **Files Created:**
+
 - `SESSION_HANDOFF.md` (this file)
 - `TESTING_CHECKLIST.md`
 - `app/(dashboard)/collections/page.tsx`
@@ -89,6 +98,7 @@
 - `src/trigger/conversation-summarizer.ts`
 
 **Files Modified:**
+
 - `hooks/use-chat.ts` - Added conversation ID tracking
 - `components/chat/chat-panel.tsx` - Added conversation support
 - `components/layout/main-sidebar.tsx` - Added Collections link
@@ -97,6 +107,7 @@
 - `lib/services/document-processor.ts` - Fixed imports
 
 **Next Session Should:**
+
 - Run through `TESTING_CHECKLIST.md`
 - Test document upload → processing → search flow
 - Verify chat persistence works
@@ -110,6 +121,7 @@
 ### ✅ What's Built & Working (17/17 Steps Complete)
 
 #### Backend (Fully Operational)
+
 - Database schema with migrations
 - User session service (Clerk → User/Workspace mapping)
 - Conversation service (CRUD, context tracking)
@@ -121,6 +133,7 @@
 - Conversation history APIs
 
 #### Frontend (Fully Built)
+
 - Collections page with grid/list views
 - Document upload modal with progress tracking
 - Chat panel with conversation persistence
@@ -129,11 +142,13 @@
 - All components properly typed
 
 #### Background Jobs (Created)
+
 - Document processing pipeline (Trigger.dev)
 - Conversation summarization (Trigger.dev)
 - Auto-title generation
 
 ### 🟡 What Needs Testing
+
 - End-to-end document upload → processing → search flow
 - Chat persistence across sessions
 - Mobile responsiveness
@@ -141,6 +156,7 @@
 - See `TESTING_CHECKLIST.md` for full plan
 
 ### 🔴 Known TODOs
+
 - Conversation history sidebar in chat panel
 - Document detail view/preview
 - Bulk document operations
@@ -155,6 +171,7 @@
 ## Project Architecture
 
 ### Directory Structure
+
 ```
 galaxyco-ai-2.0/
 ├── apps/
@@ -184,6 +201,7 @@ galaxyco-ai-2.0/
 ### Key Files to Know
 
 #### Services (Business Logic)
+
 - `lib/services/conversation-service.ts` - Chat conversation management
 - `lib/services/document-service.ts` - Document CRUD operations
 - `lib/services/document-processor.ts` - Text extraction & embeddings
@@ -191,6 +209,7 @@ galaxyco-ai-2.0/
 - `lib/services/user-session-service.ts` - Clerk → User mapping
 
 #### API Endpoints
+
 - `app/api/ai/chat/route.ts` - AI chat endpoint
 - `app/api/conversations/route.ts` - List conversations
 - `app/api/conversations/[id]/messages/route.ts` - Get conversation messages
@@ -198,12 +217,14 @@ galaxyco-ai-2.0/
 - `app/api/documents/upload/route.ts` - Upload documents
 
 #### UI Pages
+
 - `app/(dashboard)/collections/page.tsx` - Collections/Documents page
 - `app/(app)/dashboard/page.tsx` - Main dashboard
 - `app/(app)/agents/page.tsx` - Agent management
 - `app/(app)/prospects/page.tsx` - Prospect database
 
 #### Core Components
+
 - `components/chat/chat-panel.tsx` - Chat UI
 - `components/chat/chat-widget.tsx` - Chat toggle button
 - `components/documents/upload-modal.tsx` - Document upload
@@ -212,11 +233,13 @@ galaxyco-ai-2.0/
 - `components/layout/bottom-nav.tsx` - Mobile navigation
 
 #### Background Jobs
+
 - `src/trigger/document-processor.ts` - Process uploaded documents
 - `src/trigger/conversation-summarizer.ts` - Summarize conversations
 - `src/trigger/lead-intel-agent.ts` - Lead research automation
 
 #### Configuration
+
 - `trigger.config.ts` - Trigger.dev configuration
 - `drizzle.config.ts` - Database migration config
 - `tailwind.config.ts` - Tailwind CSS config
@@ -227,6 +250,7 @@ galaxyco-ai-2.0/
 ## Common Development Tasks
 
 ### Starting the Development Server
+
 ```bash
 cd /c/Users/Owner/workspace/galaxyco-ai-2.0
 pnpm --filter web dev              # Start Next.js dev server (port 3000)
@@ -234,12 +258,14 @@ pnpm --filter web trigger:dev      # Start Trigger.dev for background jobs
 ```
 
 ### Database Operations
+
 ```bash
 pnpm --filter database db:push     # Push schema changes to database
 pnpm --filter database db:studio   # Open Drizzle Studio (database GUI)
 ```
 
 ### Code Quality Checks
+
 ```bash
 pnpm --filter web run typecheck    # TypeScript type checking
 pnpm --filter web run lint         # ESLint linting
@@ -247,6 +273,7 @@ pnpm --filter web build            # Production build test
 ```
 
 ### Testing
+
 See `TESTING_CHECKLIST.md` for comprehensive testing guide.
 
 ---
@@ -254,17 +281,20 @@ See `TESTING_CHECKLIST.md` for comprehensive testing guide.
 ## Important Context & Decisions
 
 ### Why Collections vs Databases?
+
 - **User Mental Model**: "Collections" = organized folders of documents (familiar)
 - **Technical Reality**: "Databases" = AI learning storage (accurate but scary)
 - **Result**: Users see "Collections" in UI, AI uses databases behind the scenes
 
 ### Authentication Flow
+
 1. User signs in via Clerk
 2. `UserSessionService` creates/fetches User record
 3. User is assigned to a Workspace
 4. All operations scoped to `userId` + `workspaceId`
 
 ### Document Processing Flow
+
 1. User uploads file via UI
 2. File stored in Vercel Blob
 3. Trigger.dev job processes asynchronously:
@@ -276,6 +306,7 @@ See `TESTING_CHECKLIST.md` for comprehensive testing guide.
 4. Document marked as "completed" in database
 
 ### Chat Conversation Flow
+
 1. User sends message in chat panel
 2. API creates/updates conversation record
 3. Message stored in database
@@ -313,6 +344,7 @@ TRIGGER_SECRET_KEY=...
 ## 17-Step Implementation Checklist
 
 ### Phase 1: Backend Foundation ✅ (Items 1-10)
+
 - [x] 1. Database schema migrations (ai_conversations, ai_messages, ai_user_preferences, documents, document_chunks)
 - [x] 2. UserSessionService for Clerk → User/Workspace mapping
 - [x] 3. ConversationService with full CRUD operations
@@ -325,12 +357,14 @@ TRIGGER_SECRET_KEY=...
 - [x] 10. RAG/semantic search service
 
 ### Phase 2: Frontend Components 🚧 (Items 11-14)
+
 - [x] 11. Update chat hook to use persisted conversations
 - [x] 12. Collections page with grid/list view, search, filters
 - [x] 13. Document upload modal with drag-drop and progress
 - [x] 14. Navigation integration (sidebar + mobile nav)
 
 ### Phase 3: Background Processing ✅ (Items 15-16)
+
 - [x] 15. Trigger.dev job: Document processing pipeline
   - Parse uploaded files
   - Extract text and generate embeddings
@@ -342,12 +376,13 @@ TRIGGER_SECRET_KEY=...
   - Full summarization support
 
 ### Phase 4: Testing & Verification ✅ (Item 17)
+
 - [x] 17. End-to-end testing checklist created
   - Testing plan documented in `TESTING_CHECKLIST.md`
   - Comprehensive test coverage for all features
   - Commands and scripts provided
   - Sign-off criteria defined
-  
+
   **Testing Ready**: Run through checklist to verify all features
 
 ---
@@ -357,6 +392,7 @@ TRIGGER_SECRET_KEY=...
 **All phases completed successfully!**
 
 ### Summary by Phase:
+
 - **Phase 1 (Backend)**: 10/10 items ✅
 - **Phase 2 (Frontend)**: 4/4 items ✅
 - **Phase 3 (Background Jobs)**: 2/2 items ✅
@@ -369,6 +405,7 @@ TRIGGER_SECRET_KEY=...
 ## Recent Progress
 
 ### Today's Completed Work
+
 1. **Chat System Integration**
    - Updated `use-chat` hook with conversation ID support
    - Modified chat panel to load conversation history
@@ -396,12 +433,16 @@ TRIGGER_SECRET_KEY=...
 ## Next Steps
 
 ### Immediate (Steps 15-16)
+
 Create Trigger.dev background jobs for:
+
 1. Document processing after upload
 2. Conversation summarization
 
 ### Final (Step 17)
+
 Run comprehensive tests:
+
 - Document upload → processing → search flow
 - Chat conversation persistence
 - UI responsiveness
@@ -412,6 +453,7 @@ Run comprehensive tests:
 ## Technical Notes
 
 ### API Endpoints Available
+
 - `POST /api/ai/chat` - Send message, create/update conversation
 - `GET /api/conversations` - List user conversations
 - `GET /api/conversations/:id/messages` - Get conversation messages
@@ -420,6 +462,7 @@ Run comprehensive tests:
 - `GET /api/documents/:id` - Get document details
 
 ### Key Services
+
 - `ConversationService` - Conversation CRUD, message management
 - `DocumentService` - Document CRUD, category assignment
 - `DocumentProcessor` - Text extraction, embedding generation
@@ -427,6 +470,7 @@ Run comprehensive tests:
 - `UserSessionService` - Clerk → User/Workspace mapping
 
 ### Environment Variables Required
+
 ```
 DATABASE_URL=postgresql://...
 OPENAI_API_KEY=sk-...
@@ -440,6 +484,7 @@ BLOB_READ_WRITE_TOKEN=...
 ---
 
 ## Known Issues & TODOs
+
 - [ ] Add conversation history sidebar to chat panel
 - [ ] Add document detail view/preview
 - [ ] Add bulk document operations
@@ -455,17 +500,20 @@ BLOB_READ_WRITE_TOKEN=...
 ## Architecture Decisions
 
 ### Collections vs Databases
+
 - **Collections**: User-facing organization (UI)
 - **Databases**: Backend AI data storage (learning/memory)
 - Keeps user mental model clean while enabling AI learning
 
 ### Chat Persistence
+
 - Every message stored with conversation context
 - Conversations auto-titled from first user message
 - Support for pinning, tagging, searching
 - Context tracking (page, selected items, documents)
 
 ### Document Processing
+
 - Async processing via Trigger.dev
 - Auto-categorization with GPT-4o-mini
 - Chunking for RAG with embeddings
@@ -478,6 +526,7 @@ BLOB_READ_WRITE_TOKEN=...
 ### Immediate Next Steps:
 
 1. **Run the Testing Checklist**
+
    ```bash
    # See TESTING_CHECKLIST.md for full details
    cd /c/Users/Owner/workspace/galaxyco-ai-2.0
@@ -512,6 +561,7 @@ BLOB_READ_WRITE_TOKEN=...
 ### Files Created/Modified This Session:
 
 **Created:**
+
 - `SESSION_HANDOFF.md` - This file, 17-step checklist tracker
 - `TESTING_CHECKLIST.md` - Comprehensive testing plan
 - `app/(dashboard)/collections/page.tsx` - Collections page UI
@@ -520,6 +570,7 @@ BLOB_READ_WRITE_TOKEN=...
 - `src/trigger/conversation-summarizer.ts` - Conversation AI summarization
 
 **Modified:**
+
 - `hooks/use-chat.ts` - Added conversation persistence
 - `components/chat/chat-panel.tsx` - Added conversation ID support
 - `components/layout/main-sidebar.tsx` - Added Collections nav link
@@ -529,6 +580,7 @@ BLOB_READ_WRITE_TOKEN=...
 - `app/page.tsx` - Fixed unescaped quotes
 
 ### Code Quality Status:
+
 - ✅ TypeScript compilation: PASSING
 - ✅ ESLint: PASSING (warnings acceptable)
 - ✅ All imports resolved
@@ -539,6 +591,7 @@ BLOB_READ_WRITE_TOKEN=...
 ## Troubleshooting Common Issues
 
 ### TypeScript Errors
+
 ```bash
 # Check for errors
 pnpm --filter web run typecheck
@@ -550,6 +603,7 @@ pnpm --filter web run typecheck
 ```
 
 ### Database Issues
+
 ```bash
 # Reset local database (DESTRUCTIVE)
 pnpm --filter database db:push --force
@@ -562,6 +616,7 @@ ls packages/database/drizzle/
 ```
 
 ### Trigger.dev Not Working
+
 ```bash
 # Make sure Trigger.dev is running
 pnpm --filter web trigger:dev
@@ -573,12 +628,14 @@ open https://cloud.trigger.dev
 ```
 
 ### Upload Not Processing
+
 1. Check Trigger.dev is running
 2. Verify OPENAI_API_KEY is set
 3. Check BLOB_READ_WRITE_TOKEN is valid
 4. Look for errors in Trigger.dev dashboard
 
 ### Chat Not Persisting
+
 1. Check DATABASE_URL is correct
 2. Verify database schema is up to date
 3. Check browser console for API errors
@@ -587,6 +644,7 @@ open https://cloud.trigger.dev
 ---
 
 ## Contact & Resources
+
 - **Project Repo**: github.com/yourusername/galaxyco-ai-2.0
 - **Staging**: staging.galaxyco.ai
 - **Production**: app.galaxyco.ai

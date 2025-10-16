@@ -1,13 +1,17 @@
 /**
  * RAG (Retrieval Augmented Generation) Service
- * 
+ *
  * Handles semantic search over user documents and knowledge base using
  * vector embeddings and similarity search.
  */
 
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { db } from "@galaxyco/database";
-import { knowledgeItems, type KnowledgeItem, aiConversations } from "@galaxyco/database/schema";
+import {
+  knowledgeItems,
+  type KnowledgeItem,
+  aiConversations,
+} from "@galaxyco/database/schema";
 import { and, eq, desc, sql, inArray } from "drizzle-orm";
 
 export interface SearchParams {
@@ -48,12 +52,12 @@ export class RAGService {
    * Search for relevant documents using vector similarity
    */
   async searchDocuments(params: SearchParams): Promise<SearchResult[]> {
-    const { 
-      query, 
-      workspaceId, 
-      limit = 10, 
+    const {
+      query,
+      workspaceId,
+      limit = 10,
       threshold = 0.7,
-      filters = {} 
+      filters = {},
     } = params;
 
     // Generate embedding for the query
@@ -66,7 +70,9 @@ export class RAGService {
     ];
 
     if (filters.collectionIds?.length) {
-      conditions.push(inArray(knowledgeItems.collectionId, filters.collectionIds));
+      conditions.push(
+        inArray(knowledgeItems.collectionId, filters.collectionIds),
+      );
     }
 
     if (filters.types?.length) {
@@ -87,7 +93,7 @@ export class RAGService {
       .map((item) => {
         const score = this.cosineSimilarity(
           queryEmbedding,
-          item.embeddings as unknown as number[]
+          item.embeddings as unknown as number[],
         );
         return {
           item,
@@ -108,7 +114,7 @@ export class RAGService {
   async getRAGContext(
     query: string,
     workspaceId: string,
-    conversationId?: string
+    conversationId?: string,
   ): Promise<RAGContext> {
     // Search relevant documents
     const searchResults = await this.searchDocuments({
@@ -125,7 +131,7 @@ export class RAGService {
       const conversation = await db.query.aiConversations.findFirst({
         where: and(
           eq(aiConversations.id, conversationId),
-          eq(aiConversations.workspaceId, workspaceId)
+          eq(aiConversations.workspaceId, workspaceId),
         ),
         with: {
           messages: {
@@ -146,7 +152,7 @@ export class RAGService {
     // Build context summary
     const summary = await this.buildContextSummary(
       searchResults,
-      conversationContext
+      conversationContext,
     );
 
     return {
@@ -197,7 +203,7 @@ export class RAGService {
   private extractSnippet(content: string, query: string): string {
     const queryWords = query.toLowerCase().split(/\s+/);
     const sentences = content.split(/[.!?]+/);
-    
+
     // Find the most relevant sentence
     let bestSentence = "";
     let bestScore = 0;
@@ -205,7 +211,7 @@ export class RAGService {
     for (const sentence of sentences) {
       const sentenceLower = sentence.toLowerCase();
       let score = 0;
-      
+
       for (const word of queryWords) {
         if (sentenceLower.includes(word)) {
           score++;
@@ -220,8 +226,8 @@ export class RAGService {
 
     // Return the best sentence or first 200 chars
     if (bestSentence) {
-      return bestSentence.length > 200 
-        ? bestSentence.slice(0, 197) + "..." 
+      return bestSentence.length > 200
+        ? bestSentence.slice(0, 197) + "..."
         : bestSentence;
     }
 
@@ -233,7 +239,7 @@ export class RAGService {
    */
   private async buildContextSummary(
     searchResults: SearchResult[],
-    conversationContext: string
+    conversationContext: string,
   ): Promise<string> {
     if (searchResults.length === 0) {
       return "";
@@ -241,9 +247,9 @@ export class RAGService {
 
     const sourceSummaries = searchResults
       .map((result, index) => {
-        return `Source ${index + 1} (${result.item.title}, relevance: ${
-          Math.round(result.relevanceScore * 100)
-        }%): ${result.snippet}`;
+        return `Source ${index + 1} (${result.item.title}, relevance: ${Math.round(
+          result.relevanceScore * 100,
+        )}%): ${result.snippet}`;
       })
       .join("\n\n");
 
@@ -262,13 +268,13 @@ export class RAGService {
   async findSimilarDocuments(
     documentId: string,
     workspaceId: string,
-    limit: number = 5
+    limit: number = 5,
   ): Promise<KnowledgeItem[]> {
     // Get the document
     const document = await db.query.knowledgeItems.findFirst({
       where: and(
         eq(knowledgeItems.id, documentId),
-        eq(knowledgeItems.workspaceId, workspaceId)
+        eq(knowledgeItems.workspaceId, workspaceId),
       ),
     });
 
@@ -280,11 +286,13 @@ export class RAGService {
     const allDocs = await db
       .select()
       .from(knowledgeItems)
-      .where(and(
-        eq(knowledgeItems.workspaceId, workspaceId),
-        eq(knowledgeItems.status, "ready"),
-        sql`${knowledgeItems.id} != ${documentId}`
-      ))
+      .where(
+        and(
+          eq(knowledgeItems.workspaceId, workspaceId),
+          eq(knowledgeItems.status, "ready"),
+          sql`${knowledgeItems.id} != ${documentId}`,
+        ),
+      )
       .limit(limit * 3);
 
     // Calculate similarities and sort
@@ -293,7 +301,7 @@ export class RAGService {
         doc,
         score: this.cosineSimilarity(
           document.embeddings as unknown as number[],
-          doc.embeddings as unknown as number[]
+          doc.embeddings as unknown as number[],
         ),
       }))
       .filter((item) => item.score > 0.5)
@@ -310,7 +318,7 @@ export class RAGService {
   async updateDocumentEmbeddings(
     documentId: string,
     content: string,
-    workspaceId: string
+    workspaceId: string,
   ): Promise<void> {
     const embeddings = await this.embeddings.embedDocuments([content]);
 
@@ -321,10 +329,12 @@ export class RAGService {
         embeddingsModel: "text-embedding-3-small",
         updatedAt: new Date(),
       })
-      .where(and(
-        eq(knowledgeItems.id, documentId),
-        eq(knowledgeItems.workspaceId, workspaceId)
-      ));
+      .where(
+        and(
+          eq(knowledgeItems.id, documentId),
+          eq(knowledgeItems.workspaceId, workspaceId),
+        ),
+      );
   }
 }
 

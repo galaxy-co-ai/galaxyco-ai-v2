@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis';
+import { Redis } from "@upstash/redis";
 
 /**
  * Redis client singleton for Upstash KV
@@ -13,7 +13,7 @@ export function getRedisClient(): Redis {
 
     if (!url || !token) {
       throw new Error(
-        'Redis configuration missing. Please set KV_REST_API_URL and KV_REST_API_TOKEN environment variables.'
+        "Redis configuration missing. Please set KV_REST_API_URL and KV_REST_API_TOKEN environment variables.",
       );
     }
 
@@ -36,7 +36,7 @@ export function getRedisReadOnlyClient(): Redis {
 
   if (!url || !token) {
     throw new Error(
-      'Redis read-only configuration missing. Please set KV_REST_API_URL and KV_REST_API_READ_ONLY_TOKEN environment variables.'
+      "Redis read-only configuration missing. Please set KV_REST_API_URL and KV_REST_API_READ_ONLY_TOKEN environment variables.",
     );
   }
 

@@ -1,6 +1,6 @@
 /**
  * API Error Handling Utilities
- * 
+ *
  * Custom error classes and utilities for handling different types of errors
  * throughout the application with proper user messaging and logging.
  */
@@ -16,7 +16,7 @@ export class APIError extends Error {
     status: number = 500,
     code: string = "INTERNAL_ERROR",
     details?: any,
-    retryable: boolean = false
+    retryable: boolean = false,
   ) {
     super(message);
     this.name = "APIError";
@@ -89,7 +89,7 @@ export class ServerError extends APIError {
 export async function handleApiResponse(response: Response) {
   if (!response.ok) {
     let errorData: any = {};
-    
+
     try {
       errorData = await response.json();
     } catch {
@@ -132,7 +132,7 @@ export async function handleApiResponse(response: Response) {
 export async function apiRequest(
   url: string,
   options: RequestInit = {},
-  workspaceId?: string
+  workspaceId?: string,
 ): Promise<Response> {
   try {
     // Add workspace header if provided
@@ -150,7 +150,9 @@ export async function apiRequest(
     return handleApiResponse(response);
   } catch (error) {
     if (error instanceof TypeError && error.message.includes("fetch")) {
-      throw new NetworkError("Network connection failed. Please check your internet connection.");
+      throw new NetworkError(
+        "Network connection failed. Please check your internet connection.",
+      );
     }
     throw error;
   }
@@ -163,7 +165,7 @@ export async function withRetry<T>(
   operation: () => Promise<T>,
   maxAttempts: number = 3,
   delay: number = 1000,
-  backoff: number = 2
+  backoff: number = 2,
 ): Promise<T> {
   let lastError: Error | undefined;
 
@@ -184,10 +186,13 @@ export async function withRetry<T>(
       }
 
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
       delay *= backoff;
 
-      console.warn(`Attempt ${attempt} failed, retrying in ${delay}ms...`, error);
+      console.warn(
+        `Attempt ${attempt} failed, retrying in ${delay}ms...`,
+        error,
+      );
     }
   }
 
@@ -236,7 +241,7 @@ export function isRetryableError(error: unknown): boolean {
   if (error instanceof APIError) {
     return error.retryable;
   }
-  
+
   if (error instanceof Error && error.message.includes("fetch")) {
     return true; // Network errors are retryable
   }
@@ -254,7 +259,8 @@ export function logError(error: unknown, context?: Record<string, any>) {
     stack: error instanceof Error ? error.stack : undefined,
     context,
     timestamp: new Date().toISOString(),
-    userAgent: typeof window !== "undefined" ? window.navigator.userAgent : undefined,
+    userAgent:
+      typeof window !== "undefined" ? window.navigator.userAgent : undefined,
     url: typeof window !== "undefined" ? window.location.href : undefined,
   };
 

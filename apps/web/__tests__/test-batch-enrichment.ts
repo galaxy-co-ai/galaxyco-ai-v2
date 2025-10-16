@@ -23,7 +23,8 @@ const testCompanies: TestCompany[] = [
     name: "Gong",
     domain: "gong.io",
     expectedICPFit: "medium",
-    notes: "Revenue intelligence, ~500+ employees - too large but relevant industry",
+    notes:
+      "Revenue intelligence, ~500+ employees - too large but relevant industry",
   },
   {
     name: "Superhuman",
@@ -59,7 +60,7 @@ const testCompanies: TestCompany[] = [
 
 async function runBatchTest() {
   console.log("🧪 COMPREHENSIVE LEAD INTEL AGENT BATCH TEST");
-  console.log("=" .repeat(70));
+  console.log("=".repeat(70));
   console.log(`Testing ${testCompanies.length} companies...\n`);
 
   const results = [];
@@ -69,7 +70,7 @@ async function runBatchTest() {
   for (let i = 0; i < testCompanies.length; i++) {
     const company = testCompanies[i];
     console.log(
-      `\n[${ i + 1}/${testCompanies.length}] Testing: ${company.name} (${company.domain})`
+      `\n[${i + 1}/${testCompanies.length}] Testing: ${company.name} (${company.domain})`,
     );
     console.log(`Expected ICP Fit: ${company.expectedICPFit}`);
     console.log(`Notes: ${company.notes}`);
@@ -106,16 +107,20 @@ async function runBatchTest() {
         }
 
         console.log(`✅ Success (${duration}ms)`);
-        console.log(`   Company: ${lead.companyName ?? 'N/A'}`);
-        console.log(`   Industry: ${lead.industry ?? 'N/A'}`);
-        console.log(`   ICP Score: ${(lead.icpFitScore ?? 0)}/100`);
-        console.log(`   Confidence: ${lead.confidenceLevel ?? 'N/A'}`);
+        console.log(`   Company: ${lead.companyName ?? "N/A"}`);
+        console.log(`   Industry: ${lead.industry ?? "N/A"}`);
+        console.log(`   ICP Score: ${lead.icpFitScore ?? 0}/100`);
+        console.log(`   Confidence: ${lead.confidenceLevel ?? "N/A"}`);
         const techStackPreview = Array.isArray(lead.techStack)
           ? `${lead.techStack.slice(0, 3).join(", ")}${lead.techStack.length > 3 ? "..." : ""}`
-          : 'N/A';
+          : "N/A";
         console.log(`   Tech Stack: ${techStackPreview}`);
-        console.log(`   News Found: ${Array.isArray(lead.recentNews) ? lead.recentNews.length : 0} articles`);
-        console.log(`   Data Completeness: ${result.metadata?.dataCompleteness ?? 0}%`);
+        console.log(
+          `   News Found: ${Array.isArray(lead.recentNews) ? lead.recentNews.length : 0} articles`,
+        );
+        console.log(
+          `   Data Completeness: ${result.metadata?.dataCompleteness ?? 0}%`,
+        );
 
         results.push({
           company: company.name,
@@ -140,7 +145,9 @@ async function runBatchTest() {
       }
     } catch (error) {
       failureCount++;
-      console.log(`💥 Exception: ${error instanceof Error ? error.message : "Unknown"}`);
+      console.log(
+        `💥 Exception: ${error instanceof Error ? error.message : "Unknown"}`,
+      );
       results.push({
         company: company.name,
         domain: company.domain,
@@ -159,23 +166,40 @@ async function runBatchTest() {
 
   // Summary Report
   console.log("\n\n");
-  console.log("=" .repeat(70));
+  console.log("=".repeat(70));
   console.log("📊 BATCH TEST SUMMARY");
   console.log("=".repeat(70));
   console.log(`Total Tests: ${testCompanies.length}`);
-  console.log(`✅ Successful: ${successCount} (${Math.round((successCount / testCompanies.length) * 100)}%)`);
-  console.log(`❌ Failed: ${failureCount} (${Math.round((failureCount / testCompanies.length) * 100)}%)`);
+  console.log(
+    `✅ Successful: ${successCount} (${Math.round((successCount / testCompanies.length) * 100)}%)`,
+  );
+  console.log(
+    `❌ Failed: ${failureCount} (${Math.round((failureCount / testCompanies.length) * 100)}%)`,
+  );
 
   if (successCount > 0) {
-    const successfulResults = results.filter((r) => r.success && "icpScore" in r);
-    const avgScore = successfulResults.reduce((sum, r) => sum + (r.icpScore || 0), 0) / successfulResults.length;
-    const avgDuration = successfulResults.reduce((sum, r) => sum + r.duration, 0) / successfulResults.length;
-    const avgCompleteness = successfulResults.reduce((sum, r) => sum + (r.completeness || 0), 0) / successfulResults.length;
-    const totalNews = successfulResults.reduce((sum, r) => sum + (r.newsCount || 0), 0);
+    const successfulResults = results.filter(
+      (r) => r.success && "icpScore" in r,
+    );
+    const avgScore =
+      successfulResults.reduce((sum, r) => sum + (r.icpScore || 0), 0) /
+      successfulResults.length;
+    const avgDuration =
+      successfulResults.reduce((sum, r) => sum + r.duration, 0) /
+      successfulResults.length;
+    const avgCompleteness =
+      successfulResults.reduce((sum, r) => sum + (r.completeness || 0), 0) /
+      successfulResults.length;
+    const totalNews = successfulResults.reduce(
+      (sum, r) => sum + (r.newsCount || 0),
+      0,
+    );
 
     console.log(`\n📈 Performance Metrics:`);
     console.log(`   Average ICP Score: ${avgScore.toFixed(1)}/100`);
-    console.log(`   Average Duration: ${avgDuration.toFixed(0)}ms (~${(avgDuration / 1000).toFixed(1)}s)`);
+    console.log(
+      `   Average Duration: ${avgDuration.toFixed(0)}ms (~${(avgDuration / 1000).toFixed(1)}s)`,
+    );
     console.log(`   Average Data Completeness: ${avgCompleteness.toFixed(1)}%`);
     console.log(`   Total News Articles Found: ${totalNews}`);
   }
@@ -187,16 +211,20 @@ async function runBatchTest() {
       "ICP Score".padEnd(12) +
       "Confidence".padEnd(12) +
       "Duration".padEnd(12) +
-      "Status"
+      "Status",
   );
   console.log("-".repeat(70));
 
   results.forEach((r) => {
     const company = String(r.company).padEnd(25);
-    const score = (r as any).success && "icpScore" in (r as any)
-      ? `${(r as any).icpScore}/100`.padEnd(12)
-      : "N/A".padEnd(12);
-    const confVal = (r as any).success && "confidence" in (r as any) ? (r as any).confidence : "N/A";
+    const score =
+      (r as any).success && "icpScore" in (r as any)
+        ? `${(r as any).icpScore}/100`.padEnd(12)
+        : "N/A".padEnd(12);
+    const confVal =
+      (r as any).success && "confidence" in (r as any)
+        ? (r as any).confidence
+        : "N/A";
     const conf = String(confVal).padEnd(12);
     const dur = `${((r as any).duration / 1000).toFixed(1)}s`.padEnd(12);
     const status = (r as any).success ? "✅" : "❌";
@@ -213,9 +241,13 @@ async function runBatchTest() {
   if (passRate === 100) {
     console.log("✅ PERFECT! All tests passed. Agent is production-ready! 🚀");
   } else if (passRate >= 85) {
-    console.log("✅ EXCELLENT! Agent is highly reliable and ready for production.");
+    console.log(
+      "✅ EXCELLENT! Agent is highly reliable and ready for production.",
+    );
   } else if (passRate >= 70) {
-    console.log("⚠️  GOOD! Agent works but may need some error handling improvements.");
+    console.log(
+      "⚠️  GOOD! Agent works but may need some error handling improvements.",
+    );
   } else {
     console.log("❌ NEEDS WORK! Review failed cases before production.");
   }
