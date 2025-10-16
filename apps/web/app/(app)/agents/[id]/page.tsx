@@ -21,6 +21,7 @@ import {
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { ExecutionList } from '@/components/agents/execution-list';
 
 type TabView = 'overview' | 'workflow' | 'executions' | 'settings';
 
@@ -335,9 +336,11 @@ export default function AgentDetailPage({ params }: { params: { id: string } }) 
         </div>
       )}
 
-      {activeTab === 'executions' && (
-        <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
-          <p className="text-neutral-600 dark:text-neutral-400">Execution history coming soon</p>
+      {activeTab === 'executions' && agent && (
+        <div className="space-y-6">
+          <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+            <ExecutionList agentId={agent.id} agentName={agent.name} />
+          </div>
         </div>
       )}
 
