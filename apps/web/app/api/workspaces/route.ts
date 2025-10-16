@@ -10,18 +10,6 @@ import { eq } from 'drizzle-orm';
  */
 export async function GET() {
   try {
-    // Development bypass
-    if (process.env.NODE_ENV === 'development') {
-      return NextResponse.json([
-        {
-          id: 'dev-workspace-123',
-          name: 'Development Workspace',
-          slug: 'dev-workspace',
-          role: 'admin',
-        },
-      ]);
-    }
-    
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {

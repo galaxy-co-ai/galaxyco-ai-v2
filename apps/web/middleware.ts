@@ -20,12 +20,6 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
-  // DEVELOPMENT BYPASS: Skip all auth for development
-if (process.env.NODE_ENV !== 'production') {
-    const response = NextResponse.next();
-    response.headers.set('x-dev-bypass', 'true');
-    return response;
-  }
   const response = NextResponse.next();
   
   // Protect non-public routes
@@ -38,19 +32,10 @@ if (process.env.NODE_ENV !== 'production') {
   
   if (userId && !isPublicRoute(request)) {
     try {
-      // Skip tenant context for development if no database setup
-if (process.env.NODE_ENV !== 'production') {
-        // Add mock tenant context headers for debugging
-        response.headers.set('x-tenant-id', 'dev-tenant-123');
-        response.headers.set('x-user-id', userId);
-        return response;
-      }
-      
       // Get tenant context and set in database session
       const context = await getCurrentTenantContext();
       
-      // Set tenant context in the database session
-      // This enables Row-Level Security policies
+      // Enable Row-Level Security policies
       await db.execute(
         sql`SELECT set_tenant_context(${context.tenantId}::uuid)`
       );
@@ -70,13 +55,6 @@ if (process.env.NODE_ENV !== 'production') {
       
     } catch (error) {
       console.error('Failed to set tenant context:', error);
-      
-      // In development, allow access with mock context
-if (process.env.NODE_ENV !== 'production') {
-        response.headers.set('x-tenant-id', 'dev-tenant-fallback');
-        response.headers.set('x-user-id', userId);
-        return response;
-      }
       
       // Log security incident
       trackApiAccess(
