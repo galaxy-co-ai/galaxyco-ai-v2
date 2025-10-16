@@ -12,22 +12,9 @@ import { cn, formatString } from '@/lib/utils'
 import useResponsive from '@/hooks/use-mobile'
 import { Button } from '@/components/ui/button'
 import { 
-  Bell,
   Search,
   Menu,
-  User,
-  Settings,
-  LogOut,
-  HelpCircle
 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 interface TopBarProps {
   className?: string
@@ -109,129 +96,18 @@ export function TopBar({ className }: TopBarProps) {
           </div>
         </div>
 
-        {/* Right Section - Actions and User Menu */}
+        {/* Right Section - Search Only */}
         <div className="flex items-center space-x-2">
-          {/* Search Button - Desktop */}
-          {isDesktop && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden lg:flex"
-              aria-label="Search"
-            >
-              <Search className="w-4 h-4" />
-            </Button>
-          )}
-
-          {/* Notifications */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="relative"
-                aria-label="Notifications"
-              >
-                <Bell className="w-4 h-4" />
-                {/* Notification dot */}
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              
-              {/* Notification Items */}
-              <div className="max-h-64 overflow-y-auto">
-                <DropdownMenuItem className="flex flex-col items-start p-3">
-                  <div className="font-medium">New reply from Lisa Wang</div>
-                  <div className="text-sm text-neutral-500 mt-1">
-                    Lisa replied to your outreach email about AI solutions
-                  </div>
-                  <div className="text-xs text-neutral-400 mt-1">15 min ago</div>
-                </DropdownMenuItem>
-                
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuItem className="flex flex-col items-start p-3">
-                  <div className="font-medium">Research Agent completed</div>
-                  <div className="text-sm text-neutral-500 mt-1">
-                    Successfully enriched 5 new prospects
-                  </div>
-                  <div className="text-xs text-neutral-400 mt-1">45 min ago</div>
-                </DropdownMenuItem>
-                
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuItem className="flex flex-col items-start p-3">
-                  <div className="font-medium">Workflow completed</div>
-                  <div className="text-sm text-neutral-500 mt-1">
-                    Lead Qualification Pipeline finished processing 12 prospects
-                  </div>
-                  <div className="text-xs text-neutral-400 mt-1">2 hours ago</div>
-                </DropdownMenuItem>
-              </div>
-              
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-center text-sm text-primary-600">
-                View all notifications
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Help */}
+          {/* Search Button */}
           <Button
             variant="ghost"
             size="sm"
-            aria-label="Help"
+            className="flex items-center gap-2"
+            aria-label="Search"
           >
-            <HelpCircle className="w-4 h-4" />
+            <Search className="w-4 h-4" />
+            {isDesktop && <span className="text-sm">Search</span>}
           </Button>
-
-          {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="relative h-8 w-8 rounded-full"
-                aria-label="User menu"
-              >
-                {/* User Avatar */}
-                <div className="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">D</span>
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Demo User</p>
-                  <p className="text-xs leading-none text-neutral-500">
-                    demo@galaxyco.ai
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              
-              <DropdownMenuSeparator />
-              
-              <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>

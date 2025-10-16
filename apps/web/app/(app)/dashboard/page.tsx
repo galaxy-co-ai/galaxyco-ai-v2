@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { Button } from '@/components/ui/button'
-import { TrendingUp, TrendingDown, Users, FileText, Mail, Briefcase, Bot, Clock, DollarSign, User as UserIcon, Megaphone } from 'lucide-react'
+import { TrendingUp, TrendingDown, Users, FileText, Mail, Briefcase, Bot, Clock, DollarSign, User as UserIcon, Megaphone, BookOpen, FileStack, GraduationCap, Building2, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // Mock data for the chart
@@ -192,7 +192,7 @@ function CategorySidebar({ selectedCategory, onCategoryChange }: {
   onCategoryChange: (id: string) => void 
 }) {
   return (
-    <div className="bg-white rounded-2xl border-2 border-gray-300 p-6 h-fit">
+    <div className="bg-white rounded-2xl border-2 border-gray-300 p-6 h-full flex flex-col">
       <div className="space-y-2">
         {sidebarCategories.map((category) => {
           const Icon = category.icon
@@ -295,11 +295,97 @@ function MainChart() {
 }
 
 function DashboardFooter() {
+  const resourceSections = [
+    {
+      title: 'Documentation',
+      icon: BookOpen,
+      description: 'Guides and references',
+      links: [
+        { label: 'Getting Started', href: '/docs/getting-started' },
+        { label: 'API Reference', href: '/docs/api' },
+        { label: 'Integration Guides', href: '/docs/integrations' },
+        { label: 'Best Practices', href: '/docs/best-practices' },
+      ]
+    },
+    {
+      title: 'Templates',
+      icon: FileStack,
+      description: 'Ready-to-use resources',
+      links: [
+        { label: 'Workflow Templates', href: '/templates/workflows' },
+        { label: 'Document Templates', href: '/templates/documents' },
+        { label: 'Agent Blueprints', href: '/templates/agents' },
+        { label: 'Email Templates', href: '/templates/emails' },
+      ]
+    },
+    {
+      title: 'AI University',
+      icon: GraduationCap,
+      description: 'Learn and master AI',
+      links: [
+        { label: 'Platform Courses', href: '/university/courses' },
+        { label: 'Certifications', href: '/university/certifications' },
+        { label: 'Video Tutorials', href: '/university/tutorials' },
+        { label: 'Webinars', href: '/university/webinars' },
+      ]
+    },
+    {
+      title: 'Company',
+      icon: Building2,
+      description: 'About GalaxyCo.ai',
+      links: [
+        { label: 'Blog & Updates', href: 'https://galaxyco.ai/blog', external: true },
+        { label: 'Support Center', href: '/support' },
+        { label: 'System Status', href: 'https://status.galaxyco.ai', external: true },
+        { label: 'Contact Us', href: '/contact' },
+      ]
+    },
+  ]
+
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-300 p-8 mt-6">
-      <h2 className="text-2xl font-bold text-gray-900 text-center">Dashboard Footer</h2>
-      <div className="mt-4 text-center text-gray-600">
-        Additional metrics and insights will be displayed here
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Resources</h2>
+        <p className="text-gray-600">Essential tools and guides for power users and executives</p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {resourceSections.map((section) => {
+          const Icon = section.icon
+          return (
+            <div key={section.title} className="space-y-4">
+              {/* Section Header */}
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-primary-50 rounded-lg">
+                  <Icon className="w-5 h-5 text-primary-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">{section.title}</h3>
+                  <p className="text-sm text-gray-500">{section.description}</p>
+                </div>
+              </div>
+              
+              {/* Links */}
+              <ul className="space-y-2">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noopener noreferrer' : undefined}
+                      className="text-sm text-gray-700 hover:text-primary-600 transition-colors flex items-center gap-1 group"
+                    >
+                      <span>{link.label}</span>
+                      {link.external && (
+                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -315,7 +401,7 @@ export default function DashboardPage() {
         <DashboardHero />
 
         {/* Main Content */}
-        <div className="flex gap-6 mb-6">
+        <div className="flex gap-6 mb-6 h-[550px]">
           {/* Left Sidebar Categories */}
           <div className="w-80">
             <CategorySidebar 
