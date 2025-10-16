@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db } from '@galaxyco/database';
-import { agents, workspaceMembers } from '@galaxyco/database/schema';
+import { agents, workspaceMembers, users } from '@galaxyco/database/schema';
 import { eq, and } from 'drizzle-orm';
 
 /**
@@ -46,26 +46,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Verify workspace membership and get user ID
+    // 4. Get user ID from clerkUserId
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkUserId, clerkUserId),
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // 5. Verify workspace membership
     const membership = await db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
+        eq(workspaceMembers.userId, user.id)
       ),
-      with: {
-        user: true,
-      },
     });
 
-    if (!membership || membership.user.clerkUserId !== clerkUserId) {
+    if (!membership) {
       return NextResponse.json(
         { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 }
       );
     }
 
-    const userId = membership.user.id;
+    const userId = user.id;
 
-    // 5. Build agent config
+    // 6. Build agent config
     const config = {
       aiProvider: 'openai' as const, // Default, can be customized later
       model: 'gpt-4',
@@ -86,7 +96,7 @@ export async function POST(req: NextRequest) {
       ],
     };
 
-    // 6. Insert agent as draft
+    // 7. Insert agent as draft
     const [newAgent] = await db
       .insert(agents)
       .values({
@@ -102,7 +112,7 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    // 7. Return success
+    // 8. Return success
     return NextResponse.json({
       success: true,
       agent: {
@@ -155,24 +165,34 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 3. Verify workspace membership
+    // 3. Get user ID from clerkUserId
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkUserId, clerkUserId),
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    // 4. Verify workspace membership
     const membership = await db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
+        eq(workspaceMembers.userId, user.id)
       ),
-      with: {
-        user: true,
-      },
     });
 
-    if (!membership || membership.user.clerkUserId !== clerkUserId) {
+    if (!membership) {
       return NextResponse.json(
         { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 }
       );
     }
 
-    // 4. Fetch agents (placeholder - will expand in Phase 4E)
+    // 5. Fetch agents (placeholder - will expand in Phase 4E)
     const agentsList = await db.query.agents.findMany({
       where: eq(agents.workspaceId, workspaceId),
       orderBy: (agents, { desc }) => [desc(agents.createdAt)],
