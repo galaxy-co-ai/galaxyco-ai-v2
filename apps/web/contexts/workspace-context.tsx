@@ -20,13 +20,31 @@ interface WorkspaceContextType {
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
 
-export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
+export function WorkspaceProvider({ 
+  children, 
+  initialWorkspace 
+}: { 
+  children: React.ReactNode;
+  initialWorkspace?: any;
+}) {
   const { isSignedIn } = useUser();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchWorkspaces = async () => {
+    // Development bypass with mock data
+    if (process.env.NODE_ENV === 'development' && initialWorkspace) {
+      const mockWorkspace = {
+        ...initialWorkspace,
+        role: 'admin'
+      };
+      setWorkspaces([mockWorkspace]);
+      setCurrentWorkspace(mockWorkspace);
+      setIsLoading(false);
+      return;
+    }
+    
     if (!isSignedIn) {
       setWorkspaces([]);
       setCurrentWorkspace(null);

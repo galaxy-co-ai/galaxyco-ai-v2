@@ -20,6 +20,12 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
+  // DEVELOPMENT BYPASS: Skip all auth for development
+  if (process.env.NODE_ENV === 'development') {
+    const response = NextResponse.next();
+    response.headers.set('x-dev-bypass', 'true');
+    return response;
+  }
   const response = NextResponse.next();
   
   // Protect non-public routes

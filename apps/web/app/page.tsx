@@ -11,11 +11,16 @@ import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 
 export default async function HomePage() {
-  const user = await currentUser()
-  
-  // If user is authenticated, redirect to dashboard
-  if (user) {
-    redirect('/dashboard')
+  // Skip auth redirect in development
+  if (process.env.NODE_ENV === 'development') {
+    // Allow direct access to landing page
+  } else {
+    const user = await currentUser()
+    
+    // If user is authenticated, redirect to dashboard
+    if (user) {
+      redirect('/dashboard')
+    }
   }
 
   return (
@@ -33,16 +38,33 @@ export default async function HomePage() {
             
             <div className="flex items-center space-x-4">
               {/* <ThemeToggle /> */}
-              <Link href="/sign-in">
-                <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
-                  Sign In
-                </button>
-              </Link>
-              <Link href="/sign-up">
-                <button className="px-6 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
-                  Get Started
-                </button>
-              </Link>
+              {process.env.NODE_ENV === 'development' ? (
+                <>
+                  <Link href="/dashboard">
+                    <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      Dashboard
+                    </button>
+                  </Link>
+                  <Link href="/test-dashboard">
+                    <button className="px-6 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
+                      View Demo
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/sign-in">
+                    <button className="px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      Sign In
+                    </button>
+                  </Link>
+                  <Link href="/sign-up">
+                    <button className="px-6 py-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
+                      Get Started
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
