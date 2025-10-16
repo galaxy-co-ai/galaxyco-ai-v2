@@ -10,9 +10,11 @@ import { VariantGrid } from '@/components/agents/variant-grid';
 import { ProgressStream } from '@/components/agents/progress-stream';
 import { WorkflowVisualizer } from '@/components/agents/workflow-visualizer';
 import { IterationChat } from '@/components/agents/iteration-chat';
+import { TestPlayground } from '@/components/agents/test-playground';
 import { ErrorBoundary } from '@/components/shared/error-boundary';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
+import type { TestResult } from '@/lib/agents/test-types';
 
 export default function AgentBuilderPage() {
   const router = useRouter();
@@ -25,11 +27,16 @@ export default function AgentBuilderPage() {
     workflow,
     iterations,
     isGenerating,
+    isTesting,
+    testResults,
     setPrompt,
     setEnhancedPrompt,
     setVariants,
     setIsEnhancing,
     setIsGenerating,
+    setIsTesting,
+    setTestResults,
+    setStep,
     selectVariant,
     addIteration,
     updateWorkflow,
@@ -148,6 +155,65 @@ export default function AgentBuilderPage() {
   };
 
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+
+  const handleContinueToTest = () => {
+    setStep('test');
+    toast.success('Ready to test your agent!');
+  };
+
+  const handleRunTest = async (inputs: any) => {
+    if (!selectedVariant || !workflow) {
+      toast.error('No workflow to test');
+      return;
+    }
+
+    setIsTesting(true);
+
+    try {
+      const response = await fetch('/api/agents/test-run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agentName: selectedVariant.name,
+          workflowSteps: workflow,
+          ...inputs,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Test execution failed');
+      }
+
+      const result: TestResult = await response.json();
+      setTestResults(result);
+
+      if (result.success) {
+        toast.success(`Test completed! All ${result.executedSteps} steps passed.`);
+      } else {
+        toast.error(`Test failed: ${result.error || 'Unknown error'}`);
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Test run error:', error);
+      const message = error instanceof Error ? error.message : 'Failed to run test';
+      toast.error(message);
+      throw error;
+    } finally {
+      setIsTesting(false);
+    }
+  };
+
+  const handleDeploy = async () => {
+    if (!selectedVariant || !testResults?.success) {
+      toast.error('Test must pass before deploying');
+      return;
+    }
+
+    toast.success('Deploy feature coming soon!');
+    // TODO: Implement agent deployment
+  };
 
   const handleSendMessage = async (content: string) => {
     if (!selectedVariant) return;
@@ -314,11 +380,43 @@ export default function AgentBuilderPage() {
                 ← Choose Different Variant
               </button>
               <button
+                onClick={handleContinueToTest}
                 className="inline-flex items-center gap-2 px-6 py-2 text-sm font-medium rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
               >
                 Continue to Test →
               </button>
             </div>
+          </div>
+        )}
+
+        {currentStep === 'test' && selectedVariant && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                  Test Your Agent
+                </h2>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                  Run a test with sample data to verify your workflow
+                </p>
+              </div>
+              <button
+                onClick={() => setStep('iteration')}
+                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                ← Back to Refine
+              </button>
+            </div>
+
+            <ErrorBoundary>
+              <TestPlayground
+                agentName={selectedVariant.name}
+                workflowSteps={workflow}
+                onRunTest={handleRunTest}
+                onDeploy={handleDeploy}
+                isRunning={isTesting}
+              />
+            </ErrorBoundary>
           </div>
         )}
       </div>

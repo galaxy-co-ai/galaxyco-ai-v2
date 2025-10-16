@@ -53,13 +53,9 @@ export interface TestInputs {
   mockIntegrations: boolean;
 }
 
-export interface TestResult {
-  success: boolean;
-  outputs: any[];
-  steps: any[];
-  duration: number;
-  errors?: any[];
-}
+// Import TestResult from test-types instead of defining here
+import type { TestResult as TestResultType } from '@/lib/agents/test-types';
+export type TestResult = TestResultType;
 
 interface AgentBuilderState {
   // Current builder state
