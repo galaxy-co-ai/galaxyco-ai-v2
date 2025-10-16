@@ -98,6 +98,13 @@ export function MainSidebar({ className }: SidebarProps) {
     const newPinState = !isPinned
     setIsPinned(newPinState)
     localStorage.setItem('sidebar-pinned', String(newPinState))
+    
+    // Emit custom event for same-tab updates
+    window.dispatchEvent(
+      new CustomEvent('sidebar-toggle', {
+        detail: { isPinned: newPinState }
+      })
+    )
   }
 
   return (

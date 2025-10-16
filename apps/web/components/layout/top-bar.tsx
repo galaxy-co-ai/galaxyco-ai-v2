@@ -6,7 +6,7 @@
 
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn, formatString } from '@/lib/utils'
 import useResponsive from '@/hooks/use-mobile'
@@ -39,9 +39,28 @@ const getBreadcrumbs = (pathname: string): string[] => {
 export function TopBar({ className }: TopBarProps) {
   const pathname = usePathname()
   const { isMobile, isDesktop } = useResponsive()
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false)
   
   const pageTitle = getPageTitle(pathname)
   const breadcrumbs = getBreadcrumbs(pathname)
+
+  // Listen for sidebar pin state changes
+  useEffect(() => {
+    // Check initial state
+    const savedPinState = localStorage.getItem('sidebar-pinned')
+    setIsSidebarPinned(savedPinState === 'true')
+
+    // Listen for custom event
+    const handleSidebarToggle = (e: CustomEvent) => {
+      setIsSidebarPinned(e.detail.isPinned)
+    }
+
+    window.addEventListener('sidebar-toggle' as any, handleSidebarToggle as any)
+
+    return () => {
+      window.removeEventListener('sidebar-toggle' as any, handleSidebarToggle as any)
+    }
+  }, [])
 
   return (
     <header
@@ -49,7 +68,8 @@ export function TopBar({ className }: TopBarProps) {
         // Fixed positioning
         'fixed top-0 right-0 z-50',
         // Responsive width (account for sidebar on desktop)
-        'left-0 lg:left-16',
+        'transition-all duration-200 ease-in-out',
+        isSidebarPinned ? 'left-0 lg:left-60' : 'left-0 lg:left-16',
         // Height
         'h-16',
         // Styling
