@@ -38,6 +38,7 @@
     "@types/pdf-parse": "^1.1.5",
     "@upstash/redis": "^1.35.6",
     "@vercel/blob": "^2.0.0",
+    "@xyflow/react": "^12.8.6",
     "ai": "^5.0.64",
     "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.1",

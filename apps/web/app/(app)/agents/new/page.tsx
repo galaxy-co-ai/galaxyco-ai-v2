@@ -8,7 +8,10 @@ import { PromptInput } from '@/components/agents/prompt-input';
 import { TemplateGallery, type Template } from '@/components/agents/template-gallery';
 import { VariantGrid } from '@/components/agents/variant-grid';
 import { ProgressStream } from '@/components/agents/progress-stream';
+import { WorkflowVisualizer } from '@/components/agents/workflow-visualizer';
+import { IterationChat } from '@/components/agents/iteration-chat';
 import { toast } from 'sonner';
+import { nanoid } from 'nanoid';
 
 export default function AgentBuilderPage() {
   const router = useRouter();
@@ -17,6 +20,9 @@ export default function AgentBuilderPage() {
     promptText,
     enhancedPrompt,
     variants,
+    selectedVariant,
+    workflow,
+    iterations,
     isGenerating,
     setPrompt,
     setEnhancedPrompt,
@@ -24,6 +30,8 @@ export default function AgentBuilderPage() {
     setIsEnhancing,
     setIsGenerating,
     selectVariant,
+    addIteration,
+    updateWorkflow,
   } = useAgentBuilder();
 
   const [progressSteps, setProgressSteps] = useState<Array<{ label: string; status: 'pending' | 'active' | 'complete' }>>([]);
@@ -124,8 +132,67 @@ export default function AgentBuilderPage() {
 
   const handleVariantSelect = (variant: any) => {
     selectVariant(variant);
-    toast.success('Variant selected! (Iteration coming in Phase 2)');
-    // TODO Phase 2: Navigate to iteration view
+    toast.success('Variant selected! Refine your agent using the chat.');
+  };
+
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+
+  const handleSendMessage = async (content: string) => {
+    if (!selectedVariant) return;
+
+    setIsSendingMessage(true);
+
+    // Add user message
+    addIteration({
+      id: nanoid(),
+      role: 'user',
+      content,
+      timestamp: new Date(),
+    });
+
+    try {
+      const response = await fetch('/api/ai/iterate-workflow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          currentWorkflow: workflow,
+          currentEdges: selectedVariant.edges,
+          message: content,
+          variantId: selectedVariant.id,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to iterate workflow');
+
+      const data = await response.json();
+
+      // Add assistant message
+      addIteration({
+        id: nanoid(),
+        role: 'assistant',
+        content: data.explanation,
+        timestamp: new Date(),
+        workflowUpdate: data.workflow,
+      });
+
+      // Update workflow in store
+      updateWorkflow(data.workflow);
+
+      toast.success('Workflow updated!');
+    } catch (error) {
+      console.error('Iterate error:', error);
+      toast.error('Failed to update workflow');
+      
+      // Add error message
+      addIteration({
+        id: nanoid(),
+        role: 'system',
+        content: 'Failed to process your request. Please try again.',
+        timestamp: new Date(),
+      });
+    } finally {
+      setIsSendingMessage(false);
+    }
   };
 
   return (
@@ -178,6 +245,60 @@ export default function AgentBuilderPage() {
 
         {currentStep === 'variants' && variants.length > 0 && (
           <VariantGrid variants={variants} onSelectVariant={handleVariantSelect} />
+        )}
+
+        {currentStep === 'iteration' && selectedVariant && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+              Refine Your Agent
+            </h2>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Use the chat to describe changes. The workflow updates in real-time.
+            </p>
+
+            {/* Desktop: Split layout, Mobile: Stacked */}
+            <div className="grid gap-6 lg:grid-cols-2 lg:h-[600px]">
+              {/* Workflow Visualizer */}
+              <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
+                <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
+                  <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
+                    Workflow
+                  </h3>
+                </div>
+                <div className="h-[400px] lg:h-[calc(100%-57px)]">
+                  <WorkflowVisualizer
+                    nodes={workflow}
+                    edges={selectedVariant.edges}
+                    interactive={false}
+                  />
+                </div>
+              </div>
+
+              {/* Iteration Chat */}
+              <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 h-[600px]">
+                <IterationChat
+                  messages={iterations}
+                  onSendMessage={handleSendMessage}
+                  isSending={isSendingMessage}
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between pt-4">
+              <button
+                onClick={() => selectVariant(null as any)}
+                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                ← Choose Different Variant
+              </button>
+              <button
+                className="inline-flex items-center gap-2 px-6 py-2 text-sm font-medium rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
+              >
+                Continue to Test →
+              </button>
+            </div>
+          </div>
         )}
       </div>
 
