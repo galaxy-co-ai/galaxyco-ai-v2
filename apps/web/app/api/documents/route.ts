@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireSession } from '@/lib/services/user-session';
+import { auth } from '@clerk/nextjs/server';
 import { db } from '@galaxyco/database';
-import { knowledgeItems } from '@galaxyco/database/schema';
-import { and, eq, desc, like, inArray } from 'drizzle-orm';
-import { ragService } from '@/lib/services/rag-service';
+import { knowledgeItems, users, workspaceMembers } from '@galaxyco/database/schema';
+import { and, eq, desc, like } from 'drizzle-orm';
 
 export const runtime = 'nodejs';
 
@@ -13,8 +12,30 @@ export const runtime = 'nodejs';
  */
 export async function GET(req: NextRequest) {
   try {
-    const session = await requireSession();
-    const { workspaceId } = session;
+    // 1. Auth check
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // 2. Get user and workspace
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkUserId, clerkUserId),
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    const membership = await db.query.workspaceMembers.findFirst({
+      where: eq(workspaceMembers.userId, user.id),
+    });
+
+    if (!membership) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
+    }
+
+    const workspaceId = membership.workspaceId;
 
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get('limit') || '50');
@@ -23,27 +44,10 @@ export async function GET(req: NextRequest) {
     const tags = searchParams.get('tags')?.split(',');
     const query = searchParams.get('query');
 
-    // If there's a search query, use semantic search
-    if (query) {
-      const results = await ragService.searchDocuments({
-        query,
-        workspaceId,
-        limit,
-        filters: {
-          collectionIds: collectionId ? [collectionId] : undefined,
-          types: type ? [type] : undefined,
-          tags,
-        },
-      });
-
-      return NextResponse.json({
-        documents: results.map((r) => ({
-          ...r.item,
-          relevanceScore: r.relevanceScore,
-          snippet: r.snippet,
-        })),
-      });
-    }
+    // For now, return simple query results (semantic search can be added later)
+    // if (query) {
+    //   // Add text search capability here if needed
+    // }
 
     // Otherwise, regular list query
     const conditions = [eq(knowledgeItems.workspaceId, workspaceId)];

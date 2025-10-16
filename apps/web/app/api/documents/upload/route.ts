@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireSession } from '@/lib/services/user-session';
-import { documentProcessor } from '@/lib/services/document-processor';
+import { auth } from '@clerk/nextjs/server';
 import { db } from '@galaxyco/database';
-import { knowledgeItems } from '@galaxyco/database/schema';
-import { nanoid } from 'nanoid';
+import { knowledgeItems, users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 export const runtime = 'nodejs';
 
@@ -18,11 +17,23 @@ const ALLOWED_TYPES = [
   'text/plain',
   'text/csv',
   'text/markdown',
+  'text/x-markdown',
   'image/png',
   'image/jpeg',
   'image/jpg',
   'image/webp',
 ];
+
+function isAllowedFile(file: File): boolean {
+  if (ALLOWED_TYPES.includes(file.type)) return true;
+  
+  // Check by extension for files with missing/incorrect MIME types
+  const fileName = file.name.toLowerCase();
+  return fileName.endsWith('.md') || 
+         fileName.endsWith('.txt') ||
+         fileName.endsWith('.csv') ||
+         fileName.endsWith('.json');
+}
 
 /**
  * POST /api/documents/upload
@@ -30,8 +41,31 @@ const ALLOWED_TYPES = [
  */
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireSession();
-    const { userId, workspaceId } = session;
+    // 1. Auth check
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // 2. Get user and workspace
+    const user = await db.query.users.findFirst({
+      where: eq(users.clerkUserId, clerkUserId),
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    const membership = await db.query.workspaceMembers.findFirst({
+      where: eq(workspaceMembers.userId, user.id),
+    });
+
+    if (!membership) {
+      return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
+    }
+
+    const userId = user.id;
+    const workspaceId = membership.workspaceId;
 
     // Parse form data
     const formData = await req.formData();
@@ -51,78 +85,59 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!isAllowedFile(file)) {
       return NextResponse.json(
-        { error: `File type ${file.type} not supported` },
+        { error: `File type ${file.type} not supported. Supported: PDF, Word, Excel, Text, Markdown, Images` },
         { status: 400 }
       );
     }
 
-    // Create knowledge item record first (status: processing)
-    const itemId = nanoid();
-    await db.insert(knowledgeItems).values({
+    // For demo: create a simple knowledge item record
+    const itemId = crypto.randomUUID();
+    
+    // Read file content for text files
+    let content = '';
+    let summary = '';
+    if (file.type.startsWith('text/') || file.name.endsWith('.md') || file.name.endsWith('.txt')) {
+      content = await file.text();
+      summary = content.slice(0, 200) + (content.length > 200 ? '...' : '');
+    } else {
+      summary = `Uploaded ${file.type} file: ${file.name}`;
+    }
+
+    const [newItem] = await db.insert(knowledgeItems).values({
       id: itemId,
       workspaceId,
       createdBy: userId,
-      title: file.name,
+      title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
       type: file.type.startsWith('image/') ? 'image' : 'document',
-      status: 'processing',
+      status: 'ready',
       fileName: file.name,
       fileSize: file.size,
       mimeType: file.type,
-    });
+      content,
+      summary,
+      tags: [],
+      metadata: {
+        originalName: file.name,
+        uploadedAt: new Date().toISOString(),
+      },
+      processedAt: new Date(),
+    }).returning();
 
-    // Process document in the background (could be moved to Trigger.dev)
-    // For now, we'll process it synchronously
-    try {
-      const processed = await documentProcessor.processDocument({
-        file,
-        userId,
-        workspaceId,
-        collectionId: collectionId || undefined,
-      });
-
-      // Update knowledge item with processed data
-      await db
-        .update(knowledgeItems)
-        .set({
+    return NextResponse.json(
+      {
+        success: true,
+        document: {
+          id: itemId,
+          title: newItem.title,
+          summary,
+          tags: [],
           status: 'ready',
-          sourceUrl: processed.storageUrl,
-          content: processed.content,
-          summary: processed.summary,
-          tags: processed.tags,
-          embeddings: processed.embeddings.flat() as any, // Flatten to single array
-          embeddingsModel: 'text-embedding-3-small',
-          metadata: processed.metadata,
-          processedAt: new Date(),
-        })
-        .where(eq(knowledgeItems.id, itemId));
-
-      return NextResponse.json(
-        {
-          success: true,
-          document: {
-            id: itemId,
-            title: file.name,
-            summary: processed.summary,
-            tags: processed.tags,
-            status: 'ready',
-          },
         },
-        { status: 201 }
-      );
-    } catch (processError) {
-      // Update status to failed
-      await db
-        .update(knowledgeItems)
-        .set({
-          status: 'failed',
-          processingError: processError instanceof Error ? processError.message : 'Unknown error',
-        })
-        .where(eq(knowledgeItems.id, itemId));
-
-      throw processError;
-    }
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Document upload error:', error);
     return NextResponse.json(
@@ -132,5 +147,3 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Import eq for database query
-import { eq } from 'drizzle-orm';

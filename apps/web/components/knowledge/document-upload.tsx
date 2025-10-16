@@ -31,9 +31,18 @@ export function DocumentUpload({
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/msword',
     'text/plain',
+    'text/markdown',
+    'text/x-markdown',
+    '.md',
+    '.txt',
+    '.csv',
+    'text/csv',
+    'application/json',
+    'text/html',
     'image/jpeg',
     'image/png',
     'image/gif',
+    'image/webp',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ]
@@ -59,9 +68,19 @@ export function DocumentUpload({
   };
 
   const validateFile = (file: File): string | null => {
-    if (!acceptedTypes.includes(file.type)) {
-      return `File type not supported. Accepted types: ${acceptedTypes.map(type => 
-        type.split('/')[1].toUpperCase()).join(', ')}`;
+    // Check by file extension for files without proper MIME types
+    const fileName = file.name.toLowerCase();
+    const fileExtension = '.' + fileName.split('.').pop();
+    
+    const isAccepted = acceptedTypes.includes(file.type) || 
+                      acceptedTypes.includes(fileExtension) ||
+                      (fileName.endsWith('.md') || fileName.endsWith('.markdown')) ||
+                      (fileName.endsWith('.txt')) ||
+                      (fileName.endsWith('.csv')) ||
+                      (fileName.endsWith('.json'));
+    
+    if (!isAccepted) {
+      return `File type not supported. Accepted types: PDF, Word, Excel, Text, Markdown (.md), CSV, JSON, Images`;
     }
     
     if (file.size > maxSizeBytes) {
@@ -272,7 +291,7 @@ export function DocumentUpload({
           className="hidden"
         />
         <div className="mt-4 text-sm text-muted-foreground">
-          <p>Supported formats: PDF, Word, Excel, Text, Images</p>
+          <p>Supported formats: PDF, Word, Excel, Text, Markdown, CSV, JSON, Images</p>
           <p>Maximum file size: {formatFileSize(maxSizeBytes)} • Maximum files: {maxFiles}</p>
         </div>
       </div>
