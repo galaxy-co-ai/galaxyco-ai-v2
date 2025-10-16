@@ -73,10 +73,10 @@ export function TopBar({ className }: TopBarProps) {
         // Height
         'h-16',
         // Styling
-        'bg-white dark:bg-neutral-900',
-        'border-b border-neutral-200 dark:border-neutral-700',
+'bg-card',
+        'border-b border-border',
         // Backdrop blur
-        'backdrop-blur-lg bg-white/90 dark:bg-neutral-900/90',
+        'backdrop-blur-lg bg-card/90',
         className
       )}
     >

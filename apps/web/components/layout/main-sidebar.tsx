@@ -117,21 +117,21 @@ export function MainSidebar({ className }: SidebarProps) {
         // Responsive width with smooth transition
         'transition-all duration-200 ease-in-out',
         isExpanded ? 'w-60' : 'w-16',
-        // Light theme styling
-        'bg-white border-r border-gray-200',
-        'flex flex-col',
+        // Surface styling using design tokens
+        'bg-card border-r border-border',
+        'flex flex-col shadow-sm',
         className
       )}
     >
       {/* Logo/Brand Section */}
-      <div className="flex items-center h-16 px-4 border-b border-gray-200 gap-3">
+      <div className="flex items-center h-16 px-4 border-b border-border gap-3">
         {/* Logo */}
-        <div className="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-sm">G</span>
+        <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+          <span className="text-primary-foreground font-bold text-sm">G</span>
         </div>
         {/* Brand Name - visible when expanded */}
         {isExpanded && (
-          <span className="text-lg font-bold text-gray-900 whitespace-nowrap">GalaxyCo</span>
+          <span className="text-lg font-bold text-foreground whitespace-nowrap">GalaxyCo</span>
         )}
       </div>
 
@@ -148,12 +148,12 @@ export function MainSidebar({ className }: SidebarProps) {
                 className={cn(
                   // Base styles
                   'w-full h-12 rounded-lg',
-                  'hover:bg-gray-100',
+'hover:bg-hover',
                   'transition-colors duration-200',
                   // Active state
-                  isActive && 'bg-primary-50 text-primary-600',
+                  isActive && 'bg-primary/10 text-primary',
                   // Default text color
-                  !isActive && 'text-gray-600',
+                  !isActive && 'text-muted-foreground',
                   // Layout
                   'flex items-center gap-3',
                   isExpanded ? 'justify-start px-3' : 'justify-center p-0',
@@ -171,8 +171,8 @@ export function MainSidebar({ className }: SidebarProps) {
                 {/* Badge */}
                 {item.badge && (
                   <span className={cn(
-                    "bg-primary-500 text-white text-[10px] px-1 h-4 min-w-[16px] flex items-center justify-center rounded-full",
-                    isExpanded ? "ml-auto" : "absolute -top-1 -right-1"
+                    'bg-primary text-primary-foreground text-[10px] px-1 h-4 min-w-[16px] flex items-center justify-center rounded-full shadow-sm',
+                    isExpanded ? 'ml-auto' : 'absolute -top-1 -right-1'
                   )}>
                     {item.badge}
                   </span>
@@ -196,26 +196,26 @@ export function MainSidebar({ className }: SidebarProps) {
             onClick={togglePin}
             className={cn(
               'w-full h-10 rounded-lg',
-              'hover:bg-gray-100',
+              'hover:bg-hover',
               'flex items-center gap-3 justify-start px-3',
-              'text-gray-600',
-              isPinned && 'bg-gray-100 text-primary-600'
+              'text-muted-foreground',
+              isPinned && 'bg-hover text-primary'
             )}
           >
-            <Pin className={cn("w-4 h-4 flex-shrink-0", isPinned && "fill-current")} />
+            <Pin className={cn('w-4 h-4 flex-shrink-0', isPinned && 'fill-current')} />
             <span className="text-sm font-medium">Pin Sidebar</span>
           </Button>
         </div>
       )}
 
       {/* Bottom Section - Settings, Help, Notifications, User */}
-      <div className="p-2 border-t border-gray-200 space-y-1">
+      <div className="p-2 border-t border-border space-y-1">
         {/* Settings */}
         <Link href="/settings">
           <Button
             variant="ghost"
             className={cn(
-              'w-full h-12 rounded-lg hover:bg-gray-100 text-gray-600',
+              'w-full h-12 rounded-lg hover:bg-hover text-muted-foreground',
               'flex items-center gap-3',
               isExpanded ? 'justify-start px-3' : 'justify-center p-0'
             )}
@@ -229,7 +229,7 @@ export function MainSidebar({ className }: SidebarProps) {
         <Button
           variant="ghost"
           className={cn(
-            'w-full h-12 rounded-lg hover:bg-gray-100 text-gray-600',
+            'w-full h-12 rounded-lg hover:bg-hover text-muted-foreground',
             'flex items-center gap-3',
             isExpanded ? 'justify-start px-3' : 'justify-center p-0'
           )}
@@ -244,7 +244,7 @@ export function MainSidebar({ className }: SidebarProps) {
             <Button
               variant="ghost"
               className={cn(
-                'w-full h-12 rounded-lg hover:bg-gray-100 text-gray-600 relative',
+                'w-full h-12 rounded-lg hover:bg-hover text-muted-foreground relative',
                 'flex items-center gap-3',
                 isExpanded ? 'justify-start px-3' : 'justify-center p-0'
               )}
@@ -253,8 +253,8 @@ export function MainSidebar({ className }: SidebarProps) {
               {isExpanded && <span className="text-sm font-medium">Notifications</span>}
               {/* Notification dot */}
               <div className={cn(
-                "w-2 h-2 bg-red-500 rounded-full",
-                isExpanded ? "ml-auto" : "absolute top-2 right-2"
+                'w-2 h-2 bg-destructive rounded-full',
+                isExpanded ? 'ml-auto' : 'absolute top-2 right-2'
               )} />
             </Button>
           </DropdownMenuTrigger>
@@ -306,13 +306,13 @@ export function MainSidebar({ className }: SidebarProps) {
             <Button
               variant="ghost"
               className={cn(
-                'w-full h-12 rounded-lg hover:bg-gray-100',
+                'w-full h-12 rounded-lg hover:bg-hover',
                 'flex items-center gap-3',
                 isExpanded ? 'justify-start px-3' : 'justify-center p-0'
               )}
             >
-              <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm font-medium">D</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-primary-foreground text-sm font-medium">D</span>
               </div>
               {isExpanded && (
                 <div className="flex flex-col items-start min-w-0">
