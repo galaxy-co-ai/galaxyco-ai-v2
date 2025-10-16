@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Button } from '@/components/ui/button'
 import { TrendingUp, TrendingDown, Users, FileText, Mail, Briefcase, Bot, Clock, DollarSign, User as UserIcon, Megaphone, BookOpen, FileStack, GraduationCap, Building2, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import './dashboard.css'
 
 // Mock data for the chart
 const chartData = [
@@ -133,11 +134,12 @@ function DashboardHero() {
   })
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-gray-300 p-8 mb-6">
+    <div className="bg-white rounded-2xl border-2 border-gray-300 p-8">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between">
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Dashboard Hero</h1>
+          <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
         </div>
         <div className="flex items-center gap-8">
           {/* Time and Date */}
@@ -168,21 +170,39 @@ function DashboardHero() {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
 
-      {/* User Engagement Stats */}
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">User Engagement</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {userEngagementStats.map((stat, index) => (
-            <div key={index} className={cn("rounded-full px-6 py-3 flex items-center gap-3", stat.bgColor)}>
-              <div className={cn("text-sm font-medium", stat.color)}>
-                {stat.value} {stat.title}
-              </div>
+function StockTicker() {
+  // Duplicate stats for seamless infinite scroll
+  const duplicatedStats = [...userEngagementStats, ...userEngagementStats]
+
+  return (
+    <div className="relative overflow-hidden bg-gradient-to-r from-cyan-50 via-blue-50 to-cyan-50 border-y border-gray-200 py-4 my-6">
+      <div className="flex animate-scroll">
+        {duplicatedStats.map((stat, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-3 px-8 whitespace-nowrap"
+          >
+            <div className="flex items-center gap-2">
+              <span className={cn("text-lg font-bold", stat.color)}>
+                {stat.value}
+              </span>
+              <span className="text-sm text-gray-700 font-medium">
+                {stat.title}
+              </span>
               <TrendingUp className={cn("w-4 h-4", stat.color)} />
             </div>
-          ))}
-        </div>
+            <div className="w-px h-6 bg-gray-300" />
+          </div>
+        ))}
       </div>
+      
+      {/* Fade edges */}
+      <div className="absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-cyan-50 to-transparent pointer-events-none" />
+      <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-blue-50 to-transparent pointer-events-none" />
     </div>
   )
 }
@@ -399,6 +419,9 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto">
         {/* Dashboard Hero */}
         <DashboardHero />
+        
+        {/* Stock Ticker */}
+        <StockTicker />
 
         {/* Main Content */}
         <div className="flex gap-6 mb-6 h-[550px]">
