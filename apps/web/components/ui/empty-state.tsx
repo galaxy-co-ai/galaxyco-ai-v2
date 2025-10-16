@@ -47,7 +47,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "text-center p-16 bg-secondary/50 rounded-xl border-2 border-dashed border-border max-w-2xl mx-auto",
+"text-center p-spacing-xl bg-background-subtle rounded-lg border border-dashed border-border max-w-2xl mx-auto",
         className
       )}
     >
@@ -60,34 +60,34 @@ export function EmptyState({
         </div>
       )}
 
-      <h3 className="text-2xl font-semibold text-foreground mb-4">
+<h3 className="text-heading-lg font-heading text-foreground mb-spacing-sm">
         {title}
       </h3>
 
       <p className={cn(
-        "text-base text-muted-foreground max-w-lg mx-auto leading-relaxed",
-        helpText || steps ? "mb-6" : "mb-8"
+"text-body-md text-foreground-muted max-w-lg mx-auto leading-relaxed",
+helpText || steps ? "mb-spacing-md" : "mb-spacing-lg"
       )}>
         {description}
       </p>
 
       {/* Optional help text */}
       {helpText && (
-        <p className="text-sm text-muted-foreground/80 max-w-lg mx-auto mb-8 italic">
+<p className="text-caption text-foreground-muted max-w-lg mx-auto mb-spacing-lg italic">
           {helpText}
         </p>
       )}
 
       {/* Optional helpful steps */}
       {steps && steps.length > 0 && (
-        <div className="bg-background border border-border rounded-lg p-6 max-w-lg mx-auto mb-8">
-          <div className="text-sm font-semibold text-foreground mb-4 text-left">
+<div className="bg-background border border-border rounded-lg p-spacing-md max-w-lg mx-auto mb-spacing-lg">
+<div className="text-caption font-semibold text-foreground mb-spacing-sm text-left">
             Get started:
           </div>
-          <ul className="list-none p-0 m-0 text-left flex flex-col gap-3">
+<ul className="list-none p-0 m-0 text-left flex flex-col gap-spacing-sm">
             {steps.map((step, index) => (
-              <li key={index} className="text-sm text-muted-foreground flex items-start gap-3">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-semibold flex-shrink-0">
+<li key={index} className="text-body-sm text-foreground-muted flex items-start gap-spacing-sm">
+<span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-caption font-semibold flex-shrink-0">
                   {index + 1}
                 </span>
                 <span>{step}</span>
@@ -98,7 +98,7 @@ export function EmptyState({
       )}
 
       {action && (
-        <div className="flex gap-4 justify-center flex-wrap">
+<div className="flex gap-spacing-md justify-center flex-wrap">
           <Button
             variant={action.variant || "default"}
             size="lg"
