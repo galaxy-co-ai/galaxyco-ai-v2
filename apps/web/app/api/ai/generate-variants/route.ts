@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { requireSession } from '@/lib/services/user-session';
+import { auth } from '@clerk/nextjs/server';
 import { nanoid } from 'nanoid';
 
 export const runtime = 'nodejs';
@@ -70,7 +70,12 @@ function createWorkflowNodes(steps: string[], variantId: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireSession();
+    // Auth check
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { prompt, enhancedPrompt, templateId } = body;
 

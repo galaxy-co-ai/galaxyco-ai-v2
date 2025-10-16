@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { requireSession } from '@/lib/services/user-session';
+import { auth } from '@clerk/nextjs/server';
 
 export const runtime = 'nodejs';
 
@@ -20,7 +20,12 @@ Keep the enhanced version conversational but structured. Add 2-3 key improvement
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireSession();
+    // Auth check
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { prompt, context } = body;
 
