@@ -10,6 +10,7 @@ import { VariantGrid } from '@/components/agents/variant-grid';
 import { ProgressStream } from '@/components/agents/progress-stream';
 import { WorkflowVisualizer } from '@/components/agents/workflow-visualizer';
 import { IterationChat } from '@/components/agents/iteration-chat';
+import { ErrorBoundary } from '@/components/shared/error-boundary';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
 
@@ -48,11 +49,17 @@ export default function AgentBuilderPage() {
       if (!response.ok) throw new Error('Failed to enhance prompt');
 
       const data = await response.json();
+      
+      if (!data.enhanced) {
+        throw new Error('No enhanced prompt returned');
+      }
+      
       setEnhancedPrompt(data.enhanced);
-      toast.success('Prompt enhanced!');
+      toast.success('Prompt enhanced with AI suggestions!');
     } catch (error) {
       console.error('Enhance error:', error);
-      toast.error('Failed to enhance prompt');
+      const message = error instanceof Error ? error.message : 'Failed to enhance prompt';
+      toast.error(message);
     } finally {
       setIsEnhancing(false);
     }
@@ -103,6 +110,10 @@ export default function AgentBuilderPage() {
 
       const data = await response.json();
       
+      if (!data.variants || data.variants.length === 0) {
+        throw new Error('No variants generated. Try a more specific prompt.');
+      }
+      
       // Complete progress
       setProgressSteps([
         { label: 'Parsing prompt', status: 'complete' },
@@ -118,7 +129,8 @@ export default function AgentBuilderPage() {
       }, 800);
     } catch (error) {
       console.error('Generate error:', error);
-      toast.error('Failed to generate agent variants');
+      const message = error instanceof Error ? error.message : 'Failed to generate agent variants';
+      toast.error(message);
       setProgressSteps([]);
     } finally {
       setIsGenerating(false);
@@ -165,6 +177,10 @@ export default function AgentBuilderPage() {
       if (!response.ok) throw new Error('Failed to iterate workflow');
 
       const data = await response.json();
+      
+      if (!data.explanation || !data.workflow) {
+        throw new Error('Invalid response from AI');
+      }
 
       // Add assistant message
       addIteration({
@@ -181,7 +197,8 @@ export default function AgentBuilderPage() {
       toast.success('Workflow updated!');
     } catch (error) {
       console.error('Iterate error:', error);
-      toast.error('Failed to update workflow');
+      const message = error instanceof Error ? error.message : 'Failed to update workflow';
+      toast.error(message);
       
       // Add error message
       addIteration({
@@ -259,29 +276,33 @@ export default function AgentBuilderPage() {
             {/* Desktop: Split layout, Mobile: Stacked */}
             <div className="grid gap-6 lg:grid-cols-2 lg:h-[600px]">
               {/* Workflow Visualizer */}
-              <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
-                <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
-                  <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
-                    Workflow
-                  </h3>
+              <ErrorBoundary>
+                <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
+                  <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
+                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
+                      Workflow
+                    </h3>
+                  </div>
+                  <div className="h-[400px] lg:h-[calc(100%-57px)]">
+                    <WorkflowVisualizer
+                      nodes={workflow}
+                      edges={selectedVariant.edges}
+                      interactive={false}
+                    />
+                  </div>
                 </div>
-                <div className="h-[400px] lg:h-[calc(100%-57px)]">
-                  <WorkflowVisualizer
-                    nodes={workflow}
-                    edges={selectedVariant.edges}
-                    interactive={false}
-                  />
-                </div>
-              </div>
+              </ErrorBoundary>
 
               {/* Iteration Chat */}
-              <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 h-[600px]">
-                <IterationChat
-                  messages={iterations}
-                  onSendMessage={handleSendMessage}
-                  isSending={isSendingMessage}
-                />
-              </div>
+              <ErrorBoundary>
+                <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 h-[600px]">
+                  <IterationChat
+                    messages={iterations}
+                    onSendMessage={handleSendMessage}
+                    isSending={isSendingMessage}
+                  />
+                </div>
+              </ErrorBoundary>
             </div>
 
             {/* Actions */}

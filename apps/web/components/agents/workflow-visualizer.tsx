@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   ReactFlow,
   Node,
@@ -120,10 +120,11 @@ export function WorkflowVisualizer({
     [workflowNodes, onNodeClick]
   );
 
-  // Update nodes when workflowNodes change
-  useCallback(() => {
+  // Sync React Flow state when incoming workflow changes
+  useEffect(() => {
     setNodes(transformedNodes);
     setEdges(transformedEdges);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workflowNodes, workflowEdges]);
 
   if (compact) {

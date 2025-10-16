@@ -22,6 +22,9 @@ export function PromptInput({ onEnhance, onGenerate }: PromptInputProps) {
   const [showEnhanced, setShowEnhanced] = useState(false);
 
   const handleEnhanceClick = async () => {
+    if (!promptText.trim() || promptText.trim().length < 10) {
+      return; // Validation handled by disabled state
+    }
     setShowEnhanced(true);
     await onEnhance();
   };
