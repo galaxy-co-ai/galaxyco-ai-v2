@@ -26,12 +26,22 @@ export async function getCurrentTenantContext(): Promise<TenantContext> {
     throw new Error('User not authenticated');
   }
 
-  // Get user's workspace memberships from database
+  // First, get the internal user ID from Clerk user ID
+  const user = await db.query.users.findFirst({
+    where: eq(users.clerkUserId, userId),
+    columns: {
+      id: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error('User not found in database');
+  }
+
+  // Then get user's active workspace membership
   const membership = await db.query.workspaceMembers.findFirst({
     where: and(
-      eq(workspaceMembers.userId, 
-        db.select({ id: users.id }).from(users).where(eq(users.clerkUserId, userId)).limit(1)
-      ),
+      eq(workspaceMembers.userId, user.id),
       eq(workspaceMembers.isActive, true)
     ),
     columns: {
