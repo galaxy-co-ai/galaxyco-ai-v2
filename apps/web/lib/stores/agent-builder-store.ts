@@ -60,6 +60,7 @@ export type TestResult = TestResultType;
 interface AgentBuilderState {
   // Current builder state
   currentStep: BuilderStep;
+  agentId: string | null; // Saved agent ID after deploy
   promptText: string;
   enhancedPrompt: string | null;
   variants: AgentVariant[];
@@ -76,6 +77,7 @@ interface AgentBuilderState {
   
   // Actions
   setStep: (step: BuilderStep) => void;
+  setAgentId: (id: string | null) => void;
   setPrompt: (prompt: string) => void;
   setEnhancedPrompt: (prompt: string) => void;
   setVariants: (variants: AgentVariant[]) => void;
@@ -95,6 +97,7 @@ interface AgentBuilderState {
 
 const initialState = {
   currentStep: 'prompt' as BuilderStep,
+  agentId: null,
   promptText: '',
   enhancedPrompt: null,
   variants: [],
@@ -116,6 +119,8 @@ export const useAgentBuilder = create<AgentBuilderState>()(
         
         // Actions
         setStep: (step) => set({ currentStep: step }),
+        
+        setAgentId: (id) => set({ agentId: id }),
         
         setPrompt: (prompt) => set({ promptText: prompt }),
         

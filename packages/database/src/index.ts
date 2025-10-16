@@ -16,6 +16,7 @@ export {
   agentTemplates,
   agentPacks,
   agentExecutions,
+  agentSchedules,
   workspaceApiKeys,
 } from './schema';
 

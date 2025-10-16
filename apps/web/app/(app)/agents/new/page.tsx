@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useAgentBuilder } from '@/lib/stores/agent-builder-store';
+import { useWorkspace } from '@/contexts/workspace-context';
 import { PromptInput } from '@/components/agents/prompt-input';
 import { TemplateGallery, type Template } from '@/components/agents/template-gallery';
 import { VariantGrid } from '@/components/agents/variant-grid';
@@ -18,8 +19,10 @@ import type { TestResult } from '@/lib/agents/test-types';
 
 export default function AgentBuilderPage() {
   const router = useRouter();
+  const { currentWorkspace } = useWorkspace();
   const {
     currentStep,
+    agentId,
     promptText,
     enhancedPrompt,
     variants,
@@ -37,6 +40,7 @@ export default function AgentBuilderPage() {
     setIsTesting,
     setTestResults,
     setStep,
+    setAgentId,
     selectVariant,
     addIteration,
     updateWorkflow,
@@ -211,8 +215,46 @@ export default function AgentBuilderPage() {
       return;
     }
 
-    toast.success('Deploy feature coming soon!');
-    // TODO: Implement agent deployment
+    if (!currentWorkspace?.id) {
+      toast.error('No workspace selected');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/agents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          name: selectedVariant.name,
+          description: selectedVariant.description,
+          workflow,
+          edges: selectedVariant.edges,
+          variantType: selectedVariant.type,
+          originalPrompt: promptText,
+          enhancedPrompt,
+          integrations: selectedVariant.integrations,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save agent');
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.agent?.id) {
+        setAgentId(data.agent.id);
+        toast.success(`Agent "${data.agent.name}" saved as draft!`);
+        // Redirect to agents list or show deploy modal
+        // router.push(`/agents/${data.agent.id}`);
+      }
+    } catch (error) {
+      console.error('Deploy error:', error);
+      const message = error instanceof Error ? error.message : 'Failed to save agent';
+      toast.error(message);
+    }
   };
 
   const handleSendMessage = async (content: string) => {

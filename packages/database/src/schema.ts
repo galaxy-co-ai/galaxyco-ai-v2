@@ -577,6 +577,47 @@ export const agentExecutions = pgTable(
 );
 
 // ============================================================================
+// AGENT SCHEDULES (Trigger Configuration)
+// ============================================================================
+
+export const agentSchedules = pgTable(
+  "agent_schedules",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    agentId: uuid("agent_id")
+      .notNull()
+      .references(() => agents.id, { onDelete: "cascade" }),
+
+    // Schedule configuration
+    triggerType: text("trigger_type").notNull(), // 'manual' | 'scheduled' | 'webhook'
+    cron: text("cron"), // Cron expression for scheduled type
+    timezone: text("timezone").default("America/Chicago"),
+    webhookUrl: text("webhook_url"), // For webhook type
+    webhookSecret: text("webhook_secret"), // Secret for webhook authentication
+
+    // State
+    enabled: boolean("enabled").notNull().default(true),
+    nextRunAt: timestamp("next_run_at"),
+    lastRunAt: timestamp("last_run_at"),
+    lastRunStatus: text("last_run_status"), // 'success' | 'failed'
+
+    // Metadata
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("schedule_tenant_idx").on(table.workspaceId),
+    agentIdx: uniqueIndex("schedule_agent_idx").on(table.agentId),
+    nextRunIdx: index("schedule_next_run_idx").on(table.nextRunAt),
+  }),
+);
+
+// ============================================================================
 // KNOWLEDGE BASE (Wisebase-like Document Management)
 // ============================================================================
 
@@ -739,6 +780,7 @@ export const workspacesRelations = relations(workspaces, ({ many }) => ({
   members: many(workspaceMembers),
   agents: many(agents),
   executions: many(agentExecutions),
+  schedules: many(agentSchedules),
   agentLogs: many(agentLogs),
   knowledgeCollections: many(knowledgeCollections),
   knowledgeItems: many(knowledgeItems),
@@ -782,6 +824,7 @@ export const agentsRelations = relations(agents, ({ one, many }) => ({
     references: [users.id],
   }),
   executions: many(agentExecutions),
+  schedule: one(agentSchedules),
 }));
 
 export const agentExecutionsRelations = relations(
@@ -798,6 +841,20 @@ export const agentExecutionsRelations = relations(
     triggeredByUser: one(users, {
       fields: [agentExecutions.triggeredBy],
       references: [users.id],
+    }),
+  }),
+);
+
+export const agentSchedulesRelations = relations(
+  agentSchedules,
+  ({ one }) => ({
+    workspace: one(workspaces, {
+      fields: [agentSchedules.workspaceId],
+      references: [workspaces.id],
+    }),
+    agent: one(agents, {
+      fields: [agentSchedules.agentId],
+      references: [agents.id],
     }),
   }),
 );
@@ -1089,6 +1146,9 @@ export type NewAgentPack = typeof agentPacks.$inferInsert;
 
 export type AgentExecution = typeof agentExecutions.$inferSelect;
 export type NewAgentExecution = typeof agentExecutions.$inferInsert;
+
+export type AgentSchedule = typeof agentSchedules.$inferSelect;
+export type NewAgentSchedule = typeof agentSchedules.$inferInsert;
 
 export type AgentLog = typeof agentLogs.$inferSelect;
 export type NewAgentLog = typeof agentLogs.$inferInsert;
