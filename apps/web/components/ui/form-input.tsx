@@ -5,7 +5,7 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { cn } from "@/lib/utils";
 
-interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helper?: string;
