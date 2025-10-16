@@ -1,43 +1,70 @@
 /**
- * GalaxyCo.ai Global Styles
- * Complete design system styles for nuclear rebuild
- * October 15, 2025
+ * GalaxyCo.ai Design System - Global Styles
+ * Complete implementation matching 01-DESIGN-TOKENS.md
+ * Updated: October 16, 2025
  */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 /* Base layer enhancements */
 @layer base {
-  /* CSS Custom Properties for runtime theming */
+  /* CSS Custom Properties for design system tokens */
   :root {
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-mono: 'Fira Code', 'Consolas', monospace;
+    /* Font families */
+    --font-sans: 'Inter', system-ui, '-apple-system', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
     
-    /* Semantic color variables in HSL format */
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --border: 220 13% 91%;
-    --input: 0 0% 100%;
-    --ring: 217 91% 60%;
-    --primary: 217 91% 60%;
+    /* Light mode colors (for shadcn/ui compatibility) */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 5% 35%;
+    --popover: 240 5% 98%;
+    --popover-foreground: 240 10% 4%;
+    --card: 240 5% 98%;
+    --card-foreground: 240 10% 4%;
+    --border: 240 6% 90%;
+    --input: 240 5% 96%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 10% 4%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --ring: 262 83% 58%;
     
     /* Border radius */
     --radius: 0.5rem;
+  }
+  
+  /* Dark mode colors (default theme) */
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --popover: 240 6% 10%;
+    --popover-foreground: 0 0% 98%;
+    --card: 240 6% 10%;
+    --card-foreground: 0 0% 98%;
+    --border: 240 4% 24%;
+    --input: 240 4% 16%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 262 83% 58%;
   }
   
   
@@ -58,83 +85,166 @@
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     font-feature-settings: 'rlig' 1, 'calt' 1;
+    /* Enable smooth transitions for theme switching */
+    transition: background-color 200ms ease, color 200ms ease;
   }
   
-  /* Focus styles */
+  /* Focus styles - enhanced for accessibility */
   *:focus-visible {
     outline: 2px solid transparent;
     outline-offset: 2px;
     box-shadow: 0 0 0 2px hsl(var(--ring));
   }
   
+  /* Improved focus for interactive elements */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
   /* Selection styles */
   ::selection {
     background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
   }
   
-  /* Scrollbar styles */
+  /* Scrollbar styles - design system compliant */
   ::-webkit-scrollbar {
-    @apply w-2;
+    width: 8px;
+    height: 8px;
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    background: transparent;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-300 rounded-full;
-  }
-  
-  .dark ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-700;
+    background: hsl(var(--border));
+    border-radius: 4px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-400;
+    background: hsl(var(--border) / 0.8);
   }
   
-  .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-600;
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
 }
 
-/* Component layer */
+/* Component layer - Design System Components */
 @layer components {
-  /* Custom button variants */
+  /* Button variants using design tokens */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active;
+    @apply px-4 py-2 rounded font-medium;
+    @apply transition-colors duration-fast;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover;
+    @apply px-4 py-2 rounded font-medium;
+    @apply transition-colors duration-fast;
+  }
+  
   .btn-ghost {
-    @apply bg-transparent hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-neutral-50;
+    @apply bg-transparent text-foreground hover:bg-hover;
+    @apply px-4 py-2 rounded font-medium;
+    @apply transition-colors duration-fast;
   }
   
-  /* Card component */
+  .btn-outline {
+    @apply border border-border bg-background hover:bg-hover;
+    @apply px-4 py-2 rounded font-medium;
+    @apply transition-colors duration-fast;
+  }
+  
+  /* Card component with design system tokens */
   .card {
-    @apply bg-card text-card-foreground rounded-lg border shadow-sm;
+    @apply bg-background-elevated border border-border rounded-lg shadow;
+    @apply p-6;
   }
   
-  /* Badge component */
+  .card-hover {
+    @apply hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer;
+  }
+  
+  /* KPI Card component */
+  .kpi-card {
+    @apply bg-background-elevated border border-border rounded-lg p-6;
+    @apply hover:border-border-hover transition-colors duration-fast;
+  }
+  
+  /* Badge variants */
   .badge {
-    @apply inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors;
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+    @apply border;
   }
   
-  /* Input component */
+  .badge-default {
+    @apply bg-background-subtle text-foreground border-border;
+  }
+  
+  .badge-success {
+    @apply bg-success/10 text-success border-success/20;
+  }
+  
+  .badge-warning {
+    @apply bg-warning/10 text-warning border-warning/20;
+  }
+  
+  .badge-destructive {
+    @apply bg-destructive/10 text-destructive border-destructive/20;
+  }
+  
+  /* Input component with design system tokens */
   .input {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply w-full px-4 py-2 rounded border border-border bg-background-subtle;
+    @apply text-foreground placeholder:text-foreground-subtle;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
+    @apply transition-colors duration-fast;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
-  /* Loading skeleton */
+  /* Loading skeleton with design system colors */
   .skeleton {
-    @apply animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-800;
+    @apply animate-pulse rounded bg-background-subtle;
   }
   
-  /* Status indicators */
+  /* Status indicators using semantic colors */
   .status-dot {
     @apply inline-block w-2 h-2 rounded-full;
   }
   
-  .status-running { @apply bg-green-500; }
-  .status-idle { @apply bg-blue-500; }
-  .status-paused { @apply bg-orange-500; }
-  .status-error { @apply bg-red-500; }
-  .status-disabled { @apply bg-gray-400; }
+  .status-active { @apply bg-success; }
+  .status-idle { @apply bg-primary; }
+  .status-paused { @apply bg-warning; }
+  .status-error { @apply bg-destructive; }
+  .status-disabled { @apply bg-foreground-subtle; }
+  
+  /* Empty state component */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-12 text-center;
+  }
+  
+  .empty-state-icon {
+    @apply w-12 h-12 text-foreground-muted mb-4;
+  }
+  
+  .empty-state-title {
+    @apply text-lg font-semibold text-foreground mb-2;
+  }
+  
+  .empty-state-description {
+    @apply text-foreground-muted max-w-sm;
+  }
 }
 
 /* Utility layer */
