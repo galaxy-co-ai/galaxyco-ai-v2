@@ -118,10 +118,7 @@ export async function POST(req: NextRequest) {
       content,
       summary,
       tags: [],
-      metadata: {
-        originalName: file.name,
-        uploadedAt: new Date().toISOString(),
-      },
+      metadata: {},
       processedAt: new Date(),
     }).returning();
 
