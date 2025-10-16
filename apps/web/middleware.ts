@@ -32,6 +32,14 @@ export default clerkMiddleware(async (auth, request) => {
   
   if (userId && !isPublicRoute(request)) {
     try {
+      // Skip tenant context for development if no database setup
+      if (process.env.NODE_ENV === 'development') {
+        // Add mock tenant context headers for debugging
+        response.headers.set('x-tenant-id', 'dev-tenant-123');
+        response.headers.set('x-user-id', userId);
+        return response;
+      }
+      
       // Get tenant context and set in database session
       const context = await getCurrentTenantContext();
       
@@ -56,6 +64,13 @@ export default clerkMiddleware(async (auth, request) => {
       
     } catch (error) {
       console.error('Failed to set tenant context:', error);
+      
+      // In development, allow access with mock context
+      if (process.env.NODE_ENV === 'development') {
+        response.headers.set('x-tenant-id', 'dev-tenant-fallback');
+        response.headers.set('x-user-id', userId);
+        return response;
+      }
       
       // Log security incident
       trackApiAccess(
