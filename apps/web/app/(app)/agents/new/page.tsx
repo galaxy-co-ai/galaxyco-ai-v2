@@ -452,10 +452,10 @@ export default function AgentBuilderPage() {
 
             <ErrorBoundary>
               <TestPlayground
+                agentId={agentId}
                 agentName={selectedVariant.name}
                 workflowSteps={workflow}
                 onRunTest={handleRunTest}
-                onDeploy={handleDeploy}
                 isRunning={isTesting}
               />
             </ErrorBoundary>

@@ -2,19 +2,22 @@
 
 import { useState } from 'react';
 import { Play, Check, AlertCircle, Loader2, FileText, Mail, Bell, Download, Sparkles, Database } from 'lucide-react';
+import { DeployModal } from './deploy-modal';
 import type { TestInputs, TestResult } from '@/lib/agents/test-types';
+import type { ScheduleConfigInput } from '@/lib/agents/types';
+import { toast } from 'sonner';
 
 interface TestPlaygroundProps {
+  agentId: string | null;
   agentName: string;
   workflowSteps: any[];
   onRunTest: (inputs: any) => Promise<TestResult | void>;
-  onDeploy: () => void;
   isRunning?: boolean;
 }
 
 type TabView = 'inputs' | 'logs' | 'outputs';
 
-export function TestPlayground({ agentName, workflowSteps, onRunTest, onDeploy, isRunning = false }: TestPlaygroundProps) {
+export function TestPlayground({ agentId, agentName, workflowSteps, onRunTest, isRunning = false }: TestPlaygroundProps) {
   const [triggerType, setTriggerType] = useState<'manual' | 'scheduled' | 'event'>('manual');
   const [sampleData, setSampleData] = useState<Record<string, string>>({
     customerName: 'John Doe',
@@ -25,6 +28,7 @@ export function TestPlayground({ agentName, workflowSteps, onRunTest, onDeploy, 
   
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [activeTab, setActiveTab] = useState<TabView>('inputs');
+  const [showDeployModal, setShowDeployModal] = useState(false);
 
   const handleRunTest = async () => {
     setTestResult(null);
@@ -49,6 +53,41 @@ export function TestPlayground({ agentName, workflowSteps, onRunTest, onDeploy, 
   };
 
   const canRun = Object.values(sampleData).some(v => v.trim() !== '') || triggerType === 'manual';
+
+  const handleDeploy = async (scheduleConfig: ScheduleConfigInput) => {
+    if (!agentId) {
+      toast.error('Agent must be saved before deploying');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/agents/${agentId}/activate`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scheduleConfig }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to activate agent');
+      }
+
+      const data = await response.json();
+      
+      // Show webhook secret if applicable
+      if (data.schedule?.webhookSecret) {
+        toast.success(
+          `Agent activated! Webhook secret: ${data.schedule.webhookSecret}`,
+          { duration: 10000 }
+        );
+      } else {
+        toast.success('Agent activated successfully!');
+      }
+    } catch (error) {
+      console.error('Activation error:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -282,14 +321,24 @@ export function TestPlayground({ agentName, workflowSteps, onRunTest, onDeploy, 
       {testResult?.success && (
         <div className="flex justify-end">
           <button
-            onClick={onDeploy}
-            className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors"
+            onClick={() => setShowDeployModal(true)}
+            disabled={!agentId}
+            className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Check className="h-4 w-4" />
             Deploy Agent
           </button>
         </div>
       )}
+
+      {/* Deploy Modal */}
+      <DeployModal
+        isOpen={showDeployModal}
+        onClose={() => setShowDeployModal(false)}
+        agentId={agentId}
+        agentName={agentName}
+        onDeploy={handleDeploy}
+      />
     </div>
   );
 }
