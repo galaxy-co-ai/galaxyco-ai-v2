@@ -10,6 +10,7 @@ import {
   validateWorkspaceName,
   validateSlug,
 } from "../workspace-utils";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Create a new workspace for the authenticated user
@@ -119,13 +120,19 @@ async function createWorkspaceWithSlug(
       },
     });
 
-    console.log(`✅ Workspace created: ${workspace.name} (${workspace.slug})`);
+    logger.info("Workspace created successfully", {
+      workspaceName: workspace.name,
+      workspaceSlug: workspace.slug,
+      workspaceId: workspace.id,
+    });
 
     // Revalidate and redirect
     revalidatePath("/dashboard");
     redirect(`/dashboard?workspace=${workspace.id}`);
   } catch (error) {
-    console.error("Error creating workspace:", error);
+    logger.error("Failed to create workspace", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return {
       success: false,
       error: "Failed to create workspace. Please try again.",

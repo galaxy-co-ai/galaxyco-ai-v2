@@ -6,6 +6,7 @@
  */
 
 import OpenAI from "openai";
+import { logger } from "@/lib/utils/logger";
 import type {
   ChatCompletionMessageParam,
   ChatCompletionTool,
@@ -170,7 +171,7 @@ export async function executeAgentWithTools(
           );
 
           if (!tool) {
-            console.error(`Tool not found: ${toolName}`);
+            logger.error(`Tool not found: ${toolName}`);
             currentMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -183,10 +184,9 @@ export async function executeAgentWithTools(
 
           // Execute the tool
           try {
-            console.log(
-              `[Agent Executor] Executing tool: ${toolName}`,
+            logger.info(`[Agent Executor] Executing tool: ${toolName}`, {
               toolArgs,
-            );
+            });
             const toolResult = await tool.execute(toolArgs, context);
 
             // Track tool call
@@ -203,7 +203,7 @@ export async function executeAgentWithTools(
               content: JSON.stringify(toolResult),
             });
           } catch (error: any) {
-            console.error(`[Agent Executor] Tool execution error:`, error);
+            logger.error(`[Agent Executor] Tool execution error`, error);
             currentMessages.push({
               role: "tool",
               tool_call_id: toolCall.id,
@@ -226,10 +226,10 @@ export async function executeAgentWithTools(
       }
 
       // No content and no tool calls - something went wrong
-      console.warn("[Agent Executor] No content or tool calls in response");
+      logger.warn("[Agent Executor] No content or tool calls in response");
       break;
     } catch (error: any) {
-      console.error("[Agent Executor] OpenAI API error:", error);
+      logger.error("[Agent Executor] OpenAI API error", error);
       throw new Error(`Agent execution failed: ${error.message}`);
     }
   }

@@ -1,4 +1,5 @@
 import { put } from "@vercel/blob";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Storage Helper for Vercel Blob
@@ -24,7 +25,10 @@ export async function uploadFileToBlob(
       downloadUrl: blob.downloadUrl || blob.url,
     };
   } catch (error: any) {
-    console.error("Blob upload error:", error);
+    logger.error("Blob upload failed", {
+      filename,
+      error: error.message,
+    });
     throw new Error(`Failed to upload file: ${error.message}`);
   }
 }

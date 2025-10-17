@@ -5,6 +5,8 @@
  * throughout the application with proper user messaging and logging.
  */
 
+import { logger } from "@/lib/utils/logger";
+
 export class APIError extends Error {
   public status: number;
   public code: string;
@@ -189,10 +191,11 @@ export async function withRetry<T>(
       await new Promise((resolve) => setTimeout(resolve, delay));
       delay *= backoff;
 
-      console.warn(
-        `Attempt ${attempt} failed, retrying in ${delay}ms...`,
-        error,
-      );
+      logger.warn("Retry attempt after failure", {
+        attempt,
+        retryDelay: delay,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -264,8 +267,8 @@ export function logError(error: unknown, context?: Record<string, any>) {
     url: typeof window !== "undefined" ? window.location.href : undefined,
   };
 
-  // Log to console
-  console.error("Application error:", errorInfo);
+  // Log using structured logger
+  logger.error("Application error", errorInfo);
 
   // In production, send to error monitoring service
   if (process.env.NODE_ENV === "production") {

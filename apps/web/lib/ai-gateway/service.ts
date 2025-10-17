@@ -12,6 +12,7 @@ import type {
   AIGatewayStreamResponse,
   AIGatewayLog,
 } from "./types";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * AI Gateway Service
@@ -224,14 +225,18 @@ export class AIGatewayService {
       // TODO: Store in database (ai_gateway_logs table)
       // For now, log to console in development
       if (process.env.NODE_ENV === "development") {
-        console.log("[AI Gateway]", {
+        logger.info("AI Gateway request completed", {
           requestId: log.requestId,
           tenantId: log.tenantId,
+          userId: log.userId,
+          agentId: log.agentId,
           model: log.model,
+          provider: log.provider,
           latencyMs: log.latencyMs,
           cost: `$${log.cost.toFixed(6)}`,
           tokens: log.totalTokens,
           success: log.success,
+          error: log.error,
         });
       }
 
@@ -242,7 +247,10 @@ export class AIGatewayService {
       }
     } catch (error) {
       // Don't fail the request if logging fails
-      console.error("[AI Gateway] Failed to log request:", error);
+      logger.error("AI Gateway failed to log request", {
+        error: error instanceof Error ? error.message : String(error),
+        requestId: log.requestId,
+      });
     }
   }
 

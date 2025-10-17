@@ -1,6 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { google } from "@ai-sdk/google";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * AI Gateway Configuration
@@ -159,7 +160,7 @@ export function calculateCost(
   const pricing = MODEL_PRICING[model as keyof typeof MODEL_PRICING];
 
   if (!pricing) {
-    console.warn(`No pricing data for model: ${model}`);
+    logger.warn("No pricing data available for model", { model });
     return 0;
   }
 

@@ -434,7 +434,11 @@ export class AIProviderWrapper {
         metadata: data.metadata,
       });
     } catch (logError) {
-      console.error("[AI PROVIDER] Failed to log execution:", logError);
+      logger.error("AI Provider failed to log execution", {
+        error: logError instanceof Error ? logError.message : String(logError),
+        agentId: this.options.agentId,
+        tenantId: this.options.tenantId,
+      });
       // Don't throw - logging failure shouldn't break the agent
     }
   }
@@ -500,7 +504,7 @@ export function validateProviderConfig(
   config: ProviderConfig,
 ): boolean {
   if (!config.apiKey) {
-    console.error(`[AI PROVIDER] Missing API key for ${provider}`);
+    logger.error("AI Provider missing API key", { provider });
     return false;
   }
 

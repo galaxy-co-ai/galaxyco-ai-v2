@@ -1,5 +1,6 @@
 const pdf = require("pdf-parse");
 import * as cheerio from "cheerio";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Document Processing Helper
@@ -26,7 +27,9 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{
       },
     };
   } catch (error: any) {
-    console.error("PDF extraction error:", error);
+    logger.error("PDF extraction failed", {
+      error: error.message,
+    });
     throw new Error(`Failed to extract PDF text: ${error.message}`);
   }
 }
@@ -40,7 +43,9 @@ export async function extractTextFromPlainText(
   try {
     return buffer.toString("utf-8");
   } catch (error: any) {
-    console.error("Text extraction error:", error);
+    logger.error("Text extraction failed", {
+      error: error.message,
+    });
     throw new Error(`Failed to extract text: ${error.message}`);
   }
 }
@@ -123,7 +128,10 @@ export async function scrapeURL(url: string): Promise<{
       publishDate: publishDate || undefined,
     };
   } catch (error: any) {
-    console.error("URL scraping error:", error);
+    logger.error("URL scraping failed", {
+      url,
+      error: error.message,
+    });
     throw new Error(`Failed to scrape URL: ${error.message}`);
   }
 }

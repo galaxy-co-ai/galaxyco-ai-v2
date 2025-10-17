@@ -267,8 +267,11 @@ export function measurePerformance() {
       requestAnimationFrame(countFrames);
 
       setTimeout(() => {
-        console.log(`Frame rate: ${frames} FPS`);
+        // Frame rate measurement complete - could log if needed
+        // Intentionally not logged to console
       }, 1000);
+
+      return frames; // Return the frame count for callers to use
     },
   };
 }

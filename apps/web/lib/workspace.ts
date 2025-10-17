@@ -13,6 +13,7 @@ import { cookies } from "next/headers";
 import { db } from "@galaxyco/database";
 import { workspaceMembers, users } from "@galaxyco/database/schema";
 import { eq, and } from "drizzle-orm";
+import { logger } from "@/lib/utils/logger";
 
 export interface WorkspaceResolution {
   id: string;
@@ -73,7 +74,9 @@ export async function getCurrentWorkspaceId(): Promise<WorkspaceResolution> {
       return { id: firstWorkspaceId, source: "default" };
     }
   } catch (error) {
-    console.error("Error fetching default workspace:", error);
+    logger.error("Failed to fetch default workspace", {
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 
   return { id: "", source: "none" };
@@ -128,9 +131,10 @@ export async function getWorkspaceDetails(
     });
 
     if (!membership?.workspace) {
-      console.warn(
-        `User ${clerkUserId} attempted to access workspace ${workspaceId} without permission`,
-      );
+      logger.warn("Unauthorized workspace access attempt", {
+        clerkUserId,
+        workspaceId,
+      });
       return null;
     }
 
@@ -142,7 +146,10 @@ export async function getWorkspaceDetails(
       role: membership.role,
     };
   } catch (error) {
-    console.error("Error fetching workspace details:", error);
+    logger.error("Failed to fetch workspace details", {
+      workspaceId,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return null;
   }
 }
@@ -185,7 +192,9 @@ export async function getUserWorkspaces(): Promise<Workspace[]> {
       role: membership.role,
     }));
   } catch (error) {
-    console.error("Error fetching user workspaces:", error);
+    logger.error("Failed to fetch user workspaces", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return [];
   }
 }
@@ -221,7 +230,10 @@ export async function validateWorkspaceAccess(
 
     return !!membership;
   } catch (error) {
-    console.error("Error validating workspace access:", error);
+    logger.error("Failed to validate workspace access", {
+      workspaceId,
+      error: error instanceof Error ? error.message : String(error),
+    });
     return false;
   }
 }

@@ -11,6 +11,7 @@
 
 import { getCurrentTenantContext } from "../db/tenant-filter";
 import { logAgentExecution } from "../agents/agent-logger";
+import { logger } from "@/lib/utils/logger";
 
 export interface AIOptions {
   model?: string;
@@ -219,7 +220,7 @@ export async function callAIProvider(
     // Retry logic
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
-        console.log(
+        logger.info(
           `[AI PROVIDER] Attempt ${attempt}/${retryCount} with ${provider}`,
         );
 
@@ -258,10 +259,9 @@ export async function callAIProvider(
         };
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        console.warn(
-          `[AI PROVIDER] Attempt ${attempt} failed:`,
-          lastError.message,
-        );
+        logger.warn(`[AI PROVIDER] Attempt ${attempt} failed`, {
+          error: lastError.message,
+        });
 
         // Wait before retry (exponential backoff)
         if (attempt < retryCount) {
@@ -274,7 +274,7 @@ export async function callAIProvider(
 
     // Primary provider failed, try fallback
     if (options.fallbackProvider) {
-      console.log(
+      logger.info(
         `[AI PROVIDER] Trying fallback provider: ${options.fallbackProvider}`,
       );
 
@@ -294,7 +294,7 @@ export async function callAIProvider(
           fallbackUsed: true,
         };
       } catch (fallbackError) {
-        console.error(`[AI PROVIDER] Fallback also failed:`, fallbackError);
+        logger.error(`[AI PROVIDER] Fallback also failed`, fallbackError);
       }
     }
 
@@ -328,7 +328,7 @@ export async function callAIProvider(
     const duration = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
 
-    console.error(`[AI PROVIDER] Critical error:`, error);
+    logger.error(`[AI PROVIDER] Critical error`, error);
 
     return {
       success: false,

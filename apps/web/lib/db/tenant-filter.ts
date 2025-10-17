@@ -9,6 +9,7 @@ import { eq, and, SQL } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@galaxyco/database";
 import { users, workspaceMembers } from "@galaxyco/database/schema";
+import { logger } from "@/lib/utils/logger";
 
 export interface TenantContext {
   tenantId: string;
@@ -105,11 +106,10 @@ export function validateTenantAccess(
 ): void {
   if (userTenantId !== resourceTenantId) {
     // Log security incident
-    console.error("[SECURITY] Cross-tenant access attempt", {
+    logger.error("Cross-tenant access attempt blocked", {
       userTenantId,
       resourceTenantId,
       timestamp: new Date().toISOString(),
-      stack: new Error().stack,
     });
 
     throw new Error("Cross-tenant access denied");

@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Embeddings Helper
@@ -36,7 +37,9 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 
     return response.data[0].embedding;
   } catch (error: any) {
-    console.error("Error generating embedding:", error);
+    logger.error("Failed to generate embedding", {
+      error: error.message,
+    });
     throw new Error(`Failed to generate embedding: ${error.message}`);
   }
 }
@@ -66,7 +69,10 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
 
     return response.data.map((item) => item.embedding);
   } catch (error: any) {
-    console.error("Error generating embeddings:", error);
+    logger.error("Failed to generate embeddings", {
+      error: error.message,
+      textCount: texts.length,
+    });
     throw new Error(`Failed to generate embeddings: ${error.message}`);
   }
 }
