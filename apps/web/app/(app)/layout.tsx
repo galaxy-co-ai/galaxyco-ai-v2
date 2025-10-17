@@ -7,6 +7,7 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { WorkspaceProvider } from "@/contexts/workspace-context";
+import { ErrorBoundary } from "@/components/error/error-boundary";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -14,9 +15,13 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <WorkspaceProvider>
-      <AppShell>{children}</AppShell>
-      <ChatWidget />
-    </WorkspaceProvider>
+    <ErrorBoundary>
+      <WorkspaceProvider>
+        <AppShell>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </AppShell>
+        <ChatWidget />
+      </WorkspaceProvider>
+    </ErrorBoundary>
   );
 }
