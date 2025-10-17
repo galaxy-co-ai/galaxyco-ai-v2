@@ -1,124 +1,171 @@
 "use client";
 
-import { PageHeader } from "@/components/layout/page-header";
-import { logger } from "@/lib/utils/logger";
+import { useState } from "react";
+import { ListPage } from "@/components/templates/list-page";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
 import { ConfidenceBadge } from "@/components/shared/confidence-badge";
-import { EmptyState } from "@/components/shared/empty-state";
 import { mockProspects } from "@/lib/fixtures";
-import { Users, Plus, Building2, Mail, Linkedin } from "lucide-react";
+import { Plus, Building2, Mail, Linkedin, User } from "lucide-react";
 
 export default function ProspectsPage() {
   const prospects = mockProspects;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
+    {},
+  );
+
+  // Filter prospects
+  const filteredProspects = prospects.filter((prospect) => {
+    // Search filter
+    const matchesSearch =
+      searchQuery === "" ||
+      prospect.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prospect.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prospect.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prospect.title?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    // Status filter
+    const statusFilter = activeFilters.status || [];
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(prospect.status);
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const handleFilterChange = (filterId: string, values: string[]) => {
+    setActiveFilters((prev) => ({
+      ...prev,
+      [filterId]: values,
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setActiveFilters({});
+    setSearchQuery("");
+  };
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Prospects"
-        description="Manage enriched prospects and leads"
-      >
-        <button className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90">
-          <Plus className="h-4 w-4" />
+    <ListPage
+      title="Prospects"
+      subtitle="Manage enriched prospects and leads"
+      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Prospects" }]}
+      searchQuery={searchQuery}
+      searchPlaceholder="Search prospects by name, email, or company..."
+      onSearchChange={setSearchQuery}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
+      filters={[
+        {
+          id: "status",
+          label: "Status",
+          type: "checkbox",
+          options: [
+            { value: "new", label: "New" },
+            { value: "contacted", label: "Contacted" },
+            { value: "qualified", label: "Qualified" },
+            { value: "nurturing", label: "Nurturing" },
+          ],
+        },
+      ]}
+      activeFilters={activeFilters}
+      onFilterChange={handleFilterChange}
+      onClearFilters={handleClearFilters}
+      actions={
+        <Button size="sm">
+          <Plus className="mr-2 h-4 w-4" />
           Add Prospect
-        </button>
-      </PageHeader>
-
-      {prospects.length === 0 ? (
-        <EmptyState
-          icon={Users}
-          title="No prospects yet"
-          description="Add prospects to start enriching and engaging with them"
-          action={{
-            label: "Add Prospect",
-            onClick: () => logger.debug("Add prospect clicked"),
-          }}
-        />
+        </Button>
+      }
+      isEmpty={prospects.length === 0}
+      emptyMessage="No prospects yet. Add prospects to start enriching and engaging with them."
+      emptyAction={
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Prospect
+        </Button>
+      }
+    >
+      {filteredProspects.length === 0 && prospects.length > 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground mb-4">
+            No prospects match your search or filters
+          </p>
+          <Button variant="outline" onClick={handleClearFilters}>
+            Clear Filters
+          </Button>
+        </div>
       ) : (
-        <div className="card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b bg-neutral-50 dark:bg-neutral-900">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Company
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Title
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Confidence
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-neutral-600 dark:text-neutral-400">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {prospects.map((prospect) => (
-                  <tr
-                    key={prospect.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50"
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredProspects.map((prospect) => (
+            <div
+              key={prospect.id}
+              className="group rounded-lg border border-border bg-card p-6 transition-all hover:shadow-md hover:border-primary/50"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Avatar
+                    src=""
+                    alt={prospect.name}
+                    fallback={<User className="h-4 w-4" />}
+                    size="lg"
+                  />
+                  <div>
+                    <h3 className="font-semibold">{prospect.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {prospect.title}
+                    </p>
+                  </div>
+                </div>
+                <Badge variant="secondary">{prospect.status}</Badge>
+              </div>
+
+              {/* Company */}
+              <div className="flex items-center gap-2 mb-3">
+                <Building2 className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{prospect.company}</span>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-2 mb-4">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground truncate">
+                  {prospect.email}
+                </span>
+              </div>
+
+              {/* Confidence Score */}
+              {prospect.enrichmentData && (
+                <div className="mb-4">
+                  <ConfidenceBadge
+                    score={prospect.enrichmentData.confidenceScore}
+                  />
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-4 border-t border-border">
+                <Button size="sm" variant="outline" className="flex-1">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Email
+                </Button>
+                <Button size="sm" variant="outline" asChild>
+                  <a
+                    href={prospect.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <td className="px-6 py-4">
-                      <div>
-                        <p className="font-medium text-neutral-900 dark:text-neutral-100">
-                          {prospect.name}
-                        </p>
-                        <p className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400">
-                          <Mail className="h-3 w-3" />
-                          {prospect.email}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-neutral-400" />
-                        <span className="text-sm text-neutral-900 dark:text-neutral-100">
-                          {prospect.company}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-neutral-900 dark:text-neutral-100">
-                        {prospect.title}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                        {prospect.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      {prospect.enrichmentData && (
-                        <ConfidenceBadge
-                          score={prospect.enrichmentData.confidenceScore}
-                        />
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <a
-                          href={prospect.linkedinUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-neutral-600 hover:text-primary dark:text-neutral-400"
-                        >
-                          <Linkedin className="h-4 w-4" />
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
-    </div>
+    </ListPage>
   );
 }
