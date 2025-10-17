@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 
 interface PerformanceMetrics {
   pageLoadTime?: number;
@@ -38,9 +39,8 @@ export function usePerformanceMonitoring() {
 
       // Log performance metrics in development
       if (process.env.NODE_ENV === "development") {
-        console.log("🚀 Performance Metrics:", {
+        logger.info("Performance metrics collected", {
           ...metrics,
-          timestamp: new Date().toISOString(),
           url: window.location.pathname,
         });
       }
@@ -66,7 +66,7 @@ export function usePerformanceMonitoring() {
       const longTaskObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.duration > 50) {
-            console.warn("⚠️ Long Task detected:", {
+            logger.warn("Long task detected", {
               duration: entry.duration,
               startTime: entry.startTime,
               name: entry.name,
@@ -103,7 +103,8 @@ export function useApiPerformance() {
         const duration = performance.now() - start;
 
         if (process.env.NODE_ENV === "development") {
-          console.log(`🔥 API Performance: ${endpoint}`, {
+          logger.info("API performance measured", {
+            endpoint,
             duration: `${duration.toFixed(2)}ms`,
             success: true,
           });
@@ -111,9 +112,10 @@ export function useApiPerformance() {
 
         // Log slow APIs
         if (duration > 2000) {
-          console.warn(
-            `🐌 Slow API detected: ${endpoint} took ${duration.toFixed(2)}ms`,
-          );
+          logger.warn("Slow API detected", {
+            endpoint,
+            duration: `${duration.toFixed(2)}ms`,
+          });
         }
 
         return result;
@@ -121,7 +123,8 @@ export function useApiPerformance() {
         const duration = performance.now() - start;
 
         if (process.env.NODE_ENV === "development") {
-          console.error(`❌ API Error: ${endpoint}`, {
+          logger.error("API error occurred", {
+            endpoint,
             duration: `${duration.toFixed(2)}ms`,
             error: error instanceof Error ? error.message : "Unknown error",
           });

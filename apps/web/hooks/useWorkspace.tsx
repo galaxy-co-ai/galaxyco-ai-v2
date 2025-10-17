@@ -19,6 +19,7 @@ import {
   useCallback,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { logger } from "@/lib/utils/logger";
 
 export interface Workspace {
   id: string;
@@ -82,7 +83,7 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
 
       // Handle null workspace (new user without workspace yet) - this is normal!
       if (data.workspaceId === null || data.workspace === null) {
-        console.log("ℹ️ No workspace found - user needs to create one");
+        logger.info("No workspace found - user needs to create one");
         setWorkspaceIdState(null);
         setWorkspace(null);
         localStorage.removeItem("workspaceId");
@@ -99,7 +100,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
 
       return data.workspaceId;
     } catch (err: any) {
-      console.error("Error fetching workspace details:", err);
+      logger.error("Failed to fetch workspace details", {
+        error: err.message,
+      });
       setError(err.message);
       return null;
     }
@@ -117,7 +120,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         // Priority 1: URL query parameter
         const urlWorkspace = searchParams.get("w");
         if (urlWorkspace) {
-          console.log("🔗 Using workspace from URL:", urlWorkspace);
+          logger.info("Using workspace from URL", {
+            workspaceId: urlWorkspace,
+          });
           await fetchWorkspaceDetails(urlWorkspace);
           setIsLoading(false);
           return;
@@ -126,17 +131,21 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         // Priority 2: localStorage
         const storedWorkspace = localStorage.getItem("workspaceId");
         if (storedWorkspace && storedWorkspace !== "undefined") {
-          console.log("💾 Using workspace from localStorage:", storedWorkspace);
+          logger.info("Using workspace from localStorage", {
+            workspaceId: storedWorkspace,
+          });
           await fetchWorkspaceDetails(storedWorkspace);
           setIsLoading(false);
           return;
         }
 
         // Priority 3: API default
-        console.log("🌐 Fetching default workspace from API");
+        logger.info("Fetching default workspace from API");
         await fetchWorkspaceDetails();
       } catch (err: any) {
-        console.error("Error initializing workspace:", err);
+        logger.error("Failed to initialize workspace", {
+          error: err.message,
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -187,9 +196,14 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
           scroll: false,
         });
 
-        console.log("✅ Workspace switched to:", data.workspace?.name);
+        logger.info("Workspace switched successfully", {
+          workspaceName: data.workspace?.name,
+          workspaceId: data.workspaceId,
+        });
       } catch (err: any) {
-        console.error("Error setting workspace:", err);
+        logger.error("Failed to set workspace", {
+          error: err.message,
+        });
         setError(err.message);
       } finally {
         setIsLoading(false);

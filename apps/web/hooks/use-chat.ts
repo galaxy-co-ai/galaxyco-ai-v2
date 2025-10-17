@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { logger } from "@/lib/utils/logger";
 
 export interface ChatMessage {
   id: string;
@@ -47,7 +48,10 @@ export function useChat(conversationId?: string | null) {
         setMessages(loadedMessages);
         setCurrentConversationId(conversationId);
       } catch (error) {
-        console.error("Failed to load conversation:", error);
+        logger.error("Failed to load conversation", {
+          conversationId,
+          error: error instanceof Error ? error.message : String(error),
+        });
       }
     };
 

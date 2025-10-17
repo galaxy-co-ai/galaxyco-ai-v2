@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import { logger } from "@/lib/utils/logger";
 
 export interface Workspace {
   id: string;
@@ -62,7 +63,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } catch (error) {
-      console.error("Error fetching workspaces:", error);
+      logger.error("Failed to fetch workspaces", {
+        error: error instanceof Error ? error.message : String(error),
+      });
     } finally {
       setIsLoading(false);
     }
