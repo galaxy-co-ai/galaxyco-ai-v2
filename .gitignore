@@ -93,3 +93,4 @@ scripts/**/*.backup
 **/*.backup
 .env.*.backup
 apps/web/backup-archive/
+docs/deployment/SECRETS_ACTUAL_VALUES.txt
