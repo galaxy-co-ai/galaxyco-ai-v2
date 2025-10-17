@@ -11,6 +11,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { logAgentExecution } from "./agent-logger";
+import { logger } from "@/lib/utils/logger";
 
 export type AIProvider = "openai" | "anthropic" | "google" | "custom";
 export type AIModel =
@@ -99,7 +100,7 @@ export class AIProviderWrapper {
 
     // Try primary provider
     try {
-      console.info("[AI PROVIDER] Attempting primary provider", {
+      logger.info("[AI PROVIDER] Attempting primary provider", {
         request_id: requestId,
         agent_id: this.options.agentId,
         provider: this.options.primary.provider,
@@ -128,7 +129,7 @@ export class AIProviderWrapper {
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
-      console.warn(
+      logger.warn(
         "[AI PROVIDER] Primary provider failed, attempting fallback",
         {
           request_id: requestId,
@@ -170,7 +171,7 @@ export class AIProviderWrapper {
               ? fallbackError
               : new Error(String(fallbackError));
 
-          console.error("[AI PROVIDER] Both providers failed", {
+          logger.error("[AI PROVIDER] Both providers failed", fallbackError, {
             request_id: requestId,
             primary_error:
               error instanceof Error ? error.message : String(error),
@@ -266,7 +267,7 @@ export class AIProviderWrapper {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
 
-        console.warn("[AI PROVIDER] Request attempt failed", {
+        logger.warn("[AI PROVIDER] Request attempt failed", {
           provider,
           attempt,
           max_retries: maxRetries,

@@ -6,6 +6,7 @@
  */
 
 import { AgentRegistry, BaseAgent } from "./agent-interface";
+import { logger } from "@/lib/utils/logger";
 
 export interface TestResults {
   totalAgents: number;
@@ -31,7 +32,7 @@ export interface TestResults {
  */
 export async function runAgentTests(): Promise<TestResults> {
   const startTime = Date.now();
-  console.info("[AGENT TEST RUNNER] Starting comprehensive agent testing...");
+  logger.info("[AGENT TEST RUNNER] Starting comprehensive agent testing...");
 
   const agentList = AgentRegistry.list();
   const results: TestResults["results"] = [];
@@ -42,7 +43,7 @@ export async function runAgentTests(): Promise<TestResults> {
     const testStartTime = Date.now();
 
     try {
-      console.info(`[AGENT TEST] Testing agent: ${agentInfo.id}`);
+      logger.info(`[AGENT TEST] Testing agent: ${agentInfo.id}`);
 
       const AgentClass = AgentRegistry.get(agentInfo.id);
       if (!AgentClass) {
@@ -89,11 +90,11 @@ export async function runAgentTests(): Promise<TestResults> {
           : undefined,
       });
 
-      console.info(
+      logger.info(
         `[AGENT TEST] ${agentInfo.id} completed in ${executionTime}ms: ${testResult.success ? "PASS" : "FAIL"}`,
       );
       if (agentIssues.length > 0) {
-        console.warn(`[AGENT TEST] ${agentInfo.id} issues:`, agentIssues);
+        logger.warn(`[AGENT TEST] ${agentInfo.id} issues`, { agentIssues });
       }
     } catch (error) {
       const executionTime = Date.now() - testStartTime;
@@ -112,7 +113,7 @@ export async function runAgentTests(): Promise<TestResults> {
         executionTime,
       });
 
-      console.error(`[AGENT TEST] ${agentInfo.id} failed with error:`, error);
+      logger.error(`[AGENT TEST] ${agentInfo.id} failed with error`, error);
     }
   }
 
@@ -134,23 +135,25 @@ export async function runAgentTests(): Promise<TestResults> {
   };
 
   // Log summary
-  console.info(`[AGENT TEST RUNNER] Testing completed in ${totalTime}ms`);
-  console.info(
+  logger.info(`[AGENT TEST RUNNER] Testing completed in ${totalTime}ms`);
+  logger.info(
     `[AGENT TEST RUNNER] Results: ${passedTests}/${results.length} agents passed`,
   );
 
   if (criticalIssues.length > 0) {
-    console.error(`[AGENT TEST RUNNER] Critical issues found:`, criticalIssues);
+    logger.error(`[AGENT TEST RUNNER] Critical issues found`, {
+      criticalIssues,
+    });
   }
 
   if (warnings.length > 0) {
-    console.warn(`[AGENT TEST RUNNER] Warnings:`, warnings);
+    logger.warn(`[AGENT TEST RUNNER] Warnings`, { warnings });
   }
 
   if (overallSuccess) {
-    console.info("[AGENT TEST RUNNER] ✅ All agents are working correctly!");
+    logger.info("[AGENT TEST RUNNER] ✅ All agents are working correctly!");
   } else {
-    console.error(
+    logger.error(
       "[AGENT TEST RUNNER] ❌ Some agents have issues that need attention",
     );
   }
@@ -170,7 +173,7 @@ export async function testSpecificAgent(agentId: string): Promise<{
   const startTime = Date.now();
 
   try {
-    console.info(`[AGENT TEST] Testing specific agent: ${agentId}`);
+    logger.info(`[AGENT TEST] Testing specific agent: ${agentId}`);
 
     const AgentClass = AgentRegistry.get(agentId);
     if (!AgentClass) {
@@ -185,7 +188,7 @@ export async function testSpecificAgent(agentId: string): Promise<{
     const testResult = await agent.test();
     const executionTime = Date.now() - startTime;
 
-    console.info(
+    logger.info(
       `[AGENT TEST] ${agentId} completed in ${executionTime}ms: ${testResult.success ? "PASS" : "FAIL"}`,
     );
 
@@ -199,7 +202,7 @@ export async function testSpecificAgent(agentId: string): Promise<{
     const errorMessage = error instanceof Error ? error.message : String(error);
     const executionTime = Date.now() - startTime;
 
-    console.error(`[AGENT TEST] ${agentId} failed with error:`, error);
+    logger.error(`[AGENT TEST] ${agentId} failed with error`, error);
 
     return {
       success: false,
