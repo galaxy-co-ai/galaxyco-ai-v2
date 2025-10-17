@@ -302,7 +302,7 @@ export default function AgentTemplateCard({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            console.log("Preview agent:", template.id);
+            logger.debug("Preview agent clicked", { templateId: template.id });
           }}
           style={{
             padding: "var(--space-2) var(--space-3)", // 8px 12px

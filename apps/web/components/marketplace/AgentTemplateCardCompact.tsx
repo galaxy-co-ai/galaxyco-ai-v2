@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Download, Zap, Clock } from "lucide-react";
+import { logger } from "@/lib/utils/logger";
 
 interface AgentTemplateCardProps {
   template: {
@@ -258,7 +259,7 @@ export default function AgentTemplateCardCompact({
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            console.log("Deploy agent:", template.id);
+            logger.debug("Deploy agent clicked", { templateId: template.id });
           }}
           className="w-full"
         >

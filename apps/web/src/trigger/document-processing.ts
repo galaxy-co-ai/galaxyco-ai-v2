@@ -5,6 +5,7 @@ import {
 } from "@galaxyco/database/schema";
 import { eq } from "drizzle-orm";
 import { DocumentProcessor } from "../lib/services/document-processor";
+import { logger } from "@/lib/utils/logger";
 
 interface DocumentProcessingPayload {
   documentId: string;
@@ -16,7 +17,7 @@ export async function documentProcessingJob(
   payload: DocumentProcessingPayload,
 ) {
   const { documentId, workspaceId, userId } = payload;
-  console.info("Starting document processing", {
+  logger.info("Starting document processing", {
     documentId,
     workspaceId,
     userId,
@@ -75,7 +76,7 @@ export async function documentProcessingJob(
       })
       .where(eq(knowledgeItems.id, documentId));
 
-    console.info("Document processing completed successfully", {
+    logger.info("Document processing completed successfully", {
       documentId,
       wordCount: processedData.wordCount,
       summaryLength: processedData.summary?.length || 0,
@@ -91,7 +92,7 @@ export async function documentProcessingJob(
       keywords: processedData.keywords || [],
     };
   } catch (error) {
-    console.error("Document processing failed", {
+    logger.error("Document processing failed", {
       documentId,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -111,7 +112,7 @@ export async function embeddingUpdateJob(payload: {
   content: string;
 }) {
   const { documentId, content } = payload;
-  console.info("Updating document embeddings", { documentId });
+  logger.info("Updating document embeddings", { documentId });
 
   try {
     const processor = new DocumentProcessor();
@@ -122,11 +123,11 @@ export async function embeddingUpdateJob(payload: {
       .set({ embeddings: embeddings as any, updatedAt: new Date() })
       .where(eq(knowledgeItems.id, documentId));
 
-    console.info("Embeddings updated successfully", { documentId });
+    logger.info("Embeddings updated successfully", { documentId });
 
     return { success: true, documentId, embeddingsLength: embeddings.length };
   } catch (error) {
-    console.error("Embedding update failed", {
+    logger.error("Embedding update failed", {
       documentId,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -139,7 +140,7 @@ export async function documentCategorizationJob(payload: {
   workspaceId: string;
 }) {
   const { documentId, workspaceId } = payload;
-  console.info("Auto-categorizing document", { documentId });
+  logger.info("Auto-categorizing document", { documentId });
 
   try {
     // Get document details
@@ -149,7 +150,7 @@ export async function documentCategorizationJob(payload: {
     if (!document) throw new Error(`Document not found: ${documentId}`);
 
     if (!document.content && !document.summary) {
-      console.info("No content available for categorization", { documentId });
+      logger.info("No content available for categorization", { documentId });
       return { success: false, reason: "No content available" } as const;
     }
 
@@ -188,7 +189,7 @@ export async function documentCategorizationJob(payload: {
       })
       .where(eq(knowledgeItems.id, documentId));
 
-    console.info("Document categorization completed", {
+    logger.info("Document categorization completed", {
       documentId,
       suggestedCategories: suggestions.suggestedCategories,
       suggestedTags: suggestions.suggestedTags,

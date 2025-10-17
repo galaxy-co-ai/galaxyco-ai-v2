@@ -83,6 +83,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     const logLevel = log.success ? "info" : "error";
     const logMessage = `[AGENT ${log.success ? "SUCCESS" : "FAILED"}]`;
 
+    // eslint-disable-next-line no-console -- Intentional: Real-time agent execution feedback for debugging
     console[logLevel](logMessage, {
       agent_id: log.agentId,
       tenant_id: log.tenantId,
@@ -131,6 +132,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     // Performance monitoring - alert on slow executions
     if (log.duration > 30000) {
       // 30 seconds
+      // eslint-disable-next-line no-console -- Intentional: Real-time performance alerts for monitoring
       console.warn("[AGENT PERFORMANCE] Slow execution detected", {
         agent_id: log.agentId,
         duration_ms: log.duration,
@@ -144,9 +146,11 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
       );
     }
   } catch (error) {
+    // eslint-disable-next-line no-console -- Intentional: Fallback logging when database fails
     console.error("[AGENT LOGGER] Failed to log execution:", error);
 
     // Fallback: at least log to console if DB fails
+    // eslint-disable-next-line no-console -- Intentional: Critical fallback when primary logging fails
     console[log.success ? "info" : "error"]("[AGENT FALLBACK LOG]", {
       agent_id: log.agentId,
       success: log.success,
@@ -311,6 +315,7 @@ export async function logAgentConfigChange(
   changes: Record<string, { old: any; new: any }>,
 ): Promise<void> {
   try {
+    // eslint-disable-next-line no-console -- Intentional: Real-time config change tracking for audit trail
     console.info("[AGENT CONFIG] Configuration updated", {
       agent_id: agentId,
       tenant_id: tenantId,

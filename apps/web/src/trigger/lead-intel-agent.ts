@@ -1,6 +1,7 @@
 import { task } from "@trigger.dev/sdk/v3";
 import OpenAI from "openai";
 import * as cheerio from "cheerio";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * Lead Intel Agent - Production Implementation
@@ -150,7 +151,7 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
       aboutText: aboutText.substring(0, 500), // Limit length
     };
   } catch (error) {
-    console.warn(`Failed to scrape ${domain}:`, error);
+    logger.warn(`Failed to scrape ${domain}`, { error, domain });
     return {
       companyName: domain,
       description: "",
@@ -168,7 +169,7 @@ async function searchCompanyNews(companyName: string): Promise<NewsItem[]> {
   try {
     // Only search if API key is configured
     if (!process.env.GOOGLE_CUSTOM_SEARCH_API_KEY) {
-      console.warn("Google Custom Search API key not configured");
+      logger.warn("Google Custom Search API key not configured");
       return [];
     }
 
@@ -317,7 +318,7 @@ Provide:
     const insights = JSON.parse(content);
     return insights;
   } catch (error) {
-    console.error("Failed to generate insights:", error);
+    logger.error("Failed to generate insights", { error });
     // Return fallback data
     return {
       painPoints: ["Unable to analyze - enrichment data limited"],
@@ -335,18 +336,18 @@ Provide:
  */
 export async function enrichLeadCore(payload: EnrichLeadPayload) {
   const startTime = Date.now();
-  console.log("🚀 Starting lead enrichment", {
+  logger.info("🚀 Starting lead enrichment", {
     domain: payload.companyDomain,
     workspace: payload.workspaceId,
   });
 
   try {
     // Step 1: Scrape website (parallel with news search)
-    console.log("📡 Step 1: Scraping company website...");
+    logger.info("📡 Step 1: Scraping company website...");
     const websiteDataPromise = scrapeCompanyWebsite(payload.companyDomain);
 
     // Step 2: Search news (parallel with website scrape)
-    console.log("📰 Step 2: Searching recent news...");
+    logger.info("📰 Step 2: Searching recent news...");
     const newsPromise = searchCompanyNews(
       payload.companyName || payload.companyDomain,
     );
@@ -358,7 +359,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
     ]);
 
     // Step 3: Generate AI insights
-    console.log("🤖 Step 3: Generating AI insights...");
+    logger.info("🤖 Step 3: Generating AI insights...");
     const insights = await generateInsights(
       websiteData,
       newsItems,
@@ -401,7 +402,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
 
     const duration = Date.now() - startTime;
 
-    console.log("✅ Enrichment complete", {
+    logger.info("✅ Enrichment complete", {
       leadId: enrichedLead.leadId,
       icpFitScore: enrichedLead.icpFitScore,
       confidence: enrichedLead.confidenceLevel,
@@ -425,7 +426,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
       },
     };
   } catch (error) {
-    console.error("❌ Enrichment failed:", error);
+    logger.error("❌ Enrichment failed", { error });
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

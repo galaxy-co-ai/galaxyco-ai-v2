@@ -208,6 +208,7 @@ export function trackApiAccess(
 
   // Log successful tenant-scoped API access
   if (userId && tenantId && responseStatus && responseStatus < 400) {
+    // eslint-disable-next-line no-console -- Intentional: Real-time security audit trail for API access monitoring
     console.log("[API ACCESS]", context);
   }
 
