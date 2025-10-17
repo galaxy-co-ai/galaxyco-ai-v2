@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Code, Copy, Lock, Search } from "lucide-react";
+import { logger } from "@/lib/utils/logger";
 
 const apiEndpoints = [
   {
@@ -182,7 +183,9 @@ const agent = await fetch('https://api.galaxyco.ai/v1/agents', {
 });
 
 const agentData = await agent.json();
-console.log('Agent created:', agentData);`;
+// Agent data is available in the 'agentData' variable
+// Process the agent data as needed
+`;
 
 export default function ApiReferencePage() {
   const [searchQuery, setSearchQuery] = useState("");

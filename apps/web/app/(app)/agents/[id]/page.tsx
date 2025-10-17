@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { ExecutionList } from "@/components/agents/execution-list";
+import { logger } from "@/lib/utils/logger";
 
 // Minimal agent type for fields used here
 interface AgentExecution {
@@ -71,7 +72,10 @@ export default function AgentDetailPage({
         const data = await response.json();
         setAgent(data.agent);
       } catch (err) {
-        console.error("Error fetching agent:", err);
+        logger.error("Failed to fetch agent", {
+          agentId: params.id,
+          error: err instanceof Error ? err.message : String(err),
+        });
         setError(
           err instanceof Error ? err : new Error("Failed to load agent"),
         );

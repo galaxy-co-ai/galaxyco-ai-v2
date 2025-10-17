@@ -19,6 +19,7 @@ import { ErrorBoundary } from "@/components/shared/error-boundary";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
 import type { TestResult } from "@/lib/agents/test-types";
+import { logger } from "@/lib/utils/logger";
 
 export default function AgentBuilderPage() {
   const router = useRouter();
@@ -73,7 +74,9 @@ export default function AgentBuilderPage() {
       setEnhancedPrompt(data.enhanced);
       toast.success("Prompt enhanced with AI suggestions!");
     } catch (error) {
-      console.error("Enhance error:", error);
+      logger.error("Failed to enhance prompt", {
+        error: error instanceof Error ? error.message : String(error),
+      });
       const message =
         error instanceof Error ? error.message : "Failed to enhance prompt";
       toast.error(message);
@@ -145,7 +148,9 @@ export default function AgentBuilderPage() {
         toast.success(`Generated ${data.variants.length} agent variants!`);
       }, 800);
     } catch (error) {
-      console.error("Generate error:", error);
+      logger.error("Failed to generate variants", {
+        error: error instanceof Error ? error.message : String(error),
+      });
       const message =
         error instanceof Error
           ? error.message
@@ -211,7 +216,10 @@ export default function AgentBuilderPage() {
 
       return result;
     } catch (error) {
-      console.error("Test run error:", error);
+      logger.error("Failed to run test", {
+        agentName: selectedVariant?.name,
+        error: error instanceof Error ? error.message : String(error),
+      });
       const message =
         error instanceof Error ? error.message : "Failed to run test";
       toast.error(message);
@@ -263,7 +271,10 @@ export default function AgentBuilderPage() {
         // router.push(`/agents/${data.agent.id}`);
       }
     } catch (error) {
-      console.error("Deploy error:", error);
+      logger.error("Failed to save agent", {
+        agentName: selectedVariant?.name,
+        error: error instanceof Error ? error.message : String(error),
+      });
       const message =
         error instanceof Error ? error.message : "Failed to save agent";
       toast.error(message);
@@ -317,7 +328,10 @@ export default function AgentBuilderPage() {
 
       toast.success("Workflow updated!");
     } catch (error) {
-      console.error("Iterate error:", error);
+      logger.error("Failed to iterate workflow", {
+        variantId: selectedVariant?.id,
+        error: error instanceof Error ? error.message : String(error),
+      });
       const message =
         error instanceof Error ? error.message : "Failed to update workflow";
       toast.error(message);

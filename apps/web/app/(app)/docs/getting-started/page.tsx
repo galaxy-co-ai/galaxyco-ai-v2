@@ -13,6 +13,7 @@ import {
   Play,
 } from "lucide-react";
 import Link from "next/link";
+import { logger } from "@/lib/utils/logger";
 
 const steps = [
   {
@@ -114,7 +115,9 @@ const result = await client.agents.execute(agent.id, {
   input: 'Find leads in the technology sector'
 });
 
-console.log(result);`;
+// Result is available in the 'result' variable
+// Process the result as needed
+`;
 
 export default function GettingStartedPage() {
   return (

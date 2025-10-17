@@ -9,6 +9,7 @@ import { MetricCard } from "@/components/agents/metric-card";
 import { useWorkspace } from "@/contexts/workspace-context";
 import type { AgentWithSchedule, AgentStatus } from "@/lib/agents/types";
 import { toast } from "sonner";
+import { logger } from "@/lib/utils/logger";
 
 export default function AgentsPage() {
   const { currentWorkspace } = useWorkspace();
@@ -49,7 +50,10 @@ export default function AgentsPage() {
         const data = await response.json();
         setAgents(data.agents || []);
       } catch (err) {
-        console.error("Error fetching agents:", err);
+        logger.error("Failed to fetch agents", {
+          error: err instanceof Error ? err.message : String(err),
+          workspaceId: currentWorkspace?.id,
+        });
         setError(
           err instanceof Error ? err : new Error("Failed to load agents"),
         );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus, Search, FileText, Image, File, Grid, List } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UploadModal } from "@/components/documents/upload-modal";
+import { logger } from "@/lib/utils/logger";
 
 interface Document {
   id: string;
@@ -56,7 +57,9 @@ export default function CollectionsPage() {
 
       setCollections(collectionList);
     } catch (err) {
-      console.error("Failed to load collections:", err);
+      logger.error("Failed to load collections", {
+        error: err instanceof Error ? err.message : String(err),
+      });
     } finally {
       setLoading(false);
     }

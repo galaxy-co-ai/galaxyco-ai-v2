@@ -22,6 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { logger } from "@/lib/utils/logger";
 
 interface Document {
   id: string;
@@ -71,7 +72,9 @@ export default function KnowledgeBasePage() {
         setDocuments(data.documents || []);
       }
     } catch (error) {
-      console.error("Failed to load documents:", error);
+      logger.error("Failed to load documents", {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
     setLoading(false);
   };
