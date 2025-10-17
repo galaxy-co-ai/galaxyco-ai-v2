@@ -413,3 +413,13 @@ Proprietary - All rights reserved
 ---
 
 **Built with ❤️ to make multi-agent AI useful in minutes**
+
+## 🚀 CI/CD Pipeline
+
+Automated workflows for continuous integration, security scanning, and deployment.
+
+- **CI Pipeline:** TypeScript, lint, format, build checks
+- **Security Scanning:** npm audit, CodeQL, secret scanning, OWASP
+- **Deploy Pipeline:** Staging and production with gated approvals
+
+See [`docs/deployment/GITHUB_SECRETS_SETUP.md`](./docs/deployment/GITHUB_SECRETS_SETUP.md) for configuration.
