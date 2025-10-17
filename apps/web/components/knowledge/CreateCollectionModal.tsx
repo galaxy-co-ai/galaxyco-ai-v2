@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
 import { COLORS, SPACING } from "@/lib/design-system";
 
 interface CreateCollectionModalProps {
@@ -80,7 +81,7 @@ export default function CreateCollectionModal({
       onCreate?.();
       onClose();
     } catch (err: any) {
-      console.error("Error saving collection:", err);
+      logger.error("Error saving collection", err);
       setError(err.message || "Failed to save collection");
     } finally {
       setIsSubmitting(false);

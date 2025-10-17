@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
 import Link from "next/link";
 import { Rocket, Package } from "lucide-react";
 import AgentCard from "./AgentCard";
@@ -64,7 +65,7 @@ export default function AgentGrid({
             : a,
         ),
       );
-      console.error("Failed to toggle agent:", error);
+      logger.error("Failed to toggle agent", error);
     }
   };
 

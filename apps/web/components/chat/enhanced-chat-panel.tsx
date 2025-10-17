@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { logger } from "@/lib/utils/logger";
 import { useChat } from "@/hooks/use-chat";
 import { ChatMessageComponent } from "./chat-message";
 import {
@@ -86,7 +87,7 @@ export function EnhancedChatPanel({
         setConversations(data.conversations || []);
       }
     } catch (error) {
-      console.error("Failed to load conversations:", error);
+      logger.error("Failed to load conversations", error);
     }
     setLoadingConversations(false);
   };
@@ -108,7 +109,7 @@ export function EnhancedChatPanel({
         }
       }
     } catch (error) {
-      console.error("Failed to delete conversation:", error);
+      logger.error("Failed to delete conversation", error);
     }
   };
 
@@ -125,7 +126,7 @@ export function EnhancedChatPanel({
         );
       }
     } catch (error) {
-      console.error("Failed to pin conversation:", error);
+      logger.error("Failed to pin conversation", error);
     }
   };
 

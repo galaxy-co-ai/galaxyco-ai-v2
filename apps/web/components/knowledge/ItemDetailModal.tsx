@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { COLORS, SPACING } from "@/lib/design-system";
 
 interface KnowledgeItem {
@@ -90,7 +91,7 @@ export default function ItemDetailModal({
         setItem(data.item);
         setEditedTitle(data.item.title);
       } catch (err: any) {
-        console.error("Error fetching item:", err);
+        logger.error("Error fetching item", err);
         setError(err.message || "Failed to load item");
       } finally {
         setIsLoading(false);
@@ -126,7 +127,7 @@ export default function ItemDetailModal({
       setIsEditing(false);
       onUpdate?.();
     } catch (err: any) {
-      console.error("Error updating title:", err);
+      logger.error("Error updating title", err);
       alert("Failed to update title: " + err.message);
     }
   };
@@ -158,7 +159,7 @@ export default function ItemDetailModal({
       onDelete?.();
       onClose();
     } catch (err: any) {
-      console.error("Error deleting item:", err);
+      logger.error("Error deleting item", err);
       alert("Failed to delete item: " + err.message);
       setIsDeleting(false);
     }

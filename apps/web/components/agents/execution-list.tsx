@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Clock,
@@ -129,7 +130,7 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
       setStats(data.stats || null);
       setPagination(data.pagination || null);
     } catch (err) {
-      console.error("Error fetching executions:", err);
+      logger.error("Error fetching executions", err);
       setError(
         err instanceof Error ? err.message : "Failed to load executions",
       );
@@ -201,7 +202,7 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
       toast.success("Execution cancelled");
       await fetchExecutions(); // Refresh the list
     } catch (err) {
-      console.error("Error cancelling execution:", err);
+      logger.error("Error cancelling execution", err);
       toast.error("Failed to cancel execution");
     } finally {
       setIsUpdating(null);

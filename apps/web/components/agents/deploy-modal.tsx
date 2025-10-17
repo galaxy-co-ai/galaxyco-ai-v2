@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
 import { Rocket, AlertCircle, Check, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -63,7 +64,7 @@ export function DeployModal({
         setSuccess(false);
       }, 1500);
     } catch (err) {
-      console.error("Deploy error:", err);
+      logger.error("Deploy error", err);
       setError(err instanceof Error ? err.message : "Failed to deploy agent");
     } finally {
       setIsDeploying(false);

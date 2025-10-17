@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { MessageSquare, Search, Trash2, Pin, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +42,7 @@ export function ConversationHistory({
         setConversations(data.conversations);
       }
     } catch (error) {
-      console.error("Failed to load conversations:", error);
+      logger.error("Failed to load conversations", error);
     } finally {
       setLoading(false);
     }
@@ -61,7 +62,7 @@ export function ConversationHistory({
         onDeleteConversation(id);
       }
     } catch (error) {
-      console.error("Failed to delete conversation:", error);
+      logger.error("Failed to delete conversation", error);
     }
   }
 
@@ -81,7 +82,7 @@ export function ConversationHistory({
         );
       }
     } catch (error) {
-      console.error("Failed to pin conversation:", error);
+      logger.error("Failed to pin conversation", error);
     }
   }
 

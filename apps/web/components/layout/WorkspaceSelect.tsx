@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { useWorkspace, type Workspace } from "@/hooks/useWorkspace";
 import {
   colors,
@@ -68,7 +69,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
         const data = await response.json();
         setAvailableWorkspaces(data.workspaces || []);
       } catch (error) {
-        console.error("Error fetching workspaces:", error);
+        logger.error("Error fetching workspaces", error);
       } finally {
         setIsLoadingWorkspaces(false);
       }
@@ -91,7 +92,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
       await setWorkspaceId(selectedWorkspace.id);
       setIsDropdownOpen(false);
     } catch (error) {
-      console.error("Error switching workspace:", error);
+      logger.error("Error switching workspace", error);
     }
   };
 

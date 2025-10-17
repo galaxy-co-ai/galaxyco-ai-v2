@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { COLORS, SPACING } from "@/lib/design-system";
 import CreateCollectionModal from "./CreateCollectionModal";
 
@@ -48,7 +49,7 @@ export default function CollectionsSidebar({
       const data = await response.json();
       setCollections(data.collections || []);
     } catch (error) {
-      console.error("Error fetching collections:", error);
+      logger.error("Error fetching collections", error);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +89,7 @@ export default function CollectionsSidebar({
 
       fetchCollections();
     } catch (error: any) {
-      console.error("Error deleting collection:", error);
+      logger.error("Error deleting collection", error);
       alert("Failed to delete collection: " + error.message);
     }
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import {
   colors,
   spacing,
@@ -59,7 +60,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
         setCollections(data.collections || []);
       }
     } catch (error) {
-      console.error("Error fetching collections:", error);
+      logger.error("Error fetching collections", error);
     } finally {
       setIsLoadingCollections(false);
     }

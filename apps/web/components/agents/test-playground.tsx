@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
 import {
   Play,
   Check,
@@ -67,7 +68,7 @@ export function TestPlayground({
         }
       }
     } catch (error) {
-      console.error("Test error:", error);
+      logger.error("Test error", error);
     }
   };
 
@@ -105,7 +106,7 @@ export function TestPlayground({
         toast.success("Agent activated successfully!");
       }
     } catch (error) {
-      console.error("Activation error:", error);
+      logger.error("Activation error", error);
       throw error;
     }
   };
