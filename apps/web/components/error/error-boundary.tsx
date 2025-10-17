@@ -3,6 +3,7 @@
 import React from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/utils/logger";
 import {
   Card,
   CardContent,
@@ -47,7 +48,9 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error details
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    logger.error("ErrorBoundary caught an error", error, {
+      componentStack: errorInfo.componentStack,
+    });
 
     // Send error to monitoring service (Sentry, LogRocket, etc.)
     if (this.props.onError) {

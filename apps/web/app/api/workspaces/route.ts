@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import { workspaceMembers, users } from "@galaxyco/database/schema";
 import { eq } from "drizzle-orm";
@@ -43,7 +44,7 @@ export async function GET() {
 
     return NextResponse.json(workspaces);
   } catch (error) {
-    console.error("[API] List workspaces error:", error);
+    logger.error("[API] List workspaces error", error);
     return NextResponse.json(
       { error: "Failed to fetch workspaces" },
       { status: 500 },

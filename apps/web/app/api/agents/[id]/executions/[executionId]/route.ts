@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import {
   agentExecutions,
@@ -170,7 +170,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("[API] Get execution details error:", error);
+    logger.error("[API] Get execution details error", error);
     return NextResponse.json(
       {
         error: "Failed to fetch execution details",
@@ -270,7 +270,7 @@ export async function PATCH(
       message: `Execution ${action}ed successfully`,
     });
   } catch (error) {
-    console.error("[API] Update execution error:", error);
+    logger.error("[API] Update execution error", error);
     return NextResponse.json(
       {
         error: "Failed to update execution",

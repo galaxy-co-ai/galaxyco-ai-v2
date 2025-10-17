@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import {
   agents,
@@ -85,7 +85,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("[API] Get agent error:", error);
+    logger.error("[API] Get agent error", error);
     return NextResponse.json(
       { error: "Failed to fetch agent" },
       { status: 500 },
@@ -144,7 +144,7 @@ export async function PATCH(
 
     return NextResponse.json({ agent: updatedAgent, success: true });
   } catch (error) {
-    console.error("[API] Update agent error:", error);
+    logger.error("[API] Update agent error", error);
     return NextResponse.json(
       { error: "Failed to update agent" },
       { status: 500 },
@@ -192,7 +192,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[API] Delete agent error:", error);
+    logger.error("[API] Delete agent error", error);
     return NextResponse.json(
       { error: "Failed to delete agent" },
       { status: 500 },

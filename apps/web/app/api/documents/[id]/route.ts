@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/services/user-session";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import { knowledgeItems } from "@galaxyco/database/schema";
 import { and, eq } from "drizzle-orm";
@@ -36,7 +37,7 @@ export async function GET(
 
     return NextResponse.json({ document });
   } catch (error) {
-    console.error("Get document error:", error);
+    logger.error("Get document error", error);
     return NextResponse.json(
       { error: "Failed to fetch document" },
       { status: 500 },
@@ -84,7 +85,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Update document error:", error);
+    logger.error("Update document error", error);
     return NextResponse.json(
       { error: "Failed to update document" },
       { status: 500 },
@@ -117,7 +118,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Delete document error:", error);
+    logger.error("Delete document error", error);
     return NextResponse.json(
       { error: "Failed to delete document" },
       { status: 500 },

@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { logger } from "@/lib/utils/logger";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@galaxyco/database";
 import {
@@ -238,7 +238,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Chat API error:", error);
+    logger.error("Chat API error", error);
     return NextResponse.json(
       { error: "Failed to generate AI response" },
       { status: 500 },

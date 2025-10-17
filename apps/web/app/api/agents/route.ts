@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import { agents, workspaceMembers, users } from "@galaxyco/database/schema";
 import { eq, and } from "drizzle-orm";
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("[API] Save agent error:", error);
+    logger.error("[API] Save agent error", error);
     return NextResponse.json(
       {
         error: "Failed to save agent",
@@ -193,7 +193,7 @@ export async function GET(req: NextRequest) {
       total: agentsList.length,
     });
   } catch (error) {
-    console.error("[API] List agents error:", error);
+    logger.error("[API] List agents error", error);
     return NextResponse.json(
       { error: "Failed to fetch agents" },
       { status: 500 },

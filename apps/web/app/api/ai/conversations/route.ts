@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/services/user-session";
+import { logger } from "@/lib/utils/logger";
 import { conversationService } from "@/lib/services/conversation-service";
 
 export const runtime = "nodejs";
@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ conversations });
   } catch (error) {
-    console.error("Get conversations error:", error);
+    logger.error("Get conversations error", error);
     return NextResponse.json(
       { error: "Failed to fetch conversations" },
       { status: 500 },
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ conversation }, { status: 201 });
   } catch (error) {
-    console.error("Create conversation error:", error);
+    logger.error("Create conversation error", error);
     return NextResponse.json(
       { error: "Failed to create conversation" },
       { status: 500 },

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import {
   knowledgeItems,
@@ -156,7 +157,7 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Document upload error:", error);
+    logger.error("Document upload error", error);
     return NextResponse.json(
       {
         error: "Failed to upload document",

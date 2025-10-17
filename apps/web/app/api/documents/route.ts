@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import {
   knowledgeItems,
@@ -84,7 +85,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ documents });
   } catch (error) {
-    console.error("List documents error:", error);
+    logger.error("List documents error", error);
     return NextResponse.json(
       { error: "Failed to fetch documents" },
       { status: 500 },

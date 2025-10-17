@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCcw, Home, Mail } from "lucide-react";
 import Link from "next/link";
+import { logger } from "@/lib/utils/logger";
 
 export default function Error({
   error,
@@ -14,7 +15,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log error to error reporting service
-    console.error("Global error:", error);
+    logger.error("Global error", error);
   }, [error]);
 
   return (

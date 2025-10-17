@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/services/user-session";
+import { logger } from "@/lib/utils/logger";
 import { conversationService } from "@/lib/services/conversation-service";
 
 export const runtime = "nodejs";
@@ -33,7 +33,7 @@ export async function GET(
 
     return NextResponse.json(conversationContext);
   } catch (error) {
-    console.error("Get conversation error:", error);
+    logger.error("Get conversation error", error);
     return NextResponse.json(
       { error: "Failed to fetch conversation" },
       { status: 500 },
@@ -70,7 +70,7 @@ export async function PATCH(
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error) {
-    console.error("Update conversation error:", error);
+    logger.error("Update conversation error", error);
     return NextResponse.json(
       { error: "Failed to update conversation" },
       { status: 500 },
@@ -106,7 +106,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Delete conversation error:", error);
+    logger.error("Delete conversation error", error);
     return NextResponse.json(
       { error: "Failed to delete conversation" },
       { status: 500 },

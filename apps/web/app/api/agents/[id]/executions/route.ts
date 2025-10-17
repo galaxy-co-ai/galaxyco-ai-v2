@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import {
   agentExecutions,
@@ -157,7 +157,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("[API] Get agent executions error:", error);
+    logger.error("[API] Get agent executions error", error);
     return NextResponse.json(
       {
         error: "Failed to fetch executions",
