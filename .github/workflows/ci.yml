@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build dependencies
-        run: pnpm turbo build --filter="!@galaxyco/web" --filter="!@galaxyco/api"
+        run: pnpm turbo build --filter="!web" --filter="!api"
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
