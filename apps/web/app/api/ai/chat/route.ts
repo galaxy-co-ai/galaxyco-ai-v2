@@ -14,6 +14,7 @@ import {
   safeValidateRequest,
   formatValidationError,
 } from "@/lib/validation";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -55,19 +56,50 @@ Always structure responses with:
 You are the user's secret weapon for business automation success! 💪`;
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
+      logger.warn("Unauthorized chat request");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get user and workspace
+    // 2. Rate limiting check
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CHAT);
+    if (!rateLimitResult.success) {
+      logger.warn("Chat rate limit exceeded", {
+        userId: clerkUserId,
+        limit: rateLimitResult.limit,
+        reset: rateLimitResult.reset,
+      });
+      return NextResponse.json(
+        {
+          error: "Rate limit exceeded",
+          message: `Too many chat requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
+          retryAfter: rateLimitResult.reset,
+        },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": String(rateLimitResult.limit),
+            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+            "X-RateLimit-Reset": String(rateLimitResult.reset),
+            "Retry-After": String(
+              rateLimitResult.reset - Math.floor(Date.now() / 1000),
+            ),
+          },
+        },
+      );
+    }
+
+    // 3. Get user and workspace
     const user = await db.query.users.findFirst({
       where: eq(users.clerkUserId, clerkUserId),
     });
 
     if (!user) {
+      logger.warn("Chat request by non-existent user", { clerkUserId });
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -76,6 +108,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!membership) {
+      logger.warn("Chat request without workspace", { userId: user.id });
       return NextResponse.json(
         { error: "No workspace found" },
         { status: 404 },
@@ -85,15 +118,18 @@ export async function POST(req: NextRequest) {
     const userId = user.id;
     const workspaceId = membership.workspaceId;
 
-    // Validate request body
+    // 4. Validate request body
     const body = await req.json();
     const validation = safeValidateRequest(chatRequestSchema, body);
 
     if (!validation.success) {
-      logger.warn("[API] Invalid chat request", {
-        errors: formatValidationError(validation.error),
+      const formattedError = formatValidationError(validation.error);
+      logger.warn("Invalid chat request", {
+        userId: user.id,
+        workspaceId: membership.workspaceId,
+        errors: formattedError.errors,
       });
-      return NextResponse.json(formatValidationError(validation.error), {
+      return NextResponse.json(formattedError, {
         status: 400,
       });
     }
@@ -166,13 +202,17 @@ export async function POST(req: NextRequest) {
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
     if (!openaiKey && !anthropicKey) {
+      logger.error("No AI API keys configured", {
+        userId,
+        workspaceId,
+      });
       return NextResponse.json(
         { error: "No AI API keys configured" },
         { status: 500 },
       );
     }
 
-    const startTime = Date.now();
+    const aiStartTime = Date.now();
     let reply: string;
     let modelUsed: string;
     let tokensUsed: number | undefined;
@@ -230,12 +270,26 @@ export async function POST(req: NextRequest) {
       tokensUsed = data.usage?.input_tokens + data.usage?.output_tokens;
     }
 
-    const durationMs = Date.now() - startTime;
+    const aiDurationMs = Date.now() - aiStartTime;
+    const totalDurationMs = Date.now() - startTime;
+
+    // Log successful chat completion
+    logger.info("Chat request completed", {
+      userId,
+      workspaceId,
+      conversationId: activeConversationId,
+      model: modelUsed,
+      tokensUsed,
+      aiDurationMs,
+      totalDurationMs,
+      documentsUsed: contextDocs.length,
+      messageCount: messages.length,
+    });
 
     // Store conversation for future reference (simplified for demo)
     // In production, save to conversations table
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       reply,
       conversationId: activeConversationId,
       sources: contextDocs.map((doc) => ({
@@ -247,14 +301,32 @@ export async function POST(req: NextRequest) {
       metadata: {
         model: modelUsed,
         tokensUsed,
-        durationMs,
+        durationMs: aiDurationMs,
         documentsFound: contextDocs.length,
       },
     });
+
+    // Add rate limit headers
+    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
+    response.headers.set(
+      "X-RateLimit-Remaining",
+      String(rateLimitResult.remaining),
+    );
+    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+
+    return response;
   } catch (error) {
-    logger.error("Chat API error", error);
+    const durationMs = Date.now() - startTime;
+    logger.error("Chat API error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      durationMs,
+    });
     return NextResponse.json(
-      { error: "Failed to generate AI response" },
+      {
+        error: "Failed to generate AI response",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 },
     );
   }

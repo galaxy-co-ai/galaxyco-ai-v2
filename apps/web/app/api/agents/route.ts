@@ -9,6 +9,7 @@ import {
   safeValidateRequest,
   formatValidationError,
 } from "@/lib/validation";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
  * POST /api/agents
@@ -20,22 +21,56 @@ import {
  * - Agent data (name, description, workflow, etc.)
  */
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
+      logger.warn("Unauthorized agent creation attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get and validate request body
+    // 2. Rate limiting check
+    const rateLimitResult = await checkRateLimit(
+      clerkUserId,
+      RATE_LIMITS.AGENT_CREATE,
+    );
+    if (!rateLimitResult.success) {
+      logger.warn("Agent creation rate limit exceeded", {
+        userId: clerkUserId,
+        limit: rateLimitResult.limit,
+        reset: rateLimitResult.reset,
+      });
+      return NextResponse.json(
+        {
+          error: "Rate limit exceeded",
+          message: `Too many agent creation requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
+          retryAfter: rateLimitResult.reset,
+        },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": String(rateLimitResult.limit),
+            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+            "X-RateLimit-Reset": String(rateLimitResult.reset),
+            "Retry-After": String(
+              rateLimitResult.reset - Math.floor(Date.now() / 1000),
+            ),
+          },
+        },
+      );
+    }
+
+    // 3. Get and validate request body
     const body = await req.json();
     const validation = safeValidateRequest(createAgentSchema, body);
 
     if (!validation.success) {
-      logger.warn("[API] Invalid agent creation request", {
-        errors: formatValidationError(validation.error),
+      const formattedError = formatValidationError(validation.error);
+      logger.warn("Invalid agent creation request", {
+        errors: formattedError.errors,
       });
-      return NextResponse.json(formatValidationError(validation.error), {
+      return NextResponse.json(formattedError, {
         status: 400,
       });
     }
@@ -54,7 +89,7 @@ export async function POST(req: NextRequest) {
     // Note: edges is not in schema but used in config - get from body if present
     const edges = body.edges || [];
 
-    // 4. Get user ID from clerkUserId
+    // 5. Get user ID from clerkUserId
     const user = await db.query.users.findFirst({
       where: eq(users.clerkUserId, clerkUserId),
     });
@@ -63,7 +98,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // 5. Verify workspace membership
+    // 6. Verify workspace membership
     const membership = await db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
@@ -80,7 +115,7 @@ export async function POST(req: NextRequest) {
 
     const userId = user.id;
 
-    // 6. Build agent config
+    // 7. Build agent config
     const config = {
       aiProvider: "openai" as const, // Default, can be customized later
       model: "gpt-4",
@@ -101,7 +136,7 @@ export async function POST(req: NextRequest) {
       ],
     };
 
-    // 7. Insert agent as draft
+    // 8. Insert agent as draft
     const [newAgent] = await db
       .insert(agents)
       .values({
@@ -117,8 +152,18 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    // 8. Return success
-    return NextResponse.json({
+    // 9. Return success
+    const durationMs = Date.now() - startTime;
+
+    logger.info("Agent created successfully", {
+      userId,
+      workspaceId,
+      agentId: newAgent.id,
+      agentName: newAgent.name,
+      durationMs,
+    });
+
+    const response = NextResponse.json({
       success: true,
       agent: {
         id: newAgent.id,
@@ -128,8 +173,23 @@ export async function POST(req: NextRequest) {
         createdAt: newAgent.createdAt,
       },
     });
+
+    // Add rate limit headers
+    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
+    response.headers.set(
+      "X-RateLimit-Remaining",
+      String(rateLimitResult.remaining),
+    );
+    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+
+    return response;
   } catch (error) {
-    logger.error("[API] Save agent error", error);
+    const durationMs = Date.now() - startTime;
+    logger.error("Save agent error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      durationMs,
+    });
     return NextResponse.json(
       {
         error: "Failed to save agent",
@@ -153,6 +213,7 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
+      logger.warn("Unauthorized agent list request");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -203,7 +264,10 @@ export async function GET(req: NextRequest) {
       total: agentsList.length,
     });
   } catch (error) {
-    logger.error("[API] List agents error", error);
+    logger.error("List agents error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
       { error: "Failed to fetch agents" },
       { status: 500 },
