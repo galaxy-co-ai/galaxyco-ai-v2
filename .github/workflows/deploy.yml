@@ -1,0 +1,310 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main # Production
+      - staging # Staging
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  # Determine deployment environment
+  setup:
+    name: Setup Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.determine-env.outputs.environment }}
+      should-deploy: ${{ steps.determine-env.outputs.should-deploy }}
+
+    steps:
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+          fi
+
+  # Pre-deployment checks
+  pre-deploy-checks:
+    name: Pre-Deployment Checks
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.should-deploy == 'true'
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run health checks
+        run: |
+          echo "Running pre-deployment health checks..."
+
+          # TypeScript check
+          pnpm turbo typecheck || { echo "❌ TypeScript check failed"; exit 1; }
+
+          # Lint check
+          pnpm turbo lint || { echo "❌ Lint check failed"; exit 1; }
+
+          # Build check
+          pnpm turbo build || { echo "❌ Build check failed"; exit 1; }
+
+          echo "✅ All pre-deployment checks passed"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+
+      - name: Check deployment time restrictions (Production only)
+        if: needs.setup.outputs.environment == 'production'
+        run: |
+          DAY=$(date +%u)
+          HOUR=$(date +%H)
+
+          # No Friday afternoon deploys (after 2pm)
+          if [ $DAY -eq 5 ] && [ $HOUR -ge 14 ]; then
+            echo "❌ No production deployments on Friday after 2pm"
+            echo "Please deploy earlier in the week or wait until Monday"
+            exit 1
+          fi
+
+          # No weekend deploys
+          if [ $DAY -eq 6 ] || [ $DAY -eq 7 ]; then
+            echo "❌ No production deployments on weekends"
+            echo "Please deploy during business hours (Mon-Fri)"
+            exit 1
+          fi
+
+          echo "✅ Deployment time check passed"
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [setup, pre-deploy-checks]
+    if: needs.setup.outputs.environment == 'staging' && needs.setup.outputs.should-deploy == 'true'
+    environment:
+      name: staging
+      url: https://staging.galaxyco.ai
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Staging)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./apps/web
+          vercel-args: "--env staging"
+          alias-domains: staging.galaxyco.ai
+
+      - name: Run smoke tests on staging
+        run: |
+          echo "Running smoke tests on staging..."
+          sleep 10  # Wait for deployment to propagate
+
+          # Health check
+          curl -f https://staging.galaxyco.ai/api/health || { echo "❌ Health check failed"; exit 1; }
+
+          echo "✅ Smoke tests passed"
+
+      - name: Create deployment summary
+        run: |
+          echo "# 🚀 Staging Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** Staging" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** https://staging.galaxyco.ai" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u +%Y-%m-%d\ %H:%M:%S\ UTC)" >> $GITHUB_STEP_SUMMARY
+
+  # Deploy to Production (with approval)
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [setup, pre-deploy-checks]
+    if: needs.setup.outputs.environment == 'production' && needs.setup.outputs.should-deploy == 'true'
+    environment:
+      name: production
+      url: https://galaxyco.ai
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deployment announcement
+        run: |
+          echo "🚀 Starting production deployment..."
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        id: deploy
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./apps/web
+          vercel-args: "--prod"
+          alias-domains: galaxyco.ai,www.galaxyco.ai
+
+      - name: Wait for deployment propagation
+        run: sleep 15
+
+      - name: Run production smoke tests
+        run: |
+          echo "Running production smoke tests..."
+
+          # Health check
+          curl -f https://galaxyco.ai/api/health || { echo "❌ Health check failed"; exit 1; }
+
+          # Check critical pages
+          curl -f https://galaxyco.ai || { echo "❌ Home page failed"; exit 1; }
+          curl -f https://galaxyco.ai/marketplace || { echo "❌ Marketplace failed"; exit 1; }
+
+          echo "✅ Production smoke tests passed"
+
+      - name: Create production deployment summary
+        run: |
+          echo "# 🎉 Production Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** Production" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** https://galaxyco.ai" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u +%Y-%m-%d\ %H:%M:%S\ UTC)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment URL:** ${{ steps.deploy.outputs.preview-url }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Tag release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create tag with timestamp
+          TAG="v$(date +%Y.%m.%d-%H%M%S)"
+          git tag -a $TAG -m "Production deployment: ${{ github.sha }}"
+          git push origin $TAG
+
+          echo "Created release tag: $TAG"
+
+  # Post-deployment monitoring
+  post-deploy-monitoring:
+    name: Post-Deployment Monitoring
+    runs-on: ubuntu-latest
+    needs: [setup, deploy-staging, deploy-production]
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+
+    steps:
+      - name: Monitor deployment health
+        run: |
+          ENV="${{ needs.setup.outputs.environment }}"
+
+          if [ "$ENV" == "production" ]; then
+            URL="https://galaxyco.ai"
+          else
+            URL="https://staging.galaxyco.ai"
+          fi
+
+          echo "Monitoring $URL for 2 minutes..."
+
+          for i in {1..12}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL/api/health)
+            
+            if [ "$STATUS" == "200" ]; then
+              echo "✅ Health check $i/12: OK"
+            else
+              echo "⚠️ Health check $i/12: Failed (Status: $STATUS)"
+            fi
+            
+            sleep 10
+          done
+
+          echo "✅ Monitoring complete"
+
+      - name: Check Sentry for errors
+        run: |
+          echo "Checking Sentry for deployment errors..."
+          echo "Manual check required: https://sentry.io/organizations/galaxyco/issues/"
+          # Add Sentry API integration here if needed
+
+  # Notify on completion
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [setup, deploy-staging, deploy-production]
+    if: always()
+
+    steps:
+      - name: Send notification
+        run: |
+          ENV="${{ needs.setup.outputs.environment }}"
+
+          if [ "${{ needs.deploy-staging.result }}" == "success" ] || [ "${{ needs.deploy-production.result }}" == "success" ]; then
+            STATUS="✅ Deployed Successfully"
+            COLOR="3447003"
+          else
+            STATUS="❌ Deployment Failed"
+            COLOR="15158332"
+          fi
+
+          if [ "$ENV" == "production" ]; then
+            URL="https://galaxyco.ai"
+          else
+            URL="https://staging.galaxyco.ai"
+          fi
+
+          COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || echo 'Unknown commit')"
+          AUTHOR="${{ github.actor }}"
+
+          echo "Deployment Status: $STATUS"
+          echo "Environment: $ENV"
+          echo "URL: $URL"
+          echo "Commit: $COMMIT_MSG"
+          echo "Author: $AUTHOR"
+
+          # Add Discord/Slack notification here
+          # curl -X POST ${{ secrets.DISCORD_WEBHOOK_URL }} ...

@@ -1,0 +1,280 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [main, staging, develop]
+  pull_request:
+    branches: [main, staging, develop]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: "0 2 * * *"
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  # Job 1: npm audit for known vulnerabilities
+  npm-audit:
+    name: npm Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Run npm audit
+        run: |
+          echo "Running npm audit for all workspaces..."
+          pnpm audit --audit-level=moderate --json > audit-report.json || true
+
+          # Display summary
+          echo "=== Security Audit Summary ==="
+          cat audit-report.json | jq -r '.advisories | length' > /dev/null 2>&1 && \
+            echo "Total vulnerabilities: $(cat audit-report.json | jq '.advisories | length')" || \
+            echo "No vulnerabilities found"
+
+          # Check for critical/high vulnerabilities
+          CRITICAL=$(cat audit-report.json | jq '[.advisories[] | select(.severity == "critical")] | length' 2>/dev/null || echo "0")
+          HIGH=$(cat audit-report.json | jq '[.advisories[] | select(.severity == "high")] | length' 2>/dev/null || echo "0")
+
+          echo "Critical: $CRITICAL"
+          echo "High: $HIGH"
+
+          # Fail if critical or high vulnerabilities found
+          if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
+            echo "❌ Critical or high severity vulnerabilities found!"
+            echo "Please review and fix before merging."
+            cat audit-report.json | jq '.advisories[] | select(.severity == "critical" or .severity == "high")' || true
+            exit 1
+          fi
+
+          echo "✅ No critical or high severity vulnerabilities found"
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+          retention-days: 30
+
+  # Job 2: Dependency Review (GitHub native)
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: high
+          deny-licenses: GPL-3.0, AGPL-3.0
+          comment-summary-in-pr: always
+
+  # Job 3: CodeQL Analysis
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["javascript", "typescript"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  # Job 4: Secret Scanning
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+
+      - name: Check for exposed API keys
+        run: |
+          echo "Checking for exposed API keys..."
+
+          # Check for common API key patterns
+          if grep -r "sk_live_" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.github; then
+            echo "❌ ERROR: Stripe live API key found!"
+            exit 1
+          fi
+
+          if grep -r "pk_live_" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.github; then
+            echo "⚠️ Warning: Stripe publishable live key found"
+          fi
+
+          # Check for hardcoded passwords
+          if grep -rE "(password|passwd|pwd)\\s*=\\s*['\"][^'\"]{8,}" apps/ --include="*.ts" --include="*.tsx" --exclude-dir=node_modules; then
+            echo "⚠️ Warning: Potential hardcoded password found"
+          fi
+
+          # Check for AWS keys
+          if grep -rE "AKIA[0-9A-Z]{16}" . --exclude-dir=node_modules --exclude-dir=.git; then
+            echo "❌ ERROR: AWS Access Key ID found!"
+            exit 1
+          fi
+
+          echo "✅ No exposed secrets found"
+
+  # Job 5: OWASP Dependency Check
+  owasp-check:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "galaxyco-ai-2.0"
+          path: "."
+          format: "HTML"
+          args: >
+            --enableRetired
+            --enableExperimental
+            --failOnCVSS 7
+            --exclude "**/node_modules/**"
+            --exclude "**/.next/**"
+            --exclude "**/dist/**"
+
+      - name: Upload OWASP report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: owasp-dependency-check-report
+          path: reports/
+          retention-days: 30
+
+  # Job 6: License Compliance Check
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check licenses
+        run: |
+          echo "Checking for incompatible licenses..."
+
+          # Install license checker
+          pnpm add -g license-checker
+
+          # Check for GPL licenses (copyleft)
+          if license-checker --production --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Unlicense" --summary; then
+            echo "✅ All licenses are compatible"
+          else
+            echo "⚠️ Warning: Some packages have incompatible licenses"
+            license-checker --production --summary
+          fi
+
+  # Job 7: Security Summary
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [npm-audit, secret-scan, license-check]
+    if: always()
+
+    steps:
+      - name: Generate security summary
+        run: |
+          echo "# 🔐 Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| npm Audit | ${{ needs.npm-audit.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Scan | ${{ needs.secret-scan.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| License Check | ${{ needs.license-check.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scan Date:** $(date -u +%Y-%m-%d\ %H:%M:%S\ UTC)" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.npm-audit.result }}" != "success" ] || \
+             [ "${{ needs.secret-scan.result }}" != "success" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Action Required:** Security issues detected. Please review and fix before merging." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **All security checks passed!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Job 8: Notify on failures
+  notify:
+    name: Notify on Security Issues
+    runs-on: ubuntu-latest
+    needs: [npm-audit, codeql, secret-scan, owasp-check]
+    if: failure() && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Send notification
+        run: |
+          echo "🚨 Security scan failed on main branch!"
+          echo "Check the Actions tab for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # Add your notification logic here (Slack, Discord, email, etc.)
