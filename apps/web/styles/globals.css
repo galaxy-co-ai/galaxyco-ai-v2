@@ -21,49 +21,99 @@
 
     /* Light mode colors (for shadcn/ui compatibility) */
     --background: 0 0% 100%;
+    --background-elevated: 240 5% 98%;
+    --background-subtle: 240 5% 96%;
+
     --foreground: 240 10% 4%;
+    --foreground-muted: 240 5% 35%;
+    --foreground-subtle: 240 4% 46%;
+
     --muted: 240 5% 96%;
     --muted-foreground: 240 5% 35%;
+
     --popover: 240 5% 98%;
     --popover-foreground: 240 10% 4%;
+
     --card: 240 5% 98%;
     --card-foreground: 240 10% 4%;
+
     --border: 240 6% 90%;
+    --border-hover: 240 6% 85%;
+    --border-focus: 262 83% 58%;
+
     --input: 240 5% 96%;
+
     --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
+    --primary-hover: 262 83% 52%;
+    --primary-active: 262 83% 46%;
+
     --secondary: 215 25% 27%;
     --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 215 25% 32%;
+    --secondary-active: 215 25% 22%;
+
     --accent: 240 5% 96%;
     --accent-foreground: 240 10% 4%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
+
+    --hover: 240 5% 96%;
+    --active: 240 6% 92%;
+    --selected: 262 60% 96%;
+
     --ring: 262 83% 58%;
 
     /* Border radius */
     --radius: 0.5rem;
   }
 
-  /* Dark mode colors (default theme) */
+  /* Dark mode overrides */
   .dark {
     --background: 240 10% 4%;
+    --background-elevated: 240 6% 10%;
+    --background-subtle: 240 4% 16%;
+
     --foreground: 0 0% 98%;
+    --foreground-muted: 240 5% 65%;
+    --foreground-subtle: 240 4% 46%;
+
     --muted: 240 4% 16%;
     --muted-foreground: 240 5% 65%;
+
     --popover: 240 6% 10%;
     --popover-foreground: 0 0% 98%;
+
     --card: 240 6% 10%;
     --card-foreground: 0 0% 98%;
+
     --border: 240 4% 24%;
+    --border-hover: 240 4% 32%;
+    --border-focus: 262 83% 58%;
+
     --input: 240 4% 16%;
+
     --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
+    --primary-hover: 262 83% 52%;
+    --primary-active: 262 83% 46%;
+
     --secondary: 215 25% 27%;
     --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 215 25% 32%;
+    --secondary-active: 215 25% 22%;
+
     --accent: 240 4% 16%;
     --accent-foreground: 0 0% 98%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
+
+    --hover: 240 4% 16%;
+    --active: 240 4% 12%;
+    --selected: 262 60% 16%;
+
     --ring: 262 83% 58%;
   }
 

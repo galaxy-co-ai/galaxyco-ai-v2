@@ -17,22 +17,41 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Semantic tokens mapped to CSS variables (light by default, overridden by .dark)
+        border: "hsl(var(--border))",
+        "border-hover": "hsl(var(--border-hover))",
+        "border-focus": "hsl(var(--border-focus))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+
+        background: "hsl(var(--background))",
+        "background-elevated": "hsl(var(--background-elevated))",
+        "background-subtle": "hsl(var(--background-subtle))",
+
+        foreground: "hsl(var(--foreground))",
+        "foreground-muted": "hsl(var(--foreground-muted))",
+        "foreground-subtle": "hsl(var(--foreground-subtle))",
+
+        hover: "hsl(var(--hover))",
+        active: "hsl(var(--active))",
+        selected: "hsl(var(--selected))",
+
         // Brand colors (Primary purple)
         primary: {
-          DEFAULT: "hsl(262, 83%, 58%)", // #8b5cf6
-          foreground: "hsl(0, 0%, 100%)", // White text on primary buttons
-          hover: "hsl(262, 83%, 52%)", // Hover state
-          active: "hsl(262, 83%, 46%)", // Active/pressed state
-          muted: "hsl(262, 83%, 96%)", // Light backgrounds
-          subtle: "hsl(262, 20%, 88%)", // Borders, dividers
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
+          active: "hsl(var(--primary-active))",
+          muted: "hsl(var(--primary) / 0.1)",
+          subtle: "hsl(var(--primary) / 0.2)",
         },
 
         // Secondary (Slate Blue)
         secondary: {
-          DEFAULT: "hsl(215, 25%, 27%)", // #344050
-          foreground: "hsl(0, 0%, 98%)", // Text on secondary buttons
-          hover: "hsl(215, 25%, 32%)",
-          active: "hsl(215, 25%, 22%)",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+          hover: "hsl(var(--secondary-hover))",
+          active: "hsl(var(--secondary-active))",
         },
 
         // Success (Green)
@@ -53,28 +72,11 @@ const config: Config = {
 
         // Error/Destructive (Red)
         destructive: {
-          DEFAULT: "hsl(0, 84%, 60%)", // #ef4444
-          foreground: "hsl(0, 0%, 100%)",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
           light: "hsl(0, 84%, 96%)",
           border: "hsl(0, 84%, 65%)",
         },
-
-        // Dark mode neutrals (default theme)
-        background: "hsl(240, 10%, 4%)", // #0a0a0b - Page background
-        "background-elevated": "hsl(240, 6%, 10%)", // #18181b - Cards, modals
-        "background-subtle": "hsl(240, 4%, 16%)", // #27272a - Hover states
-
-        foreground: "hsl(0, 0%, 98%)", // #fafafa - Primary text
-        "foreground-muted": "hsl(240, 5%, 65%)", // #a1a1aa - Secondary text
-        "foreground-subtle": "hsl(240, 4%, 46%)", // #71717a - Tertiary text
-
-        border: "hsl(240, 4%, 24%)", // #3f3f46 - Default borders
-        "border-hover": "hsl(240, 4%, 32%)", // #52525b - Hover borders
-        "border-focus": "hsl(262, 83%, 58%)", // Primary color for focus rings
-
-        hover: "hsl(240, 4%, 16%)", // #27272a - Hover backgrounds
-        active: "hsl(240, 4%, 12%)", // #1f1f23 - Active/pressed
-        selected: "hsl(262, 60%, 16%)", // #2d1b4e - Selected items
 
         // Shadcn/ui compatibility (CSS variables)
         card: {
@@ -93,8 +95,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
       },
 
       fontFamily: {
