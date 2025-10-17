@@ -346,7 +346,7 @@ export default function SearchPage() {
       setRecentSearches(updated);
       localStorage.setItem("recentSearches", JSON.stringify(updated));
     }
-  }, [query]);
+  }, [query, recentSearches]);
 
   const handleCategoryToggle = (category: SearchCategory) => {
     setSelectedCategories((prev) =>

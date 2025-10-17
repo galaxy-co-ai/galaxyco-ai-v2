@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAgentBuilder } from "@/hooks/use-agent-builder";
 import { useWorkspaceAuth } from "@/hooks/use-workspace-auth";
 import { BasicInfoForm } from "./BasicInfoForm";
@@ -61,13 +61,13 @@ export const AgentBuilderPage: React.FC = () => {
     setShowTemplateLibrary(false);
   };
 
-  const handleSaveDraft = async () => {
+  const handleSaveDraft = useCallback(async () => {
     const success = await saveDraft();
     if (success) {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     }
-  };
+  }, [saveDraft]);
 
   const handlePublish = async () => {
     const success = await publish();

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { db } from "@galaxyco/database/client";
 import { agents } from "@galaxyco/database/schema";
 import { eq, and, like, desc } from "drizzle-orm";

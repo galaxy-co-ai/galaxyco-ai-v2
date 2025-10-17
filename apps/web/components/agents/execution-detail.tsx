@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   ArrowLeft,
   Clock,
@@ -90,41 +90,45 @@ export function ExecutionDetail({
     "logs" | "input" | "output" | "metrics"
   >("logs");
 
-  const fetchExecutionDetail = async (showRefreshIndicator = false) => {
-    if (showRefreshIndicator) {
-      setIsRefreshing(true);
-    } else {
-      setIsLoading(true);
-    }
-    setError(null);
-
-    try {
-      const response = await fetch(
-        `/api/agents/${agentId}/executions/${executionId}`,
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch execution details");
+  const fetchExecutionDetail = useCallback(
+    async (showRefreshIndicator = false) => {
+      if (showRefreshIndicator) {
+        setIsRefreshing(true);
+      } else {
+        setIsLoading(true);
       }
+      setError(null);
 
-      const data = await response.json();
-      setExecution(data.execution);
-    } catch (err) {
-      console.error("Error fetching execution details:", err);
-      setError(
-        err instanceof Error ? err.message : "Failed to load execution details",
-      );
-      toast.error("Failed to load execution details");
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  };
+      try {
+        const response = await fetch(
+          `/api/agents/${agentId}/executions/${executionId}`,
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch execution details");
+        }
+
+        const data = await response.json();
+        setExecution(data.execution);
+      } catch (err) {
+        console.error("Error fetching execution details:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load execution details",
+        );
+        toast.error("Failed to load execution details");
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }
+    },
+    [agentId, executionId],
+  );
 
   useEffect(() => {
     fetchExecutionDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [agentId, executionId]);
+  }, [fetchExecutionDetail]);
 
   // Auto-refresh for running executions
   useEffect(() => {
@@ -135,9 +139,8 @@ export function ExecutionDetail({
       fetchExecutionDetail(true);
     }, 3000); // Refresh every 3 seconds
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => clearInterval(interval);
-  }, [execution?.status]);
+  }, [execution, fetchExecutionDetail]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
