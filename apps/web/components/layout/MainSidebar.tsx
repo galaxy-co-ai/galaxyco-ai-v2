@@ -88,6 +88,7 @@ export default function MainSidebar() {
               size="icon"
               className="h-8 w-8"
               title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
+              aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar"}
             >
               <Pin className={cn("h-4 w-4", isPinned && "fill-current")} />
             </Button>
