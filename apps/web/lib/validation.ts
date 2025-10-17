@@ -91,6 +91,60 @@ export const uploadDocumentSchema = z.object({
   url: urlSchema.optional(),
 });
 
+// File upload validation constants
+export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+export const ALLOWED_MIME_TYPES = [
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+  "application/vnd.ms-excel", // XLS
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // XLSX
+  "text/plain",
+  "text/csv",
+  "text/markdown",
+  "text/x-markdown",
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
+] as const;
+
+export const ALLOWED_FILE_EXTENSIONS = [
+  ".md",
+  ".txt",
+  ".csv",
+  ".json",
+  ".pdf",
+  ".docx",
+  ".doc",
+  ".xls",
+  ".xlsx",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+] as const;
+
+// File upload FormData validation schema
+export const fileUploadSchema = z.object({
+  file: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, "File cannot be empty")
+    .refine(
+      (file) => file.size <= MAX_FILE_SIZE,
+      `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+    )
+    .refine((file) => {
+      // Check MIME type
+      if (ALLOWED_MIME_TYPES.includes(file.type as any)) return true;
+      // Check file extension as fallback
+      const fileName = file.name.toLowerCase();
+      return ALLOWED_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
+    }, "File type not supported. Supported: PDF, Word, Excel, Text, Markdown, Images"),
+  collectionId: idSchema.optional(),
+});
+
+export type FileUploadInput = z.infer<typeof fileUploadSchema>;
+
 // Test run validation schemas
 export const testRunSchema = z.object({
   agentName: agentNameSchema,

@@ -4,6 +4,11 @@ import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
 import { agents, workspaceMembers, users } from "@galaxyco/database/schema";
 import { eq, and } from "drizzle-orm";
+import {
+  createAgentSchema,
+  safeValidateRequest,
+  formatValidationError,
+} from "@/lib/validation";
 
 /**
  * POST /api/agents
@@ -22,27 +27,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get request body
+    // 2. Get and validate request body
     const body = await req.json();
+    const validation = safeValidateRequest(createAgentSchema, body);
+
+    if (!validation.success) {
+      logger.warn("[API] Invalid agent creation request", {
+        errors: formatValidationError(validation.error),
+      });
+      return NextResponse.json(formatValidationError(validation.error), {
+        status: 400,
+      });
+    }
+
     const {
       workspaceId,
       name,
       description,
       workflow,
-      edges,
       variantType,
       originalPrompt,
       enhancedPrompt,
       integrations,
-    } = body;
+    } = validation.data;
 
-    // 3. Validate required fields
-    if (!workspaceId || !name || !workflow) {
-      return NextResponse.json(
-        { error: "Missing required fields: workspaceId, name, workflow" },
-        { status: 400 },
-      );
-    }
+    // Note: edges is not in schema but used in config - get from body if present
+    const edges = body.edges || [];
 
     // 4. Get user ID from clerkUserId
     const user = await db.query.users.findFirst({

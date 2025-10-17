@@ -8,39 +8,14 @@ import {
   workspaceMembers,
 } from "@galaxyco/database/schema";
 import { eq } from "drizzle-orm";
+import {
+  fileUploadSchema,
+  formatValidationError,
+  safeValidateRequest,
+} from "@/lib/validation";
+import { ZodError } from "zod";
 
 export const runtime = "nodejs";
-
-// Max file size: 10MB
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
-const ALLOWED_TYPES = [
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
-  "application/vnd.ms-excel", // XLS
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // XLSX
-  "text/plain",
-  "text/csv",
-  "text/markdown",
-  "text/x-markdown",
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/webp",
-];
-
-function isAllowedFile(file: File): boolean {
-  if (ALLOWED_TYPES.includes(file.type)) return true;
-
-  // Check by extension for files with missing/incorrect MIME types
-  const fileName = file.name.toLowerCase();
-  return (
-    fileName.endsWith(".md") ||
-    fileName.endsWith(".txt") ||
-    fileName.endsWith(".csv") ||
-    fileName.endsWith(".json")
-  );
-}
 
 /**
  * POST /api/documents/upload
@@ -51,6 +26,7 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
+      logger.warn("Unauthorized document upload attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -60,6 +36,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
+      logger.warn("Document upload by non-existent user", { clerkUserId });
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
@@ -68,6 +45,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!membership) {
+      logger.warn("Document upload without workspace", { userId: user.id });
       return NextResponse.json(
         { error: "No workspace found" },
         { status: 404 },
@@ -77,71 +55,77 @@ export async function POST(req: NextRequest) {
     const userId = user.id;
     const workspaceId = membership.workspaceId;
 
-    // Parse form data
+    // 3. Parse and validate form data
     const formData = await req.formData();
-    const file = formData.get("file") as File;
-    const collectionId = formData.get("collectionId") as string | null;
+    const file = formData.get("file");
+    const collectionId = formData.get("collectionId");
 
-    if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    // Validate using Zod schema
+    const validationResult = safeValidateRequest(fileUploadSchema, {
+      file,
+      collectionId: collectionId || undefined,
+    });
+
+    if (!validationResult.success) {
+      const formattedError = formatValidationError(validationResult.error);
+      logger.warn("Document upload validation failed", {
+        userId,
+        workspaceId,
+        errors: formattedError.errors,
+      });
+      return NextResponse.json(formattedError, { status: 400 });
     }
 
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        {
-          error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB`,
-        },
-        { status: 400 },
-      );
-    }
+    const { file: validatedFile, collectionId: validatedCollectionId } =
+      validationResult.data;
 
-    // Validate file type
-    if (!isAllowedFile(file)) {
-      return NextResponse.json(
-        {
-          error: `File type ${file.type} not supported. Supported: PDF, Word, Excel, Text, Markdown, Images`,
-        },
-        { status: 400 },
-      );
-    }
-
-    // For demo: create a simple knowledge item record
+    // 4. Process file
     const itemId = crypto.randomUUID();
 
     // Read file content for text files
     let content = "";
     let summary = "";
     if (
-      file.type.startsWith("text/") ||
-      file.name.endsWith(".md") ||
-      file.name.endsWith(".txt")
+      validatedFile.type.startsWith("text/") ||
+      validatedFile.name.endsWith(".md") ||
+      validatedFile.name.endsWith(".txt")
     ) {
-      content = await file.text();
+      content = await validatedFile.text();
       summary = content.slice(0, 200) + (content.length > 200 ? "..." : "");
     } else {
-      summary = `Uploaded ${file.type} file: ${file.name}`;
+      summary = `Uploaded ${validatedFile.type} file: ${validatedFile.name}`;
     }
 
+    // 5. Create knowledge item
     const [newItem] = await db
       .insert(knowledgeItems)
       .values({
         id: itemId,
         workspaceId,
         createdBy: userId,
-        title: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
-        type: file.type.startsWith("image/") ? "image" : "document",
+        title: validatedFile.name.replace(/\.[^/.]+$/, ""), // Remove extension
+        type: validatedFile.type.startsWith("image/") ? "image" : "document",
         status: "ready",
-        fileName: file.name,
-        fileSize: file.size,
-        mimeType: file.type,
+        fileName: validatedFile.name,
+        fileSize: validatedFile.size,
+        mimeType: validatedFile.type,
         content,
         summary,
         tags: [],
+        collectionId: validatedCollectionId || null,
         metadata: {},
         processedAt: new Date(),
       })
       .returning();
+
+    logger.info("Document uploaded successfully", {
+      userId,
+      workspaceId,
+      documentId: itemId,
+      fileName: validatedFile.name,
+      fileSize: validatedFile.size,
+      mimeType: validatedFile.type,
+    });
 
     return NextResponse.json(
       {
@@ -157,7 +141,20 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (error) {
-    logger.error("Document upload error", error);
+    // Handle Zod validation errors specifically
+    if (error instanceof ZodError) {
+      const formattedError = formatValidationError(error);
+      logger.warn("Document upload validation error", {
+        errors: formattedError.errors,
+      });
+      return NextResponse.json(formattedError, { status: 400 });
+    }
+
+    // Handle other errors
+    logger.error("Document upload error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
       {
         error: "Failed to upload document",

@@ -9,6 +9,11 @@ import {
   knowledgeItems,
 } from "@galaxyco/database/schema";
 import { eq, like, desc } from "drizzle-orm";
+import {
+  chatRequestSchema,
+  safeValidateRequest,
+  formatValidationError,
+} from "@/lib/validation";
 
 export const runtime = "nodejs";
 
@@ -80,15 +85,24 @@ export async function POST(req: NextRequest) {
     const userId = user.id;
     const workspaceId = membership.workspaceId;
 
+    // Validate request body
     const body = await req.json();
-    const { messages, conversationId, context } = body;
+    const validation = safeValidateRequest(chatRequestSchema, body);
 
-    if (!Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
+    if (!validation.success) {
+      logger.warn("[API] Invalid chat request", {
+        errors: formatValidationError(validation.error),
+      });
+      return NextResponse.json(formatValidationError(validation.error), {
+        status: 400,
+      });
     }
 
+    const { messages, conversationId } = validation.data;
+    const context = body.context; // Context is not in schema but used
+
     const lastMessage = messages[messages.length - 1];
-    if (!lastMessage || lastMessage.role !== "user") {
+    if (lastMessage.role !== "user") {
       return NextResponse.json(
         { error: "Last message must be from user" },
         { status: 400 },
