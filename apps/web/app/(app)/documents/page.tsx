@@ -9,7 +9,7 @@ import { Avatar } from "@/components/ui/avatar";
 import {
   FileText,
   File,
-  Image,
+  Image as ImageIcon,
   FileSpreadsheet,
   Download,
   MoreVertical,
@@ -212,7 +212,7 @@ export default function DocumentsPage() {
       case "csv":
         return <FileSpreadsheet className="h-8 w-8" />;
       case "image":
-        return <Image className="h-8 w-8" />;
+        return <ImageIcon className="h-8 w-8" />;
       default:
         return <File className="h-8 w-8" />;
     }
