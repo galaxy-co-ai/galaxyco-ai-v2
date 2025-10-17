@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Plus,
-  Search,
   Upload,
-  Filter,
-  Grid,
-  List,
   FileText,
   Image as ImageIcon,
   File,
@@ -15,10 +11,9 @@ import {
   Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EmptyState } from "@/components/ui/empty-state";
+import { ListPage, ViewMode } from "@/components/templates/list-page";
 import { DocumentUpload } from "@/components/knowledge/document-upload";
 import {
   Dialog,
@@ -55,8 +50,11 @@ export default function KnowledgeBasePage() {
   const [selectedCollection, setSelectedCollection] = useState<string | null>(
     null,
   );
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
+    {},
+  );
 
   // Load documents and collections
   useEffect(() => {
@@ -98,7 +96,7 @@ export default function KnowledgeBasePage() {
     ]);
   };
 
-  // Filter documents based on search and collection
+  // Filter documents based on search, collection, and filters
   const filteredDocuments = documents.filter((doc) => {
     const matchesSearch =
       doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -109,7 +107,18 @@ export default function KnowledgeBasePage() {
       !selectedCollection ||
       selectedCollection === "1" ||
       doc.collectionId === selectedCollection;
-    return matchesSearch && matchesCollection;
+
+    // Apply type filter
+    const typeFilter = activeFilters["type"] || [];
+    const matchesType =
+      typeFilter.length === 0 || typeFilter.includes(doc.type);
+
+    // Apply status filter
+    const statusFilter = activeFilters["status"] || [];
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(doc.status);
+
+    return matchesSearch && matchesCollection && matchesType && matchesStatus;
   });
 
   const getDocumentIcon = (type: Document["type"]) => {
@@ -151,6 +160,23 @@ export default function KnowledgeBasePage() {
     });
   };
 
+  // Document type counts for filters
+  const documentTypeCounts = documents.reduce(
+    (acc, doc) => {
+      acc[doc.type] = (acc[doc.type] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const statusCounts = documents.reduce(
+    (acc, doc) => {
+      acc[doc.status] = (acc[doc.status] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
   return (
     <div className="flex h-full">
       {/* Collections Sidebar */}
@@ -185,18 +211,16 @@ export default function KnowledgeBasePage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="border-b p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-semibold">Knowledge Base</h1>
-              <p className="text-muted-foreground mt-1">
-                Upload and organize documents to enhance AI responses
-              </p>
-            </div>
-
+      {/* Main Content - ListPage Template */}
+      <div className="flex-1">
+        <ListPage
+          title="Knowledge Base"
+          subtitle="Upload and organize documents to enhance AI responses"
+          breadcrumbs={[
+            { label: "Dashboard", href: "/dashboard" },
+            { label: "Knowledge Base" },
+          ]}
+          actions={
             <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -216,141 +240,155 @@ export default function KnowledgeBasePage() {
                 />
               </DialogContent>
             </Dialog>
-          </div>
-
-          {/* Search and Filters */}
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search documents and tags..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Filters
-            </Button>
-
-            <div className="flex border rounded-md">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("grid")}
-                className="rounded-r-none"
-              >
-                <Grid className="h-4 w-4" />
+          }
+          searchQuery={searchQuery}
+          searchPlaceholder="Search documents and tags..."
+          onSearchChange={setSearchQuery}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          filters={[
+            {
+              id: "type",
+              label: "Document Type",
+              type: "checkbox",
+              options: [
+                {
+                  value: "document",
+                  label: "Document",
+                  count: documentTypeCounts["document"] || 0,
+                },
+                {
+                  value: "url",
+                  label: "URL",
+                  count: documentTypeCounts["url"] || 0,
+                },
+                {
+                  value: "image",
+                  label: "Image",
+                  count: documentTypeCounts["image"] || 0,
+                },
+                {
+                  value: "text",
+                  label: "Text",
+                  count: documentTypeCounts["text"] || 0,
+                },
+              ],
+            },
+            {
+              id: "status",
+              label: "Status",
+              type: "checkbox",
+              options: [
+                {
+                  value: "ready",
+                  label: "Ready",
+                  count: statusCounts["ready"] || 0,
+                },
+                {
+                  value: "processing",
+                  label: "Processing",
+                  count: statusCounts["processing"] || 0,
+                },
+                {
+                  value: "failed",
+                  label: "Failed",
+                  count: statusCounts["failed"] || 0,
+                },
+              ],
+            },
+          ]}
+          activeFilters={activeFilters}
+          onFilterChange={(filterId, values) =>
+            setActiveFilters({ ...activeFilters, [filterId]: values })
+          }
+          onClearFilters={() => setActiveFilters({})}
+          isLoading={loading}
+          isEmpty={!loading && filteredDocuments.length === 0}
+          emptyMessage={
+            searchQuery ||
+            Object.values(activeFilters).some((f) => f.length > 0)
+              ? "No documents found"
+              : "No documents yet"
+          }
+          emptyAction={
+            !searchQuery &&
+            Object.values(activeFilters).every((f) => f.length === 0) ? (
+              <Button onClick={() => setUploadDialogOpen(true)}>
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Documents
               </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("list")}
-                className="rounded-l-none"
+            ) : undefined
+          }
+        >
+          {/* Document Grid/List */}
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                : "space-y-4"
+            }
+          >
+            {filteredDocuments.map((document) => (
+              <Card
+                key={document.id}
+                className="hover:shadow-md transition-shadow cursor-pointer"
               >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Document Content */}
-        <div className="flex-1 p-6 overflow-auto">
-          {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          ) : filteredDocuments.length === 0 ? (
-            <EmptyState
-              icon={<FileText className="h-12 w-12 text-muted-foreground" />}
-              iconType="component"
-              title={searchQuery ? "No documents found" : "No documents yet"}
-              description={
-                searchQuery
-                  ? "Try adjusting your search terms or filters."
-                  : "Upload your first document to get started with AI-powered knowledge base."
-              }
-              action={
-                !searchQuery
-                  ? {
-                      label: "Upload Documents",
-                      onClick: () => setUploadDialogOpen(true),
-                    }
-                  : undefined
-              }
-            />
-          ) : (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "space-y-4"
-              }
-            >
-              {filteredDocuments.map((document) => (
-                <Card
-                  key={document.id}
-                  className="hover:shadow-md transition-shadow cursor-pointer"
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        {getDocumentIcon(document.type)}
-                        <CardTitle className="text-base truncate">
-                          {document.title}
-                        </CardTitle>
-                      </div>
-                      <Badge
-                        className={`ml-2 ${getStatusColor(document.status)}`}
-                      >
-                        {document.status}
-                      </Badge>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      {getDocumentIcon(document.type)}
+                      <CardTitle className="text-base truncate">
+                        {document.title}
+                      </CardTitle>
                     </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    {document.summary && (
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                        {document.summary}
-                      </p>
-                    )}
+                    <Badge
+                      className={`ml-2 ${getStatusColor(document.status)}`}
+                    >
+                      {document.status}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  {document.summary && (
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {document.summary}
+                    </p>
+                  )}
 
-                    {document.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {document.tags.slice(0, 3).map((tag) => (
-                          <Badge
-                            key={tag}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            <Tag className="h-3 w-3 mr-1" />
-                            {tag}
-                          </Badge>
-                        ))}
-                        {document.tags.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{document.tags.length - 3} more
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {formatDate(document.uploadedAt)}
-                      </div>
-                      {document.size && (
-                        <span>{formatFileSize(document.size)}</span>
+                  {document.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {document.tags.slice(0, 3).map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          <Tag className="h-3 w-3 mr-1" />
+                          {tag}
+                        </Badge>
+                      ))}
+                      {document.tags.length > 3 && (
+                        <Badge variant="secondary" className="text-xs">
+                          +{document.tags.length - 3} more
+                        </Badge>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
+                  )}
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {formatDate(document.uploadedAt)}
+                    </div>
+                    {document.size && (
+                      <span>{formatFileSize(document.size)}</span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ListPage>
       </div>
     </div>
   );
