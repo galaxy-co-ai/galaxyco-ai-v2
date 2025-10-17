@@ -17,83 +17,86 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Semantic tokens mapped to CSS variables (light by default, overridden by .dark)
-        border: "hsl(var(--border))",
-        "border-hover": "hsl(var(--border-hover))",
-        "border-focus": "hsl(var(--border-focus))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        // Semantic tokens with RGB format for alpha channel support
+        border: "rgb(var(--border) / <alpha-value>)",
+        "border-hover": "rgb(var(--border-hover) / <alpha-value>)",
+        "border-focus": "rgb(var(--border-focus) / <alpha-value>)",
+        input: "rgb(var(--input) / <alpha-value>)",
+        ring: "rgb(var(--ring) / <alpha-value>)",
 
-        background: "hsl(var(--background))",
-        "background-elevated": "hsl(var(--background-elevated))",
-        "background-subtle": "hsl(var(--background-subtle))",
+        background: "rgb(var(--background) / <alpha-value>)",
+        "background-elevated":
+          "rgb(var(--background-elevated) / <alpha-value>)",
+        "background-subtle": "rgb(var(--background-subtle) / <alpha-value>)",
 
-        foreground: "hsl(var(--foreground))",
-        "foreground-muted": "hsl(var(--foreground-muted))",
-        "foreground-subtle": "hsl(var(--foreground-subtle))",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        "foreground-muted": "rgb(var(--foreground-muted) / <alpha-value>)",
+        "foreground-subtle": "rgb(var(--foreground-subtle) / <alpha-value>)",
 
-        hover: "hsl(var(--hover))",
-        active: "hsl(var(--active))",
-        selected: "hsl(var(--selected))",
+        hover: "rgb(var(--hover) / <alpha-value>)",
+        active: "rgb(var(--active) / <alpha-value>)",
+        selected: "rgb(var(--selected) / <alpha-value>)",
 
         // Brand colors (Primary purple)
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-          hover: "hsl(var(--primary-hover))",
-          active: "hsl(var(--primary-active))",
-          muted: "hsl(var(--primary) / 0.1)",
-          subtle: "hsl(var(--primary) / 0.2)",
+          DEFAULT: "rgb(var(--primary) / <alpha-value>)",
+          foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
+          hover: "rgb(var(--primary-hover) / <alpha-value>)",
+          active: "rgb(var(--primary-active) / <alpha-value>)",
+          muted: "rgb(var(--primary) / 0.1)",
+          subtle: "rgb(var(--primary) / 0.2)",
         },
 
         // Secondary (Slate Blue)
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-          hover: "hsl(var(--secondary-hover))",
-          active: "hsl(var(--secondary-active))",
+          DEFAULT: "rgb(var(--secondary) / <alpha-value>)",
+          foreground: "rgb(var(--secondary-foreground) / <alpha-value>)",
+          hover: "rgb(var(--secondary-hover) / <alpha-value>)",
+          active: "rgb(var(--secondary-active) / <alpha-value>)",
         },
 
-        // Success (Green)
+        // Success (Green) - static colors
         success: {
-          DEFAULT: "hsl(142, 76%, 36%)", // #16a34a
-          foreground: "hsl(0, 0%, 100%)",
-          light: "hsl(142, 76%, 96%)", // Success message backgrounds
-          border: "hsl(142, 76%, 45%)",
+          DEFAULT: "rgb(34 197 94 / <alpha-value>)",
+          foreground: "rgb(255 255 255 / <alpha-value>)",
+          light: "rgb(240 253 244 / <alpha-value>)",
+          border: "rgb(74 222 128 / <alpha-value>)",
         },
 
-        // Warning (Amber)
+        // Warning (Amber) - static colors
         warning: {
-          DEFAULT: "hsl(38, 92%, 50%)", // #f59e0b
-          foreground: "hsl(0, 0%, 0%)", // Dark text for contrast
-          light: "hsl(38, 92%, 96%)",
-          border: "hsl(38, 92%, 55%)",
+          DEFAULT: "rgb(251 191 36 / <alpha-value>)",
+          foreground: "rgb(15 23 42 / <alpha-value>)",
+          light: "rgb(254 252 232 / <alpha-value>)",
+          border: "rgb(252 211 77 / <alpha-value>)",
         },
 
         // Error/Destructive (Red)
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-          light: "hsl(0, 84%, 96%)",
-          border: "hsl(0, 84%, 65%)",
+          DEFAULT: "rgb(var(--destructive) / <alpha-value>)",
+          foreground: "rgb(var(--destructive-foreground) / <alpha-value>)",
+          hover: "rgb(var(--destructive-hover) / <alpha-value>)",
+          active: "rgb(var(--destructive-active) / <alpha-value>)",
+          light: "rgb(254 242 242 / <alpha-value>)",
+          border: "rgb(248 113 113 / <alpha-value>)",
         },
 
         // Shadcn/ui compatibility (CSS variables)
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "rgb(var(--card) / <alpha-value>)",
+          foreground: "rgb(var(--card-foreground) / <alpha-value>)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "rgb(var(--popover) / <alpha-value>)",
+          foreground: "rgb(var(--popover-foreground) / <alpha-value>)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "rgb(var(--muted) / <alpha-value>)",
+          foreground: "rgb(var(--muted-foreground) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          foreground: "rgb(var(--accent-foreground) / <alpha-value>)",
         },
       },
 
