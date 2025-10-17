@@ -17,6 +17,7 @@ import {
   validateProviderConfig,
 } from "./ai-provider-wrapper";
 import { logAgentExecution } from "./agent-logger";
+import { logger } from "@/lib/utils/logger";
 
 export type AgentTriggerType =
   | "manual"
@@ -155,7 +156,7 @@ export abstract class BaseAgent {
         !fallbackConfig ||
         !validateProviderConfig(this.aiProvider.fallback, fallbackConfig)
       ) {
-        console.warn(
+        logger.warn(
           `[AGENT ${this.id}] Fallback provider unavailable: ${this.aiProvider.fallback}`,
         );
         fallbackConfig = null;
@@ -291,7 +292,7 @@ export abstract class BaseAgent {
     let result: AgentExecutionResult;
 
     try {
-      console.info(`[AGENT ${this.id}] Starting execution`, {
+      logger.info(`[AGENT ${this.id}] Starting execution`, {
         agent_id: this.id,
         tenant_id: context.tenantId,
         user_id: context.userId,
@@ -329,7 +330,7 @@ export abstract class BaseAgent {
         model: result.metadata?.model,
       });
 
-      console.info(`[AGENT ${this.id}] Execution completed successfully`, {
+      logger.info(`[AGENT ${this.id}] Execution completed successfully`, {
         agent_id: this.id,
         execution_id: context.executionId,
         duration,
@@ -369,7 +370,7 @@ export abstract class BaseAgent {
         error: errorMessage,
       });
 
-      console.error(`[AGENT ${this.id}] Execution failed`, {
+      logger.error(`[AGENT ${this.id}] Execution failed`, error, {
         agent_id: this.id,
         execution_id: context.executionId,
         duration,
@@ -503,7 +504,7 @@ export abstract class BaseAgent {
 
     // Check if aiProvider is defined (might not be during build-time instantiation)
     if (!this.aiProvider) {
-      console.warn(
+      logger.warn(
         `[AGENT ${this.id || "unknown"}] AI provider not defined, skipping environment validation`,
       );
       return;
@@ -531,10 +532,9 @@ export abstract class BaseAgent {
     }
 
     if (missingVars.length > 0) {
-      console.warn(
-        `[AGENT ${this.id}] Missing environment variables:`,
+      logger.warn(`[AGENT ${this.id}] Missing environment variables`, {
         missingVars,
-      );
+      });
     }
   }
 
@@ -570,7 +570,7 @@ export class AgentRegistry {
   static register(agentClass: new () => BaseAgent) {
     const instance = new agentClass();
     this.agents.set(instance.id, agentClass);
-    console.info(`[AGENT REGISTRY] Registered agent: ${instance.id}`);
+    logger.info(`[AGENT REGISTRY] Registered agent: ${instance.id}`);
   }
 
   static get(agentId: string): (new () => BaseAgent) | undefined {
