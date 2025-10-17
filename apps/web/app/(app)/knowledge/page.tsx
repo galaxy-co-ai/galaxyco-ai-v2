@@ -9,7 +9,7 @@ import {
   Grid,
   List,
   FileText,
-  Image,
+  Image as ImageIcon,
   File,
   Clock,
   Tag,
@@ -62,6 +62,7 @@ export default function KnowledgeBasePage() {
   useEffect(() => {
     loadDocuments();
     loadCollections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadDocuments = async () => {
@@ -114,7 +115,7 @@ export default function KnowledgeBasePage() {
   const getDocumentIcon = (type: Document["type"]) => {
     switch (type) {
       case "image":
-        return <Image className="h-4 w-4" />;
+        return <ImageIcon className="h-4 w-4" />;
       case "document":
         return <FileText className="h-4 w-4" />;
       default:

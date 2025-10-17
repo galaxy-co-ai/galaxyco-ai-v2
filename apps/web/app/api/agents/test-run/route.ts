@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { requireSession } from "@/lib/services/user-session";

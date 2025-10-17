@@ -41,6 +41,7 @@ export function ApiKeyManager({ className }: ApiKeyManagerProps) {
 
   useEffect(() => {
     loadConfiguredProviders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace?.id]);
 
   const loadConfiguredProviders = async () => {

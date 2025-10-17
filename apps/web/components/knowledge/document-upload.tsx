@@ -5,7 +5,7 @@ import {
   Upload,
   X,
   FileText,
-  Image,
+  Image as ImageIcon,
   File,
   AlertCircle,
   CheckCircle,
@@ -62,7 +62,7 @@ export function DocumentUpload({
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/")) {
-      return <Image className="h-5 w-5" />;
+      return <ImageIcon className="h-5 w-5" />;
     } else if (
       file.type === "application/pdf" ||
       file.type.includes("document")
@@ -121,6 +121,7 @@ export function DocumentUpload({
 
       setFiles((prev) => [...prev, ...uploadFiles]);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [files.length, maxFiles, maxSizeBytes, acceptedTypes],
   );
 

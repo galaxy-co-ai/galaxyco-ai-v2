@@ -123,6 +123,7 @@ export function ExecutionDetail({
 
   useEffect(() => {
     fetchExecutionDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId, executionId]);
 
   // Auto-refresh for running executions
@@ -134,6 +135,7 @@ export function ExecutionDetail({
       fetchExecutionDetail(true);
     }, 3000); // Refresh every 3 seconds
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => clearInterval(interval);
   }, [execution?.status]);
 

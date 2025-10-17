@@ -51,6 +51,7 @@ export function UploadModal({
       uploadFiles(files);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 

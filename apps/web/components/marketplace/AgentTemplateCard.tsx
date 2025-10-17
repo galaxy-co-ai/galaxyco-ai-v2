@@ -1,6 +1,7 @@
 "use client";
 
 import { colors, shadows, radius } from "@/lib/constants/design-system";
+import { logger } from "@/lib/utils/logger";
 import { useState } from "react";
 
 interface AgentTemplateCardProps {
@@ -272,7 +273,7 @@ export default function AgentTemplateCard({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            console.log("Install agent:", template.id);
+            logger.debug("Install agent clicked", { templateId: template.id });
           }}
           style={{
             flex: 1,

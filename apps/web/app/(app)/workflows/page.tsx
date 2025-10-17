@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { logger } from "@/lib/utils/logger";
 import { EmptyState } from "@/components/shared/empty-state";
 import { mockWorkflows } from "@/lib/fixtures";
 import { formatRelativeTime } from "@/lib/utils";
@@ -28,7 +29,7 @@ export default function WorkflowsPage() {
           description="Create your first workflow to chain multiple agents together"
           action={{
             label: "Create Workflow",
-            onClick: () => console.log("Create workflow"),
+            onClick: () => logger.debug("Create workflow clicked"),
           }}
         />
       ) : (

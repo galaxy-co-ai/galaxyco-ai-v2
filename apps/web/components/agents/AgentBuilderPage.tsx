@@ -99,7 +99,7 @@ export const AgentBuilderPage: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [state.isDirty, state.isSaving]);
+  }, [state.isDirty, state.isSaving, handleSaveDraft]);
 
   return (
     <div

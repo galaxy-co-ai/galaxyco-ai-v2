@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NextRequest, NextResponse } from "next/server";
 import { requireSession } from "@/lib/services/user-session";
 import { conversationService } from "@/lib/services/conversation-service";

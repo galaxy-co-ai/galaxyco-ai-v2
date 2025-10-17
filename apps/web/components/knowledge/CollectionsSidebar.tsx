@@ -56,6 +56,7 @@ export default function CollectionsSidebar({
 
   useEffect(() => {
     fetchCollections();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
 
   // Handle delete collection

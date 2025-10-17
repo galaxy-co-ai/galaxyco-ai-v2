@@ -7,6 +7,7 @@
 "use client";
 
 import React, { ReactNode, useEffect } from "react";
+import { logger } from "@/lib/utils/logger";
 import { useRouter } from "next/navigation";
 import { useWorkspace } from "@/hooks/useWorkspace";
 import { colors, spacing, typography } from "@/lib/constants/design-system";
@@ -33,7 +34,7 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
 
     // Redirect if no workspace is available
     if (!workspaceId && !error) {
-      console.log("🚨 No workspace found, redirecting to onboarding");
+      logger.info("No workspace found, redirecting to onboarding");
       router.push(redirectTo);
     }
   }, [workspaceId, isLoading, error, router, redirectTo]);

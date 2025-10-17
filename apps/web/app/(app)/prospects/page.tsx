@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { logger } from "@/lib/utils/logger";
 import { ConfidenceBadge } from "@/components/shared/confidence-badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { mockProspects } from "@/lib/fixtures";
@@ -28,7 +29,7 @@ export default function ProspectsPage() {
           description="Add prospects to start enriching and engaging with them"
           action={{
             label: "Add Prospect",
-            onClick: () => console.log("Add prospect"),
+            onClick: () => logger.debug("Add prospect clicked"),
           }}
         />
       ) : (

@@ -141,6 +141,7 @@ export function ExecutionList({ agentId, agentName }: ExecutionListProps) {
 
   useEffect(() => {
     fetchExecutions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId, searchParams]);
 
   const updateFilters = (newFilters: Record<string, string>) => {

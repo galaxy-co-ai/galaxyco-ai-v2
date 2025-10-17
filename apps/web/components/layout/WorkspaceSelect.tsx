@@ -75,6 +75,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
     }
 
     fetchWorkspaces();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]); // Refresh when workspace changes
 
   /**

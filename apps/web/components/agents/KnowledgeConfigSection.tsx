@@ -45,6 +45,7 @@ export const KnowledgeConfigSection: React.FC<KnowledgeConfigSectionProps> = ({
     if (config.enabled && workspaceId) {
       fetchCollections();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.enabled, workspaceId]);
 
   const fetchCollections = async () => {
