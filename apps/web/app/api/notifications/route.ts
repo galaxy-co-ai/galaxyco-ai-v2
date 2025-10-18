@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  notifications,
+} from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createNotificationSchema } from "@/lib/validation/communication";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,15 +102,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create notification (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockNotification = {
-      id: crypto.randomUUID(),
+    // 6. Create notification in database
+    const insertValues: typeof notifications.$inferInsert = {
       workspaceId,
-      ...notificationData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      userId: notificationData.userId,
+      type: notificationData.type,
+      title: notificationData.title,
+      message: notificationData.message,
+      actionUrl: notificationData.actionUrl,
+      actionLabel: notificationData.actionLabel,
+      metadata: notificationData.metadata || {},
     };
+
+    const [notification] = await db
+      .insert(notifications)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
@@ -114,13 +125,13 @@ export async function POST(req: NextRequest) {
     logger.info("Notifications created successfully", {
       userId: user.id,
       workspaceId,
-      notificationId: mockNotification.id,
+      notificationId: notification.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      notification: mockNotification,
+      notification,
     });
 
     // Add rate limit headers
@@ -204,19 +215,20 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch notifications (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockNotifications = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch notifications from database
+    const userNotifications = await db.query.notifications.findMany({
+      where: and(
+        eq(notifications.workspaceId, workspaceId),
+        eq(notifications.userId, user.id),
+      ),
+      orderBy: [desc(notifications.createdAt)],
+      limit,
+      offset,
+    });
 
     return NextResponse.json({
-      notifications: mockNotifications,
-      total: mockNotifications.length,
+      notifications: userNotifications,
+      total: userNotifications.length,
       limit,
       offset,
     });
