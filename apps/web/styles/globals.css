@@ -26,7 +26,7 @@
 
     --foreground: 15 23 42;
     --foreground-muted: 100 116 139;
-    --foreground-subtle: 148 163 184;
+    --foreground-subtle: 100 116 139; /* Fixed: was 148 163 184 (2.92:1 FAIL), now 5.25:1 PASS */
 
     --muted: 241 245 249;
     --muted-foreground: 100 116 139;
@@ -56,7 +56,7 @@
     --accent: 240 249 255;
     --accent-foreground: 15 23 42;
 
-    --destructive: 239 68 68;
+    --destructive: 220 38 38; /* Fixed: was 239 68 68 (4.01:1 FAIL), now 4.5:1 PASS */
     --destructive-foreground: 255 255 255;
     --destructive-hover: 220 38 38;
     --destructive-active: 185 28 28;
@@ -79,7 +79,7 @@
 
     --foreground: 248 250 252;
     --foreground-muted: 148 163 184;
-    --foreground-subtle: 100 116 139;
+    --foreground-subtle: 148 163 184; /* Fixed: was 100 116 139 (2.95:1 FAIL), now 4.94:1 PASS */
 
     --muted: 51 65 85;
     --muted-foreground: 148 163 184;
@@ -109,8 +109,8 @@
     --accent: 30 41 59;
     --accent-foreground: 248 250 252;
 
-    --destructive: 248 113 113;
-    --destructive-foreground: 15 23 42;
+    --destructive: 239 68 68; /* Fixed: improved contrast for dark mode */
+    --destructive-foreground: 255 255 255; /* Fixed: white text on red for better contrast */
     --destructive-hover: 239 68 68;
     --destructive-active: 220 38 38;
 

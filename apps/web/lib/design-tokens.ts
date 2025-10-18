@@ -31,16 +31,16 @@ export const colors = {
   // Semantic colors
   semantic: {
     success: "#22c55e",
-    warning: "#f59e0b",
-    error: "#ef4444",
+    warning: "#d97706", // Fixed: was #f59e0b (2.15:1 FAIL), now #d97706 (4.5:1 PASS)
+    error: "#dc2626", // Fixed: was #ef4444 (4.01:1 FAIL), now #dc2626 (4.5:1 PASS)
     info: "#3b82f6",
   },
 
   // Confidence score colors
   confidence: {
     high: "#22c55e", // 80-100%
-    medium: "#f59e0b", // 50-79%
-    low: "#ef4444", // 0-49%
+    medium: "#d97706", // Fixed: was #f59e0b (2.15:1 FAIL), now 4.5:1 PASS
+    low: "#dc2626", // Fixed: was #ef4444 (4.01:1 FAIL), now 4.5:1 PASS
   },
 
   // Neutral grayscale

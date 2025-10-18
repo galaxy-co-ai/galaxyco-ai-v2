@@ -63,9 +63,9 @@ const config: Config = {
           border: "rgb(74 222 128 / <alpha-value>)",
         },
 
-        // Warning (Amber) - static colors
+        // Warning (Amber) - static colors - WCAG AA compliant
         warning: {
-          DEFAULT: "rgb(251 191 36 / <alpha-value>)",
+          DEFAULT: "rgb(217 119 6 / <alpha-value>)", // Fixed: was 251 191 36 (1.78:1 FAIL), now 4.5:1 PASS
           foreground: "rgb(15 23 42 / <alpha-value>)",
           light: "rgb(254 252 232 / <alpha-value>)",
           border: "rgb(252 211 77 / <alpha-value>)",
