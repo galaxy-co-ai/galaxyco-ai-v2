@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  campaigns,
+  prospects,
+  emailThreads,
+} from "@galaxyco/database/schema";
+import { eq, and, count, gte } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
@@ -61,21 +67,73 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch analytics/marketing (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockMarketing = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
+    // 5. Fetch marketing analytics from database
+    const dateRange = searchParams.get("dateRange") || "30d";
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - parseInt(dateRange));
+
+    // Total campaigns
+    const campaignCount = await db
+      .select({ count: count() })
+      .from(campaigns)
+      .where(eq(campaigns.workspaceId, workspaceId));
+
+    // Campaigns by status
+    const campaignsByStatus = await db
+      .select({
+        status: campaigns.status,
+        count: count(),
+      })
+      .from(campaigns)
+      .where(eq(campaigns.workspaceId, workspaceId))
+      .groupBy(campaigns.status);
+
+    // Total prospects
+    const prospectCount = await db
+      .select({ count: count() })
+      .from(prospects)
+      .where(eq(prospects.workspaceId, workspaceId));
+
+    // Prospects by stage
+    const prospectsByStage = await db
+      .select({
+        stage: prospects.stage,
+        count: count(),
+      })
+      .from(prospects)
+      .where(eq(prospects.workspaceId, workspaceId))
+      .groupBy(prospects.stage);
+
+    // Email threads count
+    const emailCount = await db
+      .select({ count: count() })
+      .from(emailThreads)
+      .where(
+        and(
+          eq(emailThreads.workspaceId, workspaceId),
+          gte(emailThreads.createdAt, startDate),
+        ),
+      );
+
+    const analytics = {
+      campaigns: {
+        total: campaignCount[0]?.count || 0,
+        byStatus: campaignsByStatus,
       },
-    ].slice(offset, offset + limit);
+      prospects: {
+        total: prospectCount[0]?.count || 0,
+        byStage: prospectsByStage,
+      },
+      emails: {
+        total: emailCount[0]?.count || 0,
+        period: dateRange,
+      },
+    };
 
     return NextResponse.json({
-      analytics_marketing: mockMarketing,
-      total: mockMarketing.length,
-      limit,
-      offset,
+      analytics,
+      workspaceId,
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error("List analytics/marketing error", {

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, tasks } from "@galaxyco/database/schema";
+import { eq, and, count, gte, sql } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
@@ -61,21 +61,64 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch analytics/time-usage (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockTimeUsage = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
+    // 5. Fetch time usage analytics from database
+    const dateRange = searchParams.get("dateRange") || "30d";
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - parseInt(dateRange));
+
+    // Tasks completed in period
+    const completedTasks = await db
+      .select({ count: count() })
+      .from(tasks)
+      .where(
+        and(
+          eq(tasks.workspaceId, workspaceId),
+          eq(tasks.status, "done"),
+          gte(tasks.updatedAt, startDate),
+        ),
+      );
+
+    // Tasks by priority
+    const tasksByPriority = await db
+      .select({
+        priority: tasks.priority,
+        count: count(),
+      })
+      .from(tasks)
+      .where(eq(tasks.workspaceId, workspaceId))
+      .groupBy(tasks.priority);
+
+    // Tasks by assignee (top 10)
+    const tasksByAssignee = await db
+      .select({
+        assignedTo: tasks.assignedTo,
+        count: count(),
+      })
+      .from(tasks)
+      .where(
+        and(
+          eq(tasks.workspaceId, workspaceId),
+          sql`${tasks.assignedTo} IS NOT NULL`,
+        ),
+      )
+      .groupBy(tasks.assignedTo)
+      .limit(10);
+
+    const analytics = {
+      tasks: {
+        completed: completedTasks[0]?.count || 0,
+        period: dateRange,
       },
-    ].slice(offset, offset + limit);
+      distribution: {
+        byPriority: tasksByPriority,
+        byAssignee: tasksByAssignee,
+      },
+    };
 
     return NextResponse.json({
-      analytics_time_usage: mockTimeUsage,
-      total: mockTimeUsage.length,
-      limit,
-      offset,
+      analytics,
+      workspaceId,
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error("List analytics/time-usage error", {

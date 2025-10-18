@@ -2,8 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  contacts,
+  tasks,
+  calendarEvents,
+  emailThreads,
+} from "@galaxyco/database/schema";
+import { eq, and, count, gte } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
@@ -61,21 +68,77 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch analytics/outreach (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockOutreach = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
+    // 5. Fetch outreach analytics from database
+    const dateRange = searchParams.get("dateRange") || "30d";
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - parseInt(dateRange));
+
+    // Total contacts
+    const contactCount = await db
+      .select({ count: count() })
+      .from(contacts)
+      .where(eq(contacts.workspaceId, workspaceId));
+
+    // Total tasks
+    const taskCount = await db
+      .select({ count: count() })
+      .from(tasks)
+      .where(eq(tasks.workspaceId, workspaceId));
+
+    // Tasks by status
+    const tasksByStatus = await db
+      .select({
+        status: tasks.status,
+        count: count(),
+      })
+      .from(tasks)
+      .where(eq(tasks.workspaceId, workspaceId))
+      .groupBy(tasks.status);
+
+    // Calendar events in period
+    const eventCount = await db
+      .select({ count: count() })
+      .from(calendarEvents)
+      .where(
+        and(
+          eq(calendarEvents.workspaceId, workspaceId),
+          gte(calendarEvents.startTime, startDate),
+        ),
+      );
+
+    // Email threads in period
+    const emailCount = await db
+      .select({ count: count() })
+      .from(emailThreads)
+      .where(
+        and(
+          eq(emailThreads.workspaceId, workspaceId),
+          gte(emailThreads.createdAt, startDate),
+        ),
+      );
+
+    const analytics = {
+      contacts: {
+        total: contactCount[0]?.count || 0,
       },
-    ].slice(offset, offset + limit);
+      tasks: {
+        total: taskCount[0]?.count || 0,
+        byStatus: tasksByStatus,
+      },
+      events: {
+        total: eventCount[0]?.count || 0,
+        period: dateRange,
+      },
+      emails: {
+        total: emailCount[0]?.count || 0,
+        period: dateRange,
+      },
+    };
 
     return NextResponse.json({
-      analytics_outreach: mockOutreach,
-      total: mockOutreach.length,
-      limit,
-      offset,
+      analytics,
+      workspaceId,
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error("List analytics/outreach error", {

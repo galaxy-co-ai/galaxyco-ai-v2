@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  customers,
+  invoices,
+  projects,
+} from "@galaxyco/database/schema";
+import { eq, and, sum, count, gte, sql } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
@@ -61,21 +67,70 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch analytics/sales (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockSales = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
+    // 5. Fetch sales analytics from database
+    const dateRange = searchParams.get("dateRange") || "30d";
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - parseInt(dateRange));
+
+    // Total revenue from invoices
+    const revenueResult = await db
+      .select({ total: sum(invoices.total) })
+      .from(invoices)
+      .where(
+        and(
+          eq(invoices.workspaceId, workspaceId),
+          gte(invoices.createdAt, startDate),
+        ),
+      );
+
+    // Total customers
+    const customerCount = await db
+      .select({ count: count() })
+      .from(customers)
+      .where(eq(customers.workspaceId, workspaceId));
+
+    // Total projects
+    const projectCount = await db
+      .select({ count: count() })
+      .from(projects)
+      .where(eq(projects.workspaceId, workspaceId));
+
+    // Invoice breakdown by status
+    const invoicesByStatus = await db
+      .select({
+        status: invoices.status,
+        count: count(),
+        total: sum(invoices.total),
+      })
+      .from(invoices)
+      .where(
+        and(
+          eq(invoices.workspaceId, workspaceId),
+          gte(invoices.createdAt, startDate),
+        ),
+      )
+      .groupBy(invoices.status);
+
+    const analytics = {
+      revenue: {
+        total: revenueResult[0]?.total || "0",
+        period: dateRange,
       },
-    ].slice(offset, offset + limit);
+      customers: {
+        total: customerCount[0]?.count || 0,
+      },
+      projects: {
+        total: projectCount[0]?.count || 0,
+      },
+      invoices: {
+        byStatus: invoicesByStatus,
+      },
+    };
 
     return NextResponse.json({
-      analytics_sales: mockSales,
-      total: mockSales.length,
-      limit,
-      offset,
+      analytics,
+      workspaceId,
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error("List analytics/sales error", {
