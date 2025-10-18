@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, exports } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createExportSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,35 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create export (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockExport = {
-      id: crypto.randomUUID(),
+    // 6. Create export in database
+    const insertValues: typeof exports.$inferInsert = {
       workspaceId,
-      ...exportData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: exportData.name,
+      resourceType: exportData.resource,
+      format: exportData.format || "csv",
+      status: "pending",
+      filters: exportData.filters || {},
+      requestedBy: user.id,
     };
+
+    const [exportRecord] = await db
+      .insert(exports)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Exports created successfully", {
+    logger.info("Export created successfully", {
       userId: user.id,
       workspaceId,
-      exportId: mockExport.id,
+      exportId: exportRecord.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      export: mockExport,
+      export: exportRecord,
     });
 
     // Add rate limit headers

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, segments } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createSegmentSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create segment (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockSegment = {
-      id: crypto.randomUUID(),
+    // 6. Create segment in database
+    const insertValues: typeof segments.$inferInsert = {
       workspaceId,
-      ...segmentData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: segmentData.name,
+      description: segmentData.description,
+      criteria: {
+        rules: segmentData.rules.map((rule: any) => ({
+          field: rule.field,
+          operator: rule.operator,
+          value: rule.value ?? null,
+        })),
+      } as any,
+      createdBy: user.id,
     };
+
+    const [segment] = await db
+      .insert(segments)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Segments created successfully", {
+    logger.info("Segment created successfully", {
       userId: user.id,
       workspaceId,
-      segmentId: mockSegment.id,
+      segmentId: segment.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      segment: mockSegment,
+      segment,
     });
 
     // Add rate limit headers

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, imports } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createImportSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,34 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create import (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockImport = {
-      id: crypto.randomUUID(),
+    // 6. Create import in database
+    const insertValues: typeof imports.$inferInsert = {
       workspaceId,
-      ...importData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: importData.name,
+      resourceType: importData.resource,
+      fileName: `import-${Date.now()}.csv`,
+      status: "pending",
+      requestedBy: user.id,
     };
+
+    const [importRecord] = await db
+      .insert(imports)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Imports created successfully", {
+    logger.info("Import created successfully", {
       userId: user.id,
       workspaceId,
-      importId: mockImport.id,
+      importId: importRecord.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      import: mockImport,
+      import: importRecord,
     });
 
     // Add rate limit headers
