@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -24,83 +27,26 @@ import {
   DollarSign,
   MoreHorizontal,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Customer {
   id: string;
+  workspaceId: string;
   name: string;
-  company: string;
-  email: string;
-  phone: string;
-  website: string;
-  status: "active" | "inactive" | "lead";
-  value: number;
-  employees: number;
-  industry: string;
-  lastContact: string;
-  avatar: string;
+  email: string | null;
+  phone: string | null;
+  company: string | null;
+  website: string | null;
+  status: string;
+  industry: string | null;
+  size: string | null;
+  revenue: number | null;
+  lastContactedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const customers: Customer[] = [
-  {
-    id: "1",
-    name: "Sarah Johnson",
-    company: "TechCorp Industries",
-    email: "sarah@techcorp.com",
-    phone: "+1 (555) 123-4567",
-    website: "techcorp.com",
-    status: "active",
-    value: 125000,
-    employees: 450,
-    industry: "Technology",
-    lastContact: "2025-10-15",
-    avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-  },
-  {
-    id: "2",
-    name: "Michael Chen",
-    company: "Global Solutions Inc",
-    email: "michael@globalsolutions.com",
-    phone: "+1 (555) 234-5678",
-    website: "globalsolutions.com",
-    status: "active",
-    value: 85000,
-    employees: 200,
-    industry: "Consulting",
-    lastContact: "2025-10-14",
-    avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
-  },
-  {
-    id: "3",
-    name: "Emily Rodriguez",
-    company: "Innovate Labs",
-    email: "emily@innovatelabs.io",
-    phone: "+1 (555) 345-6789",
-    website: "innovatelabs.io",
-    status: "lead",
-    value: 0,
-    employees: 75,
-    industry: "SaaS",
-    lastContact: "2025-10-10",
-    avatar: "https://api.dicebear.com/7.x/initials/svg?seed=ER",
-  },
-  {
-    id: "4",
-    name: "David Park",
-    company: "Enterprise Systems",
-    email: "david@enterprisesys.com",
-    phone: "+1 (555) 456-7890",
-    website: "enterprisesys.com",
-    status: "active",
-    value: 210000,
-    employees: 1200,
-    industry: "Enterprise Software",
-    lastContact: "2025-10-12",
-    avatar: "https://api.dicebear.com/7.x/initials/svg?seed=DP",
-  },
-];
-
-const statusConfig = {
+const statusConfig: Record<string, { label: string; className: string }> = {
   active: {
     label: "Active",
     className:
@@ -114,28 +60,74 @@ const statusConfig = {
     label: "Lead",
     className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
   },
+  churned: {
+    label: "Churned",
+    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+  },
+  prospect: {
+    label: "Prospect",
+    className:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
+  },
 };
 
 export default function CustomersPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredCustomers = customers.filter((customer) => {
-    const matchesSearch =
-      customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || customer.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  useEffect(() => {
+    async function fetchCustomers() {
+      if (!currentWorkspace?.id) return;
 
-  const totalValue = customers
-    .filter((c) => c.status === "active")
-    .reduce((sum, c) => sum + c.value, 0);
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams({
+          workspaceId: currentWorkspace.id,
+          limit: "100",
+        });
+
+        if (statusFilter !== "all") {
+          params.append("status", statusFilter);
+        }
+        if (searchQuery) {
+          params.append("search", searchQuery);
+        }
+
+        const res = await fetch(`/api/customers?${params}`);
+        if (!res.ok) throw new Error("Failed to fetch customers");
+
+        const data = await res.json();
+        setCustomers(data.customers);
+      } catch (error) {
+        console.error("Failed to fetch customers:", error);
+        toast.error("Failed to load customers");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCustomers();
+  }, [currentWorkspace?.id, statusFilter, searchQuery]);
+
+  const filteredCustomers = customers;
+
+  const totalRevenue = customers
+    .filter((c) => c.status === "active" && c.revenue)
+    .reduce((sum, c) => sum + (c.revenue || 0), 0);
   const activeCustomers = customers.filter((c) => c.status === "active").length;
   const leads = customers.filter((c) => c.status === "lead").length;
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <PageShell
@@ -173,7 +165,7 @@ export default function CustomersPage() {
             <span className="text-sm text-muted-foreground">Total Value</span>
           </div>
           <p className="text-2xl font-bold">
-            ${(totalValue / 1000).toFixed(0)}K
+            ${(totalRevenue / 100000).toFixed(0)}K
           </p>
         </div>
       </div>
@@ -237,9 +229,9 @@ export default function CustomersPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <Avatar
-                    src={customer.avatar}
+                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(customer.name)}`}
                     alt={customer.name}
-                    fallback={customer.name.substring(0, 2)}
+                    fallback={customer.name.substring(0, 2).toUpperCase()}
                     size="default"
                   />
                   <div>
@@ -254,32 +246,38 @@ export default function CustomersPage() {
                 </Button>
               </div>
               <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground truncate">
-                    {customer.email}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    {customer.phone}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    {customer.website}
-                  </span>
-                </div>
+                {customer.email && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground truncate">
+                      {customer.email}
+                    </span>
+                  </div>
+                )}
+                {customer.phone && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">
+                      {customer.phone}
+                    </span>
+                  </div>
+                )}
+                {customer.website && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">
+                      {customer.website}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="flex items-center justify-between pt-4 border-t border-border">
                 <Badge className={statusConfig[customer.status].className}>
                   {statusConfig[customer.status].label}
                 </Badge>
-                {customer.status === "active" && (
+                {customer.status === "active" && customer.revenue && (
                   <span className="text-sm font-semibold">
-                    ${(customer.value / 1000).toFixed(0)}K
+                    ${(customer.revenue / 100000).toFixed(0)}K
                   </span>
                 )}
               </div>
@@ -319,9 +317,9 @@ export default function CustomersPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <Avatar
-                          src={customer.avatar}
+                          src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(customer.name)}`}
                           alt={customer.name}
-                          fallback={customer.name.substring(0, 2)}
+                          fallback={customer.name.substring(0, 2).toUpperCase()}
                           size="sm"
                         />
                         <div>
@@ -349,12 +347,16 @@ export default function CustomersPage() {
                       {customer.industry}
                     </td>
                     <td className="p-4 font-semibold">
-                      {customer.status === "active"
-                        ? `$${(customer.value / 1000).toFixed(0)}K`
+                      {customer.status === "active" && customer.revenue
+                        ? `$${(customer.revenue / 100000).toFixed(0)}K`
                         : "-"}
                     </td>
                     <td className="p-4 text-muted-foreground text-sm">
-                      {new Date(customer.lastContact).toLocaleDateString()}
+                      {customer.lastContactedAt
+                        ? new Date(
+                            customer.lastContactedAt,
+                          ).toLocaleDateString()
+                        : "Never"}
                     </td>
                     <td className="p-4">
                       <Button variant="ghost" size="sm">
