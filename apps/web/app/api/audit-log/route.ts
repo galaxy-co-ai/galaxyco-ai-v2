@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, auditLogs } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
@@ -61,19 +61,17 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch audit-log (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockAuditLog = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch audit logs from database
+    const logs = await db.query.auditLogs.findMany({
+      where: eq(auditLogs.workspaceId, workspaceId),
+      orderBy: [desc(auditLogs.createdAt)],
+      limit,
+      offset,
+    });
 
     return NextResponse.json({
-      audit_log: mockAuditLog,
-      total: mockAuditLog.length,
+      audit_log: logs,
+      total: logs.length,
       limit,
       offset,
     });

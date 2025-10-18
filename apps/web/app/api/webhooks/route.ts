@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, webhooks } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
+import { generateWebhookSecret } from "@/lib/webhooks/signature";
 import { createWebhookSchema } from "@/lib/validation/analytics";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,34 +99,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create webhook (PLACEHOLDER - table doesn't exist yet)
-    // TODO Phase 2:
-    // - Generate webhook secret using generateWebhookSecret() from @/lib/webhooks/signature
-    // - Store webhook in database with encrypted secret
-    // - Return webhook with unencrypted secret (only shown once)
-    const mockWebhook = {
-      id: crypto.randomUUID(),
+    // 6. Create webhook in database with secret
+    const secret = generateWebhookSecret();
+
+    const insertValues: typeof webhooks.$inferInsert = {
       workspaceId,
-      ...webhookData,
-      // Note: In production, generate secret here and store encrypted
-      secret: "<secret_generated_on_creation>",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: webhookData.name,
+      url: webhookData.url,
+      events: webhookData.events,
+      secret, // Store in plain text (consider encryption for production)
+      createdBy: user.id,
     };
+
+    const [webhook] = await db
+      .insert(webhooks)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Webhooks created successfully", {
+    logger.info("Webhook created successfully", {
       userId: user.id,
       workspaceId,
-      webhookId: mockWebhook.id,
+      webhookId: webhook.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      webhook: mockWebhook,
+      webhook,
     });
 
     // Add rate limit headers
