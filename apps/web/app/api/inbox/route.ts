@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  inboxMessages,
+} from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createInboxMessageSchema } from "@/lib/validation/communication";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,15 +102,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create message (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockInboxMessage = {
-      id: crypto.randomUUID(),
+    // 6. Create message in database
+    const insertValues: typeof inboxMessages.$inferInsert = {
       workspaceId,
-      ...messageData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      channel: messageData.channel,
+      subject: messageData.subject,
+      body: messageData.body,
+      recipientIds: messageData.recipientIds as string[],
+      senderId: user.id,
+      status: "unread",
     };
+
+    const [message] = await db
+      .insert(inboxMessages)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
@@ -114,13 +124,13 @@ export async function POST(req: NextRequest) {
     logger.info("Inbox created successfully", {
       userId: user.id,
       workspaceId,
-      messageId: mockInboxMessage.id,
+      messageId: message.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      message: mockInboxMessage,
+      message,
     });
 
     // Add rate limit headers
@@ -204,19 +214,17 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch inbox (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockInbox = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch inbox messages from database
+    const messages = await db.query.inboxMessages.findMany({
+      where: eq(inboxMessages.workspaceId, workspaceId),
+      orderBy: [desc(inboxMessages.createdAt)],
+      limit,
+      offset,
+    });
 
     return NextResponse.json({
-      inbox: mockInbox,
-      total: mockInbox.length,
+      inbox: messages,
+      total: messages.length,
       limit,
       offset,
     });
