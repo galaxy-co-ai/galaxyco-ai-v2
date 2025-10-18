@@ -68,6 +68,90 @@ export const RATE_LIMITS = {
     window: 60,
     name: "general",
   } as RateLimitConfig,
+
+  // CRM Routes
+  CRM_CREATE: {
+    limit: 100,
+    window: 60,
+    name: "crm_create",
+  } as RateLimitConfig,
+
+  CRM_READ: {
+    limit: 1000,
+    window: 60,
+    name: "crm_read",
+  } as RateLimitConfig,
+
+  // Business Operations
+  INVOICE_CREATE: {
+    limit: 50,
+    window: 60,
+    name: "invoice_create",
+  } as RateLimitConfig,
+
+  CAMPAIGN_OPS: {
+    limit: 100,
+    window: 60,
+    name: "campaign_ops",
+  } as RateLimitConfig,
+
+  EXPORT_CREATE: {
+    limit: 10,
+    window: 300, // 10 per 5 minutes
+    name: "export_create",
+  } as RateLimitConfig,
+
+  IMPORT_CREATE: {
+    limit: 10,
+    window: 300, // 10 per 5 minutes
+    name: "import_create",
+  } as RateLimitConfig,
+
+  // Communication
+  EMAIL_SEND: {
+    limit: 100,
+    window: 3600, // 100 per hour
+    name: "email_send",
+  } as RateLimitConfig,
+
+  CHAT_MESSAGE: {
+    limit: 200,
+    window: 60,
+    name: "chat_message",
+  } as RateLimitConfig,
+
+  // Analytics
+  ANALYTICS_QUERY: {
+    limit: 100,
+    window: 60,
+    name: "analytics_query",
+  } as RateLimitConfig,
+
+  REPORT_GENERATE: {
+    limit: 20,
+    window: 300, // 20 per 5 minutes
+    name: "report_generate",
+  } as RateLimitConfig,
+
+  // Developer Tools
+  WEBHOOK_OPS: {
+    limit: 50,
+    window: 60,
+    name: "webhook_ops",
+  } as RateLimitConfig,
+
+  PLAYGROUND: {
+    limit: 50,
+    window: 60,
+    name: "playground",
+  } as RateLimitConfig,
+
+  // Admin (stricter limits)
+  ADMIN_OPS: {
+    limit: 30,
+    window: 60,
+    name: "admin_ops",
+  } as RateLimitConfig,
 } as const;
 
 /**
