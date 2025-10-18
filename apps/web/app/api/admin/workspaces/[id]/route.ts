@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
+import { users, workspaceMembers, workspaces } from "@galaxyco/database/schema";
 import { eq, and } from "drizzle-orm";
 import { adminWorkspaceUpdateSchema } from "@/lib/validation/analytics";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { checkSystemAdmin } from "@/lib/auth/admin-check";
 
 /**
  * GET /api/admin/workspaces/[id]
@@ -17,33 +18,42 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   try {
+    // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const workspaceId = params.id;
-
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    // 2. Check admin role
+    const adminCheck = await checkSystemAdmin(clerkUserId);
+    if (!adminCheck.authorized) {
+      logger.warn("Non-admin attempted to access workspace", { clerkUserId });
+      return NextResponse.json(
+        { error: adminCheck.error },
+        { status: adminCheck.status },
+      );
     }
 
-    // TODO: Add admin role check in Phase 2
+    // 3. Fetch workspace from database
+    const workspaceId = params.id;
+    const workspace = await db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
+    });
 
-    // PLACEHOLDER - Replace with actual database query in Phase 2
-    const mockAdminWorkspaceUpdate = {
-      id: workspaceId,
-      name: "Example Workspace",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    if (!workspace) {
+      return NextResponse.json(
+        { error: "Workspace not found" },
+        { status: 404 },
+      );
+    }
+
+    logger.info("Admin workspace fetched", {
+      userId: adminCheck.user.id,
+      workspaceId,
+    });
 
     return NextResponse.json({
-      workspace: mockAdminWorkspaceUpdate,
+      workspace,
     });
   } catch (error) {
     logger.error("Fetch workspace error", {
@@ -66,11 +76,13 @@ export async function PUT(
 ) {
   const startTime = Date.now();
   try {
+    // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // 2. Rate limiting
     const rateLimitResult = await checkRateLimit(
       clerkUserId,
       RATE_LIMITS.ADMIN_OPS,
@@ -82,8 +94,18 @@ export async function PUT(
       );
     }
 
-    const workspaceId = params.id;
+    // 3. Check admin role
+    const adminCheck = await checkSystemAdmin(clerkUserId);
+    if (!adminCheck.authorized) {
+      logger.warn("Non-admin attempted to update workspace", { clerkUserId });
+      return NextResponse.json(
+        { error: adminCheck.error },
+        { status: adminCheck.status },
+      );
+    }
 
+    // 4. Validate request body
+    const workspaceId = params.id;
     const body = await req.json();
     const validation = safeValidateRequest(adminWorkspaceUpdateSchema, body);
 
@@ -92,33 +114,38 @@ export async function PUT(
       return NextResponse.json(formattedError, { status: 400 });
     }
 
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
+    // 5. Check workspace exists
+    const workspace = await db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
     });
 
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!workspace) {
+      return NextResponse.json(
+        { error: "Workspace not found" },
+        { status: 404 },
+      );
     }
 
-    // TODO: Add admin role check in Phase 2
-
-    // PLACEHOLDER - Replace with actual database update in Phase 2
-    const updatedAdminWorkspaceUpdate = {
-      id: workspaceId,
-      ...validation.data,
-      updatedAt: new Date().toISOString(),
-    };
+    // 6. Update workspace in database
+    const [updated] = await db
+      .update(workspaces)
+      .set({
+        ...validation.data,
+        updatedAt: new Date(),
+      })
+      .where(eq(workspaces.id, workspaceId))
+      .returning();
 
     const durationMs = Date.now() - startTime;
     logger.info("Admin workspace updated successfully", {
-      userId: user.id,
+      userId: adminCheck.user.id,
       workspaceId,
       durationMs,
     });
 
     return NextResponse.json({
       success: true,
-      workspace: updatedAdminWorkspaceUpdate,
+      workspace: updated,
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
@@ -143,11 +170,13 @@ export async function DELETE(
 ) {
   const startTime = Date.now();
   try {
+    // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // 2. Rate limiting
     const rateLimitResult = await checkRateLimit(
       clerkUserId,
       RATE_LIMITS.ADMIN_OPS,
@@ -159,41 +188,48 @@ export async function DELETE(
       );
     }
 
-    const workspaceId = params.id;
-
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const membership = await db.query.workspaceMembers.findFirst({
-      where: and(
-        eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, user.id),
-      ),
-    });
-
-    if (!membership) {
+    // 3. Check admin role
+    const adminCheck = await checkSystemAdmin(clerkUserId);
+    if (!adminCheck.authorized) {
+      logger.warn("Non-admin attempted to delete workspace", { clerkUserId });
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
-        { status: 403 },
+        { error: adminCheck.error },
+        { status: adminCheck.status },
       );
     }
 
-    // PLACEHOLDER - Replace with actual soft delete in Phase 2
+    // 4. Check workspace exists
+    const workspaceId = params.id;
+    const workspace = await db.query.workspaces.findFirst({
+      where: eq(workspaces.id, workspaceId),
+    });
+
+    if (!workspace) {
+      return NextResponse.json(
+        { error: "Workspace not found" },
+        { status: 404 },
+      );
+    }
+
+    // 5. Soft delete workspace (set isActive = false)
+    await db
+      .update(workspaces)
+      .set({
+        isActive: false,
+        updatedAt: new Date(),
+      })
+      .where(eq(workspaces.id, workspaceId));
+
     const durationMs = Date.now() - startTime;
     logger.info("Admin workspace deleted successfully", {
-      userId: user.id,
+      userId: adminCheck.user.id,
       workspaceId,
       durationMs,
     });
 
     return NextResponse.json({
       success: true,
-      message: "Admin/workspaces deleted successfully",
+      message: "Workspace deleted successfully",
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
