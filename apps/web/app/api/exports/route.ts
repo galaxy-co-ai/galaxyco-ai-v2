@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers, exports } from "@galaxyco/database/schema";
+import {
+  users,
+  workspaceMembers,
+  dataExports,
+} from "@galaxyco/database/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { createExportSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
@@ -99,7 +103,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 6. Create export in database
-    const insertValues: typeof exports.$inferInsert = {
+    const insertValues: typeof dataExports.$inferInsert = {
       workspaceId,
       name: exportData.name,
       resourceType: exportData.resource,
@@ -110,7 +114,7 @@ export async function POST(req: NextRequest) {
     };
 
     const [exportRecord] = await db
-      .insert(exports)
+      .insert(dataExports)
       .values(insertValues)
       .returning();
 

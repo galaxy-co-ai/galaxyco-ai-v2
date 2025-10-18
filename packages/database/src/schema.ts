@@ -1749,7 +1749,7 @@ export const segments = pgTable(
 // BUSINESS - EXPORTS
 // ============================================================================
 
-export const exports = pgTable(
+export const dataExports = pgTable(
   "exports",
   {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -1799,7 +1799,7 @@ export const exports = pgTable(
 // BUSINESS - IMPORTS
 // ============================================================================
 
-export const imports = pgTable(
+export const dataImports = pgTable(
   "imports",
   {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -2302,11 +2302,11 @@ export type NewCampaign = typeof campaigns.$inferInsert;
 export type Segment = typeof segments.$inferSelect;
 export type NewSegment = typeof segments.$inferInsert;
 
-export type Export = typeof exports.$inferSelect;
-export type NewExport = typeof exports.$inferInsert;
+export type Export = typeof dataExports.$inferSelect;
+export type NewExport = typeof dataExports.$inferInsert;
 
-export type Import = typeof imports.$inferSelect;
-export type NewImport = typeof imports.$inferInsert;
+export type Import = typeof dataImports.$inferSelect;
+export type NewImport = typeof dataImports.$inferInsert;
 
 // Communication Types
 export type InboxMessage = typeof inboxMessages.$inferSelect;
