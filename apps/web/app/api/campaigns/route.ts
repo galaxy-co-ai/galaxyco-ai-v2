@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, campaigns } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createCampaignSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create campaign (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockCampaign = {
-      id: crypto.randomUUID(),
+    // 6. Create campaign in database
+    const insertValues: typeof campaigns.$inferInsert = {
       workspaceId,
-      ...campaignData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: campaignData.name,
+      description: campaignData.description,
+      status: campaignData.status as any,
+      type: campaignData.type,
+      content: {},
+      budget: campaignData.budget,
+      createdBy: user.id,
+      tags: campaignData.tags,
     };
+
+    const [campaign] = await db
+      .insert(campaigns)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Campaigns created successfully", {
+    logger.info("Campaign created successfully", {
       userId: user.id,
       workspaceId,
-      campaignId: mockCampaign.id,
+      campaignId: campaign.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      campaign: mockCampaign,
+      campaign,
     });
 
     // Add rate limit headers

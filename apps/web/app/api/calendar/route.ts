@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import {
+  users,
+  workspaceMembers,
+  calendarEvents,
+} from "@galaxyco/database/schema";
+import { eq, and, desc, gte, lte } from "drizzle-orm";
 import { createCalendarEventSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +102,44 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create event (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockCalendarEvent = {
-      id: crypto.randomUUID(),
+    // 6. Create calendar event in database
+    const insertValues: typeof calendarEvents.$inferInsert = {
       workspaceId,
-      ...eventData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      title: eventData.title,
+      description: eventData.description,
+      startTime: new Date(eventData.startTime),
+      endTime: new Date(eventData.endTime),
+      location: eventData.location,
+      isAllDay: eventData.isAllDay,
+      attendees: eventData.attendees
+        ? eventData.attendees.map((a: any) => ({
+            userId: a.userId,
+            email: a.email || "",
+            name: a.email || "",
+            status: a.status || "pending",
+          }))
+        : [],
+      createdBy: user.id,
     };
+
+    const [event] = await db
+      .insert(calendarEvents)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Calendar created successfully", {
+    logger.info("Calendar event created successfully", {
       userId: user.id,
       workspaceId,
-      eventId: mockCalendarEvent.id,
+      eventId: event.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      event: mockCalendarEvent,
+      event,
     });
 
     // Add rate limit headers
@@ -204,19 +223,36 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch calendar (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockCalendar = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch calendar events from database
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+
+    const conditions = [eq(calendarEvents.workspaceId, workspaceId)];
+
+    if (startDate) {
+      conditions.push(gte(calendarEvents.startTime, new Date(startDate)));
+    }
+
+    if (endDate) {
+      conditions.push(lte(calendarEvents.endTime, new Date(endDate)));
+    }
+
+    const events = await db
+      .select()
+      .from(calendarEvents)
+      .where(and(...conditions))
+      .orderBy(desc(calendarEvents.startTime))
+      .limit(limit)
+      .offset(offset);
+
+    const [{ count }] = await db
+      .select({ count: calendarEvents.id })
+      .from(calendarEvents)
+      .where(and(...conditions));
 
     return NextResponse.json({
-      calendar: mockCalendar,
-      total: mockCalendar.length,
+      events,
+      total: Number(count) || 0,
       limit,
       offset,
     });

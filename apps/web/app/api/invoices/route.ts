@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, invoices } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createInvoiceSchema } from "@/lib/validation/business";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,54 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create invoice (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockInvoice = {
-      id: crypto.randomUUID(),
+    // 6. Create invoice in database
+    // Calculate totals from line items
+    const subtotal = invoiceData.lineItems.reduce(
+      (sum: number, item: any) => sum + item.quantity * item.unitPrice,
+      0,
+    );
+
+    const insertValues: typeof invoices.$inferInsert = {
       workspaceId,
-      ...invoiceData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      invoiceNumber:
+        invoiceData.invoiceNumber ||
+        `INV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      status: invoiceData.status as any,
+      customerId: invoiceData.customerId,
+      items: invoiceData.lineItems.map((item: any) => ({
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        total: item.quantity * item.unitPrice,
+      })),
+      subtotal,
+      tax: 0,
+      total: subtotal,
+      currency: invoiceData.currency,
+      issueDate: new Date(invoiceData.issueDate),
+      dueDate: new Date(invoiceData.dueDate),
+      notes: invoiceData.notes,
+      terms: invoiceData.terms,
     };
+
+    const [invoice] = await db
+      .insert(invoices)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Invoices created successfully", {
+    logger.info("Invoice created successfully", {
       userId: user.id,
       workspaceId,
-      invoiceId: mockInvoice.id,
+      invoiceId: invoice.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      invoice: mockInvoice,
+      invoice,
     });
 
     // Add rate limit headers
