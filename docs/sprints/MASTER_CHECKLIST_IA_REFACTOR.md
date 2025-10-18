@@ -10,29 +10,31 @@
 
 **Objective:** Connect 20 critical pages that survive IA redesign
 
-### Day 1-2: Foundation
+### Day 1-2: Foundation ✅ COMPLETE
 
-- [ ] 1.1 Run quality gates baseline (typecheck, lint, build) ✅ DONE
-- [ ] 1.2 Fix schema keyword conflict (exports/imports) ✅ DONE
-- [ ] 1.3 Audit existing API routes (verify 46 routes functional)
-- [ ] 1.4 Document current route → page mappings
-- [ ] 1.5 Create `PAGES_TO_KEEP.md` list (20 pages)
+- [x] 1.1 Run quality gates baseline (typecheck, lint, build) ✅
+- [x] 1.2 Fix schema keyword conflict (exports/imports) ✅
+- [x] 1.3 Audit existing API routes (64 routes functional) ✅
+- [x] 1.4 Document current route → page mappings ✅
+- [x] 1.5 Create `PAGES_TO_KEEP.md` list (20 pages) ✅
 
-### Day 3-4: Dashboard & Analytics
+### Day 3-4: Dashboard & Analytics ✅ COMPLETE
 
-- [ ] 2.1 Dashboard (`/dashboard`) - Connect to analytics APIs
-  - [ ] Fetch real agent count from `/api/agents`
-  - [ ] Fetch analytics from `/api/analytics/sales`, `/marketing`, `/time-usage`
-  - [ ] Replace mock chart data with real metrics
-  - [ ] Add loading states (Spinner component)
-  - [ ] Add error handling (toast notifications)
-- [ ] 2.2 Analytics pages (6 pages) - Keep for consolidation to `/insights`
-  - [ ] `/analytics` → `/api/analytics/*` (overview)
-  - [ ] `/analytics/sales` → real sales data
-  - [ ] `/analytics/marketing` → real marketing data
-  - [ ] `/analytics/outreach` → real outreach data
-  - [ ] `/analytics/time-usage` → real time tracking
-  - [ ] `/analytics/usage` → real platform usage
+- [x] 2.1 Dashboard (`/dashboard`) - Connected to real APIs ✅
+  - [x] Fetch real agent count from `/api/agents`
+  - [x] Fetch analytics from `/api/analytics/sales`, `/marketing`, `/outreach`, `/usage`
+  - [x] Replace mock data with real metrics (580 lines → 420 lines)
+  - [x] Add loading states (Spinner component)
+  - [x] Add error handling (toast notifications)
+  - [x] Commit: `feat(web): connect dashboard to real apis` (407d546)
+- [x] 2.2 Analytics pages (6 pages) - Connected to real APIs ✅
+  - [x] `/analytics` → Overview with all analytics (converted)
+  - [x] `/analytics/sales` → Created, fetches revenue/invoices/customers/projects
+  - [x] `/analytics/marketing` → Created, fetches campaigns/prospects/emails
+  - [x] `/analytics/outreach` → Created, fetches tasks/events/contacts/emails
+  - [x] `/analytics/time-usage` → Created, fetches task completion/distribution
+  - [x] `/analytics/usage` → Created, fetches agent activity/knowledge metrics
+  - [x] Commit: `feat(web): connect analytics pages to real apis (6 pages)` (677d8c1)
 
 ### Day 5-7: CRM Core
 
