@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, tasks } from "@galaxyco/database/schema";
+import { eq, and, desc, ilike, or } from "drizzle-orm";
 import { createTaskSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create task (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockTask = {
-      id: crypto.randomUUID(),
+    // 6. Create task in database
+    const insertValues: typeof tasks.$inferInsert = {
       workspaceId,
-      ...taskData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      title: taskData.title,
+      description: taskData.description,
+      status: taskData.status as any,
+      priority: taskData.priority as any,
+      assignedTo: taskData.assigneeId,
+      createdBy: user.id,
+      projectId: taskData.projectId,
+      customerId: taskData.customerId,
+      dueDate: taskData.dueDate ? new Date(taskData.dueDate) : undefined,
+      tags: taskData.tags,
     };
+
+    const [task] = await db.insert(tasks).values(insertValues).returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Tasks created successfully", {
+    logger.info("Task created successfully", {
       userId: user.id,
       workspaceId,
-      taskId: mockTask.id,
+      taskId: task.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      task: mockTask,
+      task,
     });
 
     // Add rate limit headers
@@ -204,19 +211,51 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch tasks (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockTasks = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch tasks from database
+    const status = searchParams.get("status");
+    const priority = searchParams.get("priority");
+    const assignedTo = searchParams.get("assignedTo");
+    const projectId = searchParams.get("projectId");
+    const customerId = searchParams.get("customerId");
+
+    const conditions = [eq(tasks.workspaceId, workspaceId)];
+
+    if (status) {
+      conditions.push(eq(tasks.status, status as any));
+    }
+
+    if (priority) {
+      conditions.push(eq(tasks.priority, priority as any));
+    }
+
+    if (assignedTo) {
+      conditions.push(eq(tasks.assignedTo, assignedTo));
+    }
+
+    if (projectId) {
+      conditions.push(eq(tasks.projectId, projectId));
+    }
+
+    if (customerId) {
+      conditions.push(eq(tasks.customerId, customerId));
+    }
+
+    const taskList = await db
+      .select()
+      .from(tasks)
+      .where(and(...conditions))
+      .orderBy(desc(tasks.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const [{ count }] = await db
+      .select({ count: tasks.id })
+      .from(tasks)
+      .where(and(...conditions));
 
     return NextResponse.json({
-      tasks: mockTasks,
-      total: mockTasks.length,
+      tasks: taskList,
+      total: Number(count) || 0,
       limit,
       offset,
     });

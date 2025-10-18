@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, prospects } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createProspectSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,47 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create prospect (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockProspect = {
-      id: crypto.randomUUID(),
+    // 6. Create prospect in database
+    // Map validation stage to database stage enum
+    let dbStage = prospectData.stage;
+    if (dbStage === "lead") dbStage = "new" as any;
+    if (dbStage === "closed-won") dbStage = "won" as any;
+    if (dbStage === "closed-lost") dbStage = "lost" as any;
+
+    const insertValues: typeof prospects.$inferInsert = {
       workspaceId,
-      ...prospectData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: prospectData.name,
+      email: prospectData.email,
+      phone: prospectData.phone,
+      company: prospectData.company,
+      title: prospectData.title,
+      stage: dbStage as any,
+      source: prospectData.source,
+      score: prospectData.score,
+      estimatedValue: prospectData.expectedValue,
+      tags: prospectData.tags,
+      notes: prospectData.notes,
+      customFields: prospectData.metadata,
     };
+
+    const [prospect] = await db
+      .insert(prospects)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Prospects created successfully", {
+    logger.info("Prospect created successfully", {
       userId: user.id,
       workspaceId,
-      prospectId: mockProspect.id,
+      prospectId: prospect.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      prospect: mockProspect,
+      prospect,
     });
 
     // Add rate limit headers

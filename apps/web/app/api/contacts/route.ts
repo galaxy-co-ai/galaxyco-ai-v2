@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, contacts } from "@galaxyco/database/schema";
+import { eq, and, desc, ilike, or } from "drizzle-orm";
 import { createContactSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create contact (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockContact = {
-      id: crypto.randomUUID(),
+    // 6. Create contact in database
+    const insertValues: typeof contacts.$inferInsert = {
       workspaceId,
-      ...contactData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      firstName: contactData.firstName,
+      lastName: contactData.lastName,
+      email: contactData.email,
+      phone: contactData.phone,
+      title: contactData.title,
+      customerId: contactData.customerId,
+      linkedinUrl: contactData.linkedin,
+      tags: contactData.tags,
+      notes: contactData.notes,
+      customFields: contactData.metadata,
     };
+
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Contacts created successfully", {
+    logger.info("Contact created successfully", {
       userId: user.id,
       workspaceId,
-      contactId: mockContact.id,
+      contactId: contact.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      contact: mockContact,
+      contact,
     });
 
     // Add rate limit headers
@@ -204,19 +214,43 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch contacts (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockContacts = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch contacts from database
+    const search = searchParams.get("search");
+    const customerId = searchParams.get("customerId");
+
+    const conditions = [eq(contacts.workspaceId, workspaceId)];
+
+    if (customerId) {
+      conditions.push(eq(contacts.customerId, customerId));
+    }
+
+    if (search) {
+      conditions.push(
+        or(
+          ilike(contacts.firstName, `%${search}%`),
+          ilike(contacts.lastName, `%${search}%`),
+          ilike(contacts.email, `%${search}%`),
+          ilike(contacts.company, `%${search}%`),
+        )!,
+      );
+    }
+
+    const contactList = await db
+      .select()
+      .from(contacts)
+      .where(and(...conditions))
+      .orderBy(desc(contacts.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const [{ count }] = await db
+      .select({ count: contacts.id })
+      .from(contacts)
+      .where(and(...conditions));
 
     return NextResponse.json({
-      contacts: mockContacts,
-      total: mockContacts.length,
+      contacts: contactList,
+      total: Number(count) || 0,
       limit,
       offset,
     });
