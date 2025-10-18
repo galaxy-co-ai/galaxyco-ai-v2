@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { ListPage } from "@/components/templates/list-page";
+import { useState, useEffect } from "react";
+import { PageShell } from "@/components/templates/page-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Mail,
   Phone,
@@ -12,278 +23,208 @@ import {
   Calendar,
   MoreVertical,
   UserPlus,
-  Download,
-  Upload,
+  Search,
 } from "lucide-react";
 
-// Mock data for contacts
-const mockContacts = [
-  {
-    id: "1",
-    name: "Sarah Johnson",
-    email: "sarah.johnson@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    company: "Acme Corporation",
-    role: "Marketing Director",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-15",
-    tags: ["Enterprise", "Priority"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-  },
-  {
-    id: "2",
-    name: "Michael Chen",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    company: "TechStart Inc",
-    role: "CTO",
-    type: "lead",
-    status: "active",
-    lastContact: "2025-10-16",
-    tags: ["Tech", "Decision Maker"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-  },
-  {
-    id: "3",
-    name: "Emily Rodriguez",
-    email: "emily.r@globalventures.com",
-    phone: "+1 (555) 345-6789",
-    company: "Global Ventures",
-    role: "Sales Manager",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-14",
-    tags: ["Sales", "High Value"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-  },
-  {
-    id: "4",
-    name: "David Kim",
-    email: "david@innovatelab.com",
-    phone: "+1 (555) 456-7890",
-    company: "InnovateLab",
-    role: "Founder",
-    type: "lead",
-    status: "nurturing",
-    lastContact: "2025-10-10",
-    tags: ["Startup", "Warm Lead"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-  },
-  {
-    id: "5",
-    name: "Jessica Martinez",
-    email: "j.martinez@enterprise-solutions.com",
-    phone: "+1 (555) 567-8901",
-    company: "Enterprise Solutions",
-    role: "VP Operations",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-17",
-    tags: ["Enterprise", "Champion"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
-  },
-  {
-    id: "6",
-    name: "Robert Taylor",
-    email: "rtaylor@futuretech.net",
-    phone: "+1 (555) 678-9012",
-    company: "FutureTech",
-    role: "Head of Product",
-    type: "lead",
-    status: "cold",
-    lastContact: "2025-09-20",
-    tags: ["Product", "Cold Lead"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
-  },
-];
-
-const typeOptions = [
-  { value: "all", label: "All Types" },
-  { value: "customer", label: "Customer" },
-  { value: "lead", label: "Lead" },
-  { value: "partner", label: "Partner" },
-];
-
-const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "nurturing", label: "Nurturing" },
-  { value: "cold", label: "Cold" },
-];
+interface Contact {
+  id: string;
+  workspaceId: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  phone: string | null;
+  title: string | null;
+  company: string | null;
+  tags: string[];
+  lastContactedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function ContactsPage() {
-  const [contacts, setContacts] = useState(mockContacts);
+  const { currentWorkspace } = useWorkspace();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Filter contacts based on search and filters
-  const filteredContacts = contacts.filter((contact) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      contact.company.toLowerCase().includes(searchQuery.toLowerCase());
+  useEffect(() => {
+    async function fetchContacts() {
+      if (!currentWorkspace?.id) return;
 
-    const matchesType = typeFilter === "all" || contact.type === typeFilter;
-    const matchesStatus =
-      statusFilter === "all" || contact.status === statusFilter;
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams({
+          workspaceId: currentWorkspace.id,
+          limit: "100",
+        });
 
-    return matchesSearch && matchesType && matchesStatus;
-  });
+        if (searchQuery) {
+          params.append("search", searchQuery);
+        }
 
-  const renderContactCard = (contact: (typeof mockContacts)[0]) => {
-    const statusColors: Record<string, "default" | "secondary" | "outline"> = {
-      active: "default",
-      nurturing: "secondary",
-      cold: "outline",
-    };
+        const res = await fetch(`/api/contacts?${params}`);
+        if (!res.ok) throw new Error("Failed to fetch contacts");
 
-    const typeColors: Record<string, "default" | "secondary" | "outline"> = {
-      customer: "default",
-      lead: "secondary",
-      partner: "outline",
-    };
+        const data = await res.json();
+        setContacts(data.contacts);
+      } catch (error) {
+        console.error("Failed to fetch contacts:", error);
+        toast.error("Failed to load contacts");
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
+    fetchContacts();
+  }, [currentWorkspace?.id, searchQuery]);
+
+  if (isLoading) {
     return (
-      <div
-        key={contact.id}
-        className="group relative rounded-lg border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all"
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <Avatar
-              src={contact.avatar}
-              alt={contact.name}
-              fallback={contact.name.slice(0, 2).toUpperCase()}
-              size="lg"
-            />
-            <div>
-              <h3 className="font-semibold text-lg">{contact.name}</h3>
-              <p className="text-sm text-muted-foreground">{contact.role}</p>
-            </div>
-          </div>
-          <Button variant="ghost" size="sm">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* Company */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 text-sm">
-            <Building2 className="h-4 w-4 text-muted-foreground" />
-            <span>{contact.company}</span>
-          </div>
-        </div>
-
-        {/* Contact Info */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-sm">
-            <Mail className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground truncate">
-              {contact.email}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Phone className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">{contact.phone}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">
-              Last contact: {new Date(contact.lastContact).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-
-        {/* Badges */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Badge variant={typeColors[contact.type]}>
-            {contact.type.charAt(0).toUpperCase() + contact.type.slice(1)}
-          </Badge>
-          <Badge variant={statusColors[contact.status]}>
-            {contact.status.charAt(0).toUpperCase() + contact.status.slice(1)}
-          </Badge>
-        </div>
-
-        {/* Tags */}
-        {contact.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {contact.tags.map((tag, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-
-        {/* Actions (show on hover) */}
-        <div className="absolute inset-x-0 bottom-0 p-4 bg-card border-t border-border rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
-          <div className="flex gap-2">
-            <Button size="sm" className="flex-1">
-              <Mail className="mr-2 h-4 w-4" />
-              Email
-            </Button>
-            <Button size="sm" variant="outline" className="flex-1">
-              <Phone className="mr-2 h-4 w-4" />
-              Call
-            </Button>
-          </div>
-        </div>
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
       </div>
+    );
+  }
+
+  const getFullName = (contact: Contact) => {
+    return (
+      [contact.firstName, contact.lastName].filter(Boolean).join(" ") ||
+      contact.email
     );
   };
 
   return (
-    <ListPage
+    <PageShell
       title="Contacts"
-      subtitle="Manage your contacts and relationships"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Contacts" }]}
-      searchPlaceholder="Search contacts..."
-      searchQuery={searchQuery}
-      onSearchChange={setSearchQuery}
-      showFilters={false}
+      subtitle="Manage your professional contacts"
+      breadcrumbs={[
+        { label: "Dashboard", href: "/dashboard" },
+        { label: "Contacts" },
+      ]}
       actions={
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Upload className="mr-2 h-4 w-4" />
-            Import
-          </Button>
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            Export
-          </Button>
-          <Button size="sm">
-            <UserPlus className="mr-2 h-4 w-4" />
-            Add Contact
-          </Button>
-        </div>
+        <Button>
+          <UserPlus className="mr-2 h-4 w-4" />
+          Add Contact
+        </Button>
       }
-      viewMode={viewMode}
-      onViewModeChange={setViewMode}
     >
-      {filteredContacts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredContacts.map((contact) => renderContactCard(contact))}
+      {/* Search */}
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search contacts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">No contacts found</p>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setSearchQuery("");
-              setTypeFilter("all");
-              setStatusFilter("all");
-            }}
+      </div>
+
+      {/* Results */}
+      <div className="mb-4">
+        <p className="text-sm text-muted-foreground">
+          {contacts.length} contact{contacts.length !== 1 ? "s" : ""} found
+        </p>
+      </div>
+
+      {/* Grid View */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {contacts.map((contact) => (
+          <div
+            key={contact.id}
+            className="group rounded-lg border border-border bg-card p-6 hover:border-primary/50 hover:shadow-md transition-all"
           >
-            Clear Filters
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Avatar
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(getFullName(contact))}`}
+                  alt={getFullName(contact)}
+                  fallback={getFullName(contact).substring(0, 2).toUpperCase()}
+                  size="lg"
+                />
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    {getFullName(contact)}
+                  </h3>
+                  {contact.title && (
+                    <p className="text-sm text-muted-foreground">
+                      {contact.title}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <Button variant="ghost" size="sm">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Company */}
+            {contact.company && (
+              <div className="mb-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
+                  <span>{contact.company}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Contact Info */}
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2 text-sm">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground truncate">
+                  {contact.email}
+                </span>
+              </div>
+              {contact.phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">{contact.phone}</span>
+                </div>
+              )}
+              {contact.lastContactedAt && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    Last contact:{" "}
+                    {new Date(contact.lastContactedAt).toLocaleDateString()}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Tags */}
+            {contact.tags && contact.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                {contact.tags.slice(0, 3).map((tag, index) => (
+                  <Badge key={index} variant="secondary">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {contacts.length === 0 && (
+        <div className="rounded-lg border border-border bg-card p-12 text-center">
+          <UserPlus className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-2">No contacts found</h3>
+          <p className="text-muted-foreground mb-4">
+            {searchQuery
+              ? "Try adjusting your search"
+              : "Get started by adding your first contact"}
+          </p>
+          <Button>
+            <UserPlus className="mr-2 h-4 w-4" />
+            Add Your First Contact
           </Button>
         </div>
       )}
-    </ListPage>
+    </PageShell>
   );
 }
