@@ -50,6 +50,16 @@ vi.mock("@clerk/nextjs", () => ({
 process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "test-clerk-key";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 
+// Mock ResizeObserver
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+
+// Mock scrollIntoView
+Element.prototype.scrollIntoView = vi.fn();
+
 // Suppress console errors in tests (optional)
 global.console = {
   ...console,

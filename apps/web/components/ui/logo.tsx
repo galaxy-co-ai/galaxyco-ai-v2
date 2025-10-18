@@ -139,7 +139,11 @@ const Logo = React.forwardRef<HTMLElement, LogoProps>(
       );
     }
 
-    return <span ref={ref as any}>{renderLogo()}</span>;
+    return (
+      <span ref={ref as any} className={className}>
+        {renderLogo()}
+      </span>
+    );
   },
 );
 
