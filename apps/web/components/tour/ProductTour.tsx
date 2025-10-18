@@ -276,7 +276,7 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     id: "agents",
     title: "Your Agents",
     description:
-      'These are the AI agents from your starter pack. Click "Enable" to activate them and start automating tasks.',
+      "These are the AI agents from your starter pack. Click &quot;Enable&quot; to activate them and start automating tasks.",
   },
   {
     id: "actions",
@@ -288,6 +288,6 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     id: "create",
     title: "Create Custom Agents",
     description:
-      'Click "Create Agent" anytime to build your own custom AI agents tailored to your specific workflows.',
+      "Click &quot;Create Agent&quot; anytime to build your own custom AI agents tailored to your specific workflows.",
   },
 ];

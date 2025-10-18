@@ -306,7 +306,9 @@ export function TestPlayground({
               ))
             ) : (
               <p className="text-sm text-neutral-500 text-center py-8">
-                {isRunning ? "Starting test..." : 'Click "Run Test" to begin'}
+                {isRunning
+                  ? "Starting test..."
+                  : "Click &quot;Run Test&quot; to begin"}
               </p>
             )}
           </div>

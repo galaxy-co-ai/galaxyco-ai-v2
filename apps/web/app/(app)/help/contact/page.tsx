@@ -74,7 +74,7 @@ export default function ContactPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast.success("Support ticket created successfully!", {
-      description: "We'll get back to you within 24 hours.",
+      description: "We&apos;ll get back to you within 24 hours.",
     });
 
     // Reset form

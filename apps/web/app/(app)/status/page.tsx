@@ -166,7 +166,7 @@ export default function StatusPage() {
               <p className="text-sm text-muted-foreground">
                 {allOperational
                   ? "All services are running smoothly"
-                  : "We're experiencing issues with some services"}
+                  : "We&apos;re experiencing issues with some services"}
               </p>
             </div>
           </div>
