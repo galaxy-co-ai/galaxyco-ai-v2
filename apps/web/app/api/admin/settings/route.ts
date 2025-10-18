@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
+import { db } from "@galaxyco/database";
+import { systemSettings } from "@galaxyco/database/schema";
+import { eq } from "drizzle-orm";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { checkSystemAdmin } from "@/lib/auth/admin-check";
 
@@ -29,27 +32,27 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 3. Fetch admin/settings (PLACEHOLDER - system settings)
-    // TODO: Replace with actual database query in Phase 2
-    const mockSettings = {
-      maintenanceMode: false,
-      allowSignups: true,
-      maxWorkspacesPerUser: 5,
-      featureFlags: {
-        aiAgents: true,
-        knowledgeBase: true,
-        customPacks: false,
-      },
-      rateLimit: {
-        requestsPerMinute: 60,
-        burstSize: 100,
-      },
-    };
+    // 3. Fetch system settings from database
+    // Get the first (and only) row from system_settings table
+    const settingsRecord = await db.query.systemSettings.findFirst();
 
-    logger.info("Admin settings fetched", { userId: adminCheck.user.id });
+    if (!settingsRecord) {
+      logger.error("System settings not found in database", {
+        userId: adminCheck.user.id,
+      });
+      return NextResponse.json(
+        { error: "System settings not initialized" },
+        { status: 500 },
+      );
+    }
+
+    logger.info("Admin settings fetched", {
+      userId: adminCheck.user.id,
+      settingsId: settingsRecord.id,
+    });
 
     return NextResponse.json({
-      settings: mockSettings,
+      settings: settingsRecord.settings,
     });
   } catch (error) {
     logger.error("List admin/settings error", {
@@ -101,18 +104,46 @@ export async function PUT(req: NextRequest) {
     // 4. Get and validate body
     const body = await req.json();
 
-    // TODO: Add validation with adminSettingsSchema
-    // TODO: Update settings in database in Phase 2
+    // Basic validation - ensure body is an object
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { error: "Invalid settings data" },
+        { status: 400 },
+      );
+    }
+
+    // 5. Get current settings record
+    const settingsRecord = await db.query.systemSettings.findFirst();
+
+    if (!settingsRecord) {
+      return NextResponse.json(
+        { error: "System settings not initialized" },
+        { status: 500 },
+      );
+    }
+
+    // 6. Update settings in database
+    const [updated] = await db
+      .update(systemSettings)
+      .set({
+        settings: body,
+        updatedBy: clerkUserId,
+        updatedAt: new Date(),
+      })
+      .where(eq(systemSettings.id, settingsRecord.id))
+      .returning();
 
     const durationMs = Date.now() - startTime;
     logger.info("Admin settings updated", {
       userId: adminCheck.user.id,
+      updatedBy: clerkUserId,
+      settingsId: updated.id,
       durationMs,
     });
 
     return NextResponse.json({
       success: true,
-      settings: body,
+      settings: updated.settings,
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;

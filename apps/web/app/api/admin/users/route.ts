@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, workspaces } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
+import { checkSystemAdmin } from "@/lib/auth/admin-check";
 import { adminUserUpdateSchema } from "@/lib/validation/analytics";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -20,10 +21,9 @@ import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
  * GET /api/admin/users
- * List all admin/users for a workspace
+ * List all users (admin only - cross-tenant)
  *
  * Query params:
- * - workspaceId: required
  * - limit: optional (default: 50)
  * - offset: optional (default: 0)
  */
@@ -36,56 +36,38 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get query params
+    // 2. Check admin role
+    const adminCheck = await checkSystemAdmin(clerkUserId);
+    if (!adminCheck.authorized) {
+      logger.warn("Non-admin attempted to access users", { clerkUserId });
+      return NextResponse.json(
+        { error: adminCheck.error },
+        { status: adminCheck.status },
+      );
+    }
+
+    // 3. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
     const limit = parseInt(searchParams.get("limit") || "50");
     const offset = parseInt(searchParams.get("offset") || "0");
 
-    if (!workspaceId) {
-      return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
-        { status: 400 },
-      );
-    }
-
-    // 3. Get user ID from clerkUserId
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // 4. Verify workspace membership
-    const membership = await db.query.workspaceMembers.findFirst({
-      where: and(
-        eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, user.id),
-      ),
-    });
-
-    if (!membership) {
-      return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
-        { status: 403 },
-      );
-    }
-
-    // 5. Fetch admin/users (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockUsers = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
+    // 4. Fetch all users from database
+    const allUsers = await db.query.users.findMany({
+      orderBy: [desc(users.createdAt)],
+      limit,
+      offset,
+      with: {
+        workspaceMembers: {
+          with: {
+            workspace: true,
+          },
+        },
       },
-    ].slice(offset, offset + limit);
+    });
 
     return NextResponse.json({
-      admin_users: mockUsers,
-      total: mockUsers.length,
+      users: allUsers,
+      total: allUsers.length,
       limit,
       offset,
     });

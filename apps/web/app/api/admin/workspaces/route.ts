@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { users, workspaces } from "@galaxyco/database/schema";
+import { eq, desc } from "drizzle-orm";
+import { checkSystemAdmin } from "@/lib/auth/admin-check";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 // NOTE: Admin routes don't create resources, only list and update existing ones
@@ -30,31 +31,33 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "50");
     const offset = parseInt(searchParams.get("offset") || "0");
 
-    // 3. Get user ID from clerkUserId
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    // 3. Check admin role
+    const adminCheck = await checkSystemAdmin(clerkUserId);
+    if (!adminCheck.authorized) {
+      logger.warn("Non-admin attempted to access workspaces", { clerkUserId });
+      return NextResponse.json(
+        { error: adminCheck.error },
+        { status: adminCheck.status },
+      );
     }
 
-    // TODO: Add admin role check in Phase 2
-    // For now, allow any authenticated user
-
-    // 4. Fetch all workspaces (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockWorkspaces = [
-      {
-        id: crypto.randomUUID(),
-        name: "Example Workspace",
-        createdAt: new Date().toISOString(),
+    // 4. Fetch all workspaces from database
+    const allWorkspaces = await db.query.workspaces.findMany({
+      orderBy: [desc(workspaces.createdAt)],
+      limit,
+      offset,
+      with: {
+        members: {
+          with: {
+            user: true,
+          },
+        },
       },
-    ].slice(offset, offset + limit);
+    });
 
     return NextResponse.json({
-      workspaces: mockWorkspaces,
-      total: mockWorkspaces.length,
+      workspaces: allWorkspaces,
+      total: allWorkspaces.length,
       limit,
       offset,
     });

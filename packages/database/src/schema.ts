@@ -2188,6 +2188,39 @@ export const auditLogs = pgTable(
     createdAtIdx: index("audit_log_created_at_idx").on(table.createdAt),
   }),
 );
+
+// ============================================================================
+// SYSTEM SETTINGS (Admin Configuration)
+// ============================================================================
+
+export const systemSettings = pgTable("system_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+
+  // Settings (stored as JSONB for flexibility)
+  settings: jsonb("settings")
+    .$type<{
+      maintenanceMode?: boolean;
+      allowSignups?: boolean;
+      maxWorkspacesPerUser?: number;
+      featureFlags?: {
+        aiAgents?: boolean;
+        knowledgeBase?: boolean;
+        customPacks?: boolean;
+      };
+      rateLimit?: {
+        requestsPerMinute?: number;
+        burstSize?: number;
+      };
+    }>()
+    .notNull()
+    .default({}),
+
+  // Audit
+  updatedBy: text("updated_by"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -2297,3 +2330,7 @@ export type NewWebhookDelivery = typeof webhookDeliveries.$inferInsert;
 
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type NewAuditLog = typeof auditLogs.$inferInsert;
+
+// Admin Types
+export type SystemSettings = typeof systemSettings.$inferSelect;
+export type NewSystemSettings = typeof systemSettings.$inferInsert;
