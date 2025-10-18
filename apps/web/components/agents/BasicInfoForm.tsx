@@ -3,7 +3,15 @@
 import React, { useState } from "react";
 import { FormInput as Input } from "@/components/ui/form-input";
 import { FormTextarea as Textarea } from "@/components/ui/form-textarea";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { AgentBuilderState } from "@/hooks/use-agent-builder";
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 import {
   colors,
   spacing,
@@ -99,6 +107,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
       {/* Icon Picker */}
       <div style={{ marginBottom: spacing.lg }}>
         <label
+          htmlFor="agent-icon"
           style={{
             display: "block",
             marginBottom: spacing.xs,
@@ -110,35 +119,48 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
           Icon
         </label>
         <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
-          <button
-            type="button"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            disabled={disabled}
-            style={{
-              width: "60px",
-              height: "60px",
-              fontSize: "32px",
-              backgroundColor: colors.background.secondary,
-              border: `2px solid ${colors.border.default}`,
-              borderRadius: radius.lg,
-              cursor: disabled ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "border-color 200ms",
-              opacity: disabled ? 0.6 : 1,
-            }}
-            onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
-              if (!disabled) {
-                e.currentTarget.style.borderColor = colors.primaryColor;
-              }
-            }}
-            onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.currentTarget.style.borderColor = colors.border.default;
-            }}
-          >
-            {basicInfo.icon}
-          </button>
+          <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
+            <PopoverTrigger asChild>
+              <Button
+                id="agent-icon"
+                type="button"
+                variant="outline"
+                disabled={disabled}
+                aria-label={`Change agent icon. Current icon: ${basicInfo.icon}`}
+                className="w-[60px] h-[60px] text-3xl p-0"
+              >
+                {basicInfo.icon}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" align="start">
+              <div
+                className="grid grid-cols-8 gap-1"
+                role="listbox"
+                aria-label="Agent icon picker"
+              >
+                {AGENT_EMOJIS.map((emoji) => (
+                  <button
+                    key={emoji}
+                    type="button"
+                    role="option"
+                    aria-selected={basicInfo.icon === emoji}
+                    aria-label={`Select ${emoji} emoji`}
+                    onClick={() => {
+                      onChange({ icon: emoji });
+                      setShowEmojiPicker(false);
+                    }}
+                    className={cn(
+                      "w-10 h-10 text-2xl rounded-md transition-colors",
+                      "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                      basicInfo.icon === emoji && "bg-accent",
+                    )}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
           <p
             style={{
               fontSize: typography.sizes.sm,
@@ -148,63 +170,6 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
             Click to change icon
           </p>
         </div>
-
-        {/* Emoji Picker Dropdown */}
-        {showEmojiPicker && (
-          <div
-            style={{
-              marginTop: spacing.sm,
-              padding: spacing.md,
-              backgroundColor: colors.background.primary,
-              border: `1px solid ${colors.border.default}`,
-              borderRadius: radius.lg,
-              display: "grid",
-              gridTemplateColumns: "repeat(8, 1fr)",
-              gap: spacing.xs,
-              maxWidth: "400px",
-            }}
-          >
-            {AGENT_EMOJIS.map((emoji) => (
-              <button
-                key={emoji}
-                type="button"
-                onClick={() => {
-                  onChange({ icon: emoji });
-                  setShowEmojiPicker(false);
-                }}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  fontSize: "24px",
-                  backgroundColor:
-                    basicInfo.icon === emoji
-                      ? colors.background.secondary
-                      : "transparent",
-                  border: "none",
-                  borderRadius: radius.md,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "background-color 200ms",
-                }}
-                onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  if (basicInfo.icon !== emoji) {
-                    e.currentTarget.style.backgroundColor =
-                      colors.background.secondary;
-                  }
-                }}
-                onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  if (basicInfo.icon !== emoji) {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }
-                }}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Name Input */}
@@ -282,18 +247,20 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
                   type="button"
                   onClick={() => handleTagRemove(tag)}
                   disabled={disabled}
+                  aria-label={`Remove ${tag} tag`}
+                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
                   style={{
                     background: "none",
                     border: "none",
                     color: colors.text.tertiary,
                     cursor: disabled ? "not-allowed" : "pointer",
-                    fontSize: typography.sizes.sm,
                     padding: 0,
                     display: "flex",
                     alignItems: "center",
                   }}
                 >
-                  ×
+                  <X className="h-3 w-3" />
+                  <span className="sr-only">Remove {tag}</span>
                 </button>
               </span>
             ))}

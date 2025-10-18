@@ -57,6 +57,29 @@ export function AppShell({ children, className }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+      {/* Skip Link - Accessibility: Allows keyboard users to bypass navigation */}
+      <a
+        href="#main-content"
+        className={cn(
+          // Screen reader only by default
+          "sr-only",
+          // Visible when focused
+          "focus:not-sr-only focus:absolute focus:top-4 focus:left-4",
+          // High z-index to appear above all content
+          "focus:z-[100]",
+          // Styling
+          "focus:px-4 focus:py-2",
+          "focus:bg-primary focus:text-primary-foreground",
+          "focus:rounded-lg focus:shadow-lg",
+          // Focus ring
+          "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+          // Transition
+          "transition-all duration-fast",
+        )}
+      >
+        Skip to main content
+      </a>
+
       {/* Desktop Sidebar */}
       {isDesktop && <MainSidebar />}
 
@@ -65,6 +88,7 @@ export function AppShell({ children, className }: AppShellProps) {
 
       {/* Main Content Area */}
       <main
+        id="main-content"
         className={cn(
           // Desktop: account for sidebar width (64px collapsed, 240px expanded)
           "transition-all duration-200 ease-in-out",
