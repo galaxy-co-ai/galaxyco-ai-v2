@@ -91,6 +91,88 @@ export const subscriptionTierEnum = pgEnum("subscription_tier", [
   "enterprise",
 ]);
 
+// CRM & Business enums
+export const customerStatusEnum = pgEnum("customer_status", [
+  "lead",
+  "active",
+  "inactive",
+  "churned",
+]);
+export const projectStatusEnum = pgEnum("project_status", [
+  "planning",
+  "in_progress",
+  "on_hold",
+  "completed",
+  "cancelled",
+]);
+export const taskStatusEnum = pgEnum("task_status", [
+  "todo",
+  "in_progress",
+  "done",
+  "cancelled",
+]);
+export const taskPriorityEnum = pgEnum("task_priority", [
+  "low",
+  "medium",
+  "high",
+  "urgent",
+]);
+export const invoiceStatusEnum = pgEnum("invoice_status", [
+  "draft",
+  "sent",
+  "paid",
+  "overdue",
+  "cancelled",
+]);
+export const campaignStatusEnum = pgEnum("campaign_status", [
+  "draft",
+  "scheduled",
+  "active",
+  "paused",
+  "completed",
+]);
+export const prospectStageEnum = pgEnum("prospect_stage", [
+  "new",
+  "contacted",
+  "qualified",
+  "proposal",
+  "negotiation",
+  "won",
+  "lost",
+]);
+
+// Communication enums
+export const inboxChannelEnum = pgEnum("inbox_channel", [
+  "email",
+  "chat",
+  "notification",
+  "comment",
+  "mention",
+]);
+export const inboxStatusEnum = pgEnum("inbox_status", [
+  "unread",
+  "read",
+  "archived",
+]);
+export const notificationTypeEnum = pgEnum("notification_type", [
+  "info",
+  "success",
+  "warning",
+  "error",
+  "mention",
+  "assignment",
+  "reminder",
+  "system",
+]);
+
+// Job status enum for exports/imports
+export const jobStatusEnum = pgEnum("job_status", [
+  "pending",
+  "processing",
+  "completed",
+  "failed",
+]);
+
 // ============================================================================
 // WORKSPACES (Tenant Boundary)
 // ============================================================================
@@ -1116,6 +1198,997 @@ export const aiUserPreferencesRelations = relations(
 );
 
 // ============================================================================
+// CRM - CUSTOMERS
+// ============================================================================
+
+export const customers = pgTable(
+  "customers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    name: text("name").notNull(),
+    email: text("email"),
+    phone: text("phone"),
+    company: text("company"),
+    website: text("website"),
+
+    // Address
+    address: jsonb("address")
+      .$type<{
+        street?: string;
+        city?: string;
+        state?: string;
+        zip?: string;
+        country?: string;
+      }>()
+      .default({}),
+
+    // Business details
+    status: customerStatusEnum("status").notNull().default("lead"),
+    industry: text("industry"),
+    size: text("size"), // 'small', 'medium', 'large', 'enterprise'
+    revenue: integer("revenue"), // Annual revenue in cents
+
+    // Relationships
+    assignedTo: uuid("assigned_to").references(() => users.id),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    customFields: jsonb("custom_fields")
+      .$type<Record<string, any>>()
+      .default({}),
+    notes: text("notes"),
+
+    // Timestamps
+    lastContactedAt: timestamp("last_contacted_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("customer_tenant_idx").on(table.workspaceId),
+    statusIdx: index("customer_status_idx").on(table.status),
+    assignedToIdx: index("customer_assigned_to_idx").on(table.assignedTo),
+    emailIdx: index("customer_email_idx").on(table.email),
+  }),
+);
+
+// ============================================================================
+// CRM - PROJECTS
+// ============================================================================
+
+export const projects = pgTable(
+  "projects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    name: text("name").notNull(),
+    description: text("description"),
+    status: projectStatusEnum("status").notNull().default("planning"),
+
+    // Relationships
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    managerId: uuid("manager_id").references(() => users.id),
+
+    // Project details
+    startDate: timestamp("start_date"),
+    endDate: timestamp("end_date"),
+    budget: integer("budget"), // In cents
+    actualCost: integer("actual_cost"), // In cents
+
+    // Progress
+    progress: integer("progress").default(0), // 0-100
+    completedTasks: integer("completed_tasks").default(0),
+    totalTasks: integer("total_tasks").default(0),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    customFields: jsonb("custom_fields")
+      .$type<Record<string, any>>()
+      .default({}),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("project_tenant_idx").on(table.workspaceId),
+    statusIdx: index("project_status_idx").on(table.status),
+    customerIdx: index("project_customer_idx").on(table.customerId),
+    managerIdx: index("project_manager_idx").on(table.managerId),
+  }),
+);
+
+// ============================================================================
+// CRM - PROSPECTS
+// ============================================================================
+
+export const prospects = pgTable(
+  "prospects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    name: text("name").notNull(),
+    email: text("email"),
+    phone: text("phone"),
+    company: text("company"),
+    title: text("title"),
+    linkedinUrl: text("linkedin_url"),
+
+    // Pipeline
+    stage: prospectStageEnum("stage").notNull().default("new"),
+    score: integer("score").default(0), // Lead scoring 0-100
+    estimatedValue: integer("estimated_value"), // In cents
+
+    // Relationships
+    assignedTo: uuid("assigned_to").references(() => users.id),
+    source: text("source"), // 'website', 'referral', 'campaign', etc
+
+    // Engagement
+    lastContactedAt: timestamp("last_contacted_at"),
+    nextFollowUpAt: timestamp("next_follow_up_at"),
+    interactionCount: integer("interaction_count").default(0),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    notes: text("notes"),
+    customFields: jsonb("custom_fields")
+      .$type<Record<string, any>>()
+      .default({}),
+
+    // Conversion
+    convertedToCustomer: boolean("converted_to_customer").default(false),
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("prospect_tenant_idx").on(table.workspaceId),
+    stageIdx: index("prospect_stage_idx").on(table.stage),
+    assignedToIdx: index("prospect_assigned_to_idx").on(table.assignedTo),
+    emailIdx: index("prospect_email_idx").on(table.email),
+  }),
+);
+
+// ============================================================================
+// CRM - CONTACTS
+// ============================================================================
+
+export const contacts = pgTable(
+  "contacts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    firstName: text("first_name"),
+    lastName: text("last_name"),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    title: text("title"),
+    company: text("company"),
+
+    // Social
+    linkedinUrl: text("linkedin_url"),
+    twitterUrl: text("twitter_url"),
+
+    // Relationships
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    assignedTo: uuid("assigned_to").references(() => users.id),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    notes: text("notes"),
+    customFields: jsonb("custom_fields")
+      .$type<Record<string, any>>()
+      .default({}),
+
+    // Engagement
+    lastContactedAt: timestamp("last_contacted_at"),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("contact_tenant_idx").on(table.workspaceId),
+    emailIdx: index("contact_email_idx").on(table.email),
+    customerIdx: index("contact_customer_idx").on(table.customerId),
+    assignedToIdx: index("contact_assigned_to_idx").on(table.assignedTo),
+  }),
+);
+
+// ============================================================================
+// CRM - TASKS
+// ============================================================================
+
+export const tasks = pgTable(
+  "tasks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    title: text("title").notNull(),
+    description: text("description"),
+    status: taskStatusEnum("status").notNull().default("todo"),
+    priority: taskPriorityEnum("priority").notNull().default("medium"),
+
+    // Relationships
+    assignedTo: uuid("assigned_to").references(() => users.id),
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+    projectId: uuid("project_id").references(() => projects.id, {
+      onDelete: "set null",
+    }),
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+
+    // Scheduling
+    dueDate: timestamp("due_date"),
+    startDate: timestamp("start_date"),
+    completedAt: timestamp("completed_at"),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    attachments: jsonb("attachments")
+      .$type<Array<{ name: string; url: string; size: number }>>()
+      .default([]),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("task_tenant_idx").on(table.workspaceId),
+    statusIdx: index("task_status_idx").on(table.status),
+    priorityIdx: index("task_priority_idx").on(table.priority),
+    assignedToIdx: index("task_assigned_to_idx").on(table.assignedTo),
+    projectIdx: index("task_project_idx").on(table.projectId),
+    dueDateIdx: index("task_due_date_idx").on(table.dueDate),
+  }),
+);
+
+// ============================================================================
+// CRM - CALENDAR EVENTS
+// ============================================================================
+
+export const calendarEvents = pgTable(
+  "calendar_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Event info
+    title: text("title").notNull(),
+    description: text("description"),
+    location: text("location"),
+    meetingUrl: text("meeting_url"),
+
+    // Timing
+    startTime: timestamp("start_time").notNull(),
+    endTime: timestamp("end_time").notNull(),
+    timezone: text("timezone").default("America/Chicago"),
+    isAllDay: boolean("is_all_day").default(false),
+
+    // Recurrence
+    isRecurring: boolean("is_recurring").default(false),
+    recurrenceRule: text("recurrence_rule"), // RRULE format
+
+    // Relationships
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+    attendees: jsonb("attendees")
+      .$type<
+        Array<{ userId?: string; email: string; name: string; status: string }>
+      >()
+      .default([]),
+
+    // Links
+    customerId: uuid("customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    projectId: uuid("project_id").references(() => projects.id, {
+      onDelete: "set null",
+    }),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+    reminders: jsonb("reminders")
+      .$type<Array<{ minutes: number; sent: boolean }>>()
+      .default([]),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("calendar_event_tenant_idx").on(table.workspaceId),
+    startTimeIdx: index("calendar_event_start_time_idx").on(table.startTime),
+    createdByIdx: index("calendar_event_created_by_idx").on(table.createdBy),
+  }),
+);
+
+// ============================================================================
+// BUSINESS - INVOICES
+// ============================================================================
+
+export const invoices = pgTable(
+  "invoices",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    invoiceNumber: text("invoice_number").notNull(),
+    status: invoiceStatusEnum("status").notNull().default("draft"),
+
+    // Relationships
+    customerId: uuid("customer_id")
+      .notNull()
+      .references(() => customers.id, { onDelete: "restrict" }),
+    projectId: uuid("project_id").references(() => projects.id, {
+      onDelete: "set null",
+    }),
+
+    // Financial details
+    subtotal: integer("subtotal").notNull(), // In cents
+    tax: integer("tax").default(0), // In cents
+    total: integer("total").notNull(), // In cents
+    amountPaid: integer("amount_paid").default(0), // In cents
+    currency: text("currency").notNull().default("USD"),
+
+    // Line items
+    items: jsonb("items")
+      .$type<
+        Array<{
+          description: string;
+          quantity: number;
+          unitPrice: number;
+          total: number;
+        }>
+      >()
+      .notNull()
+      .default([]),
+
+    // Dates
+    issueDate: timestamp("issue_date").notNull(),
+    dueDate: timestamp("due_date").notNull(),
+    paidAt: timestamp("paid_at"),
+
+    // Metadata
+    notes: text("notes"),
+    terms: text("terms"),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("invoice_tenant_idx").on(table.workspaceId),
+    statusIdx: index("invoice_status_idx").on(table.status),
+    customerIdx: index("invoice_customer_idx").on(table.customerId),
+    invoiceNumberIdx: uniqueIndex("invoice_number_idx").on(
+      table.workspaceId,
+      table.invoiceNumber,
+    ),
+  }),
+);
+
+// ============================================================================
+// BUSINESS - CAMPAIGNS
+// ============================================================================
+
+export const campaigns = pgTable(
+  "campaigns",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Campaign info
+    name: text("name").notNull(),
+    description: text("description"),
+    status: campaignStatusEnum("status").notNull().default("draft"),
+    type: text("type").notNull(), // 'email', 'social', 'ads', 'content'
+
+    // Targeting
+    segmentId: uuid("segment_id").references(() => segments.id, {
+      onDelete: "set null",
+    }),
+    targetAudience: jsonb("target_audience")
+      .$type<{
+        count?: number;
+        criteria?: Record<string, any>;
+      }>()
+      .default({}),
+
+    // Schedule
+    startDate: timestamp("start_date"),
+    endDate: timestamp("end_date"),
+    scheduledFor: timestamp("scheduled_for"),
+
+    // Content
+    content: jsonb("content")
+      .$type<{
+        subject?: string;
+        body?: string;
+        images?: string[];
+        links?: Array<{ url: string; label: string }>;
+      }>()
+      .default({}),
+
+    // Performance
+    sentCount: integer("sent_count").default(0),
+    openCount: integer("open_count").default(0),
+    clickCount: integer("click_count").default(0),
+    conversionCount: integer("conversion_count").default(0),
+
+    // Budget
+    budget: integer("budget"), // In cents
+    spent: integer("spent").default(0), // In cents
+
+    // Relationships
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Metadata
+    tags: text("tags").array().default([]),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("campaign_tenant_idx").on(table.workspaceId),
+    statusIdx: index("campaign_status_idx").on(table.status),
+    typeIdx: index("campaign_type_idx").on(table.type),
+  }),
+);
+
+// ============================================================================
+// BUSINESS - SEGMENTS
+// ============================================================================
+
+export const segments = pgTable(
+  "segments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Segment info
+    name: text("name").notNull(),
+    description: text("description"),
+
+    // Criteria (filter rules)
+    criteria: jsonb("criteria")
+      .$type<{
+        rules: Array<{
+          field: string;
+          operator: string;
+          value: any;
+        }>;
+        logic?: "and" | "or";
+      }>()
+      .notNull()
+      .default({ rules: [] }),
+
+    // Stats
+    memberCount: integer("member_count").default(0),
+    lastCalculatedAt: timestamp("last_calculated_at"),
+
+    // Metadata
+    isActive: boolean("is_active").default(true),
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("segment_tenant_idx").on(table.workspaceId),
+    activeIdx: index("segment_active_idx").on(table.isActive),
+  }),
+);
+
+// ============================================================================
+// BUSINESS - EXPORTS
+// ============================================================================
+
+export const exports = pgTable(
+  "exports",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Export info
+    name: text("name").notNull(),
+    resourceType: text("resource_type").notNull(), // 'customers', 'contacts', etc
+    format: text("format").notNull().default("csv"), // 'csv', 'json', 'xlsx'
+    status: jobStatusEnum("status").notNull().default("pending"),
+
+    // Configuration
+    filters: jsonb("filters").$type<Record<string, any>>().default({}),
+    columns: text("columns").array(), // Specific columns to export
+
+    // Results
+    fileUrl: text("file_url"),
+    fileSize: integer("file_size"), // In bytes
+    recordCount: integer("record_count"),
+
+    // Error handling
+    error: text("error"),
+
+    // Relationships
+    requestedBy: uuid("requested_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Timestamps
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    expiresAt: timestamp("expires_at"), // Auto-delete after expiry
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("export_tenant_idx").on(table.workspaceId),
+    statusIdx: index("export_status_idx").on(table.status),
+    requestedByIdx: index("export_requested_by_idx").on(table.requestedBy),
+  }),
+);
+
+// ============================================================================
+// BUSINESS - IMPORTS
+// ============================================================================
+
+export const imports = pgTable(
+  "imports",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Import info
+    name: text("name").notNull(),
+    resourceType: text("resource_type").notNull(), // 'customers', 'contacts', etc
+    status: jobStatusEnum("status").notNull().default("pending"),
+
+    // File info
+    fileName: text("file_name").notNull(),
+    fileSize: integer("file_size"), // In bytes
+    fileUrl: text("file_url"),
+
+    // Mapping
+    columnMapping: jsonb("column_mapping")
+      .$type<Record<string, string>>()
+      .default({}),
+
+    // Results
+    totalRows: integer("total_rows"),
+    successfulRows: integer("successful_rows").default(0),
+    failedRows: integer("failed_rows").default(0),
+    errors: jsonb("errors")
+      .$type<Array<{ row: number; error: string }>>()
+      .default([]),
+
+    // Error handling
+    error: text("error"),
+
+    // Relationships
+    requestedBy: uuid("requested_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Timestamps
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("import_tenant_idx").on(table.workspaceId),
+    statusIdx: index("import_status_idx").on(table.status),
+    requestedByIdx: index("import_requested_by_idx").on(table.requestedBy),
+  }),
+);
+
+// ============================================================================
+// COMMUNICATION - INBOX MESSAGES
+// ============================================================================
+
+export const inboxMessages = pgTable(
+  "inbox_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Message info
+    channel: inboxChannelEnum("channel").notNull(),
+    subject: text("subject"),
+    body: text("body").notNull(),
+    status: inboxStatusEnum("status").notNull().default("unread"),
+
+    // Sender/Receiver
+    senderId: uuid("sender_id").references(() => users.id),
+    senderEmail: text("sender_email"),
+    senderName: text("sender_name"),
+    recipientIds: jsonb("recipient_ids").$type<string[]>().default([]),
+
+    // Thread
+    threadId: text("thread_id"), // For grouping related messages
+    replyToId: text("reply_to_id"), // Self-reference to parent message
+
+    // Metadata
+    metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
+    attachments: jsonb("attachments")
+      .$type<Array<{ name: string; url: string; size: number }>>()
+      .default([]),
+
+    // Timestamps
+    readAt: timestamp("read_at"),
+    archivedAt: timestamp("archived_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("inbox_message_tenant_idx").on(table.workspaceId),
+    statusIdx: index("inbox_message_status_idx").on(table.status),
+    threadIdx: index("inbox_message_thread_idx").on(table.threadId),
+  }),
+);
+
+// ============================================================================
+// COMMUNICATION - EMAIL THREADS
+// ============================================================================
+
+export const emailThreads = pgTable(
+  "email_threads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Thread info
+    subject: text("subject").notNull(),
+    snippet: text("snippet"), // First few lines
+    messageCount: integer("message_count").default(0),
+
+    // Participants
+    participants: jsonb("participants")
+      .$type<Array<{ email: string; name?: string }>>()
+      .default([]),
+
+    // Status
+    isStarred: boolean("is_starred").default(false),
+    isRead: boolean("is_read").default(false),
+    folder: text("folder").default("inbox"), // 'inbox', 'sent', 'drafts', 'trash'
+
+    // Labels
+    labels: text("labels").array().default([]),
+
+    // Timestamps
+    lastMessageAt: timestamp("last_message_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("email_thread_tenant_idx").on(table.workspaceId),
+    folderIdx: index("email_thread_folder_idx").on(table.folder),
+    lastMessageIdx: index("email_thread_last_message_idx").on(
+      table.lastMessageAt,
+    ),
+  }),
+);
+
+// ============================================================================
+// COMMUNICATION - CHAT MESSAGES
+// ============================================================================
+
+export const chatMessages = pgTable(
+  "chat_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Message info
+    content: text("content").notNull(),
+    type: text("type").default("text"), // 'text', 'image', 'file', 'system'
+
+    // Sender/Receiver
+    senderId: uuid("sender_id")
+      .notNull()
+      .references(() => users.id),
+    recipientId: uuid("recipient_id").references(() => users.id),
+    groupId: text("group_id"), // For group chats
+
+    // Thread
+    replyToId: text("reply_to_id"), // Self-reference to parent message
+
+    // Metadata
+    attachments: jsonb("attachments")
+      .$type<Array<{ type: string; url: string; filename?: string }>>()
+      .default([]),
+    reactions: jsonb("reactions")
+      .$type<Record<string, string[]>>() // emoji -> userIds[]
+      .default({}),
+
+    // Edit history
+    isEdited: boolean("is_edited").default(false),
+    editedAt: timestamp("edited_at"),
+
+    // Status
+    isDeleted: boolean("is_deleted").default(false),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("chat_message_tenant_idx").on(table.workspaceId),
+    senderIdx: index("chat_message_sender_idx").on(table.senderId),
+    recipientIdx: index("chat_message_recipient_idx").on(table.recipientId),
+    groupIdx: index("chat_message_group_idx").on(table.groupId),
+    createdAtIdx: index("chat_message_created_at_idx").on(table.createdAt),
+  }),
+);
+
+// ============================================================================
+// COMMUNICATION - NOTIFICATIONS
+// ============================================================================
+
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Notification info
+    type: notificationTypeEnum("type").notNull(),
+    title: text("title").notNull(),
+    message: text("message").notNull(),
+
+    // Action
+    actionUrl: text("action_url"),
+    actionLabel: text("action_label"),
+
+    // Metadata
+    metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
+
+    // Status
+    isRead: boolean("is_read").default(false),
+    isDismissed: boolean("is_dismissed").default(false),
+
+    // Timestamps
+    readAt: timestamp("read_at"),
+    expiresAt: timestamp("expires_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantUserIdx: index("notification_tenant_user_idx").on(
+      table.workspaceId,
+      table.userId,
+    ),
+    userIdx: index("notification_user_idx").on(table.userId),
+    typeIdx: index("notification_type_idx").on(table.type),
+    isReadIdx: index("notification_is_read_idx").on(table.isRead),
+  }),
+);
+
+// ============================================================================
+// DEVELOPER - WEBHOOKS
+// ============================================================================
+
+export const webhooks = pgTable(
+  "webhooks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Webhook info
+    name: text("name").notNull(),
+    url: text("url").notNull(),
+    events: text("events").array().notNull(), // Array of event types
+    secret: text("secret").notNull(), // HMAC secret (encrypted in DB)
+
+    // Status
+    isActive: boolean("is_active").default(true),
+
+    // Stats
+    lastTriggeredAt: timestamp("last_triggered_at"),
+    successCount: integer("success_count").default(0),
+    failureCount: integer("failure_count").default(0),
+
+    // Metadata
+    metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
+
+    // Relationships
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("webhook_tenant_idx").on(table.workspaceId),
+    activeIdx: index("webhook_active_idx").on(table.isActive),
+  }),
+);
+
+// ============================================================================
+// DEVELOPER - WEBHOOK DELIVERIES
+// ============================================================================
+
+export const webhookDeliveries = pgTable(
+  "webhook_deliveries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Relationships
+    webhookId: uuid("webhook_id")
+      .notNull()
+      .references(() => webhooks.id, { onDelete: "cascade" }),
+
+    // Delivery info
+    event: text("event").notNull(),
+    payload: jsonb("payload").$type<Record<string, any>>().notNull(),
+
+    // Response
+    status: integer("status"), // HTTP status code
+    responseBody: text("response_body"),
+    responseTime: integer("response_time"), // Milliseconds
+
+    // Retry
+    attempt: integer("attempt").default(1),
+    maxAttempts: integer("max_attempts").default(3),
+    nextRetryAt: timestamp("next_retry_at"),
+
+    // Error
+    error: text("error"),
+
+    // Timestamps
+    deliveredAt: timestamp("delivered_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    webhookIdx: index("webhook_delivery_webhook_idx").on(table.webhookId),
+    eventIdx: index("webhook_delivery_event_idx").on(table.event),
+    createdAtIdx: index("webhook_delivery_created_at_idx").on(table.createdAt),
+  }),
+);
+
+// ============================================================================
+// DEVELOPER - AUDIT LOGS
+// ============================================================================
+
+export const auditLogs = pgTable(
+  "audit_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Actor
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    userEmail: text("user_email"),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+
+    // Action
+    action: text("action").notNull(), // 'create', 'update', 'delete', etc
+    resourceType: text("resource_type").notNull(), // 'customer', 'agent', etc
+    resourceId: text("resource_id"),
+
+    // Details
+    changes: jsonb("changes")
+      .$type<{
+        before?: Record<string, any>;
+        after?: Record<string, any>;
+      }>()
+      .default({}),
+    metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
+
+    // Timestamp
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("audit_log_tenant_idx").on(table.workspaceId),
+    userIdx: index("audit_log_user_idx").on(table.userId),
+    actionIdx: index("audit_log_action_idx").on(table.action),
+    resourceIdx: index("audit_log_resource_idx").on(
+      table.resourceType,
+      table.resourceId,
+    ),
+    createdAtIdx: index("audit_log_created_at_idx").on(table.createdAt),
+  }),
+);
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -1166,3 +2239,61 @@ export type NewAiMessage = typeof aiMessages.$inferInsert;
 
 export type AiUserPreferences = typeof aiUserPreferences.$inferSelect;
 export type NewAiUserPreferences = typeof aiUserPreferences.$inferInsert;
+
+// CRM Types
+export type Customer = typeof customers.$inferSelect;
+export type NewCustomer = typeof customers.$inferInsert;
+
+export type Project = typeof projects.$inferSelect;
+export type NewProject = typeof projects.$inferInsert;
+
+export type Prospect = typeof prospects.$inferSelect;
+export type NewProspect = typeof prospects.$inferInsert;
+
+export type Contact = typeof contacts.$inferSelect;
+export type NewContact = typeof contacts.$inferInsert;
+
+export type Task = typeof tasks.$inferSelect;
+export type NewTask = typeof tasks.$inferInsert;
+
+export type CalendarEvent = typeof calendarEvents.$inferSelect;
+export type NewCalendarEvent = typeof calendarEvents.$inferInsert;
+
+// Business Types
+export type Invoice = typeof invoices.$inferSelect;
+export type NewInvoice = typeof invoices.$inferInsert;
+
+export type Campaign = typeof campaigns.$inferSelect;
+export type NewCampaign = typeof campaigns.$inferInsert;
+
+export type Segment = typeof segments.$inferSelect;
+export type NewSegment = typeof segments.$inferInsert;
+
+export type Export = typeof exports.$inferSelect;
+export type NewExport = typeof exports.$inferInsert;
+
+export type Import = typeof imports.$inferSelect;
+export type NewImport = typeof imports.$inferInsert;
+
+// Communication Types
+export type InboxMessage = typeof inboxMessages.$inferSelect;
+export type NewInboxMessage = typeof inboxMessages.$inferInsert;
+
+export type EmailThread = typeof emailThreads.$inferSelect;
+export type NewEmailThread = typeof emailThreads.$inferInsert;
+
+export type ChatMessage = typeof chatMessages.$inferSelect;
+export type NewChatMessage = typeof chatMessages.$inferInsert;
+
+export type Notification = typeof notifications.$inferSelect;
+export type NewNotification = typeof notifications.$inferInsert;
+
+// Developer Types
+export type Webhook = typeof webhooks.$inferSelect;
+export type NewWebhook = typeof webhooks.$inferInsert;
+
+export type WebhookDelivery = typeof webhookDeliveries.$inferSelect;
+export type NewWebhookDelivery = typeof webhookDeliveries.$inferInsert;
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type NewAuditLog = typeof auditLogs.$inferInsert;

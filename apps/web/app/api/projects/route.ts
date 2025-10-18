@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, projects } from "@galaxyco/database/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { createProjectSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,29 +98,47 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create project (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockProject = {
-      id: crypto.randomUUID(),
+    // 6. Create project in database
+    const status =
+      projectData.status === "active"
+        ? "in_progress"
+        : projectData.status === "archived"
+          ? "cancelled"
+          : (projectData.status as any);
+
+    const insertValues: typeof projects.$inferInsert = {
       workspaceId,
-      ...projectData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      name: projectData.name,
+      description: projectData.description,
+      status,
+      customerId: projectData.customerId,
+      startDate: projectData.startDate
+        ? new Date(projectData.startDate)
+        : undefined,
+      endDate: projectData.endDate ? new Date(projectData.endDate) : undefined,
+      budget: projectData.budget,
+      tags: projectData.tags,
+      customFields: projectData.metadata,
     };
+
+    const [project] = await db
+      .insert(projects)
+      .values(insertValues)
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Projects created successfully", {
+    logger.info("Project created successfully", {
       userId: user.id,
       workspaceId,
-      projectId: mockProject.id,
+      projectId: project.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      project: mockProject,
+      project,
     });
 
     // Add rate limit headers
@@ -204,19 +222,24 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch projects (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockProjects = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch projects from database
+    const projectList = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.workspaceId, workspaceId))
+      .orderBy(desc(projects.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    // Get total count for pagination
+    const [{ count }] = await db
+      .select({ count: projects.id })
+      .from(projects)
+      .where(eq(projects.workspaceId, workspaceId));
 
     return NextResponse.json({
-      projects: mockProjects,
-      total: mockProjects.length,
+      projects: projectList,
+      total: Number(count) || 0,
       limit,
       offset,
     });

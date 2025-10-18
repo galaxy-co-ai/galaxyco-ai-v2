@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { logger } from "@/lib/utils/logger";
 import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { users, workspaceMembers, customers } from "@galaxyco/database/schema";
+import { eq, and, ilike, or, desc } from "drizzle-orm";
 import { createCustomerSchema } from "@/lib/validation/crm";
 import { safeValidateRequest, formatValidationError } from "@/lib/validation";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
@@ -98,15 +98,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Create customer (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database insert in Phase 2
-    const mockCustomer = {
-      id: crypto.randomUUID(),
-      workspaceId,
-      ...customerData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // 6. Create customer in database
+    const [customer] = await db
+      .insert(customers)
+      .values({
+        workspaceId,
+        name: customerData.name,
+        email: customerData.email,
+        phone: customerData.phone,
+        website: customerData.website,
+        address: customerData.address,
+        status:
+          customerData.status === "prospect"
+            ? "lead"
+            : (customerData.status as any),
+        industry: customerData.industry,
+        size: customerData.size,
+        customFields: customerData.metadata,
+      })
+      .returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
@@ -114,13 +124,13 @@ export async function POST(req: NextRequest) {
     logger.info("Customer created successfully", {
       userId: user.id,
       workspaceId,
-      customerId: mockCustomer.id,
+      customerId: customer.id,
       durationMs,
     });
 
     const response = NextResponse.json({
       success: true,
-      customer: mockCustomer,
+      customer,
     });
 
     // Add rate limit headers
@@ -208,40 +218,42 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch customers (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockCustomers = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        name: "Acme Corporation",
-        email: "contact@acme.com",
-        status: "active",
-        industry: "Technology",
-        size: "51-200",
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        name: "TechStart Inc",
-        email: "hello@techstart.com",
-        status: "prospect",
-        industry: "SaaS",
-        size: "11-50",
-        createdAt: new Date().toISOString(),
-      },
-    ]
-      .filter((customer) => !status || customer.status === status)
-      .filter(
-        (customer) =>
-          !search || customer.name.toLowerCase().includes(search.toLowerCase()),
-      )
-      .slice(offset, offset + limit);
+    // 5. Fetch customers from database
+    const conditions = [eq(customers.workspaceId, workspaceId)];
+
+    // Add status filter if provided
+    if (status) {
+      conditions.push(eq(customers.status, status as any));
+    }
+
+    // Add search filter if provided
+    if (search) {
+      conditions.push(
+        or(
+          ilike(customers.name, `%${search}%`),
+          ilike(customers.email, `%${search}%`),
+          ilike(customers.company, `%${search}%`),
+        )!,
+      );
+    }
+
+    const customerList = await db
+      .select()
+      .from(customers)
+      .where(and(...conditions))
+      .orderBy(desc(customers.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    // Get total count for pagination
+    const [{ count }] = await db
+      .select({ count: customers.id })
+      .from(customers)
+      .where(and(...conditions));
 
     return NextResponse.json({
-      customers: mockCustomers,
-      total: mockCustomers.length,
+      customers: customerList,
+      total: Number(count) || 0,
       limit,
       offset,
     });
