@@ -38,8 +38,22 @@
 
 ### Day 5-7: CRM Core
 
-- [ ] 3.1 Customers (`/customers`) → `/api/customers`
-- [ ] 3.2 Contacts (`/contacts`) → `/api/contacts`
+- [x] 3.1 Customers (`/customers`) → `/api/customers` ✅
+  - [x] Replaced mock customer array with real API fetching
+  - [x] Updated interface to match database schema
+  - [x] Added statusConfig for all customer statuses (active, inactive, lead, churned, prospect)
+  - [x] Implemented workspace-aware fetching with search and status filters
+  - [x] Generated avatar URLs dynamically using dicebear
+  - [x] Added loading state with Spinner, error handling with toast
+  - [x] Commit: `feat(web): connect customers page to real api` (befaa4f)
+- [x] 3.2 Contacts (`/contacts`) → `/api/contacts` ✅
+  - [x] Replaced mock contact array with real API fetching
+  - [x] Updated interface to match database schema (firstName, lastName, email, phone, title, company, tags)
+  - [x] Implemented getFullName() helper to combine firstName/lastName
+  - [x] Generated avatar URLs dynamically using dicebear
+  - [x] Simplified to grid view only
+  - [x] Added loading state with Spinner, error handling with toast
+  - [x] Commit: `feat(web): connect contacts page to real api` (741a80d)
 - [ ] 3.3 Projects (`/projects`) → `/api/projects`
 - [ ] 3.4 Prospects (`/prospects`) → `/api/prospects`
 - [ ] 3.5 Verify RLS policies work (multi-tenant isolation)
@@ -281,11 +295,11 @@
 
 | Week   | Pages Connected | Routes Moved | Quality Gates | Status         |
 | ------ | --------------- | ------------ | ------------- | -------------- |
-| Week 1 | 20/112 (18%)    | 0            | ✅ All Pass   | ✅ DONE        |
-| Week 2 | 20/112 (18%)    | 40 redirects | ✅ All Pass   | 🟡 In Progress |
+| Week 1 | 9/112 (8%)      | 0            | ✅ All Pass   | 🟡 In Progress |
+| Week 2 | 20/112 (18%)    | 40 redirects | ✅ All Pass   | ⏸️ Planned     |
 | Week 3 | 80/112 (71%)    | All final    | ✅ All Pass   | ⏸️ Planned     |
 
-**Current Status:** Week 1 Day 1 - Pre-flight complete, starting dashboard conversion
+**Current Status:** Week 1 Day 5-7 - Dashboard (1 page), Analytics (6 pages), Customers (1 page), Contacts (1 page) complete. Projects and Prospects remaining.
 
 ---
 
