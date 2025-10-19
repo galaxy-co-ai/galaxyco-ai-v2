@@ -54,8 +54,25 @@
   - [x] Simplified to grid view only
   - [x] Added loading state with Spinner, error handling with toast
   - [x] Commit: `feat(web): connect contacts page to real api` (741a80d)
-- [ ] 3.3 Projects (`/projects`) → `/api/projects`
-- [ ] 3.4 Prospects (`/prospects`) → `/api/prospects`
+- [x] 3.3 Projects (`/projects`) → `/api/projects` ✅
+  - [x] Replaced mock projects array with real API fetching
+  - [x] Updated interface to match database schema (name, description, status, dates, budget, progress, tasks)
+  - [x] Fixed status enum mapping (in_progress instead of in-progress)
+  - [x] Added support for all status values (planning, in_progress, review, completed, on_hold, cancelled)
+  - [x] Removed priority and team fields (not in database schema)
+  - [x] Added loading state with Spinner, error handling with toast
+  - [x] Created backup file
+  - [x] Commit: `feat(web): connect projects and prospects pages to real apis` (c0e226e)
+- [x] 3.4 Prospects (`/prospects`) → `/api/prospects` ✅
+  - [x] Fixed `/api/prospects` GET endpoint to query database instead of mock data
+  - [x] Replaced mockProspects import with real API fetching
+  - [x] Updated interface to match database schema (name, email, phone, company, title, stage, score, etc)
+  - [x] Removed enrichmentData (not in database schema)
+  - [x] Added conditional rendering for optional fields (company, email, score, linkedinUrl)
+  - [x] Mapped stage enum values (new, contacted, qualified, nurturing)
+  - [x] Added loading state with Spinner, error handling with toast
+  - [x] Created backup file
+  - [x] Commit: `fix(api): connect prospects endpoint to database query` (aedb651)
 - [ ] 3.5 Verify RLS policies work (multi-tenant isolation)
 
 ### Day 8-10: Work Items (Will move to `/work` but connect now)
@@ -299,7 +316,7 @@
 | Week 2 | 20/112 (18%)    | 40 redirects | ✅ All Pass   | ⏸️ Planned     |
 | Week 3 | 80/112 (71%)    | All final    | ✅ All Pass   | ⏸️ Planned     |
 
-**Current Status:** Week 1 Day 5-7 - Dashboard (1 page), Analytics (6 pages), Customers (1 page), Contacts (1 page) complete. Projects and Prospects remaining.
+**Current Status:** Week 1 Day 5-7 - Dashboard (1 page), Analytics (6 pages), CRM Core (4 pages: Customers, Contacts, Projects, Prospects) complete. Work Items remaining.
 
 ---
 
