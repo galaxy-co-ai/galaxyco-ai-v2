@@ -222,19 +222,24 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 5. Fetch prospects (PLACEHOLDER - table doesn't exist yet)
-    // TODO: Replace with actual database query in Phase 2
-    const mockProspects = [
-      {
-        id: crypto.randomUUID(),
-        workspaceId,
-        createdAt: new Date().toISOString(),
-      },
-    ].slice(offset, offset + limit);
+    // 5. Fetch prospects from database
+    const prospectList = await db
+      .select()
+      .from(prospects)
+      .where(eq(prospects.workspaceId, workspaceId))
+      .orderBy(desc(prospects.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    // Get total count for pagination
+    const [{ count }] = await db
+      .select({ count: prospects.id })
+      .from(prospects)
+      .where(eq(prospects.workspaceId, workspaceId));
 
     return NextResponse.json({
-      prospects: mockProspects,
-      total: mockProspects.length,
+      prospects: prospectList,
+      total: Number(count) || 0,
       limit,
       offset,
     });
