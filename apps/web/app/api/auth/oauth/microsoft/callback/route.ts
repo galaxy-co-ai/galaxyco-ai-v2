@@ -6,12 +6,12 @@ import { eq, and } from "drizzle-orm";
 import { encryptTokens } from "@/lib/encryption";
 
 /**
- * GET /api/auth/oauth/google/callback
+ * GET /api/auth/oauth/microsoft/callback
  *
- * OAuth 2.0 callback handler for Google integrations (Gmail, Calendar)
+ * OAuth 2.0 callback handler for Microsoft integrations (Outlook, Calendar)
  *
  * Query params:
- * - code: string (OAuth authorization code from Google)
+ * - code: string (OAuth authorization code from Microsoft)
  * - state: string (contains workspaceId, integrationType, etc.)
  * - error: string (optional, if user denied access)
  */
@@ -63,17 +63,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Exchange code for tokens
-    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID || "",
-        client_secret: process.env.GOOGLE_CLIENT_SECRET || "",
-        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/oauth/google/callback`,
-        grant_type: "authorization_code",
-      }),
-    });
+    const tokenResponse = await fetch(
+      "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          code,
+          client_id: process.env.MICROSOFT_CLIENT_ID || "",
+          client_secret: process.env.MICROSOFT_CLIENT_SECRET || "",
+          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/oauth/microsoft/callback`,
+          grant_type: "authorization_code",
+        }),
+      },
+    );
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
@@ -89,9 +92,9 @@ export async function GET(request: NextRequest) {
     const tokens = await tokenResponse.json();
     const { access_token, refresh_token, expires_in, scope, id_token } = tokens;
 
-    // Get user info from Google
+    // Get user info from Microsoft Graph API
     const userInfoResponse = await fetch(
-      "https://www.googleapis.com/oauth2/v2/userinfo",
+      "https://graph.microsoft.com/v1.0/me",
       {
         headers: { Authorization: `Bearer ${access_token}` },
       },
@@ -104,17 +107,18 @@ export async function GET(request: NextRequest) {
     }
 
     const userInfo = await userInfoResponse.json();
-    const { email, name, picture, id: googleId } = userInfo;
+    const { mail, userPrincipalName, displayName, id: microsoftId } = userInfo;
+    const email = mail || userPrincipalName;
 
     const integrationName =
-      integrationType === "gmail" ? "Gmail" : "Google Calendar";
+      integrationType === "outlook" ? "Outlook" : "Microsoft Calendar";
 
     // Check if integration already exists
     const existingIntegration = await db.query.integrations.findFirst({
       where: and(
         eq(integrations.workspaceId, workspaceId),
         eq(integrations.userId, userId),
-        eq(integrations.provider, "google"),
+        eq(integrations.provider, "microsoft"),
         eq(integrations.type, integrationType),
       ),
     });
@@ -136,9 +140,9 @@ export async function GET(request: NextRequest) {
         .set({
           status: "active",
           email,
-          displayName: name,
-          profileImage: picture,
-          providerAccountId: googleId,
+          displayName,
+          profileImage: null, // Microsoft Graph doesn't return profile image in /me endpoint
+          providerAccountId: microsoftId,
           scopes: scope?.split(" ") || [],
           lastSyncAt: new Date(),
           updatedAt: new Date(),
@@ -182,14 +186,14 @@ export async function GET(request: NextRequest) {
         .values({
           workspaceId,
           userId,
-          provider: "google",
+          provider: "microsoft",
           type: integrationType,
           name: integrationName,
           status: "active",
-          providerAccountId: googleId,
+          providerAccountId: microsoftId,
           email,
-          displayName: name,
-          profileImage: picture,
+          displayName,
+          profileImage: null,
           scopes: scope?.split(" ") || [],
           lastSyncAt: new Date(),
         })

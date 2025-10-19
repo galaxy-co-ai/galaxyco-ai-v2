@@ -173,6 +173,22 @@ export const jobStatusEnum = pgEnum("job_status", [
   "failed",
 ]);
 
+// Integration provider and status enums
+export const integrationProviderEnum = pgEnum("integration_provider", [
+  "google",
+  "microsoft",
+  "slack",
+  "salesforce",
+  "hubspot",
+]);
+
+export const integrationStatusEnum = pgEnum("integration_status", [
+  "active",
+  "inactive",
+  "error",
+  "expired",
+]);
+
 // ============================================================================
 // WORKSPACES (Tenant Boundary)
 // ============================================================================
@@ -2222,6 +2238,87 @@ export const systemSettings = pgTable("system_settings", {
 });
 
 // ============================================================================
+// INTEGRATIONS (OAuth & Third-Party Connections)
+// ============================================================================
+
+export const integrations = pgTable(
+  "integrations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull(),
+
+    // Integration details
+    provider: integrationProviderEnum("provider").notNull(),
+    type: text("type").notNull(), // "email", "calendar", "storage", etc.
+    name: text("name").notNull(),
+    status: integrationStatusEnum("status").notNull().default("active"),
+
+    // OAuth metadata
+    providerAccountId: text("provider_account_id").notNull(),
+    email: text("email"),
+    displayName: text("display_name"),
+    profileImage: text("profile_image"),
+
+    // Scopes and permissions
+    scopes: jsonb("scopes").$type<string[]>().notNull().default([]),
+
+    // Configuration
+    config: jsonb("config").$type<Record<string, any>>().default({}),
+
+    // Error tracking
+    lastError: text("last_error"),
+    lastErrorAt: timestamp("last_error_at"),
+
+    // Timestamps
+    lastSyncAt: timestamp("last_sync_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    workspaceIdx: index("integrations_workspace_idx").on(table.workspaceId),
+    userIdx: index("integrations_user_idx").on(table.userId),
+    providerIdx: index("integrations_provider_idx").on(table.provider),
+    statusIdx: index("integrations_status_idx").on(table.status),
+    uniqueProviderAccount: uniqueIndex(
+      "integrations_provider_account_unique",
+    ).on(table.workspaceId, table.provider, table.providerAccountId),
+  }),
+);
+
+export const oauthTokens = pgTable(
+  "oauth_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    integrationId: uuid("integration_id")
+      .notNull()
+      .references(() => integrations.id, { onDelete: "cascade" }),
+
+    // Encrypted tokens (AES-256-GCM encrypted)
+    accessToken: text("access_token").notNull(),
+    refreshToken: text("refresh_token"),
+    idToken: text("id_token"),
+
+    // Token metadata
+    tokenType: text("token_type").notNull().default("Bearer"),
+    expiresAt: timestamp("expires_at"),
+    scope: text("scope"),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    integrationIdx: index("oauth_tokens_integration_idx").on(
+      table.integrationId,
+    ),
+    expiresAtIdx: index("oauth_tokens_expires_at_idx").on(table.expiresAt),
+  }),
+);
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -2334,3 +2431,10 @@ export type NewAuditLog = typeof auditLogs.$inferInsert;
 // Admin Types
 export type SystemSettings = typeof systemSettings.$inferSelect;
 export type NewSystemSettings = typeof systemSettings.$inferInsert;
+
+// Integration Types
+export type Integration = typeof integrations.$inferSelect;
+export type NewIntegration = typeof integrations.$inferInsert;
+
+export type OAuthToken = typeof oauthTokens.$inferSelect;
+export type NewOAuthToken = typeof oauthTokens.$inferInsert;
