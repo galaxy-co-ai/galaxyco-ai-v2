@@ -14,42 +14,67 @@ import {
 } from "@/components/ui/select";
 import { Play, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { useWorkspace } from "@/contexts/workspace-context";
 
 export default function PlaygroundPage() {
+  const { currentWorkspace } = useWorkspace();
   const [request, setRequest] = useState({
     method: "GET",
-    endpoint: "/api/agents",
-    headers:
-      '{\n  "Authorization": "Bearer YOUR_API_KEY",\n  "Content-Type": "application/json"\n}',
-    body: "",
+    resource: "/api/agents",
+    validateOnly: false,
   });
 
   const [response, setResponse] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleExecute = async () => {
+    if (!currentWorkspace) {
+      toast.error("No workspace selected");
+      return;
+    }
+
     setIsExecuting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setResponse("");
 
-    const mockResponse = {
-      success: true,
-      data: [
-        {
-          id: "agent_123",
-          name: "Lead Generator",
-          status: "active",
-          created_at: "2025-10-15T10:30:00Z",
+    try {
+      const res = await fetch("/api/playground", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      ],
-      meta: {
-        timestamp: new Date().toISOString(),
-        count: 1,
-      },
-    };
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          resource: request.resource,
+          method: request.method,
+          validateOnly: request.validateOnly,
+        }),
+      });
 
-    setResponse(JSON.stringify(mockResponse, null, 2));
-    setIsExecuting(false);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to execute request");
+      }
+
+      setResponse(JSON.stringify(data, null, 2));
+      toast.success("Request executed successfully");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to execute request";
+      toast.error(errorMessage);
+      setResponse(
+        JSON.stringify(
+          {
+            error: errorMessage,
+            timestamp: new Date().toISOString(),
+          },
+          null,
+          2,
+        ),
+      );
+    } finally {
+      setIsExecuting(false);
+    }
   };
 
   const handleCopyResponse = () => {
@@ -90,62 +115,50 @@ export default function PlaygroundPage() {
                   </Select>
                 </div>
                 <div className="col-span-2 space-y-2">
-                  <Label htmlFor="endpoint">Endpoint</Label>
+                  <Label htmlFor="resource">Resource</Label>
                   <Select
-                    value={request.endpoint}
+                    value={request.resource}
                     onValueChange={(value) =>
-                      setRequest({ ...request, endpoint: value })
+                      setRequest({ ...request, resource: value })
                     }
                   >
-                    <SelectTrigger id="endpoint">
-                      <SelectValue placeholder="Select endpoint" />
+                    <SelectTrigger id="resource">
+                      <SelectValue placeholder="Select resource" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="/api/agents">
-                        GET /api/agents
-                      </SelectItem>
-                      <SelectItem value="/api/agents/:id">
-                        GET /api/agents/:id
-                      </SelectItem>
-                      <SelectItem value="/api/agents/create">
-                        POST /api/agents
-                      </SelectItem>
+                      <SelectItem value="/api/agents">Agents</SelectItem>
                       <SelectItem value="/api/executions">
-                        GET /api/executions
+                        Executions
                       </SelectItem>
+                      <SelectItem value="/api/documents">Documents</SelectItem>
+                      <SelectItem value="/api/contacts">Contacts</SelectItem>
+                      <SelectItem value="/api/campaigns">Campaigns</SelectItem>
+                      <SelectItem value="/api/webhooks">Webhooks</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="headers">Headers (JSON)</Label>
-                <Textarea
-                  id="headers"
-                  value={request.headers}
-                  onChange={(e) =>
-                    setRequest({ ...request, headers: e.target.value })
-                  }
-                  rows={5}
-                  className="font-mono text-xs"
-                />
-              </div>
-
-              {(request.method === "POST" || request.method === "PUT") && (
-                <div className="space-y-2">
-                  <Label htmlFor="body">Body (JSON)</Label>
-                  <Textarea
-                    id="body"
-                    value={request.body}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="validateOnly"
+                    checked={request.validateOnly}
                     onChange={(e) =>
-                      setRequest({ ...request, body: e.target.value })
+                      setRequest({ ...request, validateOnly: e.target.checked })
                     }
-                    placeholder='{\n  "name": "New Agent",\n  "type": "lead-gen"\n}'
-                    rows={6}
-                    className="font-mono text-xs"
+                    className="h-4 w-4 rounded border-gray-300"
                   />
+                  <Label htmlFor="validateOnly" className="cursor-pointer">
+                    Validate only (don&apos;t execute)
+                  </Label>
                 </div>
-              )}
+                <p className="text-xs text-muted-foreground">
+                  Test permissions and schema without actually executing the
+                  request
+                </p>
+              </div>
 
               <Button
                 className="w-full"
@@ -189,10 +202,10 @@ export default function PlaygroundPage() {
           <div className="rounded-lg border border-border bg-card p-6">
             <h4 className="font-semibold mb-3">Quick Reference</h4>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p>• Replace :id with actual resource IDs</p>
-              <p>• All requests require Authorization header</p>
-              <p>• Use Content-Type: application/json for POST/PUT</p>
-              <p>• Check console for detailed error messages</p>
+              <p>• Validates authentication and workspace membership</p>
+              <p>• Checks rate limits and permissions</p>
+              <p>• Use &quot;Validate only&quot; to test without executing</p>
+              <p>• Returns mock data in sandbox mode</p>
             </div>
           </div>
         </div>

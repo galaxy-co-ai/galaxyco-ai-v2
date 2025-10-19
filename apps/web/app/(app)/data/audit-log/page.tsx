@@ -1,82 +1,74 @@
 "use client";
 
 import React, { useState } from "react";
+import useSWR from "swr";
 import { ListPage } from "@/components/templates/list-page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Shield, Download } from "lucide-react";
+import { Shield, Download, Loader2 } from "lucide-react";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
 
 interface AuditEntry {
   id: string;
   timestamp: string;
-  user: string;
+  userId: string;
   action: string;
-  resource: string;
-  status: "success" | "failed";
-  ipAddress: string;
+  resourceType: string;
+  resourceId: string;
+  metadata?: Record<string, unknown>;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: string;
+  workspaceId: string;
 }
 
-const mockAuditLog: AuditEntry[] = [
-  {
-    id: "1",
-    timestamp: "2025-10-18 15:45:23",
-    user: "sarah@company.com",
-    action: "agent.create",
-    resource: "Lead Generator",
-    status: "success",
-    ipAddress: "192.168.1.100",
-  },
-  {
-    id: "2",
-    timestamp: "2025-10-18 15:42:15",
-    user: "john@startup.io",
-    action: "user.login",
-    resource: "-",
-    status: "success",
-    ipAddress: "10.0.0.50",
-  },
-  {
-    id: "3",
-    timestamp: "2025-10-18 15:38:47",
-    user: "admin@enterprise.com",
-    action: "workspace.update",
-    resource: "Enterprise LLC",
-    status: "success",
-    ipAddress: "172.16.0.10",
-  },
-  {
-    id: "4",
-    timestamp: "2025-10-18 15:30:12",
-    user: "hacker@malicious.com",
-    action: "user.login",
-    resource: "-",
-    status: "failed",
-    ipAddress: "203.0.113.42",
-  },
-  {
-    id: "5",
-    timestamp: "2025-10-18 15:22:58",
-    user: "lisa@agency.co",
-    action: "document.delete",
-    resource: "report-2024.pdf",
-    status: "success",
-    ipAddress: "192.168.2.75",
-  },
-];
+interface AuditLogResponse {
+  audit_log: AuditEntry[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: "Failed to fetch" }));
+    throw new Error(error.error || "Failed to fetch audit log");
+  }
+  return res.json();
+};
 
 export default function AuditLogPage() {
+  const { currentWorkspace } = useWorkspace();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
 
-  const filteredAuditLog = mockAuditLog.filter((entry) => {
+  const { data, error, isLoading } = useSWR<AuditLogResponse>(
+    currentWorkspace
+      ? `/api/audit-log?workspaceId=${currentWorkspace.id}&limit=100`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      onError: (err: Error) => {
+        toast.error(err.message || "Failed to load audit log");
+      },
+    },
+  );
+
+  const auditLog = data?.audit_log || [];
+
+  const filteredAuditLog = auditLog.filter((entry: AuditEntry) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       if (
-        !entry.user.toLowerCase().includes(query) &&
+        !entry.userId.toLowerCase().includes(query) &&
         !entry.action.toLowerCase().includes(query) &&
-        !entry.resource.toLowerCase().includes(query)
+        !entry.resourceType.toLowerCase().includes(query) &&
+        !entry.resourceId.toLowerCase().includes(query)
       ) {
         return false;
       }
@@ -84,11 +76,6 @@ export default function AuditLogPage() {
 
     const actionFilter = activeFilters.action || [];
     if (actionFilter.length > 0 && !actionFilter.includes(entry.action)) {
-      return false;
-    }
-
-    const statusFilter = activeFilters.status || [];
-    if (statusFilter.length > 0 && !statusFilter.includes(entry.status)) {
       return false;
     }
 
@@ -110,19 +97,11 @@ export default function AuditLogPage() {
           label: "Action Type",
           type: "checkbox",
           options: [
-            { value: "user.login", label: "User Login" },
-            { value: "agent.create", label: "Agent Created" },
-            { value: "workspace.update", label: "Workspace Updated" },
-            { value: "document.delete", label: "Document Deleted" },
-          ],
-        },
-        {
-          id: "status",
-          label: "Status",
-          type: "checkbox",
-          options: [
-            { value: "success", label: "Success" },
-            { value: "failed", label: "Failed" },
+            { value: "create", label: "Create" },
+            { value: "update", label: "Update" },
+            { value: "delete", label: "Delete" },
+            { value: "login", label: "Login" },
+            { value: "execute", label: "Execute" },
           ],
         },
       ]}
@@ -142,69 +121,77 @@ export default function AuditLogPage() {
       }
     >
       <div className="rounded-lg border border-border bg-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-muted/50 border-b border-border">
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  Timestamp
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  User
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  Action
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  Resource
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium">
-                  IP Address
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredAuditLog.map((entry) => (
-                <tr
-                  key={entry.id}
-                  className="hover:bg-muted/50 transition-colors"
-                >
-                  <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
-                    {entry.timestamp}
-                  </td>
-                  <td className="px-4 py-3 text-sm">{entry.user}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-4 w-4 text-muted-foreground" />
-                      <code className="text-xs">{entry.action}</code>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
-                    {entry.resource}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge
-                      variant="secondary"
-                      className={
-                        entry.status === "success"
-                          ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-                          : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
-                      }
-                    >
-                      {entry.status}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
-                    {entry.ipAddress}
-                  </td>
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )}
+
+        {error && (
+          <div className="p-6 text-center text-red-600 dark:text-red-400">
+            Failed to load audit log. Please try again.
+          </div>
+        )}
+
+        {!isLoading && !error && filteredAuditLog.length === 0 && (
+          <div className="p-6 text-center text-muted-foreground">
+            No audit log entries found.
+          </div>
+        )}
+
+        {!isLoading && !error && filteredAuditLog.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-muted/50 border-b border-border">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-medium">
+                    Timestamp
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">
+                    User
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">
+                    Action
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">
+                    Resource
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">
+                    IP Address
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredAuditLog.map((entry: AuditEntry) => (
+                  <tr
+                    key={entry.id}
+                    className="hover:bg-muted/50 transition-colors"
+                  >
+                    <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
+                      {new Date(entry.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-sm">{entry.userId}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-muted-foreground" />
+                        <code className="text-xs">{entry.action}</code>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
+                      <div>
+                        <div className="font-medium">{entry.resourceType}</div>
+                        <div className="text-xs">{entry.resourceId}</div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
+                      {entry.ipAddress || "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </ListPage>
   );
