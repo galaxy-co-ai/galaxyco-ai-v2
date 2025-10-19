@@ -1,0 +1,5 @@
+extends: spectral:oas
+rules:
+  operation-description: warn
+  operation-operationId: warn
+  oas3-unused-component: off
