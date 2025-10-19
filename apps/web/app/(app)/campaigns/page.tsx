@@ -1,84 +1,47 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { PageShell } from "@/components/templates/page-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-  Plus,
-  Search,
-  Play,
-  Pause,
-  Mail,
-  Users,
-  TrendingUp,
-  Calendar,
-  MoreHorizontal,
-} from "lucide-react";
-import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
+import { Plus, Search, Mail, Users, TrendingUp } from "lucide-react";
 
 interface Campaign {
   id: string;
+  workspaceId: string;
   name: string;
-  type: "email" | "social" | "ads";
-  status: "active" | "paused" | "completed" | "draft";
-  sent: number;
-  opens: number;
-  clicks: number;
-  conversions: number;
-  startDate: string;
-  budget?: number;
+  description: string | null;
+  status:
+    | "draft"
+    | "scheduled"
+    | "active"
+    | "paused"
+    | "completed"
+    | "archived";
+  type: "email" | "social" | "ads" | "content";
+  segmentId: string | null;
+  targetAudience: any;
+  startDate: string | null;
+  endDate: string | null;
+  scheduledFor: string | null;
+  content: any;
+  sentCount: number;
+  openCount: number;
+  clickCount: number;
+  conversionCount: number;
+  budget: number | null;
+  spent: number | null;
+  createdBy: string;
+  tags: string[] | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const campaigns: Campaign[] = [
-  {
-    id: "1",
-    name: "Q4 Product Launch",
-    type: "email",
-    status: "active",
-    sent: 12450,
-    opens: 5823,
-    clicks: 1247,
-    conversions: 234,
-    startDate: "2025-10-01",
-  },
-  {
-    id: "2",
-    name: "Holiday Promotion",
-    type: "email",
-    status: "draft",
-    sent: 0,
-    opens: 0,
-    clicks: 0,
-    conversions: 0,
-    startDate: "2025-11-15",
-  },
-  {
-    id: "3",
-    name: "LinkedIn Ads Campaign",
-    type: "ads",
-    status: "active",
-    sent: 0,
-    opens: 0,
-    clicks: 3421,
-    conversions: 156,
-    startDate: "2025-09-15",
-    budget: 5000,
-  },
-  {
-    id: "4",
-    name: "Customer Winback",
-    type: "email",
-    status: "completed",
-    sent: 8932,
-    opens: 3421,
-    clicks: 892,
-    conversions: 178,
-    startDate: "2025-09-01",
-  },
-];
-
-const statusConfig = {
+const statusConfig: Record<string, { label: string; className: string }> = {
   active: {
     label: "Active",
     className:
@@ -97,23 +60,72 @@ const statusConfig = {
     label: "Draft",
     className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
   },
+  scheduled: {
+    label: "Scheduled",
+    className:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
+  },
+  archived: {
+    label: "Archived",
+    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+  },
 };
 
-const typeConfig = {
+const typeConfig: Record<string, { label: string; icon: typeof Mail }> = {
   email: { label: "Email", icon: Mail },
   social: { label: "Social", icon: Users },
   ads: { label: "Ads", icon: TrendingUp },
+  content: { label: "Content", icon: Mail },
 };
 
 export default function CampaignsPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    async function fetchCampaigns() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/campaigns?workspaceId=${currentWorkspace.id}&limit=100`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch campaigns");
+        const data = await res.json();
+        setCampaigns(data.campaigns || []);
+      } catch (error) {
+        console.error("Failed to fetch campaigns:", error);
+        toast.error("Failed to load campaigns");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCampaigns();
+  }, [currentWorkspace?.id]);
+
   const filteredCampaigns = campaigns.filter((campaign) =>
-    campaign.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    searchQuery === ""
+      ? true
+      : campaign.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
+  const totalConversions = campaigns.reduce(
+    (sum, c) => sum + (c.conversionCount || 0),
+    0,
+  );
   const activeCampaigns = campaigns.filter((c) => c.status === "active").length;
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <PageShell
@@ -152,7 +164,7 @@ export default function CampaignsPage() {
               ? (
                   (totalConversions /
                     campaigns.reduce(
-                      (sum, c) => sum + (c.sent || c.clicks),
+                      (sum, c) => sum + (c.sentCount || c.clickCount || 1),
                       0,
                     )) *
                   100
@@ -176,118 +188,91 @@ export default function CampaignsPage() {
 
       {/* Campaigns Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredCampaigns.map((campaign) => {
-          const TypeIcon = typeConfig[campaign.type].icon;
-          const openRate = campaign.sent
-            ? ((campaign.opens / campaign.sent) * 100).toFixed(1)
-            : 0;
-          const clickRate = campaign.opens
-            ? ((campaign.clicks / campaign.opens) * 100).toFixed(1)
-            : campaign.clicks > 0
-              ? "N/A"
+        {filteredCampaigns.length > 0 ? (
+          filteredCampaigns.map((campaign) => {
+            const TypeIcon = typeConfig[campaign.type]?.icon || Mail;
+            const openRate = campaign.sentCount
+              ? ((campaign.openCount / campaign.sentCount) * 100).toFixed(1)
               : 0;
+            const clickRate = campaign.openCount
+              ? ((campaign.clickCount / campaign.openCount) * 100).toFixed(1)
+              : campaign.clickCount > 0
+                ? "N/A"
+                : 0;
 
-          return (
-            <div
-              key={campaign.id}
-              className="rounded-lg border border-border bg-card p-6 hover:border-primary hover:shadow-md transition-all"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold mb-1 truncate">
-                    {campaign.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-2">
-                    <TypeIcon className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      {typeConfig[campaign.type].label}
-                    </span>
+            return (
+              <div
+                key={campaign.id}
+                className="rounded-lg border border-border bg-card p-6 hover:border-primary hover:shadow-md transition-all"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold mb-1 truncate">
+                      {campaign.name}
+                    </h3>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge
+                        variant="outline"
+                        className={statusConfig[campaign.status]?.className}
+                      >
+                        {statusConfig[campaign.status]?.label}
+                      </Badge>
+                      <TypeIcon className="h-4 w-4 text-muted-foreground" />
+                    </div>
                   </div>
                 </div>
-                <Badge className={statusConfig[campaign.status].className}>
-                  {statusConfig[campaign.status].label}
-                </Badge>
-              </div>
 
-              {/* Metrics */}
-              <div className="space-y-3 mb-4">
-                {campaign.sent > 0 && (
+                {campaign.description && (
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {campaign.description}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="text-muted-foreground">Sent</span>
-                      <span className="font-semibold">
-                        {campaign.sent.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="text-muted-foreground">Open Rate</span>
-                      <span className="font-semibold">{openRate}%</span>
-                    </div>
+                    <p className="text-xs text-muted-foreground">Sent</p>
+                    <p className="text-lg font-semibold">
+                      {campaign.sentCount || 0}
+                    </p>
                   </div>
-                )}
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Clicks</span>
-                  <span className="font-semibold">
-                    {campaign.clicks.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Conversions</span>
-                  <span className="font-semibold text-primary">
-                    {campaign.conversions}
-                  </span>
-                </div>
-                {campaign.budget && (
-                  <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
-                    <span className="text-muted-foreground">Budget</span>
-                    <span className="font-semibold">
-                      ${campaign.budget.toLocaleString()}
-                    </span>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Opens</p>
+                    <p className="text-lg font-semibold">
+                      {campaign.openCount || 0}
+                    </p>
                   </div>
-                )}
-              </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Clicks</p>
+                    <p className="text-lg font-semibold">
+                      {campaign.clickCount || 0}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Conversions</p>
+                    <p className="text-lg font-semibold">
+                      {campaign.conversionCount || 0}
+                    </p>
+                  </div>
+                </div>
 
-              {/* Actions */}
-              <div className="flex gap-2 pt-4 border-t border-border">
-                <Button size="sm" variant="outline" className="flex-1">
-                  {campaign.status === "active" ? (
-                    <>
-                      <Pause className="h-3 w-3 mr-1" />
-                      Pause
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-3 w-3 mr-1" />
-                      Start
-                    </>
-                  )}
-                </Button>
-                <Button size="sm" variant="outline" className="flex-1">
-                  View
-                </Button>
-                <Button size="sm" variant="outline">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="flex-1">
+                    View Details
+                  </Button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div className="col-span-3 p-12 text-center border border-border rounded-lg">
+            <Mail className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+            <h3 className="mb-2 text-lg font-semibold">No campaigns</h3>
+            <p className="text-sm text-muted-foreground">
+              Create your first campaign to get started
+            </p>
+          </div>
+        )}
       </div>
-
-      {/* Empty State */}
-      {filteredCampaigns.length === 0 && (
-        <div className="rounded-lg border border-border bg-card p-12 text-center">
-          <Mail className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No campaigns found</h3>
-          <p className="text-muted-foreground mb-4">
-            Create your first campaign to start engaging customers
-          </p>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Campaign
-          </Button>
-        </div>
-      )}
     </PageShell>
   );
 }
