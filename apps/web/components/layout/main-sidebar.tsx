@@ -39,43 +39,50 @@ interface SidebarProps {
   className?: string;
 }
 
-// Navigation items to match wireframe
+// Navigation items - New IA structure (Week 2 refactor)
 const navigationItems = [
+  {
+    title: "My Work",
+    href: "/my-work",
+    icon: Command,
+    description: "Your daily workflow hub",
+  },
   {
     title: "Dashboard",
     href: "/dashboard",
-    icon: Command,
+    icon: TrendingUp,
+    description: "Platform overview",
   },
   {
     title: "Agents",
     href: "/agents",
     icon: Bot,
     badge: "3",
+    description: "AI agent management",
   },
   {
-    title: "Sales",
-    href: "/sales",
-    icon: TrendingUp,
+    title: "CRM",
+    href: "/crm/customers",
+    icon: User,
+    description: "Customer management",
   },
   {
-    title: "Time Usage",
-    href: "/time-usage",
+    title: "Analytics",
+    href: "/analytics",
     icon: Clock,
+    description: "Performance insights",
   },
   {
     title: "Library",
-    href: "/knowledge",
+    href: "/library",
     icon: FolderOpen,
+    description: "Documents & resources",
   },
   {
-    title: "Marketing",
-    href: "/marketing",
+    title: "Automations",
+    href: "/automations",
     icon: Megaphone,
-  },
-  {
-    title: "Outreach",
-    href: "/emails",
-    icon: Mail,
+    description: "Workflows & integrations",
   },
 ];
 

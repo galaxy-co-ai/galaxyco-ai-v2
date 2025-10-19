@@ -5,6 +5,64 @@ import { sql } from "drizzle-orm";
 import { getCurrentTenantContext } from "./lib/db/tenant-filter";
 import { trackApiAccess } from "./lib/monitoring/security-logger";
 
+// Route redirects for IA refactor (Week 2)
+const ROUTE_REDIRECTS: Record<string, string> = {
+  // CRM Consolidation
+  "/customers": "/crm/customers",
+  "/contacts": "/crm/contacts",
+  "/projects": "/crm/projects",
+  "/prospects": "/crm/prospects",
+  "/segments": "/crm/segments",
+
+  // Analytics Consolidation
+  "/sales": "/analytics/sales",
+  "/marketing": "/analytics/marketing",
+  "/outreach": "/analytics/outreach",
+  "/time-usage": "/analytics/time-usage",
+  "/usage": "/analytics/usage",
+
+  // Library Consolidation
+  "/knowledge": "/library",
+  "/documents": "/library/documents",
+  "/templates": "/library/templates",
+  "/resources": "/library/resources",
+
+  // Business Consolidation
+  "/invoices": "/business/invoices",
+  "/campaigns": "/business/campaigns",
+  "/emails": "/business/emails",
+
+  // Developer Consolidation
+  "/api-explorer": "/developer/api",
+  "/webhooks": "/developer/webhooks",
+  "/playground": "/developer/playground",
+
+  // Automations Consolidation
+  "/integrations": "/automations/integrations",
+
+  // Data Management
+  "/exports": "/data/exports",
+  "/imports": "/data/imports",
+  "/audit-log": "/data/audit-log",
+
+  // Settings Consolidation
+  "/api-keys": "/settings/api-keys",
+
+  // Mobile Deprecation (use responsive design)
+  "/m/dashboard": "/dashboard",
+  "/m/agents": "/agents",
+  "/m/calendar": "/calendar",
+  "/m/chat": "/chat",
+  "/m/contacts": "/crm/contacts",
+  "/m/documents": "/library/documents",
+  "/m/notifications": "/notifications",
+  "/m/prospects": "/crm/prospects",
+  "/m/search": "/search",
+  "/m/settings": "/settings",
+  "/m/tasks": "/tasks",
+  "/m/workflows": "/workflows",
+};
+
 const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
@@ -20,6 +78,70 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
+  const { pathname, search } = request.nextUrl;
+
+  // Handle route redirects for IA refactor
+  if (ROUTE_REDIRECTS[pathname]) {
+    const redirectUrl = new URL(
+      ROUTE_REDIRECTS[pathname] + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${ROUTE_REDIRECTS[pathname]}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
+  // Handle dynamic route redirects (with IDs)
+  if (pathname.startsWith("/documents/") && !pathname.startsWith("/library/")) {
+    const redirectUrl = new URL(
+      pathname.replace("/documents/", "/library/documents/") + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${redirectUrl.pathname}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
+  if (pathname.startsWith("/files/") && !pathname.startsWith("/library/")) {
+    const redirectUrl = new URL(
+      pathname.replace("/files/", "/library/files/") + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${redirectUrl.pathname}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
+  if (
+    pathname.startsWith("/integrations/") &&
+    !pathname.startsWith("/automations/")
+  ) {
+    const redirectUrl = new URL(
+      pathname.replace("/integrations/", "/automations/integrations/") + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${redirectUrl.pathname}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
+  if (
+    pathname.startsWith("/webhooks/") &&
+    !pathname.startsWith("/developer/")
+  ) {
+    const redirectUrl = new URL(
+      pathname.replace("/webhooks/", "/developer/webhooks/") + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${redirectUrl.pathname}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
+  if (pathname.startsWith("/exports/") && !pathname.startsWith("/data/")) {
+    const redirectUrl = new URL(
+      pathname.replace("/exports/", "/data/exports/") + search,
+      request.url,
+    );
+    console.log(`[Redirect] ${pathname} → ${redirectUrl.pathname}`);
+    return NextResponse.redirect(redirectUrl, { status: 308 });
+  }
+
   const response = NextResponse.next();
 
   // Protect non-public routes
