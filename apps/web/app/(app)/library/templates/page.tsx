@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { ListPage } from "@/components/templates/list-page";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,20 @@ import {
   Star,
 } from "lucide-react";
 
-const templates = [
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  type: string;
+  difficulty: string;
+  rating: number;
+  downloads: number;
+  author: string;
+  tags: string[];
+}
+
+const mockTemplates: Template[] = [
   {
     id: "1",
     name: "Lead Enrichment Workflow",
@@ -115,11 +129,44 @@ const templates = [
 ];
 
 export default function TemplatesPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/templates?workspaceId=${currentWorkspace.id}`,
+        );
+
+        if (!res.ok) {
+          // Fallback to mock data if API fails
+          console.warn("Templates API not available, using mock data");
+          setTemplates(mockTemplates);
+          return;
+        }
+
+        const data = await res.json();
+        setTemplates(data.templates || mockTemplates);
+      } catch (error) {
+        console.error("Failed to fetch templates:", error);
+        setTemplates(mockTemplates);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTemplates();
+  }, [currentWorkspace?.id]);
 
   const filteredTemplates = templates.filter((template) => {
     // Search filter
@@ -170,12 +217,23 @@ export default function TemplatesPage() {
     return colors[difficulty as keyof typeof colors] || "default";
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <ListPage
       title="Templates"
-      subtitle="Pre-built workflows and code templates"
+      subtitle={`${filteredTemplates.length} template${
+        filteredTemplates.length !== 1 ? "s" : ""
+      }`}
       breadcrumbs={[
         { label: "Dashboard", href: "/dashboard" },
+        { label: "Library", href: "/library" },
         { label: "Templates" },
       ]}
       searchQuery={searchQuery}

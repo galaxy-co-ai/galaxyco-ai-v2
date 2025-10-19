@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { ListPage } from "@/components/templates";
 import { CardGrid } from "@/components/organisms/card-grid";
 import { Button } from "@/components/ui/button";
 import { Plus, FileText, Video, Code, BookOpen } from "lucide-react";
 
-// Mock data - would come from API in production
-const mockResources = [
+interface Resource {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  category: string;
+  icon?: any;
+  href: string;
+}
+
+const mockResources: Resource[] = [
   {
     id: "1",
     title: "Getting Started Guide",
@@ -53,14 +63,67 @@ const mockResources = [
  * Shows resource library with search, filters, and grid view.
  */
 export default function ResourcesPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
 
+  useEffect(() => {
+    async function fetchResources() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/resources${currentWorkspace?.id ? `?workspaceId=${currentWorkspace.id}` : ""}`,
+        );
+
+        if (!res.ok) {
+          console.warn("Resources API not available, using mock data");
+          setResources(
+            mockResources.map((r) => ({ ...r, icon: getIcon(r.type) })),
+          );
+          return;
+        }
+
+        const data = await res.json();
+        const resourcesWithIcons = (data.resources || mockResources).map(
+          (r: Resource) => ({
+            ...r,
+            icon: getIcon(r.type),
+          }),
+        );
+        setResources(resourcesWithIcons);
+      } catch (error) {
+        console.error("Failed to fetch resources:", error);
+        setResources(
+          mockResources.map((r) => ({ ...r, icon: getIcon(r.type) })),
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchResources();
+  }, [currentWorkspace?.id]);
+
+  const getIcon = (type: string) => {
+    switch (type) {
+      case "document":
+        return <FileText className="h-5 w-5" />;
+      case "video":
+        return <Video className="h-5 w-5" />;
+      case "documentation":
+        return <Code className="h-5 w-5" />;
+      default:
+        return <BookOpen className="h-5 w-5" />;
+    }
+  };
+
   // Filter resources based on search and filters
-  const filteredResources = mockResources.filter((resource) => {
+  const filteredResources = resources.filter((resource) => {
     // Search filter
     const matchesSearch =
       searchQuery === "" ||
@@ -91,12 +154,21 @@ export default function ResourcesPage() {
     setActiveFilters({});
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <ListPage
       title="Resources"
-      subtitle="Documentation, guides, and tutorials to help you succeed"
+      subtitle={`${filteredResources.length} resource${filteredResources.length !== 1 ? "s" : ""} available`}
       breadcrumbs={[
         { label: "Dashboard", href: "/dashboard" },
+        { label: "Library", href: "/library" },
         { label: "Resources" },
       ]}
       actions={

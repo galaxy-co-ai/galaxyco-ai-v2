@@ -12,7 +12,8 @@ import {
   Filter,
   MoreHorizontal,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 
 interface Segment {
   id: string;
@@ -25,7 +26,7 @@ interface Segment {
   color: string;
 }
 
-const segments: Segment[] = [
+const mockSegments: Segment[] = [
   {
     id: "1",
     name: "Enterprise Customers",
@@ -69,7 +70,39 @@ const segments: Segment[] = [
 ];
 
 export default function SegmentsPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [segments, setSegments] = useState<Segment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    async function fetchSegments() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/segments?workspaceId=${currentWorkspace.id}`,
+        );
+
+        if (!res.ok) {
+          console.warn("Segments API not available, using mock data");
+          setSegments(mockSegments);
+          return;
+        }
+
+        const data = await res.json();
+        setSegments(data.segments || mockSegments);
+      } catch (error) {
+        console.error("Failed to fetch segments:", error);
+        setSegments(mockSegments);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchSegments();
+  }, [currentWorkspace?.id]);
 
   const filteredSegments = segments.filter((segment) =>
     segment.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -77,11 +110,23 @@ export default function SegmentsPage() {
 
   const totalContacts = segments.reduce((sum, s) => sum + s.count, 0);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <PageShell
       title="Customer Segments"
       subtitle="Organize and target your audience with dynamic segments"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Segments" }]}
+      breadcrumbs={[
+        { label: "Dashboard", href: "/" },
+        { label: "CRM", href: "/crm" },
+        { label: "Segments" },
+      ]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
