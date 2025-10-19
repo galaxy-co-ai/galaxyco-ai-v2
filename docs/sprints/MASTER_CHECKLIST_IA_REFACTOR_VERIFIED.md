@@ -2,8 +2,8 @@
 
 **Duration:** 3 weeks (Oct 18 - Nov 8, 2025)  
 **Goal:** Reorganize navigation + connect all pages to real API data  
-**Status:** ✅ Week 1 COMPLETE (95%)  
-**Last Verified:** 2025-10-19 03:45 UTC
+**Status:** ✅ Week 1 COMPLETE (95%) | ✅ Week 2 COMPLETE (100%)  
+**Last Verified:** 2025-10-19 06:50 UTC
 
 ---
 
@@ -224,6 +224,176 @@ setCustomers(data.customers);
 
 ---
 
+## ✅ WEEK 2: NAVIGATION REFACTOR - 100% COMPLETE
+
+**Duration:** Oct 19, 2025 (4 hours)  
+**Goal:** Reorganize 106 pages into workflow-based IA structure  
+**Status:** ✅ COMPLETE
+
+### What Was Accomplished
+
+#### 2.1 Foundation (3 hours)
+
+1. **Navigation Audit** - `docs/navigation/NAVIGATION_AUDIT.md`
+   - Documented all 106 pages
+   - Identified workflow patterns and pain points
+   - Current structure problems documented
+
+2. **New IA Design** - `docs/navigation/NEW_IA_DESIGN.md`
+   - Workflow-centric structure designed
+   - Complete route mapping for 106 pages
+   - 44 redirect mappings documented
+
+3. **Middleware Redirects** - `apps/web/middleware.ts`
+   - 44 redirects implemented:
+     - CRM consolidation: 5 redirects
+     - Analytics consolidation: 5 redirects
+     - Library consolidation: 6 redirects
+     - Business consolidation: 3 redirects
+     - Developer consolidation: 4 redirects
+     - Automations consolidation: 4 redirects
+     - Data management: 4 redirects
+     - Settings: 1 redirect
+     - Mobile deprecation: 12 redirects
+   - Dynamic route handling (documents/[id], files/[id], etc.)
+   - **Commit:** `6a475f5`
+
+4. **My Work Hub** - `apps/web/app/(app)/my-work/page.tsx`
+   - Central workflow dashboard
+   - Aggregates tasks, calendar, inbox, notifications
+   - Real API integration with Week 1 endpoints
+   - Mobile-responsive grid layout
+   - 394 lines
+
+5. **Sidebar Navigation Update** - `apps/web/components/layout/main-sidebar.tsx`
+   - New structure: My Work, Dashboard, Agents, CRM, Analytics, Library, Automations
+   - Updated all route paths
+
+6. **Page Migrations** - 28 pages moved
+   - **CRM** (`/crm/*`): customers, contacts, projects, prospects, segments
+   - **Library** (`/library/*`): knowledge→library, documents, templates, resources
+   - **Business** (`/business/*`): invoices, campaigns, emails
+   - **Developer** (`/developer/*`): api, webhooks, playground
+   - **Data** (`/data/*`): exports, imports, audit-log
+   - Used `git mv` to preserve history
+   - **Commit:** `4b11a47`
+
+#### 2.2 Hub Pages (30 minutes)
+
+7. **CRM Hub** - `apps/web/app/(app)/crm/page.tsx`
+   - Dashboard with live metrics from APIs
+   - Links to all CRM pages
+   - 220 lines
+
+8. **Business Hub** - `apps/web/app/(app)/business/page.tsx`
+   - Links to invoices, campaigns, emails
+   - 93 lines
+
+9. **Developer Hub** - `apps/web/app/(app)/developer/page.tsx`
+   - Links to API, webhooks, playground
+   - 87 lines
+
+10. **Data Hub** - `apps/web/app/(app)/data/page.tsx`
+    - Links to exports, imports, audit log
+    - 93 lines
+
+11. **Automations Hub** - Pre-existing at `/automations/page.tsx`
+
+**Total Hub Pages:** 5 (CRM, Business, Developer, Data, Automations)
+
+**Commit:** `98986b1`
+
+### New Navigation Structure
+
+```
+Primary Navigation:
+├── My Work (/my-work) ✨ NEW
+├── Dashboard (/dashboard)
+├── Agents (/agents)
+├── CRM (/crm) ✨ NEW GROUP
+│   ├── Hub page
+│   ├── Customers
+│   ├── Contacts
+│   ├── Projects
+│   ├── Prospects
+│   └── Segments
+├── Analytics (/analytics/*)
+├── Library (/library) ✨ RENAMED from /knowledge
+│   ├── Hub page
+│   ├── Documents
+│   ├── Templates
+│   └── Resources
+├── Business (/business) ✨ NEW GROUP
+│   ├── Hub page
+│   ├── Invoices
+│   ├── Campaigns
+│   └── Emails
+├── Developer (/developer) ✨ NEW GROUP
+│   ├── Hub page
+│   ├── API Explorer
+│   ├── Webhooks
+│   └── Playground
+├── Data (/data) ✨ NEW GROUP
+│   ├── Hub page
+│   ├── Exports
+│   ├── Imports
+│   └── Audit Log
+└── Automations (/automations)
+    ├── Hub page
+    ├── Workflows
+    └── Integrations
+```
+
+### Quality Gates - Week 2
+
+- ✅ TypeScript: 0 errors
+- ✅ Build: Success
+- ✅ Lint: Pass (1 acceptable API warning)
+- ✅ Prettier: Formatted
+- ✅ Git: 5 commits pushed
+- ✅ All redirects active
+- ✅ Zero breaking changes
+- ✅ Backward compatibility maintained
+
+### Week 2 Metrics
+
+**Files Changed:** 36  
+**Lines Added:** ~2,100  
+**Lines Removed:** ~50  
+**Commits:** 5
+
+1. `6a475f5` - IA refactor foundation
+2. `4b11a47` - Page migrations
+3. `38bfda4` - Documentation update (85%)
+4. `98986b1` - Hub pages completion
+5. `0738a7d` - Documentation update (100%)
+
+### Impact
+
+**User Experience:**
+
+- Clearer mental model (workflow-based grouping)
+- Central "My Work" entry point
+- Hub pages for quick navigation
+- All old URLs work via redirects
+
+**Developer Experience:**
+
+- Scalable structure for growth
+- Consistent route patterns
+- Easy to add new features
+- Git history preserved
+
+**Technical:**
+
+- Zero breaking changes
+- Mobile-responsive maintained
+- Production-ready
+
+**Week 2 Status:** ✅ 100% COMPLETE
+
+---
+
 ## 🔧 API READINESS MATRIX
 
 | Page          | API Endpoint         | Status   | Database Table   | Query Type                 |
@@ -386,11 +556,11 @@ git push origin main
 
 ## 📊 PROGRESS TRACKING TABLE
 
-| Week   | Pages Connected      | Routes Moved | Quality Gates | Status     |
-| ------ | -------------------- | ------------ | ------------- | ---------- |
-| Week 1 | 12/19 (63%)          | 0            | ✅ All Pass   | 🟡 Active  |
-| Week 2 | Target: 20/112 (18%) | 40 redirects | ✅ All Pass   | ⏸️ Planned |
-| Week 3 | Target: 80/112 (71%) | All final    | ✅ All Pass   | ⏸️ Planned |
+|| Week | Focus | Achievement | Quality Gates | Status |
+|| ------ | -------------------- | ------------------------ | ------------- | ------------- |
+|| Week 1 | API Integration | 18/19 pages (95%) | ✅ All Pass | ✅ Complete |
+|| Week 2 | Navigation Refactor | 44 redirects, 28 moved | ✅ All Pass | ✅ Complete |
+|| Week 3 | API Completion | Target: ~88 more pages | ⏳ Pending | 🟡 Next Sprint |
 
 **Current Sprint Velocity:** 12 pages / 10 days = 1.2 pages/day  
 **Estimated Completion of Remaining 6:** 5 days (conservative) or 3 hours (optimistic)  
@@ -398,26 +568,378 @@ git push origin main
 
 ---
 
-## 🔄 WEEK 2 & WEEK 3 (Unchanged)
+## 🎯 WEEK 3: REMAINING API CONNECTIONS (Estimated: 15-20 hours)
 
-[Copying sections from original checklist - these remain unchanged]
+**Goal:** Connect all remaining pages to real APIs  
+**Status:** ⏳ Not Started  
+**Prerequisites:** ✅ Week 1 Complete, ✅ Week 2 Complete
 
-### Week 2: Navigation Refactor (Day 1-10)
+### 3.1 Library Pages (4 pages) - Est: 2 hours
 
-- Route infrastructure creation
-- Middleware redirects (40 redirects)
-- Navigation components update
-- Page moves to new structure
-- My Work Hub implementation
+**New Routes (after Week 2 migration):**
 
-### Week 3: Complete API Connections (Day 1-15)
+1. `/library/documents` → `/api/documents`
+2. `/library/templates` → `/api/templates`
+3. `/library/resources` → `/api/resources`
+4. `/library/files` → `/api/files`
 
-- Automation pages (Workflows, Templates, Transcriptions)
-- Settings & Admin pages (12 pages)
-- Communication & Outreach
-- Mobile pages (12 pages)
-- Secondary & Utility pages (52 pages)
-- Comprehensive quality gates and testing
+**Notes:**
+
+- All moved from `/knowledge/*` and `/documents/*` in Week 2
+- Redirects already in place
+- Need to verify API endpoints exist
+
+---
+
+### 3.2 Automation Pages (3 pages) - Est: 2 hours
+
+**Routes:**
+
+1. `/automations/workflows` → `/api/workflows` (⚠️ Verify DB table exists)
+2. `/automations/integrations` → `/api/integrations`
+3. `/automations/templates` → `/api/automation-templates`
+
+**Note:** Workflows may need DB migration first
+
+---
+
+### 3.3 CRM Extended (3 pages) - Est: 1.5 hours
+
+**New Routes (after Week 2 migration):**
+
+1. `/crm/segments` → `/api/segments`
+2. `/crm/deals` → `/api/deals` (if exists)
+3. `/crm/leads` → `/api/leads` (if exists)
+
+**Note:** Verify which CRM pages actually exist in codebase
+
+---
+
+### 3.4 Business Extended (2 pages) - Est: 1 hour
+
+**New Routes (after Week 2 migration):**
+
+1. `/business/proposals` → `/api/proposals` (if exists)
+2. `/business/quotes` → `/api/quotes` (if exists)
+
+---
+
+### 3.5 Settings & Admin (12 pages) - Est: 3-4 hours
+
+**Routes:**
+
+1. `/settings/workspace` → `/api/workspaces/:id`
+2. `/settings/members` → `/api/members`
+3. `/settings/teams` → `/api/teams`
+4. `/settings/roles` → `/api/roles`
+5. `/settings/permissions` → `/api/permissions`
+6. `/settings/billing` → `/api/billing`
+7. `/settings/subscription` → `/api/subscriptions`
+8. `/settings/api-keys` → `/api/api-keys`
+9. `/settings/webhooks` → `/api/webhooks`
+10. `/settings/logs` → `/api/audit-logs`
+11. `/settings/security` → `/api/security-settings`
+12. `/settings/integrations` → `/api/workspace-integrations`
+
+**Note:** Settings pages often load data from multiple endpoints
+
+---
+
+### 3.6 Developer Tools (3 pages) - Est: 1.5 hours
+
+**New Routes (after Week 2 migration):**
+
+1. `/developer/api` → `/api/api-explorer`
+2. `/developer/webhooks` → `/api/webhooks`
+3. `/developer/playground` → Execute code directly
+
+**Note:** API Explorer and Playground may need special handling
+
+---
+
+### 3.7 Data Management (3 pages) - Est: 1.5 hours
+
+**New Routes (after Week 2 migration):**
+
+1. `/data/exports` → `/api/exports`
+2. `/data/imports` → `/api/imports`
+3. `/data/audit-log` → `/api/audit-logs`
+
+---
+
+### 3.8 Mobile Pages (12 pages) - Est: 3-4 hours
+
+**Status:** ⚠️ DEPRECATED in Week 2
+
+**Routes (all redirect to desktop equivalents):**
+
+1. `/m/dashboard` → `/dashboard`
+2. `/m/agents` → `/agents`
+3. `/m/tasks` → `/tasks`
+4. `/m/calendar` → `/calendar`
+5. `/m/inbox` → `/inbox`
+6. `/m/customers` → `/crm/customers`
+7. `/m/contacts` → `/crm/contacts`
+8. `/m/projects` → `/projects`
+9. `/m/analytics` → `/analytics`
+10. `/m/settings` → `/settings`
+11. `/m/notifications` → `/notifications`
+12. `/m/search` → `/search`
+
+**Decision:** Likely can DELETE these pages if they're just duplicates with mobile styling. Modern responsive design handles mobile views.
+
+---
+
+### 3.9 Secondary Pages (~50 pages) - Est: 5-8 hours
+
+**Categories:**
+
+1. **Detail Pages** (need dynamic routing):
+   - `/crm/customers/[id]` → `/api/customers/:id`
+   - `/crm/contacts/[id]` → `/api/contacts/:id`
+   - `/crm/projects/[id]` → `/api/projects/:id`
+   - `/library/documents/[id]` → `/api/documents/:id`
+   - `/agents/[id]` → `/api/agents/:id`
+   - `/automations/workflows/[id]` → `/api/workflows/:id`
+
+2. **Utility Pages**:
+   - `/search` → `/api/search`
+   - `/activity` → `/api/activity-feed`
+   - `/reports` → `/api/reports`
+   - `/favorites` → `/api/favorites`
+   - `/recent` → `/api/recent-items`
+
+3. **Profile & User**:
+   - `/profile` → `/api/users/:id`
+   - `/profile/settings` → `/api/user-settings`
+
+**Note:** Many detail pages may already be using templates with API connections
+
+---
+
+### 3.10 Quality Gates & Testing - Est: 2-3 hours
+
+**After All Conversions:**
+
+1. **TypeScript Check:**
+
+   ```bash
+   pnpm typecheck  # 0 errors required
+   ```
+
+2. **Lint Check:**
+
+   ```bash
+   pnpm lint  # 0 errors (warnings acceptable)
+   ```
+
+3. **Build Test:**
+
+   ```bash
+   pnpm build  # Must succeed
+   ```
+
+4. **Manual Testing:**
+   - Navigate to each converted page
+   - Verify data loads
+   - Test error states (disconnect API)
+   - Test loading states
+   - Verify mobile responsiveness
+
+5. **Browser Console:**
+   - Zero console errors
+   - No 404s on API calls
+   - No CORS issues
+
+6. **Database Verification:**
+   ```bash
+   # Check all referenced tables exist
+   grep -r "from.*schema" apps/api/src/**/*.ts
+   ```
+
+---
+
+## 📊 WEEK 3 EFFORT BREAKDOWN
+
+|| Category | Pages | Hours | Priority |
+|| ------------------ | ----- | ----- | -------- |
+|| Library | 4 | 2 | High |
+|| Automation | 3 | 2 | High |
+|| CRM Extended | 3 | 1.5 | Medium |
+|| Business Extended | 2 | 1 | Medium |
+|| Settings & Admin | 12 | 4 | High |
+|| Developer Tools | 3 | 1.5 | Medium |
+|| Data Management | 3 | 1.5 | High |
+|| Mobile Pages | 12 | 0\* | Low |
+|| Secondary Pages | 50 | 8 | Medium |
+|| Quality & Testing | - | 3 | Critical |
+|| **TOTAL** | **92**| **24**| - |
+
+\*Mobile pages likely can be deleted (deprecated)
+
+**Revised Estimate:** 20-24 hours of focused work
+
+---
+
+## 🚀 WEEK 3 EXECUTION STRATEGY
+
+### Phase 1: High-Value Pages (Day 1-2, 8 hours)
+
+**Batch 1 - Library & Automation (6 hours):**
+
+1. Audit which API endpoints exist vs need creation
+2. Convert Library pages (4 pages)
+3. Convert Automation pages (3 pages)
+4. Commit: `feat(web): connect library and automation pages to real apis`
+
+**Batch 2 - Settings (2 hours):**
+
+1. Settings pages (12 pages) - many are simple forms
+2. Commit: `feat(web): connect settings pages to real apis`
+
+### Phase 2: Extended Features (Day 3, 6 hours)
+
+**Batch 3 - CRM, Business, Developer, Data (6 hours):**
+
+1. CRM extended (3 pages)
+2. Business extended (2 pages)
+3. Developer tools (3 pages)
+4. Data management (3 pages)
+5. Commit: `feat(web): connect extended crm, business, developer, and data pages`
+
+### Phase 3: Secondary & Detail Pages (Day 4-5, 8 hours)
+
+**Batch 4 - Detail Pages (4 hours):**
+
+1. Audit which detail pages need conversion
+2. Convert customer/contact/project detail pages
+3. Convert document/agent/workflow detail pages
+4. Commit: `feat(web): connect detail pages to real apis`
+
+**Batch 5 - Utility Pages (4 hours):**
+
+1. Search, activity, reports, favorites
+2. Profile and user settings
+3. Commit: `feat(web): connect utility and profile pages to real apis`
+
+### Phase 4: Mobile Decision (Day 5, 2 hours)
+
+**Option A - Delete Mobile Pages:**
+
+- Remove `/m/*` pages entirely
+- Keep redirects in middleware
+- Desktop pages are already responsive
+- Commit: `refactor(web): remove deprecated mobile pages`
+
+**Option B - Keep Mobile Pages:**
+
+- If they have unique mobile-optimized UI, keep them
+- Connect to same APIs as desktop
+- Commit: `feat(web): connect mobile pages to real apis`
+
+### Phase 5: Quality Assurance (Day 6-7, 6 hours)
+
+1. **Automated Checks (1 hour):**
+   - Run typecheck, lint, build
+   - Fix any errors
+
+2. **Manual Testing (3 hours):**
+   - Test every converted page
+   - Verify data accuracy
+   - Test error/loading states
+   - Check mobile responsiveness
+
+3. **Documentation (2 hours):**
+   - Update CURRENT_SESSION.md
+   - Update Master Checklist
+   - Create Sprint Retrospective doc
+   - Document any technical debt
+
+---
+
+## 🎯 WEEK 3 SUCCESS CRITERIA
+
+**Functional:**
+
+- [ ] 100% of pages connected to real APIs (excluding deprecated)
+- [ ] Zero mock data in entire application
+- [ ] All detail pages work with dynamic routing
+- [ ] Search functionality operational
+- [ ] All forms submit to real endpoints
+
+**Quality:**
+
+- [ ] TypeScript: 0 errors
+- [ ] ESLint: 0 errors
+- [ ] Build: Success
+- [ ] All API endpoints return valid data
+- [ ] Zero console errors in browser
+
+**Testing:**
+
+- [ ] Manual smoke test of all pages
+- [ ] API response validation
+- [ ] Error handling verification
+- [ ] Mobile responsiveness check
+
+**Documentation:**
+
+- [ ] CURRENT_SESSION.md updated
+- [ ] Master Checklist 100% verified
+- [ ] Sprint retrospective written
+- [ ] Technical debt documented
+- [ ] Handoff doc for next sprint
+
+---
+
+## ⚠️ WEEK 3 RISKS & MITIGATION
+
+### Risk 1: Missing API Endpoints
+
+**Probability:** Medium  
+**Impact:** High
+
+**Mitigation:**
+
+- Audit API endpoints FIRST before starting conversions
+- Create list of endpoints to build
+- Build missing endpoints in batches
+- Alternative: Use placeholder endpoints with TODO comments
+
+### Risk 2: Complex Data Relationships
+
+**Probability:** High  
+**Impact:** Medium
+
+**Mitigation:**
+
+- Detail pages often need multiple API calls
+- Use Promise.all() for parallel fetching
+- Implement proper loading states
+- Cache data where appropriate
+
+### Risk 3: Database Schema Gaps
+
+**Probability:** Medium  
+**Impact:** High
+
+**Mitigation:**
+
+- Verify all DB tables exist before conversion
+- Create migrations for missing tables
+- Document schema changes needed
+
+### Risk 4: Time Overrun
+
+**Probability:** Medium  
+**Impact:** Low
+
+**Mitigation:**
+
+- Focus on high-value pages first
+- Secondary pages can be Phase 2
+- Mobile pages can be deleted to save time
+- Maintain quality over speed
 
 ---
 
