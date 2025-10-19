@@ -77,7 +77,15 @@
 
 ### Day 8-10: Work Items (Will move to `/work` but connect now)
 
-- [ ] 4.1 Tasks (`/tasks`) → `/api/tasks`
+- [x] 4.1 Tasks (`/tasks`) → `/api/tasks` ✅
+  - [x] Replaced mock tasks array with real API fetching
+  - [x] Updated interface to match database schema (title, description, status, priority, assignedTo, dueDate, etc)
+  - [x] Fixed status enum: in_progress vs in-progress
+  - [x] Added overdue logic, conditional rendering for optional fields
+  - [x] Maintained grid view with task cards
+  - [x] Added loading/error states
+  - [x] Created backup file
+  - [x] Pending commit (batch with remaining Work Items)
 - [ ] 4.2 Calendar (`/calendar`) → `/api/calendar`
 - [ ] 4.3 Inbox (`/inbox`) → `/api/inbox`
 - [ ] 4.4 Notifications (`/notifications`) → `/api/notifications`
@@ -316,7 +324,7 @@
 | Week 2 | 20/112 (18%)    | 40 redirects | ✅ All Pass   | ⏸️ Planned     |
 | Week 3 | 80/112 (71%)    | All final    | ✅ All Pass   | ⏸️ Planned     |
 
-**Current Status:** Week 1 Day 5-7 - Dashboard (1 page), Analytics (6 pages), CRM Core (4 pages: Customers, Contacts, Projects, Prospects) complete. Work Items remaining.
+**Current Status:** Week 1 Day 8-10 - Dashboard (1 page), Analytics (6 pages), CRM Core (4 pages), Tasks (1 page) = 12/20 complete (60%). Remaining: 8 pages (Calendar, Inbox, Notifications, Invoices, Campaigns, Emails + verify Agents/Workflows).
 
 ---
 

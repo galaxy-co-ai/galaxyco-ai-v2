@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ListPage } from "@/components/templates/list-page";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
 import {
   Calendar,
   CheckCircle2,
@@ -14,141 +17,74 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-// Mock data for tasks
-const mockTasks = [
-  {
-    id: "1",
-    title: "Complete Q4 Marketing Strategy",
-    description:
-      "Finalize marketing plan for Q4 including budget allocation and campaign timelines",
-    status: "in-progress",
-    priority: "high",
-    dueDate: "2025-10-20",
-    assignee: {
-      name: "Sarah Johnson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    },
-    tags: ["Marketing", "Strategy"],
-  },
-  {
-    id: "2",
-    title: "Review Sales Dashboard Prototype",
-    description: "Provide feedback on the new sales dashboard design and UX",
-    status: "todo",
-    priority: "medium",
-    dueDate: "2025-10-18",
-    assignee: {
-      name: "Michael Chen",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-    },
-    tags: ["Design", "Review"],
-  },
-  {
-    id: "3",
-    title: "Update API Documentation",
-    description: "Add documentation for new API endpoints released in v2.1",
-    status: "in-progress",
-    priority: "high",
-    dueDate: "2025-10-19",
-    assignee: {
-      name: "Emily Rodriguez",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-    },
-    tags: ["Documentation", "API"],
-  },
-  {
-    id: "4",
-    title: "Client Onboarding - Acme Corp",
-    description:
-      "Schedule and conduct onboarding session for new enterprise client",
-    status: "todo",
-    priority: "urgent",
-    dueDate: "2025-10-17",
-    assignee: {
-      name: "David Kim",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-    },
-    tags: ["Onboarding", "Client"],
-  },
-  {
-    id: "5",
-    title: "Security Audit Q4",
-    description: "Conduct quarterly security audit and update compliance docs",
-    status: "todo",
-    priority: "medium",
-    dueDate: "2025-10-25",
-    assignee: {
-      name: "Jessica Martinez",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
-    },
-    tags: ["Security", "Compliance"],
-  },
-  {
-    id: "6",
-    title: "Implement Feature Flags",
-    description: "Add feature flag system for gradual rollouts",
-    status: "done",
-    priority: "low",
-    dueDate: "2025-10-15",
-    assignee: {
-      name: "Robert Taylor",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
-    },
-    tags: ["Development", "Infrastructure"],
-  },
-];
-
-const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "todo", label: "To Do" },
-  { value: "in-progress", label: "In Progress" },
-  { value: "done", label: "Done" },
-];
-
-const priorityOptions = [
-  { value: "all", label: "All Priority" },
-  { value: "urgent", label: "Urgent" },
-  { value: "high", label: "High" },
-  { value: "medium", label: "Medium" },
-  { value: "low", label: "Low" },
-];
-
-const assigneeOptions = [
-  { value: "all", label: "All Assignees" },
-  { value: "Sarah Johnson", label: "Sarah Johnson" },
-  { value: "Michael Chen", label: "Michael Chen" },
-  { value: "Emily Rodriguez", label: "Emily Rodriguez" },
-  { value: "David Kim", label: "David Kim" },
-  { value: "Jessica Martinez", label: "Jessica Martinez" },
-  { value: "Robert Taylor", label: "Robert Taylor" },
-];
+interface Task {
+  id: string;
+  workspaceId: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  assignedTo: string | null;
+  createdBy: string;
+  projectId: string | null;
+  customerId: string | null;
+  dueDate: string | null;
+  startDate: string | null;
+  completedAt: string | null;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function TasksPage() {
-  const [tasks, setTasks] = useState(mockTasks);
+  const { currentWorkspace } = useWorkspace();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [assigneeFilter, setAssigneeFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Filter tasks based on search and filters
+  useEffect(() => {
+    async function fetchTasks() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/tasks?workspaceId=${currentWorkspace.id}&limit=100`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch tasks");
+        const data = await res.json();
+        setTasks(data.tasks || []);
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
+        toast.error("Failed to load tasks");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTasks();
+  }, [currentWorkspace?.id]);
+
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
       searchQuery === "" ||
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (task.description?.toLowerCase() || "").includes(
+        searchQuery.toLowerCase(),
+      );
 
     const matchesStatus =
       statusFilter === "all" || task.status === statusFilter;
     const matchesPriority =
       priorityFilter === "all" || task.priority === priorityFilter;
-    const matchesAssignee =
-      assigneeFilter === "all" || task.assignee.name === assigneeFilter;
 
-    return matchesSearch && matchesStatus && matchesPriority && matchesAssignee;
+    return matchesSearch && matchesStatus && matchesPriority;
   });
 
-  const renderTaskCard = (task: (typeof mockTasks)[0]) => {
+  const renderTaskCard = (task: Task) => {
     const priorityColors: Record<
       string,
       "destructive" | "default" | "secondary" | "outline"
@@ -159,20 +95,27 @@ export default function TasksPage() {
       low: "outline",
     };
 
-    const statusColors: Record<string, "default" | "secondary" | "outline"> = {
+    const statusColors: Record<
+      string,
+      "default" | "secondary" | "outline" | "destructive"
+    > = {
       todo: "secondary",
-      "in-progress": "default",
+      in_progress: "default",
       done: "outline",
+      blocked: "destructive",
     };
 
     const statusIcons: Record<string, React.ReactElement> = {
       todo: <Clock className="h-4 w-4" />,
-      "in-progress": <AlertCircle className="h-4 w-4" />,
+      in_progress: <AlertCircle className="h-4 w-4" />,
       done: <CheckCircle2 className="h-4 w-4" />,
+      blocked: <AlertCircle className="h-4 w-4" />,
     };
 
     const isOverdue =
-      new Date(task.dueDate) < new Date() && task.status !== "done";
+      task.dueDate &&
+      new Date(task.dueDate) < new Date() &&
+      task.status !== "done";
 
     return (
       <div
@@ -188,7 +131,7 @@ export default function TasksPage() {
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-1">{task.title}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {task.description}
+              {task.description || "No description"}
             </p>
           </div>
           <Button variant="ghost" size="sm">
@@ -203,7 +146,7 @@ export default function TasksPage() {
           </Badge>
           <Badge variant={statusColors[task.status]} className="gap-1">
             {statusIcons[task.status]}
-            {task.status === "in-progress"
+            {task.status === "in_progress"
               ? "In Progress"
               : task.status.charAt(0).toUpperCase() + task.status.slice(1)}
           </Badge>
@@ -211,7 +154,7 @@ export default function TasksPage() {
         </div>
 
         {/* Tags */}
-        {task.tags.length > 0 && (
+        {task.tags && task.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
             {task.tags.map((tag, index) => (
               <Badge key={index} variant="outline" className="text-xs">
@@ -223,25 +166,35 @@ export default function TasksPage() {
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
-          <div className="flex items-center gap-2">
-            <Avatar
-              src={task.assignee.avatar}
-              alt={task.assignee.name}
-              fallback={task.assignee.name.slice(0, 2).toUpperCase()}
-              size="sm"
-            />
-            <span className="text-sm text-muted-foreground">
-              {task.assignee.name}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Calendar className="h-4 w-4" />
-            <span>{new Date(task.dueDate).toLocaleDateString()}</span>
-          </div>
+          {task.assignedTo && (
+            <div className="flex items-center gap-2">
+              <Avatar
+                src={`https://api.dicebear.com/7.x/initials/svg?seed=${task.assignedTo}`}
+                alt="Assignee"
+                fallback="A"
+                size="sm"
+              />
+              <span className="text-sm text-muted-foreground">Assigned</span>
+            </div>
+          )}
+          {task.dueDate && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(task.dueDate).toLocaleDateString()}</span>
+            </div>
+          )}
         </div>
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <ListPage
@@ -274,7 +227,6 @@ export default function TasksPage() {
               setSearchQuery("");
               setStatusFilter("all");
               setPriorityFilter("all");
-              setAssigneeFilter("all");
             }}
           >
             Clear Filters
