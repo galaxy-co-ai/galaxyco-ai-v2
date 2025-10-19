@@ -3,7 +3,6 @@
 import { PageShell } from "@/components/templates/page-shell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -17,130 +16,45 @@ import {
   Search,
   FolderKanban,
   Calendar,
-  Users,
   CheckCircle2,
   Clock,
   AlertCircle,
   MoreHorizontal,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 interface Project {
   id: string;
+  workspaceId: string;
   name: string;
-  description: string;
-  status: "planning" | "in-progress" | "review" | "completed";
-  priority: "low" | "medium" | "high";
+  description: string | null;
+  status: string;
+  startDate: string | null;
+  endDate: string | null;
+  budget: number | null;
+  actualCost: number | null;
   progress: number;
-  startDate: string;
-  dueDate: string;
-  team: { name: string; avatar: string }[];
-  tasksTotal: number;
-  tasksCompleted: number;
+  completedTasks: number;
+  totalTasks: number;
+  customerId: string | null;
+  managerId: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const projects: Project[] = [
-  {
-    id: "1",
-    name: "AI Agent Platform v2.0",
-    description: "Major platform upgrade with new features and improved UX",
-    status: "in-progress",
-    priority: "high",
-    progress: 67,
-    startDate: "2025-09-01",
-    dueDate: "2025-11-30",
-    team: [
-      {
-        name: "Sarah Chen",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SC",
-      },
-      {
-        name: "Michael Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MR",
-      },
-      {
-        name: "Emily Watson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=EW",
-      },
-    ],
-    tasksTotal: 45,
-    tasksCompleted: 30,
-  },
-  {
-    id: "2",
-    name: "Customer Onboarding Flow",
-    description: "Streamline new customer signup and setup process",
-    status: "review",
-    priority: "high",
-    progress: 90,
-    startDate: "2025-10-01",
-    dueDate: "2025-10-25",
-    team: [
-      {
-        name: "David Kim",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=DK",
-      },
-      {
-        name: "Lisa Park",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=LP",
-      },
-    ],
-    tasksTotal: 20,
-    tasksCompleted: 18,
-  },
-  {
-    id: "3",
-    name: "Integration Marketplace",
-    description: "Build marketplace for third-party integrations",
-    status: "planning",
-    priority: "medium",
-    progress: 15,
-    startDate: "2025-11-01",
-    dueDate: "2026-01-31",
-    team: [
-      {
-        name: "Alex Johnson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AJ",
-      },
-    ],
-    tasksTotal: 32,
-    tasksCompleted: 5,
-  },
-  {
-    id: "4",
-    name: "Mobile App Launch",
-    description: "Native iOS and Android applications",
-    status: "in-progress",
-    priority: "medium",
-    progress: 42,
-    startDate: "2025-09-15",
-    dueDate: "2025-12-15",
-    team: [
-      {
-        name: "Jordan Lee",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=JL",
-      },
-      {
-        name: "Taylor Smith",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=TS",
-      },
-      {
-        name: "Morgan Davis",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MD",
-      },
-    ],
-    tasksTotal: 56,
-    tasksCompleted: 24,
-  },
-];
-
-const statusConfig = {
+const statusConfig: Record<
+  string,
+  { label: string; icon: any; className: string }
+> = {
   planning: {
     label: "Planning",
     icon: Clock,
     className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
   },
-  "in-progress": {
+  in_progress: {
     label: "In Progress",
     icon: AlertCircle,
     className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
@@ -157,33 +71,56 @@ const statusConfig = {
     className:
       "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
   },
-};
-
-const priorityConfig = {
-  low: {
-    label: "Low",
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
-  },
-  medium: {
-    label: "Medium",
+  on_hold: {
+    label: "On Hold",
+    icon: Clock,
     className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+      "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
   },
-  high: {
-    label: "High",
+  cancelled: {
+    label: "Cancelled",
+    icon: AlertCircle,
     className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
   },
 };
 
 export default function ProjectsPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
 
+  useEffect(() => {
+    async function fetchProjects() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/projects?workspaceId=${currentWorkspace.id}&limit=100`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch projects");
+        const data = await res.json();
+        setProjects(data.projects || []);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+        toast.error("Failed to load projects");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchProjects();
+  }, [currentWorkspace?.id]);
+
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (project.description?.toLowerCase() || "").includes(
+        searchQuery.toLowerCase(),
+      );
     const matchesStatus =
       statusFilter === "all" || project.status === statusFilter;
     return matchesSearch && matchesStatus;
@@ -191,17 +128,21 @@ export default function ProjectsPage() {
 
   const projectsByStatus = {
     planning: filteredProjects.filter((p) => p.status === "planning"),
-    "in-progress": filteredProjects.filter((p) => p.status === "in-progress"),
+    in_progress: filteredProjects.filter((p) => p.status === "in_progress"),
     review: filteredProjects.filter((p) => p.status === "review"),
     completed: filteredProjects.filter((p) => p.status === "completed"),
+    on_hold: filteredProjects.filter((p) => p.status === "on_hold"),
+    cancelled: filteredProjects.filter((p) => p.status === "cancelled"),
   };
 
   const ProjectCard = ({ project }: { project: Project }) => {
-    const StatusIcon = statusConfig[project.status].icon;
-    const daysUntilDue = Math.ceil(
-      (new Date(project.dueDate).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
-    );
+    const StatusIcon = statusConfig[project.status]?.icon || Clock;
+    const daysUntilDue = project.endDate
+      ? Math.ceil(
+          (new Date(project.endDate).getTime() - new Date().getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : null;
 
     return (
       <div className="group rounded-lg border border-border bg-card p-6 hover:border-primary hover:shadow-md transition-all cursor-pointer">
@@ -209,7 +150,7 @@ export default function ProjectsPage() {
           <div className="flex-1">
             <h3 className="font-semibold mb-1">{project.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {project.description}
+              {project.description || "No description"}
             </p>
           </div>
           <Button variant="ghost" size="sm">
@@ -218,13 +159,12 @@ export default function ProjectsPage() {
         </div>
 
         <div className="flex items-center gap-2 mb-4">
-          <Badge className={statusConfig[project.status].className}>
-            <StatusIcon className="h-3 w-3 mr-1" />
-            {statusConfig[project.status].label}
-          </Badge>
-          <Badge className={priorityConfig[project.priority].className}>
-            {priorityConfig[project.priority].label}
-          </Badge>
+          {statusConfig[project.status] && (
+            <Badge className={statusConfig[project.status].className}>
+              <StatusIcon className="h-3 w-3 mr-1" />
+              {statusConfig[project.status].label}
+            </Badge>
+          )}
         </div>
 
         <div className="space-y-3 mb-4">
@@ -245,41 +185,25 @@ export default function ProjectsPage() {
             <div className="flex items-center gap-1 text-muted-foreground">
               <CheckCircle2 className="h-4 w-4" />
               <span>
-                {project.tasksCompleted} / {project.tasksTotal} tasks
+                {project.completedTasks} / {project.totalTasks} tasks
               </span>
             </div>
-            <div
-              className={`flex items-center gap-1 ${
-                daysUntilDue < 7 ? "text-destructive" : "text-muted-foreground"
-              }`}
-            >
-              <Calendar className="h-4 w-4" />
-              <span>{daysUntilDue}d left</span>
-            </div>
+            {daysUntilDue !== null && (
+              <div
+                className={`flex items-center gap-1 ${
+                  daysUntilDue < 7
+                    ? "text-destructive"
+                    : "text-muted-foreground"
+                }`}
+              >
+                <Calendar className="h-4 w-4" />
+                <span>{daysUntilDue}d left</span>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-border">
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-muted-foreground" />
-            <div className="flex -space-x-2">
-              {project.team.slice(0, 3).map((member, idx) => (
-                <Avatar
-                  key={idx}
-                  src={member.avatar}
-                  alt={member.name}
-                  fallback={member.name.substring(0, 2)}
-                  size="sm"
-                  className="ring-2 ring-background"
-                />
-              ))}
-              {project.team.length > 3 && (
-                <div className="h-8 w-8 rounded-full bg-background-subtle border-2 border-background flex items-center justify-center text-xs font-medium">
-                  +{project.team.length - 3}
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="flex items-center justify-end pt-4 border-t border-border">
           <Button size="sm" variant="outline">
             View
           </Button>
@@ -287,6 +211,14 @@ export default function ProjectsPage() {
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <PageShell
@@ -309,7 +241,7 @@ export default function ProjectsPage() {
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">In Progress</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "in-progress").length}
+            {projects.filter((p) => p.status === "in_progress").length}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
@@ -344,9 +276,11 @@ export default function ProjectsPage() {
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
             <SelectItem value="planning">Planning</SelectItem>
-            <SelectItem value="in-progress">In Progress</SelectItem>
+            <SelectItem value="in_progress">In Progress</SelectItem>
             <SelectItem value="review">Review</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
+            <SelectItem value="on_hold">On Hold</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
         <div className="flex gap-2">
@@ -383,12 +317,9 @@ export default function ProjectsPage() {
             <div key={status} className="space-y-3">
               <div className="flex items-center justify-between p-3 rounded-lg bg-background-subtle">
                 <div className="flex items-center gap-2">
-                  {/* @ts-ignore */}
                   {statusConfig[status] && (
                     <>
-                      {/* @ts-ignore */}
                       <Badge className={statusConfig[status].className}>
-                        {/* @ts-ignore */}
                         {statusConfig[status].label}
                       </Badge>
                       <span className="text-sm text-muted-foreground">
@@ -406,18 +337,13 @@ export default function ProjectsPage() {
                   >
                     <h4 className="font-semibold mb-2">{project.name}</h4>
                     <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {project.description}
+                      {project.description || "No description"}
                     </p>
-                    <Badge
-                      className={priorityConfig[project.priority].className}
-                    >
-                      {priorityConfig[project.priority].label}
-                    </Badge>
                     <div className="mt-3 pt-3 border-t border-border">
                       <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                         <span>{project.progress}% complete</span>
                         <span>
-                          {project.tasksCompleted}/{project.tasksTotal}
+                          {project.completedTasks}/{project.totalTasks}
                         </span>
                       </div>
                       <div className="h-1.5 bg-background-subtle rounded-full overflow-hidden">
