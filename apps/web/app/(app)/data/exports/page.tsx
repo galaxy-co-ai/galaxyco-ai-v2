@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { PageShell } from "@/components/templates/page-shell";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,40 +14,83 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Download, FileText, CheckCircle2, Clock } from "lucide-react";
+import { toast } from "sonner";
 
-const exportHistory = [
-  {
-    id: "1",
-    type: "Agents",
-    format: "CSV",
-    status: "completed",
-    createdAt: "2025-10-18 14:30",
-    size: "2.4 MB",
-  },
-  {
-    id: "2",
-    type: "Executions",
-    format: "JSON",
-    status: "completed",
-    createdAt: "2025-10-17 09:15",
-    size: "8.1 MB",
-  },
-  {
-    id: "3",
-    type: "Users",
-    format: "Excel",
-    status: "processing",
-    createdAt: "2025-10-18 15:45",
-    size: "-",
-  },
-];
+interface ExportRecord {
+  id: string;
+  resourceType: string;
+  format: string;
+  status: string;
+  createdAt: string;
+  fileSize?: number | null;
+}
 
 export default function ExportsPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [exportHistory, setExportHistory] = useState<ExportRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
   const [exportConfig, setExportConfig] = useState({
     entity: "agents",
     format: "csv",
     dateRange: "last-30-days",
   });
+
+  useEffect(() => {
+    async function fetchExports() {
+      if (!currentWorkspace?.id) return;
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/exports?workspaceId=${currentWorkspace.id}&limit=20`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch exports");
+        const json = await res.json();
+        setExportHistory(json.exports || []);
+      } catch (e) {
+        console.error("Failed to load exports", e);
+        toast.error("Failed to load export history");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchExports();
+  }, [currentWorkspace?.id]);
+
+  const handleCreateExport = async () => {
+    if (!currentWorkspace?.id) return;
+    try {
+      setIsCreating(true);
+      const res = await fetch("/api/exports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          name: `${exportConfig.entity}-export`,
+          resource: exportConfig.entity,
+          format: exportConfig.format,
+          filters: { dateRange: exportConfig.dateRange },
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to create export");
+      const json = await res.json();
+      toast.success(
+        "Export created! Processing in background. Check back soon.",
+      );
+      // Refresh list
+      const listRes = await fetch(
+        `/api/exports?workspaceId=${currentWorkspace.id}&limit=20`,
+      );
+      if (listRes.ok) {
+        const listJson = await listRes.json();
+        setExportHistory(listJson.exports || []);
+      }
+    } catch (e) {
+      toast.error("Failed to create export");
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   return (
     <PageShell
@@ -119,9 +163,13 @@ export default function ExportsPage() {
               </Select>
             </div>
 
-            <Button className="w-full mt-4">
+            <Button
+              className="w-full mt-4"
+              onClick={handleCreateExport}
+              disabled={isCreating || !currentWorkspace?.id}
+            >
               <Download className="mr-2 h-4 w-4" />
-              Create Export
+              {isCreating ? "Creating..." : "Create Export"}
             </Button>
           </div>
         </div>
@@ -160,42 +208,59 @@ export default function ExportsPage() {
       {/* Export History */}
       <div className="mt-6 rounded-lg border border-border bg-card p-6">
         <h3 className="text-lg font-semibold mb-4">Export History</h3>
-        <div className="space-y-3">
-          {exportHistory.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between rounded-lg border border-border bg-background p-4"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <FileText className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium">{item.type}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {item.format}
-                    </Badge>
-                    {item.status === "completed" ? (
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                    ) : (
-                      <Clock className="h-4 w-4 text-yellow-600" />
-                    )}
+        {isLoading ? (
+          <div className="text-center text-muted-foreground py-8">
+            Loading...
+          </div>
+        ) : exportHistory.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">
+            No exports yet. Create your first export above.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {exportHistory.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between rounded-lg border border-border bg-background p-4"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                    <FileText className="h-5 w-5 text-primary" />
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {item.createdAt} • {item.size}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-medium capitalize">
+                        {item.resourceType || "Export"}
+                      </span>
+                      <Badge variant="secondary" className="text-xs uppercase">
+                        {item.format}
+                      </Badge>
+                      {item.status === "completed" ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      ) : item.status === "processing" ? (
+                        <Clock className="h-4 w-4 text-yellow-600" />
+                      ) : (
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {new Date(item.createdAt).toLocaleString()} •{" "}
+                      {item.fileSize
+                        ? `${(item.fileSize / 1024 / 1024).toFixed(2)} MB`
+                        : "—"}
+                    </div>
                   </div>
                 </div>
+                {item.status === "completed" && (
+                  <Button variant="outline" size="sm">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                  </Button>
+                )}
               </div>
-              {item.status === "completed" && (
-                <Button variant="outline" size="sm">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </PageShell>
   );

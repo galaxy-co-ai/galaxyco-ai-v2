@@ -82,17 +82,32 @@ export default function SegmentsPage() {
       try {
         setIsLoading(true);
         const res = await fetch(
-          `/api/segments?workspaceId=${currentWorkspace.id}`,
+          `/api/segments?workspaceId=${currentWorkspace.id}&limit=50`,
         );
 
         if (!res.ok) {
-          console.warn("Segments API not available, using mock data");
-          setSegments(mockSegments);
-          return;
+          throw new Error("Failed to fetch segments");
         }
 
         const data = await res.json();
-        setSegments(data.segments || mockSegments);
+        // Map API response to match the Segment interface
+        const apiSegments = (data.segments || []).map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          description: s.description || "",
+          criteria: s.criteria?.rules
+            ? s.criteria.rules.map(
+                (r: any) => `${r.field} ${r.operator} ${r.value || ""}`,
+              )
+            : [],
+          count: s.memberCount || 0,
+          growth: 0, // TODO: Calculate from historical data
+          lastUpdated: new Date(
+            s.updatedAt || s.createdAt,
+          ).toLocaleTimeString(),
+          color: "bg-blue-500", // TODO: Use segment color from DB
+        }));
+        setSegments(apiSegments.length > 0 ? apiSegments : mockSegments);
       } catch (error) {
         console.error("Failed to fetch segments:", error);
         setSegments(mockSegments);
