@@ -1,20 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ListPage } from "@/components/templates/list-page";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { mockWorkflows } from "@/lib/fixtures";
+import { Spinner } from "@/components/ui/spinner";
 import { formatRelativeTime } from "@/lib/utils";
 import { Plus, ArrowRight } from "lucide-react";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
+
+interface Workflow {
+  id: string;
+  workspaceId: string;
+  name: string;
+  description: string;
+  status: "active" | "draft" | "paused" | "archived";
+  steps: Array<{
+    id: string;
+    type: string;
+    name: string;
+    config?: any;
+  }>;
+  metrics: {
+    totalExecutions: number;
+    successfulExecutions: number;
+    failedExecutions: number;
+    lastExecutedAt: string | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function WorkflowsPage() {
-  const workflows = mockWorkflows;
+  const { currentWorkspace } = useWorkspace();
+  const [workflows, setWorkflows] = useState<Workflow[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
+
+  // Fetch workflows from API
+  useEffect(() => {
+    async function fetchWorkflows() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/workflows?workspaceId=${currentWorkspace.id}`,
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch workflows");
+        }
+
+        const data = await res.json();
+        setWorkflows(data.workflows || []);
+      } catch (error) {
+        console.error("Error fetching workflows:", error);
+        toast.error("Failed to load workflows");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchWorkflows();
+  }, [currentWorkspace?.id]);
 
   // Filter workflows
   const filteredWorkflows = workflows.filter((workflow) => {
@@ -43,6 +97,15 @@ export default function WorkflowsPage() {
     setActiveFilters({});
     setSearchQuery("");
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <ListPage
