@@ -1,114 +1,90 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ListPage } from "@/components/templates/list-page";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, UserPlus } from "lucide-react";
 
-interface User {
+interface AdminUser {
   id: string;
-  name: string;
   email: string;
-  avatar?: string;
-  role: "admin" | "member" | "viewer";
-  status: "active" | "inactive" | "suspended";
-  lastActive: string;
-  workspace: string;
+  firstName: string | null;
+  lastName: string | null;
+  avatarUrl: string | null;
+  lastLoginAt: string | null;
+  workspaceMembers?: Array<{
+    role: string;
+    isActive: boolean;
+    workspace: { id: string; name: string };
+  }>;
 }
-
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "Sarah Chen",
-    email: "sarah@company.com",
-    role: "admin",
-    status: "active",
-    lastActive: "2 minutes ago",
-    workspace: "Acme Corp",
-  },
-  {
-    id: "2",
-    name: "John Smith",
-    email: "john@startup.io",
-    role: "member",
-    status: "active",
-    lastActive: "1 hour ago",
-    workspace: "Startup Inc",
-  },
-  {
-    id: "3",
-    name: "Emily Johnson",
-    email: "emily@enterprise.com",
-    role: "admin",
-    status: "active",
-    lastActive: "3 hours ago",
-    workspace: "Enterprise LLC",
-  },
-  {
-    id: "4",
-    name: "Michael Brown",
-    email: "michael@tech.com",
-    role: "member",
-    status: "inactive",
-    lastActive: "2 days ago",
-    workspace: "Tech Solutions",
-  },
-  {
-    id: "5",
-    name: "Lisa Garcia",
-    email: "lisa@agency.co",
-    role: "viewer",
-    status: "suspended",
-    lastActive: "1 week ago",
-    workspace: "Digital Agency",
-  },
-];
-
-const roleColors = {
-  admin:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
-  member: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-  viewer: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-};
-
-const statusColors = {
-  active: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-  inactive:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
-  suspended: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
-};
 
 export default function AdminUsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredUsers = mockUsers.filter((user) => {
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      if (
-        !user.name.toLowerCase().includes(query) &&
-        !user.email.toLowerCase().includes(query)
-      ) {
-        return false;
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(`/api/admin/users?limit=100`);
+        if (!res.ok) throw new Error("Failed to fetch users");
+        const json = await res.json();
+        setUsers(json.users || []);
+      } catch (e) {
+        console.error("Failed to load users", e);
+      } finally {
+        setIsLoading(false);
       }
     }
+    fetchUsers();
+  }, []);
+
+  const rows = useMemo(() => {
+    return users.map((u) => ({
+      id: u.id,
+      name: `${u.firstName || ""} ${u.lastName || ""}`.trim() || u.email,
+      email: u.email,
+      role: u.workspaceMembers?.[0]?.role || "member",
+      status: u.workspaceMembers?.[0]?.isActive ? "active" : "inactive",
+      lastActive: u.lastLoginAt
+        ? new Date(u.lastLoginAt).toLocaleString()
+        : "—",
+      workspace: u.workspaceMembers?.[0]?.workspace?.name || "—",
+    }));
+  }, [users]);
+
+  const filteredUsers = rows.filter((user) => {
+    const q = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      q === "" ||
+      user.name.toLowerCase().includes(q) ||
+      user.email.toLowerCase().includes(q);
 
     const roleFilter = activeFilters.role || [];
-    if (roleFilter.length > 0 && !roleFilter.includes(user.role)) {
-      return false;
-    }
-
     const statusFilter = activeFilters.status || [];
-    if (statusFilter.length > 0 && !statusFilter.includes(user.status)) {
-      return false;
-    }
 
-    return true;
+    const matchesRole =
+      roleFilter.length === 0 || roleFilter.includes(user.role);
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(user.status);
+
+    return matchesSearch && matchesRole && matchesStatus;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <ListPage
@@ -129,9 +105,9 @@ export default function AdminUsersPage() {
           label: "Role",
           type: "checkbox",
           options: [
+            { value: "owner", label: "Owner" },
             { value: "admin", label: "Admin" },
             { value: "member", label: "Member" },
-            { value: "viewer", label: "Viewer" },
           ],
         },
         {
@@ -141,7 +117,6 @@ export default function AdminUsersPage() {
           options: [
             { value: "active", label: "Active" },
             { value: "inactive", label: "Inactive" },
-            { value: "suspended", label: "Suspended" },
           ],
         },
       ]}
@@ -205,17 +180,13 @@ export default function AdminUsersPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <Badge
-                      variant="secondary"
-                      className={roleColors[user.role]}
-                    >
-                      {user.role}
-                    </Badge>
+                    <Badge variant="secondary">{user.role}</Badge>
                   </td>
                   <td className="px-4 py-3">
                     <Badge
-                      variant="secondary"
-                      className={statusColors[user.status]}
+                      variant={
+                        user.status === "active" ? "success" : "secondary"
+                      }
                     >
                       {user.status}
                     </Badge>

@@ -12,41 +12,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const platformMetrics = [
-  {
-    label: "Total Users",
-    value: "2,847",
-    change: "+12.5%",
-    trend: "up" as const,
-    icon: Users,
-    color: "text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400",
-  },
-  {
-    label: "Active Workspaces",
-    value: "482",
-    change: "+8.2%",
-    trend: "up" as const,
-    icon: Building2,
-    color:
-      "text-purple-600 bg-purple-50 dark:bg-purple-950 dark:text-purple-400",
-  },
-  {
-    label: "API Calls (24h)",
-    value: "1.2M",
-    change: "+15.8%",
-    trend: "up" as const,
-    icon: Activity,
-    color: "text-cyan-600 bg-cyan-50 dark:bg-cyan-950 dark:text-cyan-400",
-  },
-  {
-    label: "Revenue (MTD)",
-    value: "$48,392",
-    change: "+22.4%",
-    trend: "up" as const,
-    icon: DollarSign,
-    color: "text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400",
-  },
-];
+const platformMetrics: Array<{
+  label: string;
+  value: string;
+  change: string;
+  trend: "up" | "down";
+  icon: any;
+  color: string;
+}> = [];
 
 const recentActivity = [
   {
@@ -102,6 +75,66 @@ const systemAlerts = [
 ];
 
 export default function AdminDashboardPage() {
+  const [metrics, setMetrics] = React.useState<typeof platformMetrics>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/admin/analytics?period=last-30-days");
+        if (!res.ok) throw new Error("Failed to fetch analytics");
+        const json = await res.json();
+        const d = json.analytics?.data;
+        if (d) {
+          setMetrics([
+            {
+              label: "Total Users",
+              value: (d.totalUsers || 0).toLocaleString(),
+              change: "+—%",
+              trend: "up",
+              icon: Users,
+              color:
+                "text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400",
+            },
+            {
+              label: "Total Workspaces",
+              value: (d.totalWorkspaces || 0).toLocaleString(),
+              change: "+—%",
+              trend: "up",
+              icon: Building2,
+              color:
+                "text-purple-600 bg-purple-50 dark:bg-purple-950 dark:text-purple-400",
+            },
+            {
+              label: "Executions (30d)",
+              value: (d.recentExecutions || 0).toLocaleString(),
+              change: "+—%",
+              trend: "up",
+              icon: Activity,
+              color:
+                "text-cyan-600 bg-cyan-50 dark:bg-cyan-950 dark:text-cyan-400",
+            },
+            {
+              label: "Total Executions",
+              value: (d.totalExecutions || 0).toLocaleString(),
+              change: "+—%",
+              trend: "up",
+              icon: DollarSign,
+              color:
+                "text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400",
+            },
+          ]);
+        }
+      } catch (e) {
+        // keep empty metrics and show rest of page
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
   return (
     <PageShell
       title="Admin Dashboard"
@@ -111,7 +144,7 @@ export default function AdminDashboardPage() {
       <div className="space-y-6">
         {/* Platform Metrics */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {platformMetrics.map((metric) => {
+          {metrics.map((metric) => {
             const Icon = metric.icon;
             return (
               <div

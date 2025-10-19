@@ -1,105 +1,81 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ListPage } from "@/components/templates/list-page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building2, Users, Bot, Database, Plus } from "lucide-react";
 
-interface Workspace {
+interface AdminWorkspace {
   id: string;
   name: string;
-  plan: "free" | "pro" | "enterprise";
-  users: number;
-  agents: number;
-  storage: string;
-  created: string;
-  status: "active" | "suspended" | "trial";
+  slug: string | null;
+  subscriptionTier: string | null;
+  subscriptionStatus: string | null;
+  isActive: boolean | null;
+  createdAt: string;
+  members?: Array<{ userId: string }>;
 }
-
-const mockWorkspaces: Workspace[] = [
-  {
-    id: "1",
-    name: "Acme Corp",
-    plan: "enterprise",
-    users: 45,
-    agents: 28,
-    storage: "12.4 GB",
-    created: "2024-01-15",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Startup Inc",
-    plan: "pro",
-    users: 8,
-    agents: 12,
-    storage: "2.1 GB",
-    created: "2024-06-20",
-    status: "active",
-  },
-  {
-    id: "3",
-    name: "Tech Solutions",
-    plan: "free",
-    users: 3,
-    agents: 3,
-    storage: "420 MB",
-    created: "2024-09-05",
-    status: "trial",
-  },
-  {
-    id: "4",
-    name: "Digital Agency",
-    plan: "pro",
-    users: 12,
-    agents: 18,
-    storage: "5.8 GB",
-    created: "2024-03-10",
-    status: "suspended",
-  },
-];
-
-const planColors = {
-  free: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-  pro: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-  enterprise:
-    "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
-};
-
-const statusColors = {
-  active: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-  trial:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
-  suspended: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
-};
 
 export default function AdminWorkspacesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
+  const [workspaces, setWorkspaces] = useState<AdminWorkspace[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredWorkspaces = mockWorkspaces.filter((workspace) => {
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      if (!workspace.name.toLowerCase().includes(query)) {
-        return false;
+  useEffect(() => {
+    async function fetchWorkspaces() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(`/api/admin/workspaces?limit=100`);
+        if (!res.ok) throw new Error("Failed to fetch workspaces");
+        const json = await res.json();
+        setWorkspaces(json.workspaces || []);
+      } catch (e) {
+        console.error("Failed to load workspaces", e);
+      } finally {
+        setIsLoading(false);
       }
     }
+    fetchWorkspaces();
+  }, []);
+
+  const rows = useMemo(() => {
+    return workspaces.map((w) => ({
+      id: w.id,
+      name: w.name,
+      plan: (w.subscriptionTier as "free" | "pro" | "enterprise") || "free",
+      users: w.members?.length || 0,
+      agents: 0,
+      storage: "—",
+      created: w.createdAt,
+      status: w.isActive ? "active" : "suspended",
+    }));
+  }, [workspaces]);
+
+  const filteredWorkspaces = rows.filter((workspace) => {
+    const q = searchQuery.trim().toLowerCase();
+    const matchesSearch = q === "" || workspace.name.toLowerCase().includes(q);
 
     const planFilter = activeFilters.plan || [];
-    if (planFilter.length > 0 && !planFilter.includes(workspace.plan)) {
-      return false;
-    }
-
     const statusFilter = activeFilters.status || [];
-    if (statusFilter.length > 0 && !statusFilter.includes(workspace.status)) {
-      return false;
-    }
+    const matchesPlan =
+      planFilter.length === 0 || planFilter.includes(workspace.plan);
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(workspace.status);
 
-    return true;
+    return matchesSearch && matchesPlan && matchesStatus;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <ListPage
@@ -131,7 +107,6 @@ export default function AdminWorkspacesPage() {
           type: "checkbox",
           options: [
             { value: "active", label: "Active" },
-            { value: "trial", label: "Trial" },
             { value: "suspended", label: "Suspended" },
           ],
         },
@@ -172,12 +147,25 @@ export default function AdminWorkspacesPage() {
             </div>
 
             <div className="flex gap-2 mb-4">
-              <Badge variant="secondary" className={planColors[workspace.plan]}>
+              <Badge
+                variant="secondary"
+                className={
+                  workspace.plan === "enterprise"
+                    ? "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                    : workspace.plan === "pro"
+                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                      : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                }
+              >
                 {workspace.plan}
               </Badge>
               <Badge
                 variant="secondary"
-                className={statusColors[workspace.status]}
+                className={
+                  workspace.status === "active"
+                    ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                    : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+                }
               >
                 {workspace.status}
               </Badge>

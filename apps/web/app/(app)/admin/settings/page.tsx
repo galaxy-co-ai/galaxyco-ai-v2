@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageShell } from "@/components/templates/page-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,13 +9,52 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 
 export default function AdminSettingsPage() {
-  const [settings, setSettings] = useState({
-    siteName: "GalaxyCo.ai",
-    supportEmail: "support@galaxyco.ai",
-    signupsEnabled: true,
-    maintenanceMode: false,
-    twoFactorRequired: false,
-  });
+  const [settings, setSettings] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/admin/settings");
+        if (!res.ok) throw new Error("Failed to fetch settings");
+        const json = await res.json();
+        setSettings(json.settings || {});
+      } catch (e) {
+        console.error("Failed to load admin settings", e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchSettings();
+  }, []);
+
+  async function saveSettings(updated: any) {
+    try {
+      setIsSaving(true);
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) throw new Error("Failed to save settings");
+      const json = await res.json();
+      setSettings(json.settings);
+    } catch (e) {
+      console.error("Failed to save settings", e);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  if (isLoading || !settings) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <PageShell
@@ -43,7 +82,7 @@ export default function AdminSettingsPage() {
                 <Label htmlFor="siteName">Site Name</Label>
                 <Input
                   id="siteName"
-                  value={settings.siteName}
+                  value={settings.siteName || ""}
                   onChange={(e) =>
                     setSettings({ ...settings, siteName: e.target.value })
                   }
@@ -54,7 +93,7 @@ export default function AdminSettingsPage() {
                 <Input
                   id="supportEmail"
                   type="email"
-                  value={settings.supportEmail}
+                  value={settings.supportEmail || ""}
                   onChange={(e) =>
                     setSettings({ ...settings, supportEmail: e.target.value })
                   }
@@ -69,7 +108,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   id="signups"
-                  checked={settings.signupsEnabled}
+                  checked={!!settings.signupsEnabled}
                   onCheckedChange={(checked) =>
                     setSettings({ ...settings, signupsEnabled: checked })
                   }
@@ -84,15 +123,25 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   id="maintenance"
-                  checked={settings.maintenanceMode}
+                  checked={!!settings.maintenanceMode}
                   onCheckedChange={(checked) =>
                     setSettings({ ...settings, maintenanceMode: checked })
                   }
                 />
               </div>
               <div className="flex gap-3 pt-4">
-                <Button>Save Changes</Button>
-                <Button variant="outline">Reset</Button>
+                <Button
+                  onClick={() => saveSettings(settings)}
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.location.reload()}
+                >
+                  Reset
+                </Button>
               </div>
             </div>
           </div>
@@ -111,15 +160,25 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   id="twoFactor"
-                  checked={settings.twoFactorRequired}
+                  checked={!!settings.twoFactorRequired}
                   onCheckedChange={(checked) =>
                     setSettings({ ...settings, twoFactorRequired: checked })
                   }
                 />
               </div>
               <div className="flex gap-3 pt-4">
-                <Button>Save Changes</Button>
-                <Button variant="outline">Reset</Button>
+                <Button
+                  onClick={() => saveSettings(settings)}
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.location.reload()}
+                >
+                  Reset
+                </Button>
               </div>
             </div>
           </div>
