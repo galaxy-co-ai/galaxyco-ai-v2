@@ -53,32 +53,40 @@ export async function GET(req: NextRequest) {
 
     const stubIntegrations = [
       {
-        id: "1",
-        name: "Slack",
-        type: "communication",
-        status: "active",
-        description: "Send notifications to Slack channels",
-        config: {
-          webhookUrl: "https://hooks.slack.com/services/...",
-          channel: "#general",
-        },
-        connectedAt: new Date(
-          Date.now() - 30 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
+        id: "gmail-stub",
+        name: "Gmail",
+        type: "gmail",
+        status: "inactive",
+        description: "Send and read emails through Gmail",
+        config: {},
+        connectedAt: null,
       },
       {
-        id: "2",
+        id: "calendar-stub",
+        name: "Google Calendar",
+        type: "calendar",
+        status: "inactive",
+        description: "Create and manage calendar events",
+        config: {},
+        connectedAt: null,
+      },
+      {
+        id: "slack-stub",
+        name: "Slack",
+        type: "slack",
+        status: "inactive",
+        description: "Send notifications to Slack channels",
+        config: {},
+        connectedAt: null,
+      },
+      {
+        id: "github-stub",
         name: "GitHub",
-        type: "development",
-        status: "active",
+        type: "github",
+        status: "inactive",
         description: "Create issues and PRs automatically",
-        config: {
-          repository: "user/repo",
-          token: "***",
-        },
-        connectedAt: new Date(
-          Date.now() - 60 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
+        config: {},
+        connectedAt: null,
       },
     ];
 
