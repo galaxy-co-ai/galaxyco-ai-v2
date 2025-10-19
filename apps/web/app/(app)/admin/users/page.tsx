@@ -5,7 +5,30 @@ import { ListPage } from "@/components/templates/list-page";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, UserPlus } from "lucide-react";
+import { MoreHorizontal, UserPlus, Edit, Trash2, Eye } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface AdminUser {
   id: string;
@@ -28,6 +51,11 @@ export default function AdminUsersPage() {
   );
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const [editUser, setEditUser] = useState<AdminUser | null>(null);
+  const [deleteUser, setDeleteUser] = useState<AdminUser | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -45,6 +73,48 @@ export default function AdminUsersPage() {
     }
     fetchUsers();
   }, []);
+
+  async function handleUpdateUser(updatedData: Partial<AdminUser>) {
+    if (!editUser) return;
+    try {
+      setIsUpdating(true);
+      const res = await fetch(`/api/admin/users/${editUser.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+      if (!res.ok) throw new Error("Failed to update user");
+      // Refresh users list
+      const usersRes = await fetch(`/api/admin/users?limit=100`);
+      if (usersRes.ok) {
+        const json = await usersRes.json();
+        setUsers(json.users || []);
+      }
+      setEditUser(null);
+    } catch (e) {
+      console.error("Failed to update user", e);
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
+  async function handleDeleteUser() {
+    if (!deleteUser) return;
+    try {
+      setIsDeleting(true);
+      const res = await fetch(`/api/admin/users/${deleteUser.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete user");
+      // Remove from local state
+      setUsers(users.filter((u) => u.id !== deleteUser.id));
+      setDeleteUser(null);
+    } catch (e) {
+      console.error("Failed to delete user", e);
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   const rows = useMemo(() => {
     return users.map((u) => ({
@@ -196,9 +266,46 @@ export default function AdminUsersPage() {
                     {user.lastActive}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="sm">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setSelectedUser(
+                              users.find((u) => u.id === user.id) || null,
+                            )
+                          }
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setEditUser(
+                              users.find((u) => u.id === user.id) || null,
+                            )
+                          }
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setDeleteUser(
+                              users.find((u) => u.id === user.id) || null,
+                            )
+                          }
+                          className="text-red-600 dark:text-red-400"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete User
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </td>
                 </tr>
               ))}
@@ -206,6 +313,192 @@ export default function AdminUsersPage() {
           </table>
         </div>
       </div>
+
+      {/* View User Modal */}
+      <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+            <DialogDescription>
+              View detailed information about this user.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Avatar
+                  fallback={(
+                    `${selectedUser.firstName || ""} ${selectedUser.lastName || ""}`.trim() ||
+                    selectedUser.email
+                  )
+                    .substring(0, 2)
+                    .toUpperCase()}
+                />
+                <div>
+                  <p className="font-medium">
+                    {`${selectedUser.firstName || ""} ${selectedUser.lastName || ""}`.trim() ||
+                      selectedUser.email}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedUser.email}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-medium">User ID</p>
+                  <p className="text-muted-foreground">{selectedUser.id}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Last Login</p>
+                  <p className="text-muted-foreground">
+                    {selectedUser.lastLoginAt
+                      ? new Date(selectedUser.lastLoginAt).toLocaleString()
+                      : "Never"}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium">Role</p>
+                  <p className="text-muted-foreground">
+                    {selectedUser.workspaceMembers?.[0]?.role || "member"}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium">Status</p>
+                  <p className="text-muted-foreground">
+                    {selectedUser.workspaceMembers?.[0]?.isActive
+                      ? "Active"
+                      : "Inactive"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedUser(null)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit User Modal */}
+      <Dialog open={!!editUser} onOpenChange={() => setEditUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Update user information and permissions.
+            </DialogDescription>
+          </DialogHeader>
+          {editUser && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                handleUpdateUser({
+                  firstName: formData.get("firstName") as string,
+                  lastName: formData.get("lastName") as string,
+                  email: formData.get("email") as string,
+                });
+              }}
+            >
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      defaultValue={editUser.firstName || ""}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      defaultValue={editUser.lastName || ""}
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    defaultValue={editUser.email}
+                    required
+                  />
+                </div>
+              </div>
+              <DialogFooter className="mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setEditUser(null)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isUpdating}>
+                  {isUpdating ? "Updating..." : "Update User"}
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete User Modal */}
+      <Dialog open={!!deleteUser} onOpenChange={() => setDeleteUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this user? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          {deleteUser && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                <Avatar
+                  fallback={(
+                    `${deleteUser.firstName || ""} ${deleteUser.lastName || ""}`.trim() ||
+                    deleteUser.email
+                  )
+                    .substring(0, 2)
+                    .toUpperCase()}
+                />
+                <div>
+                  <p className="font-medium">
+                    {`${deleteUser.firstName || ""} ${deleteUser.lastName || ""}`.trim() ||
+                      deleteUser.email}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {deleteUser.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteUser(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteUser}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete User"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </ListPage>
   );
 }

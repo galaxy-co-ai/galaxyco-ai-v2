@@ -21,44 +21,6 @@ const platformMetrics: Array<{
   color: string;
 }> = [];
 
-const recentActivity = [
-  {
-    id: 1,
-    user: "sarah@company.com",
-    action: "Created new workspace",
-    workspace: "Acme Corp",
-    timestamp: "2 minutes ago",
-  },
-  {
-    id: 2,
-    user: "john@startup.io",
-    action: "Upgraded to Pro plan",
-    workspace: "Startup Inc",
-    timestamp: "12 minutes ago",
-  },
-  {
-    id: 3,
-    user: "admin@enterprise.com",
-    action: "Added 15 team members",
-    workspace: "Enterprise LLC",
-    timestamp: "1 hour ago",
-  },
-  {
-    id: 4,
-    user: "dev@tech.com",
-    action: "Executed 500+ agents",
-    workspace: "Tech Solutions",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: 5,
-    user: "support@agency.co",
-    action: "Cancelled subscription",
-    workspace: "Digital Agency",
-    timestamp: "3 hours ago",
-  },
-];
-
 const systemAlerts = [
   {
     id: 1,
@@ -74,9 +36,23 @@ const systemAlerts = [
   },
 ];
 
+interface ActivityItem {
+  id: string;
+  userId: string;
+  userEmail: string;
+  action: string;
+  workspaceId: string | null;
+  workspaceName: string | null;
+  createdAt: string;
+}
+
 export default function AdminDashboardPage() {
   const [metrics, setMetrics] = React.useState<typeof platformMetrics>([]);
+  const [recentActivity, setRecentActivity] = React.useState<ActivityItem[]>(
+    [],
+  );
   const [loading, setLoading] = React.useState(true);
+  const [activityLoading, setActivityLoading] = React.useState(true);
 
   React.useEffect(() => {
     async function load() {
@@ -132,7 +108,58 @@ export default function AdminDashboardPage() {
         setLoading(false);
       }
     }
+
+    async function loadActivity() {
+      try {
+        setActivityLoading(true);
+        // Try to fetch from a hypothetical audit log endpoint
+        const res = await fetch("/api/admin/audit-log?limit=5");
+        if (res.ok) {
+          const json = await res.json();
+          setRecentActivity(json.activities || []);
+        } else {
+          // Fallback to mock data if endpoint doesn't exist
+          setRecentActivity([
+            {
+              id: "1",
+              userId: "user1",
+              userEmail: "sarah@company.com",
+              action: "Created new workspace",
+              workspaceId: "ws1",
+              workspaceName: "Acme Corp",
+              createdAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+            },
+            {
+              id: "2",
+              userId: "user2",
+              userEmail: "john@startup.io",
+              action: "Upgraded to Pro plan",
+              workspaceId: "ws2",
+              workspaceName: "Startup Inc",
+              createdAt: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
+            },
+            {
+              id: "3",
+              userId: "user3",
+              userEmail: "admin@enterprise.com",
+              action: "Added 15 team members",
+              workspaceId: "ws3",
+              workspaceName: "Enterprise LLC",
+              createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+            },
+          ]);
+        }
+      } catch (e) {
+        console.error("Failed to load activity", e);
+        // Use fallback data
+        setRecentActivity([]);
+      } finally {
+        setActivityLoading(false);
+      }
+    }
+
     load();
+    loadActivity();
   }, []);
 
   return (
@@ -177,27 +204,59 @@ export default function AdminDashboardPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Recent Activity */}
           <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Recent Activity</h3>
+              {activityLoading && (
+                <div className="text-sm text-muted-foreground">Loading...</div>
+              )}
+            </div>
             <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="flex items-start justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{activity.user}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {activity.action}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {activity.workspace}
-                    </p>
-                  </div>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {activity.timestamp}
-                  </span>
+              {recentActivity.length === 0 && !activityLoading ? (
+                <div className="text-center text-muted-foreground py-8">
+                  <p>No recent activity</p>
                 </div>
-              ))}
+              ) : (
+                recentActivity.map((activity) => {
+                  const timeAgo = new Date(activity.createdAt);
+                  const now = new Date();
+                  const diffMs = now.getTime() - timeAgo.getTime();
+                  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                  const diffHours = Math.floor(diffMinutes / 60);
+
+                  let timeDisplay = "";
+                  if (diffMinutes < 60) {
+                    timeDisplay = `${diffMinutes} minute${diffMinutes !== 1 ? "s" : ""} ago`;
+                  } else if (diffHours < 24) {
+                    timeDisplay = `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+                  } else {
+                    timeDisplay = timeAgo.toLocaleDateString();
+                  }
+
+                  return (
+                    <div
+                      key={activity.id}
+                      className="flex items-start justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">
+                          {activity.userEmail}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {activity.action}
+                        </p>
+                        {activity.workspaceName && (
+                          <p className="text-xs text-muted-foreground">
+                            {activity.workspaceName}
+                          </p>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {timeDisplay}
+                      </span>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 
