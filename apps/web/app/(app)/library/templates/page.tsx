@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useSWR from "swr";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { ListPage } from "@/components/templates/list-page";
 import { Card } from "@/components/ui/card";
@@ -13,7 +14,9 @@ import {
   Download,
   ExternalLink,
   Star,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Template {
   id: string;
@@ -26,145 +29,48 @@ interface Template {
   downloads: number;
   author: string;
   tags: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-const mockTemplates: Template[] = [
-  {
-    id: "1",
-    name: "Lead Enrichment Workflow",
-    description:
-      "Automatically enrich leads with data from multiple sources and score them",
-    category: "workflow",
-    type: "Sales",
-    difficulty: "Beginner",
-    rating: 4.8,
-    downloads: 1250,
-    author: "GalaxyCo Team",
-    tags: ["Sales", "CRM", "Automation"],
-  },
-  {
-    id: "2",
-    name: "Customer Support Automation",
-    description: "Route and respond to support tickets automatically using AI",
-    category: "workflow",
-    type: "Support",
-    difficulty: "Intermediate",
-    rating: 4.9,
-    downloads: 2100,
-    author: "GalaxyCo Team",
-    tags: ["Support", "AI", "Automation"],
-  },
-  {
-    id: "3",
-    name: "Custom Agent Integration",
-    description: "TypeScript template for building custom agent integrations",
-    category: "code",
-    type: "Development",
-    difficulty: "Advanced",
-    rating: 4.7,
-    downloads: 850,
-    author: "Community",
-    tags: ["TypeScript", "SDK", "Integration"],
-  },
-  {
-    id: "4",
-    name: "Email Campaign Workflow",
-    description: "Automated email campaign with personalization and tracking",
-    category: "workflow",
-    type: "Marketing",
-    difficulty: "Beginner",
-    rating: 4.6,
-    downloads: 1800,
-    author: "GalaxyCo Team",
-    tags: ["Marketing", "Email", "Automation"],
-  },
-  {
-    id: "5",
-    name: "Webhook Handler Template",
-    description: "Node.js template for processing webhooks with authentication",
-    category: "code",
-    type: "Development",
-    difficulty: "Intermediate",
-    rating: 4.5,
-    downloads: 920,
-    author: "Community",
-    tags: ["Node.js", "Webhooks", "API"],
-  },
-  {
-    id: "6",
-    name: "Data Sync Pipeline",
-    description: "Synchronize data between multiple systems in real-time",
-    category: "workflow",
-    type: "Integration",
-    difficulty: "Advanced",
-    rating: 4.8,
-    downloads: 670,
-    author: "GalaxyCo Team",
-    tags: ["Integration", "Data", "Real-time"],
-  },
-  {
-    id: "7",
-    name: "Python Agent Example",
-    description: "Complete Python example for building and deploying agents",
-    category: "code",
-    type: "Development",
-    difficulty: "Intermediate",
-    rating: 4.7,
-    downloads: 1100,
-    author: "Community",
-    tags: ["Python", "Example", "Agent"],
-  },
-  {
-    id: "8",
-    name: "Onboarding Automation",
-    description: "Automated customer onboarding workflow with notifications",
-    category: "workflow",
-    type: "Operations",
-    difficulty: "Beginner",
-    rating: 4.9,
-    downloads: 1450,
-    author: "GalaxyCo Team",
-    tags: ["Onboarding", "Automation", "Notifications"],
-  },
-];
+interface TemplatesResponse {
+  templates: Template[];
+  total: number;
+}
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: "Failed to fetch" }));
+    throw new Error(error.error || "Failed to fetch templates");
+  }
+  return res.json();
+};
 
 export default function TemplatesPage() {
   const { currentWorkspace } = useWorkspace();
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
 
-  useEffect(() => {
-    async function fetchTemplates() {
-      try {
-        setIsLoading(true);
-        const url = currentWorkspace?.id
-          ? `/api/templates?workspaceId=${currentWorkspace.id}`
-          : "/api/templates";
-        const res = await fetch(url);
+  const { data, error, isLoading } = useSWR<TemplatesResponse>(
+    currentWorkspace
+      ? `/api/templates?workspaceId=${currentWorkspace.id}&limit=100`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      onError: (err: Error) => {
+        toast.error(err.message || "Failed to load templates");
+      },
+    },
+  );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch templates");
-        }
+  const templates = data?.templates || [];
 
-        const data = await res.json();
-        setTemplates(data.templates || []);
-      } catch (error) {
-        console.error("Failed to fetch templates:", error);
-        setTemplates([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchTemplates();
-  }, [currentWorkspace?.id]);
-
-  const filteredTemplates = templates.filter((template) => {
+  const filteredTemplates = templates.filter((template: Template) => {
     // Search filter
     const matchesSearch =
       searchQuery === "" ||
@@ -215,8 +121,23 @@ export default function TemplatesPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center text-muted-foreground">
-        Loading...
+      <div className="flex h-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 mb-2">
+            Failed to load templates
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Please try again later
+          </p>
+        </div>
       </div>
     );
   }

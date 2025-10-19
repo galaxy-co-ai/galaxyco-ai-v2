@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import useSWR from "swr";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { ListPage } from "@/components/templates";
 import { CardGrid } from "@/components/organisms/card-grid";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Video, Code, BookOpen } from "lucide-react";
+import { Plus, FileText, Video, Code, BookOpen, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Resource {
   id: string;
@@ -14,95 +16,52 @@ interface Resource {
   type: string;
   category: string;
   icon?: any;
-  href: string;
+  href?: string;
+  url?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-const mockResources: Resource[] = [
-  {
-    id: "1",
-    title: "Getting Started Guide",
-    description: "Learn the basics of GalaxyCo.ai platform",
-    type: "document",
-    category: "tutorials",
-    icon: <BookOpen className="h-5 w-5" />,
-    href: "/resources/getting-started",
-  },
-  {
-    id: "2",
-    title: "API Documentation",
-    description: "Complete API reference and examples",
-    type: "documentation",
-    category: "technical",
-    icon: <Code className="h-5 w-5" />,
-    href: "/resources/api-docs",
-  },
-  {
-    id: "3",
-    title: "Video Tutorials",
-    description: "Step-by-step video guides",
-    type: "video",
-    category: "tutorials",
-    icon: <Video className="h-5 w-5" />,
-    href: "/resources/videos",
-  },
-  {
-    id: "4",
-    title: "Best Practices",
-    description: "Recommended patterns and workflows",
-    type: "document",
-    category: "guides",
-    icon: <FileText className="h-5 w-5" />,
-    href: "/resources/best-practices",
-  },
-];
+interface ResourcesResponse {
+  resources: Resource[];
+  total: number;
+}
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: "Failed to fetch" }));
+    throw new Error(error.error || "Failed to fetch resources");
+  }
+  return res.json();
+};
 
 /**
  * Resources Page
  *
- * Example page demonstrating ListPage template usage.
  * Shows resource library with search, filters, and grid view.
+ * Connected to /api/resources endpoint for real-time data.
  */
 export default function ResourcesPage() {
   const { currentWorkspace } = useWorkspace();
-  const [resources, setResources] = useState<Resource[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
 
-  useEffect(() => {
-    async function fetchResources() {
-      try {
-        setIsLoading(true);
-        const url = currentWorkspace?.id
-          ? `/api/resources?workspaceId=${currentWorkspace.id}`
-          : "/api/resources";
-        const res = await fetch(url);
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch resources");
-        }
-
-        const data = await res.json();
-        const resourcesWithIcons = (data.resources || []).map(
-          (r: Resource) => ({
-            ...r,
-            icon: getIcon(r.type),
-          }),
-        );
-        setResources(resourcesWithIcons);
-      } catch (error) {
-        console.error("Failed to fetch resources:", error);
-        setResources([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchResources();
-  }, [currentWorkspace?.id]);
+  const { data, error, isLoading } = useSWR<ResourcesResponse>(
+    currentWorkspace
+      ? `/api/resources?workspaceId=${currentWorkspace.id}&limit=100`
+      : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      onError: (err: Error) => {
+        toast.error(err.message || "Failed to load resources");
+      },
+    },
+  );
 
   const getIcon = (type: string) => {
     switch (type) {
@@ -117,8 +76,13 @@ export default function ResourcesPage() {
     }
   };
 
+  const resources = (data?.resources || []).map((r: Resource) => ({
+    ...r,
+    icon: getIcon(r.type),
+  }));
+
   // Filter resources based on search and filters
-  const filteredResources = resources.filter((resource) => {
+  const filteredResources = resources.filter((resource: Resource) => {
     // Search filter
     const matchesSearch =
       searchQuery === "" ||
@@ -151,8 +115,23 @@ export default function ResourcesPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center text-muted-foreground">
-        Loading...
+      <div className="flex h-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 mb-2">
+            Failed to load resources
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Please try again later
+          </p>
+        </div>
       </div>
     );
   }
