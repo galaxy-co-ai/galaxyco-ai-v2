@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { FormPage } from "@/components/templates/form-page";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,29 +21,81 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Trash2, Upload } from "lucide-react";
 
 export default function WorkspaceSettingsPage() {
-  const [workspaceName, setWorkspaceName] = useState("GalaxyCo AI");
-  const [workspaceSlug, setWorkspaceSlug] = useState("galaxyco-ai");
-  const [description, setDescription] = useState(
-    "AI-powered automation and workflow platform",
-  );
+  const { currentWorkspace } = useWorkspace();
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceSlug, setWorkspaceSlug] = useState("");
+  const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState("technology");
   const [size, setSize] = useState("11-50");
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    async function fetchWorkspace() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        const res = await fetch(
+          `/api/workspaces/current?workspaceId=${currentWorkspace.id}`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch workspace");
+        const data = await res.json();
+        const ws = data.workspace;
+        setWorkspaceName(ws.name);
+        setWorkspaceSlug(ws.slug);
+        setDescription(ws.settings?.description || "");
+        setIndustry(ws.settings?.industry || "technology");
+        setSize(ws.settings?.companySize || "11-50");
+      } catch (error) {
+        toast.error("Failed to load workspace settings");
+      } finally {
+        setIsPageLoading(false);
+      }
+    }
+
+    fetchWorkspace();
+  }, [currentWorkspace?.id]);
+
   const handleSubmit = async () => {
+    if (!currentWorkspace?.id) return;
+
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    try {
+      const res = await fetch("/api/workspaces/current", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          name: workspaceName,
+          slug: workspaceSlug,
+          settings: {
+            description,
+            industry,
+            companySize: size,
+          },
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update workspace");
+      toast.success("Workspace updated successfully");
+    } catch (error) {
+      toast.error("Failed to update workspace");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    setWorkspaceName("GalaxyCo AI");
-    setWorkspaceSlug("galaxyco-ai");
-    setDescription("AI-powered automation and workflow platform");
-    setIndustry("technology");
-    setSize("11-50");
+    window.history.back();
   };
+
+  if (isPageLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <FormPage

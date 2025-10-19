@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { ListPage } from "@/components/templates";
 import { DataTable } from "@/components/organisms/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -25,41 +28,21 @@ import {
 } from "@/components/ui/select";
 import { UserPlus, Mail, MoreVertical, Shield, User } from "lucide-react";
 
-// Mock team member data
-const teamMembers = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "owner",
-    status: "active",
-    joinedAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "admin",
-    status: "active",
-    joinedAt: "2024-02-20",
-  },
-  {
-    id: "3",
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    role: "member",
-    status: "active",
-    joinedAt: "2024-03-10",
-  },
-  {
-    id: "4",
-    name: "Alice Williams",
-    email: "alice@example.com",
-    role: "member",
-    status: "invited",
-    joinedAt: "2024-10-15",
-  },
-];
+type TeamMember = {
+  id: string;
+  userId: string;
+  role: string;
+  isActive: boolean;
+  joinedAt: string;
+  user: {
+    id: string;
+    email: string;
+    firstName: string | null;
+    lastName: string | null;
+    avatarUrl: string | null;
+    name: string;
+  };
+};
 
 /**
  * Settings Team Page
@@ -68,26 +51,77 @@ const teamMembers = [
  * Shows member list and invite dialog.
  */
 export default function SettingsTeamPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [isLoading, setIsLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("member");
+
+  useEffect(() => {
+    async function fetchMembers() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        const res = await fetch(
+          `/api/workspaces/current/members?workspaceId=${currentWorkspace.id}`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch members");
+        const data = await res.json();
+        setTeamMembers(data.members);
+      } catch (error) {
+        toast.error("Failed to load team members");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchMembers();
+  }, [currentWorkspace?.id]);
+
+  const handleInvite = async () => {
+    if (!currentWorkspace?.id || !inviteEmail) return;
+
+    try {
+      const res = await fetch("/api/workspaces/current/members", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          email: inviteEmail,
+          role: inviteRole,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to invite member");
+      toast.success("Invitation sent successfully");
+      setIsInviteOpen(false);
+      setInviteEmail("");
+      setInviteRole("member");
+    } catch (error) {
+      toast.error("Failed to send invitation");
+    }
+  };
 
   // Filter members
   const filteredMembers = teamMembers.filter((member) => {
     const matchesSearch =
       searchQuery === "" ||
-      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchQuery.toLowerCase());
+      member.user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      member.user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const roleFilter = activeFilters.role || [];
     const matchesRole =
       roleFilter.length === 0 || roleFilter.includes(member.role);
 
     const statusFilter = activeFilters.status || [];
+    const statusValue = member.isActive ? "active" : "inactive";
     const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(member.status);
+      statusFilter.length === 0 || statusFilter.includes(statusValue);
 
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -102,6 +136,14 @@ export default function SettingsTeamPage() {
   const handleClearFilters = () => {
     setActiveFilters({});
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <ListPage
@@ -133,11 +175,13 @@ export default function SettingsTeamPage() {
                   id="email"
                   type="email"
                   placeholder="colleague@example.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="role">Role</Label>
-                <Select defaultValue="member">
+                <Select value={inviteRole} onValueChange={setInviteRole}>
                   <SelectTrigger id="role">
                     <SelectValue />
                   </SelectTrigger>
@@ -154,7 +198,7 @@ export default function SettingsTeamPage() {
                 >
                   Cancel
                 </Button>
-                <Button onClick={() => setIsInviteOpen(false)}>
+                <Button onClick={handleInvite}>
                   <Mail className="mr-2 h-4 w-4" />
                   Send Invitation
                 </Button>
@@ -229,10 +273,10 @@ export default function SettingsTeamPage() {
                       </Avatar>
                       <div>
                         <div className="font-medium text-foreground">
-                          {member.name}
+                          {member.user.name}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {member.email}
+                          {member.user.email}
                         </div>
                       </div>
                     </div>
@@ -248,12 +292,8 @@ export default function SettingsTeamPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge
-                      variant={
-                        member.status === "active" ? "success" : "secondary"
-                      }
-                    >
-                      {member.status}
+                    <Badge variant={member.isActive ? "success" : "secondary"}>
+                      {member.isActive ? "active" : "inactive"}
                     </Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">

@@ -1,12 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormPage } from "@/components/templates/form-page";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 import { Bell, Mail, Smartphone, Monitor } from "lucide-react";
 
+type NotificationPreferences = {
+  email?: {
+    agentUpdates?: boolean;
+    workflowAlerts?: boolean;
+    teamActivity?: boolean;
+    weeklySummary?: boolean;
+    securityAlerts?: boolean;
+  };
+  push?: {
+    agentUpdates?: boolean;
+    workflowAlerts?: boolean;
+    teamActivity?: boolean;
+    mentions?: boolean;
+  };
+  inApp?: {
+    agentUpdates?: boolean;
+    workflowAlerts?: boolean;
+    teamActivity?: boolean;
+    mentions?: boolean;
+    comments?: boolean;
+  };
+};
+
 export default function NotificationsSettingsPage() {
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   // Email Notifications
@@ -29,20 +55,103 @@ export default function NotificationsSettingsPage() {
   const [inAppMentions, setInAppMentions] = useState(true);
   const [inAppComments, setInAppComments] = useState(true);
 
+  useEffect(() => {
+    async function fetchPreferences() {
+      try {
+        const res = await fetch("/api/users/me/preferences");
+        if (!res.ok) throw new Error("Failed to fetch preferences");
+        const data = await res.json();
+        const prefs = data.preferences.notifications as NotificationPreferences;
+
+        // Set email preferences
+        if (prefs?.email) {
+          setEmailAgentUpdates(prefs.email.agentUpdates ?? true);
+          setEmailWorkflowAlerts(prefs.email.workflowAlerts ?? true);
+          setEmailTeamActivity(prefs.email.teamActivity ?? false);
+          setEmailWeeklySummary(prefs.email.weeklySummary ?? true);
+          setEmailSecurityAlerts(prefs.email.securityAlerts ?? true);
+        }
+
+        // Set push preferences
+        if (prefs?.push) {
+          setPushAgentUpdates(prefs.push.agentUpdates ?? true);
+          setPushWorkflowAlerts(prefs.push.workflowAlerts ?? true);
+          setPushTeamActivity(prefs.push.teamActivity ?? false);
+          setPushMentions(prefs.push.mentions ?? true);
+        }
+
+        // Set in-app preferences
+        if (prefs?.inApp) {
+          setInAppAgentUpdates(prefs.inApp.agentUpdates ?? true);
+          setInAppWorkflowAlerts(prefs.inApp.workflowAlerts ?? true);
+          setInAppTeamActivity(prefs.inApp.teamActivity ?? true);
+          setInAppMentions(prefs.inApp.mentions ?? true);
+          setInAppComments(prefs.inApp.comments ?? true);
+        }
+      } catch (error) {
+        toast.error("Failed to load notification preferences");
+      } finally {
+        setIsPageLoading(false);
+      }
+    }
+
+    fetchPreferences();
+  }, []);
+
   const handleSubmit = async () => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    try {
+      const preferences = {
+        notifications: {
+          email: {
+            agentUpdates: emailAgentUpdates,
+            workflowAlerts: emailWorkflowAlerts,
+            teamActivity: emailTeamActivity,
+            weeklySummary: emailWeeklySummary,
+            securityAlerts: emailSecurityAlerts,
+          },
+          push: {
+            agentUpdates: pushAgentUpdates,
+            workflowAlerts: pushWorkflowAlerts,
+            teamActivity: pushTeamActivity,
+            mentions: pushMentions,
+          },
+          inApp: {
+            agentUpdates: inAppAgentUpdates,
+            workflowAlerts: inAppWorkflowAlerts,
+            teamActivity: inAppTeamActivity,
+            mentions: inAppMentions,
+            comments: inAppComments,
+          },
+        },
+      };
+
+      const res = await fetch("/api/users/me/preferences", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(preferences),
+      });
+
+      if (!res.ok) throw new Error("Failed to update preferences");
+      toast.success("Notification preferences updated");
+    } catch (error) {
+      toast.error("Failed to update notification preferences");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    // Reset to defaults
-    setEmailAgentUpdates(true);
-    setEmailWorkflowAlerts(true);
-    setEmailTeamActivity(false);
-    setEmailWeeklySummary(true);
-    setEmailSecurityAlerts(true);
+    window.history.back();
   };
+
+  if (isPageLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <FormPage

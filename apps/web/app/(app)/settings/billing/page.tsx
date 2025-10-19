@@ -1,6 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { PageShell } from "@/components/templates/page-shell";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,52 +17,51 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const paymentMethods = [
-  {
-    id: "1",
-    type: "card",
-    brand: "Visa",
-    last4: "4242",
-    expiryMonth: 12,
-    expiryYear: 2025,
-    isDefault: true,
-  },
-  {
-    id: "2",
-    type: "card",
-    brand: "Mastercard",
-    last4: "8888",
-    expiryMonth: 6,
-    expiryYear: 2026,
-    isDefault: false,
-  },
-];
-
-const invoices = [
-  {
-    id: "INV-2025-001",
-    date: "2025-10-01",
-    amount: "$99.00",
-    status: "paid",
-    period: "Oct 2025",
-  },
-  {
-    id: "INV-2025-002",
-    date: "2025-09-01",
-    amount: "$99.00",
-    status: "paid",
-    period: "Sep 2025",
-  },
-  {
-    id: "INV-2025-003",
-    date: "2025-08-01",
-    amount: "$99.00",
-    status: "paid",
-    period: "Aug 2025",
-  },
-];
-
 export default function BillingSettingsPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [isLoading, setIsLoading] = useState(true);
+  const [billingData, setBillingData] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchBilling() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        const res = await fetch(
+          `/api/billing?workspaceId=${currentWorkspace.id}`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch billing");
+        const data = await res.json();
+        setBillingData(data);
+      } catch (error) {
+        toast.error("Failed to load billing information");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchBilling();
+  }, [currentWorkspace?.id]);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!billingData) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p>Failed to load billing information</p>
+      </div>
+    );
+  }
+
+  const paymentMethod = billingData.paymentMethod;
+  const invoices = billingData.invoices;
+
   return (
     <PageShell
       title="Billing Settings"
@@ -87,14 +90,21 @@ export default function BillingSettingsPage() {
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm">Monthly billing</span>
               </div>
-              <span className="font-semibold">$99.00/month</span>
+              <span className="font-semibold">
+                ${(billingData.subscription.price / 100).toFixed(2)}/
+                {billingData.subscription.interval}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm">Next billing date</span>
               </div>
-              <span className="font-semibold">November 1, 2025</span>
+              <span className="font-semibold">
+                {new Date(
+                  billingData.subscription.currentPeriodEnd,
+                ).toLocaleDateString()}
+              </span>
             </div>
           </div>
           <div className="mt-6 flex gap-2">
@@ -117,11 +127,8 @@ export default function BillingSettingsPage() {
             </Button>
           </div>
           <div className="space-y-3">
-            {paymentMethods.map((method) => (
-              <div
-                key={method.id}
-                className="flex items-center justify-between rounded-lg border border-border p-4"
-              >
+            {paymentMethod && (
+              <div className="flex items-center justify-between rounded-lg border border-border p-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                     <CreditCard className="h-5 w-5 text-primary" />
@@ -129,31 +136,26 @@ export default function BillingSettingsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <p className="font-medium">
-                        {method.brand} •••• {method.last4}
+                        {paymentMethod.card.brand} ••••{" "}
+                        {paymentMethod.card.last4}
                       </p>
-                      {method.isDefault && (
-                        <Badge variant="secondary" className="text-xs">
-                          Default
-                        </Badge>
-                      )}
+                      <Badge variant="secondary" className="text-xs">
+                        Default
+                      </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Expires {method.expiryMonth}/{method.expiryYear}
+                      Expires {paymentMethod.card.expMonth}/
+                      {paymentMethod.card.expYear}
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {!method.isDefault && (
-                    <Button variant="outline" size="sm">
-                      Set Default
-                    </Button>
-                  )}
                   <Button variant="ghost" size="sm">
                     Remove
                   </Button>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </Card>
 
@@ -167,20 +169,22 @@ export default function BillingSettingsPage() {
             </Button>
           </div>
           <div className="space-y-3">
-            {invoices.map((invoice) => (
+            {invoices.map((invoice: any) => (
               <div
                 key={invoice.id}
                 className="flex items-center justify-between rounded-lg border border-border p-4"
               >
                 <div>
-                  <p className="font-medium">{invoice.id}</p>
+                  <p className="font-medium">{invoice.number}</p>
                   <p className="text-sm text-muted-foreground">
-                    {invoice.period} • {invoice.date}
+                    {new Date(invoice.created).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="font-semibold">{invoice.amount}</p>
+                    <p className="font-semibold">
+                      ${(invoice.amount / 100).toFixed(2)}
+                    </p>
                     <Badge
                       variant={
                         invoice.status === "paid" ? "default" : "secondary"

@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWorkspace } from "@/contexts/workspace-context";
 import { PageShell } from "@/components/templates/page-shell";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,15 +48,63 @@ const activeSessions = [
 ];
 
 export default function SecuritySettingsPage() {
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
+  const { currentWorkspace } = useWorkspace();
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    async function fetchSecurity() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        const res = await fetch(
+          `/api/workspaces/current/security?workspaceId=${currentWorkspace.id}`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch security settings");
+        const data = await res.json();
+        setTwoFactorEnabled(data.security.twoFactorRequired || false);
+      } catch (error) {
+        toast.error("Failed to load security settings");
+      } finally {
+        setIsPageLoading(false);
+      }
+    }
+
+    fetchSecurity();
+  }, [currentWorkspace?.id]);
+
   const handleSubmit = async () => {
+    if (!currentWorkspace?.id) return;
+
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    try {
+      const res = await fetch("/api/workspaces/current/security", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workspaceId: currentWorkspace.id,
+          twoFactorRequired: twoFactorEnabled,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update security settings");
+      toast.success("Security settings updated");
+    } catch (error) {
+      toast.error("Failed to update security settings");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (isPageLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <PageShell
