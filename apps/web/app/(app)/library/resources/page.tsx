@@ -76,20 +76,17 @@ export default function ResourcesPage() {
     async function fetchResources() {
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/resources${currentWorkspace?.id ? `?workspaceId=${currentWorkspace.id}` : ""}`,
-        );
+        const url = currentWorkspace?.id
+          ? `/api/resources?workspaceId=${currentWorkspace.id}`
+          : "/api/resources";
+        const res = await fetch(url);
 
         if (!res.ok) {
-          console.warn("Resources API not available, using mock data");
-          setResources(
-            mockResources.map((r) => ({ ...r, icon: getIcon(r.type) })),
-          );
-          return;
+          throw new Error("Failed to fetch resources");
         }
 
         const data = await res.json();
-        const resourcesWithIcons = (data.resources || mockResources).map(
+        const resourcesWithIcons = (data.resources || []).map(
           (r: Resource) => ({
             ...r,
             icon: getIcon(r.type),
@@ -98,9 +95,7 @@ export default function ResourcesPage() {
         setResources(resourcesWithIcons);
       } catch (error) {
         console.error("Failed to fetch resources:", error);
-        setResources(
-          mockResources.map((r) => ({ ...r, icon: getIcon(r.type) })),
-        );
+        setResources([]);
       } finally {
         setIsLoading(false);
       }

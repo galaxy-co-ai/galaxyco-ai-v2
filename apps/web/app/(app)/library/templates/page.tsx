@@ -140,26 +140,22 @@ export default function TemplatesPage() {
 
   useEffect(() => {
     async function fetchTemplates() {
-      if (!currentWorkspace?.id) return;
-
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/templates?workspaceId=${currentWorkspace.id}`,
-        );
+        const url = currentWorkspace?.id
+          ? `/api/templates?workspaceId=${currentWorkspace.id}`
+          : "/api/templates";
+        const res = await fetch(url);
 
         if (!res.ok) {
-          // Fallback to mock data if API fails
-          console.warn("Templates API not available, using mock data");
-          setTemplates(mockTemplates);
-          return;
+          throw new Error("Failed to fetch templates");
         }
 
         const data = await res.json();
-        setTemplates(data.templates || mockTemplates);
+        setTemplates(data.templates || []);
       } catch (error) {
         console.error("Failed to fetch templates:", error);
-        setTemplates(mockTemplates);
+        setTemplates([]);
       } finally {
         setIsLoading(false);
       }
