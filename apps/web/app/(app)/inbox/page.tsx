@@ -1,11 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { PageShell } from "@/components/templates/page-shell";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -13,233 +17,60 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  MessageSquare,
-  Send,
-  Search,
-  Star,
-  Plus,
-  MoreHorizontal,
-} from "lucide-react";
-import { useState } from "react";
+import { MessageSquare, Search, Mail, Phone, Globe, Plus } from "lucide-react";
 
-interface Message {
+interface InboxMessage {
   id: string;
-  sender: {
-    name: string;
-    avatar: string;
-    isCurrentUser: boolean;
-  };
-  content: string;
-  timestamp: string;
+  workspaceId: string;
+  channel: "email" | "sms" | "web" | "api" | "form";
+  subject: string;
+  body: string;
+  status: "unread" | "read" | "archived" | "spam" | "flagged";
+  senderId: string | null;
+  senderEmail: string | null;
+  senderName: string | null;
+  recipientIds: any;
+  threadId: string | null;
+  replyToId: string | null;
+  metadata: any;
+  attachments: any;
+  readAt: string | null;
+  archivedAt: string | null;
+  createdAt: string;
 }
 
-interface Conversation {
-  id: string;
-  participants: Array<{
-    name: string;
-    avatar: string;
-  }>;
-  lastMessage: string;
-  timestamp: string;
-  unreadCount: number;
-  isStarred: boolean;
-  messages: Message[];
-}
+const statusConfig: Record<string, { label: string; className: string }> = {
+  unread: {
+    label: "Unread",
+    className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+  },
+  read: {
+    label: "Read",
+    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+  },
+  archived: {
+    label: "Archived",
+    className:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
+  },
+  spam: {
+    label: "Spam",
+    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+  },
+  flagged: {
+    label: "Flagged",
+    className:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+  },
+};
 
-const mockConversations: Conversation[] = [
-  {
-    id: "conv_001",
-    participants: [
-      {
-        name: "Sarah Johnson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-      },
-    ],
-    lastMessage: "Can you review the sales playbook updates?",
-    timestamp: "2025-01-16T11:45:00Z",
-    unreadCount: 2,
-    isStarred: true,
-    messages: [
-      {
-        id: "msg_001",
-        sender: {
-          name: "Sarah Johnson",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-          isCurrentUser: false,
-        },
-        content:
-          "Hey! I've updated the sales playbook with the new pricing guidelines.",
-        timestamp: "2025-01-16T11:30:00Z",
-      },
-      {
-        id: "msg_002",
-        sender: {
-          name: "You",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=YOU",
-          isCurrentUser: true,
-        },
-        content: "Thanks! I'll take a look this afternoon.",
-        timestamp: "2025-01-16T11:35:00Z",
-      },
-      {
-        id: "msg_003",
-        sender: {
-          name: "Sarah Johnson",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-          isCurrentUser: false,
-        },
-        content: "Can you review the sales playbook updates?",
-        timestamp: "2025-01-16T11:45:00Z",
-      },
-    ],
-  },
-  {
-    id: "conv_002",
-    participants: [
-      {
-        name: "Michael Chen",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
-      },
-    ],
-    lastMessage: "The deployment went smoothly!",
-    timestamp: "2025-01-16T10:30:00Z",
-    unreadCount: 0,
-    isStarred: false,
-    messages: [
-      {
-        id: "msg_004",
-        sender: {
-          name: "You",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=YOU",
-          isCurrentUser: true,
-        },
-        content: "How did the production deployment go?",
-        timestamp: "2025-01-16T10:15:00Z",
-      },
-      {
-        id: "msg_005",
-        sender: {
-          name: "Michael Chen",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
-          isCurrentUser: false,
-        },
-        content: "The deployment went smoothly!",
-        timestamp: "2025-01-16T10:30:00Z",
-      },
-    ],
-  },
-  {
-    id: "conv_003",
-    participants: [
-      {
-        name: "Emily Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=ER",
-      },
-    ],
-    lastMessage: "I'll send over the designs by EOD",
-    timestamp: "2025-01-16T09:15:00Z",
-    unreadCount: 1,
-    isStarred: true,
-    messages: [
-      {
-        id: "msg_006",
-        sender: {
-          name: "You",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=YOU",
-          isCurrentUser: true,
-        },
-        content: "Do you have the new dashboard designs ready?",
-        timestamp: "2025-01-16T09:00:00Z",
-      },
-      {
-        id: "msg_007",
-        sender: {
-          name: "Emily Rodriguez",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=ER",
-          isCurrentUser: false,
-        },
-        content: "I'll send over the designs by EOD",
-        timestamp: "2025-01-16T09:15:00Z",
-      },
-    ],
-  },
-  {
-    id: "conv_004",
-    participants: [
-      {
-        name: "David Park",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=DP",
-      },
-    ],
-    lastMessage: "All systems are running normally",
-    timestamp: "2025-01-15T18:45:00Z",
-    unreadCount: 0,
-    isStarred: false,
-    messages: [
-      {
-        id: "msg_008",
-        sender: {
-          name: "David Park",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=DP",
-          isCurrentUser: false,
-        },
-        content: "All systems are running normally",
-        timestamp: "2025-01-15T18:45:00Z",
-      },
-    ],
-  },
-  {
-    id: "conv_005",
-    participants: [
-      {
-        name: "Jessica Liu",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=JL",
-      },
-    ],
-    lastMessage: "The campaign results look great!",
-    timestamp: "2025-01-15T16:20:00Z",
-    unreadCount: 0,
-    isStarred: false,
-    messages: [
-      {
-        id: "msg_009",
-        sender: {
-          name: "Jessica Liu",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=JL",
-          isCurrentUser: false,
-        },
-        content: "The campaign results look great!",
-        timestamp: "2025-01-15T16:20:00Z",
-      },
-    ],
-  },
-  {
-    id: "conv_006",
-    participants: [
-      {
-        name: "Alex Thompson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AT",
-      },
-    ],
-    lastMessage: "Found a bug in the authentication flow",
-    timestamp: "2025-01-15T14:10:00Z",
-    unreadCount: 3,
-    isStarred: false,
-    messages: [
-      {
-        id: "msg_010",
-        sender: {
-          name: "Alex Thompson",
-          avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AT",
-          isCurrentUser: false,
-        },
-        content: "Found a bug in the authentication flow",
-        timestamp: "2025-01-15T14:10:00Z",
-      },
-    ],
-  },
-];
+const channelIcons: Record<string, typeof MessageSquare> = {
+  email: Mail,
+  sms: Phone,
+  web: Globe,
+  api: MessageSquare,
+  form: MessageSquare,
+};
 
 function formatTimestamp(dateString: string): string {
   const date = new Date(dateString);
@@ -258,132 +89,63 @@ function formatTimestamp(dateString: string): string {
   }
 }
 
-function ConversationItem({
-  conversation,
-  isActive,
-  onClick,
-}: {
-  conversation: Conversation;
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full border-b border-border p-4 text-left transition-colors hover:bg-muted/50 ${
-        isActive ? "bg-muted" : ""
-      }`}
-    >
-      <div className="flex items-start gap-3">
-        <div className="relative">
-          <Avatar
-            src={conversation.participants[0].avatar}
-            alt={conversation.participants[0].name}
-            fallback={conversation.participants[0].name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
-            size="default"
-          />
-          {conversation.unreadCount > 0 && (
-            <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-              {conversation.unreadCount}
-            </div>
-          )}
-        </div>
-        <div className="flex-1 overflow-hidden">
-          <div className="flex items-center justify-between">
-            <h4 className="font-semibold text-foreground">
-              {conversation.participants[0].name}
-            </h4>
-            <div className="flex items-center gap-2">
-              {conversation.isStarred && (
-                <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-              )}
-              <span className="text-xs text-muted-foreground">
-                {formatTimestamp(conversation.timestamp)}
-              </span>
-            </div>
-          </div>
-          <p
-            className={`mt-1 truncate text-sm ${
-              conversation.unreadCount > 0
-                ? "font-medium text-foreground"
-                : "text-muted-foreground"
-            }`}
-          >
-            {conversation.lastMessage}
-          </p>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-function MessageBubble({ message }: { message: Message }) {
-  return (
-    <div
-      className={`flex gap-3 ${message.sender.isCurrentUser ? "flex-row-reverse" : ""}`}
-    >
-      <Avatar
-        src={message.sender.avatar}
-        alt={message.sender.name}
-        fallback={message.sender.name
-          .split(" ")
-          .map((n) => n[0])
-          .join("")}
-        size="sm"
-      />
-      <div
-        className={`flex-1 ${message.sender.isCurrentUser ? "flex justify-end" : ""}`}
-      >
-        <div
-          className={`inline-block max-w-md rounded-lg p-3 ${
-            message.sender.isCurrentUser
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-foreground"
-          }`}
-        >
-          <p className="text-sm">{message.content}</p>
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {formatTimestamp(message.timestamp)}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function InboxPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [messages, setMessages] = useState<InboxMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [selectedConversation, setSelectedConversation] =
-    useState<Conversation | null>(mockConversations[0]);
-  const [messageInput, setMessageInput] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedMessage, setSelectedMessage] = useState<InboxMessage | null>(
+    null,
+  );
 
-  const filteredConversations = mockConversations.filter((conv) => {
-    const matchesSearch = conv.participants.some((p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+  useEffect(() => {
+    async function fetchMessages() {
+      if (!currentWorkspace?.id) return;
 
-    const matchesFilter =
-      filter === "all" ||
-      (filter === "unread" && conv.unreadCount > 0) ||
-      (filter === "starred" && conv.isStarred);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/inbox?workspaceId=${currentWorkspace.id}&limit=100`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch messages");
+        const data = await res.json();
+        setMessages(data.messages || []);
+        if (data.messages && data.messages.length > 0) {
+          setSelectedMessage(data.messages[0]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+        toast.error("Failed to load inbox messages");
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-    return matchesSearch && matchesFilter;
+    fetchMessages();
+  }, [currentWorkspace?.id]);
+
+  const filteredMessages = messages.filter((msg) => {
+    const matchesSearch =
+      searchQuery === "" ||
+      msg.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      msg.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (msg.senderName?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || msg.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
   });
 
-  const unreadCount = mockConversations.reduce(
-    (sum, conv) => sum + conv.unreadCount,
-    0,
-  );
+  const unreadCount = messages.filter((msg) => msg.status === "unread").length;
 
-  const handleSendMessage = () => {
-    if (!messageInput.trim() || !selectedConversation) return;
-    // In a real app, this would send the message to the backend
-    setMessageInput("");
-  };
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <PageShell
@@ -401,20 +163,20 @@ export default function InboxPage() {
       }
     >
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Conversation List */}
+        {/* Message List */}
         <div className="lg:col-span-1">
           <Card className="overflow-hidden">
             <div className="border-b border-border p-4">
               <div className="relative mb-3">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search conversations..."
+                  placeholder="Search messages..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
-              <Select value={filter} onValueChange={setFilter}>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
@@ -422,29 +184,75 @@ export default function InboxPage() {
                   <SelectItem value="all">All Messages</SelectItem>
                   <SelectItem value="unread">
                     Unread (
-                    {mockConversations.filter((c) => c.unreadCount > 0).length})
+                    {messages.filter((m) => m.status === "unread").length})
                   </SelectItem>
-                  <SelectItem value="starred">
-                    Starred (
-                    {mockConversations.filter((c) => c.isStarred).length})
+                  <SelectItem value="flagged">
+                    Flagged (
+                    {messages.filter((m) => m.status === "flagged").length})
                   </SelectItem>
+                  <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="max-h-[600px] overflow-y-auto">
-              {filteredConversations.map((conversation) => (
-                <ConversationItem
-                  key={conversation.id}
-                  conversation={conversation}
-                  isActive={selectedConversation?.id === conversation.id}
-                  onClick={() => setSelectedConversation(conversation)}
-                />
-              ))}
-              {filteredConversations.length === 0 && (
+              {filteredMessages.map((message) => {
+                const Icon = channelIcons[message.channel] || MessageSquare;
+                return (
+                  <button
+                    key={message.id}
+                    onClick={() => setSelectedMessage(message)}
+                    className={`w-full border-b border-border p-4 text-left transition-colors hover:bg-muted/50 ${
+                      selectedMessage?.id === message.id ? "bg-muted" : ""
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <Avatar
+                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${message.senderName || message.senderEmail}`}
+                        alt={
+                          message.senderName || message.senderEmail || "Unknown"
+                        }
+                        fallback={(
+                          message.senderName ||
+                          message.senderEmail ||
+                          "?"
+                        )
+                          .slice(0, 2)
+                          .toUpperCase()}
+                        size="default"
+                      />
+                      <div className="flex-1 overflow-hidden">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-semibold text-foreground truncate">
+                            {message.senderName ||
+                              message.senderEmail ||
+                              "Unknown Sender"}
+                          </h4>
+                          <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
+                            {formatTimestamp(message.createdAt)}
+                          </span>
+                        </div>
+                        <p className="text-sm font-medium truncate mb-1">
+                          {message.subject}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="outline"
+                            className={statusConfig[message.status].className}
+                          >
+                            {statusConfig[message.status].label}
+                          </Badge>
+                          <Icon className="h-3 w-3 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+              {filteredMessages.length === 0 && (
                 <div className="p-8 text-center">
                   <MessageSquare className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
-                    No conversations found
+                    No messages found
                   </p>
                 </div>
               )}
@@ -452,85 +260,83 @@ export default function InboxPage() {
           </Card>
         </div>
 
-        {/* Message Thread */}
+        {/* Message Detail */}
         <div className="lg:col-span-2">
-          {selectedConversation ? (
-            <Card className="flex h-[700px] flex-col">
-              {/* Thread Header */}
-              <div className="flex items-center justify-between border-b border-border p-4">
-                <div className="flex items-center gap-3">
-                  <Avatar
-                    src={selectedConversation.participants[0].avatar}
-                    alt={selectedConversation.participants[0].name}
-                    fallback={selectedConversation.participants[0].name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                    size="default"
-                  />
-                  <div>
-                    <h3 className="font-semibold">
-                      {selectedConversation.participants[0].name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">Active now</p>
+          {selectedMessage ? (
+            <Card className="p-6">
+              {/* Message Header */}
+              <div className="border-b border-border pb-4 mb-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${selectedMessage.senderName || selectedMessage.senderEmail}`}
+                      alt={
+                        selectedMessage.senderName ||
+                        selectedMessage.senderEmail ||
+                        "Unknown"
+                      }
+                      fallback={(
+                        selectedMessage.senderName ||
+                        selectedMessage.senderEmail ||
+                        "?"
+                      )
+                        .slice(0, 2)
+                        .toUpperCase()}
+                      size="default"
+                    />
+                    <div>
+                      <h3 className="font-semibold">
+                        {selectedMessage.senderName ||
+                          selectedMessage.senderEmail ||
+                          "Unknown Sender"}
+                      </h3>
+                      {selectedMessage.senderEmail && (
+                        <p className="text-xs text-muted-foreground">
+                          {selectedMessage.senderEmail}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className={statusConfig[selectedMessage.status].className}
+                    >
+                      {statusConfig[selectedMessage.status].label}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {formatTimestamp(selectedMessage.createdAt)}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <Star
-                      className={`h-4 w-4 ${
-                        selectedConversation.isStarred
-                          ? "fill-yellow-500 text-yellow-500"
-                          : ""
-                      }`}
-                    />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
+                <h2 className="text-lg font-semibold">
+                  {selectedMessage.subject}
+                </h2>
+              </div>
+
+              {/* Message Body */}
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <div className="whitespace-pre-wrap">
+                  {selectedMessage.body}
                 </div>
               </div>
 
-              {/* Messages */}
-              <div className="flex-1 space-y-4 overflow-y-auto p-4">
-                {selectedConversation.messages.map((message) => (
-                  <MessageBubble key={message.id} message={message} />
-                ))}
-              </div>
-
-              {/* Message Input */}
-              <div className="border-t border-border p-4">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Type a message..."
-                    value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={!messageInput.trim()}
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
+              {/* Actions */}
+              <div className="flex gap-2 mt-6 pt-4 border-t border-border">
+                <Button variant="outline">Reply</Button>
+                <Button variant="outline">Forward</Button>
+                <Button variant="outline">Archive</Button>
               </div>
             </Card>
           ) : (
-            <Card className="flex h-[700px] items-center justify-center">
+            <Card className="flex h-[600px] items-center justify-center">
               <div className="text-center">
                 <MessageSquare className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
                 <h3 className="mb-2 text-lg font-semibold">
-                  No conversation selected
+                  No message selected
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Select a conversation to start messaging
+                  Select a message to view its contents
                 </p>
               </div>
             </Card>

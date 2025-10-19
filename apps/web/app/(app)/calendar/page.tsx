@@ -1,10 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { DetailPage } from "@/components/templates/detail-page";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { Spinner } from "@/components/ui/spinner";
+import { useWorkspace } from "@/contexts/workspace-context";
+import { toast } from "sonner";
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -16,105 +20,28 @@ import {
   Video,
 } from "lucide-react";
 
-// Mock data for events
-const mockEvents = [
-  {
-    id: "1",
-    title: "Q4 Strategy Planning",
-    type: "meeting",
-    date: "2025-10-17",
-    time: "09:00 AM",
-    duration: "2 hours",
-    location: "Conference Room A",
-    attendees: [
-      {
-        name: "Sarah Johnson",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      },
-      {
-        name: "Michael Chen",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-      },
-      {
-        name: "Emily Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-      },
-    ],
-    status: "upcoming",
-  },
-  {
-    id: "2",
-    title: "Client Demo - Acme Corp",
-    type: "demo",
-    date: "2025-10-17",
-    time: "02:00 PM",
-    duration: "1 hour",
-    location: "Virtual (Zoom)",
-    attendees: [
-      {
-        name: "David Kim",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-      },
-    ],
-    status: "upcoming",
-  },
-  {
-    id: "3",
-    title: "Team Standup",
-    type: "standup",
-    date: "2025-10-18",
-    time: "09:30 AM",
-    duration: "30 minutes",
-    location: "Virtual (Teams)",
-    attendees: [
-      {
-        name: "Jessica Martinez",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
-      },
-      {
-        name: "Robert Taylor",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
-      },
-    ],
-    status: "upcoming",
-  },
-  {
-    id: "4",
-    title: "Product Roadmap Review",
-    type: "review",
-    date: "2025-10-18",
-    time: "03:00 PM",
-    duration: "1.5 hours",
-    location: "Conference Room B",
-    attendees: [
-      {
-        name: "Sarah Johnson",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      },
-      {
-        name: "Michael Chen",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-      },
-    ],
-    status: "upcoming",
-  },
-  {
-    id: "5",
-    title: "1:1 with Engineering Lead",
-    type: "one-on-one",
-    date: "2025-10-19",
-    time: "10:00 AM",
-    duration: "30 minutes",
-    location: "Office",
-    attendees: [
-      {
-        name: "Emily Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-      },
-    ],
-    status: "upcoming",
-  },
-];
+interface CalendarEvent {
+  id: string;
+  workspaceId: string;
+  title: string;
+  description: string | null;
+  location: string | null;
+  meetingUrl: string | null;
+  startTime: string;
+  endTime: string;
+  timezone: string;
+  isAllDay: boolean;
+  isRecurring: boolean;
+  recurrenceRule: string | null;
+  createdBy: string;
+  attendees: any;
+  customerId: string | null;
+  projectId: string | null;
+  tags: string[] | null;
+  reminders: any;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const calendarMetrics = [
   {
@@ -222,7 +149,7 @@ function CalendarView() {
   );
 }
 
-function UpcomingEvents() {
+function UpcomingEvents({ events }: { events: CalendarEvent[] }) {
   const typeColors = {
     meeting: "default",
     demo: "secondary",
@@ -231,12 +158,23 @@ function UpcomingEvents() {
     "one-on-one": "secondary",
   } as const;
 
+  if (events.length === 0) {
+    return (
+      <div className="space-y-6">
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
+          <p className="text-sm text-muted-foreground">No upcoming events</p>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
         <div className="space-y-4">
-          {mockEvents.map((event) => (
+          {events.map((event) => (
             <div
               key={event.id}
               className="p-4 rounded-lg border border-border hover:border-primary/50 hover:shadow-sm transition-all"
@@ -247,57 +185,62 @@ function UpcomingEvents() {
                   <h4 className="font-semibold mb-1">{event.title}</h4>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    <span>
-                      {new Date(event.date).toLocaleDateString()} at{" "}
-                      {event.time}
-                    </span>
-                    <span>• {event.duration}</span>
+                    <span>{new Date(event.startTime).toLocaleString()}</span>
+                    {event.endTime && (
+                      <span>• {new Date(event.endTime).toLocaleString()}</span>
+                    )}
                   </div>
                 </div>
-                <Badge
-                  variant={typeColors[event.type as keyof typeof typeColors]}
-                >
-                  {event.type.charAt(0).toUpperCase() +
-                    event.type.slice(1).replace("-", " ")}
+                <Badge variant="default">
+                  {event.isAllDay ? "All Day" : "Event"}
                 </Badge>
               </div>
 
               {/* Event Details */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  {event.location.includes("Virtual") ? (
-                    <Video className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                  )}
-                  <span className="text-muted-foreground">
-                    {event.location}
-                  </span>
-                </div>
-
-                {/* Attendees */}
-                {event.attendees.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <div className="flex -space-x-2">
-                      {event.attendees.slice(0, 3).map((attendee, index) => (
-                        <Avatar
-                          key={index}
-                          src={attendee.avatar}
-                          alt={attendee.name}
-                          fallback={attendee.name.slice(0, 2).toUpperCase()}
-                          size="sm"
-                          className="border-2 border-background"
-                        />
-                      ))}
-                    </div>
-                    {event.attendees.length > 3 && (
-                      <span className="text-xs text-muted-foreground">
-                        +{event.attendees.length - 3} more
-                      </span>
+                {event.location && (
+                  <div className="flex items-center gap-2 text-sm">
+                    {event.meetingUrl ||
+                    event.location?.toLowerCase().includes("virtual") ? (
+                      <Video className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
                     )}
+                    <span className="text-muted-foreground">
+                      {event.location}
+                    </span>
                   </div>
                 )}
+
+                {/* Attendees */}
+                {event.attendees &&
+                  Array.isArray(event.attendees) &&
+                  event.attendees.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      <div className="flex -space-x-2">
+                        {event.attendees
+                          .slice(0, 3)
+                          .map((attendee: any, index: number) => (
+                            <Avatar
+                              key={index}
+                              src={`https://api.dicebear.com/7.x/initials/svg?seed=${attendee.name || attendee.email}`}
+                              alt={attendee.name || attendee.email}
+                              fallback={(attendee.name || attendee.email || "U")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                              size="sm"
+                              className="border-2 border-background"
+                            />
+                          ))}
+                      </div>
+                      {event.attendees.length > 3 && (
+                        <span className="text-xs text-muted-foreground">
+                          +{event.attendees.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  )}
               </div>
 
               {/* Actions */}
@@ -305,10 +248,16 @@ function UpcomingEvents() {
                 <Button variant="outline" size="sm">
                   View Details
                 </Button>
-                {event.location.includes("Virtual") && (
-                  <Button size="sm">
-                    <Video className="mr-2 h-4 w-4" />
-                    Join
+                {event.meetingUrl && (
+                  <Button size="sm" asChild>
+                    <a
+                      href={event.meetingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Video className="mr-2 h-4 w-4" />
+                      Join
+                    </a>
                   </Button>
                 )}
               </div>
@@ -342,6 +291,92 @@ function WeekView() {
 }
 
 export default function CalendarPage() {
+  const { currentWorkspace } = useWorkspace();
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      if (!currentWorkspace?.id) return;
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `/api/calendar?workspaceId=${currentWorkspace.id}&limit=100`,
+        );
+        if (!res.ok) throw new Error("Failed to fetch events");
+        const data = await res.json();
+        setEvents(data.events || []);
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+        toast.error("Failed to load calendar events");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, [currentWorkspace?.id]);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  // Calculate metrics from real data
+  const today = new Date();
+  const todayEvents = events.filter((e) => {
+    const eventDate = new Date(e.startTime);
+    return eventDate.toDateString() === today.toDateString();
+  });
+
+  const thisWeekEvents = events.filter((e) => {
+    const eventDate = new Date(e.startTime);
+    const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return eventDate >= today && eventDate <= weekFromNow;
+  });
+
+  const totalHours = thisWeekEvents.reduce((sum, e) => {
+    const start = new Date(e.startTime);
+    const end = new Date(e.endTime);
+    const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+    return sum + hours;
+  }, 0);
+
+  const dynamicMetrics = [
+    {
+      label: "Events Today",
+      value: todayEvents.length.toString(),
+      change: `${todayEvents.length} scheduled`,
+      trend: "neutral" as const,
+      icon: <CalendarIcon className="h-5 w-5" />,
+    },
+    {
+      label: "This Week",
+      value: thisWeekEvents.length.toString(),
+      change: `${thisWeekEvents.length} upcoming`,
+      trend: "neutral" as const,
+      icon: <Clock className="h-5 w-5" />,
+    },
+    {
+      label: "Total Hours",
+      value: `${totalHours.toFixed(1)}h`,
+      change: "scheduled",
+      trend: "neutral" as const,
+      icon: <Clock className="h-5 w-5" />,
+    },
+    {
+      label: "Total Events",
+      value: events.length.toString(),
+      change: "all time",
+      trend: "neutral" as const,
+      icon: <Users className="h-5 w-5" />,
+    },
+  ];
+
   const tabs = [
     {
       id: "calendar",
@@ -351,7 +386,7 @@ export default function CalendarPage() {
     {
       id: "upcoming",
       label: "Upcoming",
-      content: <UpcomingEvents />,
+      content: <UpcomingEvents events={events} />,
     },
     {
       id: "week",
@@ -371,7 +406,7 @@ export default function CalendarPage() {
           New Event
         </Button>
       }
-      metrics={calendarMetrics}
+      metrics={dynamicMetrics}
       tabs={tabs}
       defaultTab="upcoming"
     />
