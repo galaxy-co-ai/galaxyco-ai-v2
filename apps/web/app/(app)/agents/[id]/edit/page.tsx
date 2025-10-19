@@ -16,49 +16,133 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Save, Play, Zap } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+interface AgentMetrics {
+  successRate: number;
+  avgDuration: number;
+  totalRuns: number;
+  lastRunAt: string | null;
+}
+
+interface AgentApiResponse {
+  agent: {
+    id: string;
+    name: string;
+    description: string | null;
+    workspaceId: string;
+    config?: {
+      aiProvider?: string;
+      model?: string;
+      systemPrompt?: string;
+    } | null;
+    metrics?: AgentMetrics;
+  };
+}
 
 export default function AgentEditPage() {
   const params = useParams<{ id: string }>();
-  const id = params?.id || "1";
+  const id = params?.id || "";
 
-  const [name, setName] = useState("Lead Scorer");
-  const [description, setDescription] = useState(
-    "AI agent that scores leads based on engagement and fit",
-  );
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [name, setName] = useState("...");
+  const [description, setDescription] = useState("");
   const [model, setModel] = useState("gpt-4");
   const [temperature, setTemperature] = useState("0.7");
-  const [systemPrompt, setSystemPrompt] = useState(
-    "You are a lead scoring AI. Analyze the provided lead data and assign a score from 0-100 based on...",
-  );
+  const [systemPrompt, setSystemPrompt] = useState("");
+  const [metrics, setMetrics] = useState<AgentMetrics | null>(null);
 
-  const handleSave = () => {
-    toast.success("Agent configuration saved");
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/agents/${id}`);
+        if (!res.ok) throw new Error("Failed to load agent");
+        const json: AgentApiResponse = await res.json();
+        if (!active) return;
+        const a = json.agent;
+        setName(a.name);
+        setDescription(a.description || "");
+        setModel(a.config?.model || "gpt-4");
+        setSystemPrompt(a.config?.systemPrompt || "");
+        setMetrics(a.metrics || null);
+      } catch (e) {
+        toast.error("Failed to load agent");
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    if (id) load();
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const res = await fetch(`/api/agents/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          description,
+          config: {
+            model,
+            systemPrompt,
+            temperature: parseFloat(temperature),
+          },
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to save agent");
+      toast.success("Agent configuration saved");
+    } catch (e) {
+      toast.error("Failed to save agent");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleTest = () => {
     toast.info("Test run started");
   };
 
+  const totalRunsDisplay = useMemo(() => metrics?.totalRuns ?? "—", [metrics]);
+  const successRateDisplay = useMemo(
+    () => (metrics ? `${metrics.successRate.toFixed(1)}%` : "—"),
+    [metrics],
+  );
+  const avgDurationDisplay = useMemo(
+    () => (metrics ? `${(metrics.avgDuration / 1000).toFixed(1)}s` : "—"),
+    [metrics],
+  );
+
   return (
     <PageShell
-      title={`Edit Agent: ${name}`}
+      title={loading ? "Loading agent..." : `Edit Agent: ${name}`}
       subtitle="Configure agent behavior, model settings, and training data"
       breadcrumbs={[
         { label: "Agents", href: "/agents" },
-        { label: name, href: `/agents/${id}` },
+        { label: name || "Agent", href: `/agents/${id}` },
         { label: "Edit" },
       ]}
       actions={
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleTest}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleTest}
+            disabled={loading}
+          >
             <Play className="mr-2 h-4 w-4" />
             Test Agent
           </Button>
-          <Button size="sm" onClick={handleSave}>
+          <Button size="sm" onClick={handleSave} disabled={loading || saving}>
             <Save className="mr-2 h-4 w-4" />
-            Save Changes
+            {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       }
@@ -82,6 +166,7 @@ export default function AgentEditPage() {
                     id="agent-name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    disabled={loading}
                   />
                 </div>
 
@@ -92,13 +177,14 @@ export default function AgentEditPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
+                    disabled={loading}
                   />
                 </div>
 
                 <div>
                   <Label htmlFor="model">AI Model</Label>
                   <Select value={model} onValueChange={setModel}>
-                    <SelectTrigger id="model">
+                    <SelectTrigger id="model" disabled={loading}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -114,6 +200,9 @@ export default function AgentEditPage() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Model selection is saved in agent config in a later step.
+                  </p>
                 </div>
 
                 <div>
@@ -129,6 +218,7 @@ export default function AgentEditPage() {
                     value={temperature}
                     onChange={(e) => setTemperature(e.target.value)}
                     className="w-full"
+                    disabled={loading}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     Lower = more focused, Higher = more creative
@@ -143,7 +233,7 @@ export default function AgentEditPage() {
                 <div className="flex justify-between items-center p-3 rounded-lg bg-background-subtle">
                   <div>
                     <p className="font-medium">Total Runs</p>
-                    <p className="text-2xl font-bold">3,421</p>
+                    <p className="text-2xl font-bold">{totalRunsDisplay}</p>
                   </div>
                   <Zap className="h-8 w-8 text-primary" />
                 </div>
@@ -152,7 +242,7 @@ export default function AgentEditPage() {
                   <div>
                     <p className="font-medium">Success Rate</p>
                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      97.8%
+                      {successRateDisplay}
                     </p>
                   </div>
                 </div>
@@ -160,14 +250,14 @@ export default function AgentEditPage() {
                 <div className="flex justify-between items-center p-3 rounded-lg bg-background-subtle">
                   <div>
                     <p className="font-medium">Avg Response Time</p>
-                    <p className="text-2xl font-bold">1.2s</p>
+                    <p className="text-2xl font-bold">{avgDurationDisplay}</p>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center p-3 rounded-lg bg-background-subtle">
                   <div>
                     <p className="font-medium">Cost (Last 30 Days)</p>
-                    <p className="text-2xl font-bold">$42.50</p>
+                    <p className="text-2xl font-bold">—</p>
                   </div>
                 </div>
               </div>
@@ -184,6 +274,7 @@ export default function AgentEditPage() {
                 onChange={(e) => setSystemPrompt(e.target.value)}
                 rows={12}
                 className="font-mono text-sm"
+                disabled={loading}
               />
               <p className="text-sm text-muted-foreground">
                 Define how the agent should behave and what its goals are. Be
@@ -213,7 +304,7 @@ export default function AgentEditPage() {
                   />
                 </div>
               ))}
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" disabled={loading}>
                 <Save className="mr-2 h-4 w-4" />
                 Add Example
               </Button>

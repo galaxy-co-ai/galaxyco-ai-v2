@@ -109,7 +109,7 @@ export async function PATCH(
 
     const agentId = params.id;
     const body = await req.json();
-    const { name, description, status } = body;
+    const { name, description, status, config } = body;
 
     // Get agent
     const agent = await db.query.agents.findFirst({
@@ -135,6 +135,15 @@ export async function PATCH(
     if (name !== undefined) updateData.name = name;
     if (description !== undefined) updateData.description = description;
     if (status !== undefined) updateData.status = status;
+
+    // Handle config updates (merge with existing config)
+    if (config !== undefined) {
+      const existingConfig = (agent.config as any) || {};
+      updateData.config = {
+        ...existingConfig,
+        ...config,
+      };
+    }
 
     const [updatedAgent] = await db
       .update(agents)
