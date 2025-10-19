@@ -56,15 +56,22 @@ export default function AdminUsersPage() {
   const [deleteUser, setDeleteUser] = useState<AdminUser | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const limit = 20;
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         setIsLoading(true);
-        const res = await fetch(`/api/admin/users?limit=100`);
+        const offset = (page - 1) * limit;
+        const res = await fetch(
+          `/api/admin/users?limit=${limit}&offset=${offset}`,
+        );
         if (!res.ok) throw new Error("Failed to fetch users");
         const json = await res.json();
         setUsers(json.users || []);
+        setTotalUsers(json.total || json.users?.length || 0);
       } catch (e) {
         console.error("Failed to load users", e);
       } finally {
@@ -72,7 +79,7 @@ export default function AdminUsersPage() {
       }
     }
     fetchUsers();
-  }, []);
+  }, [page]);
 
   async function handleUpdateUser(updatedData: Partial<AdminUser>) {
     if (!editUser) return;
@@ -84,13 +91,16 @@ export default function AdminUsersPage() {
         body: JSON.stringify(updatedData),
       });
       if (!res.ok) throw new Error("Failed to update user");
-      // Refresh users list
-      const usersRes = await fetch(`/api/admin/users?limit=100`);
+      setEditUser(null);
+      // Refresh current page
+      const offset = (page - 1) * limit;
+      const usersRes = await fetch(
+        `/api/admin/users?limit=${limit}&offset=${offset}`,
+      );
       if (usersRes.ok) {
         const json = await usersRes.json();
         setUsers(json.users || []);
       }
-      setEditUser(null);
     } catch (e) {
       console.error("Failed to update user", e);
     } finally {
@@ -499,6 +509,34 @@ export default function AdminUsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Pagination */}
+      {totalUsers > limit && (
+        <div className="flex items-center justify-between mt-6">
+          <p className="text-sm text-muted-foreground">
+            Showing {Math.min((page - 1) * limit + 1, totalUsers)} to{" "}
+            {Math.min(page * limit, totalUsers)} of {totalUsers} users
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1 || isLoading}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page + 1)}
+              disabled={page * limit >= totalUsers || isLoading}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </ListPage>
   );
 }

@@ -67,15 +67,22 @@ export default function AdminWorkspacesPage() {
   );
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalWorkspaces, setTotalWorkspaces] = useState(0);
+  const limit = 15;
 
   useEffect(() => {
     async function fetchWorkspaces() {
       try {
         setIsLoading(true);
-        const res = await fetch(`/api/admin/workspaces?limit=100`);
+        const offset = (page - 1) * limit;
+        const res = await fetch(
+          `/api/admin/workspaces?limit=${limit}&offset=${offset}`,
+        );
         if (!res.ok) throw new Error("Failed to fetch workspaces");
         const json = await res.json();
         setWorkspaces(json.workspaces || []);
+        setTotalWorkspaces(json.total || json.workspaces?.length || 0);
       } catch (e) {
         console.error("Failed to load workspaces", e);
       } finally {
@@ -83,7 +90,7 @@ export default function AdminWorkspacesPage() {
       }
     }
     fetchWorkspaces();
-  }, []);
+  }, [page]);
 
   async function handleUpdateWorkspace(updatedData: Partial<AdminWorkspace>) {
     if (!editWorkspace) return;
@@ -95,13 +102,16 @@ export default function AdminWorkspacesPage() {
         body: JSON.stringify(updatedData),
       });
       if (!res.ok) throw new Error("Failed to update workspace");
-      // Refresh workspaces list
-      const workspacesRes = await fetch(`/api/admin/workspaces?limit=100`);
+      setEditWorkspace(null);
+      // Refresh current page
+      const offset = (page - 1) * limit;
+      const workspacesRes = await fetch(
+        `/api/admin/workspaces?limit=${limit}&offset=${offset}`,
+      );
       if (workspacesRes.ok) {
         const json = await workspacesRes.json();
         setWorkspaces(json.workspaces || []);
       }
-      setEditWorkspace(null);
     } catch (e) {
       console.error("Failed to update workspace", e);
     } finally {
@@ -548,6 +558,35 @@ export default function AdminWorkspacesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Pagination */}
+      {totalWorkspaces > limit && (
+        <div className="flex items-center justify-between mt-6">
+          <p className="text-sm text-muted-foreground">
+            Showing {Math.min((page - 1) * limit + 1, totalWorkspaces)} to{" "}
+            {Math.min(page * limit, totalWorkspaces)} of {totalWorkspaces}{" "}
+            workspaces
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1 || isLoading}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page + 1)}
+              disabled={page * limit >= totalWorkspaces || isLoading}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </ListPage>
   );
 }
