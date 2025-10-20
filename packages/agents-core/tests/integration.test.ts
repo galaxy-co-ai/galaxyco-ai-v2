@@ -15,15 +15,18 @@ import {
 import { createTool } from "../src/tools";
 import type { Message, RunOptions, ExecutionContext } from "../src/types";
 
-// Mock OpenAI
-vi.mock("openai", () => ({
-  default: vi.fn(() => ({
-    chat: {
-      completions: {
-        create: vi.fn(),
-      },
+// Mock OpenAI - proper vitest pattern for default exports
+const mockCreate = vi.fn();
+const MockOpenAI = vi.fn(() => ({
+  chat: {
+    completions: {
+      create: mockCreate,
     },
-  })),
+  },
+}));
+
+vi.mock("openai", () => ({
+  default: MockOpenAI,
 }));
 
 // ============================================================================
@@ -36,21 +39,21 @@ describe("End-to-End Security Validation", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Setup OpenAI mock
-    const OpenAI = require("openai").default;
+    // Reset mock implementation
+    mockCreate.mockReset();
     mockOpenAI = {
       chat: {
         completions: {
-          create: vi.fn(),
+          create: mockCreate,
         },
       },
     };
-    OpenAI.mockImplementation(() => mockOpenAI);
+    MockOpenAI.mockReturnValue(mockOpenAI);
   });
 
   it("should execute agent with all guardrails active successfully", async () => {
     // Setup mock OpenAI response
-    mockOpenAI.chat.completions.create.mockResolvedValue({
+    mockCreate.mockResolvedValue({
       choices: [
         {
           message: {
@@ -133,7 +136,7 @@ describe("End-to-End Security Validation", () => {
 
   it("should redact secrets in output with output validation guardrail", async () => {
     // Mock OpenAI to return output with fake API key
-    mockOpenAI.chat.completions.create.mockResolvedValue({
+    mockCreate.mockResolvedValue({
       choices: [
         {
           message: {
@@ -177,7 +180,7 @@ describe("End-to-End Security Validation", () => {
 
   it("should enforce cost limits and halt execution", async () => {
     // Mock OpenAI to simulate high token usage
-    mockOpenAI.chat.completions.create
+    mockCreate
       .mockResolvedValueOnce({
         choices: [
           {

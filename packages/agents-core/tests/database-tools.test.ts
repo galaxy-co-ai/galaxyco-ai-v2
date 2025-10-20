@@ -11,15 +11,21 @@ import {
 } from "../src/tools/database-tools";
 import type { ExecutionContext } from "../src/types";
 
-// Mock the database module
-vi.mock("@galaxyco/database", () => ({
-  db: {},
-  withTenant: vi.fn(),
-  agents: {},
-  like: vi.fn((field, pattern) => ({ field, pattern })),
-  or: vi.fn((...conditions) => ({ or: conditions })),
-  eq: vi.fn((field, value) => ({ field, value })),
-}));
+// Mock the database module - must be at top level before any imports
+vi.mock("@galaxyco/database", async () => {
+  const actual = await vi.importActual<any>("drizzle-orm");
+  return {
+    db: { query: {} },
+    withTenant: vi.fn(),
+    agents: {},
+    agentExecutions: {},
+    workspaceMembers: {},
+    like: actual.like || vi.fn((field, pattern) => ({ field, pattern })),
+    or: actual.or || vi.fn((...conditions) => ({ or: conditions })),
+    eq: actual.eq || vi.fn((field, value) => ({ field, value })),
+    and: actual.and || vi.fn((...conditions) => ({ and: conditions })),
+  };
+});
 
 // ============================================================================
 // MOCK DATA SETUP (Phase 2.1)
