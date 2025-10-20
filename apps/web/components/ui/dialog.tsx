@@ -69,11 +69,11 @@ const dialogContentVariants = cva(
   {
     variants: {
       size: {
-        sm: "max-w-sm p-spacing-md z-dialog",
-        default: "max-w-lg p-spacing-lg z-dialog",
-        lg: "max-w-2xl p-spacing-xl z-dialog",
-        xl: "max-w-4xl p-spacing-xl z-dialog",
-        full: "max-w-[95vw] max-h-[95vh] p-spacing-xl z-dialog",
+        sm: "max-w-sm p-spacing-md z-modal",
+        default: "max-w-lg p-spacing-lg z-modal",
+        lg: "max-w-2xl p-spacing-xl z-modal",
+        xl: "max-w-4xl p-spacing-xl z-modal",
+        full: "max-w-[95vw] max-h-[95vh] p-spacing-xl z-modal",
       },
     },
     defaultVariants: {
