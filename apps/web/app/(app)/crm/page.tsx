@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { Spinner } from "@/components/ui/spinner";
+import { WorkspaceGuard } from "@/components/workspace/workspace-guard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,14 @@ interface CRMMetrics {
 }
 
 export default function CRMDashboard() {
+  return (
+    <WorkspaceGuard>
+      <CRMContent />
+    </WorkspaceGuard>
+  );
+}
+
+function CRMContent() {
   const { currentWorkspace } = useWorkspace();
   const [metrics, setMetrics] = useState<CRMMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);

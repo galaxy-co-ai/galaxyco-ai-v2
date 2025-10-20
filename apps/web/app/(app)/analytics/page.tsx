@@ -5,6 +5,7 @@ import { DetailPage } from "@/components/templates";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useWorkspace } from "@/contexts/workspace-context";
+import { WorkspaceGuard } from "@/components/workspace/workspace-guard";
 import { toast } from "sonner";
 import {
   DollarSign,
@@ -58,6 +59,14 @@ interface AnalyticsData {
  * Analytics Dashboard Page - Connected to Real APIs
  */
 export default function AnalyticsPage() {
+  return (
+    <WorkspaceGuard>
+      <AnalyticsContent />
+    </WorkspaceGuard>
+  );
+}
+
+function AnalyticsContent() {
   const { currentWorkspace } = useWorkspace();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);

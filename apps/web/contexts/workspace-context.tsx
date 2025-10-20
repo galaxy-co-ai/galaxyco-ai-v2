@@ -32,42 +32,70 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchWorkspaces = async () => {
+    console.group("🏢 Workspace Context: Fetching workspaces");
+    console.log("Timestamp:", new Date().toISOString());
+    console.log("isSignedIn:", isSignedIn);
+
     if (!isSignedIn) {
+      console.log("❌ User not signed in, clearing workspaces");
       setWorkspaces([]);
       setCurrentWorkspace(null);
       setIsLoading(false);
+      console.groupEnd();
       return;
     }
 
     try {
+      console.log("📡 Fetching from /api/workspaces...");
       const response = await fetch("/api/workspaces");
+      console.log("Response status:", response.status, response.statusText);
+
       if (response.ok) {
         const data = await response.json();
+        console.log("✅ Workspaces fetched successfully:", data);
+        console.log("Workspace count:", data.length);
         setWorkspaces(data);
 
         // Get saved workspace ID from cookie
         const savedWorkspaceId = getCookie("workspace-id");
+        console.log("Saved workspace ID from cookie:", savedWorkspaceId);
 
         if (
           savedWorkspaceId &&
           data.find((w: Workspace) => w.id === savedWorkspaceId)
         ) {
           // Use saved workspace if it exists and user has access
-          setCurrentWorkspace(
-            data.find((w: Workspace) => w.id === savedWorkspaceId),
+          const workspace = data.find(
+            (w: Workspace) => w.id === savedWorkspaceId,
           );
+          console.log("✅ Using saved workspace:", workspace);
+          setCurrentWorkspace(workspace);
         } else if (data.length > 0) {
           // Default to first workspace
+          console.log("✅ Using first workspace as default:", data[0]);
           setCurrentWorkspace(data[0]);
           setCookie("workspace-id", data[0].id);
+        } else {
+          console.warn("⚠️ No workspaces available - user needs to create one");
+          setCurrentWorkspace(null);
         }
+      } else {
+        console.error(
+          "❌ Failed to fetch workspaces - HTTP error:",
+          response.status,
+        );
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
       }
     } catch (error) {
+      console.error("❌ Exception while fetching workspaces:", error);
       logger.error("Failed to fetch workspaces", {
         error: error instanceof Error ? error.message : String(error),
       });
     } finally {
+      console.log("Setting isLoading to false");
       setIsLoading(false);
+      console.groupEnd();
     }
   };
 

@@ -19,7 +19,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "precommit": "turbo run typecheck && turbo run lint && prettier --check .",
     "health-check": "pnpm precommit",
-    "db:seed": "npx tsx scripts/seed-database.ts",
+    "db:seed": "tsx scripts/database/simple-seed.ts",
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
@@ -41,6 +41,7 @@
     "lint-staged": "^16.2.3",
     "next": "14.2.33",
     "prettier": "^3.3.0",
+    "tsx": "^4.20.6",
     "turbo": "^2.0.0",
     "typescript": "^5.5.0"
   },

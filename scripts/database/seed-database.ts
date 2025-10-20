@@ -2,12 +2,21 @@
  * Database Seed Script
  *
  * Populates database with sample data for testing and demonstration.
- * Run with: npx tsx scripts/seed-database.ts
+ * Run with: npx tsx scripts/database/seed-database.ts
  *
  * SECURITY: This script creates test data. DO NOT run in production!
  */
 
-import { db } from "../packages/database/src/client";
+// Load environment variables FIRST (before any imports)
+import dotenv from "dotenv";
+import path from "path";
+
+const envPath = path.resolve(process.cwd(), ".env.local");
+console.log("📄 Loading environment from:", envPath);
+dotenv.config({ path: envPath });
+
+// Now import database after env is loaded
+import { db } from "../../packages/database/src/client.js";
 import {
   users,
   workspaces,
@@ -16,16 +25,22 @@ import {
   agentTemplates,
   knowledgeItems,
   knowledgeCollections,
-} from "../packages/database/src/schema";
+} from "../../packages/database/src/schema.js";
 import { eq } from "drizzle-orm";
+
+// Get Clerk user ID from environment or use default
+// Set CLERK_USER_ID_FOR_SEED in .env.local to your actual Clerk user ID
+const CLERK_USER_ID = process.env.CLERK_USER_ID_FOR_SEED || "user_test_owner_1";
+
+console.log("🌱 Using Clerk User ID for seed:", CLERK_USER_ID);
 
 // Sample user data
 const SAMPLE_USERS = [
   {
-    clerkUserId: "user_test_owner_1",
-    email: "owner@galaxyco-test.com",
-    firstName: "Test",
-    lastName: "Owner",
+    clerkUserId: CLERK_USER_ID,
+    email: "demo@galaxyco.ai",
+    firstName: "Demo",
+    lastName: "User",
     avatarUrl: null,
   },
   {

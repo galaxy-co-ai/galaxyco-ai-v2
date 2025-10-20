@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useWorkspace } from "@/contexts/workspace-context";
 import { Spinner } from "@/components/ui/spinner";
+import { WorkspaceGuard } from "@/components/workspace/workspace-guard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -59,6 +60,14 @@ interface Notification {
 }
 
 export default function MyWorkHub() {
+  return (
+    <WorkspaceGuard>
+      <MyWorkContent />
+    </WorkspaceGuard>
+  );
+}
+
+function MyWorkContent() {
   const { currentWorkspace } = useWorkspace();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
