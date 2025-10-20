@@ -1,0 +1,82 @@
+name: Auto-Generate Changelog
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Number of days to look back"
+        required: false
+        default: "7"
+      include_json:
+        description: "Generate JSON output"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  changelog:
+    name: Generate & Commit Changelog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for changelog
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate changelog
+        run: |
+          DAYS="${{ github.event.inputs.days || '7' }}"
+          if [[ "${{ github.event.inputs.include_json }}" == "true" ]]; then
+            pnpm changelog --days $DAYS --json
+          else
+            pnpm changelog --days $DAYS
+          fi
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code docs/RECENT_CHANGES.md || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/RECENT_CHANGES.md docs/RECENT_CHANGES.json || true
+          git commit -m "chore(docs): auto-update changelog [skip ci]"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## 📋 Changelog Generation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Period**: Last ${{ github.event.inputs.days || '7' }} days" >> $GITHUB_STEP_SUMMARY
+          echo "**Output**: docs/RECENT_CHANGES.md" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ steps.git-check.outputs.changed }}" == "true" ]]; then
+            echo "**Status**: ✅ Changes committed and pushed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status**: ℹ️ No changes detected" >> $GITHUB_STEP_SUMMARY
+          fi

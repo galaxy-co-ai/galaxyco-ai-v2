@@ -23,6 +23,8 @@
     "db:link-user": "tsx scripts/database/link-current-user.ts",
     "db:setup": "tsx scripts/database/setup-production.ts",
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
+    "changelog": "tsx scripts/generate-changelog.ts",
+    "changelog:json": "tsx scripts/generate-changelog.ts --json",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
     "release:rollback": "bash scripts/rollback.sh",

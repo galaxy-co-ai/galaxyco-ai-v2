@@ -1,718 +1,1028 @@
 # 📝 Recent Changes - Auto-Generated
 
-**Generated**: 2025-10-20 03:31 UTC  
-**Period**: Last 1 days  
-**Source**: Git commit history
+**Generated**: Mon, 20 Oct 2025 03:45:02 GMT
+**Period**: Last 14 days
+**Source**: Git commit history (Conventional Commits)
 
 ---
 
 ## 📊 Summary
 
-- **Commits**: 32
-- **Files Changed**: 85
-- **Lines Added**: +22764
-- **Lines Removed**: -1117
+- **Total Commits**: 448
+- **Files Changed**: 3
+- **Lines Added**: +771
+- **Lines Removed**: -673
+- **Breaking Changes**: 2
 
 ---
 
-## 📋 Commit Log (Most Recent First)
+## ⚠️ Breaking Changes
 
-### 08b832a - fix(web): correct scrollbar color by using rgb() instead of hsl()
+### 245bbc5 - implement OpenSea-inspired compact UI redesign
 
-**Date**: 2025-10-19 22:18  
-**Author**: Dalton Cox  
-**Type**: fix(web): correct scrollbar color by using rgb() instead of hsl()
+**Type**: `feat`
+**Scope**: `web`
+**Author**: Dalton Cox
+**Date**: 10/13/2025
 
-M apps/web/styles/globals.css
+- Add centralized design token system (design-tokens.css)
+- Update homepage with compressed spacing (~40% space reduction)
+- Update marketplace with compact agent cards (~25% reduction)
+- Reduce Category Chip height to 32px
+- Apply token system across all components
+- Update MarketplaceGrid and MarketplaceHero with compact spacing
+- Add comprehensive testing and validation documentation
 
-### db7439f - fix(web): fix onboarding wizard stuck loading and add markdown rendering
+Tested on:
 
-**Date**: 2025-10-19 22:15  
-**Author**: Dalton Cox  
-**Type**: fix(web): fix onboarding wizard stuck loading and add markdown rendering
+- Desktop (1920x1080): ✅
+- Mobile (390x844): ✅
 
-M apps/web/app/api/onboarding/process/route.ts
-M apps/web/components/onboarding/AISetupWizard.tsx
-M apps/web/package.json
-M pnpm-lock.yaml
+Modified files:
 
-### 1b9c5f4 - fix(web): ensure dialog content renders above overlay (z-index)
+- apps/web/styles/design-tokens.css (NEW)
+- apps/web/styles/globals.css (token integration)
+- apps/web/app/page.tsx (compact homepage)
+- apps/web/app/marketplace/page.tsx (compact marketplace)
+- apps/web/components/marketplace/\* (compact components)
+- docs/UI_REDESIGN_FINAL_VALIDATION.md (NEW)
 
-**Date**: 2025-10-19 22:05  
-**Author**: Dalton Cox  
-**Type**: fix(web): ensure dialog content renders above overlay (z-index)
+BREAKING CHANGE: UI layout significantly more compact, may affect user workflows
 
-M apps/web/components/ui/dialog.tsx
+Note: Skipping pre-commit hooks due to external Drizzle ORM type issues in database package, not related to web UI changes
 
-### 7db97fe - feat(web): add ai-powered setup wizard with conversational interface
+### 6812116 - remove demo/mock infrastructure in favor of real agents only
 
-**Date**: 2025-10-19 21:58  
-**Author**: Dalton Cox  
-**Type**: feat(web): add ai-powered setup wizard with conversational interface
+**Type**: `refactor`
+**Scope**: `web`
+**Author**: Dalton Cox
+**Date**: 10/10/2025
 
-A apps/web/app/api/onboarding/finalize/route.ts
-A apps/web/app/api/onboarding/process/route.ts
-A apps/web/app/api/onboarding/provision-agents/route.ts
-A apps/web/app/api/onboarding/provision-data/route.ts
-M apps/web/components/layout/main-sidebar.tsx
-A apps/web/components/onboarding/AISetupWizard.tsx
+BREAKING CHANGE: Remove all demo/mock agent infrastructure
 
-### b2e4ef3 - feat(web): add user-friendly workspace creation onboarding
+- Delete mock-agents.ts and use-mock-agent-list.ts
+- Remove Load Demo Agents and Reset Demo Data buttons
+- Update agents page to use real database agents via use-agent-list hook
+- Simplify TestPanel to only use real API execution (mock/live modes)
+- Remove client-side demo agent detection and execution
+- Fix TypeScript errors by replacing MockAgent with proper Agent interface
+- Update empty states to encourage creating real agents
+- Agent detail page now shows 'not found' (TODO: fetch from database)
 
-**Date**: 2025-10-19 21:10  
-**Author**: Dalton Cox  
-**Type**: feat(web): add user-friendly workspace creation onboarding
-
-M apps/web/app/api/workspaces/route.ts
-A apps/web/components/workspace/create-workspace-modal.tsx
-M apps/web/components/workspace/workspace-guard.tsx
-M package.json
-A scripts/database/link-current-user.ts
-A scripts/database/setup-production.ts
-
-### 7857af9 - fix(web): implement comprehensive workspace loading system with error handling
-
-**Date**: 2025-10-19 20:44  
-**Author**: Dalton Cox  
-**Type**: fix(web): implement comprehensive workspace loading system with error handling
-
-M apps/web/app/(app)/analytics/page.tsx
-M apps/web/app/(app)/crm/page.tsx
-M apps/web/app/(app)/my-work/page.tsx
-A apps/web/components/workspace/workspace-guard.tsx
-M apps/web/contexts/workspace-context.tsx
-M package.json
-M pnpm-lock.yaml
-M scripts/database/seed-database.ts
-A scripts/database/simple-seed.ts
-
-### b4ee92b - docs: update session status and ai context with oauth integration
-
-**Date**: 2025-10-19 18:22  
-**Author**: Dalton Cox  
-**Type**: docs: update session status and ai context with oauth integration
-
-M docs/AI_CONTEXT.md
-
-### 36cd74e - feat(web,db): implement full oauth flow for google and microsoft
-
-**Date**: 2025-10-19 18:15  
-**Author**: Dalton Cox  
-**Type**: feat(web,db): implement full oauth flow for google and microsoft
-
-M apps/web/app/api/auth/oauth/google/callback/route.ts
-A apps/web/app/api/auth/oauth/microsoft/callback/route.ts
-M apps/web/app/api/integrations/[id]/disconnect/route.ts
-A apps/web/app/api/integrations/microsoft/connect/route.ts
-A apps/web/lib/encryption.ts
-A packages/database/migrations/0007_silent_stardust.sql
-A packages/database/migrations/meta/0007_snapshot.json
-M packages/database/migrations/meta/\_journal.json
-M packages/database/src/schema.ts
-
-### 80401e4 - feat(web): implement real oauth integration flow for gmail and calendar
-
-**Date**: 2025-10-19 17:48  
-**Author**: Dalton Cox  
-**Type**: feat(web): implement real oauth integration flow for gmail and calendar
-
-M apps/web/app/(app)/settings/integrations/page.tsx
-A apps/web/app/api/auth/oauth/google/callback/route.ts
-A apps/web/app/api/integrations/[id]/disconnect/route.ts
-A apps/web/app/api/integrations/google/connect/route.ts
-M apps/web/app/api/integrations/route.ts
-
-### bff86ce - feat(web): add comprehensive e2e test suite and agent activity monitoring
-
-**Date**: 2025-10-19 17:40  
-**Author**: Dalton Cox  
-**Type**: feat(web): add comprehensive e2e test suite and agent activity monitoring
-
-A apps/web/app/(app)/agents/activity/page.tsx
-A apps/web/app/api/agents/executions/route.ts
-A tests/e2e/admin-library-pages.spec.ts
-A tests/e2e/analytics-agents.spec.ts
-A tests/e2e/crm-pages.spec.ts
-A tests/e2e/dashboard.spec.ts
-A tests/e2e/settings-pages.spec.ts
-
-### b3a8738 - docs: update session status - documentation pack integration complete
-
-**Date**: 2025-10-19 17:09  
-**Author**: Dalton Cox  
-**Type**: docs: update session status - documentation pack integration complete
-
-M docs/status/CURRENT_SESSION.md
-A docs/status/sessions/2025-01-19-foundation-documentation.md
-
-### d309953 - docs: integrate comprehensive documentation pack and testing infrastructure
-
-**Date**: 2025-10-19 17:00  
-**Author**: Dalton Cox  
-**Type**: docs: integrate comprehensive documentation pack and testing infrastructure
-
-A .spectral.yaml
-M package.json
-M pnpm-lock.yaml
-
-### a9d1d45 - docs: complete agent onboarding documentation suite
-
-**Date**: 2025-10-19 13:45  
-**Author**: Dalton Cox  
-**Type**: docs: complete agent onboarding documentation suite
-
-A docs/ARCHITECTURE.md
-A docs/GETTING_STARTED.md
-A docs/ROADMAP.md
-A docs/TECH_STACK.md
-A docs/api/ENDPOINTS_CATALOG.md
-A docs/database/SCHEMA.md
-
-### bcf13e7 - docs: update session status with api specification work
-
-**Date**: 2025-10-19 13:29  
-**Author**: Dalton Cox  
-**Type**: docs: update session status with api specification work
-
-M docs/status/CURRENT_SESSION.md
-
-### 153e9ae - docs: add comprehensive api design specification
-
-**Date**: 2025-10-19 13:28  
-**Author**: Dalton Cox  
-**Type**: docs: add comprehensive api design specification
-
-A docs/api/API_DESIGN_SPECIFICATION.md
-A docs/planning/REQUIRED_DOCUMENTATION_LIST.md
-
-### 094a795 - docs: celebrate 100% api integration milestone
-
-**Date**: 2025-10-19 13:13  
-**Author**: Dalton Cox  
-**Type**: docs: celebrate 100% api integration milestone
-
-M docs/status/API_INTEGRATION_ROADMAP.md
-M docs/status/CURRENT_SESSION.md
-
-### c193672 - feat(web): convert library pages to use real api endpoints
-
-**Date**: 2025-10-19 13:11  
-**Author**: Dalton Cox  
-**Type**: feat(web): convert library pages to use real api endpoints
-
-M apps/web/app/(app)/library/resources/page.tsx
-M apps/web/app/(app)/library/templates/page.tsx
-
-### 514fd22 - docs: add comprehensive api integration roadmap
-
-**Date**: 2025-10-19 13:05  
-**Author**: Dalton Cox  
-**Type**: docs: add comprehensive api integration roadmap
-
-A docs/status/API_INTEGRATION_ROADMAP.md
-
-### 71b32e7 - docs: update session status with phase 4 completion
-
-**Date**: 2025-10-19 13:03  
-**Author**: Dalton Cox  
-**Type**: docs: update session status with phase 4 completion
-
-M docs/status/CURRENT_SESSION.md
-
-### cd78ea7 - feat(web): convert data and developer pages to use real api endpoints
-
-**Date**: 2025-10-19 13:00  
-**Author**: Dalton Cox  
-**Type**: feat(web): convert data and developer pages to use real api endpoints
-
-M apps/web/app/(app)/data/audit-log/page.tsx
-M apps/web/app/(app)/developer/playground/page.tsx
-M apps/web/app/(app)/developer/webhooks/page.tsx
-M apps/web/package.json
-M pnpm-lock.yaml
-
-### f4ce7dc - feat(web/api): add templates and resources api stubs, convert pages to real apis
-
-**Date**: 2025-10-19 12:52  
-**Author**: Dalton Cox  
-**Type**: feat(web/api): add templates and resources api stubs, convert pages to real apis
-
-M apps/web/app/(app)/library/resources/page.tsx
-M apps/web/app/(app)/library/templates/page.tsx
-A apps/web/app/api/resources/route.ts
-A apps/web/app/api/templates/route.ts
-
-### f04679c - feat(web): connect exports and segments pages to real apis
-
-**Date**: 2025-10-19 12:50  
-**Author**: Dalton Cox  
-**Type**: feat(web): connect exports and segments pages to real apis
-
-M apps/web/app/(app)/crm/segments/page.tsx
-M apps/web/app/(app)/data/exports/page.tsx
-
-### 94cfc5e - feat(web): connect agent edit/logs pages to real apis with config save
-
-**Date**: 2025-10-19 12:45  
-**Author**: Dalton Cox  
-**Type**: feat(web): connect agent edit/logs pages to real apis with config save
-
-M apps/web/app/(app)/agents/[id]/edit/page.tsx
-M apps/web/app/api/agents/[id]/route.ts
-
-### c7c645e - feat(web): convert library templates/resources and crm segments pages to real apis
-
-**Date**: 2025-10-19 12:30  
-**Author**: Dalton Cox  
-**Type**: feat(web): convert library templates/resources and crm segments pages to real apis
-
-M apps/web/app/(app)/crm/segments/page.tsx
-M apps/web/app/(app)/library/resources/page.tsx
-M apps/web/app/(app)/library/templates/page.tsx
-A docs/status/REMAINING_PAGES_TO_CONVERT.md
-
-### 0fe2224 - docs: update session status - phase 3 complete
-
-**Date**: 2025-10-19 12:24  
-**Author**: Dalton Cox  
-**Type**: docs: update session status - phase 3 complete
-
-M docs/status/CURRENT_SESSION.md
-
-### e8d2850 - feat(web/api): add pagination to admin users/workspaces and audit-log endpoint
-
-**Date**: 2025-10-19 12:23  
-**Author**: Dalton Cox  
-**Type**: feat(web/api): add pagination to admin users/workspaces and audit-log endpoint
-
-M apps/web/app/(app)/admin/users/page.tsx
-M apps/web/app/(app)/admin/workspaces/page.tsx
-A apps/web/app/api/admin/audit-log/route.ts
-
-### 7888146 - feat(web): add admin user/workspace actions (view/edit/delete) and recent activity feed
-
-**Date**: 2025-10-19 12:19  
-**Author**: Dalton Cox  
-**Type**: feat(web): add admin user/workspace actions (view/edit/delete) and recent activity feed
-
-M apps/web/app/(app)/admin/page.tsx
-M apps/web/app/(app)/admin/users/page.tsx
-M apps/web/app/(app)/admin/workspaces/page.tsx
-
-### 7753e3c - docs: update session status 2025-10-19
-
-**Date**: 2025-10-19 10:33  
-**Author**: Dalton Cox  
-**Type**: docs: update session status 2025-10-19
-
-M docs/status/sessions/2025-10-19.md
-
-### 8db9951 - feat(web): wire admin pages to real api routes
-
-**Date**: 2025-10-19 10:32  
-**Author**: Dalton Cox  
-**Type**: feat(web): wire admin pages to real api routes
-
-M apps/web/app/(app)/admin/analytics/page.tsx
-M apps/web/app/(app)/admin/page.tsx
-M apps/web/app/(app)/admin/settings/page.tsx
-M apps/web/app/(app)/admin/users/page.tsx
-M apps/web/app/(app)/admin/workspaces/page.tsx
-M docs/status/CURRENT_SESSION.md
-
-### 165b555 - docs: update session status 2025-10-19 - phase 2 settings complete
-
-**Date**: 2025-10-19 10:14  
-**Author**: Dalton Cox  
-**Type**: docs: update session status 2025-10-19 - phase 2 settings complete
-
-M docs/status/CURRENT_SESSION.md
-A docs/status/sessions/2025-10-19.md
-
-### 398fc65 - feat(web): connect settings pages to real api endpoints
-
-**Date**: 2025-10-19 10:12  
-**Author**: Dalton Cox  
-**Type**: feat(web): connect settings pages to real api endpoints
-
-M apps/web/app/(app)/settings/billing/page.tsx
-M apps/web/app/(app)/settings/integrations/page.tsx
-M apps/web/app/(app)/settings/notifications/page.tsx
-M apps/web/app/(app)/settings/profile/page.tsx
-M apps/web/app/(app)/settings/security/page.tsx
-M apps/web/app/(app)/settings/team/page.tsx
-M apps/web/app/(app)/settings/workspace/page.tsx
-
-### 49a864f - feat(api): add settings endpoints for users, workspace, billing, and integrations
-
-**Date**: 2025-10-19 10:11  
-**Author**: Dalton Cox  
-**Type**: feat(api): add settings endpoints for users, workspace, billing, and integrations
-
-A apps/web/app/api/billing/route.ts
-A apps/web/app/api/integrations/route.ts
-A apps/web/app/api/users/me/preferences/route.ts
-A apps/web/app/api/users/me/route.ts
-A apps/web/app/api/workspaces/current/members/route.ts
-A apps/web/app/api/workspaces/current/route.ts
-A apps/web/app/api/workspaces/current/security/route.ts
-
----
-
-## 📁 Files Modified (Last 1 Days)
-
-```
-.spectral.yaml
-apps/web/app/(app)/admin/analytics/page.tsx
-apps/web/app/(app)/admin/page.tsx
-apps/web/app/(app)/admin/settings/page.tsx
-apps/web/app/(app)/admin/users/page.tsx
-apps/web/app/(app)/admin/workspaces/page.tsx
-apps/web/app/(app)/agents/[id]/edit/page.tsx
-apps/web/app/(app)/agents/activity/page.tsx
-apps/web/app/(app)/analytics/page.tsx
-apps/web/app/(app)/crm/page.tsx
-apps/web/app/(app)/crm/segments/page.tsx
-apps/web/app/(app)/data/audit-log/page.tsx
-apps/web/app/(app)/data/exports/page.tsx
-apps/web/app/(app)/developer/playground/page.tsx
-apps/web/app/(app)/developer/webhooks/page.tsx
-apps/web/app/(app)/library/resources/page.tsx
-apps/web/app/(app)/library/templates/page.tsx
-apps/web/app/(app)/my-work/page.tsx
-apps/web/app/(app)/settings/billing/page.tsx
-apps/web/app/(app)/settings/integrations/page.tsx
-apps/web/app/(app)/settings/notifications/page.tsx
-apps/web/app/(app)/settings/profile/page.tsx
-apps/web/app/(app)/settings/security/page.tsx
-apps/web/app/(app)/settings/team/page.tsx
-apps/web/app/(app)/settings/workspace/page.tsx
-apps/web/app/api/admin/audit-log/route.ts
-apps/web/app/api/agents/[id]/route.ts
-apps/web/app/api/agents/executions/route.ts
-apps/web/app/api/auth/oauth/google/callback/route.ts
-apps/web/app/api/auth/oauth/microsoft/callback/route.ts
-apps/web/app/api/billing/route.ts
-apps/web/app/api/integrations/[id]/disconnect/route.ts
-apps/web/app/api/integrations/google/connect/route.ts
-apps/web/app/api/integrations/microsoft/connect/route.ts
-apps/web/app/api/integrations/route.ts
-apps/web/app/api/onboarding/finalize/route.ts
-apps/web/app/api/onboarding/process/route.ts
-apps/web/app/api/onboarding/provision-agents/route.ts
-apps/web/app/api/onboarding/provision-data/route.ts
-apps/web/app/api/resources/route.ts
-apps/web/app/api/templates/route.ts
-apps/web/app/api/users/me/preferences/route.ts
-apps/web/app/api/users/me/route.ts
-apps/web/app/api/workspaces/current/members/route.ts
-apps/web/app/api/workspaces/current/route.ts
-apps/web/app/api/workspaces/current/security/route.ts
-apps/web/app/api/workspaces/route.ts
-apps/web/components/layout/main-sidebar.tsx
-apps/web/components/onboarding/AISetupWizard.tsx
-apps/web/components/ui/dialog.tsx
-apps/web/components/workspace/create-workspace-modal.tsx
-apps/web/components/workspace/workspace-guard.tsx
-apps/web/contexts/workspace-context.tsx
-apps/web/lib/encryption.ts
-apps/web/package.json
-apps/web/styles/globals.css
-docs/AI_CONTEXT.md
-docs/api/API_DESIGN_SPECIFICATION.md
-docs/api/ENDPOINTS_CATALOG.md
-docs/ARCHITECTURE.md
-docs/database/SCHEMA.md
-docs/GETTING_STARTED.md
-docs/planning/REQUIRED_DOCUMENTATION_LIST.md
-docs/ROADMAP.md
-docs/status/API_INTEGRATION_ROADMAP.md
-docs/status/CURRENT_SESSION.md
-docs/status/REMAINING_PAGES_TO_CONVERT.md
-docs/status/sessions/2025-01-19-foundation-documentation.md
-docs/status/sessions/2025-10-19.md
-docs/TECH_STACK.md
-package.json
-packages/database/migrations/0007_silent_stardust.sql
-packages/database/migrations/meta/_journal.json
-packages/database/migrations/meta/0007_snapshot.json
-packages/database/src/schema.ts
-pnpm-lock.yaml
-scripts/database/link-current-user.ts
-scripts/database/seed-database.ts
-scripts/database/setup-production.ts
-scripts/database/simple-seed.ts
-tests/e2e/admin-library-pages.spec.ts
-tests/e2e/analytics-agents.spec.ts
-tests/e2e/crm-pages.spec.ts
-tests/e2e/dashboard.spec.ts
-tests/e2e/settings-pages.spec.ts
-```
+This aligns with the principle that we should build real, production-ready
+features from the start rather than maintaining parallel demo systems. Every
+agent we create now is immediately usable and shippable.
 
 ---
 
 ## 🏷️ Changes by Type
 
-- **feat**: 16 commits
-- **docs**: 12 commits
-- **fix**: 4 commits
+### ✨ feat (181)
+
+- **web**: add ai-powered setup wizard with conversational interface (`7db97fe`)
+- **web**: add user-friendly workspace creation onboarding (`b2e4ef3`)
+- **web,db**: implement full oauth flow for google and microsoft (`36cd74e`)
+- **web**: implement real oauth integration flow for gmail and calendar (`80401e4`)
+- **web**: add comprehensive e2e test suite and agent activity monitoring (`bff86ce`)
+- **web**: convert library pages to use real api endpoints (`c193672`)
+- **web**: convert data and developer pages to use real api endpoints (`cd78ea7`)
+- **web/api**: add templates and resources api stubs, convert pages to real apis (`f4ce7dc`)
+- **web**: connect exports and segments pages to real apis (`f04679c`)
+- **web**: connect agent edit/logs pages to real apis with config save (`94cfc5e`)
+- **web**: convert library templates/resources and crm segments pages to real apis (`c7c645e`)
+- **web/api**: add pagination to admin users/workspaces and audit-log endpoint (`e8d2850`)
+- **web**: add admin user/workspace actions (view/edit/delete) and recent activity feed (`7888146`)
+- **web**: wire admin pages to real api routes (`8db9951`)
+- **web**: connect settings pages to real api endpoints (`398fc65`)
+- **api**: add settings endpoints for users, workspace, billing, and integrations (`49a864f`)
+- **web**: connect workflows page to api endpoint, complete week 1 (`001a6a2`)
+- **web**: connect documents page to real api (`1726aa7`)
+- **web**: complete remaining hub pages (`98986b1`)
+- **web**: migrate pages to new ia structure (`4b11a47`)
+- **web**: week 2 ia refactor foundation (`6a475f5`)
+- **web**: convert business pages to real apis (invoices, campaigns, emails) (`de40118`)
+- **web**: convert calendar and inbox pages to real apis (batch 1/2) (`dbbaf84`)
+- **web**: connect projects and prospects pages to real apis (`c0e226e`)
+- **web**: connect contacts page to real api (`741a80d`)
+- **web**: connect customers page to real api (`befaa4f`)
+- **web**: connect analytics pages to real apis (6 pages) (`677d8c1`)
+- **web**: connect dashboard to real apis (`407d546`)
+- **db**: complete phase 2 database integration with rls policies (`1a0eccf`)
+- **api**: integrate all analytics routes with database aggregations (`dfb31b6`)
+- **api**: integrate chat and notifications routes with database (`e4a0de0`)
+- **api**: integrate inbox and emails routes with database (`110a33a`)
+- **api**: integrate audit-log and webhooks routes with database (`b331322`)
+- **api**: integrate segments, exports, and imports routes with database (`2bcef04`)
+- **api**: integrate calendar, invoices, and campaigns routes with database (`06cd7f2`)
+- **api**: integrate 6 crm routes with database queries (`848567b`)
+- **db**: add 16 crm/business tables and integrate customers/projects routes (`3507fae`)
+- **api**: customize special routes with admin, playground, and webhook features (`3941158`)
+- **web**: reach 100% completion with 11 final pages (108/108) (`d197878`)
+- **web**: add 11 pages to reach 90% completion (97/108 pages) (`3db15c0`)
+- **web**: add customers and projects pages to reach 80% completion (`3ec1aea`)
+- **web**: add 19 feature pages for support, admin, and extended features (`817aec7`)
+- **web**: fix critical color contrast issues for wcag aa (`6933eda`)
+- **web**: add keyboard navigation improvements and skip link (`4c1ef53`)
+- **web**: complete accessibility audit and add comprehensive guidelines (`a457a52`)
+- **infra**: Add CI/CD pipeline with GitHub Actions (#2) (`37119da`)
+- **web**: complete authentication audit and monitoring setup (`34126a2`)
+- **api**: complete authentication security audit (`5ac8db9`)
+- **api**: complete sql injection prevention audit (`3616052`)
+- **api**: add redis-based rate limiting to critical endpoints (`a25b110`)
+- **api**: add zod validation to document upload endpoint (`b80a8ab`)
+- **web**: add comprehensive input validation infrastructure (`8d056ad`)
+- **web**: implement comprehensive error boundary coverage (`f7ced0f`)
+- **web**: complete 4 missing page templates (`0c5239d`)
+- **web**: add 10 new pages for workflows, docs, team, activity, etc (`e4f72f0`)
+- **web**: add 4 documentation & resource pages (`01fe470`)
+- **web**: add 4 settings pages - workspace, billing, security, notifications (`8409e24`)
+- **web**: add 5 core feature pages - contacts, tasks, calendar, reports, integrations (`fd6e17a`)
+- **web**: add billing and error pages (404, 403, 500) (`1c2d953`)
+- **web**: add 4 core dashboard pages (`94072ea`)
+- **web**: add settings pages using templates (`a18f9bf`)
+- **web**: add analytics dashboard and marketplace pages (`19411f1`)
+- **web**: add page template system with 4 reusable templates (`be0ce36`)
+- **web**: add barrel export for all 30 atomic components (`6e9ed8b`)
+- **web**: add media & interactive atoms (7 components) (`75f00ae`)
+- **web**: add indicator atoms (5 components) (`a3f3e3d`)
+- **web**: add form element atoms (3 components) (`261581d`)
+- **web**: add typography atoms (5 components) (`f32a314`)
+- **design-system**: complete organism library with 12 production-ready components (`d724a2e`)
+- **prod**: re-enable production auth and tenant context; remove dev bypasses (`1ca73ce`)
+- **ds**: Phase 5 start – organism components + tokenized layout (`33860d7`)
+- **ui**: complete Phase 4 molecular components refactor (`58d819c`)
+- **ui**: complete Phase 3 atomic components refactor (`80cbc44`)
+- **design-system**: implement comprehensive design tokens system (`ec07f8a`)
+- BADASS AI Assistant + Document Upload Fix 🚀 (`6e78309`)
+- **agents**: add execution tracking UI and APIs (Phase 4K) (`c25afe2`)
+- **agents**: add single agent CRUD API and real detail page with tabs (`0165649`)
+- **agents**: implement Deploy Modal and Activation Flow (`086aad7`)
+- **agents**: implement Agent List Page with metrics and filters (`df973bf`)
+- **agents**: implement Save Agent API and Deploy button (`31e5aa1`)
+- **agents**: add Phase 3 TestPlayground with real API execution (`fdbf787`)
+- **agents**: add Phase 2 iteration and workflow visualization (`cd3e2c9`)
+- **agents**: add Phase 1 builder UI and AI endpoints (`0e315ca`)
+- **dashboard**: UI polish - dynamic charts, slimmer sidebar, better footer alignment (`9836d7f`)
+- **dashboard**: add stock ticker for user engagement stats (`2e40b8a`)
+- **ui**: polish dashboard UI with enhanced sidebar and improved layout (`81cc471`)
+- **dashboard**: implement wireframe with hero, charts, and category sidebar (`65a2668`)
+- **ui**: major UI/UX improvements based on feedback (`31eec3d`)
+- **ai-assistant**: implement Phase 1 - Knowledge Base and AI Assistant (`884a6c3`)
+- **ai**: complete AI assistant backend infrastructure with RAG and conversation memory (`a3a7965`)
+- **infrastructure**: add Pinecone and Redis client configurations (`5c89c5f`)
+- **web**: simplify core UI components to semantic HTML (`8148687`)
+- **web**: mark design-system.ts as deprecated (`c169565`)
+- **web**: simplify UI system - install Pico CSS and strip custom design system (`1b216fb`)
+- **api**: create Lead Intel Agent API endpoints and test UI (`acdf2bc`)
+- **lead-intel-agent**: deploy Lead Intel Agent to production with lazy OpenAI init (`56e2f55`)
+- **web**: implement OpenSea-inspired compact UI redesign (`245bbc5`)
+- **docs**: implement comprehensive AI context system (`6e34e92`)
+- **web**: implement comprehensive loading states system (`5591924`)
+- **web**: implement comprehensive error handling system (`43ba6a8`)
+- **web**: implement comprehensive settings API routes (`314557e`)
+- **web**: implement comprehensive knowledge base API routes (`df59a76`)
+- **web**: implement marketplace and dashboard API routes + seed script (`ec24ce8`)
+- **web**: wire up create agent functionality and workspace context (`ceeada4`)
+- **web**: implement agents API routes and fix duplicate navigation (`7ae647f`)
+- **web**: make page content responsive to sidebar expansion (`7dcb064`)
+- **advanced-ui**: Phase 6 - Advanced UI features complete! ✨ (`05b3d19`)
+- **pages**: Phase 5 - All page migrations complete 🎉 (`f51d4b5`)
+- **dashboard**: Phase 5.1 - Dashboard page migration complete (`e8c0b5b`)
+- **layout**: Phase 4 - Layout enhancements complete (`63f2663`)
+- **design-system**: Phase 3 - Component migration complete (`e9e10ef`)
+- **design-system**: Phase 2 complete - Dual theme system (`f4f1857`)
+- **design-system**: Phase 1 complete - Foundation setup (`f6272ef`)
+- **ui**: complete professional UI transformation with enterprise-grade polish (`5241789`)
+- **dashboard**: replace emoji icons with circular profile avatars for agents (`4e939ef`)
+- **dashboard**: implement Mission Control dashboard with agent management (`145d098`)
+- **web**: replace emoji icons with space-themed Lucide icons in sidebar (`cd97b99`)
+- **web**: add main navigation sidebar with Dashboard, Knowledge, Marketplace, and Agents (`c76d2b8`)
+- **marketplace**: add collapsible sidebar, category chips, and rounded hero (`bbb6a9f`)
+- **marketplace**: implement OpenSea-style UI with search and categories (`daeb034`)
+- **marketplace**: reorder sections to show Trending before Featured (`bd127da`)
+- **knowledge-agent**: implement complete knowledge base integration for agents (`b084864`)
+- **knowledge**: implement RAG with vector embeddings (`91f1772`)
+- **knowledge**: complete collections integration (part 2) (`1014ba4`)
+- **knowledge**: add collections management system (part 1) (`a571195`)
+- **knowledge**: add item detail modal with edit/delete actions (`ddaeb5d`)
+- **knowledge**: add enhanced library view with search and filters (`d8c0dec`)
+- **knowledge**: add document processing and Vercel Blob storage (`bd503ea`)
+- **ui**: add Knowledge Base page with drag & drop upload (`7ac9b67`)
+- **api**: add knowledge base upload and list endpoints (`2c0d127`)
+- **db**: add knowledge base schema with collections, items, and tags (`6b6b563`)
+- **monitoring**: complete Sentry integration with error boundaries and tracking (`6735844`)
+- **agents-core**: integrate guardrails with Runner and add comprehensive test suite (`0d441f1`)
+- **agents-core**: implement essential guardrails for production safety (`2b3e920`)
+- **agents-core**: implement database tools with multi-tenant safety (`3c4371b`)
+- **tools**: add comprehensive production tool library (`cfb9eb6`)
+- **integration**: connect agents-core to API layer (`f923b7d`)
+- **agents-core**: implement OpenAI-aligned Agent and Runner classes (`5bd33c1`)
+- **web**: replace JSON input with user-friendly form fields in TestPanel (`c118878`)
+- **ux**: add agent detail page with proper TestPanel integration (`16960f4`)
+- **agents**: wire up agent execution for mock and live modes (`ba2130a`)
+- **agents**: complete Phase 1.1 - LangGraph orchestrator (`4f3f758`)
+- **web**: Compact OpenSea-style cards with hover-to-reveal details (`3e78f66`)
+- **web**: OpenSea-style variable card sizes and compact trending section (`438c473`)
+- **web**: UI Polish - Enhanced EmptyState & Navigation (`efc0e4f`)
+- **web**: UI Polish Sprint - Quick Wins & Card/Button Standardization (`2f8181f`)
+- **testing**: add comprehensive automated testing framework (`fccb394`)
+- **monitoring**: integrate Sentry error tracking and performance monitoring (`5c9c056`)
+- **infra**: add pre-commit quality gates with Husky and lint-staged (`dc7f6a1`)
+- **ai-gateway**: integrate Google Gemini API support (`23a18a1`)
+- **marketplace**: complete Phase 10 backend - templates, API routes, seed data (`8b409fa`)
+- **marketplace**: add Phase 10 marketplace with OpenSea-style hero (`5d0351a`)
+- **settings**: add settings page with API key management UI (`0bb4483`)
+- **agents**: add live execution mode toggle to test panel with metrics display (`0724fdd`)
+- **ui**: add API key management component with test/save/delete (`3498d65`)
+- **api**: add live agent execution endpoint with AI providers (`0f4bb2a`)
+- **execution**: add execution tracking service with stats (`d100bea`)
+- **ai**: add retry logic with exponential backoff and jitter (`d57a1e0`)
+- **api**: add API key management and test endpoints (`9171121`)
+- **ai**: add AI provider service layer with OpenAI and Anthropic (`4967acb`)
+- **crypto**: add API key encryption utilities with AES-256-GCM (`554ca63`)
+- **database**: add encrypted API keys field to workspaces (`5c04d63`)
+- **auth**: integrate Clerk authentication with workspace context (`653bee7`)
+- **web**: add agent list page with search, filters, and pagination (`ba04629`)
+- **web**: add test panel with JSON editor and mock execution (`81c4208`)
+- **web**: add advanced settings, publish modal, and keyboard shortcuts (`a6a3a52`)
+- **web**: add agent builder forms with save draft and validation (`800fbff`)
+- **web**: add API client actions for agent CRUD operations (`784a110`)
+- **web**: add template library modal with OpenSea-style cards and animations (`2ffbde1`)
+- **web**: add agent templates and design system constants (`314cc40`)
+- **api**: implement agents CRUD with tenant-scoped queries and mock test mode (`b219122`)
+- **api**: add onboarding completion endpoint with profile storage (`5f0e273`)
+- **web**: implement interactive product tour with 5-step guided onboarding (`509615f`)
+- **web**: add personalized dashboard with progress tracker and agent cards (`03d7d65`)
+- **web**: implement 6-step onboarding wizard with personalization (`1193523`)
+- **web**: add design system foundation and UI component library (`2f4919d`)
+- **api**: add authentication guards and agent controller (`f79c140`)
+- **auth**: implement workspace switching with context provider (`c15d7db`)
+- **db**: implement multi-tenant database schema with drizzle (`df87cce`)
+- **infra**: complete phase 2 with all services tested and verified (`12a859e`)
+- scaffold Next.js, NestJS, and Python FastAPI apps (`964c871`)
+
+### 🐛 fix (94)
+
+- **web**: correct scrollbar color by using rgb() instead of hsl() (`08b832a`)
+- **web**: fix onboarding wizard stuck loading and add markdown rendering (`db7439f`)
+- **web**: ensure dialog content renders above overlay (z-index) (`1b9c5f4`)
+- **web**: implement comprehensive workspace loading system with error handling (`7857af9`)
+- **api**: connect prospects endpoint to database query (`aedb651`)
+- **db**: rename exports/imports to avoid typescript keyword conflict (`bde59fa`)
+- eliminate phase 2 technical debt - apply migration and fix admin routes (`f091365`)
+- **web**: replace console statements with logger in test-runner and ai-provider-wrapper (`c3eb5dd`)
+- **web**: replace console statements with logger in agent-interface (`fc7022c`)
+- **web**: resolve accessibility warning by renaming image icon import (`1e7a7ce`)
+- **web**: replace console statements with logger in core components (`5be6723`)
+- **web**: replace console statements with logger in api routes and error handlers (`2283d71`)
+- **web**: remove unused imports and fix react hook warnings (`9ce51ac`)
+- **web**: add workspace provider to app layout (`286fcac`)
+- **web**: convert css vars to rgb per production spec (`71fdfec`)
+- **web**: eliminate technical debt - accessibility and hooks warnings (`2596e61`)
+- **infra**: resolve typecheck and lint errors, apply prettier formatting (`5d75d2e`)
+- **api**: add development bypasses with mock data for all API routes (`3732c6e`)
+- **auth**: complete development bypass for all pages (`cbab5d1`)
+- **auth**: add development middleware bypass and clerk config (`ff14cac`)
+- **auth**: resolve tenant context query causing 404 errors (`c2b3bbb`)
+- correct document upload API schema compatibility (`9bd4acc`)
+- **api**: add missing workspaces API endpoint and fix agents API user lookup (`761cac6`)
+- **layout**: make content responsive to sidebar expand/collapse (`9100c3d`)
+- **ui**: force light mode and remove theme toggles (`ba7d065`)
+- **web**: clean up TypeScript errors and improve build health (`3d6e2f2`)
+- **theme**: enable class-based dark mode in Tailwind config (`3e47396`)
+- **auth**: redirect authenticated users to dashboard (`1e4b180`)
+- **ui**: replace dropdown with simple light/dark toggle switch (`5ec0b9b`)
+- **ui**: address footer text, theme toggle positioning and Clerk OAuth (`7148106`)
+- **ui**: make theme toggle button visible in dark mode (`78566b0`)
+- **pdf-parse**: use require() for CommonJS module compatibility (`1e5aa2d`)
+- **critical**: resolve PDF import error and dark mode visibility issues (`1dcbb75`)
+- **marketplace**: remove agent templates and add empty state (`ccc32dd`)
+- **web**: remove duplicate content in separator.tsx (`2e7a50f`)
+- **web**: remove duplicate content in label.tsx (`8adad64`)
+- **tests**: fix import paths after moving test files to **tests** directory (`e6a8a3d`)
+- **lint**: fix all ESLint errors - unescaped quotes in JSX (`6dce13c`)
+- **lint**: fix TypeScript errors and some unescaped quotes in JSX (`a409b3c`)
+- **api**: correct import paths for Lead Intel Agent in API routes (`131b35c`)
+- **marketplace**: add optional chaining for slide.stats to fix TypeScript error (`a071ffc`)
+- **marketplace**: remove duplicate borderBottom property (`63a1cc8`)
+- **web**: rename UI components to lowercase for Linux compatibility (`17da6ab`)
+- **build**: resolve all TypeScript errors and component prop issues (`b6aa7fa`)
+- **components**: Add form wrapper components for backward compatibility (`0551eee`)
+- **marketplace**: remove duplicate hero section from category pages (`dca8d50`)
+- **web**: remove missing globals.css import from layout (`7ba5bc0`)
+- **build**: add metadata to ExecutionContext and handle toolCall types (`34e675d`)
+- **web**: add client-side mock execution for demo agents in TestPanel (`0502f4a`)
+- **mock-agents**: handle SSR properly and initialize on client-side only (`a220df5`)
+- **ux**: improve agent execution testing UX with mock system (`55ff3f4`)
+- **testing**: fix visual regression tests and capture baselines (`e0c1607`)
+- **onboarding**: prevent duplicate workspace slug errors and improve error handling (`9fd6cdf`)
+- **ai-gateway**: update to Gemini 2.x models with verified API support (`d036a5f`)
+- **middleware**: add marketplace routes to public access list (`fbc3249`)
+- **vercel**: simplify config to let Vercel auto-detect settings (`b064d11`)
+- **vercel**: remove extra closing brace causing JSON parse error (`6341ee3`)
+- **vercel**: specify apps/web as rootDirectory (`3786625`)
+- **vercel**: set correct output directory for Next.js build (`dbf3597`)
+- **vercel**: simplify config for apps/web root directory (`5a17b10`)
+- **vercel**: remove conflicting vercel.json from apps/web (`71492fa`)
+- **vercel**: update build command for proper monorepo deployment (`d858bc1`)
+- **api**: fix onboarding workspace creation (`6cb86c2`)
+- **web**: fix dashboard access and API route detection (`29820a5`)
+- **middleware**: allow workspace API routes to handle auth internally (`85bc01c`)
+- **web**: handle no workspace state gracefully on initial sign-in (`0f5690f`)
+- **infra**: clean slate environment variable setup - production working (`3fb356d`)
+- **api**: add dynamic export to agent execute route (`69d9edb`)
+- **config**: add dynamic API route configuration and revert to stable base (`999a006`)
+- **infra**: remove || true from build command to properly fail on errors (`448da8e`)
+- **db**: add missing encrypted_api_keys column to workspaces table (`97e5a2a`)
+- **web**: re-enable Clerk middleware with environment variables in Preview (`1ed2674`)
+- temporarily disable middleware to fix runtime error (`17f43e3`)
+- improve database client runtime handling (`198dcb1`)
+- simplify middleware and remove invalid next.config options to fix runtime error (`4d5f205`)
+- remove functions config from vercel.json - Next.js handles API routes automatically (`f0155a1`)
+- remove duplicate import in database client (`7a910cd`)
+- database connection for runtime API routes (`2a0bbdd`)
+- **build**: provide dummy DATABASE_URL during build to bypass static generation (`b3ad58f`)
+- **next**: configure next.config.js to handle environment variables during build (`2eb99dc`)
+- **vercel**: use npm run build for web app to ensure proper execution (`552789c`)
+- **vercel**: build only web app to avoid nest CLI issue (`e685765`)
+- update pnpm-lock.yaml with next.js dependency (`a4fbacc`)
+- **vercel**: add next.js to root package.json for Vercel detection (`74daf44`)
+- **vercel**: use pnpm for monorepo installation (`8ed93f2`)
+- **vercel**: update vercel.json for Next.js monorepo deployment (`3bcfbb9`)
+- **vercel**: simplify vercel.json for Next.js deployment (`268c9b7`)
+- **vercel**: add proper vercel.json configuration for monorepo deployment (`06d3239`)
+- **turbo**: add environment variables to turbo.json for Vercel deployment (`f9be9f0`)
+- Complete Phase 9B TypeScript cleanup and prepare for production deployment (`333dc30`)
+- **web**: phase 9B complete – zero TypeScript errors (#1) (`d1bb585`)
+- **dashboard**: clean up TODO comments in progress tracker (`56ab487`)
+- **typescript**: resolve path resolution and implicit any type errors (`892047a`)
+- **auth**: resolve WorkspaceProvider module resolution with relative imports (`dffbaa1`)
+
+### ♻️ refactor (12)
+
+- **web**: replace console statements with logger utility (`24fa57a`)
+- **web**: migrate knowledge page to listpage template (`961c1ae`)
+- **web**: migrate agents detail page to detailpage template (`b2054d7`)
+- **web**: migrate 3 pages to listpage template system (`0986de3`)
+- **web**: align design system to light mode (`df086ee`)
+- **agents**: polish Phase 1 & 2 with error handling and validation (`0f04255`)
+- **dashboard**: migrate to simplified design system (`d6a98a7`)
+- **cleanup**: remove stray files and organize test files (`7a58775`)
+- **logging**: create production-grade logger and clean onboarding page (`0b739d3`)
+- **cleanup**: remove obsolete src/app structure and consolidate Lead Intel APIs to standard app/ router structure (`c745d2a`)
+- **web**: remove demo/mock infrastructure in favor of real agents only (`6812116`)
+- **docs**: remove specific customer references - platform is for all users (`b6ee95b`)
+
+### 📝 docs (124)
+
+- add automated changelog system for perfect ai session handoffs (`ced3bd4`)
+- update session status and ai context with oauth integration (`b4ee92b`)
+- update session status - documentation pack integration complete (`b3a8738`)
+- integrate comprehensive documentation pack and testing infrastructure (`d309953`)
+- complete agent onboarding documentation suite (`a9d1d45`)
+- update session status with api specification work (`bcf13e7`)
+- add comprehensive api design specification (`153e9ae`)
+- celebrate 100% api integration milestone (`094a795`)
+- add comprehensive api integration roadmap (`514fd22`)
+- update session status with phase 4 completion (`71b32e7`)
+- update session status - phase 3 complete (`0fe2224`)
+- update session status 2025-10-19 (`7753e3c`)
+- update session status 2025-10-19 - phase 2 settings complete (`165b555`)
+- week 2 100% complete - all hub pages created (`0738a7d`)
+- update session status with week 2 completion (`38bfda4`)
+- complete week 1 api integration (18/19 pages - 95%) (`fbbe606`)
+- create handoff instructions for week 1 completion (`fc0249f`)
+- update progress - 12/20 pages complete (60%), tasks page done (`4763d7f`)
+- update progress for projects and prospects completion (`914caa6`)
+- update session status with crm customers and contacts completion (`549eb9d`)
+- update session status and master checklist with week 1 day 3-4 progress (`150fa7a`)
+- **infra**: complete week 1 foundation planning (`0997463`)
+- **infra**: add master checklist and guardrails for ia refactor (`f6fe057`)
+- update session status - phase 2 complete, phase 3 ready (`2813cff`)
+- update session status for phase 2 database integration progress (`8940aa8`)
+- update current session with phase 1 completion status (`d975b1f`)
+- update page count to 112 pages (104% completion) (`6282b32`)
+- prepare integration sprint plan and kickoff message (`763db09`)
+- **web**: update session status to 90% milestone (97/108 pages) (`2cd66d6`)
+- update session status to reflect 80% milestone (86/108 pages) (`39a0f4d`)
+- update session status with testing sprint phase 2 completion (`a93a15a`)
+- update session status with 374 total tests (132 new) (`6243542`)
+- update session status with testing sprint completion (242 tests, 26 components) (`8ba2ae5`)
+- update session status with 51/108 pages and testing sprint plan (`07e5d43`)
+- update session status with accessibility sprint completion (`933a67e`)
+- **web**: update accessibility guidelines with complete audit results (`4596de7`)
+- **infra**: update session status - ci/cd pipeline merged and active (`4d833d9`)
+- add production readiness completion summary (`047b061`)
+- add comprehensive 36-point quality checklist progress tracking (`579ee34`)
+- update console cleanup guide with priority 1 & 2 completion status (`dc4b514`)
+- complete phase 1 - 15 pages using templates (target exceeded) (`83d6f7e`)
+- update session status and implementation progress (`7effd8e`)
+- update session status with billing and error pages (`f5d5013`)
+- update session status with phase 7 progress (`bf108ab`)
+- **web**: add design system showcase page for atomic components (`a760eb1`)
+- update session status – Phase 5 kickoff and dev access fixes (`e07aafa`)
+- complete demo audit and design system kickoff preparation (`ac2b891`)
+- update session status with API fixes and page planning (`53adf0c`)
+- create agent system implementation checklist (`d28b1c2`)
+- update session status with Phase 4F-J completion (`8ae5524`)
+- create comprehensive Agents Builder audit document (`27ff67e`)
+- add comprehensive QA checklist for Agents Builder Phases 1 & 2 (`5767b7b`)
+- update session #6 - dashboard UI polish complete (`47d0cb0`)
+- update session status 2025-10-15 (`9d068b7`)
+- implement new documentation structure (`4553915`)
+- create CURRENT_SESSION.md and reorganization proposal (`cb126f9`)
+- update handoff for session #5 - dashboard wireframe complete (`a56fd4b`)
+- add current state summary (`7f19d7c`)
+- add UI rebuild plan and component guide (`502143a`)
+- update cleanup summary with marketplace template removal (`707a8c0`)
+- **archive**: archive completed work from October 2025 (`c194f7c`)
+- **guides**: organize guide and reference documentation (`b09a091`)
+- **planning**: organize business and planning documentation (`7a607da`)
+- **status**: organize session handoff documents (`77e8c23`)
+- **technical**: organize technical documentation into subdirectories (`07250fa`)
+- organize screenshots into categorized subdirectories (`3d6e3e4`)
+- create comprehensive technical debt cleanup report (`290cf2a`)
+- add strategic plan documentation and gap analysis (`5c2b0e2`)
+- **handoff**: update session handoff for October 14 - API endpoints & test UI complete (`b69acb1`)
+- create master session handoff and AI context for optimal communication (`f9e5d1b`)
+- add comprehensive Lead Intel Agent deployment guide (`5297972`)
+- fix all dates to October 12, 2025 (not January) (`721f2ad`)
+- add quick start guide for tomorrow's session (`f8ece85`)
+- comprehensive session handoff for Jan 12, 2025 (`781c2e7`)
+- sanitize all example API keys to prevent secret detection (`a178db7`)
+- replace example encryption key with placeholder text (`3fdb86d`)
+- add deployment success documentation (`422d83d`)
+- update session handoff with Mission Control dashboard milestone (`fa9f275`)
+- update session handoff with main navigation sidebar progress (`4c98e73`)
+- **handoff**: update session handoff with Jan 15 progress (`a777f21`)
+- **knowledge**: update progress with document processing details (`e72687a`)
+- add Knowledge Base development session summary (`c95d3f2`)
+- **monitoring**: add Sentry integration completion summary (`325da1c`)
+- add automated deployment validation report (`a8ae9c5`)
+- **agents-core**: add production deployment and security guides (`4824a73`)
+- **planning**: add completion plan for final 20% to reach 100% production-ready (`b88bf61`)
+- add OpenAI architecture refactor plan (`4e0e215`)
+- add production testing guide for agent execution (`2d4d4a3`)
+- **web**: Add UI Polish Sprint final summary - 8/12 tasks complete, B+ to A- (`851d96a`)
+- **web**: Add UI Polish Sprint Session 2 progress summary (`eb2d7be`)
+- **sessions**: add complete session summary for Day 1 (`ed7706c`)
+- **sessions**: add sprint progress report for Phases 1 & 2 (`6967fc1`)
+- create prioritized next sprint roadmap (`c79eef6`)
+- mark Sentry error monitoring as fully activated (`8e355ab`)
+- update development command center status after infrastructure sprint (`301cb19`)
+- **db**: add comprehensive database backup and branching strategy (`bf47553`)
+- **infra**: establish development command center and documentation system (`f4ba6a6`)
+- update session handoff v1.1 with backend completion and deployment fixes (`969f426`)
+- add comprehensive fix summary for dashboard error resolution (`6309e35`)
+- document critical middleware fix in session handoff v1.3 (`68b28ab`)
+- add comprehensive project status and roadmap (`aef7dec`)
+- update session handoff with workspace initialization fix (`8c0dd65`)
+- create consolidated master session handoff v1.1 (`c347f4f`)
+- add environment variables reference (`6f7ddca`)
+- add comprehensive deployment recovery documentation (`13bff11`)
+- add session handoff for Phase 9B completion (`b0e7c27`)
+- add Phase 9B handoff document for live execution UI (`dc8aebd`)
+- add Phase 9A completion handoff (`bb75d32`)
+- add Session 7 handoff document (`f037b45`)
+- add Phase 8 complete checklist and session 6 handoff (`c74205f`)
+- add agent builder testing guide (`6baca40`)
+- create Session 5 handoff with clear next steps for resuming Phase 8 (`28c8dbf`)
+- update Phase 8 progress with session 5 accomplishments (`50a82e6`)
+- add Phase 8 progress summary and testing guide (`65e17ef`)
+- add comprehensive Phase 8 Agent Builder UI plan (`ecf5209`)
+- update session handoff with Phase 7 completion status (`7f40129`)
+- add Phase 7 completion documentation and testing checklist (`fa9bea0`)
+- update session handoff with Phase 6 completion (`2343e82`)
+- add phase 6 kickoff message template (`e0cb5fe`)
+- prepare phase 6 handoff with detailed action plan (`4ca6836`)
+- update session handoff with phase 2 and 5 completion (`6b01c8d`)
+- update handoff document for session #2 start (`2777309`)
+- add time tracking and session handoff documents (`726a120`)
+- add Phase 1 completion summary (`1ca0578`)
+
+### ✅ test (14)
+
+- **web**: add comprehensive agent creation and document upload e2e tests (`7d5da3c`)
+- **web**: complete 100% ui component test coverage (`6217d24`)
+- **web**: add 132 tests for form, overlay and content components (`1545af1`)
+- **web**: add 4 more component tests - 242 total tests! (`bf5f78e`)
+- **web**: add 7 more component tests (59 tests) (`793cc1a`)
+- **web**: add avatar and separator component tests (`c42dc20`)
+- **web**: add skeleton and progress component tests (`870e096`)
+- **web**: add comprehensive switch component tests (`4744673`)
+- **web**: add textarea tests and fix checkbox typescript error (`de0c2f5`)
+- add comprehensive ui component tests (`1c04160`)
+- fix vitest jsx transformation and add working tests (`2c9d799`)
+- setup vitest infrastructure with react testing library (`b762ba4`)
+- **agents-core**: add comprehensive test suite and examples (`0cc6206`)
+- verify deploy hook for temp-phase9 branch (`0709db3`)
+
+### 🔧 chore (16)
+
+- **infra**: add security scanning and deployment workflows (`c46b934`)
+- **web**: complete priority 5 console cleanup in pages (`6167a5d`)
+- **web**: complete priority 4 console cleanup in hooks and contexts (`372fc86`)
+- **web**: complete priority 3 console cleanup in lib/ folder (`624af30`)
+- update lockfile for tailwind plugins (`be1d4a6`)
+- **web**: remove demo data from dashboard and marketplace (`c951c68`)
+- **docs**: pre-ui-simplification checkpoint - documentation organization complete (`f5a7bcc`)
+- **docs**: archive outdated documentation and clean logs (`e0b00f0`)
+- **infra**: organize shell scripts into subdirectories (`358b617`)
+- clean up old documentation files and organize project structure (`5916c9e`)
+- trigger Vercel deployment (`113e56d`)
+- trigger Vercel redeploy with new root directory (`eea51de`)
+- remove unnecessary devCommand from vercel.json (`3fa4995`)
+- update pnpm lockfile (`77bd2dc`)
+- add filled secrets file to gitignore (`06a7bf5`)
+- initial monorepo scaffold with comprehensive documentation (`05a6378`)
+
+### ⚡ perf (1)
+
+- System Performance & Security Optimizations 🚀 (`5af854f`)
+
+### 📌 force (2)
+
+- trigger deployment - Next.js configured (`f713b22`)
+- redeploy with pnpm configuration (`35dce02`)
+
+### 📌 merge (1)
+
+- **main**: resolve conflicts and complete merge of feature/sales-workflow-foundation into main (`6b7dcad`)
+
+### 📌 revert (1)
+
+- **vercel**: remove rootDirectory config (must be set in dashboard) (`3e73187`)
+
+### 📌 security (1)
+
+- remove exposed API keys and enhance .gitignore (`0ab6fae`)
+
+### 📌 trigger (1)
+
+- deployment with complete environment variables (`9626deb`)
 
 ---
 
-## 📦 Changes by Component
+## 📦 Changes by Scope
 
-- **web**: 16 changes
-- **z-index**: 1 changes
-- **api**: 1 changes
+### unscoped (130 commits)
+
+- **docs**: add automated changelog system for perfect ai session handoffs (`ced3bd4`)
+- **docs**: update session status and ai context with oauth integration (`b4ee92b`)
+- **docs**: update session status - documentation pack integration complete (`b3a8738`)
+- **docs**: integrate comprehensive documentation pack and testing infrastructure (`d309953`)
+- **docs**: complete agent onboarding documentation suite (`a9d1d45`)
+- **docs**: update session status with api specification work (`bcf13e7`)
+- **docs**: add comprehensive api design specification (`153e9ae`)
+- **docs**: celebrate 100% api integration milestone (`094a795`)
+- **docs**: add comprehensive api integration roadmap (`514fd22`)
+- **docs**: update session status with phase 4 completion (`71b32e7`)
+- **docs**: update session status - phase 3 complete (`0fe2224`)
+- **docs**: update session status 2025-10-19 (`7753e3c`)
+- **docs**: update session status 2025-10-19 - phase 2 settings complete (`165b555`)
+- **docs**: week 2 100% complete - all hub pages created (`0738a7d`)
+- **docs**: update session status with week 2 completion (`38bfda4`)
+- **docs**: complete week 1 api integration (18/19 pages - 95%) (`fbbe606`)
+- **docs**: create handoff instructions for week 1 completion (`fc0249f`)
+- **docs**: update progress - 12/20 pages complete (60%), tasks page done (`4763d7f`)
+- **docs**: update progress for projects and prospects completion (`914caa6`)
+- **docs**: update session status with crm customers and contacts completion (`549eb9d`)
+- **docs**: update session status and master checklist with week 1 day 3-4 progress (`150fa7a`)
+- **docs**: update session status - phase 2 complete, phase 3 ready (`2813cff`)
+- **fix**: eliminate phase 2 technical debt - apply migration and fix admin routes (`f091365`)
+- **docs**: update session status for phase 2 database integration progress (`8940aa8`)
+- **docs**: update current session with phase 1 completion status (`d975b1f`)
+- **docs**: update page count to 112 pages (104% completion) (`6282b32`)
+- **docs**: prepare integration sprint plan and kickoff message (`763db09`)
+- **docs**: update session status to reflect 80% milestone (86/108 pages) (`39a0f4d`)
+- **docs**: update session status with testing sprint phase 2 completion (`a93a15a`)
+- **docs**: update session status with 374 total tests (132 new) (`6243542`)
+- **docs**: update session status with testing sprint completion (242 tests, 26 components) (`8ba2ae5`)
+- **test**: add comprehensive ui component tests (`1c04160`)
+- **test**: fix vitest jsx transformation and add working tests (`2c9d799`)
+- **test**: setup vitest infrastructure with react testing library (`b762ba4`)
+- **docs**: update session status with 51/108 pages and testing sprint plan (`07e5d43`)
+- **docs**: update session status with accessibility sprint completion (`933a67e`)
+- **docs**: add production readiness completion summary (`047b061`)
+- **docs**: add comprehensive 36-point quality checklist progress tracking (`579ee34`)
+- **docs**: update console cleanup guide with priority 1 & 2 completion status (`dc4b514`)
+- **docs**: complete phase 1 - 15 pages using templates (target exceeded) (`83d6f7e`)
+- **docs**: update session status and implementation progress (`7effd8e`)
+- **docs**: update session status with billing and error pages (`f5d5013`)
+- **docs**: update session status with phase 7 progress (`bf108ab`)
+- **docs**: update session status – Phase 5 kickoff and dev access fixes (`e07aafa`)
+- **chore**: update lockfile for tailwind plugins (`be1d4a6`)
+- **docs**: complete demo audit and design system kickoff preparation (`ac2b891`)
+- **fix**: correct document upload API schema compatibility (`9bd4acc`)
+- **perf**: System Performance & Security Optimizations 🚀 (`5af854f`)
+- **feat**: BADASS AI Assistant + Document Upload Fix 🚀 (`6e78309`)
+- **docs**: update session status with API fixes and page planning (`53adf0c`)
+- **docs**: create agent system implementation checklist (`d28b1c2`)
+- **docs**: update session status with Phase 4F-J completion (`8ae5524`)
+- **docs**: create comprehensive Agents Builder audit document (`27ff67e`)
+- **docs**: add comprehensive QA checklist for Agents Builder Phases 1 & 2 (`5767b7b`)
+- **docs**: update session #6 - dashboard UI polish complete (`47d0cb0`)
+- **docs**: update session status 2025-10-15 (`9d068b7`)
+- **docs**: implement new documentation structure (`4553915`)
+- **docs**: create CURRENT_SESSION.md and reorganization proposal (`cb126f9`)
+- **docs**: update handoff for session #5 - dashboard wireframe complete (`a56fd4b`)
+- **docs**: add current state summary (`7f19d7c`)
+- **docs**: add UI rebuild plan and component guide (`502143a`)
+- **docs**: update cleanup summary with marketplace template removal (`707a8c0`)
+- **docs**: organize screenshots into categorized subdirectories (`3d6e3e4`)
+- **docs**: create comprehensive technical debt cleanup report (`290cf2a`)
+- **docs**: add strategic plan documentation and gap analysis (`5c2b0e2`)
+- **docs**: create master session handoff and AI context for optimal communication (`f9e5d1b`)
+- **docs**: add comprehensive Lead Intel Agent deployment guide (`5297972`)
+- **docs**: fix all dates to October 12, 2025 (not January) (`721f2ad`)
+- **docs**: add quick start guide for tomorrow's session (`f8ece85`)
+- **docs**: comprehensive session handoff for Jan 12, 2025 (`781c2e7`)
+- **docs**: sanitize all example API keys to prevent secret detection (`a178db7`)
+- **docs**: replace example encryption key with placeholder text (`3fdb86d`)
+- **security**: remove exposed API keys and enhance .gitignore (`0ab6fae`)
+- **docs**: add deployment success documentation (`422d83d`)
+- **docs**: update session handoff with Mission Control dashboard milestone (`fa9f275`)
+- **docs**: update session handoff with main navigation sidebar progress (`4c98e73`)
+- **docs**: add Knowledge Base development session summary (`c95d3f2`)
+- **docs**: add automated deployment validation report (`a8ae9c5`)
+- **docs**: add OpenAI architecture refactor plan (`4e0e215`)
+- **docs**: add production testing guide for agent execution (`2d4d4a3`)
+- **docs**: create prioritized next sprint roadmap (`c79eef6`)
+- **docs**: mark Sentry error monitoring as fully activated (`8e355ab`)
+- **docs**: update development command center status after infrastructure sprint (`301cb19`)
+- **chore**: clean up old documentation files and organize project structure (`5916c9e`)
+- **docs**: update session handoff v1.1 with backend completion and deployment fixes (`969f426`)
+- **chore**: trigger Vercel deployment (`113e56d`)
+- **chore**: trigger Vercel redeploy with new root directory (`eea51de`)
+- **docs**: add comprehensive fix summary for dashboard error resolution (`6309e35`)
+- **docs**: document critical middleware fix in session handoff v1.3 (`68b28ab`)
+- **docs**: add comprehensive project status and roadmap (`aef7dec`)
+- **docs**: update session handoff with workspace initialization fix (`8c0dd65`)
+- **docs**: create consolidated master session handoff v1.1 (`c347f4f`)
+- **docs**: add environment variables reference (`6f7ddca`)
+- **docs**: add comprehensive deployment recovery documentation (`13bff11`)
+- **chore**: remove unnecessary devCommand from vercel.json (`3fa4995`)
+- **fix**: temporarily disable middleware to fix runtime error (`17f43e3`)
+- **fix**: improve database client runtime handling (`198dcb1`)
+- **fix**: simplify middleware and remove invalid next.config options to fix runtime error (`4d5f205`)
+- **fix**: remove functions config from vercel.json - Next.js handles API routes automatically (`f0155a1`)
+- **fix**: remove duplicate import in database client (`7a910cd`)
+- **fix**: database connection for runtime API routes (`2a0bbdd`)
+- **test**: verify deploy hook for temp-phase9 branch (`0709db3`)
+- **fix**: update pnpm-lock.yaml with next.js dependency (`a4fbacc`)
+- **force**: trigger deployment - Next.js configured (`f713b22`)
+- **force**: redeploy with pnpm configuration (`35dce02`)
+- **trigger**: deployment with complete environment variables (`9626deb`)
+- **fix**: Complete Phase 9B TypeScript cleanup and prepare for production deployment (`333dc30`)
+- **docs**: add session handoff for Phase 9B completion (`b0e7c27`)
+- **docs**: add Phase 9B handoff document for live execution UI (`dc8aebd`)
+- **docs**: add Phase 9A completion handoff (`bb75d32`)
+- **docs**: add Session 7 handoff document (`f037b45`)
+- **docs**: add Phase 8 complete checklist and session 6 handoff (`c74205f`)
+- **docs**: add agent builder testing guide (`6baca40`)
+- **docs**: create Session 5 handoff with clear next steps for resuming Phase 8 (`28c8dbf`)
+- **docs**: update Phase 8 progress with session 5 accomplishments (`50a82e6`)
+- **docs**: add Phase 8 progress summary and testing guide (`65e17ef`)
+- **docs**: add comprehensive Phase 8 Agent Builder UI plan (`ecf5209`)
+- **docs**: update session handoff with Phase 7 completion status (`7f40129`)
+- **docs**: add Phase 7 completion documentation and testing checklist (`fa9bea0`)
+- **docs**: update session handoff with Phase 6 completion (`2343e82`)
+- **chore**: update pnpm lockfile (`77bd2dc`)
+- **docs**: add phase 6 kickoff message template (`e0cb5fe`)
+- **docs**: prepare phase 6 handoff with detailed action plan (`4ca6836`)
+- **docs**: update session handoff with phase 2 and 5 completion (`6b01c8d`)
+- **docs**: update handoff document for session #2 start (`2777309`)
+- **docs**: add time tracking and session handoff documents (`726a120`)
+- **feat**: scaffold Next.js, NestJS, and Python FastAPI apps (`964c871`)
+- **docs**: add Phase 1 completion summary (`1ca0578`)
+- **chore**: add filled secrets file to gitignore (`06a7bf5`)
+- **chore**: initial monorepo scaffold with comprehensive documentation (`05a6378`)
+
+### web (126 commits)
+
+- **fix**: correct scrollbar color by using rgb() instead of hsl() (`08b832a`)
+- **fix**: fix onboarding wizard stuck loading and add markdown rendering (`db7439f`)
+- **fix**: ensure dialog content renders above overlay (z-index) (`1b9c5f4`)
+- **feat**: add ai-powered setup wizard with conversational interface (`7db97fe`)
+- **feat**: add user-friendly workspace creation onboarding (`b2e4ef3`)
+- **fix**: implement comprehensive workspace loading system with error handling (`7857af9`)
+- **feat**: implement real oauth integration flow for gmail and calendar (`80401e4`)
+- **feat**: add comprehensive e2e test suite and agent activity monitoring (`bff86ce`)
+- **feat**: convert library pages to use real api endpoints (`c193672`)
+- **feat**: convert data and developer pages to use real api endpoints (`cd78ea7`)
+- **feat**: connect exports and segments pages to real apis (`f04679c`)
+- **feat**: connect agent edit/logs pages to real apis with config save (`94cfc5e`)
+- **feat**: convert library templates/resources and crm segments pages to real apis (`c7c645e`)
+- **feat**: add admin user/workspace actions (view/edit/delete) and recent activity feed (`7888146`)
+- **feat**: wire admin pages to real api routes (`8db9951`)
+- **feat**: connect settings pages to real api endpoints (`398fc65`)
+- **feat**: connect workflows page to api endpoint, complete week 1 (`001a6a2`)
+- **feat**: connect documents page to real api (`1726aa7`)
+- **feat**: complete remaining hub pages (`98986b1`)
+- **feat**: migrate pages to new ia structure (`4b11a47`)
+- **feat**: week 2 ia refactor foundation (`6a475f5`)
+- **feat**: convert business pages to real apis (invoices, campaigns, emails) (`de40118`)
+- **feat**: convert calendar and inbox pages to real apis (batch 1/2) (`dbbaf84`)
+- **feat**: connect projects and prospects pages to real apis (`c0e226e`)
+- **feat**: connect contacts page to real api (`741a80d`)
+- **feat**: connect customers page to real api (`befaa4f`)
+- **feat**: connect analytics pages to real apis (6 pages) (`677d8c1`)
+- **feat**: connect dashboard to real apis (`407d546`)
+- **feat**: reach 100% completion with 11 final pages (108/108) (`d197878`)
+- **docs**: update session status to 90% milestone (97/108 pages) (`2cd66d6`)
+- **feat**: add 11 pages to reach 90% completion (97/108 pages) (`3db15c0`)
+- **feat**: add customers and projects pages to reach 80% completion (`3ec1aea`)
+- **feat**: add 19 feature pages for support, admin, and extended features (`817aec7`)
+- **test**: add comprehensive agent creation and document upload e2e tests (`7d5da3c`)
+- **test**: complete 100% ui component test coverage (`6217d24`)
+- **test**: add 132 tests for form, overlay and content components (`1545af1`)
+- **test**: add 4 more component tests - 242 total tests! (`bf5f78e`)
+- **test**: add 7 more component tests (59 tests) (`793cc1a`)
+- **test**: add avatar and separator component tests (`c42dc20`)
+- **test**: add skeleton and progress component tests (`870e096`)
+- **test**: add comprehensive switch component tests (`4744673`)
+- **test**: add textarea tests and fix checkbox typescript error (`de0c2f5`)
+- **docs**: update accessibility guidelines with complete audit results (`4596de7`)
+- **feat**: fix critical color contrast issues for wcag aa (`6933eda`)
+- **feat**: add keyboard navigation improvements and skip link (`4c1ef53`)
+- **feat**: complete accessibility audit and add comprehensive guidelines (`a457a52`)
+- **refactor**: replace console statements with logger utility (`24fa57a`)
+- **feat**: complete authentication audit and monitoring setup (`34126a2`)
+- **feat**: add comprehensive input validation infrastructure (`8d056ad`)
+- **feat**: implement comprehensive error boundary coverage (`f7ced0f`)
+- **chore**: complete priority 5 console cleanup in pages (`6167a5d`)
+- **chore**: complete priority 4 console cleanup in hooks and contexts (`372fc86`)
+- **chore**: complete priority 3 console cleanup in lib/ folder (`624af30`)
+- **fix**: replace console statements with logger in test-runner and ai-provider-wrapper (`c3eb5dd`)
+- **fix**: replace console statements with logger in agent-interface (`fc7022c`)
+- **fix**: resolve accessibility warning by renaming image icon import (`1e7a7ce`)
+- **fix**: replace console statements with logger in core components (`5be6723`)
+- **fix**: replace console statements with logger in api routes and error handlers (`2283d71`)
+- **fix**: remove unused imports and fix react hook warnings (`9ce51ac`)
+- **refactor**: migrate knowledge page to listpage template (`961c1ae`)
+- **refactor**: migrate agents detail page to detailpage template (`b2054d7`)
+- **refactor**: migrate 3 pages to listpage template system (`0986de3`)
+- **fix**: add workspace provider to app layout (`286fcac`)
+- **feat**: complete 4 missing page templates (`0c5239d`)
+- **fix**: convert css vars to rgb per production spec (`71fdfec`)
+- **refactor**: align design system to light mode (`df086ee`)
+- **feat**: add 10 new pages for workflows, docs, team, activity, etc (`e4f72f0`)
+- **feat**: add 4 documentation & resource pages (`01fe470`)
+- **feat**: add 4 settings pages - workspace, billing, security, notifications (`8409e24`)
+- **feat**: add 5 core feature pages - contacts, tasks, calendar, reports, integrations (`fd6e17a`)
+- **feat**: add billing and error pages (404, 403, 500) (`1c2d953`)
+- **feat**: add 4 core dashboard pages (`94072ea`)
+- **feat**: add settings pages using templates (`a18f9bf`)
+- **feat**: add analytics dashboard and marketplace pages (`19411f1`)
+- **feat**: add page template system with 4 reusable templates (`be0ce36`)
+- **fix**: eliminate technical debt - accessibility and hooks warnings (`2596e61`)
+- **docs**: add design system showcase page for atomic components (`a760eb1`)
+- **feat**: add barrel export for all 30 atomic components (`6e9ed8b`)
+- **feat**: add media & interactive atoms (7 components) (`75f00ae`)
+- **feat**: add indicator atoms (5 components) (`a3f3e3d`)
+- **feat**: add form element atoms (3 components) (`261581d`)
+- **feat**: add typography atoms (5 components) (`f32a314`)
+- **fix**: clean up TypeScript errors and improve build health (`3d6e2f2`)
+- **chore**: remove demo data from dashboard and marketplace (`c951c68`)
+- **fix**: remove duplicate content in separator.tsx (`2e7a50f`)
+- **fix**: remove duplicate content in label.tsx (`8adad64`)
+- **feat**: simplify core UI components to semantic HTML (`8148687`)
+- **feat**: mark design-system.ts as deprecated (`c169565`)
+- **feat**: simplify UI system - install Pico CSS and strip custom design system (`1b216fb`)
+- **feat**: implement OpenSea-inspired compact UI redesign (`245bbc5`)
+- **feat**: implement comprehensive loading states system (`5591924`)
+- **feat**: implement comprehensive error handling system (`43ba6a8`)
+- **feat**: implement comprehensive settings API routes (`314557e`)
+- **feat**: implement comprehensive knowledge base API routes (`df59a76`)
+- **feat**: implement marketplace and dashboard API routes + seed script (`ec24ce8`)
+- **feat**: wire up create agent functionality and workspace context (`ceeada4`)
+- **feat**: implement agents API routes and fix duplicate navigation (`7ae647f`)
+- **feat**: make page content responsive to sidebar expansion (`7dcb064`)
+- **fix**: rename UI components to lowercase for Linux compatibility (`17da6ab`)
+- **feat**: replace emoji icons with space-themed Lucide icons in sidebar (`cd97b99`)
+- **fix**: remove missing globals.css import from layout (`7ba5bc0`)
+- **feat**: add main navigation sidebar with Dashboard, Knowledge, Marketplace, and Agents (`c76d2b8`)
+- **refactor**: remove demo/mock infrastructure in favor of real agents only (`6812116`)
+- **fix**: add client-side mock execution for demo agents in TestPanel (`0502f4a`)
+- **feat**: replace JSON input with user-friendly form fields in TestPanel (`c118878`)
+- **feat**: Compact OpenSea-style cards with hover-to-reveal details (`3e78f66`)
+- **feat**: OpenSea-style variable card sizes and compact trending section (`438c473`)
+- **docs**: Add UI Polish Sprint final summary - 8/12 tasks complete, B+ to A- (`851d96a`)
+- **feat**: UI Polish - Enhanced EmptyState & Navigation (`efc0e4f`)
+- **docs**: Add UI Polish Sprint Session 2 progress summary (`eb2d7be`)
+- **feat**: UI Polish Sprint - Quick Wins & Card/Button Standardization (`2f8181f`)
+- **fix**: fix dashboard access and API route detection (`29820a5`)
+- **fix**: handle no workspace state gracefully on initial sign-in (`0f5690f`)
+- **fix**: re-enable Clerk middleware with environment variables in Preview (`1ed2674`)
+- **fix**: phase 9B complete – zero TypeScript errors (#1) (`d1bb585`)
+- **feat**: add agent list page with search, filters, and pagination (`ba04629`)
+- **feat**: add test panel with JSON editor and mock execution (`81c4208`)
+- **feat**: add advanced settings, publish modal, and keyboard shortcuts (`a6a3a52`)
+- **feat**: add agent builder forms with save draft and validation (`800fbff`)
+- **feat**: add API client actions for agent CRUD operations (`784a110`)
+- **feat**: add template library modal with OpenSea-style cards and animations (`2ffbde1`)
+- **feat**: add agent templates and design system constants (`314cc40`)
+- **feat**: implement interactive product tour with 5-step guided onboarding (`509615f`)
+- **feat**: add personalized dashboard with progress tracker and agent cards (`03d7d65`)
+- **feat**: implement 6-step onboarding wizard with personalization (`1193523`)
+- **feat**: add design system foundation and UI component library (`2f4919d`)
+
+### api (26 commits)
+
+- **feat**: add settings endpoints for users, workspace, billing, and integrations (`49a864f`)
+- **fix**: connect prospects endpoint to database query (`aedb651`)
+- **feat**: integrate all analytics routes with database aggregations (`dfb31b6`)
+- **feat**: integrate chat and notifications routes with database (`e4a0de0`)
+- **feat**: integrate inbox and emails routes with database (`110a33a`)
+- **feat**: integrate audit-log and webhooks routes with database (`b331322`)
+- **feat**: integrate segments, exports, and imports routes with database (`2bcef04`)
+- **feat**: integrate calendar, invoices, and campaigns routes with database (`06cd7f2`)
+- **feat**: integrate 6 crm routes with database queries (`848567b`)
+- **feat**: customize special routes with admin, playground, and webhook features (`3941158`)
+- **feat**: complete authentication security audit (`5ac8db9`)
+- **feat**: complete sql injection prevention audit (`3616052`)
+- **feat**: add redis-based rate limiting to critical endpoints (`a25b110`)
+- **feat**: add zod validation to document upload endpoint (`b80a8ab`)
+- **fix**: add development bypasses with mock data for all API routes (`3732c6e`)
+- **fix**: add missing workspaces API endpoint and fix agents API user lookup (`761cac6`)
+- **fix**: correct import paths for Lead Intel Agent in API routes (`131b35c`)
+- **feat**: create Lead Intel Agent API endpoints and test UI (`acdf2bc`)
+- **feat**: add knowledge base upload and list endpoints (`2c0d127`)
+- **fix**: fix onboarding workspace creation (`6cb86c2`)
+- **fix**: add dynamic export to agent execute route (`69d9edb`)
+- **feat**: add live agent execution endpoint with AI providers (`0f4bb2a`)
+- **feat**: add API key management and test endpoints (`9171121`)
+- **feat**: implement agents CRUD with tenant-scoped queries and mock test mode (`b219122`)
+- **feat**: add onboarding completion endpoint with profile storage (`5f0e273`)
+- **feat**: add authentication guards and agent controller (`f79c140`)
+
+### vercel (15 commits)
+
+- **fix**: simplify config to let Vercel auto-detect settings (`b064d11`)
+- **fix**: remove extra closing brace causing JSON parse error (`6341ee3`)
+- **revert**: remove rootDirectory config (must be set in dashboard) (`3e73187`)
+- **fix**: specify apps/web as rootDirectory (`3786625`)
+- **fix**: set correct output directory for Next.js build (`dbf3597`)
+- **fix**: simplify config for apps/web root directory (`5a17b10`)
+- **fix**: remove conflicting vercel.json from apps/web (`71492fa`)
+- **fix**: update build command for proper monorepo deployment (`d858bc1`)
+- **fix**: use npm run build for web app to ensure proper execution (`552789c`)
+- **fix**: build only web app to avoid nest CLI issue (`e685765`)
+- **fix**: add next.js to root package.json for Vercel detection (`74daf44`)
+- **fix**: use pnpm for monorepo installation (`8ed93f2`)
+- **fix**: update vercel.json for Next.js monorepo deployment (`3bcfbb9`)
+- **fix**: simplify vercel.json for Next.js deployment (`268c9b7`)
+- **fix**: add proper vercel.json configuration for monorepo deployment (`06d3239`)
+
+### infra (12 commits)
+
+- **docs**: complete week 1 foundation planning (`0997463`)
+- **docs**: add master checklist and guardrails for ia refactor (`f6fe057`)
+- **docs**: update session status - ci/cd pipeline merged and active (`4d833d9`)
+- **feat**: Add CI/CD pipeline with GitHub Actions (#2) (`37119da`)
+- **chore**: add security scanning and deployment workflows (`c46b934`)
+- **fix**: resolve typecheck and lint errors, apply prettier formatting (`5d75d2e`)
+- **chore**: organize shell scripts into subdirectories (`358b617`)
+- **feat**: add pre-commit quality gates with Husky and lint-staged (`dc7f6a1`)
+- **docs**: establish development command center and documentation system (`f4ba6a6`)
+- **fix**: clean slate environment variable setup - production working (`3fb356d`)
+- **fix**: remove || true from build command to properly fail on errors (`448da8e`)
+- **feat**: complete phase 2 with all services tested and verified (`12a859e`)
+
+### agents (12 commits)
+
+- **feat**: add execution tracking UI and APIs (Phase 4K) (`c25afe2`)
+- **feat**: add single agent CRUD API and real detail page with tabs (`0165649`)
+- **feat**: implement Deploy Modal and Activation Flow (`086aad7`)
+- **feat**: implement Agent List Page with metrics and filters (`df973bf`)
+- **feat**: implement Save Agent API and Deploy button (`31e5aa1`)
+- **feat**: add Phase 3 TestPlayground with real API execution (`fdbf787`)
+- **refactor**: polish Phase 1 & 2 with error handling and validation (`0f04255`)
+- **feat**: add Phase 2 iteration and workflow visualization (`cd3e2c9`)
+- **feat**: add Phase 1 builder UI and AI endpoints (`0e315ca`)
+- **feat**: wire up agent execution for mock and live modes (`ba2130a`)
+- **feat**: complete Phase 1.1 - LangGraph orchestrator (`4f3f758`)
+- **feat**: add live execution mode toggle to test panel with metrics display (`0724fdd`)
+
+### ui (11 commits)
+
+- **feat**: complete Phase 4 molecular components refactor (`58d819c`)
+- **feat**: complete Phase 3 atomic components refactor (`80cbc44`)
+- **feat**: polish dashboard UI with enhanced sidebar and improved layout (`81cc471`)
+- **feat**: major UI/UX improvements based on feedback (`31eec3d`)
+- **fix**: force light mode and remove theme toggles (`ba7d065`)
+- **fix**: replace dropdown with simple light/dark toggle switch (`5ec0b9b`)
+- **fix**: address footer text, theme toggle positioning and Clerk OAuth (`7148106`)
+- **fix**: make theme toggle button visible in dark mode (`78566b0`)
+- **feat**: complete professional UI transformation with enterprise-grade polish (`5241789`)
+- **feat**: add Knowledge Base page with drag & drop upload (`7ac9b67`)
+- **feat**: add API key management component with test/save/delete (`3498d65`)
+
+### marketplace (9 commits)
+
+- **fix**: remove agent templates and add empty state (`ccc32dd`)
+- **fix**: add optional chaining for slide.stats to fix TypeScript error (`a071ffc`)
+- **fix**: remove duplicate borderBottom property (`63a1cc8`)
+- **fix**: remove duplicate hero section from category pages (`dca8d50`)
+- **feat**: add collapsible sidebar, category chips, and rounded hero (`bbb6a9f`)
+- **feat**: implement OpenSea-style UI with search and categories (`daeb034`)
+- **feat**: reorder sections to show Trending before Featured (`bd127da`)
+- **feat**: complete Phase 10 backend - templates, API routes, seed data (`8b409fa`)
+- **feat**: add Phase 10 marketplace with OpenSea-style hero (`5d0351a`)
+
+### dashboard (8 commits)
+
+- **feat**: UI polish - dynamic charts, slimmer sidebar, better footer alignment (`9836d7f`)
+- **feat**: add stock ticker for user engagement stats (`2e40b8a`)
+- **feat**: implement wireframe with hero, charts, and category sidebar (`65a2668`)
+- **refactor**: migrate to simplified design system (`d6a98a7`)
+- **feat**: Phase 5.1 - Dashboard page migration complete (`e8c0b5b`)
+- **feat**: replace emoji icons with circular profile avatars for agents (`4e939ef`)
+- **feat**: implement Mission Control dashboard with agent management (`145d098`)
+- **fix**: clean up TODO comments in progress tracker (`56ab487`)
+
+### db (7 commits)
+
+- **fix**: rename exports/imports to avoid typescript keyword conflict (`bde59fa`)
+- **feat**: complete phase 2 database integration with rls policies (`1a0eccf`)
+- **feat**: add 16 crm/business tables and integrate customers/projects routes (`3507fae`)
+- **feat**: add knowledge base schema with collections, items, and tags (`6b6b563`)
+- **docs**: add comprehensive database backup and branching strategy (`bf47553`)
+- **fix**: add missing encrypted_api_keys column to workspaces table (`97e5a2a`)
+- **feat**: implement multi-tenant database schema with drizzle (`df87cce`)
 
 ---
 
-## 🔍 Detailed Changes by File Type
+## 📁 Most Frequently Changed Files
 
-### TypeScript/JavaScript Files
-
-```
- apps/web/app/(app)/admin/analytics/page.tsx        | 113 ++--
- apps/web/app/(app)/admin/page.tsx                  | 278 ++++++----
- apps/web/app/(app)/admin/settings/page.tsx         |  93 +++-
- apps/web/app/(app)/admin/users/page.tsx            | 500 ++++++++++++++----
- apps/web/app/(app)/admin/workspaces/page.tsx       | 538 ++++++++++++++++---
- apps/web/app/(app)/agents/[id]/edit/page.tsx       | 135 ++++-
- apps/web/app/(app)/agents/activity/page.tsx        | 334 ++++++++++++
- apps/web/app/(app)/analytics/page.tsx              |   9 +
- apps/web/app/(app)/crm/page.tsx                    |   9 +
- apps/web/app/(app)/crm/segments/page.tsx           |  66 ++-
- apps/web/app/(app)/data/audit-log/page.tsx         | 257 +++++----
- apps/web/app/(app)/data/exports/page.tsx           | 187 ++++---
- apps/web/app/(app)/developer/playground/page.tsx   | 145 +++---
- apps/web/app/(app)/developer/webhooks/page.tsx     | 278 +++++-----
- apps/web/app/(app)/library/resources/page.tsx      | 134 +++--
- apps/web/app/(app)/library/templates/page.tsx      | 177 +++----
- apps/web/app/(app)/my-work/page.tsx                |   9 +
- apps/web/app/(app)/settings/billing/page.tsx       | 140 ++---
- apps/web/app/(app)/settings/integrations/page.tsx  | 181 ++++++-
- apps/web/app/(app)/settings/notifications/page.tsx | 127 ++++-
- apps/web/app/(app)/settings/profile/page.tsx       |  98 +++-
- apps/web/app/(app)/settings/security/page.tsx      |  59 ++-
- apps/web/app/(app)/settings/team/page.tsx          | 138 +++--
- apps/web/app/(app)/settings/workspace/page.tsx     |  83 ++-
- apps/web/app/api/admin/audit-log/route.ts          | 115 +++++
- apps/web/app/api/agents/[id]/route.ts              |  11 +-
- apps/web/app/api/agents/executions/route.ts        | 128 +++++
- .../app/api/auth/oauth/google/callback/route.ts    | 222 ++++++++
- .../app/api/auth/oauth/microsoft/callback/route.ts | 226 ++++++++
- apps/web/app/api/billing/route.ts                  | 146 ++++++
-```
-
-### CSS/Styles
-
-```
- apps/web/styles/globals.css | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-```
-
-### Configuration Files
-
-```
- .spectral.yaml                                     |    5 +
- apps/web/package.json                              |    2 +
- package.json                                       |   10 +-
- .../database/migrations/meta/0007_snapshot.json    | 6888 ++++++++++++++++++++
- packages/database/migrations/meta/_journal.json    |    7 +
- pnpm-lock.yaml                                     | 1875 +++++-
- 6 files changed, 8768 insertions(+), 19 deletions(-)
-```
+| File                                                  | Changes |
+| ----------------------------------------------------- | ------- |
+| `pnpm-lock.yaml`                                      | 43      |
+| `docs/status/CURRENT_SESSION.md`                      | 40      |
+| `apps/web/package.json`                               | 32      |
+| `vercel.json`                                         | 18      |
+| `packages/database/src/schema.ts`                     | 15      |
+| `apps/web/app/layout.tsx`                             | 15      |
+| `apps/web/app/marketplace/page.tsx`                   | 15      |
+| `apps/web/styles/globals.css`                         | 14      |
+| `apps/web/app/page.tsx`                               | 14      |
+| `apps/web/middleware.ts`                              | 13      |
+| `package.json`                                        | 12      |
+| `apps/web/tailwind.config.ts`                         | 11      |
+| `apps/web/app/api/agents/route.ts`                    | 11      |
+| `apps/web/components/layout/main-sidebar.tsx`         | 10      |
+| `SESSION_HANDOFF.md`                                  | 10      |
+| `apps/web/app/api/workspaces/route.ts`                | 9       |
+| `packages/database/migrations/meta/_journal.json`     | 9       |
+| `apps/web/components/agents/AgentBuilderPage.tsx`     | 9       |
+| `apps/web/components/marketplace/MarketplaceGrid.tsx` | 9       |
+| `apps/web/components/marketplace/MarketplaceHero.tsx` | 9       |
 
 ---
 
-## 💡 Quick Context for AI Agents
+## 🤖 AI Context Summary
 
 ### What Changed
 
-- fix(web): correct scrollbar color by using rgb() instead of hsl() (08b832a)
-- fix(web): fix onboarding wizard stuck loading and add markdown rendering (db7439f)
-- fix(web): ensure dialog content renders above overlay (z-index) (1b9c5f4)
-- feat(web): add ai-powered setup wizard with conversational interface (7db97fe)
-- feat(web): add user-friendly workspace creation onboarding (b2e4ef3)
-- fix(web): implement comprehensive workspace loading system with error handling (7857af9)
-- docs: update session status and ai context with oauth integration (b4ee92b)
-- feat(web,db): implement full oauth flow for google and microsoft (36cd74e)
-- feat(web): implement real oauth integration flow for gmail and calendar (80401e4)
-- feat(web): add comprehensive e2e test suite and agent activity monitoring (bff86ce)
-- docs: update session status - documentation pack integration complete (b3a8738)
-- docs: integrate comprehensive documentation pack and testing infrastructure (d309953)
-- docs: complete agent onboarding documentation suite (a9d1d45)
-- docs: update session status with api specification work (bcf13e7)
-- docs: add comprehensive api design specification (153e9ae)
-- docs: celebrate 100% api integration milestone (094a795)
-- feat(web): convert library pages to use real api endpoints (c193672)
-- docs: add comprehensive api integration roadmap (514fd22)
-- docs: update session status with phase 4 completion (71b32e7)
-- feat(web): convert data and developer pages to use real api endpoints (cd78ea7)
-- feat(web/api): add templates and resources api stubs, convert pages to real apis (f4ce7dc)
-- feat(web): connect exports and segments pages to real apis (f04679c)
-- feat(web): connect agent edit/logs pages to real apis with config save (94cfc5e)
-- feat(web): convert library templates/resources and crm segments pages to real apis (c7c645e)
-- docs: update session status - phase 3 complete (0fe2224)
-- feat(web/api): add pagination to admin users/workspaces and audit-log endpoint (e8d2850)
-- feat(web): add admin user/workspace actions (view/edit/delete) and recent activity feed (7888146)
-- docs: update session status 2025-10-19 (7753e3c)
-- feat(web): wire admin pages to real api routes (8db9951)
-- docs: update session status 2025-10-19 - phase 2 settings complete (165b555)
-- feat(web): connect settings pages to real api endpoints (398fc65)
-- feat(api): add settings endpoints for users, workspace, billing, and integrations (49a864f)
+**feat**: add ai-powered setup wizard with conversational interface; add user-friendly workspace creation onboarding; implement full oauth flow for google and microsoft; implement real oauth integration flow for gmail and calendar; add comprehensive e2e test suite and agent activity monitoring; convert library pages to use real api endpoints; convert data and developer pages to use real api endpoints; add templates and resources api stubs, convert pages to real apis; connect exports and segments pages to real apis; connect agent edit/logs pages to real apis with config save; convert library templates/resources and crm segments pages to real apis; add pagination to admin users/workspaces and audit-log endpoint; add admin user/workspace actions (view/edit/delete) and recent activity feed; wire admin pages to real api routes; connect settings pages to real api endpoints; add settings endpoints for users, workspace, billing, and integrations; connect workflows page to api endpoint, complete week 1; connect documents page to real api; complete remaining hub pages; migrate pages to new ia structure; week 2 ia refactor foundation; convert business pages to real apis (invoices, campaigns, emails); convert calendar and inbox pages to real apis (batch 1/2); connect projects and prospects pages to real apis; connect contacts page to real api; connect customers page to real api; connect analytics pages to real apis (6 pages); connect dashboard to real apis; complete phase 2 database integration with rls policies; integrate all analytics routes with database aggregations; integrate chat and notifications routes with database; integrate inbox and emails routes with database; integrate audit-log and webhooks routes with database; integrate segments, exports, and imports routes with database; integrate calendar, invoices, and campaigns routes with database; integrate 6 crm routes with database queries; add 16 crm/business tables and integrate customers/projects routes; customize special routes with admin, playground, and webhook features; reach 100% completion with 11 final pages (108/108); add 11 pages to reach 90% completion (97/108 pages); add customers and projects pages to reach 80% completion; add 19 feature pages for support, admin, and extended features; fix critical color contrast issues for wcag aa; add keyboard navigation improvements and skip link; complete accessibility audit and add comprehensive guidelines; Add CI/CD pipeline with GitHub Actions (#2); complete authentication audit and monitoring setup; complete authentication security audit; complete sql injection prevention audit; add redis-based rate limiting to critical endpoints; add zod validation to document upload endpoint; add comprehensive input validation infrastructure; implement comprehensive error boundary coverage; complete 4 missing page templates; add 10 new pages for workflows, docs, team, activity, etc; add 4 documentation & resource pages; add 4 settings pages - workspace, billing, security, notifications; add 5 core feature pages - contacts, tasks, calendar, reports, integrations; add billing and error pages (404, 403, 500); add 4 core dashboard pages; add settings pages using templates; add analytics dashboard and marketplace pages; add page template system with 4 reusable templates; add barrel export for all 30 atomic components; add media & interactive atoms (7 components); add indicator atoms (5 components); add form element atoms (3 components); add typography atoms (5 components); complete organism library with 12 production-ready components; re-enable production auth and tenant context; remove dev bypasses; Phase 5 start – organism components + tokenized layout; complete Phase 4 molecular components refactor; complete Phase 3 atomic components refactor; implement comprehensive design tokens system; BADASS AI Assistant + Document Upload Fix 🚀; add execution tracking UI and APIs (Phase 4K); add single agent CRUD API and real detail page with tabs; implement Deploy Modal and Activation Flow; implement Agent List Page with metrics and filters; implement Save Agent API and Deploy button; add Phase 3 TestPlayground with real API execution; add Phase 2 iteration and workflow visualization; add Phase 1 builder UI and AI endpoints; UI polish - dynamic charts, slimmer sidebar, better footer alignment; add stock ticker for user engagement stats; polish dashboard UI with enhanced sidebar and improved layout; implement wireframe with hero, charts, and category sidebar; major UI/UX improvements based on feedback; implement Phase 1 - Knowledge Base and AI Assistant; complete AI assistant backend infrastructure with RAG and conversation memory; add Pinecone and Redis client configurations; simplify core UI components to semantic HTML; mark design-system.ts as deprecated; simplify UI system - install Pico CSS and strip custom design system; create Lead Intel Agent API endpoints and test UI; deploy Lead Intel Agent to production with lazy OpenAI init; implement OpenSea-inspired compact UI redesign; implement comprehensive AI context system; implement comprehensive loading states system; implement comprehensive error handling system; implement comprehensive settings API routes; implement comprehensive knowledge base API routes; implement marketplace and dashboard API routes + seed script; wire up create agent functionality and workspace context; implement agents API routes and fix duplicate navigation; make page content responsive to sidebar expansion; Phase 6 - Advanced UI features complete! ✨; Phase 5 - All page migrations complete 🎉; Phase 5.1 - Dashboard page migration complete; Phase 4 - Layout enhancements complete; Phase 3 - Component migration complete; Phase 2 complete - Dual theme system; Phase 1 complete - Foundation setup; complete professional UI transformation with enterprise-grade polish; replace emoji icons with circular profile avatars for agents; implement Mission Control dashboard with agent management; replace emoji icons with space-themed Lucide icons in sidebar; add main navigation sidebar with Dashboard, Knowledge, Marketplace, and Agents; add collapsible sidebar, category chips, and rounded hero; implement OpenSea-style UI with search and categories; reorder sections to show Trending before Featured; implement complete knowledge base integration for agents; implement RAG with vector embeddings; complete collections integration (part 2); add collections management system (part 1); add item detail modal with edit/delete actions; add enhanced library view with search and filters; add document processing and Vercel Blob storage; add Knowledge Base page with drag & drop upload; add knowledge base upload and list endpoints; add knowledge base schema with collections, items, and tags; complete Sentry integration with error boundaries and tracking; integrate guardrails with Runner and add comprehensive test suite; implement essential guardrails for production safety; implement database tools with multi-tenant safety; add comprehensive production tool library; connect agents-core to API layer; implement OpenAI-aligned Agent and Runner classes; replace JSON input with user-friendly form fields in TestPanel; add agent detail page with proper TestPanel integration; wire up agent execution for mock and live modes; complete Phase 1.1 - LangGraph orchestrator; Compact OpenSea-style cards with hover-to-reveal details; OpenSea-style variable card sizes and compact trending section; UI Polish - Enhanced EmptyState & Navigation; UI Polish Sprint - Quick Wins & Card/Button Standardization; add comprehensive automated testing framework; integrate Sentry error tracking and performance monitoring; add pre-commit quality gates with Husky and lint-staged; integrate Google Gemini API support; complete Phase 10 backend - templates, API routes, seed data; add Phase 10 marketplace with OpenSea-style hero; add settings page with API key management UI; add live execution mode toggle to test panel with metrics display; add API key management component with test/save/delete; add live agent execution endpoint with AI providers; add execution tracking service with stats; add retry logic with exponential backoff and jitter; add API key management and test endpoints; add AI provider service layer with OpenAI and Anthropic; add API key encryption utilities with AES-256-GCM; add encrypted API keys field to workspaces; integrate Clerk authentication with workspace context; add agent list page with search, filters, and pagination; add test panel with JSON editor and mock execution; add advanced settings, publish modal, and keyboard shortcuts; add agent builder forms with save draft and validation; add API client actions for agent CRUD operations; add template library modal with OpenSea-style cards and animations; add agent templates and design system constants; implement agents CRUD with tenant-scoped queries and mock test mode; add onboarding completion endpoint with profile storage; implement interactive product tour with 5-step guided onboarding; add personalized dashboard with progress tracker and agent cards; implement 6-step onboarding wizard with personalization; add design system foundation and UI component library; add authentication guards and agent controller; implement workspace switching with context provider; implement multi-tenant database schema with drizzle; complete phase 2 with all services tested and verified; scaffold Next.js, NestJS, and Python FastAPI apps
 
-### Key Technical Decisions
+**fix**: correct scrollbar color by using rgb() instead of hsl(); fix onboarding wizard stuck loading and add markdown rendering; ensure dialog content renders above overlay (z-index); implement comprehensive workspace loading system with error handling; connect prospects endpoint to database query; rename exports/imports to avoid typescript keyword conflict; eliminate phase 2 technical debt - apply migration and fix admin routes; replace console statements with logger in test-runner and ai-provider-wrapper; replace console statements with logger in agent-interface; resolve accessibility warning by renaming image icon import; replace console statements with logger in core components; replace console statements with logger in api routes and error handlers; remove unused imports and fix react hook warnings; add workspace provider to app layout; convert css vars to rgb per production spec; eliminate technical debt - accessibility and hooks warnings; resolve typecheck and lint errors, apply prettier formatting; add development bypasses with mock data for all API routes; complete development bypass for all pages; add development middleware bypass and clerk config; resolve tenant context query causing 404 errors; correct document upload API schema compatibility; add missing workspaces API endpoint and fix agents API user lookup; make content responsive to sidebar expand/collapse; force light mode and remove theme toggles; clean up TypeScript errors and improve build health; enable class-based dark mode in Tailwind config; redirect authenticated users to dashboard; replace dropdown with simple light/dark toggle switch; address footer text, theme toggle positioning and Clerk OAuth; make theme toggle button visible in dark mode; use require() for CommonJS module compatibility; resolve PDF import error and dark mode visibility issues; remove agent templates and add empty state; remove duplicate content in separator.tsx; remove duplicate content in label.tsx; fix import paths after moving test files to **tests** directory; fix all ESLint errors - unescaped quotes in JSX; fix TypeScript errors and some unescaped quotes in JSX; correct import paths for Lead Intel Agent in API routes; add optional chaining for slide.stats to fix TypeScript error; remove duplicate borderBottom property; rename UI components to lowercase for Linux compatibility; resolve all TypeScript errors and component prop issues; Add form wrapper components for backward compatibility; remove duplicate hero section from category pages; remove missing globals.css import from layout; add metadata to ExecutionContext and handle toolCall types; add client-side mock execution for demo agents in TestPanel; handle SSR properly and initialize on client-side only; improve agent execution testing UX with mock system; fix visual regression tests and capture baselines; prevent duplicate workspace slug errors and improve error handling; update to Gemini 2.x models with verified API support; add marketplace routes to public access list; simplify config to let Vercel auto-detect settings; remove extra closing brace causing JSON parse error; specify apps/web as rootDirectory; set correct output directory for Next.js build; simplify config for apps/web root directory; remove conflicting vercel.json from apps/web; update build command for proper monorepo deployment; fix onboarding workspace creation; fix dashboard access and API route detection; allow workspace API routes to handle auth internally; handle no workspace state gracefully on initial sign-in; clean slate environment variable setup - production working; add dynamic export to agent execute route; add dynamic API route configuration and revert to stable base; remove || true from build command to properly fail on errors; add missing encrypted_api_keys column to workspaces table; re-enable Clerk middleware with environment variables in Preview; temporarily disable middleware to fix runtime error; improve database client runtime handling; simplify middleware and remove invalid next.config options to fix runtime error; remove functions config from vercel.json - Next.js handles API routes automatically; remove duplicate import in database client; database connection for runtime API routes; provide dummy DATABASE_URL during build to bypass static generation; configure next.config.js to handle environment variables during build; use npm run build for web app to ensure proper execution; build only web app to avoid nest CLI issue; update pnpm-lock.yaml with next.js dependency; add next.js to root package.json for Vercel detection; use pnpm for monorepo installation; update vercel.json for Next.js monorepo deployment; simplify vercel.json for Next.js deployment; add proper vercel.json configuration for monorepo deployment; add environment variables to turbo.json for Vercel deployment; Complete Phase 9B TypeScript cleanup and prepare for production deployment; phase 9B complete – zero TypeScript errors (#1); clean up TODO comments in progress tracker; resolve path resolution and implicit any type errors; resolve WorkspaceProvider module resolution with relative imports
 
-- **fix(web): correct scrollbar color by using rgb() instead of hsl()** - - Fix scrollbar-thumb using hsl() with RGB color values
-- Change to rgb() to match CSS variable format
-- Also improve hover state to use border-hover color
-- Resolves weird yellow/incorrect scrollbar colors
+**refactor**: replace console statements with logger utility; migrate knowledge page to listpage template; migrate agents detail page to detailpage template; migrate 3 pages to listpage template system; align design system to light mode; polish Phase 1 & 2 with error handling and validation; migrate to simplified design system; remove stray files and organize test files; create production-grade logger and clean onboarding page; remove obsolete src/app structure and consolidate Lead Intel APIs to standard app/ router structure; remove demo/mock infrastructure in favor of real agents only; remove specific customer references - platform is for all users
 
-- **fix(web): fix onboarding wizard stuck loading and add markdown rendering** - - Fix API logic to track role vs industry responses correctly
-- Add react-markdown for proper message formatting
-- Support bold text, lists, and paragraphs in AI responses
-- Prevent role from being overwritten when user provides industry
+**docs**: add automated changelog system for perfect ai session handoffs; update session status and ai context with oauth integration; update session status - documentation pack integration complete; integrate comprehensive documentation pack and testing infrastructure; complete agent onboarding documentation suite; update session status with api specification work; add comprehensive api design specification; celebrate 100% api integration milestone; add comprehensive api integration roadmap; update session status with phase 4 completion; update session status - phase 3 complete; update session status 2025-10-19; update session status 2025-10-19 - phase 2 settings complete; week 2 100% complete - all hub pages created; update session status with week 2 completion; complete week 1 api integration (18/19 pages - 95%); create handoff instructions for week 1 completion; update progress - 12/20 pages complete (60%), tasks page done; update progress for projects and prospects completion; update session status with crm customers and contacts completion; update session status and master checklist with week 1 day 3-4 progress; complete week 1 foundation planning; add master checklist and guardrails for ia refactor; update session status - phase 2 complete, phase 3 ready; update session status for phase 2 database integration progress; update current session with phase 1 completion status; update page count to 112 pages (104% completion); prepare integration sprint plan and kickoff message; update session status to 90% milestone (97/108 pages); update session status to reflect 80% milestone (86/108 pages); update session status with testing sprint phase 2 completion; update session status with 374 total tests (132 new); update session status with testing sprint completion (242 tests, 26 components); update session status with 51/108 pages and testing sprint plan; update session status with accessibility sprint completion; update accessibility guidelines with complete audit results; update session status - ci/cd pipeline merged and active; add production readiness completion summary; add comprehensive 36-point quality checklist progress tracking; update console cleanup guide with priority 1 & 2 completion status; complete phase 1 - 15 pages using templates (target exceeded); update session status and implementation progress; update session status with billing and error pages; update session status with phase 7 progress; add design system showcase page for atomic components; update session status – Phase 5 kickoff and dev access fixes; complete demo audit and design system kickoff preparation; update session status with API fixes and page planning; create agent system implementation checklist; update session status with Phase 4F-J completion; create comprehensive Agents Builder audit document; add comprehensive QA checklist for Agents Builder Phases 1 & 2; update session #6 - dashboard UI polish complete; update session status 2025-10-15; implement new documentation structure; create CURRENT_SESSION.md and reorganization proposal; update handoff for session #5 - dashboard wireframe complete; add current state summary; add UI rebuild plan and component guide; update cleanup summary with marketplace template removal; archive completed work from October 2025; organize guide and reference documentation; organize business and planning documentation; organize session handoff documents; organize technical documentation into subdirectories; organize screenshots into categorized subdirectories; create comprehensive technical debt cleanup report; add strategic plan documentation and gap analysis; update session handoff for October 14 - API endpoints & test UI complete; create master session handoff and AI context for optimal communication; add comprehensive Lead Intel Agent deployment guide; fix all dates to October 12, 2025 (not January); add quick start guide for tomorrow's session; comprehensive session handoff for Jan 12, 2025; sanitize all example API keys to prevent secret detection; replace example encryption key with placeholder text; add deployment success documentation; update session handoff with Mission Control dashboard milestone; update session handoff with main navigation sidebar progress; update session handoff with Jan 15 progress; update progress with document processing details; add Knowledge Base development session summary; add Sentry integration completion summary; add automated deployment validation report; add production deployment and security guides; add completion plan for final 20% to reach 100% production-ready; add OpenAI architecture refactor plan; add production testing guide for agent execution; Add UI Polish Sprint final summary - 8/12 tasks complete, B+ to A-; Add UI Polish Sprint Session 2 progress summary; add complete session summary for Day 1; add sprint progress report for Phases 1 & 2; create prioritized next sprint roadmap; mark Sentry error monitoring as fully activated; update development command center status after infrastructure sprint; add comprehensive database backup and branching strategy; establish development command center and documentation system; update session handoff v1.1 with backend completion and deployment fixes; add comprehensive fix summary for dashboard error resolution; document critical middleware fix in session handoff v1.3; add comprehensive project status and roadmap; update session handoff with workspace initialization fix; create consolidated master session handoff v1.1; add environment variables reference; add comprehensive deployment recovery documentation; add session handoff for Phase 9B completion; add Phase 9B handoff document for live execution UI; add Phase 9A completion handoff; add Session 7 handoff document; add Phase 8 complete checklist and session 6 handoff; add agent builder testing guide; create Session 5 handoff with clear next steps for resuming Phase 8; update Phase 8 progress with session 5 accomplishments; add Phase 8 progress summary and testing guide; add comprehensive Phase 8 Agent Builder UI plan; update session handoff with Phase 7 completion status; add Phase 7 completion documentation and testing checklist; update session handoff with Phase 6 completion; add phase 6 kickoff message template; prepare phase 6 handoff with detailed action plan; update session handoff with phase 2 and 5 completion; update handoff document for session #2 start; add time tracking and session handoff documents; add Phase 1 completion summary
 
-- **fix(web): ensure dialog content renders above overlay (z-index)** - - Replace non-existent z-dialog with z-modal per design tokens
-- Prevent overlay from sitting above content causing full-screen blur
-- Keeps background blur via overlay while dialog stays crisp
+**test**: add comprehensive agent creation and document upload e2e tests; complete 100% ui component test coverage; add 132 tests for form, overlay and content components; add 4 more component tests - 242 total tests!; add 7 more component tests (59 tests); add avatar and separator component tests; add skeleton and progress component tests; add comprehensive switch component tests; add textarea tests and fix checkbox typescript error; add comprehensive ui component tests; fix vitest jsx transformation and add working tests; setup vitest infrastructure with react testing library; add comprehensive test suite and examples; verify deploy hook for temp-phase9 branch
 
-- **feat(web): add ai-powered setup wizard with conversational interface** - - Create AISetupWizard component with multi-step guided flow
-- Add prominent setup button in sidebar with pulse indicator
-- Implement conversational AI assistant for onboarding
-- Create API routes for onboarding process, agent provisioning, and data setup
-- Support role-based agent recommendations (Founder, Sales, Support, Operations)
-- Include sample data provisioning for immediate platform exploration
-- Track onboarding progress with visual step indicators
-- Enable workspace creation, agent configuration, and integration setup
-- Display real Clerk user info in sidebar (replaces demo user)
-
-The wizard guides users through complete platform setup resulting in a
-fully-configured workspace with agents, sample data, and integrations ready to use.
-
-- **feat(web): add user-friendly workspace creation onboarding** - - Create CreateWorkspaceModal component with simple form (just workspace name)
-- Add POST /api/workspaces endpoint to create workspace + link user
-- Update WorkspaceGuard to show friendly onboarding UI instead of developer message
-- Auto-create user in database from Clerk data when creating workspace
-- Remove all developer-facing terminal command instructions
-- Provide clear, welcoming UX for first-time users
-
-Users now see 'Welcome to GalaxyCo!' with a Create Workspace button.
-No more technical jargon or terminal commands required.
-
-- **fix(web): implement comprehensive workspace loading system with error handling** - - Add diagnostic logging to workspace context for debugging
-- Create WorkspaceGuard component with 4 states (loading, timeout, no-workspace, success)
-- Apply WorkspaceGuard to My Work, CRM, and Analytics pages
-- Create simple database seed script that properly loads .env.local
-- Add 10-second timeout mechanism to prevent infinite loading
-- Show professional error UI when no workspace found
-- Provide developer guidance in no-workspace state
-- Fix all workspace-dependent pages to handle edge cases gracefully
-
-This ensures all 100+ workspace-dependent pages will work properly.
-Resolves infinite loading spinner issue on key pages.
-
-- **feat(web,db): implement full oauth flow for google and microsoft** - - Add integrations and oauth_tokens tables to database schema
-- Create AES-256-GCM encryption utility for secure token storage
-- Implement Google OAuth callback with database integration
-- Implement Microsoft OAuth callback for Outlook and Calendar
-- Add OAuth initiation endpoints for both providers
-- Implement token revocation and disconnect functionality
-- Update integrations API to fetch real data from database
-- Support Gmail, Google Calendar, Outlook, and Microsoft Calendar
-- Add multi-tenant security with workspace validation
-- Include encrypted token storage and refresh token support
-
-- **feat(web): implement real oauth integration flow for gmail and calendar** - - Add Google OAuth callback handler with token exchange
-- Add OAuth initiation endpoint with proper scopes
-- Add disconnect endpoint for integrations
-- Update integrations page with real OAuth connect/disconnect flows
-- Add Gmail and Calendar to stub integrations list
-- Implement loading states and error handling for OAuth flow
-- Add success/error toast notifications after OAuth callback
-- Note: Token storage to be implemented when integrations table added to schema
-
-- **feat(web): add comprehensive e2e test suite and agent activity monitoring** - - Add E2E tests for dashboard, CRM pages, analytics, agents, settings (100% coverage)
-- Add E2E tests for admin pages, library, business, developer, data pages
-- Add mobile viewport tests for responsive design validation
-- Create /api/agents/executions endpoint with filtering and metrics
-- Create /agents/activity monitoring page with real-time polling
-- Display execution status, performance metrics, token tracking
-- Add search and filter by status
-- Real-time updates every 5 seconds
-
-- **docs: integrate comprehensive documentation pack and testing infrastructure** - - Add 17 structured documentation files covering specs, API, UX, workflows, and guides
-- Create Playwright E2E test setup with baseline specs (auth, agent-create, document-upload)
-- Add OpenAPI 3.1 specifications for Agent Builder and Workflow APIs
-- Configure Spectral linter for OpenAPI validation
-- Add GitHub Actions quality workflow (typecheck, lint, test, e2e, openapi validation)
-- Update package.json with e2e and validate:openapi scripts
-- Install @stoplight/spectral-cli as dev dependency
-- Create test fixtures and utils directories for E2E infrastructure
-
-- **feat(web): convert library pages to use real api endpoints** - - convert templates page to use /api/templates with SWR
-- convert resources page to use /api/resources with SWR
-- add proper TypeScript interfaces matching API schemas
-- implement loading states with Loader2 component
-- add error handling with toast notifications
-- remove mock data and useEffect patterns
-- achieve 100% completion of actionable pages (37/37)
-
-- **feat(web): convert data and developer pages to use real api endpoints** - - convert audit-log page to use /api/audit-log endpoint
-- convert webhooks page to use /api/webhooks endpoint
-- convert playground page to use /api/playground endpoint
-- add SWR for data fetching with proper loading/error states
-- add proper TypeScript types for all API responses
-- remove mock data in favor of real API calls
-
-- **feat(web/api): add templates and resources api stubs, convert pages to real apis** -
-- **feat(web): connect exports and segments pages to real apis** -
-- **feat(web): connect agent edit/logs pages to real apis with config save** -
-- **feat(web): convert library templates/resources and crm segments pages to real apis** -
-- **feat(web/api): add pagination to admin users/workspaces and audit-log endpoint** -
-- **feat(web): add admin user/workspace actions (view/edit/delete) and recent activity feed** -
-- **feat(web): wire admin pages to real api routes** -
-- **feat(web): connect settings pages to real api endpoints** - pages: profile, notifications, team, workspace, billing, integrations, security
-
-- **feat(api): add settings endpoints for users, workspace, billing, and integrations** -
-
-### Files You'll Need to Know About
+### Key Files Modified
 
 ```
-      7 docs/status/CURRENT_SESSION.md
-      4 pnpm-lock.yaml
-      3 package.json
-      3 apps/web/app/(app)/library/templates/page.tsx
-      3 apps/web/app/(app)/library/resources/page.tsx
-      3 apps/web/app/(app)/admin/workspaces/page.tsx
-      3 apps/web/app/(app)/admin/users/page.tsx
-      2 docs/status/sessions/2025-10-19.md
-      2 docs/status/API_INTEGRATION_ROADMAP.md
-      2 apps/web/package.json
-      2 apps/web/components/workspace/workspace-guard.tsx
-      2 apps/web/components/onboarding/AISetupWizard.tsx
-      2 apps/web/app/api/onboarding/process/route.ts
-      2 apps/web/app/api/integrations/route.ts
-      2 apps/web/app/api/integrations/[id]/disconnect/route.ts
-      2 apps/web/app/api/auth/oauth/google/callback/route.ts
-      2 apps/web/app/(app)/settings/integrations/page.tsx
-      2 apps/web/app/(app)/crm/segments/page.tsx
-      2 apps/web/app/(app)/admin/page.tsx
-      1 tests/e2e/settings-pages.spec.ts
+pnpm-lock.yaml
+docs/status/CURRENT_SESSION.md
+apps/web/package.json
+vercel.json
+packages/database/src/schema.ts
+apps/web/app/layout.tsx
+apps/web/app/marketplace/page.tsx
+apps/web/styles/globals.css
+apps/web/app/page.tsx
+apps/web/middleware.ts
+package.json
+apps/web/tailwind.config.ts
+apps/web/app/api/agents/route.ts
+apps/web/components/layout/main-sidebar.tsx
+SESSION_HANDOFF.md
 ```
+
+### Next Steps Checklist
+
+- [ ] Review breaking changes (if any)
+- [ ] Verify all tests pass after recent changes
+- [ ] Check modified files for TODOs or incomplete work
+- [ ] Update CURRENT_SESSION.md with session summary
+- [ ] Run health checks before committing
 
 ---
 
-## 🎯 Next Session Checklist
-
-- [ ] Review above changes for context
-- [ ] Check for TODO comments in modified files
-- [ ] Verify all tests still pass
-- [ ] Update CURRENT_SESSION.md with today's work
-- [ ] Run this script again at end of session
-
----
-
-_Generated by: scripts/generate-changelog.sh_  
-_To regenerate: `./scripts/generate-changelog.sh [days] [output-file]`_
+_Generated by: `scripts/generate-changelog.ts`_
+_To regenerate: `tsx scripts/generate-changelog.ts`_
