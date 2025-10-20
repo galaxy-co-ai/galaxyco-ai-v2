@@ -20,6 +20,8 @@
     "precommit": "turbo run typecheck && turbo run lint && prettier --check .",
     "health-check": "pnpm precommit",
     "db:seed": "tsx scripts/database/simple-seed.ts",
+    "db:link-user": "tsx scripts/database/link-current-user.ts",
+    "db:setup": "tsx scripts/database/setup-production.ts",
     "generate-encryption-key": "node scripts/generate-encryption-key.js",
     "release:dry-run": "pnpm build",
     "release:prod": "echo 'Deploy handled by CI'",
