@@ -17,12 +17,19 @@ export async function POST(request: Request) {
 
     switch (currentStep) {
       case "welcome":
-        // Extract role from message
-        updates.role = message;
-        updates.industry = ""; // Will ask next
-        response = `Perfect! A ${message} role is great for leveraging AI automation.
+        // Check if this is role or industry response
+        if (!setupData.role) {
+          // First response: role
+          updates.role = message;
+          response = `Perfect! A **${message}** role is great for leveraging AI automation.
 
 **What industry are you in?** (e.g., Technology, Healthcare, Finance, E-commerce, Consulting, etc.)`;
+        } else {
+          // Second response: industry
+          updates.industry = message;
+          response = `Excellent! **${message}** is a great industry for AI automation.`;
+          shouldProgress = true;
+        }
         break;
 
       case "workspace":
@@ -83,12 +90,7 @@ You'll be able to connect these later in Settings.`;
         break;
 
       default:
-        // Continue to next step if industry provided in welcome
-        if (currentStep === "welcome" && message) {
-          updates.industry = message;
-          response = `Excellent! ${message} is a great industry for AI automation.`;
-          shouldProgress = true;
-        }
+        response = "I'm not sure how to handle that. Please try again.";
     }
 
     return NextResponse.json({

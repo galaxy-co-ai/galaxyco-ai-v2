@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 import {
   Dialog,
   DialogContent,
@@ -495,8 +496,25 @@ Click "Launch Platform" below to begin.`,
                           : "bg-primary text-white",
                       )}
                     >
-                      <div className="text-sm whitespace-pre-wrap">
-                        {message.content}
+                      <div className="text-sm prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown
+                          components={{
+                            p: ({ node, ...props }) => (
+                              <p className="mb-2 last:mb-0" {...props} />
+                            ),
+                            strong: ({ node, ...props }) => (
+                              <strong className="font-semibold" {...props} />
+                            ),
+                            ul: ({ node, ...props }) => (
+                              <ul className="list-disc ml-4 mb-2" {...props} />
+                            ),
+                            li: ({ node, ...props }) => (
+                              <li className="mb-1" {...props} />
+                            ),
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
                       </div>
                     </div>
                   </div>
