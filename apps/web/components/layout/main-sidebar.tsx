@@ -25,6 +25,7 @@ import {
   Pin,
   HelpCircle,
   LogOut,
+  Zap,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -34,6 +35,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { AISetupWizard } from "@/components/onboarding/AISetupWizard";
 
 interface SidebarProps {
   className?: string;
@@ -88,9 +91,18 @@ const navigationItems = [
 
 export function MainSidebar({ className }: SidebarProps) {
   const pathname = usePathname();
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const [isHovered, setIsHovered] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
+  const [showSetupWizard, setShowSetupWizard] = useState(false);
   const isExpanded = isHovered || isPinned;
+
+  // Get user display info
+  const userDisplayName = user?.fullName || user?.firstName || "User";
+  const userEmail =
+    user?.primaryEmailAddress?.emailAddress || "user@example.com";
+  const userInitial = userDisplayName.charAt(0).toUpperCase();
 
   // Load pinned state from localStorage on mount
   useEffect(() => {
@@ -245,6 +257,31 @@ export function MainSidebar({ className }: SidebarProps) {
           </Button>
         </Link>
 
+        {/* AI Setup Wizard */}
+        <Button
+          variant="ghost"
+          onClick={() => setShowSetupWizard(true)}
+          className={cn(
+            "w-full h-12 rounded-lg hover:bg-hover relative",
+            "flex items-center gap-3",
+            "bg-gradient-to-r from-primary/10 to-purple-500/10",
+            "border border-primary/20",
+            isExpanded ? "justify-start px-3" : "justify-center p-0",
+          )}
+        >
+          <Zap className="w-5 h-5 flex-shrink-0 text-primary" />
+          {isExpanded && (
+            <span className="text-sm font-medium text-primary">
+              Complete Setup
+            </span>
+          )}
+          {/* Pulse indicator */}
+          <span className="absolute top-2 right-2 flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+        </Button>
+
         {/* Help */}
         <Button
           variant="ghost"
@@ -337,16 +374,16 @@ export function MainSidebar({ className }: SidebarProps) {
             >
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-primary-foreground text-sm font-medium">
-                  D
+                  {userInitial}
                 </span>
               </div>
               {isExpanded && (
                 <div className="flex flex-col items-start min-w-0">
                   <span className="text-sm font-medium text-gray-900 truncate">
-                    Demo User
+                    {userDisplayName}
                   </span>
                   <span className="text-xs text-gray-500 truncate">
-                    demo@galaxyco.ai
+                    {userEmail}
                   </span>
                 </div>
               )}
@@ -360,9 +397,11 @@ export function MainSidebar({ className }: SidebarProps) {
           >
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Demo User</p>
+                <p className="text-sm font-medium leading-none">
+                  {userDisplayName}
+                </p>
                 <p className="text-xs leading-none text-gray-500">
-                  demo@galaxyco.ai
+                  {userEmail}
                 </p>
               </div>
             </DropdownMenuLabel>
@@ -380,13 +419,22 @@ export function MainSidebar({ className }: SidebarProps) {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem className="text-red-600 dark:text-red-400">
+            <DropdownMenuItem
+              className="text-red-600 dark:text-red-400 cursor-pointer"
+              onClick={() => signOut()}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* AI Setup Wizard Dialog */}
+      <AISetupWizard
+        open={showSetupWizard}
+        onClose={() => setShowSetupWizard(false)}
+      />
     </div>
   );
 }
