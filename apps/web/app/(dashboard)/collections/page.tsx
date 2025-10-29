@@ -2,10 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Search, FileText, Image, File, Grid, List } from "lucide-react";
+import {
+  Plus,
+  Search,
+  FileText,
+  Image,
+  File,
+  Grid,
+  List,
+  Trash2,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UploadModal } from "@/components/documents/upload-modal";
 import { logger } from "@/lib/utils/logger";
+import { toast } from "sonner";
 
 interface Document {
   id: string;
@@ -31,6 +42,8 @@ export default function CollectionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     loadCollections();
@@ -119,18 +132,119 @@ export default function CollectionsPage() {
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
 
+  // Selection handlers
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const selectAll = () => {
+    setSelectedIds(new Set(filteredDocuments.map((d) => d.id)));
+  };
+
+  const deselectAll = () => {
+    setSelectedIds(new Set());
+  };
+
+  const toggleSelectAll = () => {
+    if (
+      filteredDocuments.length > 0 &&
+      selectedIds.size === filteredDocuments.length
+    ) {
+      deselectAll();
+    } else {
+      selectAll();
+    }
+  };
+
+  // Bulk delete handler
+  const handleBulkDelete = async () => {
+    if (
+      !confirm(
+        `Delete ${selectedIds.size} document${selectedIds.size > 1 ? "s" : ""}? This cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    setIsProcessing(true);
+    let successCount = 0;
+    let failCount = 0;
+
+    try {
+      // Process deletions sequentially
+      for (const id of Array.from(selectedIds)) {
+        try {
+          const res = await fetch(`/api/documents/${id}`, {
+            method: "DELETE",
+          });
+
+          if (res.ok) {
+            successCount++;
+          } else {
+            failCount++;
+          }
+        } catch (err) {
+          failCount++;
+        }
+      }
+
+      // Show results
+      if (successCount > 0) {
+        toast.success(
+          `Deleted ${successCount} document${successCount > 1 ? "s" : ""}`,
+        );
+      }
+      if (failCount > 0) {
+        toast.error(
+          `Failed to delete ${failCount} document${failCount > 1 ? "s" : ""}`,
+        );
+      }
+
+      // Clear selection and reload
+      setSelectedIds(new Set());
+      loadCollections();
+    } catch (err) {
+      logger.error("Bulk delete error", err);
+      toast.error("Failed to delete documents");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
       <div className="border-b bg-white px-6 py-4 dark:bg-neutral-900">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-              Collections
-            </h1>
-            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-              Organize your knowledge and documents
-            </p>
+          <div className="flex items-center gap-3">
+            {filteredDocuments.length > 0 && (
+              <input
+                type="checkbox"
+                checked={
+                  filteredDocuments.length > 0 &&
+                  selectedIds.size === filteredDocuments.length
+                }
+                onChange={toggleSelectAll}
+                className="h-5 w-5 rounded border-neutral-300 text-primary focus:ring-2 focus:ring-primary"
+                title="Select all"
+              />
+            )}
+            <div>
+              <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+                Collections
+              </h1>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                {selectedIds.size > 0
+                  ? `${selectedIds.size} selected`
+                  : "Organize your knowledge and documents"}
+              </p>
+            </div>
           </div>
           <button
             onClick={() => setIsUploadModalOpen(true)}
@@ -208,6 +322,36 @@ export default function CollectionsPage() {
             </button>
           ))}
         </div>
+
+        {/* Bulk Actions Toolbar */}
+        {selectedIds.size > 0 && (
+          <div className="mt-4 flex items-center justify-between rounded-lg border bg-primary/10 p-4">
+            <div className="flex items-center gap-4">
+              <span className="font-medium text-primary">
+                {selectedIds.size} selected
+              </span>
+              <button
+                onClick={deselectAll}
+                className="flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+              >
+                <X className="h-4 w-4" />
+                Clear selection
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleBulkDelete}
+                disabled={isProcessing}
+                className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                <Trash2 className="h-4 w-4" />
+                {isProcessing
+                  ? `Deleting ${selectedIds.size}...`
+                  : `Delete ${selectedIds.size}`}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -238,24 +382,40 @@ export default function CollectionsPage() {
         ) : viewMode === "grid" ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredDocuments.map((doc) => (
-              <div
-                key={doc.id}
-                onClick={() => router.push(`/collections/${doc.id}`)}
-                className="group flex cursor-pointer flex-col rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
-              >
-                <div className="flex h-32 items-center justify-center rounded-t-lg bg-neutral-100 dark:bg-neutral-800">
-                  {getCategoryIcon(doc.category)}
-                </div>
-                <div className="flex flex-1 flex-col p-4">
-                  <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {doc.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
-                    {doc.category.replace(/_/g, " ")}
-                  </p>
-                  <div className="mt-auto flex items-center justify-between pt-3 text-xs text-neutral-500">
-                    <span>{formatFileSize(doc.fileSize)}</span>
-                    <span>{new Date(doc.uploadedAt).toLocaleDateString()}</span>
+              <div key={doc.id} className="relative">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(doc.id)}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    toggleSelection(doc.id);
+                  }}
+                  className="absolute left-2 top-2 z-10 h-5 w-5 rounded border-neutral-300 text-primary focus:ring-2 focus:ring-primary"
+                  title="Select document"
+                />
+                <div
+                  onClick={() => router.push(`/collections/${doc.id}`)}
+                  className={cn(
+                    "group flex cursor-pointer flex-col rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900",
+                    selectedIds.has(doc.id) && "ring-2 ring-primary",
+                  )}
+                >
+                  <div className="flex h-32 items-center justify-center rounded-t-lg bg-neutral-100 dark:bg-neutral-800">
+                    {getCategoryIcon(doc.category)}
+                  </div>
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {doc.title}
+                    </h3>
+                    <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
+                      {doc.category.replace(/_/g, " ")}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between pt-3 text-xs text-neutral-500">
+                      <span>{formatFileSize(doc.fileSize)}</span>
+                      <span>
+                        {new Date(doc.uploadedAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -264,25 +424,39 @@ export default function CollectionsPage() {
         ) : (
           <div className="space-y-2">
             {filteredDocuments.map((doc) => (
-              <div
-                key={doc.id}
-                onClick={() => router.push(`/collections/${doc.id}`)}
-                className="flex cursor-pointer items-center gap-4 rounded-lg border bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800">
-                  {getCategoryIcon(doc.category)}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {doc.title}
-                  </h3>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    {doc.category.replace(/_/g, " ")}
-                  </p>
-                </div>
-                <div className="text-right text-xs text-neutral-500">
-                  <div>{formatFileSize(doc.fileSize)}</div>
-                  <div>{new Date(doc.uploadedAt).toLocaleDateString()}</div>
+              <div key={doc.id} className="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(doc.id)}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    toggleSelection(doc.id);
+                  }}
+                  className="h-5 w-5 rounded border-neutral-300 text-primary focus:ring-2 focus:ring-primary"
+                  title="Select document"
+                />
+                <div
+                  onClick={() => router.push(`/collections/${doc.id}`)}
+                  className={cn(
+                    "flex flex-1 cursor-pointer items-center gap-4 rounded-lg border bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900",
+                    selectedIds.has(doc.id) && "ring-2 ring-primary",
+                  )}
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                    {getCategoryIcon(doc.category)}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {doc.title}
+                    </h3>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                      {doc.category.replace(/_/g, " ")}
+                    </p>
+                  </div>
+                  <div className="text-right text-xs text-neutral-500">
+                    <div>{formatFileSize(doc.fileSize)}</div>
+                    <div>{new Date(doc.uploadedAt).toLocaleDateString()}</div>
+                  </div>
                 </div>
               </div>
             ))}

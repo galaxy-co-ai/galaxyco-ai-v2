@@ -1192,11 +1192,12 @@ export const aiConversationsRelations = relations(
   }),
 );
 
-export const aiMessagesRelations = relations(aiMessages, ({ one }) => ({
+export const aiMessagesRelations = relations(aiMessages, ({ one, many }) => ({
   conversation: one(aiConversations, {
     fields: [aiMessages.conversationId],
     references: [aiConversations.id],
   }),
+  feedback: many(aiMessageFeedback),
 }));
 
 export const aiUserPreferencesRelations = relations(
@@ -1208,6 +1209,68 @@ export const aiUserPreferencesRelations = relations(
     }),
     user: one(users, {
       fields: [aiUserPreferences.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+// ============================================================================
+// AI ASSISTANT - MESSAGE FEEDBACK
+// ============================================================================
+
+export const aiMessageFeedback = pgTable(
+  "ai_message_feedback",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // References
+    messageId: uuid("message_id")
+      .notNull()
+      .references(() => aiMessages.id, { onDelete: "cascade" }),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+
+    // Feedback data
+    feedbackType: text("feedback_type").notNull(), // 'positive' | 'negative'
+    comment: text("comment"),
+
+    // Metadata
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    messageUserIdx: uniqueIndex("ai_message_feedback_message_user_idx").on(
+      table.messageId,
+      table.userId,
+    ),
+    messageIdx: index("ai_message_feedback_message_idx").on(table.messageId),
+    workspaceIdx: index("ai_message_feedback_workspace_idx").on(
+      table.workspaceId,
+    ),
+    userIdx: index("ai_message_feedback_user_idx").on(table.userId),
+    typeIdx: index("ai_message_feedback_type_idx").on(table.feedbackType),
+    createdAtIdx: index("ai_message_feedback_created_at_idx").on(
+      table.createdAt,
+    ),
+  }),
+);
+
+export const aiMessageFeedbackRelations = relations(
+  aiMessageFeedback,
+  ({ one }) => ({
+    message: one(aiMessages, {
+      fields: [aiMessageFeedback.messageId],
+      references: [aiMessages.id],
+    }),
+    workspace: one(workspaces, {
+      fields: [aiMessageFeedback.workspaceId],
+      references: [workspaces.id],
+    }),
+    user: one(users, {
+      fields: [aiMessageFeedback.userId],
       references: [users.id],
     }),
   }),
