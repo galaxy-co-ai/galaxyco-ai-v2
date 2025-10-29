@@ -153,9 +153,10 @@
   }
 
   /* Use consistent focus-visible ring across all elements */
+  /* Use outline instead of box-shadow to preserve existing shadows */
   *:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px hsl(var(--ring));
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   /* Selection styles */

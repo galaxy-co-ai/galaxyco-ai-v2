@@ -153,6 +153,9 @@ const config: Config = {
       },
 
       boxShadow: {
+        none: "none",
+        // No shadow
+
         sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
         // Small elements (dropdowns, tooltips)
 
@@ -168,6 +171,9 @@ const config: Config = {
 
         xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
         // Floating panels
+
+        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+        // Chat panels, large modals
 
         inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)",
         // Pressed buttons, inset inputs
