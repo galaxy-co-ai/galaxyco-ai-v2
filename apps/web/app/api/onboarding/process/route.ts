@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { db } from "@galaxyco/database";
+import { workspaces, users, workspaceMembers } from "@galaxyco/database/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -33,12 +36,81 @@ export async function POST(request: Request) {
         break;
 
       case "workspace":
-        // Extract workspace name
-        updates.workspaceName = message;
-        response = `Great! I'll set up your workspace called **"${message}"**.
+        // Extract workspace name and create real workspace
+        const workspaceName = message.trim();
+        const workspaceSlug =
+          workspaceName.toLowerCase().replace(/[^a-z0-9]+/g, "-") +
+          "-" +
+          Math.random().toString(36).substring(2, 8);
 
-Now let me configure some AI agents based on your role...`;
-        shouldProgress = true;
+        try {
+          // Get or create user record
+          let user = await db.query.users.findFirst({
+            where: eq(users.clerkUserId, userId),
+          });
+
+          if (!user) {
+            // Create user if doesn't exist (shouldn't happen but safety check)
+            const clerkUser = await auth();
+            [user] = await db
+              .insert(users)
+              .values({
+                clerkUserId: userId,
+                email:
+                  (clerkUser as any).sessionClaims?.email ||
+                  `user-${userId}@temp.com`,
+                firstName: (clerkUser as any).sessionClaims?.firstName,
+                lastName: (clerkUser as any).sessionClaims?.lastName,
+                lastLoginAt: new Date(),
+              })
+              .returning();
+          }
+
+          // Create workspace
+          const [workspace] = await db
+            .insert(workspaces)
+            .values({
+              name: workspaceName,
+              slug: workspaceSlug,
+              clerkOrganizationId: (await auth()).orgId || undefined,
+              subscriptionTier: "free",
+              settings: {
+                features: { max_agents: 10 },
+              },
+            })
+            .returning();
+
+          // Link user to workspace as owner
+          await db.insert(workspaceMembers).values({
+            workspaceId: workspace.id,
+            userId: user.id,
+            role: "owner",
+            permissions: {
+              agents: {
+                create: true,
+                edit: true,
+                delete: true,
+                execute: true,
+              },
+              packs: { install: true, uninstall: true },
+              billing: { view: true, manage: true },
+              members: { invite: true, remove: true, changeRole: true },
+            },
+          });
+
+          updates.workspaceName = workspaceName;
+          updates.workspaceId = workspace.id;
+          updates.workspaceSlug = workspaceSlug;
+
+          response = `✅ Workspace **"${workspaceName}"** created successfully!
+
+Now let me configure some AI agents based on your ${setupData.role || ""} role...`;
+          shouldProgress = true;
+        } catch (error) {
+          console.error("Error creating workspace:", error);
+          response = `I had trouble creating your workspace. Please try again or contact support.`;
+          shouldProgress = false;
+        }
         break;
 
       case "integrations":
