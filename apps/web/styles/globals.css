@@ -147,20 +147,15 @@
   }
 
   /* Focus styles - enhanced for accessibility */
-  *:focus-visible {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px hsl(var(--ring));
+  /* Remove default browser outlines */
+  *:focus {
+    outline: none;
   }
 
-  /* Improved focus for interactive elements */
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
+  /* Use consistent focus-visible ring across all elements */
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
   }
 
   /* Selection styles */

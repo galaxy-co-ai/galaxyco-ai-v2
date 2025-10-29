@@ -247,7 +247,9 @@ const config: Config = {
   plugins: [
     require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
-    require("@tailwindcss/forms"),
+    require("@tailwindcss/forms")({
+      strategy: "class", // Don't apply default styles globally
+    }),
   ],
 };
 
