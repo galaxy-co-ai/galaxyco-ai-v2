@@ -19,6 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/utils/logger";
 import { toast } from "sonner";
+import { DeleteDialog } from "@/components/documents/delete-dialog";
 
 interface KnowledgeItem {
   id: string;
@@ -53,7 +54,7 @@ export default function DocumentDetailPage({
   const router = useRouter();
   const [document, setDocument] = useState<KnowledgeItem | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     loadDocument();
@@ -85,34 +86,8 @@ export default function DocumentDetailPage({
     }
   };
 
-  const handleDelete = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this document? This action cannot be undone.",
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setDeleting(true);
-      const res = await fetch(`/api/documents/${params.id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("Failed to delete document");
-
-      toast.success("Document deleted successfully");
-      router.push("/collections");
-    } catch (err) {
-      logger.error("Failed to delete document", {
-        error: err instanceof Error ? err.message : String(err),
-        documentId: params.id,
-      });
-      toast.error("Failed to delete document");
-    } finally {
-      setDeleting(false);
-    }
+  const handleDeleteSuccess = () => {
+    router.push("/collections");
   };
 
   const handleDownload = () => {
@@ -264,15 +239,10 @@ export default function DocumentDetailPage({
               </button>
             )}
             <button
-              onClick={handleDelete}
-              disabled={deleting}
-              className="flex h-10 items-center gap-2 rounded-md border border-red-200 bg-white px-4 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 dark:border-red-900 dark:bg-neutral-800 dark:hover:bg-red-900/20"
+              onClick={() => setDeleteDialogOpen(true)}
+              className="flex h-10 items-center gap-2 rounded-md border border-red-200 bg-white px-4 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900 dark:bg-neutral-800 dark:hover:bg-red-900/20"
             >
-              {deleting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Trash2 className="h-4 w-4" />
-              )}
+              <Trash2 className="h-4 w-4" />
               Delete
             </button>
           </div>
@@ -409,6 +379,17 @@ export default function DocumentDetailPage({
           )}
         </div>
       </div>
+
+      {/* Delete Dialog */}
+      {document && (
+        <DeleteDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          documentId={document.id}
+          documentName={document.title}
+          onSuccess={handleDeleteSuccess}
+        />
+      )}
     </div>
   );
 }
