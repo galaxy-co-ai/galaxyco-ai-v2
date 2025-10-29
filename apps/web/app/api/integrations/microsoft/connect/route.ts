@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/integrations/microsoft/connect
  *

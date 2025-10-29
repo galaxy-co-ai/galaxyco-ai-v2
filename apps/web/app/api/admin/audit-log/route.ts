@@ -4,6 +4,9 @@ import { db } from "@galaxyco/database";
 import { eq, desc } from "drizzle-orm";
 import { users, workspaces, workspaceMembers } from "@galaxyco/database/schema";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 // Helper to check if user is system admin
 async function checkSystemAdmin(userId: string) {
   const user = await db.query.users.findFirst({

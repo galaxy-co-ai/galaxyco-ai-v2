@@ -4,6 +4,9 @@ import { db } from "@galaxyco/database";
 import { agentExecutions, agents } from "@galaxyco/database/schema";
 import { eq, and, desc, gte, lte, sql } from "drizzle-orm";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/agents/executions
  *

@@ -5,6 +5,9 @@ import { integrations, oauthTokens } from "@galaxyco/database/schema";
 import { eq, and } from "drizzle-orm";
 import { encryptTokens } from "@/lib/encryption";
 
+// Force dynamic rendering for OAuth callback
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/auth/oauth/google/callback
  *

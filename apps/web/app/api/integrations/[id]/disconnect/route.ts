@@ -63,8 +63,7 @@ export async function POST(
           decrypted.access_token
         ) {
           // Microsoft doesn't have a simple revoke endpoint
-          // Tokens will expire naturally
-          console.log("Microsoft tokens will expire naturally");
+          // Tokens will expire naturally (no revocation needed)
         }
       } catch (error) {
         console.error("Token revocation failed:", error);
