@@ -13,6 +13,7 @@ const nextConfig = {
   // Suppress dynamic server usage warnings during build
   // These are expected for API routes that use headers/cookies
   experimental: {
+    instrumentationHook: true,
     serverActions: {
       bodySizeLimit: "2mb",
     },
