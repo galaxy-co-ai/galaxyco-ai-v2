@@ -57,9 +57,9 @@ export const colors = {
     dark: "#155724",
   },
   warning: {
-    light: "#fff3cd",
-    DEFAULT: "#ffc107",
-    dark: "#856404",
+    light: "#fef3c7",
+    DEFAULT: "#d97706",
+    dark: "#92400e",
   },
   error: {
     light: "#fee",
@@ -103,8 +103,8 @@ export const colors = {
   primaryLight: "#f5f7ff", // Primary-50
   successColor: "#28a745", // Success DEFAULT
   successLight: "#d4edda", // Success light
-  warningColor: "#ffc107", // Warning DEFAULT
-  warningLight: "#fff3cd", // Warning light
+  warningColor: "#d97706", // Warning DEFAULT (WCAG AA compliant)
+  warningLight: "#fef3c7", // Warning light
   danger: "#dc3545", // Error DEFAULT
   dangerLight: "#fee", // Error light
   infoColor: "#17a2b8", // Info DEFAULT
