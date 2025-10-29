@@ -19,9 +19,12 @@ const inter = Inter({
 
 // Metadata for SEO
 export const metadata: Metadata = {
-  title: "GalaxyCo.ai - Make Multi-Agent AI Useful in Minutes",
-  description:
-    'A platform where users get personalized dashboards with AI agent "Packs" that deliver measurable outcomes from Day 1.',
+  metadataBase: new URL("https://app.galaxyco.ai"),
+  title: {
+    default: "GalaxyCo.ai",
+    template: "%s | GalaxyCo.ai",
+  },
+  description: "Make multi-agent AI useful in minutes",
   keywords: [
     "AI automation",
     "multi-agent AI",
@@ -48,11 +51,10 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://galaxyco.ai",
+    url: "https://app.galaxyco.ai",
     siteName: "GalaxyCo.ai",
-    title: "GalaxyCo.ai - Make Multi-Agent AI Useful in Minutes",
-    description:
-      "Transform your business with AI agent automation that delivers real results.",
+    title: "GalaxyCo.ai",
+    description: "Make multi-agent AI useful in minutes",
     images: [
       {
         url: "/og-image.png",
@@ -64,9 +66,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GalaxyCo.ai - Make Multi-Agent AI Useful in Minutes",
-    description:
-      "Transform your business with AI agent automation that delivers real results.",
+    title: "GalaxyCo.ai",
+    description: "Make multi-agent AI useful in minutes",
     images: ["/og-image.png"],
     creator: "@galaxyco_ai",
   },
