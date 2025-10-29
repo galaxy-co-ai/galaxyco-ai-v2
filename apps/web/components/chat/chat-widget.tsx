@@ -13,7 +13,7 @@ export function ChatWidget() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-4 right-4 z-toast flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-lg transition-all hover:scale-110 hover:shadow-xl md:bottom-6 md:right-6",
+          "fixed bottom-4 right-4 z-toast flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-110 hover:bg-primary-hover hover:shadow-xl md:bottom-6 md:right-6",
           isOpen && "rotate-90",
         )}
         aria-label="Toggle chat"
