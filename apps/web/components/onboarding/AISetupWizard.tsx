@@ -312,10 +312,9 @@ These agents are now active and ready to work for you!`,
       if (data.success) {
         addAssistantMessage(
           `✓ Added sample data:
-  • ${data.stats.tasks} tasks
-  • ${data.stats.workflows} workflows
-  • ${data.stats.documents} knowledge base articles
-  • ${data.stats.contacts} sample contacts
+  • ${data.stats.tasks || 0} tasks
+  • ${data.stats.events || 0} calendar events
+  • ${data.stats.contacts || 0} sample contacts
 
 You can explore these to see how the platform works!`,
         );

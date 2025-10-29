@@ -3,6 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@galaxyco/database";
 import { workspaces, users, workspaceMembers } from "@galaxyco/database/schema";
 import { eq } from "drizzle-orm";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(request: Request) {
   try {
@@ -102,9 +107,42 @@ export async function POST(request: Request) {
           updates.workspaceId = workspace.id;
           updates.workspaceSlug = workspaceSlug;
 
-          response = `✅ Workspace **"${workspaceName}"** created successfully!
+          // Generate personalized recommendations using GPT-4o-mini
+          try {
+            const completion = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                {
+                  role: "system",
+                  content:
+                    "You are an AI assistant helping users configure their workspace. Based on their role and industry, suggest 2-3 specific ways AI agents can help them. Be concise and practical.",
+                },
+                {
+                  role: "user",
+                  content: `Role: ${setupData.role || "unknown"}, Industry: ${setupData.industry || "unknown"}. Suggest specific agent use cases.`,
+                },
+              ],
+              max_tokens: 200,
+              temperature: 0.7,
+            });
+
+            const recommendations =
+              completion.choices[0]?.message?.content ||
+              "automate workflows and improve efficiency";
+
+            response = `✅ Workspace **"${workspaceName}"** created successfully!
+
+**Here's how AI agents can help you:**
+${recommendations}
+
+Let me configure these agents for you now...`;
+          } catch (llmError) {
+            console.error("LLM recommendation error:", llmError);
+            response = `✅ Workspace **"${workspaceName}"** created successfully!
 
 Now let me configure some AI agents based on your ${setupData.role || ""} role...`;
+          }
+
           shouldProgress = true;
         } catch (error) {
           console.error("Error creating workspace:", error);
