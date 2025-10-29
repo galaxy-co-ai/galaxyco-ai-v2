@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Search, FileText, Image, File, Grid, List } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UploadModal } from "@/components/documents/upload-modal";
@@ -23,6 +24,7 @@ interface Collection {
 }
 
 export default function CollectionsPage() {
+  const router = useRouter();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -238,7 +240,8 @@ export default function CollectionsPage() {
             {filteredDocuments.map((doc) => (
               <div
                 key={doc.id}
-                className="group flex flex-col rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
+                onClick={() => router.push(`/collections/${doc.id}`)}
+                className="group flex cursor-pointer flex-col rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
               >
                 <div className="flex h-32 items-center justify-center rounded-t-lg bg-neutral-100 dark:bg-neutral-800">
                   {getCategoryIcon(doc.category)}
@@ -263,7 +266,8 @@ export default function CollectionsPage() {
             {filteredDocuments.map((doc) => (
               <div
                 key={doc.id}
-                className="flex items-center gap-4 rounded-lg border bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
+                onClick={() => router.push(`/collections/${doc.id}`)}
+                className="flex cursor-pointer items-center gap-4 rounded-lg border bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:bg-neutral-900"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800">
                   {getCategoryIcon(doc.category)}
