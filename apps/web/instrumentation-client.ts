@@ -1,5 +1,18 @@
+/**
+ * Next.js Client Instrumentation
+ * Sentry client-side configuration for Next.js 14+
+ */
+
 import * as Sentry from "@sentry/nextjs";
 
+export async function onRequestError(err: Error) {
+  Sentry.captureException(err);
+}
+
+// Capture router transitions for performance monitoring
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+
+// Initialize Sentry for client-side
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
@@ -90,7 +103,9 @@ Sentry.init({
       maskAllText: true,
       blockAllMedia: true,
       // Don't capture network requests with sensitive data
-      networkDetailAllowUrls: [window.location.origin],
+      networkDetailAllowUrls: [
+        typeof window !== "undefined" ? window.location.origin : "",
+      ],
       networkCaptureBodies: false,
     }),
     // Browser profiling
