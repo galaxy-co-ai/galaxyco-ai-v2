@@ -1,4 +1,4 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd packages/database && pnpm build && cd ../../apps/web && pnpm build"
+  "buildCommand": "pnpm --filter @galaxyco/database build && pnpm --filter web build"
 }
