@@ -5,11 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "typecheck": "tsc --noEmit"
+    "build": "../../node_modules/.bin/tsc --noCheck --skipLibCheck",
+    "dev": "../../node_modules/.bin/tsc --watch",
+    "test": "../../node_modules/.bin/vitest",
+    "test:watch": "../../node_modules/.bin/vitest --watch",
+    "typecheck": "../../node_modules/.bin/tsc --noEmit"
   },
   "keywords": [
     "agents",

@@ -1,47 +1,32 @@
 # =============================================================================
-# Multi-stage Dockerfile for GalaxyCo API (NestJS)
+# Build stage - Install deps and build
 # =============================================================================
-# Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM node:20-alpine AS builder
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 WORKDIR /app
 
-# Copy workspace configuration
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+# Copy workspace files
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json turbo.json .npmrc ./
 
-# Copy package.json files for all workspaces
+# Copy all package.json files
 COPY apps/api/package.json ./apps/api/
 COPY packages/database/package.json ./packages/database/
 COPY packages/agents-core/package.json ./packages/agents-core/
 
-# Install dependencies (frozen lockfile for production)
-RUN pnpm install --frozen-lockfile --prod=false
-
-# =============================================================================
-# Stage 2: Builder
-FROM node:20-alpine AS builder
-
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
-
-WORKDIR /app
-
-# Copy dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./package.json
-COPY --from=deps /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
+# Install all dependencies (including devDependencies for build)
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
-COPY tsconfig.base.json ./
-COPY packages/database ./packages/database
-COPY packages/agents-core ./packages/agents-core
-COPY apps/api ./apps/api
+COPY packages/database/src ./apps/api/src/database
+COPY apps/api/src ./apps/api/src
+COPY apps/api/tsconfig.json ./apps/api/
+COPY apps/api/nest-cli.json ./apps/api/
 
-# Build packages in order (database has no build step)
-RUN pnpm --filter @galaxyco/agents-core build && \
-    pnpm --filter api build
+# Build API only (database source is copied in)
+RUN cd apps/api && pnpm run build
 
 # =============================================================================
 # Stage 3: Runner
@@ -60,11 +45,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=4000
 
-# Copy built application
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./package.json
+# Copy workspace root files
+COPY --from=builder --chown=nestjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nestjs:nodejs /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
+
+# Copy all node_modules (workspace root + packages)
 COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/packages ./packages
+
+# Copy built API application (database source is embedded)
+COPY --from=builder --chown=nestjs:nodejs /app/apps/api ./apps/api
 
 # Switch to non-root user
 USER nestjs
@@ -74,10 +63,10 @@ EXPOSE 4000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:4000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+  CMD node -e "require('http').get('http://localhost:4000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
-CMD ["node", "dist/apps/api/src/main.js"]
+CMD ["node", "apps/api/dist/main.js"]

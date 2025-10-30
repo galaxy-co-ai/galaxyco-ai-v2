@@ -2,15 +2,25 @@
   "name": "@galaxyco/database",
   "version": "0.1.0",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./schema": "./src/schema.ts",
-    "./client": "./src/client.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "build": "../../node_modules/.bin/tsc",
+    "typecheck": "../../node_modules/.bin/tsc --noEmit",
     "db:generate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit generate --config=drizzle.config.cjs",
     "db:migrate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit migrate --config=drizzle.config.cjs",
     "db:push": "NODE_OPTIONS=\"--import tsx\" drizzle-kit push --config=drizzle.config.cjs",

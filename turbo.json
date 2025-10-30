@@ -16,7 +16,7 @@
       "persistent": true
     },
     "build": {
-      "outputs": ["dist/**", ".next/**"],
+      "outputs": ["dist/**", ".next/**", "!dist/**/*.tsbuildinfo"],
       "dependsOn": ["^build"],
       "env": [
         "DATABASE_URL",

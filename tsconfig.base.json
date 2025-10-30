@@ -16,8 +16,10 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@galaxyco/database": ["packages/database/src/index.ts"],
-      "@galaxyco/database/*": ["packages/database/src/*"]
+      "@galaxyco/database": ["packages/database/dist/index"],
+      "@galaxyco/database/client": ["packages/database/dist/client"],
+      "@galaxyco/database/schema": ["packages/database/dist/schema"],
+      "@galaxyco/database/*": ["packages/database/dist/*"]
     }
   },
   "exclude": ["node_modules", "dist", ".next", "build"]

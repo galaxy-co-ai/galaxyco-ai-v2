@@ -432,7 +432,7 @@ resource "aws_ecs_task_definition" "api" {
   container_definitions = jsonencode([
     {
       name      = "api"
-      image     = "ghcr.io/galaxy-co-ai/galaxyco-api@sha256:0202abeeb26b561b29f2994bfabc0ddcfb51f6f03ea13fc657c279db433953a2"
+      image     = "ghcr.io/galaxy-co-ai/galaxyco-api@sha256:91aaf99a4d291c79d11d8b48668425c8573b53302ac017c6ca9995bbf3f11a03"
       essential = true
       
       repositoryCredentials = {
@@ -468,7 +468,7 @@ resource "aws_ecs_task_definition" "api" {
       }
 
       healthCheck = {
-        command     = ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4000/health || exit 1"]
+        command     = ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4000/api/health || exit 1"]
         interval    = 30
         timeout     = 5
         retries     = 3

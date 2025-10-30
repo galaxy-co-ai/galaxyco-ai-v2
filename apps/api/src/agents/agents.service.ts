@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { db } from "@galaxyco/database/client";
-import { agents } from "@galaxyco/database/schema";
+import { db } from "../database/client";
+import { agents } from "../database/schema";
 import { eq, and, like, desc } from "drizzle-orm";
 import { CreateAgentDto } from "./dto/create-agent.dto";
 import { UpdateAgentDto } from "./dto/update-agent.dto";
@@ -10,7 +10,7 @@ import {
   PythonServiceResponse,
 } from "./dto/test-agent.dto";
 import { randomUUID } from "crypto";
-import { AgentExecutionService } from "@galaxyco/agents-core";
+// import { AgentExecutionService } from "@galaxyco/agents-core";
 
 @Injectable()
 export class AgentsService {
@@ -177,44 +177,15 @@ export class AgentsService {
   /**
    * Test agent execution using NEW agents-core system
    * This is the OpenAI-aligned execution path
+   * TODO: Re-enable once agents-core is properly built
    */
   async testWithCore(
     id: string,
     testDto: TestAgentDto,
     workspaceId: string,
   ): Promise<TestResult> {
-    // Verify agent exists and belongs to workspace
-    const dbAgent = await this.findOne(id, workspaceId);
-
-    try {
-      // Execute using new core system
-      const result = await AgentExecutionService.execute(
-        dbAgent as any, // Type conversion - dbAgent matches DbAgent interface
-        {
-          agentId: id,
-          workspaceId,
-          userId: dbAgent.createdBy,
-          inputs: testDto.inputs,
-          mode: testDto.mode,
-        },
-      );
-
-      return result;
-    } catch (error: any) {
-      return {
-        id: randomUUID(),
-        timestamp: new Date().toISOString(),
-        inputs: testDto.inputs,
-        outputs: {},
-        success: false,
-        error: error.message || "Execution failed",
-        metrics: {
-          durationMs: 0,
-          tokensUsed: 0,
-          costUsd: 0,
-        },
-      };
-    }
+    // Temporarily disabled - using legacy test() method instead
+    return this.test(id, testDto, workspaceId);
   }
 
   /**

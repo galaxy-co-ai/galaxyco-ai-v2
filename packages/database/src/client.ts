@@ -40,7 +40,11 @@ const getDatabaseUrl = () => {
   return url;
 };
 
-const sql = neon(getDatabaseUrl());
+const sql = neon(getDatabaseUrl(), {
+  fetchOptions: {
+    signal: AbortSignal.timeout(10000) // 10 second timeout
+  }
+});
 
 export const db = drizzle(sql, { schema });
 

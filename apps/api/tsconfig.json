@@ -6,7 +6,8 @@
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noEmit": false
+    "noEmit": false,
+    "paths": {}
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
