@@ -20,7 +20,7 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy requirements and install dependencies
-COPY requirements.txt .
+COPY services/agents/requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
@@ -45,7 +45,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
-COPY --chown=agentuser:agentuser . .
+COPY --chown=agentuser:agentuser services/agents/ .
 
 # Create necessary directories with proper permissions
 RUN mkdir -p /app/logs /app/data && \

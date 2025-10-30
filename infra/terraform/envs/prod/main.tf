@@ -491,7 +491,7 @@ resource "aws_ecs_task_definition" "agents" {
   container_definitions = jsonencode([
     {
       name      = "agents"
-      image     = "ghcr.io/galaxy-co-ai/galaxyco-agents:latest"
+      image     = "ghcr.io/galaxy-co-ai/galaxyco-agents@sha256:7081e1719b5e253d54ed2b88d405def8f3eb03b4c02aeee6425d8f36591ad631"
       essential = true
       
       repositoryCredentials = {
