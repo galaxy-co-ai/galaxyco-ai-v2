@@ -21,11 +21,11 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "db:generate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit generate --config=drizzle.config.cjs",
-    "db:migrate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit migrate --config=drizzle.config.cjs",
-    "db:push": "NODE_OPTIONS=\"--import tsx\" drizzle-kit push --config=drizzle.config.cjs",
-    "db:studio": "NODE_OPTIONS=\"--import tsx\" drizzle-kit studio --config=drizzle.config.cjs",
-    "db:check": "NODE_OPTIONS=\"--import tsx\" drizzle-kit check --config=drizzle.config.cjs"
+    "db:generate": "drizzle-kit generate --config=drizzle.config.cjs",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.cjs",
+    "db:push": "drizzle-kit push --config=drizzle.config.cjs",
+    "db:studio": "drizzle-kit studio --config=drizzle.config.cjs",
+    "db:check": "drizzle-kit check --config=drizzle.config.cjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
