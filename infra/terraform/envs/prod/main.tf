@@ -641,6 +641,124 @@ resource "aws_appautoscaling_policy" "agents_cpu" {
 }
 
 # =============================================================================
+# CloudWatch Alarms
+# =============================================================================
+
+# API CPU Utilization Alarm
+resource "aws_cloudwatch_metric_alarm" "api_cpu_high" {
+  alarm_name          = "galaxyco-production-api-cpu-high"
+  alarm_description   = "API CPU utilization is too high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ServiceName = aws_ecs_service.api.name
+    ClusterName = aws_ecs_cluster.main.name
+  }
+}
+
+# API Memory Utilization Alarm
+resource "aws_cloudwatch_metric_alarm" "api_memory_high" {
+  alarm_name          = "galaxyco-production-api-memory-high"
+  alarm_description   = "API memory utilization is too high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 90
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ServiceName = aws_ecs_service.api.name
+    ClusterName = aws_ecs_cluster.main.name
+  }
+}
+
+# Agents CPU Utilization Alarm
+resource "aws_cloudwatch_metric_alarm" "agents_cpu_high" {
+  alarm_name          = "galaxyco-production-agents-cpu-high"
+  alarm_description   = "Agents CPU utilization is too high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ServiceName = aws_ecs_service.agents.name
+    ClusterName = aws_ecs_cluster.main.name
+  }
+}
+
+# Agents Memory Utilization Alarm
+resource "aws_cloudwatch_metric_alarm" "agents_memory_high" {
+  alarm_name          = "galaxyco-production-agents-memory-high"
+  alarm_description   = "Agents memory utilization is too high"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 90
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    ServiceName = aws_ecs_service.agents.name
+    ClusterName = aws_ecs_cluster.main.name
+  }
+}
+
+# ALB Unhealthy Target Count Alarm
+resource "aws_cloudwatch_metric_alarm" "api_unhealthy_targets" {
+  alarm_name          = "galaxyco-production-api-unhealthy-targets"
+  alarm_description   = "API has unhealthy targets"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "UnHealthyHostCount"
+  namespace           = "AWS/ApplicationELB"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 0
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    TargetGroup  = aws_lb_target_group.api.arn_suffix
+    LoadBalancer = aws_lb.main.arn_suffix
+  }
+}
+
+# ALB 5XX Error Rate Alarm
+resource "aws_cloudwatch_metric_alarm" "api_5xx_errors" {
+  alarm_name          = "galaxyco-production-api-5xx-errors"
+  alarm_description   = "API is returning too many 5XX errors"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "HTTPCode_Target_5XX_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    TargetGroup  = aws_lb_target_group.api.arn_suffix
+    LoadBalancer = aws_lb.main.arn_suffix
+  }
+}
+
+# =============================================================================
 # Outputs
 # =============================================================================
 
