@@ -319,7 +319,13 @@ export function MainSidebar({ className }: SidebarProps) {
               />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" side="right" className="w-80">
+          <DropdownMenuContent
+            align="start"
+            side="right"
+            className="w-80 ml-2"
+            sideOffset={8}
+            alignOffset={-8}
+          >
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
 

@@ -150,6 +150,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchWorkspaces();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn]);
 
   const switchWorkspace = (workspaceId: string) => {
