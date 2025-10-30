@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { db } from "../database/client";
-import { agents } from "../database/schema";
+import { db } from "@galaxyco/database/client";
+import { agents } from "@galaxyco/database/schema";
 import { eq, and, like, desc } from "drizzle-orm";
 import { CreateAgentDto } from "./dto/create-agent.dto";
 import { UpdateAgentDto } from "./dto/update-agent.dto";

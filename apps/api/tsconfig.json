@@ -1,13 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "node16",
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noEmit": false,
-    "paths": {}
+    "noEmit": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
