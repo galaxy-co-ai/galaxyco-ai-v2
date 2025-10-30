@@ -19,8 +19,8 @@
     }
   },
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
-    "typecheck": "../../node_modules/.bin/tsc --noEmit",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "db:generate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit generate --config=drizzle.config.cjs",
     "db:migrate": "NODE_OPTIONS=\"--import tsx\" drizzle-kit migrate --config=drizzle.config.cjs",
     "db:push": "NODE_OPTIONS=\"--import tsx\" drizzle-kit push --config=drizzle.config.cjs",
