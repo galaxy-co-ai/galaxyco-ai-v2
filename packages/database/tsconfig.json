@@ -6,7 +6,9 @@
     "declaration": true,
     "declarationMap": true,
     "skipLibCheck": true,
-    "noEmit": false
+    "noEmit": false,
+    "module": "CommonJS",
+    "moduleResolution": "Node"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
