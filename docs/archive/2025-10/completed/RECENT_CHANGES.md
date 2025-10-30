@@ -97,28 +97,28 @@
 
 ## 📁 Most Frequently Changed Files
 
-| File | Changes |
-|------|---------|
-| `apps/web/app/layout.tsx` | 2 |
-| `apps/web/styles/globals.css` | 2 |
-| `apps/web/tailwind.config.ts` | 2 |
-| `TODO_NEXT_AGENT.md` | 2 |
-| `apps/web/app/(dashboard)/collections/page.tsx` | 2 |
-| `apps/web/app/(dashboard)/collections/[id]/page.tsx` | 2 |
-| `PRODUCTION_READINESS_CHECKLIST.md` | 2 |
-| `apps/web/app/api/onboarding/process/route.ts` | 2 |
-| `docs/08-status/CURRENT_SESSION.md` | 1 |
-| `docs/08-status/sessions/2025-10-17.md` | 1 |
-| `DEPLOYMENT_STATUS.md` | 1 |
-| `PRODUCTION_DEPLOYMENT_COMPLETE.md` | 1 |
-| `TODO_FOR_NEXT_AGENT.md` | 1 |
-| `apps/api/.dockerignore` | 1 |
-| `apps/api/Dockerfile` | 1 |
-| `apps/api/Dockerfile.simple` | 1 |
-| `apps/api/src/agents/agents.controller.ts` | 1 |
-| `apps/web/.gitignore` | 1 |
-| `infra/terraform/envs/prod/main.tf` | 1 |
-| `scripts/push-docker-images.sh` | 1 |
+| File                                                 | Changes |
+| ---------------------------------------------------- | ------- |
+| `apps/web/app/layout.tsx`                            | 2       |
+| `apps/web/styles/globals.css`                        | 2       |
+| `apps/web/tailwind.config.ts`                        | 2       |
+| `TODO_NEXT_AGENT.md`                                 | 2       |
+| `apps/web/app/(dashboard)/collections/page.tsx`      | 2       |
+| `apps/web/app/(dashboard)/collections/[id]/page.tsx` | 2       |
+| `PRODUCTION_READINESS_CHECKLIST.md`                  | 2       |
+| `apps/web/app/api/onboarding/process/route.ts`       | 2       |
+| `docs/08-status/CURRENT_SESSION.md`                  | 1       |
+| `docs/08-status/sessions/2025-10-17.md`              | 1       |
+| `DEPLOYMENT_STATUS.md`                               | 1       |
+| `PRODUCTION_DEPLOYMENT_COMPLETE.md`                  | 1       |
+| `TODO_FOR_NEXT_AGENT.md`                             | 1       |
+| `apps/api/.dockerignore`                             | 1       |
+| `apps/api/Dockerfile`                                | 1       |
+| `apps/api/Dockerfile.simple`                         | 1       |
+| `apps/api/src/agents/agents.controller.ts`           | 1       |
+| `apps/web/.gitignore`                                | 1       |
+| `infra/terraform/envs/prod/main.tf`                  | 1       |
+| `scripts/push-docker-images.sh`                      | 1       |
 
 ---
 

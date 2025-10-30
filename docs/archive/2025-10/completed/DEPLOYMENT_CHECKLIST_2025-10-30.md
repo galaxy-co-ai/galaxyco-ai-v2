@@ -36,15 +36,17 @@ grep "class-validator" package.json
 ```
 
 **Expected Output**:
+
 ```json
 "class-transformer": "^0.5.1",
 "class-validator": "^0.14.0"
 ```
 
 **Verification**:
+
 - [ ] `class-transformer` appears in `apps/api/package.json`
 - [ ] `class-validator` appears in `apps/api/package.json`
-- [ ] Both have version numbers (not workspace:*)
+- [ ] Both have version numbers (not workspace:\*)
 
 ---
 
@@ -57,21 +59,24 @@ cd /c/Users/Owner/workspace/galaxyco-ai-2.0
 ```
 
 **Find this code** (around line 43):
+
 ```typescript
 const sql = neon(getDatabaseUrl());
 ```
 
 **Replace with**:
+
 ```typescript
 const sql = neon(getDatabaseUrl(), {
   fetchConnectionCache: true,
   fetchOptions: {
-    signal: AbortSignal.timeout(10000) // 10 second timeout
-  }
+    signal: AbortSignal.timeout(10000), // 10 second timeout
+  },
 });
 ```
 
 **Verification**:
+
 - [ ] Timeout configuration added to `packages/database/src/client.ts`
 - [ ] 10000ms (10 second) timeout value set
 - [ ] No TypeScript errors when running `cd packages/database && pnpm typecheck`
@@ -125,6 +130,7 @@ EOF
 ```
 
 **Update `src/app.module.ts`** to import HealthModule:
+
 ```typescript
 import { HealthModule } from './health/health.module';
 
@@ -137,6 +143,7 @@ import { HealthModule } from './health/health.module';
 ```
 
 **Verification**:
+
 - [ ] Health endpoint exists at `/health` or `/api/health`
 - [ ] Returns 200 OK response
 - [ ] Test locally: `cd apps/api && pnpm dev` then `curl http://localhost:4000/health`
@@ -160,6 +167,7 @@ pnpm install --frozen-lockfile
 ```
 
 **Verification**:
+
 - [ ] No errors during `pnpm install`
 - [ ] `node_modules` contains `class-transformer` and `class-validator`
 - [ ] Disk space sufficient: `df -h .` shows at least 5GB free
@@ -183,6 +191,7 @@ ls -la dist/
 ```
 
 **Expected Output**:
+
 ```
 dist/
 ├── main.js
@@ -192,6 +201,7 @@ dist/
 ```
 
 **Verification**:
+
 - [ ] Build completes with zero errors
 - [ ] `apps/api/dist/main.js` exists
 - [ ] No TypeScript compilation errors
@@ -209,6 +219,7 @@ pnpm dev
 ```
 
 **In another terminal**:
+
 ```bash
 # Test health endpoint
 curl http://localhost:4000/health
@@ -217,6 +228,7 @@ curl http://localhost:4000/health
 ```
 
 **Verification**:
+
 - [ ] API starts without hanging
 - [ ] Logs show "🚀 API running on http://localhost:4000"
 - [ ] Logs show "Nest application successfully started"
@@ -245,12 +257,14 @@ docker images | grep galaxyco-api
 ```
 
 **Expected Output**:
+
 ```
 ghcr.io/galaxy-co-ai/galaxyco-api   latest        abc123def456   5 seconds ago   500MB
 ghcr.io/galaxy-co-ai/galaxyco-api   20251030-060000   abc123def456   5 seconds ago   500MB
 ```
 
 **Verification**:
+
 - [ ] Docker build completes with "Successfully built" message
 - [ ] Image size is reasonable (< 1GB)
 - [ ] Both tags created (latest + timestamp)
@@ -285,6 +299,7 @@ docker rm galaxyco-api-test
 ```
 
 **Expected Logs**:
+
 ```
 🚀 API running on http://localhost:4000
 [Nest] LOG [NestFactory] Starting Nest application...
@@ -293,6 +308,7 @@ docker rm galaxyco-api-test
 ```
 
 **Verification**:
+
 - [ ] Container starts without errors
 - [ ] Logs show "successfully started" within 30 seconds
 - [ ] NO "class-transformer is missing" error
@@ -320,6 +336,7 @@ docker manifest inspect ghcr.io/galaxy-co-ai/galaxyco-api:latest
 ```
 
 **Expected Output**:
+
 ```
 {
    "schemaVersion": 2,
@@ -329,6 +346,7 @@ docker manifest inspect ghcr.io/galaxy-co-ai/galaxyco-api:latest
 ```
 
 **Verification**:
+
 - [ ] Both image tags pushed successfully
 - [ ] No authentication errors
 - [ ] `docker manifest inspect` returns valid JSON
@@ -359,6 +377,7 @@ grep "image.*galaxyco-api" main.tf
 ```
 
 **Verification**:
+
 - [ ] New SHA extracted successfully
 - [ ] `main.tf` updated with new SHA
 - [ ] SHA format correct: `sha256:abcdef123456...`
@@ -383,6 +402,7 @@ done
 ```
 
 **Expected Output**:
+
 ```
 Checking galaxyco/prod/database-url...
 galaxyco/prod/database-url
@@ -392,11 +412,13 @@ galaxyco/prod/clerk-secret-key
 ```
 
 **Verification**:
+
 - [ ] All 4 secrets exist
 - [ ] No "ResourceNotFoundException" errors
 - [ ] Secrets in correct region (us-east-1)
 
 **If secrets are invalid/missing**, update them:
+
 ```bash
 # Example: Update database URL
 "/c/Program Files/Amazon/AWSCLIV2/aws" secretsmanager put-secret-value \
@@ -423,6 +445,7 @@ terraform apply -var-file=terraform.tfvars -auto-approve
 ```
 
 **Expected Output**:
+
 ```
 aws_ecs_task_definition.api: Refreshing state...
 aws_ecs_task_definition.api: Modifying...
@@ -432,6 +455,7 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 ```
 
 **Verification**:
+
 - [ ] Terraform plan shows 1 resource change (task definition)
 - [ ] Apply completes without errors
 - [ ] New task definition revision created
@@ -468,6 +492,7 @@ echo "✅ All old tasks stopped. ECS will start new tasks automatically."
 ```
 
 **Verification**:
+
 - [ ] All old task ARNs listed
 - [ ] Each task stopped successfully
 - [ ] No errors during stop operations
@@ -498,15 +523,17 @@ sleep 60
 ```
 
 **Expected Output**:
+
 ```json
 {
-    "RunningCount": 2,
-    "DesiredCount": 2,
-    "Status": "ACTIVE"
+  "RunningCount": 2,
+  "DesiredCount": 2,
+  "Status": "ACTIVE"
 }
 ```
 
 **Verification**:
+
 - [ ] RunningCount equals DesiredCount (2)
 - [ ] Service status is "ACTIVE"
 - [ ] New task ARNs visible
@@ -525,15 +552,17 @@ sleep 60
 ```
 
 **Watch for these log messages**:
+
 ```
 ✅ [NestFactory] Starting Nest application...
 ✅ [InstanceLoader] AppModule dependencies initialized
-✅ [InstanceLoader] HealthModule dependencies initialized  
+✅ [InstanceLoader] HealthModule dependencies initialized
 ✅ [NestApplication] Nest application successfully started
 ✅ 🚀 API running on http://localhost:4000
 ```
 
 **MUST NOT see these errors**:
+
 ```
 ❌ ERROR [PackageLoader] The "class-transformer" package is missing
 ❌ Error: connect ETIMEDOUT (database timeout)
@@ -543,6 +572,7 @@ sleep 60
 **Stop log tailing** (Ctrl+C) once you see "successfully started".
 
 **Verification**:
+
 - [ ] Logs show "Nest application successfully started"
 - [ ] NO "class-transformer is missing" error
 - [ ] NO database timeout errors
@@ -563,6 +593,7 @@ sleep 60
 ```
 
 **Expected Output**:
+
 ```
 |  Health  |         Target          |  Reason  |
 |----------|-------------------------|----------|
@@ -571,6 +602,7 @@ sleep 60
 ```
 
 **Verification**:
+
 - [ ] Both targets show "healthy" state
 - [ ] No "unhealthy" or "draining" states
 - [ ] Reason field is empty (no health check failures)
@@ -593,6 +625,7 @@ curl -v https://api.galaxyco.ai/api/agents
 ```
 
 **Expected Output**:
+
 ```
 ✅ API IS LIVE!
 
@@ -602,6 +635,7 @@ curl -v https://api.galaxyco.ai/api/agents
 ```
 
 **Verification**:
+
 - [ ] Health endpoint returns 200 OK
 - [ ] Response is valid JSON
 - [ ] No 502 Bad Gateway errors
@@ -628,15 +662,17 @@ done
 ```
 
 **Expected Output** (consistent across all checks):
+
 ```json
 {
-    "RunningCount": 2,
-    "PendingCount": 0,
-    "FailedTasks": 0
+  "RunningCount": 2,
+  "PendingCount": 0,
+  "FailedTasks": 0
 }
 ```
 
 **Verification**:
+
 - [ ] RunningCount stable at 2 for 5 minutes
 - [ ] PendingCount remains 0 (no restart loops)
 - [ ] FailedTasks remains 0
@@ -661,10 +697,10 @@ export class DbTestController {
   async testDb() {
     // Import db from your database package
     const { db } = await import('../database/client');
-    
+
     // Try a simple query
     const result = await db.execute('SELECT NOW() as time');
-    
+
     return {
       status: 'connected',
       timestamp: result.rows[0].time,
@@ -676,12 +712,14 @@ EOF
 ```
 
 **Or test from web app console**:
+
 ```bash
 # Test via curl (after deploying test endpoint)
 curl https://api.galaxyco.ai/test/db
 ```
 
 **Expected Output**:
+
 ```json
 {
   "status": "connected",
@@ -691,6 +729,7 @@ curl https://api.galaxyco.ai/test/db
 ```
 
 **Verification**:
+
 - [ ] Database connection succeeds within 10 seconds
 - [ ] No timeout errors
 - [ ] Valid timestamp returned
@@ -711,6 +750,7 @@ curl -X GET https://api.galaxyco.ai/api/agents \
 ```
 
 **Verification**:
+
 - [ ] API requires workspace_id in requests
 - [ ] Cross-tenant data access blocked
 - [ ] Security logs working (check CloudWatch for access attempts)
@@ -735,6 +775,7 @@ done
 ```
 
 **Expected Output**:
+
 ```
 real    0m0.234s
 real    0m0.198s
@@ -743,6 +784,7 @@ real    0m0.212s
 ```
 
 **Verification**:
+
 - [ ] All concurrent requests succeed
 - [ ] Average response time < 500ms
 - [ ] No 502/503 errors under light load
@@ -763,6 +805,7 @@ curl -X POST https://api.galaxyco.ai/api/agents \
 ```
 
 **Expected Output**:
+
 ```
 < HTTP/2 404
 {"statusCode":404,"message":"Cannot GET /api/nonexistent-endpoint"}
@@ -772,6 +815,7 @@ curl -X POST https://api.galaxyco.ai/api/agents \
 ```
 
 **Verification**:
+
 - [ ] 404 for non-existent routes
 - [ ] 400 for validation errors (class-validator working)
 - [ ] No 500 Internal Server Errors
@@ -797,6 +841,7 @@ curl -X POST https://api.galaxyco.ai/api/agents \
 ```
 
 **Verification**:
+
 - [ ] CPU utilization visible in metrics
 - [ ] Average CPU < 50%
 - [ ] No sudden spikes or drops
@@ -823,7 +868,7 @@ resource "aws_cloudwatch_metric_alarm" "api_cpu_high" {
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "API CPU usage over 80%"
-  
+
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
     ServiceName = aws_ecs_service.api.name
@@ -840,7 +885,7 @@ resource "aws_cloudwatch_metric_alarm" "api_unhealthy_targets" {
   statistic           = "Average"
   threshold           = 2
   alarm_description   = "Less than 2 healthy API targets"
-  
+
   dimensions = {
     TargetGroup  = aws_lb_target_group.api.arn_suffix
     LoadBalancer = aws_lb.main.arn_suffix
@@ -853,6 +898,7 @@ terraform apply -auto-approve
 ```
 
 **Verification**:
+
 - [ ] CPU alarm created
 - [ ] Unhealthy target alarm created
 - [ ] Alarms visible in CloudWatch console
@@ -871,6 +917,7 @@ terraform apply -auto-approve
 ```
 
 **Expected Output**:
+
 ```json
 [
   {
@@ -881,6 +928,7 @@ terraform apply -auto-approve
 ```
 
 **Verification**:
+
 - [ ] Log group exists
 - [ ] Retention policy set (7-30 days recommended)
 - [ ] Logs streaming in real-time
@@ -899,6 +947,7 @@ terraform apply -auto-approve
 ```
 
 **Manual Step**:
+
 1. Copy the NAT Gateway IP addresses
 2. Go to Neon dashboard: https://console.neon.tech
 3. Select your database project
@@ -907,6 +956,7 @@ terraform apply -auto-approve
 6. Save changes
 
 **Verification**:
+
 - [ ] NAT Gateway IPs identified
 - [ ] IPs added to Neon allowlist
 - [ ] Database still accessible from ECS
@@ -947,6 +997,7 @@ echo "5. Verifying target health..."
 ```
 
 **Expected Output**:
+
 ```
 1. Testing health endpoint...
 {"status":"ok"}
@@ -965,6 +1016,7 @@ healthy healthy
 ```
 
 **Verification**:
+
 - [ ] All 5 tests pass
 - [ ] No unexpected errors
 - [ ] Response times acceptable
@@ -986,6 +1038,7 @@ sed -i 's/🟡 \*\*DEPLOYMENT BLOCKED\*\*/✅ **DEPLOYED SUCCESSFULLY**/' PROJEC
 ```
 
 **Verification**:
+
 - [ ] DEPLOYMENT_TODO.md marked as complete
 - [ ] PROJECT_ANALYSIS updated with success status
 - [ ] Changes committed to git
@@ -1016,6 +1069,7 @@ git push origin main
 ```
 
 **Verification**:
+
 - [ ] All changes committed
 - [ ] Commit message follows Conventional Commits format
 - [ ] Pushed to remote repository
@@ -1025,15 +1079,15 @@ git push origin main
 
 ### Task 6.4: Create Session Handoff Document
 
-```bash
+````bash
 cd /c/Users/Owner/workspace/galaxyco-ai-2.0/docs/status
 
 # Create new session handoff
 cat > SESSION_HANDOFF_2025-10-30_API_DEPLOYMENT.md << 'EOF'
 # Session Handoff - API Deployment Success
 
-**Date**: 2025-10-30  
-**Duration**: 2-3 hours  
+**Date**: 2025-10-30
+**Duration**: 2-3 hours
 **Status**: ✅ COMPLETED
 
 ## What Was Accomplished
@@ -1091,7 +1145,7 @@ aws logs tail /ecs/galaxyco-production-api --region us-east-1 --follow
 
 # Check target health
 aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing:us-east-1:801949251798:targetgroup/galaxyco-production-api-tg/d1b1f860fc88dcee --region us-east-1
-```
+````
 
 ## Lessons Learned
 
@@ -1113,9 +1167,11 @@ aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing
 EOF
 
 # Commit handoff document
+
 git add docs/status/SESSION_HANDOFF_2025-10-30_API_DEPLOYMENT.md
 git commit -m "docs: add session handoff for successful API deployment"
 git push origin main
+
 ```
 
 **Verification**:
@@ -1217,9 +1273,10 @@ git push origin main
 
 ---
 
-**Checklist Version**: 1.0  
-**Last Updated**: 2025-10-30  
-**Estimated Completion**: 2-3 hours  
+**Checklist Version**: 1.0
+**Last Updated**: 2025-10-30
+**Estimated Completion**: 2-3 hours
 **Difficulty**: Intermediate
 
 **Good luck! You've got this! 🚀**
+```

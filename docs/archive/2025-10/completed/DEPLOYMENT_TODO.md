@@ -9,6 +9,7 @@
 ## Current Situation
 
 ### ✅ What's Working
+
 - Docker image builds successfully using simplified monolithic approach
 - Image pushes to GitHub Container Registry (GHCR) successfully
 - ECS pulls image and starts containers
@@ -19,12 +20,14 @@
 - All required secrets exist in AWS Secrets Manager
 
 ### ❌ What's Broken
+
 - **App hangs during startup** - never reaches "listening" state
 - Health checks fail → tasks restart repeatedly
 - No "Nest application successfully started" message in logs
 - Only error visible: "class-transformer package is missing" (non-fatal warning)
 
 ### 🔍 Root Cause (Suspected)
+
 The application is **waiting indefinitely for a database connection** or other external service during startup. The app initializes but never finishes bootstrapping.
 
 ---
@@ -32,6 +35,7 @@ The application is **waiting indefinitely for a database connection** or other e
 ## Files Modified in Last Session
 
 ### 1. `apps/api/Dockerfile`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/apps/api/Dockerfile`
 - **Changes:**
   - Simplified to monolithic build (copies database source into API)
@@ -40,6 +44,7 @@ The application is **waiting indefinitely for a database connection** or other e
   - Builds with turbo/pnpm from workspace root
 
 ### 2. `apps/api/src/agents/agents.service.ts`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/apps/api/src/agents/agents.service.ts`
 - **Changes:**
   - Changed imports from `@galaxyco/database/client` to `../database/client`
@@ -48,6 +53,7 @@ The application is **waiting indefinitely for a database connection** or other e
   - `testWithCore()` method redirects to legacy `test()` method
 
 ### 3. `packages/database/package.json`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/packages/database/package.json`
 - **Changes:**
   - Added `"build": "tsc"` script
@@ -55,17 +61,20 @@ The application is **waiting indefinitely for a database connection** or other e
   - Build script uses: `../../node_modules/.bin/tsc`
 
 ### 4. `.npmrc` (Created)
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/.npmrc`
 - **Content:** `shamefully-hoist=true`
 - Enables pnpm to hoist dependencies for Docker builds
 
 ### 5. `tsconfig.base.json`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/tsconfig.base.json`
 - **Changes:**
   - Updated paths to point to built dist files instead of src
   - Added subpath mappings for `/client` and `/schema`
 
 ### 6. `packages/agents-core/tsconfig.json`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/packages/agents-core/tsconfig.json`
 - **Changes:**
   - Extended from base config
@@ -74,6 +83,7 @@ The application is **waiting indefinitely for a database connection** or other e
   - Added `skipLibCheck` and `allowJs`
 
 ### 7. `packages/agents-core/package.json`
+
 - **Path:** `/c/Users/Owner/workspace/galaxyco-ai-2.0/packages/agents-core/package.json`
 - **Changes:**
   - Build script: `../../node_modules/.bin/tsc --noCheck --skipLibCheck`
@@ -88,6 +98,7 @@ The application is **waiting indefinitely for a database connection** or other e
 **The app is likely hanging waiting for database connection.**
 
 #### Step 1: Check DATABASE_URL Secret Value
+
 ```bash
 export MSYS_NO_PATHCONV=1
 "/c/Program Files/Amazon/AWSCLIV2/aws" secretsmanager get-secret-value \
@@ -98,11 +109,13 @@ export MSYS_NO_PATHCONV=1
 ```
 
 **Expected:** Should show a valid Neon PostgreSQL connection string like:
+
 ```
 postgresql://user:password@ep-xyz.us-east-1.aws.neon.tech/dbname?sslmode=require
 ```
 
 **If missing or invalid:**
+
 ```bash
 # Get the Neon connection string from Vercel or Neon dashboard
 # Then update the secret:
@@ -113,6 +126,7 @@ postgresql://user:password@ep-xyz.us-east-1.aws.neon.tech/dbname?sslmode=require
 ```
 
 #### Step 2: Check Other Required Secrets
+
 ```bash
 "/c/Program Files/Amazon/AWSCLIV2/aws" secretsmanager get-secret-value \
   --secret-id galaxyco/prod/clerk-secret-key \
@@ -134,16 +148,19 @@ postgresql://user:password@ep-xyz.us-east-1.aws.neon.tech/dbname?sslmode=require
 ```
 
 **If any are placeholder/empty:**
+
 - Get real values from Vercel environment variables or respective service dashboards
 - Update using `put-secret-value` command above
 
 #### Step 3: Verify Database Allows ECS Connections
 
 Check if Neon/database firewall allows connections from ECS tasks:
+
 - ECS tasks run in **private subnets** (10.0.10.0/24, 10.0.11.0/24, 10.0.12.0/24)
 - They connect via **NAT Gateways** with public Elastic IPs
 
 Get NAT Gateway IPs:
+
 ```bash
 "/c/Program Files/Amazon/AWSCLIV2/aws" ec2 describe-nat-gateways \
   --region us-east-1 \
@@ -153,6 +170,7 @@ Get NAT Gateway IPs:
 ```
 
 Then in **Neon dashboard** (or database provider):
+
 - Add these IPs to the allowed connection list
 - Or set to allow all IPs temporarily for testing
 
@@ -167,14 +185,14 @@ The app might be waiting forever for DB. Add a connection timeout.
 Check if there's a timeout configured. If not, add:
 
 ```typescript
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 const sql = neon(process.env.DATABASE_URL!, {
   fetchConnectionCache: true,
   fetchOptions: {
-    signal: AbortSignal.timeout(10000) // 10 second timeout
-  }
+    signal: AbortSignal.timeout(10000), // 10 second timeout
+  },
 });
 
 export const db = drizzle(sql);
@@ -227,6 +245,7 @@ Get complete logs to see if there's a crash we're missing:
 ```
 
 Look for:
+
 - Database connection errors
 - Module resolution errors
 - Uncaught exceptions
@@ -243,18 +262,18 @@ Modify `apps/api/src/main.ts` to start server even if DB connection fails:
 ```typescript
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Start listening immediately
   await app.listen(process.env.PORT || 4000);
   console.log(`🚀 Application is running on: ${await app.getUrl()}`);
-  
+
   // Test DB connection in background (non-blocking)
   setTimeout(async () => {
     try {
       await db.select().from(users).limit(1);
-      console.log('✅ Database connected');
+      console.log("✅ Database connected");
     } catch (error) {
-      console.error('❌ Database connection failed:', error.message);
+      console.error("❌ Database connection failed:", error.message);
     }
   }, 1000);
 }
@@ -265,24 +284,25 @@ async function bootstrap() {
 Add console.log statements in `main.ts` to see exactly where it hangs:
 
 ```typescript
-console.log('1. Creating NestFactory...');
+console.log("1. Creating NestFactory...");
 const app = await NestFactory.create(AppModule);
 
-console.log('2. Setting up global pipes...');
+console.log("2. Setting up global pipes...");
 app.useGlobalPipes(new ValidationPipe());
 
-console.log('3. Setting up CORS...');
+console.log("3. Setting up CORS...");
 app.enableCors();
 
-console.log('4. Starting to listen...');
+console.log("4. Starting to listen...");
 await app.listen(process.env.PORT || 4000);
 
-console.log('5. ✅ Application started successfully');
+console.log("5. ✅ Application started successfully");
 ```
 
 ### Option C: Use Vercel Database Connection
 
 If using Vercel Postgres, ensure the connection string includes:
+
 - `?sslmode=require`
 - `?connection_limit=1` (for serverless)
 
@@ -320,17 +340,21 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## Key Infrastructure Details
 
 ### ECS Task Definition Location
+
 `/c/Users/Owner/workspace/galaxyco-ai-2.0/infra/terraform/envs/prod/main.tf`
+
 - Lines 423-479: API task definition
 - Line 435: Docker image SHA (update this after new builds)
 - Lines 454-459: Secrets configuration
 
 ### Secrets ARN Pattern
+
 ```
 arn:aws:secretsmanager:us-east-1:801949251798:secret:galaxyco/prod/{SECRET_NAME}
 ```
 
 ### Current Docker Image
+
 ```
 ghcr.io/galaxy-co-ai/galaxyco-api:latest
 ```
@@ -338,6 +362,7 @@ ghcr.io/galaxy-co-ai/galaxyco-api:latest
 Latest SHA: `sha256:431260a1536b551c2c92244f86489828a4823f16ac4b1629bfbdda78f8efec45`
 
 ### ECS Service Details
+
 - Cluster: `galaxyco-production`
 - Service: `galaxyco-production-api`
 - Desired count: 2
@@ -380,6 +405,7 @@ Latest SHA: `sha256:431260a1536b551c2c92244f86489828a4823f16ac4b1629bfbdda78f8ef
 ## Expected Outcome
 
 After fixing the database connection issue:
+
 1. Logs should show: `[Nest] X - DATE LOG [NestApplication] Nest application successfully started`
 2. Health endpoint should respond: `https://api.galaxyco.ai/health` returns 200 OK
 3. Target group should show 2 healthy targets

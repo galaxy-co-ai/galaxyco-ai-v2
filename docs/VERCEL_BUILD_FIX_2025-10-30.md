@@ -3,6 +3,7 @@
 ## 🐛 Problem
 
 Vercel build was failing with:
+
 ```
 Module not found: Can't resolve '@galaxyco/database/client'
 ```
@@ -50,6 +51,7 @@ Module not found: Can't resolve '@galaxyco/database/client'
 ## 📦 Build Output Verified
 
 After fix, `packages/database/dist/` contains:
+
 ```
 - client.d.ts (435 KB)
 - client.d.ts.map
@@ -79,6 +81,7 @@ After fix, `packages/database/dist/` contains:
 ## 🚀 Expected Vercel Build Behavior
 
 Vercel will now:
+
 1. Install all dependencies via pnpm
 2. Run `turbo run build` (from `vercel build` command)
 3. Turbo builds `@galaxyco/database` first (due to dependency)

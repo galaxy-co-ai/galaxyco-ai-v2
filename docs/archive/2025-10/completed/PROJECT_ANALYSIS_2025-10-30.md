@@ -15,6 +15,7 @@
 **Estimated Fix Time**: 30-60 minutes
 
 ### Quick Context
+
 - **What**: Multi-agent AI platform (packs of agents for business outcomes)
 - **Who**: Jason (visionary founder) + AI development partner
 - **Stage**: Post-MVP, production infrastructure deployed, web app live on Vercel
@@ -63,6 +64,7 @@
 **PRIMARY BLOCKER**: NestJS API won't finish bootstrapping on ECS
 
 **Symptoms:**
+
 ```
 [NestFactory] Starting Nest application...
 ERROR [PackageLoader] The "class-transformer" package is missing.
@@ -71,12 +73,14 @@ ERROR [PackageLoader] The "class-transformer" package is missing.
 ```
 
 **Current Logs Pattern** (last 5 minutes):
+
 - Multiple task restarts (9+ containers failed)
 - NestJS initialization starts but never completes
 - Health check path `/health` returns nothing (hangs)
 - No "Nest application successfully started" message
 
 **Root Causes (Confirmed):**
+
 1. ✅ `class-transformer` package missing from `package.json`
 2. ⚠️ App likely hanging waiting for database connection (no timeout configured)
 3. ⚠️ Possible TypeScript path alias resolution issues in production
@@ -86,6 +90,7 @@ ERROR [PackageLoader] The "class-transformer" package is missing.
 ## 🏗️ Architecture Overview
 
 ### System Architecture
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │              User Dashboard (Vercel)                 │
@@ -113,6 +118,7 @@ ERROR [PackageLoader] The "class-transformer" package is missing.
 ```
 
 ### Repository Structure
+
 ```
 galaxyco-ai-2.0/                    # Turborepo monorepo (pnpm workspaces)
 ├── apps/
@@ -191,23 +197,27 @@ galaxyco-ai-2.0/                    # Turborepo monorepo (pnpm workspaces)
 ### Timeline of Debugging (6 hours)
 
 **Phase 1**: TypeScript Module Resolution Issues
+
 - Problem: Workspace package imports (`@galaxyco/database`) not resolving in Docker
 - Solution: Simplified Dockerfile to copy source directly instead of using workspace packages
 - Result: ✅ Image builds successfully
 
 **Phase 2**: Docker Build Optimization
+
 - Added `.npmrc` with `shamefully-hoist=true` for pnpm
 - Updated `tsconfig.base.json` paths to point to dist files
 - Fixed `packages/database/package.json` exports
 - Result: ✅ Build completes without TypeScript errors
 
 **Phase 3**: ECS Deployment Attempts
+
 - Image pushed to GHCR successfully
 - ECS pulls image and starts containers
 - NestJS begins initialization
 - Result: ❌ App hangs during startup, never reaches "listening" state
 
 **Phase 4**: Current Blocker Identified
+
 - Logs show `class-transformer` package missing (non-fatal warning)
 - App hangs indefinitely (no "successfully started" message)
 - Health checks fail → tasks restart in loop
@@ -228,50 +238,58 @@ galaxyco-ai-2.0/                    # Turborepo monorepo (pnpm workspaces)
 ## 🚨 Critical Issues Analysis
 
 ### Issue #1: Missing `class-transformer` Package
+
 **Severity**: MEDIUM-HIGH  
 **Impact**: Prevents NestJS ValidationPipe from working  
 **Status**: Confirmed in logs
 
 **Evidence**:
+
 ```
-ERROR [PackageLoader] The "class-transformer" package is missing. 
+ERROR [PackageLoader] The "class-transformer" package is missing.
 Please, make sure to install it to take advantage of ValidationPipe.
 ```
 
 **Fix**:
+
 ```bash
 cd apps/api
 pnpm add class-transformer class-validator
 ```
 
 ### Issue #2: Database Connection Timeout Not Configured
+
 **Severity**: HIGH  
 **Impact**: App hangs forever if DB unreachable  
 **Status**: Suspected (code review confirms)
 
 **Evidence**:
+
 ```typescript
 // packages/database/src/client.ts
-const sql = neon(getDatabaseUrl());  // NO TIMEOUT!
+const sql = neon(getDatabaseUrl()); // NO TIMEOUT!
 export const db = drizzle(sql, { schema });
 ```
 
 **Fix**:
+
 ```typescript
 const sql = neon(getDatabaseUrl(), {
   fetchConnectionCache: true,
   fetchOptions: {
-    signal: AbortSignal.timeout(10000) // 10 second timeout
-  }
+    signal: AbortSignal.timeout(10000), // 10 second timeout
+  },
 });
 ```
 
 ### Issue #3: Health Check Path May Be Incorrect
+
 **Severity**: MEDIUM  
 **Impact**: ECS thinks container is unhealthy  
 **Status**: Needs verification
 
 **Current Config**:
+
 - ALB health check: `/health`
 - Container health check: `/api/health`
 - Main.ts doesn't show explicit `/health` or `/api/health` route
@@ -279,6 +297,7 @@ const sql = neon(getDatabaseUrl(), {
 **Fix**: Verify NestJS exposes health endpoint at correct path
 
 ### Issue #4: Potential NAT Gateway IP Allowlist Issue
+
 **Severity**: LOW-MEDIUM  
 **Impact**: Neon may block ECS connections  
 **Status**: Unverified
@@ -312,15 +331,16 @@ docker push ghcr.io/galaxy-co-ai/galaxyco-api:latest
 ### 🔥 Priority 2: Add Database Connection Timeout (10 min)
 
 Edit `packages/database/src/client.ts`:
+
 ```typescript
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 const sql = neon(getDatabaseUrl(), {
   fetchConnectionCache: true,
   fetchOptions: {
-    signal: AbortSignal.timeout(10000) // 10 second timeout
-  }
+    signal: AbortSignal.timeout(10000), // 10 second timeout
+  },
 });
 
 export const db = drizzle(sql, { schema });
@@ -331,6 +351,7 @@ Rebuild and push image again.
 ### 🔥 Priority 3: Verify/Add Health Endpoint (10 min)
 
 Check if `apps/api/src/app.module.ts` has health check controller:
+
 - If missing, add: `@nestjs/terminus` package
 - Create health check endpoint at `/health`
 - Ensure it responds with 200 OK
@@ -403,21 +424,25 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 🎯 Post-Fix Next Steps
 
 ### 1. Python Agents Service Deployment
+
 - Currently untested on ECS
 - Similar pattern: build Docker image, push to GHCR, deploy to ECS
 - Service definition already in Terraform (`aws_ecs_task_definition.agents`)
 
 ### 2. SSL Certificate Setup
+
 - HTTPS listener currently disabled (count = 0 in Terraform)
 - Need to create ACM certificate for `api.galaxyco.ai`
 - Update Terraform to enable HTTPS listener
 
 ### 3. Web App API Integration
+
 - Update `apps/web/.env.local` to point to `https://api.galaxyco.ai`
 - Test agent execution flow end-to-end
 - Verify multi-tenant isolation works correctly
 
 ### 4. Monitoring & Alerts
+
 - Configure CloudWatch alarms for:
   - ECS task restarts
   - ALB 5xx errors
@@ -426,6 +451,7 @@ curl -sf https://api.galaxyco.ai/api/agents
 - Set up Sentry error tracking
 
 ### 5. Production Readiness Checklist
+
 - [ ] API health check passing
 - [ ] Agents service deployed and healthy
 - [ ] SSL certificate configured
@@ -440,24 +466,28 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 📊 Project Health Metrics
 
 ### Development Velocity
+
 - **Phase**: Deployment & Production Polish
 - **Sprint Cycle**: 2-3 days
 - **Development Intensity**: 70 hrs/week
 - **Quality Standard**: Production-grade, no corner-cutting
 
 ### Technical Debt
+
 - **TypeScript Errors**: ✅ None (all resolved)
 - **Build Warnings**: ✅ Zero (eliminated in commit 37c1cf6)
 - **ESLint Issues**: ✅ None
 - **Known Issues**: Only deployment blocker (solvable)
 
 ### Code Quality
+
 - **Type Safety**: ✅ TypeScript strict mode
 - **Error Handling**: ✅ Comprehensive custom error classes
 - **Testing**: 🟡 E2E tests exist, unit tests needed
 - **Documentation**: ✅ Excellent (AI_CONTEXT.md, WARP.md, comprehensive docs/)
 
 ### Infrastructure Maturity
+
 - **IaC Coverage**: ✅ 100% (Terraform)
 - **Multi-Region**: ❌ Single region (us-east-1)
 - **High Availability**: ✅ 3 AZs, 2 ECS tasks per service
@@ -468,7 +498,9 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 🚀 Success Criteria
 
 ### Deployment Success
+
 ✅ **Definition of Done**:
+
 1. API endpoint responds: `curl https://api.galaxyco.ai/health` returns 200 OK
 2. ECS tasks stable: No restart loops for 30+ minutes
 3. Logs show: "Nest application successfully started"
@@ -476,7 +508,9 @@ curl -sf https://api.galaxyco.ai/api/agents
 5. End-to-end test: Web app can execute agent through API
 
 ### Platform Launch Readiness
+
 ✅ **Definition of Done**:
+
 1. ✅ Web app deployed to Vercel
 2. ❌ API deployed to AWS ECS (blocked)
 3. 🟡 Agents service deployed to AWS ECS (untested)
@@ -491,6 +525,7 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 💡 Key Insights & Learnings
 
 ### What Went Well
+
 1. **Infrastructure as Code**: Terraform setup was clean and worked first try
 2. **Monorepo Strategy**: Turborepo + pnpm scales well
 3. **Frontend Quality**: Web app is production-ready with excellent UX
@@ -498,18 +533,21 @@ curl -sf https://api.galaxyco.ai/api/agents
 5. **Security Posture**: Multi-tenant isolation baked into architecture
 
 ### What Was Challenging
+
 1. **Docker + TypeScript**: Workspace package resolution in containers is tricky
 2. **NestJS Dependencies**: Easy to miss required packages (class-transformer)
 3. **Debugging ECS**: Limited visibility into container startup issues
 4. **Session Continuity**: Need better handoff documentation (solved with DEPLOYMENT_TODO.md)
 
 ### Architectural Patterns That Work
+
 1. **AI Gateway Pattern**: Centralized AI provider calls with tracking
 2. **Multi-Tenancy Helpers**: `withTenant()` wrapper prevents security mistakes
 3. **Custom Error Classes**: Type-safe error handling across app
 4. **React Context for Layout**: Global sidebar state without Redux overhead
 
 ### Technical Debt to Address
+
 1. Database connection pooling (Neon pooler used, but check limits)
 2. Unit test coverage (E2E tests exist, need unit tests)
 3. Python agents service integration testing
@@ -521,12 +559,14 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 📚 Critical Files Reference
 
 ### Must-Read Documentation
+
 1. **WARP.md** (514 lines) - AUTHORITATIVE project rules
 2. **AI_CONTEXT.md** (489 lines) - AI onboarding guide
 3. **DEPLOYMENT_TODO.md** (399 lines) - Previous agent's handoff
 4. **README.md** - Human-friendly overview
 
 ### Key Implementation Files
+
 1. **packages/database/src/client.ts** - Database client (needs timeout)
 2. **apps/api/src/main.ts** - NestJS bootstrap (10 lines, simple)
 3. **apps/api/Dockerfile** - Simplified build (73 lines)
@@ -534,6 +574,7 @@ curl -sf https://api.galaxyco.ai/api/agents
 5. **apps/web/lib/errors.ts** - Error handling system (269 lines)
 
 ### Configuration Files
+
 1. **package.json** (root) - Monorepo scripts
 2. **apps/web/package.json** - Frontend dependencies
 3. **apps/api/package.json** - Backend dependencies (check for class-transformer)
@@ -545,14 +586,17 @@ curl -sf https://api.galaxyco.ai/api/agents
 ## 🎬 Conclusion & Recommendations
 
 ### Current State
+
 The GalaxyCo.ai 2.0 platform is **95% complete** with a single deployment blocker preventing API launch. The web app, infrastructure, database, and authentication are all production-ready. The issue is straightforward: missing NestJS dependencies and lack of database connection timeout.
 
 ### Recommended Immediate Actions
+
 1. **Fix Now** (30 min): Add `class-transformer`, add DB timeout, rebuild/redeploy
 2. **Verify** (10 min): Check health endpoints, monitor logs, test end-to-end
 3. **Document** (10 min): Update session handoff with deployment success
 
 ### Long-Term Recommendations
+
 1. **Automated Health Checks**: Add pre-deployment validation script
 2. **Dependency Audit**: Regular review of package.json completeness
 3. **Staging Environment**: Test deployments before production
@@ -560,6 +604,7 @@ The GalaxyCo.ai 2.0 platform is **95% complete** with a single deployment blocke
 5. **Observability**: Enhance logging with structured JSON logs
 
 ### Risk Assessment
+
 - **Technical Risk**: LOW (issue is well-understood and fixable)
 - **Time Risk**: LOW (estimated 30-60 min to resolve)
 - **Business Risk**: MEDIUM (blocks platform launch, but temporary)
@@ -570,6 +615,7 @@ The GalaxyCo.ai 2.0 platform is **95% complete** with a single deployment blocke
 ## 📞 Next Agent Handoff Checklist
 
 When starting work:
+
 - [ ] Read this analysis document
 - [ ] Read DEPLOYMENT_TODO.md for context
 - [ ] Check current branch: `git status`
@@ -577,6 +623,7 @@ When starting work:
 - [ ] Check latest logs: `aws logs tail /ecs/galaxyco-production-api --since 5m`
 
 When fixing:
+
 - [ ] Add class-transformer to apps/api/package.json
 - [ ] Add DB timeout to packages/database/src/client.ts
 - [ ] Rebuild Docker image
@@ -585,6 +632,7 @@ When fixing:
 - [ ] Verify health checks pass
 
 When complete:
+
 - [ ] Update this document with results
 - [ ] Update DEPLOYMENT_TODO.md status
 - [ ] Commit changes with proper message: `fix(api): resolve startup hang with missing dependencies`
