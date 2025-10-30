@@ -377,12 +377,12 @@ resource "aws_lb_listener" "http" {
 # HTTPS Listener (will be configured after SSL cert is created)
 # Placeholder - requires certificate ARN
 resource "aws_lb_listener" "https" {
-  count             = 0 # Enable after getting SSL cert
+  count             = 1 # SSL certificate configured
   load_balancer_arn = aws_lb.main.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = "" # Will be added later
+  certificate_arn   = "arn:aws:acm:us-east-1:801949251798:certificate/49dee20d-9a4c-4952-ab78-dbd1aece3633"
 
   default_action {
     type             = "forward"
