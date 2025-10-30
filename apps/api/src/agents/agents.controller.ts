@@ -23,6 +23,7 @@ import { TestAgentDto } from "./dto/test-agent.dto";
 @UseGuards(AuthGuard)
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
+  // AgentsService is used in all methods below
 
   /**
    * Create a new agent
