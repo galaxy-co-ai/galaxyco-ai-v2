@@ -112,8 +112,8 @@ export function MainSidebar({ className }: SidebarProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        // Fixed positioning for desktop sidebar
-        "fixed left-0 top-0 z-40 h-full",
+        // Fixed positioning for desktop sidebar - below top bar
+        "fixed left-0 top-16 z-40 h-[calc(100vh-4rem)]",
         // Responsive width with smooth transition
         "transition-all duration-200 ease-in-out",
         isExpanded ? "w-60" : "w-16",
@@ -123,20 +123,6 @@ export function MainSidebar({ className }: SidebarProps) {
         className,
       )}
     >
-      {/* Logo/Brand Section */}
-      <div className="flex items-center h-16 px-4 border-b border-border gap-3">
-        {/* Logo */}
-        <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-          <span className="text-primary-foreground font-bold text-sm">G</span>
-        </div>
-        {/* Brand Name - visible when expanded */}
-        {isExpanded && (
-          <span className="text-lg font-bold text-foreground whitespace-nowrap">
-            GalaxyCo
-          </span>
-        )}
-      </div>
-
       {/* Navigation Section */}
       <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
         {navigationItems.map((item) => {

@@ -55,17 +55,22 @@ export function TopBar({ className }: TopBarProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 z-50 h-16",
+        "fixed top-0 left-0 right-0 z-50 h-16 w-full",
         "bg-card border-b border-border",
         "transition-all duration-200 ease-in-out",
-        // Adjust left position based on sidebar state
-        isExpanded ? "left-60" : "left-16",
         className,
       )}
     >
       <div className="h-full px-6 flex items-center gap-4">
-        {/* Left spacer */}
-        <div className="flex-shrink-0" />
+        {/* Logo/Brand Section */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-sm">G</span>
+          </div>
+          <span className="text-lg font-bold text-foreground whitespace-nowrap hidden sm:inline">
+            GalaxyCo
+          </span>
+        </div>
 
         {/* Centered Search Bar */}
         <div className="flex-1 max-w-2xl mx-auto">
