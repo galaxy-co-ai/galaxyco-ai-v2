@@ -91,6 +91,58 @@ export const subscriptionTierEnum = pgEnum("subscription_tier", [
   "enterprise",
 ]);
 
+// Galaxy Studio enums
+export const gridStatusEnum = pgEnum("grid_status", [
+  "draft",
+  "published",
+  "archived",
+]);
+
+export const gridNodeTypeEnum = pgEnum("grid_node_type", [
+  "trigger",
+  "action",
+  "condition",
+  "loop",
+  "ai",
+  "webhook",
+  "delay",
+  "transform",
+  "filter",
+  "aggregate",
+  "branch",
+  "merge",
+  "api",
+  "database",
+  "email",
+  "notification",
+  "integration",
+  "custom",
+]);
+
+export const gridNodeStatusEnum = pgEnum("grid_node_status", [
+  "idle",
+  "pending",
+  "running",
+  "success",
+  "error",
+  "skipped",
+]);
+
+export const gridEdgeTypeEnum = pgEnum("grid_edge_type", [
+  "default",
+  "conditional",
+  "loop",
+  "error",
+]);
+
+export const gridExecutionStatusEnum = pgEnum("grid_execution_status", [
+  "pending",
+  "running",
+  "completed",
+  "failed",
+  "cancelled",
+]);
+
 // CRM & Business enums
 export const customerStatusEnum = pgEnum("customer_status", [
   "lead",
@@ -2382,6 +2434,529 @@ export const oauthTokens = pgTable(
 );
 
 // ============================================================================
+// GALAXY STUDIO - VISUAL WORKFLOW BUILDER
+// ============================================================================
+
+// Galaxy Grids: Visual workflow definitions
+export const galaxyGrids = pgTable(
+  "galaxy_grids",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key - REQUIRED FOR ALL QUERIES
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Basic info
+    name: text("name").notNull(),
+    description: text("description"),
+    thumbnailUrl: text("thumbnail_url"),
+
+    // Layout (stores React Flow viewport state)
+    viewport: jsonb("viewport")
+      .$type<{ x: number; y: number; zoom: number }>()
+      .default({ x: 0, y: 0, zoom: 1 }),
+
+    // Status
+    status: gridStatusEnum("status").notNull().default("draft"),
+
+    // Template metadata (if this grid is used as a template)
+    isTemplate: boolean("is_template").default(false),
+    templateCategory: text("template_category"),
+    tags: text("tags").array().default([]),
+
+    // Ownership
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+    isPublic: boolean("is_public").notNull().default(false),
+
+    // Version control
+    version: integer("version").notNull().default(1),
+    parentGridId: uuid("parent_grid_id"),
+
+    // Publish metadata
+    publishedAt: timestamp("published_at"),
+
+    // Additional metadata
+    metadata: jsonb("metadata")
+      .$type<{
+        lastSimulatedAt?: string;
+        executionCount?: number;
+        avgDuration?: number;
+      }>()
+      .default({}),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("galaxy_grid_tenant_idx").on(table.workspaceId),
+    statusIdx: index("galaxy_grid_status_idx").on(table.status),
+    createdByIdx: index("galaxy_grid_created_by_idx").on(table.createdBy),
+    templateIdx: index("galaxy_grid_template_idx").on(
+      table.isTemplate,
+      table.templateCategory,
+    ),
+    publishedIdx: index("galaxy_grid_published_idx").on(table.publishedAt),
+  }),
+);
+
+// Grid Nodes: Individual nodes in visual workflows
+export const gridNodes = pgTable(
+  "grid_nodes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Parent grid reference
+    gridId: uuid("grid_id")
+      .notNull()
+      .references(() => galaxyGrids.id, { onDelete: "cascade" }),
+
+    // Node info
+    nodeType: gridNodeTypeEnum("node_type").notNull(),
+    label: text("label").notNull(),
+
+    // Position on canvas (React Flow format)
+    position: jsonb("position")
+      .$type<{ x: number; y: number }>()
+      .notNull()
+      .default({ x: 0, y: 0 }),
+
+    // Dimensions (optional, for custom sizing)
+    width: integer("width"),
+    height: integer("height"),
+
+    // Node configuration (type-specific settings)
+    config: jsonb("config")
+      .$type<{
+        // AI Node
+        aiProvider?: "openai" | "anthropic" | "google";
+        model?: string;
+        systemPrompt?: string;
+        temperature?: number;
+        maxTokens?: number;
+        // Webhook Node
+        webhookUrl?: string;
+        webhookMethod?: "GET" | "POST" | "PUT" | "DELETE";
+        webhookHeaders?: Record<string, string>;
+        // Condition Node
+        conditionType?: "equals" | "contains" | "greater" | "less";
+        conditionField?: string;
+        conditionValue?: any;
+        // Transform Node
+        transformScript?: string;
+        transformMapping?: Record<string, string>;
+        // Loop Node
+        loopSource?: string;
+        loopVariable?: string;
+        maxIterations?: number;
+        // Delay Node
+        delayMs?: number;
+        // Any other config
+        [key: string]: any;
+      }>()
+      .notNull()
+      .default({}),
+
+    // Link to existing agent (optional)
+    agentId: uuid("agent_id").references(() => agents.id),
+
+    // Runtime status (for simulation/execution)
+    status: gridNodeStatusEnum("status").default("idle"),
+
+    // Style overrides
+    style: jsonb("style")
+      .$type<{
+        backgroundColor?: string;
+        borderColor?: string;
+        borderWidth?: number;
+      }>()
+      .default({}),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    gridIdx: index("grid_node_grid_idx").on(table.gridId),
+    typeIdx: index("grid_node_type_idx").on(table.nodeType),
+    agentIdx: index("grid_node_agent_idx").on(table.agentId),
+    statusIdx: index("grid_node_status_idx").on(table.status),
+  }),
+);
+
+// Grid Edges: Connections between nodes
+export const gridEdges = pgTable(
+  "grid_edges",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Parent grid reference
+    gridId: uuid("grid_id")
+      .notNull()
+      .references(() => galaxyGrids.id, { onDelete: "cascade" }),
+
+    // Connection points
+    sourceNodeId: uuid("source_node_id")
+      .notNull()
+      .references(() => gridNodes.id, { onDelete: "cascade" }),
+    targetNodeId: uuid("target_node_id")
+      .notNull()
+      .references(() => gridNodes.id, { onDelete: "cascade" }),
+
+    // Handle names (for multiple inputs/outputs)
+    sourceHandle: text("source_handle").default("output"),
+    targetHandle: text("target_handle").default("input"),
+
+    // Edge type
+    edgeType: gridEdgeTypeEnum("edge_type").notNull().default("default"),
+
+    // Conditional edge configuration
+    condition: jsonb("condition")
+      .$type<{
+        type?: "equals" | "contains" | "greater" | "less" | "exists";
+        field?: string;
+        value?: any;
+        operator?: "and" | "or";
+      }>()
+      .default({}),
+
+    // Display
+    label: text("label"),
+    animated: boolean("animated").default(false),
+
+    // Style overrides
+    style: jsonb("style")
+      .$type<{
+        strokeColor?: string;
+        strokeWidth?: number;
+        strokeDasharray?: string;
+      }>()
+      .default({}),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    gridIdx: index("grid_edge_grid_idx").on(table.gridId),
+    sourceIdx: index("grid_edge_source_idx").on(table.sourceNodeId),
+    targetIdx: index("grid_edge_target_idx").on(table.targetNodeId),
+    typeIdx: index("grid_edge_type_idx").on(table.edgeType),
+  }),
+);
+
+// Grid Versions: Version control snapshots
+export const gridVersions = pgTable(
+  "grid_versions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Parent grid reference
+    gridId: uuid("grid_id")
+      .notNull()
+      .references(() => galaxyGrids.id, { onDelete: "cascade" }),
+
+    // Version number
+    version: integer("version").notNull(),
+
+    // Complete snapshot of grid state at this version
+    snapshot: jsonb("snapshot")
+      .$type<{
+        layout: any;
+        viewport: { x: number; y: number; zoom: number };
+        nodes: any[];
+        edges: any[];
+        metadata: any;
+      }>()
+      .notNull(),
+
+    // Change description
+    changesSummary: text("changes_summary"),
+
+    // Author
+    createdBy: uuid("created_by")
+      .notNull()
+      .references(() => users.id),
+
+    // Timestamp
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    gridVersionIdx: uniqueIndex("grid_version_grid_version_idx").on(
+      table.gridId,
+      table.version,
+    ),
+    createdByIdx: index("grid_version_created_by_idx").on(table.createdBy),
+    createdAtIdx: index("grid_version_created_at_idx").on(table.createdAt),
+  }),
+);
+
+// Grid Executions: Runtime telemetry for LiveStream
+export const gridExecutions = pgTable(
+  "grid_executions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Multi-tenant key - REQUIRED FOR ALL QUERIES
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+
+    // Parent grid reference
+    gridId: uuid("grid_id")
+      .notNull()
+      .references(() => galaxyGrids.id, { onDelete: "cascade" }),
+
+    // Execution status
+    status: gridExecutionStatusEnum("status").notNull().default("pending"),
+
+    // Trigger info
+    triggerType: text("trigger_type").notNull(), // 'manual', 'scheduled', 'webhook', 'event'
+    triggerData: jsonb("trigger_data")
+      .$type<{
+        userId?: string;
+        source?: string;
+        payload?: any;
+      }>()
+      .default({}),
+
+    // Input/Output
+    input: jsonb("input").$type<Record<string, any>>().default({}),
+    output: jsonb("output").$type<Record<string, any>>().default({}),
+
+    // Performance metrics
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    durationMs: integer("duration_ms"),
+
+    // Error handling
+    errorMessage: text("error_message"),
+    errorStack: text("error_stack"),
+
+    // Additional metadata
+    metadata: jsonb("metadata")
+      .$type<{
+        totalNodes?: number;
+        successfulNodes?: number;
+        failedNodes?: number;
+        skippedNodes?: number;
+      }>()
+      .default({}),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    tenantIdx: index("grid_execution_tenant_idx").on(table.workspaceId),
+    gridIdx: index("grid_execution_grid_idx").on(table.gridId),
+    statusIdx: index("grid_execution_status_idx").on(table.status),
+    startedAtIdx: index("grid_execution_started_at_idx").on(table.startedAt),
+    createdAtIdx: index("grid_execution_created_at_idx").on(table.createdAt),
+  }),
+);
+
+// Execution Steps: Individual node executions within a grid run
+export const executionSteps = pgTable(
+  "execution_steps",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Parent execution reference
+    executionId: uuid("execution_id")
+      .notNull()
+      .references(() => gridExecutions.id, { onDelete: "cascade" }),
+
+    // Node reference
+    nodeId: uuid("node_id")
+      .notNull()
+      .references(() => gridNodes.id),
+
+    // Execution order
+    stepIndex: integer("step_index").notNull(),
+
+    // Status
+    status: gridNodeStatusEnum("status").notNull().default("pending"),
+
+    // Input/Output for this step
+    inputData: jsonb("input_data").$type<Record<string, any>>().default({}),
+    outputData: jsonb("output_data").$type<Record<string, any>>().default({}),
+
+    // Performance
+    startedAt: timestamp("started_at"),
+    completedAt: timestamp("completed_at"),
+    durationMs: integer("duration_ms"),
+
+    // Error handling
+    errorMessage: text("error_message"),
+    errorStack: text("error_stack"),
+
+    // Logs (array of log messages)
+    logs: text("logs").array().default([]),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    executionStepIdx: index("execution_step_execution_step_idx").on(
+      table.executionId,
+      table.stepIndex,
+    ),
+    nodeIdx: index("execution_step_node_idx").on(table.nodeId),
+    statusIdx: index("execution_step_status_idx").on(table.status),
+  }),
+);
+
+// Grid Templates: Marketplace templates for Discover page
+export const gridTemplates = pgTable(
+  "grid_templates",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    // Template info
+    name: text("name").notNull(),
+    description: text("description"),
+
+    // Category & organization
+    category: text("category").notNull(),
+    tags: text("tags").array().default([]),
+
+    // Visual
+    thumbnailUrl: text("thumbnail_url"),
+
+    // Template snapshot (complete grid definition)
+    previewData: jsonb("preview_data")
+      .$type<{
+        nodes: any[];
+        edges: any[];
+        viewport?: { x: number; y: number; zoom: number };
+      }>()
+      .notNull(),
+
+    // Metadata
+    complexity: text("complexity").$type<
+      "beginner" | "intermediate" | "advanced"
+    >(),
+    estimatedTime: integer("estimated_time"), // in minutes
+
+    // Marketplace stats
+    uses: integer("uses").notNull().default(0),
+    rating: integer("rating"), // 0-5 scale stored as decimal
+
+    // Publishing
+    featured: boolean("featured").default(false),
+
+    // Author
+    authorId: text("author_id").notNull(),
+
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    categoryIdx: index("grid_template_category_idx").on(table.category),
+    featuredIdx: index("grid_template_featured_idx").on(table.featured),
+    usesIdx: index("grid_template_uses_idx").on(table.uses),
+  }),
+);
+
+// ============================================================================
+// GALAXY STUDIO - RELATIONS
+// ============================================================================
+
+export const galaxyGridsRelations = relations(galaxyGrids, ({ one, many }) => ({
+  workspace: one(workspaces, {
+    fields: [galaxyGrids.workspaceId],
+    references: [workspaces.id],
+  }),
+  creator: one(users, {
+    fields: [galaxyGrids.createdBy],
+    references: [users.id],
+  }),
+  nodes: many(gridNodes),
+  edges: many(gridEdges),
+  versions: many(gridVersions),
+  executions: many(gridExecutions),
+}));
+
+export const gridNodesRelations = relations(gridNodes, ({ one, many }) => ({
+  grid: one(galaxyGrids, {
+    fields: [gridNodes.gridId],
+    references: [galaxyGrids.id],
+  }),
+  agent: one(agents, {
+    fields: [gridNodes.agentId],
+    references: [agents.id],
+  }),
+  sourceEdges: many(gridEdges, { relationName: "sourceNode" }),
+  targetEdges: many(gridEdges, { relationName: "targetNode" }),
+  executionSteps: many(executionSteps),
+}));
+
+export const gridEdgesRelations = relations(gridEdges, ({ one }) => ({
+  grid: one(galaxyGrids, {
+    fields: [gridEdges.gridId],
+    references: [galaxyGrids.id],
+  }),
+  sourceNode: one(gridNodes, {
+    fields: [gridEdges.sourceNodeId],
+    references: [gridNodes.id],
+    relationName: "sourceNode",
+  }),
+  targetNode: one(gridNodes, {
+    fields: [gridEdges.targetNodeId],
+    references: [gridNodes.id],
+    relationName: "targetNode",
+  }),
+}));
+
+export const gridVersionsRelations = relations(gridVersions, ({ one }) => ({
+  grid: one(galaxyGrids, {
+    fields: [gridVersions.gridId],
+    references: [galaxyGrids.id],
+  }),
+  creator: one(users, {
+    fields: [gridVersions.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export const gridExecutionsRelations = relations(
+  gridExecutions,
+  ({ one, many }) => ({
+    workspace: one(workspaces, {
+      fields: [gridExecutions.workspaceId],
+      references: [workspaces.id],
+    }),
+    grid: one(galaxyGrids, {
+      fields: [gridExecutions.gridId],
+      references: [galaxyGrids.id],
+    }),
+    steps: many(executionSteps),
+  }),
+);
+
+export const executionStepsRelations = relations(executionSteps, ({ one }) => ({
+  execution: one(gridExecutions, {
+    fields: [executionSteps.executionId],
+    references: [gridExecutions.id],
+  }),
+  node: one(gridNodes, {
+    fields: [executionSteps.nodeId],
+    references: [gridNodes.id],
+  }),
+}));
+
+export const gridTemplatesRelations = relations(gridTemplates, ({ one }) => ({
+  author: one(users, {
+    fields: [gridTemplates.authorId],
+    references: [users.id],
+  }),
+}));
+
+// ============================================================================
 // TYPES
 // ============================================================================
 
@@ -2501,3 +3076,33 @@ export type NewIntegration = typeof integrations.$inferInsert;
 
 export type OAuthToken = typeof oauthTokens.$inferSelect;
 export type NewOAuthToken = typeof oauthTokens.$inferInsert;
+
+// Galaxy Studio Types
+export type GalaxyGrid = typeof galaxyGrids.$inferSelect;
+export type NewGalaxyGrid = typeof galaxyGrids.$inferInsert;
+
+export type GridNode = typeof gridNodes.$inferSelect;
+export type NewGridNode = typeof gridNodes.$inferInsert;
+
+export type GridEdge = typeof gridEdges.$inferSelect;
+export type NewGridEdge = typeof gridEdges.$inferInsert;
+
+export type GridVersion = typeof gridVersions.$inferSelect;
+export type NewGridVersion = typeof gridVersions.$inferInsert;
+
+export type GridExecution = typeof gridExecutions.$inferSelect;
+export type NewGridExecution = typeof gridExecutions.$inferInsert;
+
+export type ExecutionStep = typeof executionSteps.$inferSelect;
+export type NewExecutionStep = typeof executionSteps.$inferInsert;
+
+export type GridTemplate = typeof gridTemplates.$inferSelect;
+export type NewGridTemplate = typeof gridTemplates.$inferInsert;
+
+// Galaxy Studio Enum Types
+export type GridStatus = (typeof gridStatusEnum.enumValues)[number];
+export type GridNodeType = (typeof gridNodeTypeEnum.enumValues)[number];
+export type GridNodeStatus = (typeof gridNodeStatusEnum.enumValues)[number];
+export type GridEdgeType = (typeof gridEdgeTypeEnum.enumValues)[number];
+export type GridExecutionStatus =
+  (typeof gridExecutionStatusEnum.enumValues)[number];
