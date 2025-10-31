@@ -18,6 +18,14 @@ export {
   agentExecutions,
   agentSchedules,
   workspaceApiKeys,
+  // Galaxy Studio tables
+  galaxyGrids,
+  gridNodes,
+  gridEdges,
+  gridVersions,
+  gridExecutions,
+  executionSteps,
+  gridTemplates,
 } from "./schema";
 
 // Re-export types
