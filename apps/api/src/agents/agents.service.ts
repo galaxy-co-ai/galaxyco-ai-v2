@@ -1,15 +1,11 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { db } from "@galaxyco/database/client";
-import { agents } from "@galaxyco/database/schema";
-import { eq, and, like, desc } from "drizzle-orm";
-import { CreateAgentDto } from "./dto/create-agent.dto";
-import { UpdateAgentDto } from "./dto/update-agent.dto";
-import {
-  TestAgentDto,
-  TestResult,
-  PythonServiceResponse,
-} from "./dto/test-agent.dto";
-import { randomUUID } from "crypto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { db } from '@galaxyco/database/client';
+import { agents } from '@galaxyco/database/schema';
+import { eq, and, like, desc } from 'drizzle-orm';
+import { CreateAgentDto } from './dto/create-agent.dto';
+import { UpdateAgentDto } from './dto/update-agent.dto';
+import { TestAgentDto, TestResult, PythonServiceResponse } from './dto/test-agent.dto';
+import { randomUUID } from 'crypto';
 // import { AgentExecutionService } from "@galaxyco/agents-core";
 
 @Injectable()
@@ -18,11 +14,7 @@ export class AgentsService {
    * Create a new agent
    * Multi-tenant: Automatically scoped to workspaceId
    */
-  async create(
-    createAgentDto: CreateAgentDto,
-    userId: string,
-    workspaceId: string,
-  ) {
+  async create(createAgentDto: CreateAgentDto, userId: string, workspaceId: string) {
     const agent = await db
       .insert(agents)
       .values({
@@ -31,7 +23,7 @@ export class AgentsService {
         name: createAgentDto.name,
         description: createAgentDto.description,
         type: createAgentDto.type,
-        status: "draft", // Always start as draft
+        status: 'draft', // Always start as draft
         config: {
           aiProvider: createAgentDto.aiProvider,
           model: createAgentDto.model,
@@ -55,7 +47,7 @@ export class AgentsService {
   async findAll(
     workspaceId: string,
     filters?: {
-      status?: "draft" | "active" | "paused" | "archived";
+      status?: 'draft' | 'active' | 'paused' | 'archived';
       search?: string;
       limit?: number;
       offset?: number;
@@ -115,11 +107,7 @@ export class AgentsService {
    * Update agent
    * Multi-tenant: Validates workspace access before updating
    */
-  async update(
-    id: string,
-    updateAgentDto: UpdateAgentDto,
-    workspaceId: string,
-  ) {
+  async update(id: string, updateAgentDto: UpdateAgentDto, workspaceId: string) {
     // First verify the agent belongs to this workspace
     await this.findOne(id, workspaceId);
 
@@ -166,12 +154,12 @@ export class AgentsService {
     await db
       .update(agents)
       .set({
-        status: "archived",
+        status: 'archived',
         updatedAt: new Date(),
       })
       .where(and(eq(agents.id, id), eq(agents.workspaceId, workspaceId)));
 
-    return { success: true, message: "Agent archived successfully" };
+    return { success: true, message: 'Agent archived successfully' };
   }
 
   /**
@@ -179,11 +167,7 @@ export class AgentsService {
    * This is the OpenAI-aligned execution path
    * TODO: Re-enable once agents-core is properly built
    */
-  async testWithCore(
-    id: string,
-    testDto: TestAgentDto,
-    workspaceId: string,
-  ): Promise<TestResult> {
+  async testWithCore(id: string, testDto: TestAgentDto, workspaceId: string): Promise<TestResult> {
     // Temporarily disabled - using legacy test() method instead
     return this.test(id, testDto, workspaceId);
   }
@@ -194,18 +178,14 @@ export class AgentsService {
    *
    * NOTE: This will be deprecated in favor of testWithCore()
    */
-  async test(
-    id: string,
-    testDto: TestAgentDto,
-    workspaceId: string,
-  ): Promise<TestResult> {
+  async test(id: string, testDto: TestAgentDto, workspaceId: string): Promise<TestResult> {
     // Verify agent exists and belongs to workspace
     const agent = await this.findOne(id, workspaceId);
 
     const startTime = Date.now();
 
     // Mock execution (deterministic fixtures)
-    if (testDto.mode === "mock" || !testDto.mode) {
+    if (testDto.mode === 'mock' || !testDto.mode) {
       const mockOutput = this.getMockOutput(agent.type, testDto.inputs);
       const durationMs = Date.now() - startTime + Math.random() * 500; // Simulate latency
 
@@ -236,19 +216,18 @@ export class AgentsService {
     testDto: TestAgentDto,
     workspaceId: string,
   ): Promise<TestResult> {
-    const pythonServiceUrl =
-      process.env.PYTHON_AGENTS_URL || "http://localhost:5001";
+    const pythonServiceUrl = process.env.PYTHON_AGENTS_URL || 'http://localhost:5001';
 
     try {
       const response = await fetch(`${pythonServiceUrl}/execute`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           agent_id: agent.id,
           workspace_id: workspaceId,
-          user_id: "system", // TODO: Get from context
+          user_id: 'system', // TODO: Get from context
           agent_type: agent.type,
           inputs: testDto.inputs,
           config: agent.config,
@@ -284,7 +263,7 @@ export class AgentsService {
         inputs: testDto.inputs,
         outputs: {},
         success: false,
-        error: error?.message || "Failed to execute agent",
+        error: error?.message || 'Failed to execute agent',
         metrics: {
           durationMs: 0,
           tokensUsed: 0,
@@ -298,52 +277,49 @@ export class AgentsService {
    * Generate mock output based on agent type
    * Phase 8: Deterministic fixtures for testing
    */
-  private getMockOutput(
-    agentType: string,
-    inputs: Record<string, any>,
-  ): Record<string, any> {
+  private getMockOutput(agentType: string, inputs: Record<string, any>): Record<string, any> {
     const mockOutputs: Record<string, Record<string, any>> = {
       scope: {
-        summary: "Analyzed email thread and extracted 3 action items",
+        summary: 'Analyzed email thread and extracted 3 action items',
         actionItems: [
-          "Follow up with John about Q4 budget proposal",
-          "Schedule team meeting for next week",
-          "Review and approve design mockups",
+          'Follow up with John about Q4 budget proposal',
+          'Schedule team meeting for next week',
+          'Review and approve design mockups',
         ],
-        priority: "high",
-        sentiment: "neutral",
+        priority: 'high',
+        sentiment: 'neutral',
       },
       email: {
-        subject: "Re: " + (inputs.subject || "Your inquiry"),
-        body: "Thank you for reaching out. Based on your request, here is a personalized response...",
-        sentiment: "positive",
-        suggested_action: "send",
+        subject: 'Re: ' + (inputs.subject || 'Your inquiry'),
+        body: 'Thank you for reaching out. Based on your request, here is a personalized response...',
+        sentiment: 'positive',
+        suggested_action: 'send',
       },
       call: {
-        transcript_summary: "Customer expressed interest in enterprise plan",
+        transcript_summary: 'Customer expressed interest in enterprise plan',
         key_points: [
-          "Needs multi-tenant support",
-          "Budget approved for Q1",
-          "Decision maker: Sarah (CTO)",
+          'Needs multi-tenant support',
+          'Budget approved for Q1',
+          'Decision maker: Sarah (CTO)',
         ],
-        next_steps: ["Send pricing proposal", "Schedule demo"],
+        next_steps: ['Send pricing proposal', 'Schedule demo'],
       },
       note: {
-        note_summary: "Meeting notes processed and categorized",
-        tags: ["product", "roadmap", "q1-planning"],
-        related_docs: ["PRD-2024-001", "RFC-Backend-Auth"],
+        note_summary: 'Meeting notes processed and categorized',
+        tags: ['product', 'roadmap', 'q1-planning'],
+        related_docs: ['PRD-2024-001', 'RFC-Backend-Auth'],
       },
       task: {
         task_created: true,
-        task_id: "TASK-" + Math.floor(Math.random() * 10000),
-        assignee: "auto-detected",
+        task_id: 'TASK-' + Math.floor(Math.random() * 10000),
+        assignee: 'auto-detected',
         due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       },
       roadmap: {
-        feature_analysis: "Analyzed request and mapped to existing roadmap",
+        feature_analysis: 'Analyzed request and mapped to existing roadmap',
         priority_score: 8.5,
-        estimated_effort: "3-5 days",
-        dependencies: ["API authentication", "UI component library"],
+        estimated_effort: '3-5 days',
+        dependencies: ['API authentication', 'UI component library'],
       },
       content: {
         content_generated: true,
@@ -352,17 +328,17 @@ export class AgentsService {
         seo_optimized: true,
       },
       custom: {
-        result: "Custom agent executed successfully",
+        result: 'Custom agent executed successfully',
         processed_inputs: Object.keys(inputs).length,
-        status: "completed",
+        status: 'completed',
       },
     };
 
     return (
       mockOutputs[agentType] || {
-        result: "Mock execution completed",
+        result: 'Mock execution completed',
         inputs_received: inputs,
-        status: "success",
+        status: 'success',
       }
     );
   }

@@ -8,53 +8,42 @@ import {
   IsNumber,
   Min,
   Max,
-} from "class-validator";
+} from 'class-validator';
 
 export class CreateAgentDto {
   @IsString()
-  @MinLength(3, { message: "Agent name must be at least 3 characters" })
-  @MaxLength(50, { message: "Agent name must not exceed 50 characters" })
+  @MinLength(3, { message: 'Agent name must be at least 3 characters' })
+  @MaxLength(50, { message: 'Agent name must not exceed 50 characters' })
   name!: string;
 
   @IsString()
-  @MinLength(10, { message: "Description must be at least 10 characters" })
-  @MaxLength(500, { message: "Description must not exceed 500 characters" })
+  @MinLength(10, { message: 'Description must be at least 10 characters' })
+  @MaxLength(500, { message: 'Description must not exceed 500 characters' })
   description!: string;
 
-  @IsEnum(
-    ["scope", "call", "email", "note", "task", "roadmap", "content", "custom"],
-    {
-      message: "Invalid agent type",
-    },
-  )
-  type!:
-    | "scope"
-    | "call"
-    | "email"
-    | "note"
-    | "task"
-    | "roadmap"
-    | "content"
-    | "custom";
-
-  @IsEnum(["webhook", "schedule", "manual", "event"], {
-    message: "Trigger must be one of: webhook, schedule, manual, event",
+  @IsEnum(['scope', 'call', 'email', 'note', 'task', 'roadmap', 'content', 'custom'], {
+    message: 'Invalid agent type',
   })
-  trigger!: "webhook" | "schedule" | "manual" | "event";
+  type!: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
 
-  @IsEnum(["openai", "anthropic", "custom"], {
-    message: "AI provider must be one of: openai, anthropic, custom",
+  @IsEnum(['webhook', 'schedule', 'manual', 'event'], {
+    message: 'Trigger must be one of: webhook, schedule, manual, event',
+  })
+  trigger!: 'webhook' | 'schedule' | 'manual' | 'event';
+
+  @IsEnum(['openai', 'anthropic', 'custom'], {
+    message: 'AI provider must be one of: openai, anthropic, custom',
   })
   @IsOptional()
-  aiProvider?: "openai" | "anthropic" | "custom";
+  aiProvider?: 'openai' | 'anthropic' | 'custom';
 
   @IsString()
   @IsOptional()
   model?: string;
 
   @IsString()
-  @MinLength(20, { message: "System prompt must be at least 20 characters" })
-  @MaxLength(2000, { message: "System prompt must not exceed 2000 characters" })
+  @MinLength(20, { message: 'System prompt must be at least 20 characters' })
+  @MaxLength(2000, { message: 'System prompt must not exceed 2000 characters' })
   @IsOptional()
   systemPrompt?: string;
 

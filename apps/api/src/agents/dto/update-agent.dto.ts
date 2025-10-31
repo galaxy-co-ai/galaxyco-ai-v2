@@ -1,12 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CreateAgentDto } from "./create-agent.dto";
-import {
-  IsEnum,
-  IsOptional,
-  IsString,
-  IsNumber,
-  IsBoolean,
-} from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateAgentDto } from './create-agent.dto';
+import { IsEnum, IsOptional, IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class UpdateAgentDto extends PartialType(CreateAgentDto) {
   @IsOptional()
@@ -18,29 +12,12 @@ export class UpdateAgentDto extends PartialType(CreateAgentDto) {
   description?: string;
 
   @IsOptional()
-  @IsEnum([
-    "scope",
-    "call",
-    "email",
-    "note",
-    "task",
-    "roadmap",
-    "content",
-    "custom",
-  ])
-  type?:
-    | "scope"
-    | "call"
-    | "email"
-    | "note"
-    | "task"
-    | "roadmap"
-    | "content"
-    | "custom";
+  @IsEnum(['scope', 'call', 'email', 'note', 'task', 'roadmap', 'content', 'custom'])
+  type?: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
 
   @IsOptional()
-  @IsEnum(["openai", "anthropic", "custom"])
-  aiProvider?: "openai" | "anthropic" | "custom";
+  @IsEnum(['openai', 'anthropic', 'custom'])
+  aiProvider?: 'openai' | 'anthropic' | 'custom';
 
   @IsOptional()
   @IsString()
@@ -58,11 +35,11 @@ export class UpdateAgentDto extends PartialType(CreateAgentDto) {
   @IsString()
   systemPrompt?: string;
 
-  @IsEnum(["draft", "active", "paused", "archived"], {
-    message: "Status must be one of: draft, active, paused, archived",
+  @IsEnum(['draft', 'active', 'paused', 'archived'], {
+    message: 'Status must be one of: draft, active, paused, archived',
   })
   @IsOptional()
-  status?: "draft" | "active" | "paused" | "archived";
+  status?: 'draft' | 'active' | 'paused' | 'archived';
 
   @IsOptional()
   @IsBoolean()
