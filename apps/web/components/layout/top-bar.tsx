@@ -1,142 +1,213 @@
-/**
- * GalaxyCo.ai Top Bar
- * Header with user menu, notifications, and mobile controls
- * October 15, 2025
- */
-
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { cn, formatString } from "@/lib/utils";
-import useResponsive from "@/hooks/use-mobile";
-import { Button } from "@/components/ui/button";
-import { Search, Menu } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Bell, HelpCircle, Settings, Zap } from "lucide-react";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { useSidebar } from "../../contexts/SidebarContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { AISetupWizard } from "@/components/onboarding/AISetupWizard";
 
 interface TopBarProps {
   className?: string;
 }
 
-// Get page title from pathname
-const getPageTitle = (pathname: string): string => {
-  const segments = pathname.split("/").filter(Boolean);
-  const lastSegment = segments[segments.length - 1];
-
-  if (!lastSegment || lastSegment === "dashboard") return "Dashboard";
-
-  return formatString.title(lastSegment.replace(/-/g, " "));
-};
-
-// Get breadcrumbs from pathname
-const getBreadcrumbs = (pathname: string): string[] => {
-  const segments = pathname.split("/").filter(Boolean);
-  return segments.map((segment) =>
-    formatString.title(segment.replace(/-/g, " ")),
-  );
-};
-
+/**
+ * TopBar Component
+ *
+ * Global navigation bar with:
+ * - Centered search functionality
+ * - Right-aligned user actions (Settings, Help, Notifications, User profile)
+ */
 export function TopBar({ className }: TopBarProps) {
-  const pathname = usePathname();
-  const { isMobile, isDesktop } = useResponsive();
-  const [isSidebarPinned, setIsSidebarPinned] = useState(false);
+  const { isExpanded } = useSidebar();
+  const { user } = useUser();
+  const [isMobile, setIsMobile] = useState(false);
+  const [showSetupWizard, setShowSetupWizard] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const pageTitle = getPageTitle(pathname);
-  const breadcrumbs = getBreadcrumbs(pathname);
-
-  // Listen for sidebar pin state changes
   useEffect(() => {
-    // Check initial state
-    const savedPinState = localStorage.getItem("sidebar-pinned");
-    setIsSidebarPinned(savedPinState === "true");
-
-    // Listen for custom event
-    const handleSidebarToggle = (e: CustomEvent) => {
-      setIsSidebarPinned(e.detail.isPinned);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
     };
 
-    window.addEventListener(
-      "sidebar-toggle" as any,
-      handleSidebarToggle as any,
-    );
-
-    return () => {
-      window.removeEventListener(
-        "sidebar-toggle" as any,
-        handleSidebarToggle as any,
-      );
-    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Get user display info
+  const userDisplayName = user?.fullName || user?.firstName || "User";
+  const userEmail =
+    user?.primaryEmailAddress?.emailAddress || "user@example.com";
+  const userInitial = userDisplayName.charAt(0).toUpperCase();
 
   return (
     <header
       className={cn(
-        // Fixed positioning
-        "fixed top-0 right-0 z-50",
-        // Responsive width (account for sidebar on desktop)
+        "fixed top-0 right-0 z-50 h-16",
+        "bg-card border-b border-border",
         "transition-all duration-200 ease-in-out",
-        isSidebarPinned ? "left-0 lg:left-60" : "left-0 lg:left-16",
-        // Height
-        "h-16",
-        // Styling
-        "bg-card",
-        "border-b border-border",
-        // Backdrop blur
-        "backdrop-blur-lg bg-card/90",
+        // Adjust left position based on sidebar state
+        isExpanded ? "left-60" : "left-16",
         className,
       )}
     >
-      <div className="flex items-center justify-between h-full px-4 lg:px-6">
-        {/* Left Section - Title and Breadcrumbs */}
-        <div className="flex items-center min-w-0 flex-1">
-          {/* Mobile Menu Button */}
-          {isMobile && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mr-2 lg:hidden"
-              aria-label="Open menu"
-            >
-              <Menu className="w-5 h-5" />
-            </Button>
-          )}
+      <div className="h-full px-6 flex items-center gap-4">
+        {/* Left spacer */}
+        <div className="flex-shrink-0" />
 
-          {/* Page Title and Breadcrumbs */}
-          <div className="min-w-0">
-            {/* Breadcrumbs - Desktop only */}
-            {isDesktop && breadcrumbs.length > 1 && (
-              <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400 mb-1">
-                {breadcrumbs.slice(0, -1).map((crumb, index) => (
-                  <React.Fragment key={crumb}>
-                    <span className="truncate">{crumb}</span>
-                    <span className="mx-2">/</span>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-
-            {/* Page Title */}
-            <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 truncate">
-              {pageTitle}
-            </h1>
+        {/* Centered Search Bar */}
+        <div className="flex-1 max-w-2xl mx-auto">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 h-10 bg-background border-border"
+            />
           </div>
         </div>
 
-        {/* Right Section - Search Only */}
-        <div className="flex items-center space-x-2">
-          {/* Search Button */}
+        {/* Right Section - User Actions */}
+        <div className="flex items-center gap-2">
+          {/* Settings */}
+          <Link href="/settings">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 hover:bg-hover text-muted-foreground"
+            >
+              <Settings className="w-5 h-5" />
+            </Button>
+          </Link>
+
+          {/* Complete Setup */}
           <Button
             variant="ghost"
-            size="sm"
-            className="flex items-center gap-2"
-            aria-label="Search"
+            size="icon"
+            onClick={() => setShowSetupWizard(true)}
+            className={cn(
+              "h-9 w-9 hover:bg-hover relative",
+              "bg-gradient-to-r from-primary/10 to-purple-500/10",
+              "border border-primary/20",
+            )}
           >
-            <Search className="w-4 h-4" />
-            {isDesktop && <span className="text-sm">Search</span>}
+            <Zap className="w-5 h-5 text-primary" />
+            {/* Pulse indicator */}
+            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
           </Button>
+
+          {/* Help */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 hover:bg-hover text-muted-foreground"
+          >
+            <HelpCircle className="w-5 h-5" />
+          </Button>
+
+          {/* Notifications */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 hover:bg-hover text-muted-foreground relative"
+              >
+                <Bell className="w-5 h-5" />
+                {/* Notification dot */}
+                <div className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80" sideOffset={8}>
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+
+              {/* Notification Items */}
+              <div className="max-h-64 overflow-y-auto">
+                <DropdownMenuItem className="flex flex-col items-start p-3">
+                  <div className="font-medium">New reply from Lisa Wang</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Lisa replied to your outreach email about AI solutions
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    15 min ago
+                  </div>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem className="flex flex-col items-start p-3">
+                  <div className="font-medium">Research Agent completed</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Successfully enriched 5 new prospects
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    45 min ago
+                  </div>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem className="flex flex-col items-start p-3">
+                  <div className="font-medium">Workflow completed</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Lead Qualification Pipeline finished processing 12 prospects
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    2 hours ago
+                  </div>
+                </DropdownMenuItem>
+              </div>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-center text-sm text-primary">
+                View all notifications
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* User Profile with Clerk */}
+          <div className="flex items-center gap-2 pl-2 border-l border-border">
+            <div className="flex flex-col items-end mr-2">
+              <span className="text-sm font-medium text-foreground">
+                {userDisplayName}
+              </span>
+              <span className="text-xs text-muted-foreground">{userEmail}</span>
+            </div>
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: "w-9 h-9",
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
+
+      {/* AI Setup Wizard Dialog */}
+      <AISetupWizard
+        open={showSetupWizard}
+        onClose={() => setShowSetupWizard(false)}
+      />
     </header>
   );
 }
-
-export default TopBar;
