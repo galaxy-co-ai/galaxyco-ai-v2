@@ -5,9 +5,12 @@ import { workspaces, users, workspaceMembers } from "@galaxyco/database/schema";
 import { eq } from "drizzle-orm";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy-load OpenAI client to avoid build-time errors
+function getOpenAIClient() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -109,6 +112,7 @@ export async function POST(request: Request) {
 
           // Generate personalized recommendations using GPT-4o-mini
           try {
+            const openai = getOpenAIClient();
             const completion = await openai.chat.completions.create({
               model: "gpt-4o-mini",
               messages: [
