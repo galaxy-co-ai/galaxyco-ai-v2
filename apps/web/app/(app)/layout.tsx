@@ -7,6 +7,7 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { WorkspaceProvider } from "@/contexts/workspace-context";
+import { SidebarProvider } from "@/contexts/SidebarContext";
 import { ErrorBoundary } from "@/components/error/error-boundary";
 
 interface AppLayoutProps {
@@ -17,10 +18,12 @@ export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <ErrorBoundary>
       <WorkspaceProvider>
-        <AppShell>
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </AppShell>
-        <ChatWidget />
+        <SidebarProvider>
+          <AppShell>
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </AppShell>
+          <ChatWidget />
+        </SidebarProvider>
       </WorkspaceProvider>
     </ErrorBoundary>
   );
