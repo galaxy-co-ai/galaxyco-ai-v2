@@ -5,13 +5,16 @@
  * runtime-specific properties needed by the UI components.
  */
 
-import type { 
-  GridStatus, 
-  GridNodeType, 
-  GridNodeStatus, 
+import type {
+  GridStatus,
+  GridNodeType,
+  GridNodeStatus,
   GridEdgeType,
-  GridExecutionStatus 
+  GridExecutionStatus,
 } from "@galaxyco/database";
+
+// Re-export for use in other files
+export type { GridNodeType, GridNodeStatus };
 
 // ============================================================================
 // Template Types
@@ -108,6 +111,9 @@ export interface GridNode {
 }
 
 // Node-type-specific configuration
+// Aligned with database schema: trigger, action, condition, loop, ai, webhook,
+// delay, transform, filter, aggregate, branch, merge, api, database, email,
+// notification, integration, custom
 export type NodeConfig =
   | TriggerNodeConfig
   | ActionNodeConfig
@@ -119,14 +125,14 @@ export type NodeConfig =
   | DatabaseNodeConfig
   | TransformNodeConfig
   | FilterNodeConfig
+  | AggregateNodeConfig
+  | BranchNodeConfig
   | MergeNodeConfig
-  | SplitNodeConfig
   | DelayNodeConfig
-  | ScheduleNodeConfig
+  | EmailNodeConfig
   | NotificationNodeConfig
-  | ErrorHandlerNodeConfig
-  | SubgridNodeConfig
-  | NoteNodeConfig;
+  | IntegrationNodeConfig
+  | CustomNodeConfig;
 
 export interface BaseNodeConfig {
   type: GridNodeType;
@@ -148,7 +154,13 @@ export interface ActionNodeConfig extends BaseNodeConfig {
 export interface ConditionNodeConfig extends BaseNodeConfig {
   type: "condition";
   expression: string; // e.g., "{{input.value}} > 100"
-  operator: "equals" | "not_equals" | "greater_than" | "less_than" | "contains" | "custom";
+  operator:
+    | "equals"
+    | "not_equals"
+    | "greater_than"
+    | "less_than"
+    | "contains"
+    | "custom";
 }
 
 export interface LoopNodeConfig extends BaseNodeConfig {
@@ -206,9 +218,18 @@ export interface MergeNodeConfig extends BaseNodeConfig {
   mergeStrategy: "first" | "all" | "race";
 }
 
-export interface SplitNodeConfig extends BaseNodeConfig {
-  type: "split";
-  splitBy: string; // path in data to split by
+export interface AggregateNodeConfig extends BaseNodeConfig {
+  type: "aggregate";
+  aggregationType: "sum" | "count" | "average" | "min" | "max";
+  field: string;
+}
+
+export interface BranchNodeConfig extends BaseNodeConfig {
+  type: "branch";
+  branches: Array<{
+    condition: string;
+    label: string;
+  }>;
 }
 
 export interface DelayNodeConfig extends BaseNodeConfig {
@@ -216,10 +237,13 @@ export interface DelayNodeConfig extends BaseNodeConfig {
   duration: number; // in milliseconds
 }
 
-export interface ScheduleNodeConfig extends BaseNodeConfig {
-  type: "schedule";
-  cron: string; // cron expression
-  timezone?: string;
+export interface EmailNodeConfig extends BaseNodeConfig {
+  type: "email";
+  to: string;
+  subject: string;
+  body: string;
+  cc?: string;
+  bcc?: string;
 }
 
 export interface NotificationNodeConfig extends BaseNodeConfig {
@@ -229,24 +253,18 @@ export interface NotificationNodeConfig extends BaseNodeConfig {
   message: string;
 }
 
-export interface ErrorHandlerNodeConfig extends BaseNodeConfig {
-  type: "error_handler";
-  strategy: "retry" | "fallback" | "ignore" | "notify";
-  maxRetries?: number;
-  fallbackValue?: unknown;
+export interface IntegrationNodeConfig extends BaseNodeConfig {
+  type: "integration";
+  integrationId: string;
+  action: string;
+  parameters: Record<string, unknown>;
 }
 
-export interface SubgridNodeConfig extends BaseNodeConfig {
-  type: "subgrid";
-  subgridId: string;
-  inputMapping?: Record<string, string>;
-  outputMapping?: Record<string, string>;
-}
-
-export interface NoteNodeConfig extends BaseNodeConfig {
-  type: "note";
-  content: string;
-  color?: string;
+export interface CustomNodeConfig extends BaseNodeConfig {
+  type: "custom";
+  code: string; // JavaScript/TypeScript code
+  inputs?: Record<string, unknown>;
+  outputs?: Record<string, unknown>;
 }
 
 // ============================================================================

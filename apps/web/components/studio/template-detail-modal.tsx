@@ -55,7 +55,9 @@ export function TemplateDetailModal({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create grid from template");
+        throw new Error(
+          errorData.error || "Failed to create grid from template",
+        );
       }
 
       return response.json();

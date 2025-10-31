@@ -2836,7 +2836,9 @@ export const gridTemplates = pgTable(
       .notNull(),
 
     // Metadata
-    complexity: text("complexity").$type<"beginner" | "intermediate" | "advanced">(),
+    complexity: text("complexity").$type<
+      "beginner" | "intermediate" | "advanced"
+    >(),
     estimatedTime: integer("estimated_time"), // in minutes
 
     // Marketplace stats
@@ -3098,8 +3100,9 @@ export type GridTemplate = typeof gridTemplates.$inferSelect;
 export type NewGridTemplate = typeof gridTemplates.$inferInsert;
 
 // Galaxy Studio Enum Types
-export type GridStatus = typeof gridStatusEnum.enumValues[number];
-export type GridNodeType = typeof gridNodeTypeEnum.enumValues[number];
-export type GridNodeStatus = typeof gridNodeStatusEnum.enumValues[number];
-export type GridEdgeType = typeof gridEdgeTypeEnum.enumValues[number];
-export type GridExecutionStatus = typeof gridExecutionStatusEnum.enumValues[number];
+export type GridStatus = (typeof gridStatusEnum.enumValues)[number];
+export type GridNodeType = (typeof gridNodeTypeEnum.enumValues)[number];
+export type GridNodeStatus = (typeof gridNodeStatusEnum.enumValues)[number];
+export type GridEdgeType = (typeof gridEdgeTypeEnum.enumValues)[number];
+export type GridExecutionStatus =
+  (typeof gridExecutionStatusEnum.enumValues)[number];

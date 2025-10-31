@@ -113,11 +113,7 @@ export function TemplatePreviewCanvas({
         }}
       >
         <Background color="hsl(var(--muted-foreground) / 0.2)" gap={16} />
-        <Controls
-          showZoom={true}
-          showFitView={true}
-          showInteractive={false}
-        />
+        <Controls showZoom={true} showFitView={true} showInteractive={false} />
         <MiniMap
           nodeColor="hsl(var(--primary))"
           maskColor="hsl(var(--background) / 0.8)"

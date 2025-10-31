@@ -55,11 +55,16 @@ export default function StudioDiscoverPage() {
   // Compute metrics
   const metrics = useMemo(() => {
     const total = templates.length;
-    const totalUses = templates.reduce((sum: number, t: GridTemplate) => sum + (t.uses || 0), 0);
+    const totalUses = templates.reduce(
+      (sum: number, t: GridTemplate) => sum + (t.uses || 0),
+      0,
+    );
     const avgRating =
       templates.length > 0
-        ? templates.reduce((sum: number, t: GridTemplate) => sum + (t.rating || 0), 0) /
-          templates.length
+        ? templates.reduce(
+            (sum: number, t: GridTemplate) => sum + (t.rating || 0),
+            0,
+          ) / templates.length
         : 0;
     const featured = templates.filter((t: GridTemplate) => t.featured).length;
 
@@ -138,11 +143,7 @@ export default function StudioDiscoverPage() {
             value={metrics.total}
             icon={Sparkles}
           />
-          <MetricCard
-            label="Featured"
-            value={metrics.featured}
-            icon={Star}
-          />
+          <MetricCard label="Featured" value={metrics.featured} icon={Star} />
           <MetricCard
             label="Total Uses"
             value={metrics.totalUses.toLocaleString()}

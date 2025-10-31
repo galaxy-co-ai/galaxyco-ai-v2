@@ -10,8 +10,10 @@ interface TemplateCardProps {
 export function TemplateCard({ template, onSelect }: TemplateCardProps) {
   const complexity = template.complexity || "beginner";
   const complexityColors = {
-    beginner: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-    intermediate: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+    beginner:
+      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    intermediate:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
     advanced: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
   };
 
