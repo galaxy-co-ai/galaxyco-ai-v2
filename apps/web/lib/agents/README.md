@@ -76,19 +76,19 @@ import {
   AgentOutput,
   AgentExecutionContext,
   AgentExecutionResult,
-} from "../agent-interface";
+} from '../agent-interface';
 
 export class MyAgent extends BaseAgent {
   // Required properties
-  public readonly id = "my-agent-v1";
-  public readonly name = "My Custom Agent";
-  public readonly description = "What this agent does";
-  public readonly version = "1.0.0";
+  public readonly id = 'my-agent-v1';
+  public readonly name = 'My Custom Agent';
+  public readonly description = 'What this agent does';
+  public readonly version = '1.0.0';
 
   // Define triggers
   public readonly triggers: AgentTrigger[] = [
     {
-      type: "manual",
+      type: 'manual',
       config: {},
     },
   ];
@@ -96,27 +96,27 @@ export class MyAgent extends BaseAgent {
   // Define inputs
   public readonly inputs: AgentInput[] = [
     {
-      name: "inputField",
-      type: "text",
+      name: 'inputField',
+      type: 'text',
       required: true,
-      description: "Description of the input",
+      description: 'Description of the input',
     },
   ];
 
   // Define outputs
   public readonly outputs: AgentOutput[] = [
     {
-      name: "outputField",
-      type: "text",
-      description: "Description of the output",
+      name: 'outputField',
+      type: 'text',
+      description: 'Description of the output',
     },
   ];
 
   // AI provider configuration
   public readonly aiProvider = {
-    primary: "openai" as const,
-    fallback: "anthropic" as const,
-    model: "gpt-4",
+    primary: 'openai' as const,
+    fallback: 'anthropic' as const,
+    model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 1000,
   };
@@ -130,8 +130,8 @@ export class MyAgent extends BaseAgent {
       // Your agent logic here
       const result = await this.sendAIRequest(
         [
-          { role: "system", content: "Your system prompt" },
-          { role: "user", content: inputs.inputField },
+          { role: 'system', content: 'Your system prompt' },
+          { role: 'user', content: inputs.inputField },
         ],
         context,
       );
@@ -142,7 +142,7 @@ export class MyAgent extends BaseAgent {
           outputField: result.content,
         },
         metadata: {
-          provider: result.model.includes("gpt") ? "openai" : "anthropic",
+          provider: result.model.includes('gpt') ? 'openai' : 'anthropic',
           model: result.model,
           tokensUsed: result.usage?.totalTokens,
         },
@@ -152,8 +152,8 @@ export class MyAgent extends BaseAgent {
         success: false,
         data: {},
         error: {
-          message: error instanceof Error ? error.message : "Processing failed",
-          code: "PROCESSING_ERROR",
+          message: error instanceof Error ? error.message : 'Processing failed',
+          code: 'PROCESSING_ERROR',
         },
       };
     }
@@ -164,7 +164,7 @@ export class MyAgent extends BaseAgent {
 ### Step 2: Register the Agent
 
 ```typescript
-import { AgentRegistry } from "../agent-interface";
+import { AgentRegistry } from '../agent-interface';
 AgentRegistry.register(MyAgent);
 ```
 
@@ -174,8 +174,8 @@ AgentRegistry.register(MyAgent);
 const agent = new MyAgent();
 const testResult = await agent.test();
 
-console.log("Test passed:", testResult.success);
-console.log("Issues:", testResult.issues);
+console.log('Test passed:', testResult.success);
+console.log('Issues:', testResult.issues);
 ```
 
 ## Testing
@@ -185,7 +185,7 @@ console.log("Issues:", testResult.issues);
 Run the test runner to validate all agents:
 
 ```typescript
-import { runAgentTests } from "./test-runner";
+import { runAgentTests } from './test-runner';
 
 const results = await runAgentTests();
 console.log(`${results.passedTests}/${results.totalAgents} agents passed`);
@@ -273,8 +273,8 @@ try {
     success: false,
     data: {},
     error: {
-      message: error instanceof Error ? error.message : "Operation failed",
-      code: "OPERATION_ERROR",
+      message: error instanceof Error ? error.message : 'Operation failed',
+      code: 'OPERATION_ERROR',
     },
   };
 }
@@ -285,7 +285,7 @@ try {
 Use structured logging with context:
 
 ```typescript
-console.info("[AGENT] Starting operation", {
+console.info('[AGENT] Starting operation', {
   agent_id: this.id,
   tenant_id: context.tenantId,
   user_id: context.userId,
@@ -298,11 +298,11 @@ Always test with mock data before production:
 
 ```typescript
 const testResult = await agent.test({
-  inputField: "test value",
+  inputField: 'test value',
 });
 
 if (!testResult.success) {
-  console.error("Agent test failed:", testResult.issues);
+  console.error('Agent test failed:', testResult.issues);
 }
 ```
 
@@ -311,11 +311,11 @@ if (!testResult.success) {
 Check agent performance metrics regularly:
 
 ```typescript
-import { getAgentMetrics } from "./agent-logger";
+import { getAgentMetrics } from './agent-logger';
 
-const metrics = await getAgentMetrics("my-agent-v1", tenantId, "day");
-console.log("Success rate:", metrics.successRate);
-console.log("Average duration:", metrics.averageDuration);
+const metrics = await getAgentMetrics('my-agent-v1', tenantId, 'day');
+console.log('Success rate:', metrics.successRate);
+console.log('Average duration:', metrics.averageDuration);
 ```
 
 ## Troubleshooting
@@ -325,7 +325,7 @@ console.log("Average duration:", metrics.averageDuration);
 **Solution:** Ensure the agent is registered by importing it:
 
 ```typescript
-import "./examples/my-agent"; // This auto-registers the agent
+import './examples/my-agent'; // This auto-registers the agent
 ```
 
 ### Issue: AI provider errors
@@ -334,7 +334,7 @@ import "./examples/my-agent"; // This auto-registers the agent
 
 ```typescript
 const healthCheck = await quickHealthCheck();
-console.log("Provider status:", healthCheck.issues);
+console.log('Provider status:', healthCheck.issues);
 ```
 
 ### Issue: Database logging failures
@@ -354,9 +354,9 @@ npx drizzle-kit migrate
 **Solution:** Review agent metrics and optimize:
 
 ```typescript
-const metrics = await getAgentMetrics(agentId, tenantId, "day");
+const metrics = await getAgentMetrics(agentId, tenantId, 'day');
 if (metrics.averageDuration > 30000) {
-  console.warn("Agent is slow, consider optimization");
+  console.warn('Agent is slow, consider optimization');
 }
 ```
 
@@ -410,7 +410,7 @@ if (metrics.averageDuration > 30000) {
 
 5. **Register the agent**
    ```typescript
-   import { AgentRegistry } from "../agent-interface";
+   import { AgentRegistry } from '../agent-interface';
    AgentRegistry.register(MyAgent);
    ```
 

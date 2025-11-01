@@ -442,13 +442,13 @@ Darken border color slightly:
 **Current:**
 
 ```css path=null start=null
-warning: "rgb(251 191 36)"; /* #FBBF24 - 1.78:1 FAIL */
+warning: 'rgb(251 191 36)'; /* #FBBF24 - 1.78:1 FAIL */
 ```
 
 **Fix:**
 
 ```css path=null start=null
-warning: "rgb(217 119 6)"; /* #D97706 (amber-600) - 4.5:1 PASS */
+warning: 'rgb(217 119 6)'; /* #D97706 (amber-600) - 4.5:1 PASS */
 ```
 
 **Files to update:**

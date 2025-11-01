@@ -1,16 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import {
-  users,
-  workspaceMembers,
-  customers,
-  invoices,
-  projects,
-} from "@galaxyco/database/schema";
-import { eq, and, sum, count, gte, sql } from "drizzle-orm";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, customers, invoices, projects } from '@galaxyco/database/schema';
+import { eq, and, sum, count, gte, sql } from 'drizzle-orm';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * GET /api/analytics/sales
@@ -26,19 +20,19 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized analytics/sales list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized analytics/sales list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -49,7 +43,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -62,13 +56,13 @@ export async function GET(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
 
     // 5. Fetch sales analytics from database
-    const dateRange = searchParams.get("dateRange") || "30d";
+    const dateRange = searchParams.get('dateRange') || '30d';
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - parseInt(dateRange));
 
@@ -76,12 +70,7 @@ export async function GET(req: NextRequest) {
     const revenueResult = await db
       .select({ total: sum(invoices.total) })
       .from(invoices)
-      .where(
-        and(
-          eq(invoices.workspaceId, workspaceId),
-          gte(invoices.createdAt, startDate),
-        ),
-      );
+      .where(and(eq(invoices.workspaceId, workspaceId), gte(invoices.createdAt, startDate)));
 
     // Total customers
     const customerCount = await db
@@ -103,17 +92,12 @@ export async function GET(req: NextRequest) {
         total: sum(invoices.total),
       })
       .from(invoices)
-      .where(
-        and(
-          eq(invoices.workspaceId, workspaceId),
-          gte(invoices.createdAt, startDate),
-        ),
-      )
+      .where(and(eq(invoices.workspaceId, workspaceId), gte(invoices.createdAt, startDate)))
       .groupBy(invoices.status);
 
     const analytics = {
       revenue: {
-        total: revenueResult[0]?.total || "0",
+        total: revenueResult[0]?.total || '0',
         period: dateRange,
       },
       customers: {
@@ -133,13 +117,10 @@ export async function GET(req: NextRequest) {
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
-    logger.error("List analytics/sales error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List analytics/sales error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch analytics/sales" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch analytics/sales' }, { status: 500 });
   }
 }

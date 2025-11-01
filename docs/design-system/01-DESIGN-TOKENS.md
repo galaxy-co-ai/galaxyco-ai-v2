@@ -332,9 +332,9 @@ const scale = {
 
 // Slide from right (drawers)
 const slideFromRight = {
-  initial: { x: "100%" },
+  initial: { x: '100%' },
   animate: { x: 0 },
-  exit: { x: "100%" },
+  exit: { x: '100%' },
   transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
 };
 ```
@@ -381,9 +381,7 @@ screens: {
 
 ```jsx
 // Base styles = mobile
-<div className="p-4 sm:p-6 lg:p-8">
-  // 16px mobile, 24px tablet, 32px desktop
-</div>
+<div className="p-4 sm:p-6 lg:p-8">// 16px mobile, 24px tablet, 32px desktop</div>
 ```
 
 ---

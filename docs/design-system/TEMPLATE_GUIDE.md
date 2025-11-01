@@ -49,22 +49,22 @@ interface PageShellProps {
   emptyMessage?: string;
   emptyAction?: React.ReactNode;
   contentClassName?: string;
-  maxWidth?: "full" | "7xl" | "6xl" | "5xl" | "4xl"; // default: '7xl'
+  maxWidth?: 'full' | '7xl' | '6xl' | '5xl' | '4xl'; // default: '7xl'
 }
 ```
 
 ### Example
 
 ```tsx
-import { PageShell } from "@/components/templates";
-import { Button } from "@/components/ui/button";
+import { PageShell } from '@/components/templates';
+import { Button } from '@/components/ui/button';
 
 export default function MyPage() {
   return (
     <PageShell
       title="Dashboard"
       subtitle="Welcome back! Here's what's happening"
-      breadcrumbs={[{ label: "Home", href: "/" }, { label: "Dashboard" }]}
+      breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dashboard' }]}
       actions={<Button>Take Action</Button>}
       isLoading={false}
     >
@@ -93,11 +93,11 @@ Template for collection/list views with search, filters, and view toggle.
 ### Props
 
 ```typescript
-interface ListPageProps extends Omit<PageShellProps, "children"> {
+interface ListPageProps extends Omit<PageShellProps, 'children'> {
   searchQuery?: string;
   searchPlaceholder?: string;
   onSearchChange?: (query: string) => void;
-  viewMode?: "grid" | "list";
+  viewMode?: 'grid' | 'list';
   onViewModeChange?: (mode: ViewMode) => void;
   showViewToggle?: boolean; // default: true
   filters?: ListPageFilter[];
@@ -112,7 +112,7 @@ interface ListPageProps extends Omit<PageShellProps, "children"> {
 interface ListPageFilter {
   id: string;
   label: string;
-  type: "checkbox" | "radio";
+  type: 'checkbox' | 'radio';
   options: Array<{ value: string; label: string; count?: number }>;
 }
 ```
@@ -120,22 +120,22 @@ interface ListPageFilter {
 ### Example - Agents List
 
 ```tsx
-import { useState } from "react";
-import { ListPage } from "@/components/templates";
-import { CardGrid } from "@/components/organisms/card-grid";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { useState } from 'react';
+import { ListPage } from '@/components/templates';
+import { CardGrid } from '@/components/organisms/card-grid';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 export default function AgentsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeFilters, setActiveFilters] = useState({});
 
   return (
     <ListPage
       title="Agents"
       subtitle="Manage your AI agents"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Agents" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Agents' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -149,20 +149,18 @@ export default function AgentsPage() {
       onViewModeChange={setViewMode}
       filters={[
         {
-          id: "status",
-          label: "Status",
-          type: "checkbox",
+          id: 'status',
+          label: 'Status',
+          type: 'checkbox',
           options: [
-            { value: "active", label: "Active", count: 12 },
-            { value: "draft", label: "Draft", count: 5 },
-            { value: "paused", label: "Paused", count: 3 },
+            { value: 'active', label: 'Active', count: 12 },
+            { value: 'draft', label: 'Draft', count: 5 },
+            { value: 'paused', label: 'Paused', count: 3 },
           ],
         },
       ]}
       activeFilters={activeFilters}
-      onFilterChange={(id, values) =>
-        setActiveFilters({ ...activeFilters, [id]: values })
-      }
+      onFilterChange={(id, values) => setActiveFilters({ ...activeFilters, [id]: values })}
       onClearFilters={() => setActiveFilters({})}
       isEmpty={agents.length === 0}
       emptyMessage="No agents found"
@@ -190,7 +188,7 @@ Template for detail/show views with metrics and tabs.
 ### Props
 
 ```typescript
-interface DetailPageProps extends Omit<PageShellProps, "children"> {
+interface DetailPageProps extends Omit<PageShellProps, 'children'> {
   metrics?: MetricCard[];
   tabs?: TabConfig[];
   defaultTab?: string;
@@ -203,7 +201,7 @@ interface MetricCard {
   label: string;
   value: string | number;
   change?: string;
-  trend?: "up" | "down" | "neutral";
+  trend?: 'up' | 'down' | 'neutral';
   icon?: React.ReactNode;
 }
 
@@ -218,23 +216,19 @@ interface TabConfig {
 ### Example - Agent Detail
 
 ```tsx
-import { DetailPage } from "@/components/templates";
-import { Button } from "@/components/ui/button";
-import { Play, TrendingUp } from "lucide-react";
+import { DetailPage } from '@/components/templates';
+import { Button } from '@/components/ui/button';
+import { Play, TrendingUp } from 'lucide-react';
 
-export default function AgentDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function AgentDetailPage({ params }: { params: { id: string } }) {
   return (
     <DetailPage
       title="Sales Agent"
       subtitle="Last active 2 hours ago"
       breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Agents", href: "/agents" },
-        { label: "Sales Agent" },
+        { label: 'Dashboard', href: '/' },
+        { label: 'Agents', href: '/agents' },
+        { label: 'Sales Agent' },
       ]}
       actions={
         <>
@@ -244,48 +238,48 @@ export default function AgentDetailPage({
       }
       metrics={[
         {
-          label: "Total Runs",
+          label: 'Total Runs',
           value: 1234,
           icon: <Play className="h-5 w-5" />,
         },
         {
-          label: "Success Rate",
-          value: "98.2%",
-          change: "+2.4%",
-          trend: "up",
+          label: 'Success Rate',
+          value: '98.2%',
+          change: '+2.4%',
+          trend: 'up',
           icon: <TrendingUp className="h-5 w-5" />,
         },
         {
-          label: "Avg Duration",
-          value: "2.3s",
-          change: "-0.2s",
-          trend: "up",
+          label: 'Avg Duration',
+          value: '2.3s',
+          change: '-0.2s',
+          trend: 'up',
         },
         {
-          label: "Version",
-          value: "v1.2.0",
+          label: 'Version',
+          value: 'v1.2.0',
         },
       ]}
       tabs={[
         {
-          id: "overview",
-          label: "Overview",
+          id: 'overview',
+          label: 'Overview',
           content: <OverviewTab />,
         },
         {
-          id: "workflow",
-          label: "Workflow",
+          id: 'workflow',
+          label: 'Workflow',
           content: <WorkflowTab />,
         },
         {
-          id: "executions",
-          label: "Executions",
+          id: 'executions',
+          label: 'Executions',
           badge: 25,
           content: <ExecutionsTab />,
         },
         {
-          id: "settings",
-          label: "Settings",
+          id: 'settings',
+          label: 'Settings',
           content: <SettingsTab />,
         },
       ]}
@@ -312,7 +306,7 @@ Template for create/edit forms with multi-step wizard support.
 ### Props
 
 ```typescript
-interface FormPageProps extends Omit<PageShellProps, "children"> {
+interface FormPageProps extends Omit<PageShellProps, 'children'> {
   steps?: FormStep[]; // for wizard
   currentStep?: number;
   onStepChange?: (stepIndex: number) => void;
@@ -322,7 +316,7 @@ interface FormPageProps extends Omit<PageShellProps, "children"> {
   cancelText?: string; // default: 'Cancel'
   isSubmitting?: boolean;
   children?: React.ReactNode; // for simple forms
-  formWidth?: "sm" | "md" | "lg" | "xl" | "full"; // default: 'lg'
+  formWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'full'; // default: 'lg'
 }
 
 interface FormStep {
@@ -337,10 +331,10 @@ interface FormStep {
 ### Example - Simple Form
 
 ```tsx
-import { FormPage } from "@/components/templates";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { FormPage } from '@/components/templates';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
 
 export default function CreateAgentPage() {
   const router = useRouter();
@@ -350,15 +344,15 @@ export default function CreateAgentPage() {
     setIsSubmitting(true);
     // Submit logic here
     await createAgent(formData);
-    router.push("/agents");
+    router.push('/agents');
   };
 
   return (
     <FormPage
       title="Create Agent"
-      breadcrumbs={[{ label: "Agents", href: "/agents" }, { label: "Create" }]}
+      breadcrumbs={[{ label: 'Agents', href: '/agents' }, { label: 'Create' }]}
       onSubmit={handleSubmit}
-      onCancel={() => router.push("/agents")}
+      onCancel={() => router.push('/agents')}
       isSubmitting={isSubmitting}
       formWidth="md"
     >
@@ -380,8 +374,8 @@ export default function CreateAgentPage() {
 ### Example - Multi-Step Wizard
 
 ```tsx
-import { useState } from "react";
-import { FormPage } from "@/components/templates";
+import { useState } from 'react';
+import { FormPage } from '@/components/templates';
 
 export default function CreateAgentWizard() {
   const [step, setStep] = useState(0);
@@ -390,33 +384,33 @@ export default function CreateAgentWizard() {
   return (
     <FormPage
       title="Create Agent"
-      breadcrumbs={[{ label: "Agents", href: "/agents" }, { label: "Create" }]}
+      breadcrumbs={[{ label: 'Agents', href: '/agents' }, { label: 'Create' }]}
       steps={[
         {
-          id: "basic",
-          label: "Basic Info",
-          description: "Name and description",
+          id: 'basic',
+          label: 'Basic Info',
+          description: 'Name and description',
           content: <BasicInfoStep data={formData} onChange={setFormData} />,
           isValid: !!formData.name,
         },
         {
-          id: "config",
-          label: "Configuration",
-          description: "AI model and settings",
+          id: 'config',
+          label: 'Configuration',
+          description: 'AI model and settings',
           content: <ConfigStep data={formData} onChange={setFormData} />,
           isValid: !!formData.model,
         },
         {
-          id: "review",
-          label: "Review",
-          description: "Confirm and create",
+          id: 'review',
+          label: 'Review',
+          description: 'Confirm and create',
           content: <ReviewStep data={formData} />,
         },
       ]}
       currentStep={step}
       onStepChange={setStep}
       onSubmit={handleCreateAgent}
-      onCancel={() => router.push("/agents")}
+      onCancel={() => router.push('/agents')}
     />
   );
 }
@@ -430,7 +424,7 @@ export default function CreateAgentWizard() {
 
 ```tsx
 export default function MyPage() {
-  const { data, isLoading, error } = useQuery("/api/items");
+  const { data, isLoading, error } = useQuery('/api/items');
 
   return (
     <ListPage
@@ -450,7 +444,7 @@ export default function MyPage() {
 
 ```tsx
 export default function MyPage() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({});
 
   const filtered = items.filter((item) => {
@@ -479,7 +473,7 @@ export default function MyPage() {
 
 ```tsx
 export default function MyDetailPage() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
 
   return (
     <DetailPage
@@ -600,7 +594,7 @@ components/
 ### Import Pattern
 
 ```tsx
-import { ListPage, DetailPage, FormPage } from "@/components/templates";
+import { ListPage, DetailPage, FormPage } from '@/components/templates';
 ```
 
 ---
@@ -630,7 +624,7 @@ export default function AgentsPage() {
 **After (Template):**
 
 ```tsx
-import { ListPage } from "@/components/templates";
+import { ListPage } from '@/components/templates';
 
 export default function AgentsPage() {
   return (
@@ -671,7 +665,7 @@ import type {
   TabConfig,
   FormPageProps,
   FormStep,
-} from "@/components/templates";
+} from '@/components/templates';
 ```
 
 ---
@@ -684,10 +678,10 @@ import type {
 
 ```tsx
 // components/templates/index.ts
-export * from "./page-shell";
-export * from "./list-page";
-export * from "./detail-page";
-export * from "./form-page";
+export * from './page-shell';
+export * from './list-page';
+export * from './detail-page';
+export * from './form-page';
 ```
 
 ### Issue: Filters not working
@@ -695,9 +689,7 @@ export * from "./form-page";
 **Solution:** Ensure you're managing filter state correctly:
 
 ```tsx
-const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-  {},
-);
+const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
 const handleFilterChange = (filterId: string, values: string[]) => {
   setActiveFilters((prev) => ({ ...prev, [filterId]: values }));

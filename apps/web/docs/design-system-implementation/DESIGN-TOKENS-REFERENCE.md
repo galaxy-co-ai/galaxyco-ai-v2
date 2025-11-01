@@ -20,7 +20,7 @@ This document provides a complete reference for the GalaxyCo.ai design token sys
 
 ```tsx
 // Usage in components
-className = "bg-primary text-primary-foreground hover:bg-primary-hover";
+className = 'bg-primary text-primary-foreground hover:bg-primary-hover';
 
 // Available tokens
 primary; // hsl(262, 83%, 58%) - #8b5cf6
@@ -35,7 +35,7 @@ primary - subtle; // hsl(262, 20%, 88%) - Borders
 
 ```tsx
 // Usage
-className = "bg-secondary text-secondary-foreground hover:bg-secondary-hover";
+className = 'bg-secondary text-secondary-foreground hover:bg-secondary-hover';
 
 // Available tokens
 secondary; // hsl(215, 25%, 27%) - #344050
@@ -146,16 +146,16 @@ p - 24; // 96px - XXXL
 
 ```tsx
 // Button padding
-className = "px-4 py-2"; // 16px × 8px
+className = 'px-4 py-2'; // 16px × 8px
 
 // Card padding
-className = "p-6"; // 24px all sides
+className = 'p-6'; // 24px all sides
 
 // Section spacing
-className = "py-12 md:py-16"; // 48px mobile, 64px desktop
+className = 'py-12 md:py-16'; // 48px mobile, 64px desktop
 
 // Page margins
-className = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
+className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8';
 ```
 
 ---
@@ -176,16 +176,16 @@ rounded - full; // 9999px - Pills, avatars
 
 ```tsx
 // Buttons/inputs
-className = "rounded"; // 8px
+className = 'rounded'; // 8px
 
 // Cards
-className = "rounded-lg"; // 16px
+className = 'rounded-lg'; // 16px
 
 // Modals
-className = "rounded-xl"; // 24px
+className = 'rounded-xl'; // 24px
 
 // Avatars/pills
-className = "rounded-full";
+className = 'rounded-full';
 ```
 
 ---
@@ -218,7 +218,7 @@ xl:     // 1280px - Large desktop
 
 ```tsx
 // Base styles = mobile, then add breakpoints
-className = "p-4 sm:p-6 lg:p-8";
+className = 'p-4 sm:p-6 lg:p-8';
 // 16px mobile, 24px tablet, 32px desktop
 ```
 
@@ -321,10 +321,10 @@ animate-scale-out   // scaleOut 0.15s cubic-bezier(0, 0, 0.2, 1)
 
 ```tsx
 // OLD (don't use)
-className = "bg-blue-500 text-white";
+className = 'bg-blue-500 text-white';
 
 // NEW (design system)
-className = "bg-primary text-primary-foreground";
+className = 'bg-primary text-primary-foreground';
 ```
 
 ### Component Updates Required

@@ -4,25 +4,18 @@
  * October 19, 2025
  */
 
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { WorkspaceGuard } from "@/components/workspace/workspace-guard";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import {
-  Users,
-  UserCircle,
-  Briefcase,
-  Target,
-  TrendingUp,
-  ChevronRight,
-} from "lucide-react";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { WorkspaceGuard } from '@/components/workspace/workspace-guard';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { Users, UserCircle, Briefcase, Target, TrendingUp, ChevronRight } from 'lucide-react';
 
 interface CRMMetrics {
   totalCustomers: number;
@@ -54,26 +47,17 @@ function CRMContent() {
         setIsLoading(true);
 
         // Fetch CRM metrics
-        const [customersRes, contactsRes, projectsRes, prospectsRes] =
-          await Promise.all([
-            fetch(`/api/customers?workspaceId=${currentWorkspace.id}&limit=1`),
-            fetch(`/api/contacts?workspaceId=${currentWorkspace.id}&limit=1`),
-            fetch(`/api/projects?workspaceId=${currentWorkspace.id}&limit=1`),
-            fetch(`/api/prospects?workspaceId=${currentWorkspace.id}&limit=1`),
-          ]);
+        const [customersRes, contactsRes, projectsRes, prospectsRes] = await Promise.all([
+          fetch(`/api/customers?workspaceId=${currentWorkspace.id}&limit=1`),
+          fetch(`/api/contacts?workspaceId=${currentWorkspace.id}&limit=1`),
+          fetch(`/api/projects?workspaceId=${currentWorkspace.id}&limit=1`),
+          fetch(`/api/prospects?workspaceId=${currentWorkspace.id}&limit=1`),
+        ]);
 
-        const customers = customersRes.ok
-          ? await customersRes.json()
-          : { total: 0 };
-        const contacts = contactsRes.ok
-          ? await contactsRes.json()
-          : { total: 0 };
-        const projects = projectsRes.ok
-          ? await projectsRes.json()
-          : { total: 0 };
-        const prospects = prospectsRes.ok
-          ? await prospectsRes.json()
-          : { total: 0 };
+        const customers = customersRes.ok ? await customersRes.json() : { total: 0 };
+        const contacts = contactsRes.ok ? await contactsRes.json() : { total: 0 };
+        const projects = projectsRes.ok ? await projectsRes.json() : { total: 0 };
+        const prospects = prospectsRes.ok ? await prospectsRes.json() : { total: 0 };
 
         setMetrics({
           totalCustomers: customers.total || 0,
@@ -84,8 +68,8 @@ function CRMContent() {
           activeProjects: projects.active || 0,
         });
       } catch (error) {
-        console.error("Failed to fetch CRM metrics:", error);
-        toast.error("Failed to load CRM dashboard");
+        console.error('Failed to fetch CRM metrics:', error);
+        toast.error('Failed to load CRM dashboard');
       } finally {
         setIsLoading(false);
       }
@@ -104,51 +88,51 @@ function CRMContent() {
 
   const crmSections = [
     {
-      title: "Customers",
-      href: "/crm/customers",
+      title: 'Customers',
+      href: '/crm/customers',
       icon: Users,
-      description: "Manage customer accounts and relationships",
+      description: 'Manage customer accounts and relationships',
       count: metrics?.totalCustomers || 0,
       activeCount: metrics?.activeCustomers || 0,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
     },
     {
-      title: "Contacts",
-      href: "/crm/contacts",
+      title: 'Contacts',
+      href: '/crm/contacts',
       icon: UserCircle,
-      description: "Individual contacts and decision makers",
+      description: 'Individual contacts and decision makers',
       count: metrics?.totalContacts || 0,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
     },
     {
-      title: "Projects",
-      href: "/crm/projects",
+      title: 'Projects',
+      href: '/crm/projects',
       icon: Briefcase,
-      description: "Active projects and engagements",
+      description: 'Active projects and engagements',
       count: metrics?.totalProjects || 0,
       activeCount: metrics?.activeProjects || 0,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
     },
     {
-      title: "Prospects",
-      href: "/crm/prospects",
+      title: 'Prospects',
+      href: '/crm/prospects',
       icon: Target,
-      description: "Potential customers and leads",
+      description: 'Potential customers and leads',
       count: metrics?.totalProspects || 0,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-50',
     },
     {
-      title: "Segments",
-      href: "/crm/segments",
+      title: 'Segments',
+      href: '/crm/segments',
       icon: TrendingUp,
-      description: "Customer segmentation and targeting",
+      description: 'Customer segmentation and targeting',
       count: 0,
-      color: "text-pink-600",
-      bgColor: "bg-pink-50",
+      color: 'text-pink-600',
+      bgColor: 'bg-pink-50',
     },
   ];
 
@@ -159,9 +143,7 @@ function CRMContent() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">CRM</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Customer Relationship Management
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">Customer Relationship Management</p>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-sm">
@@ -191,30 +173,20 @@ function CRMContent() {
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {section.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {section.description}
-                  </p>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">{section.description}</p>
 
                   <div className="flex items-center gap-4">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-foreground">
-                        {section.count}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        total
-                      </span>
+                      <span className="text-2xl font-bold text-foreground">{section.count}</span>
+                      <span className="text-sm text-muted-foreground">total</span>
                     </div>
                     {section.activeCount !== undefined && (
                       <div className="flex items-baseline gap-1">
                         <span className="text-lg font-semibold text-primary">
                           {section.activeCount}
                         </span>
-                        <span className="text-xs text-muted-foreground">
-                          active
-                        </span>
+                        <span className="text-xs text-muted-foreground">active</span>
                       </div>
                     )}
                   </div>

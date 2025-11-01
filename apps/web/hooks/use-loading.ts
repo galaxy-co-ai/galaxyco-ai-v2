@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 interface UseLoadingOptions {
   initialLoading?: boolean;
@@ -79,8 +79,7 @@ export function useLoading(options: UseLoadingOptions = {}) {
 export function useLoadingStates<T extends string>(
   initialStates: Record<T, boolean> = {} as Record<T, boolean>,
 ) {
-  const [loadingStates, setLoadingStates] =
-    useState<Record<T, boolean>>(initialStates);
+  const [loadingStates, setLoadingStates] = useState<Record<T, boolean>>(initialStates);
 
   const setLoading = useCallback((key: T, loading: boolean) => {
     setLoadingStates((prev) => ({
@@ -153,9 +152,7 @@ export function useAsyncWithProgress<T = any>() {
   const [error, setError] = useState<Error | null>(null);
 
   const execute = useCallback(
-    async (
-      operation: (updateProgress: (progress: number) => void) => Promise<T>,
-    ) => {
+    async (operation: (updateProgress: (progress: number) => void) => Promise<T>) => {
       setIsLoading(true);
       setError(null);
       setProgress(0);

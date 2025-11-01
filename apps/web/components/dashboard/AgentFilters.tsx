@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Search, Plus } from "lucide-react";
-import Link from "next/link";
+import { Search, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 interface AgentFiltersProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  statusFilter: "all" | "active" | "paused" | "error";
-  onStatusFilterChange: (status: "all" | "active" | "paused" | "error") => void;
+  statusFilter: 'all' | 'active' | 'paused' | 'error';
+  onStatusFilterChange: (status: 'all' | 'active' | 'paused' | 'error') => void;
   categoryFilter: string;
   onCategoryFilterChange: (category: string) => void;
 }
@@ -21,22 +21,22 @@ export default function AgentFilters({
   onCategoryFilterChange,
 }: AgentFiltersProps) {
   const statusFilters: Array<{
-    id: "all" | "active" | "paused" | "error";
+    id: 'all' | 'active' | 'paused' | 'error';
     label: string;
   }> = [
-    { id: "all", label: "All" },
-    { id: "active", label: "Active" },
-    { id: "paused", label: "Paused" },
-    { id: "error", label: "Error" },
+    { id: 'all', label: 'All' },
+    { id: 'active', label: 'Active' },
+    { id: 'paused', label: 'Paused' },
+    { id: 'error', label: 'Error' },
   ];
 
   const categories = [
-    { id: "all", label: "All Categories" },
-    { id: "sales", label: "Sales" },
-    { id: "marketing", label: "Marketing" },
-    { id: "operations", label: "Operations" },
-    { id: "support", label: "Support" },
-    { id: "engineering", label: "Engineering" },
+    { id: 'all', label: 'All Categories' },
+    { id: 'sales', label: 'Sales' },
+    { id: 'marketing', label: 'Marketing' },
+    { id: 'operations', label: 'Operations' },
+    { id: 'support', label: 'Support' },
+    { id: 'engineering', label: 'Engineering' },
   ];
 
   return (
@@ -78,8 +78,8 @@ export default function AgentFilters({
             onClick={() => onStatusFilterChange(filter.id)}
             className={`px-4 py-2 text-sm rounded-lg border transition-colors ${
               statusFilter === filter.id
-                ? "bg-blue-50 border-blue-300 text-blue-700 font-semibold"
-                : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
+                ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold'
+                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
             }`}
           >
             {filter.label}
@@ -96,8 +96,8 @@ export default function AgentFilters({
             onClick={() => onCategoryFilterChange(category.id)}
             className={`px-4 py-2 text-sm rounded-lg border transition-colors ${
               categoryFilter === category.id
-                ? "bg-blue-50 border-blue-300 text-blue-700 font-semibold"
-                : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
+                ? 'bg-blue-50 border-blue-300 text-blue-700 font-semibold'
+                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
             }`}
           >
             {category.label}

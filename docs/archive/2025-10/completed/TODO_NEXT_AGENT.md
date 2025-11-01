@@ -110,32 +110,30 @@ Then add to schema.ts:
 
 ```typescript
 export const aiMessageFeedback = pgTable(
-  "ai_message_feedback",
+  'ai_message_feedback',
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    messageId: uuid("message_id")
+    id: uuid('id').primaryKey().defaultRandom(),
+    messageId: uuid('message_id')
       .notNull()
-      .references(() => aiMessages.id, { onDelete: "cascade" }),
-    workspaceId: uuid("workspace_id")
+      .references(() => aiMessages.id, { onDelete: 'cascade' }),
+    workspaceId: uuid('workspace_id')
       .notNull()
-      .references(() => workspaces.id, { onDelete: "cascade" }),
-    userId: uuid("user_id")
+      .references(() => workspaces.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    feedbackType: text("feedback_type").notNull(), // 'positive' | 'negative'
-    comment: text("comment"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+      .references(() => users.id, { onDelete: 'cascade' }),
+    feedbackType: text('feedback_type').notNull(), // 'positive' | 'negative'
+    comment: text('comment'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (table) => ({
-    messageUserIdx: uniqueIndex("ai_message_feedback_message_user_idx").on(
+    messageUserIdx: uniqueIndex('ai_message_feedback_message_user_idx').on(
       table.messageId,
       table.userId,
     ),
-    messageIdx: index("ai_message_feedback_message_idx").on(table.messageId),
-    workspaceIdx: index("ai_message_feedback_workspace_idx").on(
-      table.workspaceId,
-    ),
-    userIdx: index("ai_message_feedback_user_idx").on(table.userId),
+    messageIdx: index('ai_message_feedback_message_idx').on(table.messageId),
+    workspaceIdx: index('ai_message_feedback_workspace_idx').on(table.workspaceId),
+    userIdx: index('ai_message_feedback_user_idx').on(table.userId),
   }),
 );
 ```
@@ -157,18 +155,15 @@ Extend the `aiMessages.metadata` field to include feedback:
 
 ```typescript
 // In chat-message.tsx
-const handleFeedback = async (type: "positive" | "negative") => {
+const handleFeedback = async (type: 'positive' | 'negative') => {
   await fetch(`/api/ai/messages/${message.id}/feedback`, {
-    method: "PATCH",
+    method: 'PATCH',
     body: JSON.stringify({ feedbackType: type }),
   });
 };
 
 // In /api/ai/messages/[id]/feedback/route.ts
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const { feedbackType } = await req.json();
 
   await db
@@ -279,8 +274,8 @@ const handleFeedback = async (type: 'positive' | 'negative') => {
 **Imports needed**:
 
 ```typescript
-import { ThumbsUp, ThumbsDown } from "lucide-react";
-import { toast } from "sonner";
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { toast } from 'sonner';
 ```
 
 ---
@@ -447,9 +442,7 @@ Insert after the search/filter section:
 
 ```typescript
 const handleBulkDelete = async () => {
-  if (
-    !confirm(`Delete ${selectedIds.size} documents? This cannot be undone.`)
-  ) {
+  if (!confirm(`Delete ${selectedIds.size} documents? This cannot be undone.`)) {
     return;
   }
 
@@ -462,7 +455,7 @@ const handleBulkDelete = async () => {
     for (const id of Array.from(selectedIds)) {
       try {
         const res = await fetch(`/api/documents/${id}`, {
-          method: "DELETE",
+          method: 'DELETE',
         });
 
         if (res.ok) {
@@ -477,22 +470,18 @@ const handleBulkDelete = async () => {
 
     // Show results
     if (successCount > 0) {
-      toast.success(
-        `Deleted ${successCount} document${successCount > 1 ? "s" : ""}`,
-      );
+      toast.success(`Deleted ${successCount} document${successCount > 1 ? 's' : ''}`);
     }
     if (failCount > 0) {
-      toast.error(
-        `Failed to delete ${failCount} document${failCount > 1 ? "s" : ""}`,
-      );
+      toast.error(`Failed to delete ${failCount} document${failCount > 1 ? 's' : ''}`);
     }
 
     // Clear selection and reload
     setSelectedIds(new Set());
     loadCollections();
   } catch (err) {
-    logger.error("Bulk delete error", err);
-    toast.error("Failed to delete documents");
+    logger.error('Bulk delete error', err);
+    toast.error('Failed to delete documents');
   } finally {
     setIsProcessing(false);
   }

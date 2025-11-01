@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useAuth } from "@clerk/nextjs";
-import { useWorkspace } from "@/hooks/useWorkspace";
+import { useAuth } from '@clerk/nextjs';
+import { useWorkspace } from '@/hooks/useWorkspace';
 
 /**
  * Hook to get authentication headers for API calls
@@ -13,23 +13,23 @@ export function useWorkspaceAuth() {
 
   async function getAuthHeaders(): Promise<HeadersInit> {
     if (!isLoaded || !isSignedIn) {
-      throw new Error("User not authenticated");
+      throw new Error('User not authenticated');
     }
 
     if (!workspace?.id) {
-      throw new Error("No workspace selected");
+      throw new Error('No workspace selected');
     }
 
     const token = await getToken();
 
     if (!token) {
-      throw new Error("Failed to get authentication token");
+      throw new Error('Failed to get authentication token');
     }
 
     return {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
-      "x-workspace-id": workspace.id,
+      'x-workspace-id': workspace.id,
     };
   }
 

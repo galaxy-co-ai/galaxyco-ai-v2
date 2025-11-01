@@ -51,14 +51,14 @@ SELECT * FROM agents; -- Exposes all tenant data!
 
 ```typescript
 // Every tenant-scoped table follows this pattern:
-export const tableName = pgTable("table_name", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  workspaceId: uuid("workspace_id")
+export const tableName = pgTable('table_name', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  workspaceId: uuid('workspace_id')
     .notNull()
-    .references(() => workspaces.id, { onDelete: "cascade" }),
+    .references(() => workspaces.id, { onDelete: 'cascade' }),
   // ... other columns
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 ```
 

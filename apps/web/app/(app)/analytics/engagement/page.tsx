@@ -1,11 +1,11 @@
-import { Metadata } from "next";
-import { Activity, Users, Clock, MousePointer, TrendingUp } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Metadata } from 'next';
+import { Activity, Users, Clock, MousePointer, TrendingUp } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: "Engagement Analytics | GalaxyCo.ai",
-  description: "Track user engagement and activity metrics",
+  title: 'Engagement Analytics | GalaxyCo.ai',
+  description: 'Track user engagement and activity metrics',
 };
 
 export default function EngagementAnalyticsPage() {
@@ -23,9 +23,7 @@ export default function EngagementAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Daily Active Users
-            </span>
+            <span className="text-sm text-foreground-muted">Daily Active Users</span>
             <Users className="h-5 w-5 text-primary" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -39,9 +37,7 @@ export default function EngagementAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Avg. Session Duration
-            </span>
+            <span className="text-sm text-foreground-muted">Avg. Session Duration</span>
             <Clock className="h-5 w-5 text-success" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -55,9 +51,7 @@ export default function EngagementAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Engagement Rate
-            </span>
+            <span className="text-sm text-foreground-muted">Engagement Rate</span>
             <Activity className="h-5 w-5 text-warning" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -71,9 +65,7 @@ export default function EngagementAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Actions per Session
-            </span>
+            <span className="text-sm text-foreground-muted">Actions per Session</span>
             <MousePointer className="h-5 w-5 text-foreground-muted" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -94,21 +86,15 @@ export default function EngagementAnalyticsPage() {
             {/* Hour Headers */}
             <div />
             {Array.from({ length: 24 }, (_, i) => (
-              <div
-                key={i}
-                className="text-xs text-center text-foreground-muted px-1"
-              >
+              <div key={i} className="text-xs text-center text-foreground-muted px-1">
                 {i}
               </div>
             ))}
 
             {/* Days */}
-            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
               <>
-                <div
-                  key={day}
-                  className="text-xs text-foreground-muted pr-2 flex items-center"
-                >
+                <div key={day} className="text-xs text-foreground-muted pr-2 flex items-center">
                   {day}
                 </div>
                 {Array.from({ length: 24 }, (_, hour) => {
@@ -118,12 +104,12 @@ export default function EngagementAnalyticsPage() {
                       key={`${day}-${hour}`}
                       className={`h-8 rounded ${
                         intensity > 0.7
-                          ? "bg-primary"
+                          ? 'bg-primary'
                           : intensity > 0.5
-                            ? "bg-primary/70"
+                            ? 'bg-primary/70'
                             : intensity > 0.3
-                              ? "bg-primary/40"
-                              : "bg-background-subtle"
+                              ? 'bg-primary/40'
+                              : 'bg-background-subtle'
                       }`}
                       title={`${day} ${hour}:00`}
                     />
@@ -150,11 +136,11 @@ export default function EngagementAnalyticsPage() {
         <h2 className="text-xl font-semibold mb-6">Most Used Features</h2>
         <div className="space-y-4">
           {[
-            { feature: "Agent Builder", usage: 8734, percentage: 92 },
-            { feature: "Workflow Automation", usage: 7456, percentage: 78 },
-            { feature: "Contact Management", usage: 6892, percentage: 72 },
-            { feature: "Analytics Dashboard", usage: 5234, percentage: 55 },
-            { feature: "API Integration", usage: 4187, percentage: 44 },
+            { feature: 'Agent Builder', usage: 8734, percentage: 92 },
+            { feature: 'Workflow Automation', usage: 7456, percentage: 78 },
+            { feature: 'Contact Management', usage: 6892, percentage: 72 },
+            { feature: 'Analytics Dashboard', usage: 5234, percentage: 55 },
+            { feature: 'API Integration', usage: 4187, percentage: 44 },
           ].map((item, index) => (
             <div key={index} className="space-y-2">
               <div className="flex items-center justify-between">
@@ -183,19 +169,8 @@ export default function EngagementAnalyticsPage() {
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-6">User Retention</h2>
         <div className="grid grid-cols-7 gap-2 mb-4">
-          {[
-            "Day 1",
-            "Day 7",
-            "Day 14",
-            "Day 30",
-            "Day 60",
-            "Day 90",
-            "Day 180",
-          ].map((label) => (
-            <div
-              key={label}
-              className="text-xs text-center text-foreground-muted"
-            >
+          {['Day 1', 'Day 7', 'Day 14', 'Day 30', 'Day 60', 'Day 90', 'Day 180'].map((label) => (
+            <div key={label} className="text-xs text-center text-foreground-muted">
               {label}
             </div>
           ))}

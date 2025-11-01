@@ -5,8 +5,8 @@
  * the standardized interface and work correctly with mock data.
  */
 
-import { AgentRegistry, BaseAgent } from "./agent-interface";
-import { logger } from "@/lib/utils/logger";
+import { AgentRegistry, BaseAgent } from './agent-interface';
+import { logger } from '@/lib/utils/logger';
 
 export interface TestResults {
   totalAgents: number;
@@ -32,10 +32,10 @@ export interface TestResults {
  */
 export async function runAgentTests(): Promise<TestResults> {
   const startTime = Date.now();
-  logger.info("[AGENT TEST RUNNER] Starting comprehensive agent testing...");
+  logger.info('[AGENT TEST RUNNER] Starting comprehensive agent testing...');
 
   const agentList = AgentRegistry.list();
-  const results: TestResults["results"] = [];
+  const results: TestResults['results'] = [];
   const criticalIssues: string[] = [];
   const warnings: string[] = [];
 
@@ -59,14 +59,12 @@ export async function runAgentTests(): Promise<TestResults> {
       const agentIssues = testResult.issues;
       const hasCriticalIssues = agentIssues.some(
         (issue) =>
-          issue.includes("failed") ||
-          issue.includes("error") ||
-          issue.includes("required"),
+          issue.includes('failed') || issue.includes('error') || issue.includes('required'),
       );
 
       if (hasCriticalIssues) {
         agentIssues.forEach((issue) => {
-          if (issue.includes("failed") || issue.includes("error")) {
+          if (issue.includes('failed') || issue.includes('error')) {
             criticalIssues.push(`${agentInfo.id}: ${issue}`);
           }
         });
@@ -91,19 +89,16 @@ export async function runAgentTests(): Promise<TestResults> {
       });
 
       logger.info(
-        `[AGENT TEST] ${agentInfo.id} completed in ${executionTime}ms: ${testResult.success ? "PASS" : "FAIL"}`,
+        `[AGENT TEST] ${agentInfo.id} completed in ${executionTime}ms: ${testResult.success ? 'PASS' : 'FAIL'}`,
       );
       if (agentIssues.length > 0) {
         logger.warn(`[AGENT TEST] ${agentInfo.id} issues`, { agentIssues });
       }
     } catch (error) {
       const executionTime = Date.now() - testStartTime;
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
-      criticalIssues.push(
-        `${agentInfo.id}: Test execution failed - ${errorMessage}`,
-      );
+      criticalIssues.push(`${agentInfo.id}: Test execution failed - ${errorMessage}`);
 
       results.push({
         agentId: agentInfo.id,
@@ -136,9 +131,7 @@ export async function runAgentTests(): Promise<TestResults> {
 
   // Log summary
   logger.info(`[AGENT TEST RUNNER] Testing completed in ${totalTime}ms`);
-  logger.info(
-    `[AGENT TEST RUNNER] Results: ${passedTests}/${results.length} agents passed`,
-  );
+  logger.info(`[AGENT TEST RUNNER] Results: ${passedTests}/${results.length} agents passed`);
 
   if (criticalIssues.length > 0) {
     logger.error(`[AGENT TEST RUNNER] Critical issues found`, {
@@ -151,11 +144,9 @@ export async function runAgentTests(): Promise<TestResults> {
   }
 
   if (overallSuccess) {
-    logger.info("[AGENT TEST RUNNER] ✅ All agents are working correctly!");
+    logger.info('[AGENT TEST RUNNER] ✅ All agents are working correctly!');
   } else {
-    logger.error(
-      "[AGENT TEST RUNNER] ❌ Some agents have issues that need attention",
-    );
+    logger.error('[AGENT TEST RUNNER] ❌ Some agents have issues that need attention');
   }
 
   return testResults;
@@ -189,7 +180,7 @@ export async function testSpecificAgent(agentId: string): Promise<{
     const executionTime = Date.now() - startTime;
 
     logger.info(
-      `[AGENT TEST] ${agentId} completed in ${executionTime}ms: ${testResult.success ? "PASS" : "FAIL"}`,
+      `[AGENT TEST] ${agentId} completed in ${executionTime}ms: ${testResult.success ? 'PASS' : 'FAIL'}`,
     );
 
     return {
@@ -223,7 +214,7 @@ export function generateTestReport(results: TestResults): string {
   report += `**Total Agents:** ${results.totalAgents}\n`;
   report += `**Passed:** ${results.passedTests}\n`;
   report += `**Failed:** ${results.failedTests}\n`;
-  report += `**Overall Status:** ${results.summary.overallSuccess ? "✅ PASS" : "❌ FAIL"}\n\n`;
+  report += `**Overall Status:** ${results.summary.overallSuccess ? '✅ PASS' : '❌ FAIL'}\n\n`;
 
   if (results.summary.criticalIssues.length > 0) {
     report += `## 🔥 Critical Issues\n\n`;
@@ -244,7 +235,7 @@ export function generateTestReport(results: TestResults): string {
   report += `## 📋 Detailed Results\n\n`;
 
   results.results.forEach((result) => {
-    const status = result.success ? "✅" : "❌";
+    const status = result.success ? '✅' : '❌';
     report += `### ${status} ${result.agentName} (\`${result.agentId}\`)\n\n`;
     report += `**Execution Time:** ${result.executionTime}ms\n`;
 
@@ -281,14 +272,14 @@ export async function quickHealthCheck(): Promise<{
     const agentCount = agents.length;
 
     if (agentCount === 0) {
-      issues.push("No agents registered in the registry");
+      issues.push('No agents registered in the registry');
     }
 
     // Check for duplicate agent IDs
     const agentIds = agents.map((a) => a.id);
     const uniqueIds = new Set(agentIds);
     if (agentIds.length !== uniqueIds.size) {
-      issues.push("Duplicate agent IDs detected in registry");
+      issues.push('Duplicate agent IDs detected in registry');
     }
 
     // Basic environment check for AI providers
@@ -296,7 +287,7 @@ export async function quickHealthCheck(): Promise<{
     const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
 
     if (!hasOpenAI && !hasAnthropic) {
-      issues.push("No AI provider API keys found in environment");
+      issues.push('No AI provider API keys found in environment');
     }
 
     return {
@@ -305,9 +296,7 @@ export async function quickHealthCheck(): Promise<{
       issues,
     };
   } catch (error) {
-    issues.push(
-      `Health check failed: ${error instanceof Error ? error.message : String(error)}`,
-    );
+    issues.push(`Health check failed: ${error instanceof Error ? error.message : String(error)}`);
 
     return {
       healthy: false,

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates";
-import { Card } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import { Users, CheckSquare, Calendar, Mail } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { Users, CheckSquare, Calendar, Mail } from 'lucide-react';
 
 interface OutreachAnalytics {
   contacts: { total: number };
@@ -26,17 +26,15 @@ export default function OutreachAnalyticsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/analytics/outreach?workspaceId=${currentWorkspace.id}`,
-        );
+        const res = await fetch(`/api/analytics/outreach?workspaceId=${currentWorkspace.id}`);
 
-        if (!res.ok) throw new Error("Failed to fetch outreach analytics");
+        if (!res.ok) throw new Error('Failed to fetch outreach analytics');
 
         const data = await res.json();
         setAnalytics(data.analytics);
       } catch (error) {
-        console.error("Failed to fetch outreach analytics:", error);
-        toast.error("Failed to load outreach analytics");
+        console.error('Failed to fetch outreach analytics:', error);
+        toast.error('Failed to load outreach analytics');
       } finally {
         setIsLoading(false);
       }
@@ -59,45 +57,43 @@ export default function OutreachAnalyticsPage() {
         title="Outreach Analytics"
         subtitle="Tasks, events, and contact engagement"
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Analytics", href: "/analytics" },
-          { label: "Outreach" },
+          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Outreach' },
         ]}
       >
-        <div className="text-center text-muted-foreground">
-          No outreach data available
-        </div>
+        <div className="text-center text-muted-foreground">No outreach data available</div>
       </DetailPage>
     );
   }
 
   const metrics = [
     {
-      label: "Total Contacts",
+      label: 'Total Contacts',
       value: analytics.contacts.total,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <Users className="h-5 w-5" />,
     },
     {
-      label: "Tasks",
+      label: 'Tasks',
       value: analytics.tasks.total,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <CheckSquare className="h-5 w-5" />,
     },
     {
-      label: "Events",
+      label: 'Events',
       value: analytics.events.total,
       change: analytics.events.period,
-      trend: "neutral" as const,
+      trend: 'neutral' as const,
       icon: <Calendar className="h-5 w-5" />,
     },
     {
-      label: "Emails",
+      label: 'Emails',
       value: analytics.emails.total,
       change: analytics.emails.period,
-      trend: "neutral" as const,
+      trend: 'neutral' as const,
       icon: <Mail className="h-5 w-5" />,
     },
   ];
@@ -107,9 +103,9 @@ export default function OutreachAnalyticsPage() {
       title="Outreach Analytics"
       subtitle="Tasks, events, and contact engagement"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Analytics", href: "/analytics" },
-        { label: "Outreach" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Analytics', href: '/analytics' },
+        { label: 'Outreach' },
       ]}
       metrics={metrics}
     >

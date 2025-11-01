@@ -131,9 +131,9 @@ See [external-links.md](external-links.md) for more resources.
 ### UI Components
 
 ```typescript
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 ```
 
 See [components.md](components.md) for complete component reference.

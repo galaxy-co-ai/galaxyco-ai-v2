@@ -3,13 +3,13 @@
  * Following OpenAI Agents SDK patterns
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // MESSAGE TYPES
 // ============================================================================
 
-export type MessageRole = "user" | "assistant" | "system" | "tool";
+export type MessageRole = 'user' | 'assistant' | 'system' | 'tool';
 
 export interface Message {
   role: MessageRole;
@@ -20,20 +20,20 @@ export interface Message {
 }
 
 export interface UserMessage extends Message {
-  role: "user";
+  role: 'user';
 }
 
 export interface AssistantMessage extends Message {
-  role: "assistant";
+  role: 'assistant';
   tool_calls?: ToolCall[];
 }
 
 export interface SystemMessage extends Message {
-  role: "system";
+  role: 'system';
 }
 
 export interface ToolMessage extends Message {
-  role: "tool";
+  role: 'tool';
   tool_call_id: string;
 }
 
@@ -43,7 +43,7 @@ export interface ToolMessage extends Message {
 
 export interface ToolCall {
   id: string;
-  type: "function";
+  type: 'function';
   function: {
     name: string;
     arguments: string; // JSON string
@@ -51,12 +51,12 @@ export interface ToolCall {
 }
 
 export interface ToolDefinition {
-  type: "function";
+  type: 'function';
   function: {
     name: string;
     description: string;
     parameters: {
-      type: "object";
+      type: 'object';
       properties: Record<string, any>;
       required?: string[];
     };
@@ -68,11 +68,11 @@ export interface Tool {
   execute: (args: any, context?: ExecutionContext) => Promise<any>;
 }
 
-export type ToolCategory = "data" | "action" | "orchestration";
+export type ToolCategory = 'data' | 'action' | 'orchestration';
 
 export interface ToolMetadata {
   category: ToolCategory;
-  riskLevel: "low" | "medium" | "high";
+  riskLevel: 'low' | 'medium' | 'high';
   requiresApproval: boolean;
   version: string;
 }
@@ -142,14 +142,14 @@ export interface GuardrailResult {
   passed: boolean;
   reason?: string;
   metadata?: Record<string, any>;
-  action?: "block" | "redact" | "warn"; // What action to take if failed
+  action?: 'block' | 'redact' | 'warn'; // What action to take if failed
   redactedContent?: string; // If action is redact, the redacted version
 }
 
 export interface Guardrail {
   name: string;
   description: string;
-  type: "input" | "output" | "tool" | "cost";
+  type: 'input' | 'output' | 'tool' | 'cost';
   enabled?: boolean; // Allow disabling guardrails
 
   check(input: any, context?: Record<string, any>): Promise<GuardrailResult>;
@@ -158,8 +158,8 @@ export interface Guardrail {
 export interface GuardrailConfig {
   input?: {
     relevance?: { enabled: boolean; threshold: number };
-    safety?: { enabled: boolean; mode: "strict" | "moderate" };
-    pii?: { enabled: boolean; action: "block" | "redact" };
+    safety?: { enabled: boolean; mode: 'strict' | 'moderate' };
+    pii?: { enabled: boolean; action: 'block' | 'redact' };
   };
   output?: {
     validation?: { schema?: z.ZodSchema };
@@ -167,7 +167,7 @@ export interface GuardrailConfig {
   };
   tools?: {
     requireApproval?: string[];
-    riskThreshold?: "low" | "medium" | "high";
+    riskThreshold?: 'low' | 'medium' | 'high';
   };
 }
 
@@ -213,14 +213,14 @@ export class AgentError extends Error {
     public details?: any,
   ) {
     super(message);
-    this.name = "AgentError";
+    this.name = 'AgentError';
   }
 }
 
 export class GuardrailError extends AgentError {
   constructor(message: string, details?: any) {
-    super(message, "GUARDRAIL_FAILED", details);
-    this.name = "GuardrailError";
+    super(message, 'GUARDRAIL_FAILED', details);
+    this.name = 'GuardrailError';
   }
 }
 
@@ -230,18 +230,16 @@ export class ToolExecutionError extends AgentError {
     public toolName: string,
     details?: any,
   ) {
-    super(message, "TOOL_EXECUTION_FAILED", details);
-    this.name = "ToolExecutionError";
+    super(message, 'TOOL_EXECUTION_FAILED', details);
+    this.name = 'ToolExecutionError';
   }
 }
 
 export class MaxIterationsError extends AgentError {
   constructor(iterations: number) {
-    super(
-      `Agent exceeded maximum iterations: ${iterations}`,
-      "MAX_ITERATIONS_EXCEEDED",
-      { iterations },
-    );
-    this.name = "MaxIterationsError";
+    super(`Agent exceeded maximum iterations: ${iterations}`, 'MAX_ITERATIONS_EXCEEDED', {
+      iterations,
+    });
+    this.name = 'MaxIterationsError';
   }
 }

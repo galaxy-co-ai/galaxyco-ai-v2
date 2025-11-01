@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { users } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { users } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 /**
  * GET /api/users/me
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get user from database
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json({
@@ -48,11 +48,11 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Get user profile error:", error);
+    console.error('Get user profile error:', error);
     return NextResponse.json(
       {
-        error: "Failed to fetch user profile",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to fetch user profile',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -67,7 +67,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -79,7 +79,7 @@ export async function PATCH(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Update user
@@ -107,11 +107,11 @@ export async function PATCH(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Update user profile error:", error);
+    console.error('Update user profile error:', error);
     return NextResponse.json(
       {
-        error: "Failed to update user profile",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update user profile',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

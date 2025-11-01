@@ -17,101 +17,94 @@ import {
   AgentOutput,
   AgentExecutionContext,
   AgentExecutionResult,
-} from "../agent-interface";
+} from '../agent-interface';
 
 export class EmailAgent extends BaseAgent {
-  public readonly id = "email-composer-v1";
-  public readonly name = "Professional Email Composer";
+  public readonly id = 'email-composer-v1';
+  public readonly name = 'Professional Email Composer';
   public readonly description =
-    "Composes professional emails based on key points, tone, and recipient information";
-  public readonly version = "1.0.0";
+    'Composes professional emails based on key points, tone, and recipient information';
+  public readonly version = '1.0.0';
 
   public readonly triggers: AgentTrigger[] = [
     {
-      type: "manual",
+      type: 'manual',
       config: {},
     },
     {
-      type: "webhook",
+      type: 'webhook',
       config: {
-        webhook_path: "/api/agents/email-agent/compose",
+        webhook_path: '/api/agents/email-agent/compose',
       },
     },
   ];
 
   public readonly inputs: AgentInput[] = [
     {
-      name: "keyPoints",
-      type: "text",
+      name: 'keyPoints',
+      type: 'text',
       required: true,
-      description: "Main points or message content to include in the email",
+      description: 'Main points or message content to include in the email',
     },
     {
-      name: "tone",
-      type: "text",
+      name: 'tone',
+      type: 'text',
       required: false,
-      description: "Tone of the email",
-      default: "professional",
+      description: 'Tone of the email',
+      default: 'professional',
       validation: {
-        allowedValues: [
-          "professional",
-          "casual",
-          "formal",
-          "friendly",
-          "urgent",
-        ],
+        allowedValues: ['professional', 'casual', 'formal', 'friendly', 'urgent'],
       },
     },
     {
-      name: "recipientInfo",
-      type: "json",
+      name: 'recipientInfo',
+      type: 'json',
       required: false,
-      description:
-        "Information about the recipient (name, relationship, context)",
+      description: 'Information about the recipient (name, relationship, context)',
       default: {},
     },
     {
-      name: "subject",
-      type: "text",
+      name: 'subject',
+      type: 'text',
       required: false,
-      description: "Email subject line (if not provided, will be generated)",
+      description: 'Email subject line (if not provided, will be generated)',
     },
     {
-      name: "includeCall2Action",
-      type: "boolean",
+      name: 'includeCall2Action',
+      type: 'boolean',
       required: false,
-      description: "Whether to include a call-to-action in the email",
+      description: 'Whether to include a call-to-action in the email',
       default: false,
     },
   ];
 
   public readonly outputs: AgentOutput[] = [
     {
-      name: "subject",
-      type: "text",
-      description: "Generated email subject line",
+      name: 'subject',
+      type: 'text',
+      description: 'Generated email subject line',
     },
     {
-      name: "body",
-      type: "text",
-      description: "Complete email body content",
+      name: 'body',
+      type: 'text',
+      description: 'Complete email body content',
     },
     {
-      name: "tone_analysis",
-      type: "json",
-      description: "Analysis of the tone and style used",
+      name: 'tone_analysis',
+      type: 'json',
+      description: 'Analysis of the tone and style used',
     },
     {
-      name: "word_count",
-      type: "number",
-      description: "Total word count of the email body",
+      name: 'word_count',
+      type: 'number',
+      description: 'Total word count of the email body',
     },
   ];
 
   public readonly aiProvider = {
-    primary: "openai" as const,
-    fallback: "anthropic" as const,
-    model: "gpt-4",
+    primary: 'openai' as const,
+    fallback: 'anthropic' as const,
+    model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 1000,
   };
@@ -123,29 +116,20 @@ export class EmailAgent extends BaseAgent {
     inputs: Record<string, any>,
     context: AgentExecutionContext,
   ): Promise<AgentExecutionResult> {
-    const { keyPoints, tone, recipientInfo, subject, includeCall2Action } =
-      inputs;
+    const { keyPoints, tone, recipientInfo, subject, includeCall2Action } = inputs;
 
     try {
       // Build the system prompt based on inputs
-      const systemPrompt = this.buildSystemPrompt(
-        tone,
-        recipientInfo,
-        includeCall2Action,
-      );
+      const systemPrompt = this.buildSystemPrompt(tone, recipientInfo, includeCall2Action);
 
       // Build the user prompt
-      const userPrompt = this.buildUserPrompt(
-        keyPoints,
-        subject,
-        recipientInfo,
-      );
+      const userPrompt = this.buildUserPrompt(keyPoints, subject, recipientInfo);
 
       // Send request to AI provider
       const aiResponse = await this.sendAIRequest(
         [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
         ],
         context,
         {
@@ -170,7 +154,7 @@ export class EmailAgent extends BaseAgent {
           word_count: wordCount,
         },
         metadata: {
-          provider: aiResponse.model.includes("gpt") ? "openai" : "anthropic",
+          provider: aiResponse.model.includes('gpt') ? 'openai' : 'anthropic',
           model: aiResponse.model,
           tokensUsed: aiResponse.usage?.totalTokens,
         },
@@ -180,9 +164,8 @@ export class EmailAgent extends BaseAgent {
         success: false,
         data: {},
         error: {
-          message:
-            error instanceof Error ? error.message : "Email composition failed",
-          code: "EMAIL_COMPOSITION_ERROR",
+          message: error instanceof Error ? error.message : 'Email composition failed',
+          code: 'EMAIL_COMPOSITION_ERROR',
         },
       };
     }
@@ -191,23 +174,19 @@ export class EmailAgent extends BaseAgent {
   /**
    * Build system prompt based on tone and context
    */
-  private buildSystemPrompt(
-    tone: string,
-    recipientInfo: any,
-    includeCall2Action: boolean,
-  ): string {
+  private buildSystemPrompt(tone: string, recipientInfo: any, includeCall2Action: boolean): string {
     let prompt = `You are a professional email writer. Your task is to compose clear, well-structured emails.
 
 TONE: ${tone}
-${recipientInfo?.relationship ? `RELATIONSHIP: ${recipientInfo.relationship}` : ""}
-${includeCall2Action ? "INCLUDE: A clear call-to-action" : ""}
+${recipientInfo?.relationship ? `RELATIONSHIP: ${recipientInfo.relationship}` : ''}
+${includeCall2Action ? 'INCLUDE: A clear call-to-action' : ''}
 
 Requirements:
 - Write in a ${tone} tone
 - Use proper email structure (greeting, body, closing)
 - Be concise but comprehensive
 - Ensure clarity and readability
-${includeCall2Action ? "- End with a specific call-to-action" : ""}
+${includeCall2Action ? '- End with a specific call-to-action' : ''}
 
 Format your response as JSON:
 {
@@ -221,19 +200,15 @@ Format your response as JSON:
   /**
    * Build user prompt with specific content requirements
    */
-  private buildUserPrompt(
-    keyPoints: string,
-    subject?: string,
-    recipientInfo?: any,
-  ): string {
+  private buildUserPrompt(keyPoints: string, subject?: string, recipientInfo?: any): string {
     let prompt = `Compose an email with the following details:
 
 KEY POINTS TO INCLUDE:
 ${keyPoints}
 
-${subject ? `SUGGESTED SUBJECT: ${subject}` : "Generate an appropriate subject line"}
-${recipientInfo?.name ? `RECIPIENT NAME: ${recipientInfo.name}` : ""}
-${recipientInfo?.context ? `CONTEXT: ${recipientInfo.context}` : ""}
+${subject ? `SUGGESTED SUBJECT: ${subject}` : 'Generate an appropriate subject line'}
+${recipientInfo?.name ? `RECIPIENT NAME: ${recipientInfo.name}` : ''}
+${recipientInfo?.context ? `CONTEXT: ${recipientInfo.context}` : ''}
 
 Please provide the email in the requested JSON format.`;
 
@@ -252,19 +227,15 @@ Please provide the email in the requested JSON format.`;
       }
     } catch (error) {
       // If JSON parsing fails, try to extract subject and body manually
-      console.warn(
-        "[EMAIL AGENT] Failed to parse JSON, attempting manual extraction",
-      );
+      console.warn('[EMAIL AGENT] Failed to parse JSON, attempting manual extraction');
     }
 
     // Manual parsing fallback
-    const subjectMatch = content.match(
-      /subject[\"':][\s]*[\"']([^\"']+)[\"']/i,
-    );
+    const subjectMatch = content.match(/subject[\"':][\s]*[\"']([^\"']+)[\"']/i);
     const bodyMatch = content.match(/body[\"':][\s]*[\"']([^\"']+)[\"']/i);
 
     return {
-      subject: subjectMatch?.[1] || "Email Subject",
+      subject: subjectMatch?.[1] || 'Email Subject',
       body: bodyMatch?.[1] || content, // Fallback to full content
     };
   }
@@ -284,8 +255,7 @@ Please provide the email in the requested JSON format.`;
    */
   private analyzeTone(body: string, requestedTone: string): any {
     const hasUrgentWords = /urgent|asap|immediately|time-sensitive/i.test(body);
-    const hasFormalWords =
-      /please find attached|kindly|furthermore|moreover/i.test(body);
+    const hasFormalWords = /please find attached|kindly|furthermore|moreover/i.test(body);
     const hasCasualWords = /hey|thanks|cheers|cool|awesome/i.test(body);
 
     return {
@@ -301,5 +271,5 @@ Please provide the email in the requested JSON format.`;
 }
 
 // Auto-register the agent
-import { AgentRegistry } from "../agent-interface";
+import { AgentRegistry } from '../agent-interface';
 AgentRegistry.register(EmailAgent);

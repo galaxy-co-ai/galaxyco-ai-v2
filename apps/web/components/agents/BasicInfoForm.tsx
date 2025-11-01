@@ -1,49 +1,40 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { FormInput as Input } from "@/components/ui/form-input";
-import { FormTextarea as Textarea } from "@/components/ui/form-textarea";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { AgentBuilderState } from "@/hooks/use-agent-builder";
-import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-} from "@/lib/constants/design-system";
+import React, { useState } from 'react';
+import { FormInput as Input } from '@/components/ui/form-input';
+import { FormTextarea as Textarea } from '@/components/ui/form-textarea';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AgentBuilderState } from '@/hooks/use-agent-builder';
+import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 
 interface BasicInfoFormProps {
-  basicInfo: AgentBuilderState["basicInfo"];
+  basicInfo: AgentBuilderState['basicInfo'];
   errors: Record<string, string>;
-  onChange: (updates: Partial<AgentBuilderState["basicInfo"]>) => void;
+  onChange: (updates: Partial<AgentBuilderState['basicInfo']>) => void;
   disabled?: boolean;
 }
 
 // Common emojis for agent icons
 const AGENT_EMOJIS = [
-  "🤖",
-  "📧",
-  "📄",
-  "🎫",
-  "🎯",
-  "✍️",
-  "💡",
-  "🔍",
-  "📊",
-  "🚀",
-  "⚡",
-  "🎨",
-  "🛠️",
-  "📱",
-  "💬",
-  "🔔",
+  '🤖',
+  '📧',
+  '📄',
+  '🎫',
+  '🎯',
+  '✍️',
+  '💡',
+  '🔍',
+  '📊',
+  '🚀',
+  '⚡',
+  '🎨',
+  '🛠️',
+  '📱',
+  '💬',
+  '🔔',
 ];
 
 export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
@@ -53,12 +44,12 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
   disabled = false,
 }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [tagInput, setTagInput] = useState("");
+  const [tagInput, setTagInput] = useState('');
 
   const handleTagAdd = () => {
     if (tagInput.trim() && !basicInfo.tags.includes(tagInput.trim())) {
       onChange({ tags: [...basicInfo.tags, tagInput.trim()] });
-      setTagInput("");
+      setTagInput('');
     }
   };
 
@@ -67,21 +58,17 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
   };
 
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleTagAdd();
-    } else if (
-      e.key === "Backspace" &&
-      !tagInput &&
-      basicInfo.tags.length > 0
-    ) {
+    } else if (e.key === 'Backspace' && !tagInput && basicInfo.tags.length > 0) {
       // Remove last tag if input is empty and backspace is pressed
       handleTagRemove(basicInfo.tags[basicInfo.tags.length - 1]);
     }
   };
 
   return (
-    <div style={{ marginBottom: spacing["2xl"] }}>
+    <div style={{ marginBottom: spacing['2xl'] }}>
       {/* Section Header */}
       <div style={{ marginBottom: spacing.xl }}>
         <h2
@@ -109,7 +96,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
         <label
           htmlFor="agent-icon"
           style={{
-            display: "block",
+            display: 'block',
             marginBottom: spacing.xs,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
@@ -118,7 +105,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
         >
           Icon
         </label>
-        <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
           <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
             <PopoverTrigger asChild>
               <Button
@@ -133,11 +120,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80" align="start">
-              <div
-                className="grid grid-cols-8 gap-1"
-                role="listbox"
-                aria-label="Agent icon picker"
-              >
+              <div className="grid grid-cols-8 gap-1" role="listbox" aria-label="Agent icon picker">
                 {AGENT_EMOJIS.map((emoji) => (
                   <button
                     key={emoji}
@@ -150,9 +133,9 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
                       setShowEmojiPicker(false);
                     }}
                     className={cn(
-                      "w-10 h-10 text-2xl rounded-md transition-colors",
-                      "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                      basicInfo.icon === emoji && "bg-accent",
+                      'w-10 h-10 text-2xl rounded-md transition-colors',
+                      'hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                      basicInfo.icon === emoji && 'bg-accent',
                     )}
                   >
                     {emoji}
@@ -176,9 +159,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
       <Input
         label="Agent Name"
         value={basicInfo.name}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange({ name: e.target.value })
-        }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ name: e.target.value })}
         error={errors.name}
         placeholder="e.g., Email Analyzer, Document Summarizer"
         required
@@ -200,14 +181,14 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
         disabled={disabled}
         maxLength={500}
         helperText={`${basicInfo.description.length}/500 characters`}
-        style={{ minHeight: "120px" }}
+        style={{ minHeight: '120px' }}
       />
 
       {/* Tags Input */}
       <div style={{ marginBottom: spacing.lg }}>
         <label
           style={{
-            display: "block",
+            display: 'block',
             marginBottom: spacing.xs,
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
@@ -221,8 +202,8 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
         {basicInfo.tags.length > 0 && (
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
+              display: 'flex',
+              flexWrap: 'wrap',
               gap: spacing.xs,
               marginBottom: spacing.sm,
             }}
@@ -231,8 +212,8 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               <span
                 key={tag}
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
+                  display: 'inline-flex',
+                  alignItems: 'center',
                   gap: spacing.xs,
                   padding: `${spacing.xs} ${spacing.sm}`,
                   backgroundColor: colors.background.secondary,
@@ -250,13 +231,13 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
                   aria-label={`Remove ${tag} tag`}
                   className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
                   style={{
-                    background: "none",
-                    border: "none",
+                    background: 'none',
+                    border: 'none',
                     color: colors.text.tertiary,
-                    cursor: disabled ? "not-allowed" : "pointer",
+                    cursor: disabled ? 'not-allowed' : 'pointer',
                     padding: 0,
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   <X className="h-3 w-3" />
@@ -268,7 +249,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
         )}
 
         {/* Tag Input */}
-        <div style={{ display: "flex", gap: spacing.sm }}>
+        <div style={{ display: 'flex', gap: spacing.sm }}>
           <input
             type="text"
             value={tagInput}
@@ -285,7 +266,7 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               backgroundColor: colors.background.primary,
               border: `1px solid ${colors.border.default}`,
               borderRadius: radius.md,
-              outline: "none",
+              outline: 'none',
               opacity: disabled ? 0.6 : 1,
             }}
           />
@@ -299,11 +280,11 @@ export const BasicInfoForm: React.FC<BasicInfoFormProps> = ({
               fontWeight: typography.weights.medium,
               color: colors.background.primary,
               backgroundColor: colors.primaryColor,
-              border: "none",
+              border: 'none',
               borderRadius: radius.md,
-              cursor: disabled || !tagInput.trim() ? "not-allowed" : "pointer",
+              cursor: disabled || !tagInput.trim() ? 'not-allowed' : 'pointer',
               opacity: disabled || !tagInput.trim() ? 0.5 : 1,
-              transition: "opacity 200ms",
+              transition: 'opacity 200ms',
             }}
           >
             Add

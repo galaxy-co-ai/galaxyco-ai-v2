@@ -1,57 +1,50 @@
-import { Metadata } from "next";
-import {
-  Search,
-  Phone,
-  Video,
-  MoreVertical,
-  Send,
-  Paperclip,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar } from "@/components/ui/avatar";
+import { Metadata } from 'next';
+import { Search, Phone, Video, MoreVertical, Send, Paperclip } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Avatar } from '@/components/ui/avatar';
 
 export const metadata: Metadata = {
-  title: "Chat | GalaxyCo.ai",
-  description: "Mobile messaging",
+  title: 'Chat | GalaxyCo.ai',
+  description: 'Mobile messaging',
 };
 
 // Mock conversations
 const conversations = [
   {
-    id: "1",
-    name: "Sarah Johnson",
-    lastMessage: "Thanks for the update!",
-    timestamp: "2m ago",
+    id: '1',
+    name: 'Sarah Johnson',
+    lastMessage: 'Thanks for the update!',
+    timestamp: '2m ago',
     unread: 2,
-    avatar: "SJ",
+    avatar: 'SJ',
     online: true,
   },
   {
-    id: "2",
-    name: "Michael Chen",
-    lastMessage: "Can we schedule a call?",
-    timestamp: "15m ago",
+    id: '2',
+    name: 'Michael Chen',
+    lastMessage: 'Can we schedule a call?',
+    timestamp: '15m ago',
     unread: 0,
-    avatar: "MC",
+    avatar: 'MC',
     online: true,
   },
   {
-    id: "3",
-    name: "Emily Rodriguez",
-    lastMessage: "Sent you the files",
-    timestamp: "1h ago",
+    id: '3',
+    name: 'Emily Rodriguez',
+    lastMessage: 'Sent you the files',
+    timestamp: '1h ago',
     unread: 1,
-    avatar: "ER",
+    avatar: 'ER',
     online: false,
   },
   {
-    id: "4",
-    name: "Team - Marketing",
+    id: '4',
+    name: 'Team - Marketing',
     lastMessage: "David: Let's review tomorrow",
-    timestamp: "2h ago",
+    timestamp: '2h ago',
     unread: 5,
-    avatar: "TM",
+    avatar: 'TM',
     online: false,
   },
 ];
@@ -93,9 +86,7 @@ export default function MobileChatPage() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between mb-1">
-                  <h3 className="font-semibold text-base truncate">
-                    {conversation.name}
-                  </h3>
+                  <h3 className="font-semibold text-base truncate">{conversation.name}</h3>
                   <span className="text-xs text-foreground-muted ml-2 shrink-0">
                     {conversation.timestamp}
                   </span>
@@ -124,9 +115,7 @@ export default function MobileChatPage() {
             <Send className="h-8 w-8 text-foreground-muted" />
           </div>
           <h3 className="font-semibold text-lg mb-2">No messages yet</h3>
-          <p className="text-sm text-foreground-muted">
-            Start a conversation with your team
-          </p>
+          <p className="text-sm text-foreground-muted">Start a conversation with your team</p>
         </div>
       )}
     </div>

@@ -5,12 +5,12 @@
  * and embedding generation for RAG.
  */
 
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import mammoth from "mammoth";
-import * as XLSX from "xlsx";
-import sharp from "sharp";
-import { put } from "@vercel/blob";
+import { OpenAIEmbeddings } from '@langchain/openai';
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
+import mammoth from 'mammoth';
+import * as XLSX from 'xlsx';
+import sharp from 'sharp';
+import { put } from '@vercel/blob';
 
 export interface ProcessDocumentParams {
   file: File;
@@ -43,7 +43,7 @@ export class DocumentProcessor {
   constructor() {
     this.embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
-      modelName: "text-embedding-3-small", // Cheaper, faster
+      modelName: 'text-embedding-3-small', // Cheaper, faster
     });
 
     this.textSplitter = new RecursiveCharacterTextSplitter({
@@ -55,9 +55,7 @@ export class DocumentProcessor {
   /**
    * Main processing pipeline
    */
-  async processDocument(
-    params: ProcessDocumentParams,
-  ): Promise<ProcessedDocument> {
+  async processDocument(params: ProcessDocumentParams): Promise<ProcessedDocument> {
     const { file, userId, workspaceId } = params;
 
     // 1. Upload to Vercel Blob storage
@@ -87,7 +85,7 @@ export class DocumentProcessor {
       embeddings,
       metadata: {
         wordCount: content.split(/\s+/).length,
-        language: "en", // TODO: Detect language
+        language: 'en', // TODO: Detect language
         extractedAt: new Date().toISOString(),
         chunks: chunks.length,
       },
@@ -97,16 +95,12 @@ export class DocumentProcessor {
   /**
    * Upload file to Vercel Blob storage
    */
-  private async uploadFile(
-    file: File,
-    workspaceId: string,
-    userId: string,
-  ): Promise<string> {
+  private async uploadFile(file: File, workspaceId: string, userId: string): Promise<string> {
     const fileName = `${workspaceId}/${userId}/${Date.now()}-${file.name}`;
 
     const buffer = await file.arrayBuffer();
     const blob = await put(fileName, buffer, {
-      access: "public",
+      access: 'public',
       addRandomSuffix: true,
     });
 
@@ -121,18 +115,15 @@ export class DocumentProcessor {
     const mimeType = file.type;
 
     // PDF
-    if (mimeType === "application/pdf") {
+    if (mimeType === 'application/pdf') {
       // Use require for pdf-parse (CommonJS module)
-      const PDFParse = require("pdf-parse");
+      const PDFParse = require('pdf-parse');
       const data = await PDFParse(Buffer.from(buffer));
       return data.text;
     }
 
     // DOCX
-    if (
-      mimeType ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
+    if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       const result = await mammoth.extractRawText({
         buffer: Buffer.from(buffer),
       });
@@ -141,21 +132,20 @@ export class DocumentProcessor {
 
     // Excel/CSV
     if (
-      mimeType ===
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-      mimeType === "application/vnd.ms-excel" ||
-      mimeType === "text/csv"
+      mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      mimeType === 'application/vnd.ms-excel' ||
+      mimeType === 'text/csv'
     ) {
-      const workbook = XLSX.read(buffer, { type: "buffer" });
+      const workbook = XLSX.read(buffer, { type: 'buffer' });
       const sheets = workbook.SheetNames.map((name) => {
         const sheet = workbook.Sheets[name];
         return XLSX.utils.sheet_to_txt(sheet);
       });
-      return sheets.join("\n\n");
+      return sheets.join('\n\n');
     }
 
     // Images (OCR with sharp metadata)
-    if (mimeType.startsWith("image/")) {
+    if (mimeType.startsWith('image/')) {
       const image = sharp(Buffer.from(buffer));
       const metadata = await image.metadata();
       // TODO: Add OCR with Tesseract or Google Vision API
@@ -163,7 +153,7 @@ export class DocumentProcessor {
     }
 
     // Plain text
-    if (mimeType.startsWith("text/")) {
+    if (mimeType.startsWith('text/')) {
       return new TextDecoder().decode(buffer);
     }
 
@@ -175,22 +165,22 @@ export class DocumentProcessor {
    */
   private async generateSummary(content: string): Promise<string> {
     // Use OpenAI API directly for summarization
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini", // Cheaper model for summaries
+        model: 'gpt-4o-mini', // Cheaper model for summaries
         messages: [
           {
-            role: "system",
+            role: 'system',
             content:
-              "You are a helpful assistant that creates concise summaries of documents. Summarize in 2-3 sentences, focusing on key points.",
+              'You are a helpful assistant that creates concise summaries of documents. Summarize in 2-3 sentences, focusing on key points.',
           },
           {
-            role: "user",
+            role: 'user',
             content: `Summarize this document:\n\n${content.slice(0, 4000)}`, // Limit to ~4k chars
           },
         ],
@@ -200,29 +190,29 @@ export class DocumentProcessor {
     });
 
     const data = await response.json();
-    return data.choices[0]?.message?.content || "Summary unavailable";
+    return data.choices[0]?.message?.content || 'Summary unavailable';
   }
 
   /**
    * Auto-generate tags using AI
    */
   private async generateTags(content: string): Promise<string[]> {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: 'gpt-4o-mini',
         messages: [
           {
-            role: "system",
+            role: 'system',
             content:
-              "You are a helpful assistant that generates relevant tags for documents. Return only a JSON array of 3-5 tags.",
+              'You are a helpful assistant that generates relevant tags for documents. Return only a JSON array of 3-5 tags.',
           },
           {
-            role: "user",
+            role: 'user',
             content: `Generate tags for this document:\n\n${content.slice(0, 2000)}`,
           },
         ],
@@ -232,15 +222,15 @@ export class DocumentProcessor {
     });
 
     const data = await response.json();
-    const tagsString = data.choices[0]?.message?.content || "[]";
+    const tagsString = data.choices[0]?.message?.content || '[]';
 
     try {
       return JSON.parse(tagsString);
     } catch {
       // Fallback: extract words from response
       return tagsString
-        .replace(/[\[\]"]/g, "")
-        .split(",")
+        .replace(/[\[\]"]/g, '')
+        .split(',')
         .map((t: string) => t.trim())
         .filter((t: string) => t.length > 0)
         .slice(0, 5);
@@ -267,11 +257,11 @@ export class DocumentProcessor {
    */
   detectLanguage(text: string): string {
     // Simple English detection (can be improved with a proper library)
-    const englishWords = ["the", "and", "is", "to", "a", "of", "in", "for"];
+    const englishWords = ['the', 'and', 'is', 'to', 'a', 'of', 'in', 'for'];
     const words = text.toLowerCase().split(/\s+/).slice(0, 100);
     const englishCount = words.filter((w) => englishWords.includes(w)).length;
 
-    return englishCount > 5 ? "en" : "unknown";
+    return englishCount > 5 ? 'en' : 'unknown';
   }
 }
 

@@ -124,7 +124,7 @@ export function StatsCard({ title, value }: Props) {
 
 ```typescript
 // DON'T waste time migrating these
-import { colors, spacing } from "@/lib/constants/design-system";
+import { colors, spacing } from '@/lib/constants/design-system';
 // These will be completely replaced
 ```
 

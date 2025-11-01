@@ -83,10 +83,10 @@ interface CalendarEvent {
 interface InboxMessage {
   id: string;
   workspaceId: string;
-  channel: "email" | "sms" | "web" | "api" | "form";
+  channel: 'email' | 'sms' | 'web' | 'api' | 'form';
   subject: string;
   body: string;
-  status: "unread" | "read" | "archived" | "spam" | "flagged";
+  status: 'unread' | 'read' | 'archived' | 'spam' | 'flagged';
   senderId: string | null;
   senderEmail: string | null;
   senderName: string | null;
@@ -111,17 +111,17 @@ interface Notification {
   workspaceId: string;
   userId: string;
   type:
-    | "info"
-    | "success"
-    | "warning"
-    | "error"
-    | "task_assigned"
-    | "task_completed"
-    | "project_update"
-    | "customer_update"
-    | "invoice_paid"
-    | "mention"
-    | "system";
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'task_assigned'
+    | 'task_completed'
+    | 'project_update'
+    | 'customer_update'
+    | 'invoice_paid'
+    | 'mention'
+    | 'system';
   title: string;
   message: string;
   actionUrl: string | null;
@@ -144,7 +144,7 @@ interface Invoice {
   id: string;
   workspaceId: string;
   invoiceNumber: string;
-  status: "draft" | "pending" | "sent" | "paid" | "overdue" | "cancelled";
+  status: 'draft' | 'pending' | 'sent' | 'paid' | 'overdue' | 'cancelled';
   customerId: string;
   projectId: string | null;
   subtotal: number; // cents
@@ -175,14 +175,8 @@ interface Campaign {
   workspaceId: string;
   name: string;
   description: string | null;
-  status:
-    | "draft"
-    | "scheduled"
-    | "active"
-    | "paused"
-    | "completed"
-    | "archived";
-  type: "email" | "social" | "ads" | "content";
+  status: 'draft' | 'scheduled' | 'active' | 'paused' | 'completed' | 'archived';
+  type: 'email' | 'social' | 'ads' | 'content';
   segmentId: string | null;
   targetAudience: any; // jsonb
   startDate: string | null;
@@ -216,7 +210,7 @@ interface EmailThread {
   participants: any; // jsonb
   isStarred: boolean;
   isRead: boolean;
-  folder: "inbox" | "sent" | "drafts" | "trash";
+  folder: 'inbox' | 'sent' | 'drafts' | 'trash';
   labels: string[] | null;
   lastMessageAt: string;
   createdAt: string;

@@ -469,8 +469,8 @@ pnpm add @clerk/nextjs --filter web
 **Database Query Example:**
 
 ```typescript
-import { db } from "@galaxyco/database";
-import { users } from "@galaxyco/database/schema";
+import { db } from '@galaxyco/database';
+import { users } from '@galaxyco/database/schema';
 
 await db.insert(users).values({
   clerkUserId: event.data.id,
@@ -507,8 +507,8 @@ await db.insert(users).values({
 **Database Query Example:**
 
 ```typescript
-import { db } from "@galaxyco/database";
-import { workspaces, workspaceMembers } from "@galaxyco/database/schema";
+import { db } from '@galaxyco/database';
+import { workspaces, workspaceMembers } from '@galaxyco/database/schema';
 
 const workspace = await db
   .insert(workspaces)
@@ -522,7 +522,7 @@ const workspace = await db
 await db.insert(workspaceMembers).values({
   workspaceId: workspace[0].id,
   userId: currentUser.id,
-  role: "owner",
+  role: 'owner',
 });
 ```
 
@@ -573,17 +573,17 @@ await db.insert(workspaceMembers).values({
 **Example Guard:**
 
 ```typescript
-import { clerkClient } from "@clerk/clerk-sdk-node";
-import { validateTenantAccess } from "@galaxyco/database";
+import { clerkClient } from '@clerk/clerk-sdk-node';
+import { validateTenantAccess } from '@galaxyco/database';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization?.split(" ")[1];
+    const token = request.headers.authorization?.split(' ')[1];
 
     const session = await clerkClient.verifyToken(token);
-    const workspaceId = request.headers["x-workspace-id"];
+    const workspaceId = request.headers['x-workspace-id'];
 
     await validateTenantAccess(session.sub, workspaceId);
 
@@ -701,7 +701,7 @@ CLERK_SECRET_KEY=sk_...
 
 ```typescript
 // ALWAYS use withTenant helper
-import { db, withTenant } from "@galaxyco/database";
+import { db, withTenant } from '@galaxyco/database';
 
 const tenantDb = withTenant(db, workspaceId);
 const agents = await tenantDb.query.agents.findMany();

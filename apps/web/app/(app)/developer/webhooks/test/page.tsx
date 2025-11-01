@@ -1,61 +1,61 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Send, Clock, CheckCircle2, XCircle, Copy } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Send, Clock, CheckCircle2, XCircle, Copy } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 const samplePayloads = {
-  "agent.completed": {
-    event: "agent.completed",
+  'agent.completed': {
+    event: 'agent.completed',
     data: {
-      agentId: "agent_abc123",
-      executionId: "exec_xyz789",
-      status: "success",
-      output: "Task completed successfully",
+      agentId: 'agent_abc123',
+      executionId: 'exec_xyz789',
+      status: 'success',
+      output: 'Task completed successfully',
       duration: 2345,
       timestamp: new Date().toISOString(),
     },
   },
-  "document.uploaded": {
-    event: "document.uploaded",
+  'document.uploaded': {
+    event: 'document.uploaded',
     data: {
-      documentId: "doc_def456",
-      name: "proposal.pdf",
+      documentId: 'doc_def456',
+      name: 'proposal.pdf',
       size: 1048576,
-      mimeType: "application/pdf",
-      uploadedBy: "user_ghi789",
+      mimeType: 'application/pdf',
+      uploadedBy: 'user_ghi789',
       timestamp: new Date().toISOString(),
     },
   },
-  "workflow.started": {
-    event: "workflow.started",
+  'workflow.started': {
+    event: 'workflow.started',
     data: {
-      workflowId: "wf_jkl012",
-      trigger: "manual",
-      initiatedBy: "user_mno345",
+      workflowId: 'wf_jkl012',
+      trigger: 'manual',
+      initiatedBy: 'user_mno345',
       timestamp: new Date().toISOString(),
     },
   },
 };
 
 export default function WebhookTestPage() {
-  const [url, setUrl] = useState("https://your-server.com/webhook");
-  const [selectedEvent, setSelectedEvent] = useState("agent.completed");
+  const [url, setUrl] = useState('https://your-server.com/webhook');
+  const [selectedEvent, setSelectedEvent] = useState('agent.completed');
   const [payload, setPayload] = useState(
-    JSON.stringify(samplePayloads["agent.completed"], null, 2),
+    JSON.stringify(samplePayloads['agent.completed'], null, 2),
   );
   const [response, setResponse] = useState<{
     status: number;
@@ -68,13 +68,7 @@ export default function WebhookTestPage() {
 
   const handleEventChange = (event: string) => {
     setSelectedEvent(event);
-    setPayload(
-      JSON.stringify(
-        samplePayloads[event as keyof typeof samplePayloads],
-        null,
-        2,
-      ),
-    );
+    setPayload(JSON.stringify(samplePayloads[event as keyof typeof samplePayloads], null, 2));
   };
 
   const handleSend = async () => {
@@ -92,30 +86,30 @@ export default function WebhookTestPage() {
       // Mock response
       setResponse({
         status: 200,
-        statusText: "OK",
+        statusText: 'OK',
         body: JSON.stringify(
           {
             received: true,
-            eventId: "evt_" + Math.random().toString(36).substr(2, 9),
+            eventId: 'evt_' + Math.random().toString(36).substr(2, 9),
             processedAt: new Date().toISOString(),
           },
           null,
           2,
         ),
         headers: {
-          "content-type": "application/json",
-          "x-webhook-id": "wh_" + Math.random().toString(36).substr(2, 9),
+          'content-type': 'application/json',
+          'x-webhook-id': 'wh_' + Math.random().toString(36).substr(2, 9),
         },
         duration,
       });
 
-      toast.success("Webhook test sent successfully");
+      toast.success('Webhook test sent successfully');
     } catch (error) {
-      toast.error("Failed to send webhook");
+      toast.error('Failed to send webhook');
       setResponse({
         status: 500,
-        statusText: "Internal Server Error",
-        body: JSON.stringify({ error: "Connection failed" }),
+        statusText: 'Internal Server Error',
+        body: JSON.stringify({ error: 'Connection failed' }),
         headers: {},
         duration: 0,
       });
@@ -126,7 +120,7 @@ export default function WebhookTestPage() {
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success('Copied to clipboard');
   };
 
   return (
@@ -134,18 +128,16 @@ export default function WebhookTestPage() {
       title="Test Webhooks"
       subtitle="Send test webhooks to verify your endpoint configuration"
       breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Webhooks", href: "/webhooks" },
-        { label: "Test" },
+        { label: 'Dashboard', href: '/' },
+        { label: 'Webhooks', href: '/webhooks' },
+        { label: 'Test' },
       ]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Request Panel */}
         <div className="space-y-6">
           <div className="rounded-lg border border-border bg-card p-6">
-            <h2 className="text-lg font-semibold mb-4">
-              Configure Test Request
-            </h2>
+            <h2 className="text-lg font-semibold mb-4">Configure Test Request</h2>
 
             {/* Webhook URL */}
             <div className="space-y-2 mb-4">
@@ -182,11 +174,7 @@ export default function WebhookTestPage() {
             <div className="space-y-2 mb-6">
               <div className="flex items-center justify-between">
                 <Label htmlFor="payload">Payload (JSON)</Label>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleCopy(payload)}
-                >
+                <Button size="sm" variant="ghost" onClick={() => handleCopy(payload)}>
                   <Copy className="h-3 w-3 mr-1" />
                   Copy
                 </Button>
@@ -201,11 +189,7 @@ export default function WebhookTestPage() {
             </div>
 
             {/* Send Button */}
-            <Button
-              className="w-full"
-              onClick={handleSend}
-              disabled={isSending || !url}
-            >
+            <Button className="w-full" onClick={handleSend} disabled={isSending || !url}>
               {isSending ? (
                 <>
                   <Clock className="mr-2 h-4 w-4 animate-spin" />
@@ -264,9 +248,7 @@ export default function WebhookTestPage() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() =>
-                        handleCopy(JSON.stringify(response.headers, null, 2))
-                      }
+                      onClick={() => handleCopy(JSON.stringify(response.headers, null, 2))}
                     >
                       <Copy className="h-3 w-3" />
                     </Button>
@@ -274,8 +256,7 @@ export default function WebhookTestPage() {
                   <div className="rounded-lg bg-background-subtle p-4 font-mono text-xs space-y-1">
                     {Object.entries(response.headers).map(([key, value]) => (
                       <div key={key}>
-                        <span className="text-muted-foreground">{key}:</span>{" "}
-                        {value}
+                        <span className="text-muted-foreground">{key}:</span> {value}
                       </div>
                     ))}
                   </div>
@@ -285,11 +266,7 @@ export default function WebhookTestPage() {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <Label>Response Body</Label>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleCopy(response.body)}
-                    >
+                    <Button size="sm" variant="ghost" onClick={() => handleCopy(response.body)}>
                       <Copy className="h-3 w-3" />
                     </Button>
                   </div>
@@ -308,9 +285,7 @@ export default function WebhookTestPage() {
           <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950 p-4">
             <h3 className="font-semibold mb-2">Testing Tips</h3>
             <ul className="text-sm space-y-1 text-muted-foreground">
-              <li>
-                • Webhooks include a signature in the X-Webhook-Signature header
-              </li>
+              <li>• Webhooks include a signature in the X-Webhook-Signature header</li>
               <li>• Your endpoint should respond within 5 seconds</li>
               <li>• Return a 2xx status code to acknowledge receipt</li>
               <li>• Failed deliveries will be retried up to 3 times</li>

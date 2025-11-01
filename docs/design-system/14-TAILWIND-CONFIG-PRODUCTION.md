@@ -13,167 +13,162 @@
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 
-  darkMode: "class", // or 'media'
+  darkMode: 'class', // or 'media'
 
   theme: {
     extend: {
       colors: {
         // Base colors
-        background: "rgb(var(--background) / <alpha-value>)",
-        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
 
         // Background variants
-        "background-subtle": "rgb(var(--background-subtle) / <alpha-value>)",
-        "background-elevated":
-          "rgb(var(--background-elevated) / <alpha-value>)",
+        'background-subtle': 'rgb(var(--background-subtle) / <alpha-value>)',
+        'background-elevated': 'rgb(var(--background-elevated) / <alpha-value>)',
 
         // UI elements
-        card: "rgb(var(--card) / <alpha-value>)",
-        "card-foreground": "rgb(var(--card-foreground) / <alpha-value>)",
+        card: 'rgb(var(--card) / <alpha-value>)',
+        'card-foreground': 'rgb(var(--card-foreground) / <alpha-value>)',
 
-        popover: "rgb(var(--popover) / <alpha-value>)",
-        "popover-foreground": "rgb(var(--popover-foreground) / <alpha-value>)",
+        popover: 'rgb(var(--popover) / <alpha-value>)',
+        'popover-foreground': 'rgb(var(--popover-foreground) / <alpha-value>)',
 
         // Primary brand
         primary: {
-          DEFAULT: "rgb(var(--primary) / <alpha-value>)",
-          foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
-          hover: "rgb(var(--primary-hover) / <alpha-value>)",
-          active: "rgb(var(--primary-active) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
+          hover: 'rgb(var(--primary-hover) / <alpha-value>)',
+          active: 'rgb(var(--primary-active) / <alpha-value>)',
         },
 
         // Secondary
         secondary: {
-          DEFAULT: "rgb(var(--secondary) / <alpha-value>)",
-          foreground: "rgb(var(--secondary-foreground) / <alpha-value>)",
-          hover: "rgb(var(--secondary-hover) / <alpha-value>)",
-          active: "rgb(var(--secondary-active) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--secondary) / <alpha-value>)',
+          foreground: 'rgb(var(--secondary-foreground) / <alpha-value>)',
+          hover: 'rgb(var(--secondary-hover) / <alpha-value>)',
+          active: 'rgb(var(--secondary-active) / <alpha-value>)',
         },
 
         // Muted (subtle backgrounds)
         muted: {
-          DEFAULT: "rgb(var(--muted) / <alpha-value>)",
-          foreground: "rgb(var(--muted-foreground) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--muted-foreground) / <alpha-value>)',
         },
 
         // Accent (hover states)
         accent: {
-          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
-          foreground: "rgb(var(--accent-foreground) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
         },
 
         // Semantic colors
         destructive: {
-          DEFAULT: "rgb(var(--destructive) / <alpha-value>)",
-          foreground: "rgb(var(--destructive-foreground) / <alpha-value>)",
-          hover: "rgb(var(--destructive-hover) / <alpha-value>)",
-          active: "rgb(var(--destructive-active) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
+          hover: 'rgb(var(--destructive-hover) / <alpha-value>)',
+          active: 'rgb(var(--destructive-active) / <alpha-value>)',
         },
 
         success: {
-          DEFAULT: "rgb(var(--success) / <alpha-value>)",
-          foreground: "rgb(var(--success-foreground) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--success) / <alpha-value>)',
+          foreground: 'rgb(var(--success-foreground) / <alpha-value>)',
         },
 
         warning: {
-          DEFAULT: "rgb(var(--warning) / <alpha-value>)",
-          foreground: "rgb(var(--warning-foreground) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--warning) / <alpha-value>)',
+          foreground: 'rgb(var(--warning-foreground) / <alpha-value>)',
         },
 
         info: {
-          DEFAULT: "rgb(var(--info) / <alpha-value>)",
-          foreground: "rgb(var(--info-foreground) / <alpha-value>)",
+          DEFAULT: 'rgb(var(--info) / <alpha-value>)',
+          foreground: 'rgb(var(--info-foreground) / <alpha-value>)',
         },
 
         // Borders
-        border: "rgb(var(--border) / <alpha-value>)",
-        "border-hover": "rgb(var(--border-hover) / <alpha-value>)",
-        input: "rgb(var(--input) / <alpha-value>)",
-        ring: "rgb(var(--ring) / <alpha-value>)",
+        border: 'rgb(var(--border) / <alpha-value>)',
+        'border-hover': 'rgb(var(--border-hover) / <alpha-value>)',
+        input: 'rgb(var(--input) / <alpha-value>)',
+        ring: 'rgb(var(--ring) / <alpha-value>)',
       },
 
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
 
       fontFamily: {
-        sans: ["Inter var", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "Menlo", "monospace"],
+        sans: ['Inter var', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Menlo', 'monospace'],
       },
 
       fontSize: {
-        xs: ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.02em" }],
-        sm: ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0.01em" }],
-        base: ["1rem", { lineHeight: "1.5rem", letterSpacing: "0" }],
-        lg: ["1.125rem", { lineHeight: "1.75rem", letterSpacing: "-0.01em" }],
-        xl: ["1.25rem", { lineHeight: "1.875rem", letterSpacing: "-0.01em" }],
-        "2xl": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.02em" }],
-        "3xl": [
-          "1.875rem",
-          { lineHeight: "2.25rem", letterSpacing: "-0.02em" },
-        ],
-        "4xl": ["2.25rem", { lineHeight: "2.5rem", letterSpacing: "-0.02em" }],
-        "5xl": ["3rem", { lineHeight: "1", letterSpacing: "-0.02em" }],
+        xs: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.02em' }],
+        sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.01em' }],
+        base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '0' }],
+        lg: ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }],
+        xl: ['1.25rem', { lineHeight: '1.875rem', letterSpacing: '-0.01em' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.02em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '-0.02em' }],
+        '5xl': ['3rem', { lineHeight: '1', letterSpacing: '-0.02em' }],
       },
 
       spacing: {
-        18: "4.5rem",
-        112: "28rem",
-        128: "32rem",
+        18: '4.5rem',
+        112: '28rem',
+        128: '32rem',
       },
 
       boxShadow: {
-        sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-        DEFAULT:
-          "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-        md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-        lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-        xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-        "2xl": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
-        inner: "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
-        none: "none",
+        sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+        md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+        '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+        inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+        none: 'none',
       },
 
       animation: {
-        "spin-slow": "spin 3s linear infinite",
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "bounce-slow": "bounce 2s infinite",
+        'spin-slow': 'spin 3s linear infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce-slow': 'bounce 2s infinite',
       },
 
       transitionDuration: {
-        DEFAULT: "200ms",
+        DEFAULT: '200ms',
       },
 
       transitionTimingFunction: {
-        DEFAULT: "cubic-bezier(0.16, 1, 0.3, 1)",
+        DEFAULT: 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
 
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
       },
 
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },
 
   plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/forms"),
-    require("@tailwindcss/container-queries"),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries'),
   ],
 };
 ```
@@ -314,8 +309,8 @@ export default {
   body {
     @apply bg-background text-foreground;
     font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+      'rlig' 1,
+      'calt' 1;
   }
 }
 
@@ -360,13 +355,7 @@ export default {
     <title>GalaxyCo.ai</title>
 
     <!-- Preload fonts -->
-    <link
-      rel="preload"
-      href="/fonts/inter-var.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
     <link
       rel="preload"
       href="/fonts/jetbrains-mono.woff2"
@@ -378,19 +367,19 @@ export default {
     <!-- Font face declarations in inline style to prevent FOUT -->
     <style>
       @font-face {
-        font-family: "Inter var";
+        font-family: 'Inter var';
         font-weight: 100 900;
         font-display: swap;
         font-style: normal;
-        font-named-instance: "Regular";
-        src: url("/fonts/inter-var.woff2") format("woff2");
+        font-named-instance: 'Regular';
+        src: url('/fonts/inter-var.woff2') format('woff2');
       }
 
       @font-face {
-        font-family: "JetBrains Mono";
+        font-family: 'JetBrains Mono';
         font-weight: 400 700;
         font-display: swap;
-        src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+        src: url('/fonts/jetbrains-mono.woff2') format('woff2');
       }
     </style>
   </head>
@@ -407,25 +396,25 @@ export default {
 
 ```typescript
 // src/hooks/useTheme.ts
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("theme") as "light" | "dark") || "dark";
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('theme') as 'light' | 'dark') || 'dark';
     }
-    return "dark";
+    return 'dark';
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
+    root.classList.remove('light', 'dark');
     root.classList.add(theme);
-    localStorage.setItem("theme", theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return { theme, setTheme, toggleTheme };
@@ -478,7 +467,7 @@ export const useTheme = () => {
 
 ```javascript
 // vite.config.ts
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   css: {
@@ -489,7 +478,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          tailwind: ["tailwindcss"],
+          tailwind: ['tailwindcss'],
         },
       },
     },

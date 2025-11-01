@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
 import {
   users,
   workspaceMembers,
   campaigns,
   prospects,
   emailThreads,
-} from "@galaxyco/database/schema";
-import { eq, and, count, gte } from "drizzle-orm";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+} from '@galaxyco/database/schema';
+import { eq, and, count, gte } from 'drizzle-orm';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * GET /api/analytics/marketing
@@ -26,19 +26,19 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized analytics/marketing list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized analytics/marketing list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -62,13 +62,13 @@ export async function GET(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
 
     // 5. Fetch marketing analytics from database
-    const dateRange = searchParams.get("dateRange") || "30d";
+    const dateRange = searchParams.get('dateRange') || '30d';
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - parseInt(dateRange));
 
@@ -109,10 +109,7 @@ export async function GET(req: NextRequest) {
       .select({ count: count() })
       .from(emailThreads)
       .where(
-        and(
-          eq(emailThreads.workspaceId, workspaceId),
-          gte(emailThreads.createdAt, startDate),
-        ),
+        and(eq(emailThreads.workspaceId, workspaceId), gte(emailThreads.createdAt, startDate)),
       );
 
     const analytics = {
@@ -136,13 +133,10 @@ export async function GET(req: NextRequest) {
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
-    logger.error("List analytics/marketing error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List analytics/marketing error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch analytics/marketing" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch analytics/marketing' }, { status: 500 });
   }
 }

@@ -101,15 +101,12 @@ packages/database/
 
 ```typescript
 // Import in apps/web
-import { db } from "@galaxyco/database";
-import { workspaces, agents } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@galaxyco/database';
+import { workspaces, agents } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 // Query
-const workspace = await db
-  .select()
-  .from(workspaces)
-  .where(eq(workspaces.id, workspaceId));
+const workspace = await db.select().from(workspaces).where(eq(workspaces.id, workspaceId));
 ```
 
 ---
@@ -252,9 +249,9 @@ npm run db:migrate
 
 ```typescript
 // Use path aliases
-import { db } from "@galaxyco/database";
-import { Button } from "@/components/ui/button";
-import { formatDate } from "@/lib/utils";
+import { db } from '@galaxyco/database';
+import { Button } from '@/components/ui/button';
+import { formatDate } from '@/lib/utils';
 
 // NOT relative paths from deep nesting
 // ❌ import { db } from "../../../../../packages/database";

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { colors, radius } from "@/lib/constants/design-system";
-import { useState, useEffect } from "react";
+import { colors, radius } from '@/lib/constants/design-system';
+import { useState, useEffect } from 'react';
 
 interface SearchBarProps {
   value: string;
@@ -15,7 +15,7 @@ export default function SearchBar({
   value,
   onChange,
   onClear,
-  placeholder = "Search agents, categories, or tags...",
+  placeholder = 'Search agents, categories, or tags...',
   isSearching = false,
 }: SearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -23,23 +23,23 @@ export default function SearchBar({
   return (
     <div
       style={{
-        position: "relative",
-        width: "100%",
-        maxWidth: "500px",
+        position: 'relative',
+        width: '100%',
+        maxWidth: '500px',
       }}
     >
       {/* Search Icon */}
       <div
         style={{
-          position: "absolute",
-          left: "12px",
-          top: "50%",
-          transform: "translateY(-50%)",
+          position: 'absolute',
+          left: '12px',
+          top: '50%',
+          transform: 'translateY(-50%)',
           color: colors.text.tertiary,
-          pointerEvents: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          pointerEvents: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <svg
@@ -66,18 +66,18 @@ export default function SearchBar({
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         style={{
-          width: "100%",
-          height: "40px",
-          padding: "0 40px 0 40px", // Space for icons
-          fontSize: "0.9375rem",
-          fontWeight: "400",
+          width: '100%',
+          height: '40px',
+          padding: '0 40px 0 40px', // Space for icons
+          fontSize: '0.9375rem',
+          fontWeight: '400',
           color: colors.text.primary,
           background: colors.background.primary,
           border: `1px solid ${isFocused ? colors.border.focus : colors.border.default}`,
           borderRadius: radius.lg,
-          outline: "none",
-          transition: "all 0.2s ease",
-          boxShadow: isFocused ? "0 0 0 3px rgba(77, 111, 255, 0.1)" : "none",
+          outline: 'none',
+          transition: 'all 0.2s ease',
+          boxShadow: isFocused ? '0 0 0 3px rgba(77, 111, 255, 0.1)' : 'none',
         }}
       />
 
@@ -88,26 +88,26 @@ export default function SearchBar({
             if (onClear) {
               onClear();
             } else {
-              onChange("");
+              onChange('');
             }
           }}
           disabled={isSearching}
           style={{
-            position: "absolute",
-            right: "8px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "24px",
-            height: "24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "transparent",
-            border: "none",
-            borderRadius: "50%",
-            cursor: isSearching ? "default" : "pointer",
+            position: 'absolute',
+            right: '8px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '24px',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            borderRadius: '50%',
+            cursor: isSearching ? 'default' : 'pointer',
             color: colors.text.tertiary,
-            transition: "all 0.2s ease",
+            transition: 'all 0.2s ease',
             opacity: isSearching ? 0.5 : 1,
           }}
           onMouseEnter={(e) => {
@@ -117,10 +117,10 @@ export default function SearchBar({
             }
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.background = 'transparent';
             e.currentTarget.style.color = colors.text.tertiary;
           }}
-          aria-label={isSearching ? "Searching..." : "Clear search"}
+          aria-label={isSearching ? 'Searching...' : 'Clear search'}
         >
           {isSearching ? (
             // Loading spinner
@@ -134,7 +134,7 @@ export default function SearchBar({
               strokeLinecap="round"
               strokeLinejoin="round"
               style={{
-                animation: "spin 1s linear infinite",
+                animation: 'spin 1s linear infinite',
               }}
             >
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Shield, Home, Mail, ArrowLeft } from "lucide-react";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Shield, Home, Mail, ArrowLeft } from 'lucide-react';
 
 export default function ForbiddenPage() {
   return (
@@ -21,8 +21,7 @@ export default function ForbiddenPage() {
         {/* Error Message */}
         <h2 className="text-3xl font-bold mb-4">Access Denied</h2>
         <p className="text-lg text-muted-foreground mb-8">
-          Sorry, you don&apos;t have permission to access this resource. This
-          could be because:
+          Sorry, you don&apos;t have permission to access this resource. This could be because:
         </p>
 
         {/* Reasons List */}
@@ -30,9 +29,7 @@ export default function ForbiddenPage() {
           <ul className="space-y-2 text-sm">
             <li className="flex gap-2">
               <span className="text-muted-foreground">•</span>
-              <span>
-                Your account doesn&apos;t have the required permissions
-              </span>
+              <span>Your account doesn&apos;t have the required permissions</span>
             </li>
             <li className="flex gap-2">
               <span className="text-muted-foreground">•</span>
@@ -51,11 +48,7 @@ export default function ForbiddenPage() {
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-center mb-8">
-          <Button
-            onClick={() => window.history.back()}
-            variant="outline"
-            className="gap-2"
-          >
+          <Button onClick={() => window.history.back()} variant="outline" className="gap-2">
             <ArrowLeft className="h-4 w-4" />
             Go Back
           </Button>
@@ -71,8 +64,8 @@ export default function ForbiddenPage() {
         <div className="p-6 bg-muted rounded-lg max-w-md mx-auto">
           <h3 className="font-semibold mb-2">Need Access?</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            If you believe you should have access to this resource, contact your
-            workspace admin or request access.
+            If you believe you should have access to this resource, contact your workspace admin or
+            request access.
           </p>
           <div className="flex gap-2 justify-center">
             <Link href="/settings/team">

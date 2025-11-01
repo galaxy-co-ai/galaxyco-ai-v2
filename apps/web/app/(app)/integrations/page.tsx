@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Check,
   Settings,
@@ -14,141 +14,134 @@ import {
   MessageSquare,
   Calendar,
   FileText,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Mock data for integrations
 const mockIntegrations = [
   {
-    id: "1",
-    name: "Slack",
-    category: "communication",
-    description:
-      "Send notifications and alerts to Slack channels for team collaboration",
+    id: '1',
+    name: 'Slack',
+    category: 'communication',
+    description: 'Send notifications and alerts to Slack channels for team collaboration',
     icon: <MessageSquare className="h-8 w-8" />,
-    status: "connected",
-    features: ["Notifications", "Alerts", "Team Chat"],
-    setupTime: "5 minutes",
+    status: 'connected',
+    features: ['Notifications', 'Alerts', 'Team Chat'],
+    setupTime: '5 minutes',
   },
   {
-    id: "2",
-    name: "Google Calendar",
-    category: "productivity",
-    description:
-      "Sync events and schedule meetings directly from your workspace",
+    id: '2',
+    name: 'Google Calendar',
+    category: 'productivity',
+    description: 'Sync events and schedule meetings directly from your workspace',
     icon: <Calendar className="h-8 w-8" />,
-    status: "connected",
-    features: ["Calendar Sync", "Event Creation", "Reminders"],
-    setupTime: "3 minutes",
+    status: 'connected',
+    features: ['Calendar Sync', 'Event Creation', 'Reminders'],
+    setupTime: '3 minutes',
   },
   {
-    id: "3",
-    name: "Salesforce",
-    category: "crm",
-    description:
-      "Connect with Salesforce CRM to sync contacts, leads, and opportunities",
+    id: '3',
+    name: 'Salesforce',
+    category: 'crm',
+    description: 'Connect with Salesforce CRM to sync contacts, leads, and opportunities',
     icon: <Database className="h-8 w-8" />,
-    status: "available",
-    features: ["Contact Sync", "Lead Management", "Opportunities"],
-    setupTime: "10 minutes",
+    status: 'available',
+    features: ['Contact Sync', 'Lead Management', 'Opportunities'],
+    setupTime: '10 minutes',
   },
   {
-    id: "4",
-    name: "Gmail",
-    category: "communication",
-    description:
-      "Send and receive emails, manage your inbox from within the platform",
+    id: '4',
+    name: 'Gmail',
+    category: 'communication',
+    description: 'Send and receive emails, manage your inbox from within the platform',
     icon: <Mail className="h-8 w-8" />,
-    status: "connected",
-    features: ["Email Sending", "Inbox Management", "Templates"],
-    setupTime: "5 minutes",
+    status: 'connected',
+    features: ['Email Sending', 'Inbox Management', 'Templates'],
+    setupTime: '5 minutes',
   },
   {
-    id: "5",
-    name: "Zapier",
-    category: "automation",
-    description: "Connect to 5000+ apps with Zapier to automate workflows",
+    id: '5',
+    name: 'Zapier',
+    category: 'automation',
+    description: 'Connect to 5000+ apps with Zapier to automate workflows',
     icon: <Zap className="h-8 w-8" />,
-    status: "available",
-    features: ["Workflow Automation", "5000+ Apps", "Custom Triggers"],
-    setupTime: "15 minutes",
+    status: 'available',
+    features: ['Workflow Automation', '5000+ Apps', 'Custom Triggers'],
+    setupTime: '15 minutes',
   },
   {
-    id: "6",
-    name: "HubSpot",
-    category: "crm",
-    description:
-      "Integrate with HubSpot CRM for marketing and sales automation",
+    id: '6',
+    name: 'HubSpot',
+    category: 'crm',
+    description: 'Integrate with HubSpot CRM for marketing and sales automation',
     icon: <Database className="h-8 w-8" />,
-    status: "available",
-    features: ["Marketing Automation", "Sales Pipeline", "Analytics"],
-    setupTime: "10 minutes",
+    status: 'available',
+    features: ['Marketing Automation', 'Sales Pipeline', 'Analytics'],
+    setupTime: '10 minutes',
   },
   {
-    id: "7",
-    name: "Notion",
-    category: "productivity",
-    description: "Connect Notion databases and pages for knowledge management",
+    id: '7',
+    name: 'Notion',
+    category: 'productivity',
+    description: 'Connect Notion databases and pages for knowledge management',
     icon: <FileText className="h-8 w-8" />,
-    status: "available",
-    features: ["Database Sync", "Page Creation", "Collaboration"],
-    setupTime: "8 minutes",
+    status: 'available',
+    features: ['Database Sync', 'Page Creation', 'Collaboration'],
+    setupTime: '8 minutes',
   },
   {
-    id: "8",
-    name: "Microsoft Teams",
-    category: "communication",
-    description: "Send messages and notifications to Microsoft Teams channels",
+    id: '8',
+    name: 'Microsoft Teams',
+    category: 'communication',
+    description: 'Send messages and notifications to Microsoft Teams channels',
     icon: <MessageSquare className="h-8 w-8" />,
-    status: "available",
-    features: ["Team Messaging", "File Sharing", "Video Calls"],
-    setupTime: "5 minutes",
+    status: 'available',
+    features: ['Team Messaging', 'File Sharing', 'Video Calls'],
+    setupTime: '5 minutes',
   },
 ];
 
 const categoryOptions = [
-  { value: "all", label: "All Categories" },
-  { value: "communication", label: "Communication" },
-  { value: "productivity", label: "Productivity" },
-  { value: "crm", label: "CRM" },
-  { value: "automation", label: "Automation" },
+  { value: 'all', label: 'All Categories' },
+  { value: 'communication', label: 'Communication' },
+  { value: 'productivity', label: 'Productivity' },
+  { value: 'crm', label: 'CRM' },
+  { value: 'automation', label: 'Automation' },
 ];
 
 const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "connected", label: "Connected" },
-  { value: "available", label: "Available" },
+  { value: 'all', label: 'All Status' },
+  { value: 'connected', label: 'Connected' },
+  { value: 'available', label: 'Available' },
 ];
 
 export default function IntegrationsPage() {
   const [integrations, setIntegrations] = useState(mockIntegrations);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Filter integrations based on search and filters
   const filteredIntegrations = integrations.filter((integration) => {
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       integration.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory =
-      categoryFilter === "all" || integration.category === categoryFilter;
-    const matchesStatus =
-      statusFilter === "all" || integration.status === statusFilter;
+    const matchesCategory = categoryFilter === 'all' || integration.category === categoryFilter;
+    const matchesStatus = statusFilter === 'all' || integration.status === statusFilter;
 
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const renderIntegrationCard = (integration: (typeof mockIntegrations)[0]) => {
-    const isConnected = integration.status === "connected";
+    const isConnected = integration.status === 'connected';
 
     const categoryColors = {
-      communication: "default",
-      productivity: "secondary",
-      crm: "default",
-      automation: "outline",
+      communication: 'default',
+      productivity: 'secondary',
+      crm: 'default',
+      automation: 'outline',
     } as const;
 
     return (
@@ -165,15 +158,10 @@ export default function IntegrationsPage() {
             <div>
               <h3 className="font-semibold text-lg">{integration.name}</h3>
               <Badge
-                variant={
-                  categoryColors[
-                    integration.category as keyof typeof categoryColors
-                  ]
-                }
+                variant={categoryColors[integration.category as keyof typeof categoryColors]}
                 className="mt-1"
               >
-                {integration.category.charAt(0).toUpperCase() +
-                  integration.category.slice(1)}
+                {integration.category.charAt(0).toUpperCase() + integration.category.slice(1)}
               </Badge>
             </div>
           </div>
@@ -186,9 +174,7 @@ export default function IntegrationsPage() {
         </div>
 
         {/* Description */}
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-          {integration.description}
-        </p>
+        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{integration.description}</p>
 
         {/* Features */}
         <div className="space-y-2 mb-4">
@@ -204,9 +190,7 @@ export default function IntegrationsPage() {
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
-          <span className="text-xs text-muted-foreground">
-            Setup: {integration.setupTime}
-          </span>
+          <span className="text-xs text-muted-foreground">Setup: {integration.setupTime}</span>
           <div className="flex gap-2">
             {isConnected ? (
               <>
@@ -237,10 +221,7 @@ export default function IntegrationsPage() {
     <ListPage
       title="Integrations"
       subtitle="Connect your favorite apps and tools"
-      breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Integrations" },
-      ]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Integrations' }]}
       searchPlaceholder="Search integrations..."
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
@@ -256,9 +237,7 @@ export default function IntegrationsPage() {
     >
       {filteredIntegrations.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredIntegrations.map((integration) =>
-            renderIntegrationCard(integration),
-          )}
+          {filteredIntegrations.map((integration) => renderIntegrationCard(integration))}
         </div>
       ) : (
         <div className="text-center py-12">
@@ -266,9 +245,9 @@ export default function IntegrationsPage() {
           <Button
             variant="outline"
             onClick={() => {
-              setSearchQuery("");
-              setCategoryFilter("all");
-              setStatusFilter("all");
+              setSearchQuery('');
+              setCategoryFilter('all');
+              setStatusFilter('all');
             }}
           >
             Clear Filters

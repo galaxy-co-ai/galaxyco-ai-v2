@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
 import {
   ROLES,
   PAIN_POINTS,
@@ -13,27 +13,19 @@ import {
   Role,
   StarterPackId,
   OnboardingProfile,
-} from "@/lib/constants/onboarding";
-import {
-  colors,
-  typography,
-  spacing,
-  radius,
-} from "@/lib/constants/design-system";
+} from '@/lib/constants/onboarding';
+import { colors, typography, spacing, radius } from '@/lib/constants/design-system';
 
 interface OnboardingWizardProps {
   onComplete: (profile: OnboardingProfile) => void;
   isLoading?: boolean;
 }
 
-export function OnboardingWizard({
-  onComplete,
-  isLoading = false,
-}: OnboardingWizardProps) {
+export function OnboardingWizard({ onComplete, isLoading = false }: OnboardingWizardProps) {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
-  const [industry, setIndustry] = useState("");
-  const [painPointsFreeText, setPainPointsFreeText] = useState("");
+  const [industry, setIndustry] = useState('');
+  const [painPointsFreeText, setPainPointsFreeText] = useState('');
   const [painPointsTags, setPainPointsTags] = useState<string[]>([]);
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [sensitiveData, setSensitiveData] = useState<boolean | null>(null);
@@ -55,11 +47,7 @@ export function OnboardingWizard({
   const handleComplete = () => {
     if (!role || !industry || sensitiveData === null) return;
 
-    const recommendedPack = deriveStarterPack(
-      role,
-      painPointsTags,
-      selectedTools,
-    );
+    const recommendedPack = deriveStarterPack(role, painPointsTags, selectedTools);
 
     const profile: OnboardingProfile = {
       persona: { role, industry },
@@ -74,9 +62,7 @@ export function OnboardingWizard({
   };
 
   const toggleArrayItem = (array: string[], item: string) => {
-    return array.includes(item)
-      ? array.filter((i) => i !== item)
-      : [...array, item];
+    return array.includes(item) ? array.filter((i) => i !== item) : [...array, item];
   };
 
   const isStepValid = () => {
@@ -84,9 +70,9 @@ export function OnboardingWizard({
       case 1:
         return true; // Welcome screen
       case 2:
-        return role !== null && industry.trim() !== "";
+        return role !== null && industry.trim() !== '';
       case 3:
-        return painPointsFreeText.trim() !== "" || painPointsTags.length > 0;
+        return painPointsFreeText.trim() !== '' || painPointsTags.length > 0;
       case 4:
         return true; // Tools are optional
       case 5:
@@ -101,40 +87,40 @@ export function OnboardingWizard({
   return (
     <div
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         background: `linear-gradient(135deg, ${colors.primary[500]} 0%, ${colors.primary[700]} 100%)`,
-        padding: spacing["2xl"],
+        padding: spacing['2xl'],
         fontFamily: typography.fontFamily.sans,
       }}
     >
       <Card
         style={{
-          maxWidth: "700px",
-          width: "100%",
-          position: "relative",
+          maxWidth: '700px',
+          width: '100%',
+          position: 'relative',
         }}
       >
         {/* Progress Bar */}
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            height: "4px",
+            height: '4px',
             background: colors.neutral[100],
             borderRadius: `${radius.lg} ${radius.lg} 0 0`,
           }}
         >
           <div
             style={{
-              height: "100%",
+              height: '100%',
               background: colors.primary[500],
               width: `${(step / totalSteps) * 100}%`,
-              transition: "width 320ms ease",
+              transition: 'width 320ms ease',
               borderRadius: `${radius.lg} ${radius.lg} 0 0`,
             }}
           />
@@ -160,16 +146,10 @@ export function OnboardingWizard({
             />
           )}
           {step === 4 && (
-            <Step4Tools
-              selectedTools={selectedTools}
-              setSelectedTools={setSelectedTools}
-            />
+            <Step4Tools selectedTools={selectedTools} setSelectedTools={setSelectedTools} />
           )}
           {step === 5 && (
-            <Step5Sensitivity
-              sensitiveData={sensitiveData}
-              setSensitiveData={setSensitiveData}
-            />
+            <Step5Sensitivity sensitiveData={sensitiveData} setSensitiveData={setSensitiveData} />
           )}
           {step === 6 && (
             <Step6Summary
@@ -178,11 +158,7 @@ export function OnboardingWizard({
               painPoints={painPointsTags}
               tools={selectedTools}
               sensitiveData={sensitiveData!}
-              recommendedPack={deriveStarterPack(
-                role!,
-                painPointsTags,
-                selectedTools,
-              )}
+              recommendedPack={deriveStarterPack(role!, painPointsTags, selectedTools)}
             />
           )}
         </div>
@@ -190,10 +166,10 @@ export function OnboardingWizard({
         {/* Navigation Buttons */}
         <div
           style={{
-            marginTop: spacing["2xl"],
-            display: "flex",
+            marginTop: spacing['2xl'],
+            display: 'flex',
             gap: spacing.lg,
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
           }}
         >
           {step > 1 && (
@@ -201,19 +177,19 @@ export function OnboardingWizard({
               ← Back
             </Button>
           )}
-          <div style={{ marginLeft: "auto", display: "flex", gap: spacing.lg }}>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: spacing.lg }}>
             {step < totalSteps && (
               <Button
                 onClick={handleNext}
                 disabled={!isStepValid()}
-                className={step === 1 ? "w-full" : ""}
+                className={step === 1 ? 'w-full' : ''}
               >
-                {step === 1 ? "Get Started" : "Continue →"}
+                {step === 1 ? 'Get Started' : 'Continue →'}
               </Button>
             )}
             {step === totalSteps && (
               <Button onClick={handleComplete} disabled={isLoading}>
-                {isLoading ? "Creating workspace..." : "Create My Workspace"}
+                {isLoading ? 'Creating workspace...' : 'Create My Workspace'}
               </Button>
             )}
           </div>
@@ -223,7 +199,7 @@ export function OnboardingWizard({
         <div
           style={{
             marginTop: spacing.xl,
-            textAlign: "center",
+            textAlign: 'center',
             fontSize: typography.fontSize.sm,
             color: colors.neutral[500],
           }}
@@ -238,11 +214,11 @@ export function OnboardingWizard({
 // Step 1: Welcome
 function Step1Welcome() {
   return (
-    <div style={{ textAlign: "center" }}>
-      <div style={{ fontSize: "4rem", marginBottom: spacing.lg }}>🚀</div>
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ fontSize: '4rem', marginBottom: spacing.lg }}>🚀</div>
       <h1
         style={{
-          fontSize: typography.fontSize["3xl"],
+          fontSize: typography.fontSize['3xl'],
           fontWeight: typography.fontWeight.bold,
           marginBottom: spacing.md,
         }}
@@ -264,8 +240,7 @@ function Step1Welcome() {
           color: colors.neutral[500],
         }}
       >
-        Answer a few quick questions so we can create your personalized
-        dashboard
+        Answer a few quick questions so we can create your personalized dashboard
       </p>
     </div>
   );
@@ -287,7 +262,7 @@ function Step2RoleIndustry({
     <div>
       <h2
         style={{
-          fontSize: typography.fontSize["2xl"],
+          fontSize: typography.fontSize['2xl'],
           fontWeight: typography.fontWeight.semibold,
           marginBottom: spacing.lg,
         }}
@@ -297,7 +272,7 @@ function Step2RoleIndustry({
 
       <label
         style={{
-          display: "block",
+          display: 'block',
           marginBottom: spacing.sm,
           fontWeight: typography.fontWeight.medium,
         }}
@@ -306,8 +281,8 @@ function Step2RoleIndustry({
       </label>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: spacing.md,
           marginBottom: spacing.xl,
         }}
@@ -320,16 +295,13 @@ function Step2RoleIndustry({
               padding: spacing.lg,
               border: `2px solid ${role === r.value ? colors.primary[500] : colors.neutral[200]}`,
               borderRadius: radius.md,
-              textAlign: "center",
-              cursor: "pointer",
-              background:
-                role === r.value ? colors.primary[50] : colors.neutral[0],
-              transition: "all 150ms",
+              textAlign: 'center',
+              cursor: 'pointer',
+              background: role === r.value ? colors.primary[50] : colors.neutral[0],
+              transition: 'all 150ms',
             }}
           >
-            <div style={{ fontSize: "2rem", marginBottom: spacing.sm }}>
-              {r.icon}
-            </div>
+            <div style={{ fontSize: '2rem', marginBottom: spacing.sm }}>{r.icon}</div>
             <div
               style={{
                 fontSize: typography.fontSize.sm,
@@ -344,7 +316,7 @@ function Step2RoleIndustry({
 
       <label
         style={{
-          display: "block",
+          display: 'block',
           marginBottom: spacing.sm,
           fontWeight: typography.fontWeight.medium,
         }}
@@ -355,7 +327,7 @@ function Step2RoleIndustry({
         value={industry}
         onChange={(e) => setIndustry(e.target.value)}
         style={{
-          width: "100%",
+          width: '100%',
           padding: spacing.md,
           fontSize: typography.fontSize.base,
           border: `2px solid ${colors.neutral[200]}`,
@@ -390,7 +362,7 @@ function Step3PainPoints({
     <div>
       <h2
         style={{
-          fontSize: typography.fontSize["2xl"],
+          fontSize: typography.fontSize['2xl'],
           fontWeight: typography.fontWeight.semibold,
           marginBottom: spacing.lg,
         }}
@@ -400,7 +372,7 @@ function Step3PainPoints({
 
       <label
         style={{
-          display: "block",
+          display: 'block',
           marginBottom: spacing.sm,
           fontWeight: typography.fontWeight.medium,
         }}
@@ -413,8 +385,8 @@ function Step3PainPoints({
         placeholder="e.g., Spending too much time on manual data entry and follow-ups..."
         maxLength={280}
         style={{
-          width: "100%",
-          minHeight: "80px",
+          width: '100%',
+          minHeight: '80px',
           padding: spacing.md,
           fontSize: typography.fontSize.base,
           border: `2px solid ${colors.neutral[200]}`,
@@ -426,14 +398,14 @@ function Step3PainPoints({
 
       <label
         style={{
-          display: "block",
+          display: 'block',
           marginBottom: spacing.sm,
           fontWeight: typography.fontWeight.medium,
         }}
       >
         Or select from common pain points
       </label>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: spacing.md }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.md }}>
         {PAIN_POINTS.map((pain) => (
           <div
             key={pain.value}
@@ -448,16 +420,14 @@ function Step3PainPoints({
               padding: `${spacing.sm} ${spacing.lg}`,
               border: `2px solid ${tags.includes(pain.value) ? colors.primary[500] : colors.neutral[200]}`,
               borderRadius: radius.full,
-              cursor: "pointer",
-              background: tags.includes(pain.value)
-                ? colors.primary[50]
-                : colors.neutral[0],
+              cursor: 'pointer',
+              background: tags.includes(pain.value) ? colors.primary[50] : colors.neutral[0],
               fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.medium,
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: spacing.sm,
-              transition: "all 150ms",
+              transition: 'all 150ms',
             }}
           >
             <span>{pain.icon}</span>
@@ -481,7 +451,7 @@ function Step4Tools({
     <div>
       <h2
         style={{
-          fontSize: typography.fontSize["2xl"],
+          fontSize: typography.fontSize['2xl'],
           fontWeight: typography.fontWeight.semibold,
           marginBottom: spacing.lg,
         }}
@@ -500,8 +470,8 @@ function Step4Tools({
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
           gap: spacing.md,
         }}
       >
@@ -519,17 +489,15 @@ function Step4Tools({
               padding: spacing.lg,
               border: `2px solid ${selectedTools.includes(tool.value) ? colors.primary[500] : colors.neutral[200]}`,
               borderRadius: radius.md,
-              textAlign: "center",
-              cursor: "pointer",
+              textAlign: 'center',
+              cursor: 'pointer',
               background: selectedTools.includes(tool.value)
                 ? colors.primary[50]
                 : colors.neutral[0],
-              transition: "all 150ms",
+              transition: 'all 150ms',
             }}
           >
-            <div style={{ fontSize: "2rem", marginBottom: spacing.sm }}>
-              {tool.icon}
-            </div>
+            <div style={{ fontSize: '2rem', marginBottom: spacing.sm }}>{tool.icon}</div>
             <div
               style={{
                 fontSize: typography.fontSize.sm,
@@ -557,7 +525,7 @@ function Step5Sensitivity({
     <div>
       <h2
         style={{
-          fontSize: typography.fontSize["2xl"],
+          fontSize: typography.fontSize['2xl'],
           fontWeight: typography.fontWeight.semibold,
           marginBottom: spacing.lg,
         }}
@@ -574,22 +542,21 @@ function Step5Sensitivity({
         This helps us configure appropriate security and compliance defaults
       </p>
 
-      <div style={{ display: "flex", gap: spacing.lg }}>
+      <div style={{ display: 'flex', gap: spacing.lg }}>
         <div
           onClick={() => setSensitiveData(true)}
           style={{
             flex: 1,
-            padding: spacing["2xl"],
+            padding: spacing['2xl'],
             border: `2px solid ${sensitiveData === true ? colors.primary[500] : colors.neutral[200]}`,
             borderRadius: radius.lg,
-            textAlign: "center",
-            cursor: "pointer",
-            background:
-              sensitiveData === true ? colors.primary[50] : colors.neutral[0],
-            transition: "all 150ms",
+            textAlign: 'center',
+            cursor: 'pointer',
+            background: sensitiveData === true ? colors.primary[50] : colors.neutral[0],
+            transition: 'all 150ms',
           }}
         >
-          <div style={{ fontSize: "3rem", marginBottom: spacing.md }}>🔒</div>
+          <div style={{ fontSize: '3rem', marginBottom: spacing.md }}>🔒</div>
           <div
             style={{
               fontSize: typography.fontSize.lg,
@@ -613,17 +580,16 @@ function Step5Sensitivity({
           onClick={() => setSensitiveData(false)}
           style={{
             flex: 1,
-            padding: spacing["2xl"],
+            padding: spacing['2xl'],
             border: `2px solid ${sensitiveData === false ? colors.primary[500] : colors.neutral[200]}`,
             borderRadius: radius.lg,
-            textAlign: "center",
-            cursor: "pointer",
-            background:
-              sensitiveData === false ? colors.primary[50] : colors.neutral[0],
-            transition: "all 150ms",
+            textAlign: 'center',
+            cursor: 'pointer',
+            background: sensitiveData === false ? colors.primary[50] : colors.neutral[0],
+            transition: 'all 150ms',
           }}
         >
-          <div style={{ fontSize: "3rem", marginBottom: spacing.md }}>🌐</div>
+          <div style={{ fontSize: '3rem', marginBottom: spacing.md }}>🌐</div>
           <div
             style={{
               fontSize: typography.fontSize.lg,
@@ -664,11 +630,11 @@ function Step6Summary({
 
   return (
     <div>
-      <div style={{ textAlign: "center", marginBottom: spacing["2xl"] }}>
-        <div style={{ fontSize: "3rem", marginBottom: spacing.md }}>✨</div>
+      <div style={{ textAlign: 'center', marginBottom: spacing['2xl'] }}>
+        <div style={{ fontSize: '3rem', marginBottom: spacing.md }}>✨</div>
         <h2
           style={{
-            fontSize: typography.fontSize["3xl"],
+            fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             marginBottom: spacing.md,
           }}
@@ -693,13 +659,13 @@ function Step6Summary({
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: spacing.lg,
             marginBottom: spacing.lg,
           }}
         >
-          <div style={{ fontSize: "3rem" }}>{pack.icon}</div>
+          <div style={{ fontSize: '3rem' }}>{pack.icon}</div>
           <div>
             <h3
               style={{
@@ -731,21 +697,19 @@ function Step6Summary({
           >
             Included agents:
           </p>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {pack.agents.map((agent) => (
               <li
                 key={agent.id}
                 style={{
                   marginBottom: spacing.md,
-                  display: "flex",
+                  display: 'flex',
                   gap: spacing.sm,
                 }}
               >
                 <span>✓</span>
                 <div>
-                  <div style={{ fontWeight: typography.fontWeight.medium }}>
-                    {agent.name}
-                  </div>
+                  <div style={{ fontWeight: typography.fontWeight.medium }}>{agent.name}</div>
                   <div
                     style={{
                       fontSize: typography.fontSize.sm,
@@ -766,7 +730,7 @@ function Step6Summary({
           marginTop: spacing.lg,
           fontSize: typography.fontSize.sm,
           color: colors.neutral[500],
-          textAlign: "center",
+          textAlign: 'center',
         }}
       >
         You can customize or add more agents anytime from your dashboard

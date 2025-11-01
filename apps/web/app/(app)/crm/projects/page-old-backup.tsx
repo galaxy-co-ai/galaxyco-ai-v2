@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Plus,
   Search,
@@ -22,15 +22,15 @@ import {
   Clock,
   AlertCircle,
   MoreHorizontal,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
 interface Project {
   id: string;
   name: string;
   description: string;
-  status: "planning" | "in-progress" | "review" | "completed";
-  priority: "low" | "medium" | "high";
+  status: 'planning' | 'in-progress' | 'review' | 'completed';
+  priority: 'low' | 'medium' | 'high';
   progress: number;
   startDate: string;
   dueDate: string;
@@ -41,92 +41,92 @@ interface Project {
 
 const projects: Project[] = [
   {
-    id: "1",
-    name: "AI Agent Platform v2.0",
-    description: "Major platform upgrade with new features and improved UX",
-    status: "in-progress",
-    priority: "high",
+    id: '1',
+    name: 'AI Agent Platform v2.0',
+    description: 'Major platform upgrade with new features and improved UX',
+    status: 'in-progress',
+    priority: 'high',
     progress: 67,
-    startDate: "2025-09-01",
-    dueDate: "2025-11-30",
+    startDate: '2025-09-01',
+    dueDate: '2025-11-30',
     team: [
       {
-        name: "Sarah Chen",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SC",
+        name: 'Sarah Chen',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=SC',
       },
       {
-        name: "Michael Rodriguez",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MR",
+        name: 'Michael Rodriguez',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=MR',
       },
       {
-        name: "Emily Watson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=EW",
+        name: 'Emily Watson',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=EW',
       },
     ],
     tasksTotal: 45,
     tasksCompleted: 30,
   },
   {
-    id: "2",
-    name: "Customer Onboarding Flow",
-    description: "Streamline new customer signup and setup process",
-    status: "review",
-    priority: "high",
+    id: '2',
+    name: 'Customer Onboarding Flow',
+    description: 'Streamline new customer signup and setup process',
+    status: 'review',
+    priority: 'high',
     progress: 90,
-    startDate: "2025-10-01",
-    dueDate: "2025-10-25",
+    startDate: '2025-10-01',
+    dueDate: '2025-10-25',
     team: [
       {
-        name: "David Kim",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=DK",
+        name: 'David Kim',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=DK',
       },
       {
-        name: "Lisa Park",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=LP",
+        name: 'Lisa Park',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=LP',
       },
     ],
     tasksTotal: 20,
     tasksCompleted: 18,
   },
   {
-    id: "3",
-    name: "Integration Marketplace",
-    description: "Build marketplace for third-party integrations",
-    status: "planning",
-    priority: "medium",
+    id: '3',
+    name: 'Integration Marketplace',
+    description: 'Build marketplace for third-party integrations',
+    status: 'planning',
+    priority: 'medium',
     progress: 15,
-    startDate: "2025-11-01",
-    dueDate: "2026-01-31",
+    startDate: '2025-11-01',
+    dueDate: '2026-01-31',
     team: [
       {
-        name: "Alex Johnson",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AJ",
+        name: 'Alex Johnson',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=AJ',
       },
     ],
     tasksTotal: 32,
     tasksCompleted: 5,
   },
   {
-    id: "4",
-    name: "Mobile App Launch",
-    description: "Native iOS and Android applications",
-    status: "in-progress",
-    priority: "medium",
+    id: '4',
+    name: 'Mobile App Launch',
+    description: 'Native iOS and Android applications',
+    status: 'in-progress',
+    priority: 'medium',
     progress: 42,
-    startDate: "2025-09-15",
-    dueDate: "2025-12-15",
+    startDate: '2025-09-15',
+    dueDate: '2025-12-15',
     team: [
       {
-        name: "Jordan Lee",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=JL",
+        name: 'Jordan Lee',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JL',
       },
       {
-        name: "Taylor Smith",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=TS",
+        name: 'Taylor Smith',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TS',
       },
       {
-        name: "Morgan Davis",
-        avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MD",
+        name: 'Morgan Davis',
+        avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=MD',
       },
     ],
     tasksTotal: 56,
@@ -136,71 +136,66 @@ const projects: Project[] = [
 
 const statusConfig = {
   planning: {
-    label: "Planning",
+    label: 'Planning',
     icon: Clock,
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
   },
-  "in-progress": {
-    label: "In Progress",
+  'in-progress': {
+    label: 'In Progress',
     icon: AlertCircle,
-    className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
   },
   review: {
-    label: "Review",
+    label: 'Review',
     icon: FolderKanban,
-    className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
   },
   completed: {
-    label: "Completed",
+    label: 'Completed',
     icon: CheckCircle2,
-    className:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
   },
 };
 
 const priorityConfig = {
   low: {
-    label: "Low",
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+    label: 'Low',
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
   },
   medium: {
-    label: "Medium",
-    className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+    label: 'Medium',
+    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
   },
   high: {
-    label: "High",
-    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    label: 'High',
+    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   },
 };
 
 export default function ProjectsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'kanban'>('grid');
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || project.status === statusFilter;
+    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const projectsByStatus = {
-    planning: filteredProjects.filter((p) => p.status === "planning"),
-    "in-progress": filteredProjects.filter((p) => p.status === "in-progress"),
-    review: filteredProjects.filter((p) => p.status === "review"),
-    completed: filteredProjects.filter((p) => p.status === "completed"),
+    planning: filteredProjects.filter((p) => p.status === 'planning'),
+    'in-progress': filteredProjects.filter((p) => p.status === 'in-progress'),
+    review: filteredProjects.filter((p) => p.status === 'review'),
+    completed: filteredProjects.filter((p) => p.status === 'completed'),
   };
 
   const ProjectCard = ({ project }: { project: Project }) => {
     const StatusIcon = statusConfig[project.status].icon;
     const daysUntilDue = Math.ceil(
-      (new Date(project.dueDate).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24),
+      (new Date(project.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
     );
 
     return (
@@ -208,9 +203,7 @@ export default function ProjectsPage() {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="font-semibold mb-1">{project.name}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {project.description}
-            </p>
+            <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
           </div>
           <Button variant="ghost" size="sm">
             <MoreHorizontal className="h-4 w-4" />
@@ -250,7 +243,7 @@ export default function ProjectsPage() {
             </div>
             <div
               className={`flex items-center gap-1 ${
-                daysUntilDue < 7 ? "text-destructive" : "text-muted-foreground"
+                daysUntilDue < 7 ? 'text-destructive' : 'text-muted-foreground'
               }`}
             >
               <Calendar className="h-4 w-4" />
@@ -292,7 +285,7 @@ export default function ProjectsPage() {
     <PageShell
       title="Projects"
       subtitle="Track and manage your team's projects"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Projects" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Projects' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -309,19 +302,19 @@ export default function ProjectsPage() {
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">In Progress</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "in-progress").length}
+            {projects.filter((p) => p.status === 'in-progress').length}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">In Review</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "review").length}
+            {projects.filter((p) => p.status === 'review').length}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Completed</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "completed").length}
+            {projects.filter((p) => p.status === 'completed').length}
           </p>
         </div>
       </div>
@@ -351,16 +344,16 @@ export default function ProjectsPage() {
         </Select>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("grid")}
+            onClick={() => setViewMode('grid')}
           >
             Grid
           </Button>
           <Button
-            variant={viewMode === "kanban" ? "default" : "outline"}
+            variant={viewMode === 'kanban' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("kanban")}
+            onClick={() => setViewMode('kanban')}
           >
             Kanban
           </Button>
@@ -368,7 +361,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Grid View */}
-      {viewMode === "grid" && (
+      {viewMode === 'grid' && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
@@ -377,7 +370,7 @@ export default function ProjectsPage() {
       )}
 
       {/* Kanban View */}
-      {viewMode === "kanban" && (
+      {viewMode === 'kanban' && (
         <div className="grid gap-4 lg:grid-cols-4">
           {Object.entries(projectsByStatus).map(([status, statusProjects]) => (
             <div key={status} className="space-y-3">
@@ -391,9 +384,7 @@ export default function ProjectsPage() {
                         {/* @ts-ignore */}
                         {statusConfig[status].label}
                       </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        {statusProjects.length}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{statusProjects.length}</span>
                     </>
                   )}
                 </div>
@@ -408,9 +399,7 @@ export default function ProjectsPage() {
                     <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                       {project.description}
                     </p>
-                    <Badge
-                      className={priorityConfig[project.priority].className}
-                    >
+                    <Badge className={priorityConfig[project.priority].className}>
                       {priorityConfig[project.priority].label}
                     </Badge>
                     <div className="mt-3 pt-3 border-t border-border">
@@ -445,9 +434,7 @@ export default function ProjectsPage() {
         <div className="rounded-lg border border-border bg-card p-12 text-center">
           <FolderKanban className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No projects found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Create Your First Project

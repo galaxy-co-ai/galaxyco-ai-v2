@@ -5,14 +5,14 @@
  * Used to verify webhook authenticity from external services
  */
 
-import crypto from "crypto";
+import crypto from 'crypto';
 
 /**
  * Generate a webhook secret (32 bytes, base64 encoded)
  * Used when creating new webhooks
  */
 export function generateWebhookSecret(): string {
-  return crypto.randomBytes(32).toString("base64");
+  return crypto.randomBytes(32).toString('base64');
 }
 
 /**
@@ -22,16 +22,12 @@ export function generateWebhookSecret(): string {
  * @param secret - The webhook secret
  * @returns The signature as hex string
  */
-export function calculateWebhookSignature(
-  payload: string | object,
-  secret: string,
-): string {
-  const payloadString =
-    typeof payload === "string" ? payload : JSON.stringify(payload);
+export function calculateWebhookSignature(payload: string | object, secret: string): string {
+  const payloadString = typeof payload === 'string' ? payload : JSON.stringify(payload);
 
-  const hmac = crypto.createHmac("sha256", secret);
+  const hmac = crypto.createHmac('sha256', secret);
   hmac.update(payloadString);
-  return hmac.digest("hex");
+  return hmac.digest('hex');
 }
 
 /**
@@ -52,8 +48,8 @@ export function verifyWebhookSignature(
   // Use constant-time comparison to prevent timing attacks
   try {
     return crypto.timingSafeEqual(
-      Buffer.from(signature, "hex"),
-      Buffer.from(expectedSignature, "hex"),
+      Buffer.from(signature, 'hex'),
+      Buffer.from(expectedSignature, 'hex'),
     );
   } catch {
     // Signature lengths don't match
@@ -92,25 +88,25 @@ export function verifyWebhookRequest(
   maxAge?: number,
 ): { valid: boolean; error?: string } {
   // Parse signature header
-  const parts = signatureHeader.split(",");
-  const timestampPart = parts.find((p) => p.startsWith("t="));
-  const signaturePart = parts.find((p) => p.startsWith("v1="));
+  const parts = signatureHeader.split(',');
+  const timestampPart = parts.find((p) => p.startsWith('t='));
+  const signaturePart = parts.find((p) => p.startsWith('v1='));
 
   if (!timestampPart || !signaturePart) {
     return {
       valid: false,
-      error: "Invalid signature header format",
+      error: 'Invalid signature header format',
     };
   }
 
-  const timestamp = parseInt(timestampPart.split("=")[1]);
-  const signature = signaturePart.split("=")[1];
+  const timestamp = parseInt(timestampPart.split('=')[1]);
+  const signature = signaturePart.split('=')[1];
 
   // Verify timestamp
   if (!verifyWebhookTimestamp(timestamp, maxAge)) {
     return {
       valid: false,
-      error: "Webhook timestamp is too old or invalid",
+      error: 'Webhook timestamp is too old or invalid',
     };
   }
 
@@ -118,7 +114,7 @@ export function verifyWebhookRequest(
   if (!verifyWebhookSignature(payload, signature, secret)) {
     return {
       valid: false,
-      error: "Invalid webhook signature",
+      error: 'Invalid webhook signature',
     };
   }
 

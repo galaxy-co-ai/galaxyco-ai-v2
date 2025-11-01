@@ -42,11 +42,11 @@ Already included via workspace protocol:
 ## Usage
 
 ```typescript
-import type { Agent, Result, AgentStatus } from "@galaxyco/types";
+import type { Agent, Result, AgentStatus } from '@galaxyco/types';
 
 const agent: Agent = {
-  id: "agent_123",
-  name: "My Agent",
+  id: 'agent_123',
+  name: 'My Agent',
   status: AgentStatus.Active,
   // ...
 };
@@ -61,8 +61,8 @@ function processAgent(agent: Agent): Result<string> {
 1. **Import with `type` keyword**:
 
    ```typescript
-   import type { Agent } from "@galaxyco/types"; // ✅ Good
-   import { Agent } from "@galaxyco/types"; // ❌ Runtime import
+   import type { Agent } from '@galaxyco/types'; // ✅ Good
+   import { Agent } from '@galaxyco/types'; // ❌ Runtime import
    ```
 
 2. **Use utility types for consistency**:

@@ -85,16 +85,12 @@ Every authenticated request operates within a workspace context:
 
 ```typescript
 // Example: Require workspace admin or owner
-export const requireWorkspaceAdmin = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const requireWorkspaceAdmin = (req: Request, res: Response, next: NextFunction) => {
   const role = req.user?.workspaceRole;
-  if (role !== "admin" && role !== "owner") {
+  if (role !== 'admin' && role !== 'owner') {
     return res.status(403).json({
-      error: "Forbidden",
-      message: "Admin or owner role required",
+      error: 'Forbidden',
+      message: 'Admin or owner role required',
     });
   }
   next();
@@ -211,14 +207,14 @@ GET /api/agents?limit=10&offset=20
 ### Implementation Pattern
 
 ```typescript
-router.get("/api/agents", async (req, res) => {
+router.get('/api/agents', async (req, res) => {
   const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
   const offset = parseInt(req.query.offset as string) || 0;
   const workspace_id = req.user.workspace_id;
 
   const [agents, total] = await Promise.all([
-    db.agents.where("workspace_id", workspace_id).limit(limit).offset(offset),
-    db.agents.where("workspace_id", workspace_id).count("id"),
+    db.agents.where('workspace_id', workspace_id).limit(limit).offset(offset),
+    db.agents.where('workspace_id', workspace_id).count('id'),
   ]);
 
   res.json({
@@ -284,26 +280,22 @@ GET /api/agents?sort=created_at&order=desc
 ### Implementation Example
 
 ```typescript
-router.get("/api/agents", async (req, res) => {
-  const { status, search, sort = "created_at", order = "desc" } = req.query;
+router.get('/api/agents', async (req, res) => {
+  const { status, search, sort = 'created_at', order = 'desc' } = req.query;
 
-  let query = db.agents.where("workspace_id", req.user.workspace_id);
+  let query = db.agents.where('workspace_id', req.user.workspace_id);
 
   if (status) {
-    query = query.whereIn("status", Array.isArray(status) ? status : [status]);
+    query = query.whereIn('status', Array.isArray(status) ? status : [status]);
   }
 
   if (search) {
     query = query.where(function () {
-      this.where("name", "ilike", `%${search}%`).orWhere(
-        "description",
-        "ilike",
-        `%${search}%`,
-      );
+      this.where('name', 'ilike', `%${search}%`).orWhere('description', 'ilike', `%${search}%`);
     });
   }
 
-  query = query.orderBy(sort as string, order as "asc" | "desc");
+  query = query.orderBy(sort as string, order as 'asc' | 'desc');
 
   const agents = await query;
   res.json({ data: agents });
@@ -319,23 +311,23 @@ router.get("/api/agents", async (req, res) => {
 Use **Zod** schemas for type-safe validation:
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
 const CreateAgentSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().optional(),
-  model: z.enum(["gpt-4", "gpt-3.5-turbo", "claude-3"]),
+  model: z.enum(['gpt-4', 'gpt-3.5-turbo', 'claude-3']),
   temperature: z.number().min(0).max(2).default(0.7),
   systemPrompt: z.string().optional(),
 });
 
-router.post("/api/agents", async (req, res) => {
+router.post('/api/agents', async (req, res) => {
   const result = CreateAgentSchema.safeParse(req.body);
 
   if (!result.success) {
     return res.status(400).json({
-      error: "Validation Error",
-      message: "Invalid request data",
+      error: 'Validation Error',
+      message: 'Invalid request data',
       details: result.error.format(),
     });
   }
@@ -407,9 +399,7 @@ All errors return a consistent JSON structure:
       "_errors": ["String must contain at least 1 character(s)"]
     },
     "model": {
-      "_errors": [
-        "Invalid enum value. Expected 'gpt-4' | 'gpt-3.5-turbo' | 'claude-3'"
-      ]
+      "_errors": ["Invalid enum value. Expected 'gpt-4' | 'gpt-3.5-turbo' | 'claude-3'"]
     }
   }
 }
@@ -450,7 +440,7 @@ All errors return a consistent JSON structure:
 ```typescript
 // Global error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error("API Error:", err);
+  console.error('API Error:', err);
 
   // Log to monitoring service (Sentry, Datadog, etc.)
   logger.error({
@@ -462,8 +452,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 
   res.status(500).json({
-    error: "Internal Server Error",
-    message: "An unexpected error occurred. Please try again later.",
+    error: 'Internal Server Error',
+    message: 'An unexpected error occurred. Please try again later.',
     details: { request_id: req.id },
   });
 });
@@ -502,23 +492,19 @@ When breaking changes are introduced, version via URL path:
 Generate OpenAPI 3.0 schemas from Zod definitions using `zod-to-openapi`:
 
 ```typescript
-import { extendZodWithOpenApi } from "zod-openapi";
-import { z } from "zod";
+import { extendZodWithOpenApi } from 'zod-openapi';
+import { z } from 'zod';
 
 extendZodWithOpenApi(z);
 
 const AgentSchema = z
   .object({
-    id: z.string().openapi({ example: "agent_123" }),
-    name: z
-      .string()
-      .min(1)
-      .max(100)
-      .openapi({ example: "Customer Support Bot" }),
-    model: z.enum(["gpt-4", "gpt-3.5-turbo", "claude-3"]),
-    status: z.enum(["active", "inactive", "draft"]).default("draft"),
+    id: z.string().openapi({ example: 'agent_123' }),
+    name: z.string().min(1).max(100).openapi({ example: 'Customer Support Bot' }),
+    model: z.enum(['gpt-4', 'gpt-3.5-turbo', 'claude-3']),
+    status: z.enum(['active', 'inactive', 'draft']).default('draft'),
   })
-  .openapi("Agent");
+  .openapi('Agent');
 ```
 
 ### OpenAPI Documentation
@@ -526,10 +512,10 @@ const AgentSchema = z
 Host interactive API docs at `/api/docs` using Swagger UI or Redoc:
 
 ```typescript
-import swaggerUi from "swagger-ui-express";
-import { openApiDocument } from "./openapi-spec";
+import swaggerUi from 'swagger-ui-express';
+import { openApiDocument } from './openapi-spec';
 
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 ```
 
 ### Example OpenAPI Spec (Excerpt)
@@ -557,7 +543,7 @@ paths:
             type: integer
             default: 0
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
@@ -567,9 +553,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Agent"
+                      $ref: '#/components/schemas/Agent'
                   pagination:
-                    $ref: "#/components/schemas/Pagination"
+                    $ref: '#/components/schemas/Pagination'
 
 components:
   schemas:
@@ -596,10 +582,10 @@ components:
 ### Complete CRUD Endpoint Example
 
 ```typescript
-import { Router } from "express";
-import { z } from "zod";
-import { db } from "../db";
-import { requireAuth, requireWorkspaceAdmin } from "../middleware/auth";
+import { Router } from 'express';
+import { z } from 'zod';
+import { db } from '../db';
+import { requireAuth, requireWorkspaceAdmin } from '../middleware/auth';
 
 const router = Router();
 
@@ -607,7 +593,7 @@ const router = Router();
 const CreateAgentSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().optional(),
-  model: z.enum(["gpt-4", "gpt-3.5-turbo", "claude-3"]),
+  model: z.enum(['gpt-4', 'gpt-3.5-turbo', 'claude-3']),
   temperature: z.number().min(0).max(2).default(0.7),
   systemPrompt: z.string().optional(),
 });
@@ -615,37 +601,30 @@ const CreateAgentSchema = z.object({
 const UpdateAgentSchema = CreateAgentSchema.partial();
 
 // List agents (GET /api/agents)
-router.get("/api/agents", requireAuth, async (req, res, next) => {
+router.get('/api/agents', requireAuth, async (req, res, next) => {
   try {
     const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
     const offset = parseInt(req.query.offset as string) || 0;
-    const { status, search, sort = "created_at", order = "desc" } = req.query;
+    const { status, search, sort = 'created_at', order = 'desc' } = req.query;
     const workspace_id = req.user.workspace_id;
 
-    let query = db.agents.where("workspace_id", workspace_id);
+    let query = db.agents.where('workspace_id', workspace_id);
 
     if (status) {
-      query = query.whereIn(
-        "status",
-        Array.isArray(status) ? status : [status],
-      );
+      query = query.whereIn('status', Array.isArray(status) ? status : [status]);
     }
 
     if (search) {
       query = query.where(function () {
-        this.where("name", "ilike", `%${search}%`).orWhere(
-          "description",
-          "ilike",
-          `%${search}%`,
-        );
+        this.where('name', 'ilike', `%${search}%`).orWhere('description', 'ilike', `%${search}%`);
       });
     }
 
-    query = query.orderBy(sort as string, order as "asc" | "desc");
+    query = query.orderBy(sort as string, order as 'asc' | 'desc');
 
     const [agents, totalResult] = await Promise.all([
       query.limit(limit).offset(offset),
-      db.agents.where("workspace_id", workspace_id).count("id"),
+      db.agents.where('workspace_id', workspace_id).count('id'),
     ]);
 
     const total = parseInt(totalResult[0].count as string);
@@ -665,7 +644,7 @@ router.get("/api/agents", requireAuth, async (req, res, next) => {
 });
 
 // Get agent by ID (GET /api/agents/:id)
-router.get("/api/agents/:id", requireAuth, async (req, res, next) => {
+router.get('/api/agents/:id', requireAuth, async (req, res, next) => {
   try {
     const agent = await db.agents
       .where({ id: req.params.id, workspace_id: req.user.workspace_id })
@@ -673,7 +652,7 @@ router.get("/api/agents/:id", requireAuth, async (req, res, next) => {
 
     if (!agent) {
       return res.status(404).json({
-        error: "Not Found",
+        error: 'Not Found',
         message: `Agent with ID '${req.params.id}' not found`,
       });
     }
@@ -685,14 +664,14 @@ router.get("/api/agents/:id", requireAuth, async (req, res, next) => {
 });
 
 // Create agent (POST /api/agents)
-router.post("/api/agents", requireAuth, async (req, res, next) => {
+router.post('/api/agents', requireAuth, async (req, res, next) => {
   try {
     const result = CreateAgentSchema.safeParse(req.body);
 
     if (!result.success) {
       return res.status(400).json({
-        error: "Validation Error",
-        message: "Invalid request data",
+        error: 'Validation Error',
+        message: 'Invalid request data',
         details: result.error.format(),
       });
     }
@@ -702,9 +681,9 @@ router.post("/api/agents", requireAuth, async (req, res, next) => {
         ...result.data,
         workspace_id: req.user.workspace_id,
         created_by: req.user.id,
-        status: "draft",
+        status: 'draft',
       })
-      .returning("*");
+      .returning('*');
 
     res.status(201).json({ data: agent[0] });
   } catch (error) {
@@ -713,14 +692,14 @@ router.post("/api/agents", requireAuth, async (req, res, next) => {
 });
 
 // Update agent (PATCH /api/agents/:id)
-router.patch("/api/agents/:id", requireAuth, async (req, res, next) => {
+router.patch('/api/agents/:id', requireAuth, async (req, res, next) => {
   try {
     const result = UpdateAgentSchema.safeParse(req.body);
 
     if (!result.success) {
       return res.status(400).json({
-        error: "Validation Error",
-        message: "Invalid request data",
+        error: 'Validation Error',
+        message: 'Invalid request data',
         details: result.error.format(),
       });
     }
@@ -728,11 +707,11 @@ router.patch("/api/agents/:id", requireAuth, async (req, res, next) => {
     const agent = await db.agents
       .where({ id: req.params.id, workspace_id: req.user.workspace_id })
       .update(result.data)
-      .returning("*");
+      .returning('*');
 
     if (!agent.length) {
       return res.status(404).json({
-        error: "Not Found",
+        error: 'Not Found',
         message: `Agent with ID '${req.params.id}' not found`,
       });
     }
@@ -744,29 +723,24 @@ router.patch("/api/agents/:id", requireAuth, async (req, res, next) => {
 });
 
 // Delete agent (DELETE /api/agents/:id)
-router.delete(
-  "/api/agents/:id",
-  requireAuth,
-  requireWorkspaceAdmin,
-  async (req, res, next) => {
-    try {
-      const deleted = await db.agents
-        .where({ id: req.params.id, workspace_id: req.user.workspace_id })
-        .delete();
+router.delete('/api/agents/:id', requireAuth, requireWorkspaceAdmin, async (req, res, next) => {
+  try {
+    const deleted = await db.agents
+      .where({ id: req.params.id, workspace_id: req.user.workspace_id })
+      .delete();
 
-      if (!deleted) {
-        return res.status(404).json({
-          error: "Not Found",
-          message: `Agent with ID '${req.params.id}' not found`,
-        });
-      }
-
-      res.status(204).send();
-    } catch (error) {
-      next(error);
+    if (!deleted) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: `Agent with ID '${req.params.id}' not found`,
+      });
     }
-  },
-);
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
 ```

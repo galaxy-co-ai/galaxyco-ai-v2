@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { agentExecutions, agents } from "@galaxyco/database/schema";
-import { eq, and, desc, gte, lte, sql } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { agentExecutions, agents } from '@galaxyco/database/schema';
+import { eq, and, desc, gte, lte, sql } from 'drizzle-orm';
 
 // Force dynamic rendering
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/agents/executions
@@ -25,23 +25,20 @@ export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get("workspaceId");
-    const agentId = searchParams.get("agentId");
-    const status = searchParams.get("status");
-    const startDate = searchParams.get("startDate");
-    const endDate = searchParams.get("endDate");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const agentId = searchParams.get('agentId');
+    const status = searchParams.get('status');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "workspaceId is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
     // Build filter conditions
@@ -122,10 +119,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching agent executions:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    console.error('Error fetching agent executions:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

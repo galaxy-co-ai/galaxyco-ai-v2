@@ -1,94 +1,85 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  CheckCircle2,
-  Circle,
-  ArrowRight,
-  Copy,
-  ExternalLink,
-  Play,
-} from "lucide-react";
-import Link from "next/link";
-import { logger } from "@/lib/utils/logger";
+import { PageShell } from '@/components/templates/page-shell';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { CheckCircle2, Circle, ArrowRight, Copy, ExternalLink, Play } from 'lucide-react';
+import Link from 'next/link';
+import { logger } from '@/lib/utils/logger';
 
 const steps = [
   {
     id: 1,
-    title: "Create Your Workspace",
-    description:
-      "Set up your workspace and configure basic settings to get started",
+    title: 'Create Your Workspace',
+    description: 'Set up your workspace and configure basic settings to get started',
     completed: true,
-    duration: "2 min",
+    duration: '2 min',
     tasks: [
-      "Sign up for an account",
-      "Create your first workspace",
-      "Invite team members",
-      "Configure workspace settings",
+      'Sign up for an account',
+      'Create your first workspace',
+      'Invite team members',
+      'Configure workspace settings',
     ],
   },
   {
     id: 2,
-    title: "Connect Your Data Sources",
-    description:
-      "Link your data sources and knowledge bases to power your agents",
+    title: 'Connect Your Data Sources',
+    description: 'Link your data sources and knowledge bases to power your agents',
     completed: true,
-    duration: "5 min",
+    duration: '5 min',
     tasks: [
-      "Upload documents to knowledge base",
-      "Connect external APIs",
-      "Configure data permissions",
-      "Test data connections",
+      'Upload documents to knowledge base',
+      'Connect external APIs',
+      'Configure data permissions',
+      'Test data connections',
     ],
   },
   {
     id: 3,
-    title: "Build Your First Agent",
-    description: "Create and configure your first AI agent using our builder",
+    title: 'Build Your First Agent',
+    description: 'Create and configure your first AI agent using our builder',
     completed: false,
-    duration: "10 min",
+    duration: '10 min',
     tasks: [
-      "Choose an agent template",
-      "Configure agent settings",
-      "Add workflow steps",
-      "Test your agent",
+      'Choose an agent template',
+      'Configure agent settings',
+      'Add workflow steps',
+      'Test your agent',
     ],
   },
   {
     id: 4,
-    title: "Deploy & Monitor",
-    description: "Deploy your agent to production and monitor its performance",
+    title: 'Deploy & Monitor',
+    description: 'Deploy your agent to production and monitor its performance',
     completed: false,
-    duration: "5 min",
+    duration: '5 min',
     tasks: [
-      "Deploy agent to production",
-      "Set up monitoring",
-      "Configure alerts",
-      "Review analytics",
+      'Deploy agent to production',
+      'Set up monitoring',
+      'Configure alerts',
+      'Review analytics',
     ],
   },
 ];
 
 const quickLinks = [
   {
-    title: "Agent Templates",
-    description: "Browse pre-built agent templates",
-    href: "/marketplace",
+    title: 'Agent Templates',
+    description: 'Browse pre-built agent templates',
+    href: '/marketplace',
     icon: <Play className="h-5 w-5" />,
   },
   {
-    title: "API Documentation",
-    description: "Explore the REST API",
-    href: "/docs/api-reference",
+    title: 'API Documentation',
+    description: 'Explore the REST API',
+    href: '/docs/api-reference',
     icon: <ExternalLink className="h-5 w-5" />,
   },
   {
-    title: "Video Tutorials",
-    description: "Watch step-by-step guides",
-    href: "/resources/videos",
+    title: 'Video Tutorials',
+    description: 'Watch step-by-step guides',
+    href: '/resources/videos',
     icon: <Play className="h-5 w-5" />,
   },
 ];
@@ -125,9 +116,9 @@ export default function GettingStartedPage() {
       title="Getting Started"
       subtitle="Everything you need to start building with GalaxyCo AI"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Documentation", href: "/docs" },
-        { label: "Getting Started" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Documentation', href: '/docs' },
+        { label: 'Getting Started' },
       ]}
     >
       <div className="space-y-8">
@@ -137,9 +128,8 @@ export default function GettingStartedPage() {
             <Badge className="mb-2">Quick Start</Badge>
             <h2 className="mb-2 text-2xl font-bold">Welcome to GalaxyCo AI</h2>
             <p className="text-muted-foreground">
-              Follow these steps to get up and running in under 30 minutes.
-              We&apos;ll guide you through creating your first AI agent and
-              deploying it to production.
+              Follow these steps to get up and running in under 30 minutes. We&apos;ll guide you
+              through creating your first AI agent and deploying it to production.
             </p>
           </div>
         </Card>
@@ -179,26 +169,17 @@ export default function GettingStartedPage() {
                         {step.duration}
                       </Badge>
                     </div>
-                    <p className="mb-3 text-sm text-muted-foreground">
-                      {step.description}
-                    </p>
+                    <p className="mb-3 text-sm text-muted-foreground">{step.description}</p>
                     <ul className="mb-4 space-y-1">
                       {step.tasks.map((task, taskIndex) => (
-                        <li
-                          key={taskIndex}
-                          className="flex items-center gap-2 text-sm"
-                        >
+                        <li key={taskIndex} className="flex items-center gap-2 text-sm">
                           {step.completed ? (
                             <CheckCircle2 className="h-4 w-4 text-success" />
                           ) : (
                             <Circle className="h-4 w-4 text-muted-foreground" />
                           )}
                           <span
-                            className={
-                              step.completed
-                                ? "text-muted-foreground line-through"
-                                : ""
-                            }
+                            className={step.completed ? 'text-muted-foreground line-through' : ''}
                           >
                             {task}
                           </span>
@@ -231,9 +212,7 @@ export default function GettingStartedPage() {
             <code>{codeExample}</code>
           </pre>
           <div className="mt-4">
-            <p className="mb-2 text-sm text-muted-foreground">
-              Install the SDK to get started:
-            </p>
+            <p className="mb-2 text-sm text-muted-foreground">Install the SDK to get started:</p>
             <div className="flex items-center gap-2 rounded-lg bg-muted p-3">
               <code className="flex-1 text-sm">npm install @galaxyco/sdk</code>
               <Button variant="ghost" size="sm">
@@ -256,12 +235,8 @@ export default function GettingStartedPage() {
                     </div>
                     <ArrowRight className="h-5 w-5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                   </div>
-                  <h4 className="mb-1 font-semibold group-hover:text-primary">
-                    {link.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {link.description}
-                  </p>
+                  <h4 className="mb-1 font-semibold group-hover:text-primary">{link.title}</h4>
+                  <p className="text-sm text-muted-foreground">{link.description}</p>
                 </div>
               </Link>
             ))}
@@ -272,8 +247,7 @@ export default function GettingStartedPage() {
         <Card className="border-primary/20 bg-primary/5 p-6">
           <h3 className="mb-2 text-lg font-semibold">Need Help?</h3>
           <p className="mb-4 text-sm text-muted-foreground">
-            Our team is here to help you get started. Reach out if you have any
-            questions.
+            Our team is here to help you get started. Reach out if you have any questions.
           </p>
           <div className="flex gap-2">
             <Button variant="outline">Contact Support</Button>

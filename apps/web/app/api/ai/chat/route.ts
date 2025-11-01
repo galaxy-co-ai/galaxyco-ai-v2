@@ -1,22 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
-import { logger } from "@/lib/utils/logger";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import {
-  users,
-  workspaceMembers,
-  knowledgeItems,
-} from "@galaxyco/database/schema";
-import { eq, like, desc } from "drizzle-orm";
-import {
-  chatRequestSchema,
-  safeValidateRequest,
-  formatValidationError,
-} from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from 'openai';
+import { logger } from '@/lib/utils/logger';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, knowledgeItems } from '@galaxyco/database/schema';
+import { eq, like, desc } from 'drizzle-orm';
+import { chatRequestSchema, safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 const SYSTEM_PROMPT = `You are the BADASS AI Assistant for GalaxyCo.ai! 🚀
 
@@ -61,33 +53,31 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized chat request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized chat request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
     const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CHAT);
     if (!rateLimitResult.success) {
-      logger.warn("Chat rate limit exceeded", {
+      logger.warn('Chat rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
         reset: rateLimitResult.reset,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many chat requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
           retryAfter: rateLimitResult.reset,
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(rateLimitResult.limit),
-            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-            "X-RateLimit-Reset": String(rateLimitResult.reset),
-            "Retry-After": String(
-              rateLimitResult.reset - Math.floor(Date.now() / 1000),
-            ),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(rateLimitResult.reset - Math.floor(Date.now() / 1000)),
           },
         },
       );
@@ -99,8 +89,8 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      logger.warn("Chat request by non-existent user", { clerkUserId });
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      logger.warn('Chat request by non-existent user', { clerkUserId });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -108,11 +98,8 @@ export async function POST(req: NextRequest) {
     });
 
     if (!membership) {
-      logger.warn("Chat request without workspace", { userId: user.id });
-      return NextResponse.json(
-        { error: "No workspace found" },
-        { status: 404 },
-      );
+      logger.warn('Chat request without workspace', { userId: user.id });
+      return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
     }
 
     const userId = user.id;
@@ -124,7 +111,7 @@ export async function POST(req: NextRequest) {
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid chat request", {
+      logger.warn('Invalid chat request', {
         userId: user.id,
         workspaceId: membership.workspaceId,
         errors: formattedError.errors,
@@ -138,11 +125,8 @@ export async function POST(req: NextRequest) {
     const context = body.context; // Context is not in schema but used
 
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role !== "user") {
-      return NextResponse.json(
-        { error: "Last message must be from user" },
-        { status: 400 },
-      );
+    if (lastMessage.role !== 'user') {
+      return NextResponse.json({ error: 'Last message must be from user' }, { status: 400 });
     }
 
     // Generate conversation ID if not provided
@@ -183,7 +167,7 @@ export async function POST(req: NextRequest) {
           (doc, idx) =>
             `[Document ${idx + 1}: "${doc.title}"]\n${doc.summary || doc.content?.slice(0, 300)}`,
         )
-        .join("\n\n");
+        .join('\n\n');
 
       enhancedSystemPrompt += `\n\n🧠 **KNOWLEDGE FROM USER'S DOCUMENTS:**\n${docContext}\n\nUse this knowledge to provide INCREDIBLY relevant and personalized answers!`;
     }
@@ -202,14 +186,11 @@ export async function POST(req: NextRequest) {
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
     if (!openaiKey && !anthropicKey) {
-      logger.error("No AI API keys configured", {
+      logger.error('No AI API keys configured', {
         userId,
         workspaceId,
       });
-      return NextResponse.json(
-        { error: "No AI API keys configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: 'No AI API keys configured' }, { status: 500 });
     }
 
     const aiStartTime = Date.now();
@@ -222,9 +203,9 @@ export async function POST(req: NextRequest) {
       const openai = new OpenAI({ apiKey: openaiKey });
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: 'gpt-4o-mini',
         messages: [
-          { role: "system", content: enhancedSystemPrompt },
+          { role: 'system', content: enhancedSystemPrompt },
           ...messages.slice(-10).map((m: any) => ({
             role: m.role,
             content: m.content,
@@ -236,25 +217,24 @@ export async function POST(req: NextRequest) {
         frequency_penalty: 0.1, // Reduce repetition
       });
 
-      reply =
-        completion.choices[0]?.message?.content || "No response generated";
-      modelUsed = "gpt-4o-mini";
+      reply = completion.choices[0]?.message?.content || 'No response generated';
+      modelUsed = 'gpt-4o-mini';
       tokensUsed = completion.usage?.total_tokens;
     } else {
       // Use Anthropic
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": anthropicKey!,
-          "anthropic-version": "2023-06-01",
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicKey!,
+          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: "claude-3-5-sonnet-20241022",
+          model: 'claude-3-5-sonnet-20241022',
           max_tokens: 800,
           system: enhancedSystemPrompt,
           messages: messages.slice(-10).map((m: any) => ({
-            role: m.role === "assistant" ? "assistant" : "user",
+            role: m.role === 'assistant' ? 'assistant' : 'user',
             content: m.content,
           })),
         }),
@@ -265,8 +245,8 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await response.json();
-      reply = data.content[0]?.text || "No response generated";
-      modelUsed = "claude-3-5-sonnet";
+      reply = data.content[0]?.text || 'No response generated';
+      modelUsed = 'claude-3-5-sonnet';
       tokensUsed = data.usage?.input_tokens + data.usage?.output_tokens;
     }
 
@@ -274,7 +254,7 @@ export async function POST(req: NextRequest) {
     const totalDurationMs = Date.now() - startTime;
 
     // Log successful chat completion
-    logger.info("Chat request completed", {
+    logger.info('Chat request completed', {
       userId,
       workspaceId,
       conversationId: activeConversationId,
@@ -296,7 +276,7 @@ export async function POST(req: NextRequest) {
         id: doc.id,
         title: doc.title,
         relevanceScore: 0.9, // High relevance for matched docs
-        snippet: doc.summary || doc.content?.slice(0, 200) || "",
+        snippet: doc.summary || doc.content?.slice(0, 200) || '',
       })),
       metadata: {
         model: modelUsed,
@@ -307,25 +287,22 @@ export async function POST(req: NextRequest) {
     });
 
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      String(rateLimitResult.remaining),
-    );
-    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
+    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
 
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Chat API error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Chat API error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to generate AI response",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to generate AI response',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

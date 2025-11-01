@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import { listAgents } from "@/lib/actions/agent-actions";
-import { useWorkspaceId } from "./useWorkspace";
-import { useWorkspaceAuth } from "@/hooks/use-workspace-auth";
+import { useState, useEffect, useCallback } from 'react';
+import { listAgents } from '@/lib/actions/agent-actions';
+import { useWorkspaceId } from './useWorkspace';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
 
 interface Agent {
   id: string;
   name: string;
   description: string;
   icon: string;
-  status: "draft" | "active" | "paused" | "archived";
+  status: 'draft' | 'active' | 'paused' | 'archived';
   type: string;
   trigger: string;
   aiProvider: string;
@@ -22,7 +22,7 @@ interface UseAgentListState {
   isLoading: boolean;
   error: string | null;
   search: string;
-  statusFilter: "all" | "draft" | "active" | "paused";
+  statusFilter: 'all' | 'draft' | 'active' | 'paused';
   page: number;
   totalPages: number;
   totalCount: number;
@@ -38,8 +38,8 @@ export const useAgentList = () => {
     agents: [],
     isLoading: true,
     error: null,
-    search: "",
-    statusFilter: "all",
+    search: '',
+    statusFilter: 'all',
     page: 1,
     totalPages: 1,
     totalCount: 0,
@@ -59,7 +59,7 @@ export const useAgentList = () => {
         offset: (state.page - 1) * ITEMS_PER_PAGE,
       };
 
-      if (state.statusFilter !== "all") {
+      if (state.statusFilter !== 'all') {
         filters.status = state.statusFilter;
       }
 
@@ -80,7 +80,7 @@ export const useAgentList = () => {
     } catch (err: any) {
       setState((prev) => ({
         ...prev,
-        error: err.message || "Failed to fetch agents",
+        error: err.message || 'Failed to fetch agents',
         isLoading: false,
       }));
     }
@@ -90,12 +90,9 @@ export const useAgentList = () => {
     setState((prev) => ({ ...prev, search, page: 1 }));
   }, []);
 
-  const setStatusFilter = useCallback(
-    (statusFilter: UseAgentListState["statusFilter"]) => {
-      setState((prev) => ({ ...prev, statusFilter, page: 1 }));
-    },
-    [],
-  );
+  const setStatusFilter = useCallback((statusFilter: UseAgentListState['statusFilter']) => {
+    setState((prev) => ({ ...prev, statusFilter, page: 1 }));
+  }, []);
 
   const setPage = useCallback((page: number) => {
     setState((prev) => ({ ...prev, page }));

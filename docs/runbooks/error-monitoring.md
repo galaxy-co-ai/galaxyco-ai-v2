@@ -86,7 +86,7 @@ Sentry automatically captures:
 For specific cases, you can capture manually:
 
 ```typescript
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 // Capture an exception
 try {
@@ -96,11 +96,11 @@ try {
 }
 
 // Capture a message
-Sentry.captureMessage("Something important happened");
+Sentry.captureMessage('Something important happened');
 
 // Add context
 Sentry.setUser({ id: userId, email: userEmail });
-Sentry.setTag("feature", "onboarding");
+Sentry.setTag('feature', 'onboarding');
 ```
 
 ## 📊 Using Sentry Dashboard
@@ -280,8 +280,8 @@ Session replay shows exactly what user did:
    ```typescript
    Sentry.init({
      ignoreErrors: [
-       "Network request failed", // User network issues
-       "ResizeObserver loop limit exceeded", // Browser quirk
+       'Network request failed', // User network issues
+       'ResizeObserver loop limit exceeded', // Browser quirk
      ],
    });
    ```

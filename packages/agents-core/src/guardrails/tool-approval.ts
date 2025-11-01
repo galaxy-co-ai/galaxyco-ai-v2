@@ -3,7 +3,7 @@
  * Requires approval for high-risk tool operations
  */
 
-import type { Guardrail, GuardrailResult, Tool } from "../types";
+import type { Guardrail, GuardrailResult, Tool } from '../types';
 
 export interface ToolApprovalConfig {
   requireApproval?: string[]; // Tool names requiring approval
@@ -11,19 +11,13 @@ export interface ToolApprovalConfig {
   autoApproveIfCallback?: boolean;
 }
 
-export function createToolApprovalGuardrail(
-  config: ToolApprovalConfig = {},
-): Guardrail {
-  const {
-    requireApproval = [],
-    approvalCallback,
-    autoApproveIfCallback = false,
-  } = config;
+export function createToolApprovalGuardrail(config: ToolApprovalConfig = {}): Guardrail {
+  const { requireApproval = [], approvalCallback, autoApproveIfCallback = false } = config;
 
   return {
-    name: "tool-approval",
-    description: "Requires approval for high-risk tool operations",
-    type: "tool",
+    name: 'tool-approval',
+    description: 'Requires approval for high-risk tool operations',
+    type: 'tool',
     enabled: true,
 
     async check(input: any): Promise<GuardrailResult> {
@@ -39,7 +33,7 @@ export function createToolApprovalGuardrail(
       if (!approvalCallback) {
         return {
           passed: false,
-          action: "block",
+          action: 'block',
           reason: `Tool '${toolName}' requires approval but no callback provided`,
           metadata: { toolName, args },
         };
@@ -52,7 +46,7 @@ export function createToolApprovalGuardrail(
         if (!approved) {
           return {
             passed: false,
-            action: "block",
+            action: 'block',
             reason: `Tool '${toolName}' approval denied`,
             metadata: { toolName, args },
           };
@@ -62,7 +56,7 @@ export function createToolApprovalGuardrail(
       } catch (error: any) {
         return {
           passed: false,
-          action: "block",
+          action: 'block',
           reason: `Tool approval callback failed: ${error.message}`,
           metadata: { toolName, error: error.message },
         };

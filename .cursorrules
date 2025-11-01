@@ -1,0 +1,20 @@
+# GalaxyCo Standards (Monorepo)
+- TypeScript strict; avoid 'any' unless justified.
+- Validate external input with Zod.
+- apps/web: Next.js App Router; Server Components by default; Server Actions for mutations.
+- Styling: Tailwind + shadcn/ui; keep design system consistent.
+- Tests: Vitest; test behavior, not implementation.
+- Monorepo: run via turbo; shared code in packages/*.
+- Pre-commit: code must format & lint; no stray console.log (warn-only allowed during dev).
+
+## GitKraken CLI Integration
+- Use `gk ai commit --add-description` for AI-generated Conventional Commits
+- Use `gk work start "<feature>"` to create feature branches with work item tracking
+- Use `gk work pr create` for AI-generated PR descriptions
+- Commit scopes: api, web, db, infra, scope-agent, call-agent, email-agent, note-agent, task-agent, roadmap-agent, content-agent
+
+## MCP Server
+- GitKraken MCP server installed for Cursor
+- Provides git operations, GitHub API, and AI tools
+- See docs/devtools/gitkraken-cli.md for details
+

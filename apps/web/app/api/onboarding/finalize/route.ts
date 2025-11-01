@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function POST(request: Request) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const setupData = await request.json();
@@ -16,9 +16,9 @@ export async function POST(request: Request) {
 
     const summary = {
       agentCount: 3,
-      workspaceName: setupData.workspaceName || "My Workspace",
+      workspaceName: setupData.workspaceName || 'My Workspace',
       integrationsConfigured: setupData.tools?.length || 0,
-      securityLevel: setupData.sensitiveData ? "enhanced" : "standard",
+      securityLevel: setupData.sensitiveData ? 'enhanced' : 'standard',
     };
 
     return NextResponse.json({
@@ -26,10 +26,7 @@ export async function POST(request: Request) {
       summary,
     });
   } catch (error) {
-    console.error("Error finalizing onboarding:", error);
-    return NextResponse.json(
-      { error: "Failed to finalize setup" },
-      { status: 500 },
-    );
+    console.error('Error finalizing onboarding:', error);
+    return NextResponse.json({ error: 'Failed to finalize setup' }, { status: 500 });
   }
 }

@@ -1,55 +1,50 @@
-"use client";
+'use client';
 
-import React from "react";
-import { FormInput as Input } from "@/components/ui/form-input";
+import React from 'react';
+import { FormInput as Input } from '@/components/ui/form-input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { FormTextarea as Textarea } from "@/components/ui/form-textarea";
-import { AgentBuilderState } from "@/hooks/use-agent-builder";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-} from "@/lib/constants/design-system";
+} from '@/components/ui/select';
+import { FormTextarea as Textarea } from '@/components/ui/form-textarea';
+import { AgentBuilderState } from '@/hooks/use-agent-builder';
+import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 
 interface ConfigurationFormProps {
-  configuration: AgentBuilderState["configuration"];
+  configuration: AgentBuilderState['configuration'];
   errors: Record<string, string>;
-  onChange: (updates: Partial<AgentBuilderState["configuration"]>) => void;
+  onChange: (updates: Partial<AgentBuilderState['configuration']>) => void;
   disabled?: boolean;
 }
 
 const TRIGGER_OPTIONS = [
-  { value: "webhook", label: "Webhook - Trigger via API call" },
-  { value: "schedule", label: "Schedule - Run on a schedule" },
-  { value: "manual", label: "Manual - Run manually" },
-  { value: "event", label: "Event - Trigger on system event" },
+  { value: 'webhook', label: 'Webhook - Trigger via API call' },
+  { value: 'schedule', label: 'Schedule - Run on a schedule' },
+  { value: 'manual', label: 'Manual - Run manually' },
+  { value: 'event', label: 'Event - Trigger on system event' },
 ];
 
 const AI_PROVIDER_OPTIONS = [
-  { value: "openai", label: "OpenAI" },
-  { value: "anthropic", label: "Anthropic" },
-  { value: "custom", label: "Custom Provider" },
+  { value: 'openai', label: 'OpenAI' },
+  { value: 'anthropic', label: 'Anthropic' },
+  { value: 'custom', label: 'Custom Provider' },
 ];
 
 const MODEL_OPTIONS: Record<string, { value: string; label: string }[]> = {
   openai: [
-    { value: "gpt-4", label: "GPT-4 - Most capable" },
-    { value: "gpt-4-turbo", label: "GPT-4 Turbo - Faster & cheaper" },
-    { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo - Fast & efficient" },
+    { value: 'gpt-4', label: 'GPT-4 - Most capable' },
+    { value: 'gpt-4-turbo', label: 'GPT-4 Turbo - Faster & cheaper' },
+    { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo - Fast & efficient' },
   ],
   anthropic: [
-    { value: "claude-3-opus", label: "Claude 3 Opus - Most capable" },
-    { value: "claude-3-sonnet", label: "Claude 3 Sonnet - Balanced" },
-    { value: "claude-3-haiku", label: "Claude 3 Haiku - Fastest" },
+    { value: 'claude-3-opus', label: 'Claude 3 Opus - Most capable' },
+    { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet - Balanced' },
+    { value: 'claude-3-haiku', label: 'Claude 3 Haiku - Fastest' },
   ],
-  custom: [{ value: "custom-model", label: "Custom Model" }],
+  custom: [{ value: 'custom-model', label: 'Custom Model' }],
 };
 
 export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
@@ -58,16 +53,11 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
   onChange,
   disabled = false,
 }) => {
-  const currentModelOptions =
-    MODEL_OPTIONS[configuration.aiProvider] || MODEL_OPTIONS.openai;
+  const currentModelOptions = MODEL_OPTIONS[configuration.aiProvider] || MODEL_OPTIONS.openai;
 
   // Ensure model is valid for current provider
-  const isModelValid = currentModelOptions.some(
-    (opt) => opt.value === configuration.model,
-  );
-  const displayModel = isModelValid
-    ? configuration.model
-    : currentModelOptions[0].value;
+  const isModelValid = currentModelOptions.some((opt) => opt.value === configuration.model);
+  const displayModel = isModelValid ? configuration.model : currentModelOptions[0].value;
 
   React.useEffect(() => {
     if (!isModelValid) {
@@ -76,7 +66,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
   }, [configuration.aiProvider, isModelValid, currentModelOptions, onChange]);
 
   return (
-    <div style={{ marginBottom: spacing["2xl"] }}>
+    <div style={{ marginBottom: spacing['2xl'] }}>
       {/* Section Header */}
       <div style={{ marginBottom: spacing.xl }}>
         <h2
@@ -116,16 +106,14 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
           ))}
         </select>
         <p className="text-sm text-muted-foreground mt-1">
-          {disabled
-            ? "Component disabled"
-            : "How should this agent be triggered?"}
+          {disabled ? 'Component disabled' : 'How should this agent be triggered?'}
         </p>
       </div>
 
       {/* Divider */}
       <div
         style={{
-          height: "1px",
+          height: '1px',
           backgroundColor: colors.border.default,
           margin: `${spacing.xl} 0`,
         }}
@@ -155,9 +143,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
 
         {/* AI Provider */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            AI Provider *
-          </label>
+          <label className="block text-sm font-medium mb-2">AI Provider *</label>
           <select
             value={configuration.aiProvider}
             onChange={(e) => onChange({ aiProvider: e.target.value as any })}
@@ -198,7 +184,7 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
         <div style={{ marginBottom: spacing.lg }}>
           <label
             style={{
-              display: "block",
+              display: 'block',
               marginBottom: spacing.xs,
               fontSize: typography.sizes.sm,
               fontWeight: typography.weights.medium,
@@ -218,15 +204,15 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
             }
             disabled={disabled}
             style={{
-              width: "100%",
+              width: '100%',
               marginBottom: spacing.xs,
-              cursor: disabled ? "not-allowed" : "pointer",
+              cursor: disabled ? 'not-allowed' : 'pointer',
             }}
           />
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
+              display: 'flex',
+              justifyContent: 'space-between',
               fontSize: typography.sizes.xs,
               color: colors.text.tertiary,
             }}
@@ -242,8 +228,8 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
               color: colors.text.tertiary,
             }}
           >
-            Controls randomness. Lower values are more focused and
-            deterministic, higher values are more creative.
+            Controls randomness. Lower values are more focused and deterministic, higher values are
+            more creative.
           </p>
         </div>
 
@@ -260,18 +246,16 @@ export const ConfigurationForm: React.FC<ConfigurationFormProps> = ({
           disabled={disabled}
           maxLength={2000}
           helperText={`${configuration.systemPrompt.length}/2000 characters - This defines the agent's behavior and personality`}
-          style={{ minHeight: "160px", fontFamily: "monospace" }}
+          style={{ minHeight: '160px', fontFamily: 'monospace' }}
         />
 
         {/* Max Tokens (Optional) */}
         <Input
           label="Max Tokens (Optional)"
           type="number"
-          value={configuration.maxTokens?.toString() || ""}
+          value={configuration.maxTokens?.toString() || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.value
-              ? parseInt(e.target.value, 10)
-              : undefined;
+            const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
             onChange({ maxTokens: value });
           }}
           error={errors.maxTokens}

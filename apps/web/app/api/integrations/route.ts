@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
 
 /**
  * GET /api/integrations
@@ -14,17 +14,14 @@ export async function GET(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "workspaceId is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
     // Get user
@@ -33,7 +30,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Verify user has access
@@ -45,7 +42,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!membership) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // TODO: Query integrations table when it exists
@@ -53,38 +50,38 @@ export async function GET(req: NextRequest) {
 
     const stubIntegrations = [
       {
-        id: "gmail-stub",
-        name: "Gmail",
-        type: "gmail",
-        status: "inactive",
-        description: "Send and read emails through Gmail",
+        id: 'gmail-stub',
+        name: 'Gmail',
+        type: 'gmail',
+        status: 'inactive',
+        description: 'Send and read emails through Gmail',
         config: {},
         connectedAt: null,
       },
       {
-        id: "calendar-stub",
-        name: "Google Calendar",
-        type: "calendar",
-        status: "inactive",
-        description: "Create and manage calendar events",
+        id: 'calendar-stub',
+        name: 'Google Calendar',
+        type: 'calendar',
+        status: 'inactive',
+        description: 'Create and manage calendar events',
         config: {},
         connectedAt: null,
       },
       {
-        id: "slack-stub",
-        name: "Slack",
-        type: "slack",
-        status: "inactive",
-        description: "Send notifications to Slack channels",
+        id: 'slack-stub',
+        name: 'Slack',
+        type: 'slack',
+        status: 'inactive',
+        description: 'Send notifications to Slack channels',
         config: {},
         connectedAt: null,
       },
       {
-        id: "github-stub",
-        name: "GitHub",
-        type: "github",
-        status: "inactive",
-        description: "Create issues and PRs automatically",
+        id: 'github-stub',
+        name: 'GitHub',
+        type: 'github',
+        status: 'inactive',
+        description: 'Create issues and PRs automatically',
         config: {},
         connectedAt: null,
       },
@@ -95,11 +92,11 @@ export async function GET(req: NextRequest) {
       total: stubIntegrations.length,
     });
   } catch (error) {
-    console.error("Get integrations error:", error);
+    console.error('Get integrations error:', error);
     return NextResponse.json(
       {
-        error: "Failed to fetch integrations",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to fetch integrations',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -116,7 +113,7 @@ export async function POST(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -124,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     if (!workspaceId || !name || !type) {
       return NextResponse.json(
-        { error: "workspaceId, name, and type are required" },
+        { error: 'workspaceId, name, and type are required' },
         { status: 400 },
       );
     }
@@ -135,7 +132,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Verify user has admin access
@@ -146,30 +143,30 @@ export async function POST(req: NextRequest) {
       ),
     });
 
-    if (!membership || !["owner", "admin"].includes(membership.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!membership || !['owner', 'admin'].includes(membership.role)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // TODO: Create integration record in database
 
     return NextResponse.json({
       success: true,
-      message: "Integration would be created (stub)",
+      message: 'Integration would be created (stub)',
       integration: {
         id: Math.random().toString(36).substring(7),
         name,
         type,
-        status: "active",
+        status: 'active',
         config,
         connectedAt: new Date().toISOString(),
       },
     });
   } catch (error) {
-    console.error("Create integration error:", error);
+    console.error('Create integration error:', error);
     return NextResponse.json(
       {
-        error: "Failed to create integration",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create integration',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

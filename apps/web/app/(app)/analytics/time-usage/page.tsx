@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates";
-import { Card } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import { Clock, CheckSquare, Users } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { Clock, CheckSquare, Users } from 'lucide-react';
 
 interface TimeUsageAnalytics {
   tasks: { completed: number; period: string };
@@ -27,17 +27,15 @@ export default function TimeUsageAnalyticsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/analytics/time-usage?workspaceId=${currentWorkspace.id}`,
-        );
+        const res = await fetch(`/api/analytics/time-usage?workspaceId=${currentWorkspace.id}`);
 
-        if (!res.ok) throw new Error("Failed to fetch time usage analytics");
+        if (!res.ok) throw new Error('Failed to fetch time usage analytics');
 
         const data = await res.json();
         setAnalytics(data.analytics);
       } catch (error) {
-        console.error("Failed to fetch time usage analytics:", error);
-        toast.error("Failed to load time usage analytics");
+        console.error('Failed to fetch time usage analytics:', error);
+        toast.error('Failed to load time usage analytics');
       } finally {
         setIsLoading(false);
       }
@@ -60,38 +58,36 @@ export default function TimeUsageAnalyticsPage() {
         title="Time Usage Analytics"
         subtitle="Task completion and time distribution"
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Analytics", href: "/analytics" },
-          { label: "Time Usage" },
+          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Time Usage' },
         ]}
       >
-        <div className="text-center text-muted-foreground">
-          No time usage data available
-        </div>
+        <div className="text-center text-muted-foreground">No time usage data available</div>
       </DetailPage>
     );
   }
 
   const metrics = [
     {
-      label: "Completed Tasks",
+      label: 'Completed Tasks',
       value: analytics.tasks.completed,
       change: analytics.tasks.period,
-      trend: "up" as const,
+      trend: 'up' as const,
       icon: <CheckSquare className="h-5 w-5" />,
     },
     {
-      label: "Task Distribution",
+      label: 'Task Distribution',
       value: analytics.distribution.byPriority.length,
-      change: "priority levels",
-      trend: "neutral" as const,
+      change: 'priority levels',
+      trend: 'neutral' as const,
       icon: <Clock className="h-5 w-5" />,
     },
     {
-      label: "Active Assignees",
+      label: 'Active Assignees',
       value: analytics.distribution.byAssignee.length,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <Users className="h-5 w-5" />,
     },
   ];
@@ -101,9 +97,9 @@ export default function TimeUsageAnalyticsPage() {
       title="Time Usage Analytics"
       subtitle="Task completion and time distribution"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Analytics", href: "/analytics" },
-        { label: "Time Usage" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Analytics', href: '/analytics' },
+        { label: 'Time Usage' },
       ]}
       metrics={metrics}
     >
@@ -117,9 +113,7 @@ export default function TimeUsageAnalyticsPage() {
                   key={item.priority}
                   className="flex items-center justify-between rounded-lg border border-border bg-card p-4"
                 >
-                  <p className="font-medium capitalize">
-                    {item.priority || "Unset"}
-                  </p>
+                  <p className="font-medium capitalize">{item.priority || 'Unset'}</p>
                   <p className="text-lg font-semibold">{item.count}</p>
                 </div>
               ))}

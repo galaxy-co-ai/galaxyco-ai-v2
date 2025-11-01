@@ -3,17 +3,17 @@
 ## 🚀 Quick Start
 
 ```typescript
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 // Simple text generation
 const response = await AIGatewayService.generateText({
   tenantId: workspaceId,
   userId: userId,
   agentId: agentId,
-  model: "gpt-4o-mini",
+  model: 'gpt-4o-mini',
   messages: [
-    { role: "system", content: "You are helpful." },
-    { role: "user", content: "Hello!" },
+    { role: 'system', content: 'You are helpful.' },
+    { role: 'user', content: 'Hello!' },
   ],
 });
 ```
@@ -38,12 +38,11 @@ const response = await AIGatewayService.generateText({
 ### With Retry Logic
 
 ```typescript
-import { retryWithBackoff } from "@/lib/retry";
+import { retryWithBackoff } from '@/lib/retry';
 
-const response = await retryWithBackoff(
-  () => AIGatewayService.generateText(request),
-  { maxAttempts: 3 },
-);
+const response = await retryWithBackoff(() => AIGatewayService.generateText(request), {
+  maxAttempts: 3,
+});
 ```
 
 ### Streaming Response
@@ -130,7 +129,7 @@ Development logs show in console:
 try {
   const response = await AIGatewayService.generateText(request);
 } catch (error) {
-  console.error("AI Gateway Error:", error.message);
+  console.error('AI Gateway Error:', error.message);
   // Error is automatically logged with request ID
 }
 ```

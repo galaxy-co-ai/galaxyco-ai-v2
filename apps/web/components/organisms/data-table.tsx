@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 export type Column<T> = {
   key: keyof T | string;
@@ -13,7 +13,7 @@ export type Column<T> = {
   render?: (row: T, index: number) => React.ReactNode;
 };
 
-export type SortState = { key: string; direction: "asc" | "desc" };
+export type SortState = { key: string; direction: 'asc' | 'desc' };
 
 export interface DataTableProps<T extends Record<string, any>> {
   data: T[];
@@ -34,7 +34,7 @@ export function DataTable<T extends Record<string, any>>({
   columns,
   className,
   isLoading,
-  emptyMessage = "No records found",
+  emptyMessage = 'No records found',
   page = 1,
   pageSize = 10,
   totalItems,
@@ -42,25 +42,20 @@ export function DataTable<T extends Record<string, any>>({
   sort,
   onSortChange,
 }: DataTableProps<T>) {
-  const totalPages = totalItems
-    ? Math.max(1, Math.ceil(totalItems / pageSize))
-    : 1;
+  const totalPages = totalItems ? Math.max(1, Math.ceil(totalItems / pageSize)) : 1;
 
   const handleSort = (key: string) => {
     if (!onSortChange) return;
     const next: SortState =
       sort && sort.key === key
-        ? { key, direction: sort.direction === "asc" ? "desc" : "asc" }
-        : { key, direction: "asc" };
+        ? { key, direction: sort.direction === 'asc' ? 'desc' : 'asc' }
+        : { key, direction: 'asc' };
     onSortChange(next);
   };
 
   return (
     <div
-      className={cn(
-        "rounded-lg border border-border bg-card shadow-sm overflow-hidden",
-        className,
-      )}
+      className={cn('rounded-lg border border-border bg-card shadow-sm overflow-hidden', className)}
     >
       <table className="w-full table-fixed md:table-auto">
         <thead className="bg-muted/40 text-muted-foreground">
@@ -69,9 +64,9 @@ export function DataTable<T extends Record<string, any>>({
               <th
                 key={String(col.key)}
                 className={cn(
-                  "text-left text-xs font-medium uppercase tracking-wide px-4 py-3 select-none",
+                  'text-left text-xs font-medium uppercase tracking-wide px-4 py-3 select-none',
                   col.widthClass,
-                  col.sortable && "cursor-pointer hover:text-foreground",
+                  col.sortable && 'cursor-pointer hover:text-foreground',
                 )}
                 onClick={() => col.sortable && handleSort(String(col.key))}
               >
@@ -79,7 +74,7 @@ export function DataTable<T extends Record<string, any>>({
                   {col.header}
                   {sort && sort.key === col.key && (
                     <span aria-hidden className="text-foreground">
-                      {sort.direction === "asc" ? "▲" : "▼"}
+                      {sort.direction === 'asc' ? '▲' : '▼'}
                     </span>
                   )}
                 </div>
@@ -98,30 +93,19 @@ export function DataTable<T extends Record<string, any>>({
             ))
           ) : data.length === 0 ? (
             <tr className="border-t border-border/60">
-              <td
-                colSpan={columns.length}
-                className="px-4 py-12 text-center text-muted-foreground"
-              >
+              <td colSpan={columns.length} className="px-4 py-12 text-center text-muted-foreground">
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             data.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="border-t border-border/60 hover:bg-muted/30"
-              >
+              <tr key={rowIndex} className="border-t border-border/60 hover:bg-muted/30">
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    className={cn(
-                      "px-4 py-3 text-sm text-foreground",
-                      col.widthClass,
-                    )}
+                    className={cn('px-4 py-3 text-sm text-foreground', col.widthClass)}
                   >
-                    {col.render
-                      ? col.render(row, rowIndex)
-                      : String(row[col.key as keyof T] ?? "")}
+                    {col.render ? col.render(row, rowIndex) : String(row[col.key as keyof T] ?? '')}
                   </td>
                 ))}
               </tr>
@@ -146,9 +130,7 @@ export function DataTable<T extends Record<string, any>>({
           </button>
           <button
             className="h-8 px-2 rounded border border-border bg-background hover:bg-hover disabled:opacity-50"
-            onClick={() =>
-              onPageChange && onPageChange(Math.min(totalPages, page + 1))
-            }
+            onClick={() => onPageChange && onPageChange(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages}
           >
             Next

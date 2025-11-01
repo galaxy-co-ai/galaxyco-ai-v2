@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database/client";
-import { integrations, oauthTokens } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { encryptTokens } from "@/lib/encryption";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database/client';
+import { integrations, oauthTokens } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { encryptTokens } from '@/lib/encryption';
 
 // Force dynamic rendering for OAuth callback
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/auth/oauth/microsoft/callback
@@ -22,73 +22,65 @@ export async function GET(request: NextRequest) {
   try {
     const { userId, orgId } = await auth();
     if (!userId || !orgId) {
-      return NextResponse.redirect(
-        new URL("/sign-in?error=unauthorized", request.url),
-      );
+      return NextResponse.redirect(new URL('/sign-in?error=unauthorized', request.url));
     }
 
     const { searchParams } = new URL(request.url);
-    const code = searchParams.get("code");
-    const state = searchParams.get("state");
-    const error = searchParams.get("error");
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+    const error = searchParams.get('error');
 
     // Handle user denial
     if (error) {
       return NextResponse.redirect(
-        new URL(
-          `/settings/integrations?error=${encodeURIComponent(error)}`,
-          request.url,
-        ),
+        new URL(`/settings/integrations?error=${encodeURIComponent(error)}`, request.url),
       );
     }
 
     if (!code || !state) {
       return NextResponse.redirect(
-        new URL("/settings/integrations?error=missing_parameters", request.url),
+        new URL('/settings/integrations?error=missing_parameters', request.url),
       );
     }
 
     // Decode state parameter
-    const stateData = JSON.parse(Buffer.from(state, "base64").toString());
+    const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
     const { workspaceId, integrationType } = stateData;
 
     if (!workspaceId || !integrationType) {
       return NextResponse.redirect(
-        new URL("/settings/integrations?error=invalid_state", request.url),
+        new URL('/settings/integrations?error=invalid_state', request.url),
       );
     }
 
     // Verify workspace ID matches org ID
     if (workspaceId !== orgId) {
       return NextResponse.redirect(
-        new URL("/settings/integrations?error=workspace_mismatch", request.url),
+        new URL('/settings/integrations?error=workspace_mismatch', request.url),
       );
     }
 
     // Exchange code for tokens
     const tokenResponse = await fetch(
-      "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      'https://login.microsoftonline.com/common/oauth2/v2.0/token',
       {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           code,
-          client_id: process.env.MICROSOFT_CLIENT_ID || "",
-          client_secret: process.env.MICROSOFT_CLIENT_SECRET || "",
+          client_id: process.env.MICROSOFT_CLIENT_ID || '',
+          client_secret: process.env.MICROSOFT_CLIENT_SECRET || '',
           redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/oauth/microsoft/callback`,
-          grant_type: "authorization_code",
+          grant_type: 'authorization_code',
         }),
       },
     );
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
-      console.error("Token exchange failed:", errorData);
+      console.error('Token exchange failed:', errorData);
       return NextResponse.redirect(
-        new URL(
-          "/settings/integrations?error=token_exchange_failed",
-          request.url,
-        ),
+        new URL('/settings/integrations?error=token_exchange_failed', request.url),
       );
     }
 
@@ -96,16 +88,13 @@ export async function GET(request: NextRequest) {
     const { access_token, refresh_token, expires_in, scope, id_token } = tokens;
 
     // Get user info from Microsoft Graph API
-    const userInfoResponse = await fetch(
-      "https://graph.microsoft.com/v1.0/me",
-      {
-        headers: { Authorization: `Bearer ${access_token}` },
-      },
-    );
+    const userInfoResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
 
     if (!userInfoResponse.ok) {
       return NextResponse.redirect(
-        new URL("/settings/integrations?error=user_info_failed", request.url),
+        new URL('/settings/integrations?error=user_info_failed', request.url),
       );
     }
 
@@ -113,15 +102,14 @@ export async function GET(request: NextRequest) {
     const { mail, userPrincipalName, displayName, id: microsoftId } = userInfo;
     const email = mail || userPrincipalName;
 
-    const integrationName =
-      integrationType === "outlook" ? "Outlook" : "Microsoft Calendar";
+    const integrationName = integrationType === 'outlook' ? 'Outlook' : 'Microsoft Calendar';
 
     // Check if integration already exists
     const existingIntegration = await db.query.integrations.findFirst({
       where: and(
         eq(integrations.workspaceId, workspaceId),
         eq(integrations.userId, userId),
-        eq(integrations.provider, "microsoft"),
+        eq(integrations.provider, 'microsoft'),
         eq(integrations.type, integrationType),
       ),
     });
@@ -132,21 +120,19 @@ export async function GET(request: NextRequest) {
       refresh_token,
       id_token,
     });
-    const expiresAt = expires_in
-      ? new Date(Date.now() + expires_in * 1000)
-      : undefined;
+    const expiresAt = expires_in ? new Date(Date.now() + expires_in * 1000) : undefined;
 
     if (existingIntegration) {
       // Update existing integration
       await db
         .update(integrations)
         .set({
-          status: "active",
+          status: 'active',
           email,
           displayName,
           profileImage: null, // Microsoft Graph doesn't return profile image in /me endpoint
           providerAccountId: microsoftId,
-          scopes: scope?.split(" ") || [],
+          scopes: scope?.split(' ') || [],
           lastSyncAt: new Date(),
           updatedAt: new Date(),
           lastError: null,
@@ -164,8 +150,7 @@ export async function GET(request: NextRequest) {
           .update(oauthTokens)
           .set({
             accessToken: encryptedTokens.accessToken,
-            refreshToken:
-              encryptedTokens.refreshToken || existingToken.refreshToken,
+            refreshToken: encryptedTokens.refreshToken || existingToken.refreshToken,
             idToken: encryptedTokens.idToken,
             expiresAt,
             scope,
@@ -189,15 +174,15 @@ export async function GET(request: NextRequest) {
         .values({
           workspaceId,
           userId,
-          provider: "microsoft",
+          provider: 'microsoft',
           type: integrationType,
           name: integrationName,
-          status: "active",
+          status: 'active',
           providerAccountId: microsoftId,
           email,
           displayName,
           profileImage: null,
-          scopes: scope?.split(" ") || [],
+          scopes: scope?.split(' ') || [],
           lastSyncAt: new Date(),
         })
         .returning();
@@ -215,15 +200,12 @@ export async function GET(request: NextRequest) {
 
     // Redirect to integrations page with success message
     return NextResponse.redirect(
-      new URL(
-        `/settings/integrations?success=${integrationType}_connected`,
-        request.url,
-      ),
+      new URL(`/settings/integrations?success=${integrationType}_connected`, request.url),
     );
   } catch (error) {
-    console.error("OAuth callback error:", error);
+    console.error('OAuth callback error:', error);
     return NextResponse.redirect(
-      new URL("/settings/integrations?error=internal_error", request.url),
+      new URL('/settings/integrations?error=internal_error', request.url),
     );
   }
 }

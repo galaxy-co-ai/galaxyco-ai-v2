@@ -403,8 +403,8 @@ Takes your examples and adapts them:
 // AI transforms to our pattern:
 
 // apps/api/src/agents/orchestrator.ts
-import { Temporal } from "@temporalio/client";
-import { getWorkspaceContext } from "@/lib/workspace";
+import { Temporal } from '@temporalio/client';
+import { getWorkspaceContext } from '@/lib/workspace';
 
 export class AgentOrchestrator {
   // [AI-generated implementation using research patterns]

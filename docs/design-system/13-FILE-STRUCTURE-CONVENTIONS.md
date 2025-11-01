@@ -157,7 +157,7 @@ galaxyco-ai-design-system/
 
 ```typescript
 // Variables: camelCase
-const userEmail = "user@example.com";
+const userEmail = 'user@example.com';
 const isLoading = true;
 
 // Functions: camelCase
@@ -165,7 +165,7 @@ function fetchAgents() {}
 const handleClick = () => {};
 
 // Constants: UPPER_SNAKE_CASE
-const API_BASE_URL = "https://api.example.com";
+const API_BASE_URL = 'https://api.example.com';
 const MAX_RETRIES = 3;
 
 // Types/Interfaces: PascalCase
@@ -257,13 +257,13 @@ export type { ButtonProps } from './Button.types';
 
 ```typescript
 // ✅ Good
-import { Button } from "@/components/atoms";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks";
+import { Button } from '@/components/atoms';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks';
 
 // ❌ Bad
-import { Button } from "../../../components/atoms/Button";
-import { cn } from "../../lib/utils";
+import { Button } from '../../../components/atoms/Button';
+import { cn } from '../../lib/utils';
 ```
 
 ---
@@ -274,21 +274,21 @@ import { cn } from "../../lib/utils";
 
 ```typescript
 // src/components/atoms/index.ts
-export { Button } from "./Button";
-export { Input } from "./Input";
-export { Badge } from "./Badge";
-export { Avatar } from "./Avatar";
+export { Button } from './Button';
+export { Input } from './Input';
+export { Badge } from './Badge';
+export { Avatar } from './Avatar';
 // ... etc
 
-export type { ButtonProps } from "./Button";
-export type { InputProps } from "./Input";
+export type { ButtonProps } from './Button';
+export type { InputProps } from './Input';
 // ... etc
 ```
 
 ### Usage
 
 ```typescript
-import { Button, Input, Badge } from "@/components/atoms";
+import { Button, Input, Badge } from '@/components/atoms';
 ```
 
 ---
@@ -320,7 +320,7 @@ VITE_SENTRY_DSN=https://xxx@sentry.io/xxx
 export const env = {
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL,
   clerkKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === "true",
+  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
 };
 ```
 
@@ -404,13 +404,13 @@ docs: improve README setup instructions
 ```javascript
 module.exports = {
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   rules: {
-    "react/react-in-jsx-scope": "off", // Not needed with Vite
-    "@typescript-eslint/no-unused-vars": "warn",
+    'react/react-in-jsx-scope': 'off', // Not needed with Vite
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
 };
 ```

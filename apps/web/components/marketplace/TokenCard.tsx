@@ -1,13 +1,7 @@
-"use client";
+'use client';
 
-import {
-  colors,
-  spacing,
-  radius,
-  shadows,
-  typography,
-} from "@/lib/constants/design-system";
-import { useState } from "react";
+import { colors, spacing, radius, shadows, typography } from '@/lib/constants/design-system';
+import { useState } from 'react';
 
 interface TokenCardProps {
   token: {
@@ -34,28 +28,28 @@ export default function TokenCard({ token }: TokenCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         gap: spacing.md,
         padding: spacing.md,
         background: colors.background.primary,
         border: `1px solid ${isHovered ? colors.border.focus : colors.border.default}`,
         borderRadius: radius.lg,
-        cursor: "pointer",
-        transition: "all 0.2s ease",
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
         boxShadow: isHovered ? shadows.md : shadows.sm,
       }}
     >
       {/* Icon */}
       <div
         style={{
-          fontSize: "2rem",
+          fontSize: '2rem',
           flexShrink: 0,
-          width: "40px",
-          height: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          width: '40px',
+          height: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           background: colors.background.secondary,
           borderRadius: radius.md,
         }}
@@ -70,9 +64,9 @@ export default function TokenCard({ token }: TokenCardProps) {
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.semibold,
             color: colors.text.primary,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
           {token.name}
@@ -81,7 +75,7 @@ export default function TokenCard({ token }: TokenCardProps) {
           style={{
             fontSize: typography.sizes.xs,
             color: colors.text.tertiary,
-            textTransform: "uppercase",
+            textTransform: 'uppercase',
           }}
         >
           {token.symbol}
@@ -91,7 +85,7 @@ export default function TokenCard({ token }: TokenCardProps) {
       {/* Stats */}
       <div
         style={{
-          textAlign: "right",
+          textAlign: 'right',
           flexShrink: 0,
         }}
       >
@@ -111,7 +105,7 @@ export default function TokenCard({ token }: TokenCardProps) {
             color: isPositive ? colors.success.DEFAULT : colors.error.DEFAULT,
           }}
         >
-          {isPositive ? "+" : ""}
+          {isPositive ? '+' : ''}
           {token.change24h.toFixed(2)}%
         </div>
       </div>

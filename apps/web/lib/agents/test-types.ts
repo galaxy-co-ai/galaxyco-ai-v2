@@ -1,4 +1,4 @@
-export type TestTriggerType = "manual" | "scheduled" | "event";
+export type TestTriggerType = 'manual' | 'scheduled' | 'event';
 
 export interface TestInputs {
   triggerType: TestTriggerType;
@@ -13,7 +13,7 @@ export interface TestPlaygroundInput extends TestInputs {
 export interface TestExecutionLog {
   id: string;
   step: string;
-  status: "running" | "completed" | "failed";
+  status: 'running' | 'completed' | 'failed';
   message: string;
   timestamp: Date;
   duration?: number;
@@ -23,7 +23,7 @@ export interface TestExecutionLog {
 
 export interface TestAgentOutput {
   id: string;
-  type: "ai-result" | "notification" | "data";
+  type: 'ai-result' | 'notification' | 'data';
   content: string;
   timestamp: Date;
 }
@@ -42,7 +42,7 @@ export interface TestResult {
 export interface StepExecution {
   id: string;
   label: string;
-  status: "queued" | "running" | "success" | "error";
+  status: 'queued' | 'running' | 'success' | 'error';
   startedAt?: number;
   endedAt?: number;
   durationMs?: number;
@@ -51,7 +51,7 @@ export interface StepExecution {
 }
 
 export interface AgentOutput {
-  type: "document" | "email" | "notification";
+  type: 'document' | 'email' | 'notification';
   title?: string;
   content: any;
   metadata?: Record<string, any>;

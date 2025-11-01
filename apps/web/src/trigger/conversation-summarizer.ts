@@ -8,10 +8,10 @@
  * - Summarize long conversations
  */
 
-import { logger, task, schedules } from "@trigger.dev/sdk/v3";
-import { db } from "@galaxyco/database";
-import { aiConversations, aiMessages } from "@galaxyco/database/schema";
-import { and, eq, gte } from "drizzle-orm";
+import { logger, task, schedules } from '@trigger.dev/sdk/v3';
+import { db } from '@galaxyco/database';
+import { aiConversations, aiMessages } from '@galaxyco/database/schema';
+import { and, eq, gte } from 'drizzle-orm';
 
 interface GenerateTitlePayload {
   conversationId: string;
@@ -31,7 +31,7 @@ interface SummarizeConversationPayload {
  * Task: Generate title from first message
  */
 export const generateConversationTitleTask = task({
-  id: "generate-conversation-title",
+  id: 'generate-conversation-title',
   maxDuration: 60, // 1 minute
   run: async (payload: GenerateTitlePayload, { ctx }) => {
     const { conversationId, firstMessage, userId, workspaceId } = payload;
@@ -40,40 +40,34 @@ export const generateConversationTitleTask = task({
 
     try {
       // Use OpenAI to generate a meaningful title
-      const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Generate a short, descriptive title (max 50 chars) for this conversation. Return only the title, no quotes.",
-              },
-              {
-                role: "user",
-                content: `First message: ${firstMessage.slice(0, 500)}`,
-              },
-            ],
-            max_tokens: 20,
-            temperature: 0.5,
-          }),
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
-      );
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content:
+                'Generate a short, descriptive title (max 50 chars) for this conversation. Return only the title, no quotes.',
+            },
+            {
+              role: 'user',
+              content: `First message: ${firstMessage.slice(0, 500)}`,
+            },
+          ],
+          max_tokens: 20,
+          temperature: 0.5,
+        }),
+      });
 
       const data = await response.json();
-      const generatedTitle =
-        data.choices[0]?.message?.content?.trim() || "Untitled Conversation";
+      const generatedTitle = data.choices[0]?.message?.content?.trim() || 'Untitled Conversation';
       const title =
-        generatedTitle.length > 50
-          ? generatedTitle.slice(0, 47) + "..."
-          : generatedTitle;
+        generatedTitle.length > 50 ? generatedTitle.slice(0, 47) + '...' : generatedTitle;
 
       // Update conversation with generated title
       await db
@@ -102,14 +96,12 @@ export const generateConversationTitleTask = task({
  * Task: Summarize and tag conversation
  */
 export const summarizeConversationTask = task({
-  id: "summarize-conversation",
+  id: 'summarize-conversation',
   maxDuration: 300, // 5 minutes
   run: async (payload: SummarizeConversationPayload, { ctx }) => {
     const { conversationId, userId, workspaceId, messageCount } = payload;
 
-    logger.info(
-      `Summarizing conversation ${conversationId} (${messageCount} messages)`,
-    );
+    logger.info(`Summarizing conversation ${conversationId} (${messageCount} messages)`);
 
     try {
       // Fetch recent messages
@@ -120,77 +112,68 @@ export const summarizeConversationTask = task({
       });
 
       // Build conversation transcript
-      const transcript = messages
-        .map((m) => `${m.role}: ${m.content}`)
-        .join("\n\n");
+      const transcript = messages.map((m) => `${m.role}: ${m.content}`).join('\n\n');
 
       // Generate summary
-      const summaryRes = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Summarize this conversation in 2-3 sentences. Focus on key topics, decisions, and action items.",
-              },
-              {
-                role: "user",
-                content: `Conversation transcript:\n\n${transcript.slice(0, 6000)}`,
-              },
-            ],
-            max_tokens: 200,
-            temperature: 0.3,
-          }),
+      const summaryRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
-      );
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content:
+                'Summarize this conversation in 2-3 sentences. Focus on key topics, decisions, and action items.',
+            },
+            {
+              role: 'user',
+              content: `Conversation transcript:\n\n${transcript.slice(0, 6000)}`,
+            },
+          ],
+          max_tokens: 200,
+          temperature: 0.3,
+        }),
+      });
       const summaryData = await summaryRes.json();
-      const summary =
-        summaryData.choices[0]?.message?.content || "Summary unavailable";
+      const summary = summaryData.choices[0]?.message?.content || 'Summary unavailable';
 
       // Extract key topics/tags
-      const tagsRes = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Extract 3-5 key topics/tags from this conversation. Return as JSON array of strings.",
-              },
-              {
-                role: "user",
-                content: `Conversation transcript:\n\n${transcript.slice(0, 4000)}`,
-              },
-            ],
-            max_tokens: 50,
-            temperature: 0.3,
-          }),
+      const tagsRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
-      );
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content:
+                'Extract 3-5 key topics/tags from this conversation. Return as JSON array of strings.',
+            },
+            {
+              role: 'user',
+              content: `Conversation transcript:\n\n${transcript.slice(0, 4000)}`,
+            },
+          ],
+          max_tokens: 50,
+          temperature: 0.3,
+        }),
+      });
       const tagsData = await tagsRes.json();
-      const tagsString = tagsData.choices[0]?.message?.content || "[]";
+      const tagsString = tagsData.choices[0]?.message?.content || '[]';
       let tags: string[];
       try {
         tags = JSON.parse(tagsString);
       } catch {
         tags = tagsString
-          .replace(/[\[\]"]/g, "")
-          .split(",")
+          .replace(/[\[\]"]/g, '')
+          .split(',')
           .map((t: string) => t.trim())
           .filter((t: string) => t.length > 0)
           .slice(0, 5);

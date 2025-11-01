@@ -39,12 +39,7 @@ The issue was in the **middleware configuration** (`apps/web/middleware.ts`):
 
 ```typescript
 // OLD CODE - Blocked everything except homepage and auth pages
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/health",
-]);
+const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/api/health']);
 
 export default clerkMiddleware((auth, request) => {
   if (!isPublicRoute(request)) {
@@ -62,13 +57,13 @@ export default clerkMiddleware((auth, request) => {
 ```typescript
 // NEW CODE - Allow workspace API routes to handle auth internally
 const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/health",
-  "/api/workspace/current", // ✅ Added
-  "/api/workspace/list", // ✅ Added
-  "/api/webhooks/clerk", // ✅ Added
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/health',
+  '/api/workspace/current', // ✅ Added
+  '/api/workspace/list', // ✅ Added
+  '/api/webhooks/clerk', // ✅ Added
 ]);
 ```
 

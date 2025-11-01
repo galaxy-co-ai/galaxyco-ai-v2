@@ -1,17 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import React from 'react';
+import Link from 'next/link';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 export interface MobileMenuNavItem {
   label: string;
@@ -51,10 +46,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent
-        side="left"
-        className={cn("w-[280px] sm:w-[320px] p-0", className)}
-      >
+      <SheetContent side="left" className={cn('w-[280px] sm:w-[320px] p-0', className)}>
         {/* Header */}
         <SheetHeader className="border-b border-border p-4">
           <div className="flex items-center justify-between">
@@ -100,19 +92,17 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                         href={item.href}
                         onClick={() => handleNavClick(item)}
                         className={cn(
-                          "flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg",
-                          "text-sm font-medium transition-colors duration-200",
-                          "hover:bg-accent hover:text-accent-foreground",
-                          "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-                          item.isActive && "bg-accent text-accent-foreground",
+                          'flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg',
+                          'text-sm font-medium transition-colors duration-200',
+                          'hover:bg-accent hover:text-accent-foreground',
+                          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+                          item.isActive && 'bg-accent text-accent-foreground',
                         )}
-                        aria-current={item.isActive ? "page" : undefined}
+                        aria-current={item.isActive ? 'page' : undefined}
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
                           {item.icon && (
-                            <span className="flex-shrink-0 text-muted-foreground">
-                              {item.icon}
-                            </span>
+                            <span className="flex-shrink-0 text-muted-foreground">{item.icon}</span>
                           )}
                           <span className="truncate">{item.label}</span>
                         </div>
@@ -120,8 +110,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
                         {item.badge && (
                           <span
                             className={cn(
-                              "flex-shrink-0 px-2 py-0.5 text-xs font-semibold rounded-full",
-                              "bg-primary text-primary-foreground",
+                              'flex-shrink-0 px-2 py-0.5 text-xs font-semibold rounded-full',
+                              'bg-primary text-primary-foreground',
                             )}
                           >
                             {item.badge}
@@ -143,4 +133,4 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   );
 };
 
-MobileMenu.displayName = "MobileMenu";
+MobileMenu.displayName = 'MobileMenu';

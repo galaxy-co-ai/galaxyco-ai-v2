@@ -5,49 +5,49 @@
  * Integrates with task management systems (Linear, Jira, etc.) or internal task system.
  */
 
-import { createTool } from "../tools";
-import type { Tool } from "../types";
+import { createTool } from '../tools';
+import type { Tool } from '../types';
 
 /**
  * Create task tool
  */
 export function createTaskTool(): Tool {
   return createTool(
-    "create_task",
-    "Create a new task or ticket in the task management system",
+    'create_task',
+    'Create a new task or ticket in the task management system',
     {
       title: {
-        type: "string",
-        description: "Task title",
+        type: 'string',
+        description: 'Task title',
       },
       description: {
-        type: "string",
-        description: "Detailed task description",
+        type: 'string',
+        description: 'Detailed task description',
       },
       priority: {
-        type: "string",
-        description: "Task priority",
-        enum: ["low", "medium", "high", "urgent"],
+        type: 'string',
+        description: 'Task priority',
+        enum: ['low', 'medium', 'high', 'urgent'],
       },
       assigneeId: {
-        type: "string",
-        description: "ID of user to assign task to",
+        type: 'string',
+        description: 'ID of user to assign task to',
         required: false,
       },
       dueDate: {
-        type: "string",
-        description: "Due date in ISO format",
+        type: 'string',
+        description: 'Due date in ISO format',
         required: false,
       },
       labels: {
-        type: "array",
-        description: "Task labels/tags",
-        items: { type: "string" },
+        type: 'array',
+        description: 'Task labels/tags',
+        items: { type: 'string' },
         required: false,
       },
       projectId: {
-        type: "string",
-        description: "Project or board ID",
+        type: 'string',
+        description: 'Project or board ID',
         required: false,
       },
     },
@@ -71,10 +71,10 @@ export function createTaskTool(): Tool {
         dueDate: args.dueDate,
         labels: args.labels || [],
         projectId: args.projectId,
-        status: "created",
+        status: 'created',
         createdAt: new Date().toISOString(),
         url: `https://app.example.com/tasks/${taskId}`,
-        message: "Task created successfully",
+        message: 'Task created successfully',
       };
     },
   );
@@ -85,32 +85,32 @@ export function createTaskTool(): Tool {
  */
 export function createUpdateTaskTool(): Tool {
   return createTool(
-    "update_task",
-    "Update an existing task",
+    'update_task',
+    'Update an existing task',
     {
       taskId: {
-        type: "string",
-        description: "Task ID to update",
+        type: 'string',
+        description: 'Task ID to update',
       },
       status: {
-        type: "string",
-        description: "New task status",
-        enum: ["todo", "in_progress", "review", "done", "cancelled"],
+        type: 'string',
+        description: 'New task status',
+        enum: ['todo', 'in_progress', 'review', 'done', 'cancelled'],
         required: false,
       },
       comment: {
-        type: "string",
-        description: "Comment to add to task",
+        type: 'string',
+        description: 'Comment to add to task',
         required: false,
       },
       assigneeId: {
-        type: "string",
-        description: "Reassign to different user",
+        type: 'string',
+        description: 'Reassign to different user',
         required: false,
       },
       dueDate: {
-        type: "string",
-        description: "Update due date",
+        type: 'string',
+        description: 'Update due date',
         required: false,
       },
     },
@@ -131,8 +131,8 @@ export function createUpdateTaskTool(): Tool {
         updates,
         comment: args.comment,
         updatedAt: new Date().toISOString(),
-        status: "updated",
-        message: "Task updated successfully",
+        status: 'updated',
+        message: 'Task updated successfully',
       };
     },
   );
@@ -143,34 +143,34 @@ export function createUpdateTaskTool(): Tool {
  */
 export function createSearchTasksTool(): Tool {
   return createTool(
-    "search_tasks",
-    "Search for tasks based on various criteria",
+    'search_tasks',
+    'Search for tasks based on various criteria',
     {
       query: {
-        type: "string",
-        description: "Search query (title, description)",
+        type: 'string',
+        description: 'Search query (title, description)',
         required: false,
       },
       status: {
-        type: "string",
-        description: "Filter by status",
-        enum: ["todo", "in_progress", "review", "done", "cancelled"],
+        type: 'string',
+        description: 'Filter by status',
+        enum: ['todo', 'in_progress', 'review', 'done', 'cancelled'],
         required: false,
       },
       assigneeId: {
-        type: "string",
-        description: "Filter by assignee",
+        type: 'string',
+        description: 'Filter by assignee',
         required: false,
       },
       priority: {
-        type: "string",
-        description: "Filter by priority",
-        enum: ["low", "medium", "high", "urgent"],
+        type: 'string',
+        description: 'Filter by priority',
+        enum: ['low', 'medium', 'high', 'urgent'],
         required: false,
       },
       limit: {
-        type: "number",
-        description: "Maximum results to return",
+        type: 'number',
+        description: 'Maximum results to return',
         required: false,
       },
     },
@@ -192,7 +192,7 @@ export function createSearchTasksTool(): Tool {
         },
         total: 0,
         limit: args.limit || 10,
-        message: "Task system integration required",
+        message: 'Task system integration required',
       };
     },
   );
@@ -203,33 +203,28 @@ export function createSearchTasksTool(): Tool {
  */
 export function createMilestoneTool(): Tool {
   return createTool(
-    "create_milestone",
-    "Create a project milestone or epic",
+    'create_milestone',
+    'Create a project milestone or epic',
     {
       name: {
-        type: "string",
-        description: "Milestone name",
+        type: 'string',
+        description: 'Milestone name',
       },
       description: {
-        type: "string",
-        description: "Milestone description",
+        type: 'string',
+        description: 'Milestone description',
       },
       targetDate: {
-        type: "string",
-        description: "Target completion date",
+        type: 'string',
+        description: 'Target completion date',
       },
       projectId: {
-        type: "string",
-        description: "Associated project ID",
+        type: 'string',
+        description: 'Associated project ID',
         required: false,
       },
     },
-    async (args: {
-      name: string;
-      description: string;
-      targetDate: string;
-      projectId?: string;
-    }) => {
+    async (args: { name: string; description: string; targetDate: string; projectId?: string }) => {
       const milestoneId = `milestone_${Date.now()}`;
 
       return {
@@ -238,9 +233,9 @@ export function createMilestoneTool(): Tool {
         description: args.description,
         targetDate: args.targetDate,
         projectId: args.projectId,
-        status: "created",
+        status: 'created',
         createdAt: new Date().toISOString(),
-        message: "Milestone created successfully",
+        message: 'Milestone created successfully',
       };
     },
   );
@@ -250,10 +245,5 @@ export function createMilestoneTool(): Tool {
  * Create all task tools
  */
 export function createTaskTools(): Tool[] {
-  return [
-    createTaskTool(),
-    createUpdateTaskTool(),
-    createSearchTasksTool(),
-    createMilestoneTool(),
-  ];
+  return [createTaskTool(), createUpdateTaskTool(), createSearchTasksTool(), createMilestoneTool()];
 }

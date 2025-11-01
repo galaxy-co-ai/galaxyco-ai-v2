@@ -5,11 +5,11 @@
  * This bridges the gap between database models and the core Agent/Runner system.
  */
 
-import { Agent } from "./agent";
-import { Runner } from "./runner";
-import { createTool } from "./tools";
-import { getToolsForAgentType } from "./tools/index";
-import type { Message, RunResult, Tool } from "./types";
+import { Agent } from './agent';
+import { Runner } from './runner';
+import { createTool } from './tools';
+import { getToolsForAgentType } from './tools/index';
+import type { Message, RunResult, Tool } from './types';
 
 /**
  * Database agent record structure (from your schema)
@@ -41,7 +41,7 @@ export interface ExecutionRequest {
   workspaceId: string;
   userId?: string;
   inputs: Record<string, any>;
-  mode?: "live" | "mock";
+  mode?: 'live' | 'mock';
 }
 
 /**
@@ -76,7 +76,7 @@ export class AgentExecutionService {
     return new Agent({
       name: dbAgent.name,
       instructions,
-      model: dbAgent.config.model || "gpt-4o-mini",
+      model: dbAgent.config.model || 'gpt-4o-mini',
       temperature: dbAgent.config.temperature ?? 0.7,
       maxTokens: dbAgent.config.maxTokens,
       tools,
@@ -169,7 +169,7 @@ Be creative and engaging.`,
 
     return (
       typeInstructions[dbAgent.type] ||
-      `You are a ${dbAgent.name}. ${dbAgent.description || "Help users with their tasks."}`
+      `You are a ${dbAgent.name}. ${dbAgent.description || 'Help users with their tasks.'}`
     );
   }
 
@@ -190,29 +190,22 @@ Be creative and engaging.`,
       const agent = this.dbAgentToCoreAgent(dbAgent, allTools);
 
       // Prepare input message
-      const inputMessage = this.prepareInputMessage(
-        dbAgent.type,
-        request.inputs,
-      );
+      const inputMessage = this.prepareInputMessage(dbAgent.type, request.inputs);
 
       // Execute using Runner
-      const result: RunResult = await Runner.run(
-        agent,
-        [{ role: "user", content: inputMessage }],
-        {
-          workspaceId: request.workspaceId,
-          userId: request.userId,
-          maxIterations: 10,
-          timeout: 60000,
-        },
-      );
+      const result: RunResult = await Runner.run(agent, [{ role: 'user', content: inputMessage }], {
+        workspaceId: request.workspaceId,
+        userId: request.userId,
+        maxIterations: 10,
+        timeout: 60000,
+      });
 
       // Convert to execution result format
       return {
         id: result.metadata.executionId,
         timestamp: result.metadata.startTime.toISOString(),
         inputs: request.inputs,
-        outputs: this.parseOutput(dbAgent.type, result.finalOutput || ""),
+        outputs: this.parseOutput(dbAgent.type, result.finalOutput || ''),
         success: result.success,
         error: result.error,
         metrics: {
@@ -229,7 +222,7 @@ Be creative and engaging.`,
         inputs: request.inputs,
         outputs: {},
         success: false,
-        error: error.message || "Execution failed",
+        error: error.message || 'Execution failed',
         metrics: {
           durationMs: 0,
           tokensUsed: 0,
@@ -242,10 +235,7 @@ Be creative and engaging.`,
   /**
    * Prepare input message based on agent type
    */
-  private static prepareInputMessage(
-    agentType: string,
-    inputs: Record<string, any>,
-  ): string {
+  private static prepareInputMessage(agentType: string, inputs: Record<string, any>): string {
     // Convert structured inputs to natural language prompt
     const parts: string[] = [];
 
@@ -255,16 +245,13 @@ Be creative and engaging.`,
       }
     }
 
-    return parts.join("\n");
+    return parts.join('\n');
   }
 
   /**
    * Parse agent output into structured format
    */
-  private static parseOutput(
-    agentType: string,
-    output: string,
-  ): Record<string, any> {
+  private static parseOutput(agentType: string, output: string): Record<string, any> {
     // Try to parse as JSON first
     try {
       return JSON.parse(output);

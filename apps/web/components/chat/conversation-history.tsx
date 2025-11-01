@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { logger } from "@/lib/utils/logger";
-import { MessageSquare, Search, Trash2, Pin, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { MessageSquare, Search, Trash2, Pin, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Conversation {
   id: string;
@@ -28,7 +28,7 @@ export function ConversationHistory({
 }: ConversationHistoryProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadConversations();
@@ -36,13 +36,13 @@ export function ConversationHistory({
 
   async function loadConversations() {
     try {
-      const res = await fetch("/api/ai/conversations");
+      const res = await fetch('/api/ai/conversations');
       if (res.ok) {
         const data = await res.json();
         setConversations(data.conversations);
       }
     } catch (error) {
-      logger.error("Failed to load conversations", error);
+      logger.error('Failed to load conversations', error);
     } finally {
       setLoading(false);
     }
@@ -50,11 +50,11 @@ export function ConversationHistory({
 
   async function handleDelete(id: string, e: React.MouseEvent) {
     e.stopPropagation();
-    if (!confirm("Delete this conversation?")) return;
+    if (!confirm('Delete this conversation?')) return;
 
     try {
       const res = await fetch(`/api/ai/conversations/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (res.ok) {
@@ -62,7 +62,7 @@ export function ConversationHistory({
         onDeleteConversation(id);
       }
     } catch (error) {
-      logger.error("Failed to delete conversation", error);
+      logger.error('Failed to delete conversation', error);
     }
   }
 
@@ -71,9 +71,9 @@ export function ConversationHistory({
 
     try {
       const res = await fetch(`/api/ai/conversations/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "toggle_pin" }),
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle_pin' }),
       });
 
       if (res.ok) {
@@ -82,7 +82,7 @@ export function ConversationHistory({
         );
       }
     } catch (error) {
-      logger.error("Failed to pin conversation", error);
+      logger.error('Failed to pin conversation', error);
     }
   }
 
@@ -120,7 +120,7 @@ export function ConversationHistory({
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={() => setSearchQuery('')}
               className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
             >
               <X className="w-3 h-3" />
@@ -140,9 +140,7 @@ export function ConversationHistory({
             {/* Pinned */}
             {pinnedConvos.length > 0 && (
               <div className="mb-4">
-                <p className="text-xs font-medium text-muted-foreground px-2 py-1">
-                  Pinned
-                </p>
+                <p className="text-xs font-medium text-muted-foreground px-2 py-1">Pinned</p>
                 {pinnedConvos.map((convo) => (
                   <ConversationItem
                     key={convo.id}
@@ -160,9 +158,7 @@ export function ConversationHistory({
             {unpinnedConvos.length > 0 ? (
               <div>
                 {pinnedConvos.length > 0 && (
-                  <p className="text-xs font-medium text-muted-foreground px-2 py-1">
-                    Recent
-                  </p>
+                  <p className="text-xs font-medium text-muted-foreground px-2 py-1">Recent</p>
                 )}
                 {unpinnedConvos.map((convo) => (
                   <ConversationItem
@@ -207,10 +203,8 @@ function ConversationItem({
   return (
     <div
       className={cn(
-        "group relative px-2 py-2 rounded-lg cursor-pointer transition-colors mb-1",
-        isActive
-          ? "bg-primary/10 text-primary"
-          : "hover:bg-muted text-foreground",
+        'group relative px-2 py-2 rounded-lg cursor-pointer transition-colors mb-1',
+        isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-foreground',
       )}
       onClick={() => onSelect(conversation.id)}
       onMouseEnter={() => setShowActions(true)}
@@ -219,9 +213,7 @@ function ConversationItem({
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{conversation.title}</p>
-          <p className="text-xs text-muted-foreground">
-            {conversation.messageCount} messages
-          </p>
+          <p className="text-xs text-muted-foreground">{conversation.messageCount} messages</p>
         </div>
 
         {(showActions || conversation.isPinned) && (
@@ -229,12 +221,10 @@ function ConversationItem({
             <button
               onClick={(e) => onPin(conversation.id, e)}
               className={cn(
-                "p-1 rounded hover:bg-background transition-colors",
-                conversation.isPinned
-                  ? "text-primary"
-                  : "text-muted-foreground",
+                'p-1 rounded hover:bg-background transition-colors',
+                conversation.isPinned ? 'text-primary' : 'text-muted-foreground',
               )}
-              aria-label={conversation.isPinned ? "Unpin" : "Pin"}
+              aria-label={conversation.isPinned ? 'Unpin' : 'Pin'}
             >
               <Pin className="w-3 h-3" />
             </button>

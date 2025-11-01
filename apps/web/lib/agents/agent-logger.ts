@@ -9,10 +9,10 @@
  * - Monitoring integration
  */
 
-import { db } from "@galaxyco/database";
-import { agentLogs } from "@galaxyco/database/schema";
-import { and, eq, gte, desc } from "drizzle-orm";
-import * as Sentry from "@sentry/nextjs";
+import { db } from '@galaxyco/database';
+import { agentLogs } from '@galaxyco/database/schema';
+import { and, eq, gte, desc } from 'drizzle-orm';
+import * as Sentry from '@sentry/nextjs';
 
 export interface AgentLog {
   agentId: string;
@@ -45,11 +45,11 @@ function summarizeData(data: any): string {
   try {
     const str = JSON.stringify(data);
     if (str.length > 500) {
-      return str.substring(0, 497) + "...";
+      return str.substring(0, 497) + '...';
     }
     return str;
   } catch (error) {
-    return "[Non-serializable data]";
+    return '[Non-serializable data]';
   }
 }
 
@@ -68,8 +68,8 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     outputSummary: summarizeData(log.output),
     duration: log.duration,
     success: log.success,
-    provider: log.provider || "unknown",
-    model: log.model || "unknown",
+    provider: log.provider || 'unknown',
+    model: log.model || 'unknown',
     error: log.error || null,
     metadata: log.metadata ? JSON.stringify(log.metadata) : null,
     timestamp,
@@ -80,8 +80,8 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     await db.insert(agentLogs).values(logEntry);
 
     // Structured console logging
-    const logLevel = log.success ? "info" : "error";
-    const logMessage = `[AGENT ${log.success ? "SUCCESS" : "FAILED"}]`;
+    const logLevel = log.success ? 'info' : 'error';
+    const logMessage = `[AGENT ${log.success ? 'SUCCESS' : 'FAILED'}]`;
 
     // eslint-disable-next-line no-console -- Intentional: Real-time agent execution feedback for debugging
     console[logLevel](logMessage, {
@@ -100,8 +100,8 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     if (log.success) {
       Sentry.addBreadcrumb({
         message: `Agent execution completed successfully`,
-        category: "agent.execution",
-        level: "info",
+        category: 'agent.execution',
+        level: 'info',
         data: {
           agentId: log.agentId,
           duration: log.duration,
@@ -111,10 +111,10 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     } else {
       // Log failures to Sentry for monitoring
       Sentry.withScope((scope) => {
-        scope.setTag("agent.execution.failed", true);
-        scope.setTag("agent.id", log.agentId);
-        scope.setTag("agent.provider", log.provider || "unknown");
-        scope.setContext("agent.execution", {
+        scope.setTag('agent.execution.failed', true);
+        scope.setTag('agent.id', log.agentId);
+        scope.setTag('agent.provider', log.provider || 'unknown');
+        scope.setContext('agent.execution', {
           agentId: log.agentId,
           tenantId: log.tenantId,
           userId: log.userId,
@@ -123,9 +123,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
           model: log.model,
         });
 
-        Sentry.captureException(
-          new Error(log.error || "Agent execution failed"),
-        );
+        Sentry.captureException(new Error(log.error || 'Agent execution failed'));
       });
     }
 
@@ -133,7 +131,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
     if (log.duration > 30000) {
       // 30 seconds
       // eslint-disable-next-line no-console -- Intentional: Real-time performance alerts for monitoring
-      console.warn("[AGENT PERFORMANCE] Slow execution detected", {
+      console.warn('[AGENT PERFORMANCE] Slow execution detected', {
         agent_id: log.agentId,
         duration_ms: log.duration,
         provider: log.provider,
@@ -142,16 +140,16 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
 
       Sentry.captureMessage(
         `Slow agent execution: ${log.agentId} took ${log.duration}ms`,
-        "warning",
+        'warning',
       );
     }
   } catch (error) {
     // eslint-disable-next-line no-console -- Intentional: Fallback logging when database fails
-    console.error("[AGENT LOGGER] Failed to log execution:", error);
+    console.error('[AGENT LOGGER] Failed to log execution:', error);
 
     // Fallback: at least log to console if DB fails
     // eslint-disable-next-line no-console -- Intentional: Critical fallback when primary logging fails
-    console[log.success ? "info" : "error"]("[AGENT FALLBACK LOG]", {
+    console[log.success ? 'info' : 'error']('[AGENT FALLBACK LOG]', {
       agent_id: log.agentId,
       success: log.success,
       duration_ms: log.duration,
@@ -167,7 +165,7 @@ export async function logAgentExecution(log: AgentLog): Promise<void> {
 export async function getAgentMetrics(
   agentId: string,
   tenantId: string,
-  timeframe: "hour" | "day" | "week" | "month" = "day",
+  timeframe: 'hour' | 'day' | 'week' | 'month' = 'day',
 ): Promise<AgentMetrics> {
   try {
     const timeframeMs = {
@@ -195,8 +193,7 @@ export async function getAgentMetrics(
     const totalExecutions = executions.length;
     const successfulExecutions = executions.filter((e) => e.success).length;
     const failedExecutions = totalExecutions - successfulExecutions;
-    const successRate =
-      totalExecutions > 0 ? (successfulExecutions / totalExecutions) * 100 : 0;
+    const successRate = totalExecutions > 0 ? (successfulExecutions / totalExecutions) * 100 : 0;
     const averageDuration =
       totalExecutions > 0
         ? executions.reduce((sum, e) => sum + e.duration, 0) / totalExecutions
@@ -231,8 +228,8 @@ export async function getAgentMetrics(
       commonErrors: commonErrors.length > 0 ? commonErrors : undefined,
     };
   } catch (error) {
-    console.error("[AGENT METRICS] Failed to get metrics:", error);
-    throw new Error("Failed to retrieve agent metrics");
+    console.error('[AGENT METRICS] Failed to get metrics:', error);
+    throw new Error('Failed to retrieve agent metrics');
   }
 }
 
@@ -241,7 +238,7 @@ export async function getAgentMetrics(
  */
 export async function getTenantAgentOverview(
   tenantId: string,
-  timeframe: "day" | "week" | "month" = "day",
+  timeframe: 'day' | 'week' | 'month' = 'day',
 ): Promise<Record<string, AgentMetrics>> {
   try {
     const timeframeMs = {
@@ -256,9 +253,7 @@ export async function getTenantAgentOverview(
     const executions = await db
       .select()
       .from(agentLogs)
-      .where(
-        and(eq(agentLogs.tenantId, tenantId), gte(agentLogs.timestamp, since)),
-      );
+      .where(and(eq(agentLogs.tenantId, tenantId), gte(agentLogs.timestamp, since)));
 
     // Group by agent ID
     const agentGroups = executions.reduce(
@@ -277,14 +272,11 @@ export async function getTenantAgentOverview(
 
     for (const [agentId, agentExecutions] of Object.entries(agentGroups)) {
       const totalExecutions = agentExecutions.length;
-      const successfulExecutions = agentExecutions.filter(
-        (e) => e.success,
-      ).length;
+      const successfulExecutions = agentExecutions.filter((e) => e.success).length;
       const failedExecutions = totalExecutions - successfulExecutions;
       const successRate = (successfulExecutions / totalExecutions) * 100;
       const averageDuration =
-        agentExecutions.reduce((sum, e) => sum + e.duration, 0) /
-        totalExecutions;
+        agentExecutions.reduce((sum, e) => sum + e.duration, 0) / totalExecutions;
 
       overview[agentId] = {
         totalExecutions,
@@ -292,16 +284,14 @@ export async function getTenantAgentOverview(
         failedExecutions,
         successRate,
         averageDuration,
-        lastExecution: new Date(
-          Math.max(...agentExecutions.map((e) => e.timestamp.getTime())),
-        ),
+        lastExecution: new Date(Math.max(...agentExecutions.map((e) => e.timestamp.getTime()))),
       };
     }
 
     return overview;
   } catch (error) {
-    console.error("[TENANT OVERVIEW] Failed to get overview:", error);
-    throw new Error("Failed to retrieve tenant agent overview");
+    console.error('[TENANT OVERVIEW] Failed to get overview:', error);
+    throw new Error('Failed to retrieve tenant agent overview');
   }
 }
 
@@ -316,7 +306,7 @@ export async function logAgentConfigChange(
 ): Promise<void> {
   try {
     // eslint-disable-next-line no-console -- Intentional: Real-time config change tracking for audit trail
-    console.info("[AGENT CONFIG] Configuration updated", {
+    console.info('[AGENT CONFIG] Configuration updated', {
       agent_id: agentId,
       tenant_id: tenantId,
       user_id: userId,
@@ -326,14 +316,14 @@ export async function logAgentConfigChange(
 
     Sentry.addBreadcrumb({
       message: `Agent configuration updated`,
-      category: "agent.config",
-      level: "info",
+      category: 'agent.config',
+      level: 'info',
       data: {
         agentId,
         changedFields: Object.keys(changes),
       },
     });
   } catch (error) {
-    console.error("[AGENT CONFIG LOG] Failed to log config change:", error);
+    console.error('[AGENT CONFIG LOG] Failed to log config change:', error);
   }
 }

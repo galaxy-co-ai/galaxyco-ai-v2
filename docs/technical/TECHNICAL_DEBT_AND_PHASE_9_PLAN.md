@@ -55,7 +55,7 @@
 **Issue**: Hardcoded placeholder auth token
 
 ```typescript
-const token = "CLERK_TOKEN_HERE"; // TODO: Get from Clerk
+const token = 'CLERK_TOKEN_HERE'; // TODO: Get from Clerk
 ```
 
 **Impact**:
@@ -359,8 +359,8 @@ Total: 16-23 hours across 5 work sessions
 2. Create `packages/database/src/types.ts`:
 
    ```typescript
-   export * from "./schema";
-   export type { Database } from "./client";
+   export * from './schema';
+   export type { Database } from './client';
    ```
 
 3. Update `apps/web/tsconfig.json`:
@@ -407,7 +407,7 @@ cd apps/web && pnpm typecheck
        const token = await getToken();
        return {
          Authorization: `Bearer ${token}`,
-         "x-workspace-id": workspace.id,
+         'x-workspace-id': workspace.id,
        };
      }
 
@@ -447,8 +447,8 @@ cd apps/web && pnpm typecheck
 1. Update `packages/database/src/index.ts`:
 
    ```typescript
-   export * from "./client";
-   export * from "./schema";
+   export * from './client';
+   export * from './schema';
 
    // Re-export specific tables for convenience
    export {
@@ -458,13 +458,13 @@ cd apps/web && pnpm typecheck
      agents,
      agentPacks,
      // ... all tables
-   } from "./schema";
+   } from './schema';
    ```
 
 2. Add type exports:
 
    ```typescript
-   export type { User, Workspace, Agent } from "./schema";
+   export type { User, Workspace, Agent } from './schema';
    ```
 
 3. Test imports in web app
@@ -472,7 +472,7 @@ cd apps/web && pnpm typecheck
 **Verification**:
 
 ```typescript
-import { agents, type Agent } from "@galaxyco/database";
+import { agents, type Agent } from '@galaxyco/database';
 // Should have full type safety
 ```
 
@@ -502,7 +502,7 @@ import { agents, type Agent } from "@galaxyco/database";
 
 2. Update `ProgressTracker.tsx`:
    ```typescript
-   const { data: stats } = useQuery(["workspace-stats", workspace.id], () =>
+   const { data: stats } = useQuery(['workspace-stats', workspace.id], () =>
      getWorkspaceStats(workspace.id),
    );
    const hasAgents = stats.agentCount > 0;
@@ -680,14 +680,11 @@ pnpm typecheck --strict
 4. Create provider factory:
    ```typescript
    // services/ai/factory.ts
-   export function createProvider(
-     type: "openai" | "anthropic",
-     apiKey: string,
-   ): AIProvider {
+   export function createProvider(type: 'openai' | 'anthropic', apiKey: string): AIProvider {
      switch (type) {
-       case "openai":
+       case 'openai':
          return new OpenAIProvider(apiKey);
-       case "anthropic":
+       case 'anthropic':
          return new AnthropicProvider(apiKey);
      }
    }
@@ -750,7 +747,7 @@ pnpm typecheck --strict
 2. Add Drizzle schema:
 
    ```typescript
-   export const agentExecutions = pgTable("agent_executions", {
+   export const agentExecutions = pgTable('agent_executions', {
      // ... fields
    });
    ```
@@ -880,9 +877,9 @@ pnpm typecheck --strict
      @IsObject()
      inputs: Record<string, any>;
 
-     @IsEnum(["mock", "live"])
+     @IsEnum(['mock', 'live'])
      @IsOptional()
-     mode?: "mock" | "live" = "live";
+     mode?: 'mock' | 'live' = 'live';
    }
    ```
 
@@ -946,7 +943,7 @@ pnpm typecheck --strict
 1. Add mode toggle to test panel:
 
    ```typescript
-   const [mode, setMode] = useState<"mock" | "live">("live");
+   const [mode, setMode] = useState<'mock' | 'live'>('live');
    ```
 
 2. Show API key requirement:
@@ -1062,10 +1059,10 @@ pnpm typecheck --strict
 2. Add schemas to agent config:
 
    ```typescript
-   export const agents = pgTable("agents", {
+   export const agents = pgTable('agents', {
      // ...
-     inputSchema: jsonb("input_schema").$type<JSONSchema>(),
-     outputSchema: jsonb("output_schema").$type<JSONSchema>(),
+     inputSchema: jsonb('input_schema').$type<JSONSchema>(),
+     outputSchema: jsonb('output_schema').$type<JSONSchema>(),
    });
    ```
 
@@ -1086,13 +1083,10 @@ pnpm typecheck --strict
    ```typescript
    async function runTest() {
      // Validate input
-     const validation = validateAgainstSchema(
-       JSON.parse(inputJson),
-       agent.inputSchema,
-     );
+     const validation = validateAgainstSchema(JSON.parse(inputJson), agent.inputSchema);
 
      if (!validation.valid) {
-       setError(`Input validation failed: ${validation.errors.join(", ")}`);
+       setError(`Input validation failed: ${validation.errors.join(', ')}`);
        return;
      }
 

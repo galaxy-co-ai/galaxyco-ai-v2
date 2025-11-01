@@ -1,95 +1,84 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ListPage } from "@/components/templates";
-import { CardGrid } from "@/components/organisms/card-grid";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Plus,
-  Zap,
-  TrendingUp,
-  Users,
-  Mail,
-  MessageSquare,
-} from "lucide-react";
+import { useState } from 'react';
+import { ListPage } from '@/components/templates';
+import { CardGrid } from '@/components/organisms/card-grid';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Zap, TrendingUp, Users, Mail, MessageSquare } from 'lucide-react';
 
 // Mock template data
 const agentTemplates = [
   {
-    id: "1",
-    name: "Sales Outreach Agent",
-    description:
-      "Automated sales outreach with personalized messaging and follow-ups",
-    category: "sales",
-    provider: "GalaxyCo",
+    id: '1',
+    name: 'Sales Outreach Agent',
+    description: 'Automated sales outreach with personalized messaging and follow-ups',
+    category: 'sales',
+    provider: 'GalaxyCo',
     installs: 1234,
     rating: 4.8,
     icon: <TrendingUp className="h-6 w-6" />,
-    tags: ["Sales", "Outreach", "Automation"],
+    tags: ['Sales', 'Outreach', 'Automation'],
     featured: true,
   },
   {
-    id: "2",
-    name: "Customer Support Bot",
-    description: "AI-powered customer support with knowledge base integration",
-    category: "support",
-    provider: "GalaxyCo",
+    id: '2',
+    name: 'Customer Support Bot',
+    description: 'AI-powered customer support with knowledge base integration',
+    category: 'support',
+    provider: 'GalaxyCo',
     installs: 892,
     rating: 4.9,
     icon: <MessageSquare className="h-6 w-6" />,
-    tags: ["Support", "AI", "Chatbot"],
+    tags: ['Support', 'AI', 'Chatbot'],
     featured: true,
   },
   {
-    id: "3",
-    name: "Marketing Campaign Manager",
-    description:
-      "Create and manage multi-channel marketing campaigns automatically",
-    category: "marketing",
-    provider: "GalaxyCo",
+    id: '3',
+    name: 'Marketing Campaign Manager',
+    description: 'Create and manage multi-channel marketing campaigns automatically',
+    category: 'marketing',
+    provider: 'GalaxyCo',
     installs: 567,
     rating: 4.7,
     icon: <Mail className="h-6 w-6" />,
-    tags: ["Marketing", "Campaigns", "Email"],
+    tags: ['Marketing', 'Campaigns', 'Email'],
     featured: false,
   },
   {
-    id: "4",
-    name: "Lead Qualification Agent",
-    description:
-      "Automatically qualify and score leads based on custom criteria",
-    category: "sales",
-    provider: "GalaxyCo",
+    id: '4',
+    name: 'Lead Qualification Agent',
+    description: 'Automatically qualify and score leads based on custom criteria',
+    category: 'sales',
+    provider: 'GalaxyCo',
     installs: 445,
     rating: 4.6,
     icon: <Users className="h-6 w-6" />,
-    tags: ["Sales", "Leads", "Qualification"],
+    tags: ['Sales', 'Leads', 'Qualification'],
     featured: false,
   },
   {
-    id: "5",
-    name: "Content Generation Agent",
-    description:
-      "Generate blog posts, social media content, and marketing copy",
-    category: "content",
-    provider: "GalaxyCo",
+    id: '5',
+    name: 'Content Generation Agent',
+    description: 'Generate blog posts, social media content, and marketing copy',
+    category: 'content',
+    provider: 'GalaxyCo',
     installs: 789,
     rating: 4.8,
     icon: <Zap className="h-6 w-6" />,
-    tags: ["Content", "AI", "Writing"],
+    tags: ['Content', 'AI', 'Writing'],
     featured: true,
   },
   {
-    id: "6",
-    name: "Email Response Agent",
-    description: "Automatically respond to common customer emails with AI",
-    category: "support",
-    provider: "GalaxyCo",
+    id: '6',
+    name: 'Email Response Agent',
+    description: 'Automatically respond to common customer emails with AI',
+    category: 'support',
+    provider: 'GalaxyCo',
     installs: 334,
     rating: 4.5,
     icon: <Mail className="h-6 w-6" />,
-    tags: ["Support", "Email", "AI"],
+    tags: ['Support', 'Email', 'AI'],
     featured: false,
   },
 ];
@@ -101,22 +90,18 @@ const agentTemplates = [
  * users can install and customize.
  */
 export default function MarketplacePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   // Filter templates
   const filteredTemplates = agentTemplates.filter((template) => {
     // Search filter
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      template.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
     // Category filter
     const categoryFilter = activeFilters.category || [];
@@ -131,12 +116,9 @@ export default function MarketplacePage() {
     // Featured filter
     const featuredFilter = activeFilters.featured || [];
     const matchesFeatured =
-      featuredFilter.length === 0 ||
-      (featuredFilter.includes("true") && template.featured);
+      featuredFilter.length === 0 || (featuredFilter.includes('true') && template.featured);
 
-    return (
-      matchesSearch && matchesCategory && matchesProvider && matchesFeatured
-    );
+    return matchesSearch && matchesCategory && matchesProvider && matchesFeatured;
   });
 
   const handleFilterChange = (filterId: string, values: string[]) => {
@@ -154,10 +136,7 @@ export default function MarketplacePage() {
     <ListPage
       title="Template Marketplace"
       subtitle="Pre-built agent templates ready to install and customize"
-      breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Marketplace" },
-      ]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Marketplace' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -171,27 +150,27 @@ export default function MarketplacePage() {
       onViewModeChange={setViewMode}
       filters={[
         {
-          id: "category",
-          label: "Category",
-          type: "checkbox",
+          id: 'category',
+          label: 'Category',
+          type: 'checkbox',
           options: [
-            { value: "sales", label: "Sales", count: 2 },
-            { value: "support", label: "Support", count: 2 },
-            { value: "marketing", label: "Marketing", count: 1 },
-            { value: "content", label: "Content", count: 1 },
+            { value: 'sales', label: 'Sales', count: 2 },
+            { value: 'support', label: 'Support', count: 2 },
+            { value: 'marketing', label: 'Marketing', count: 1 },
+            { value: 'content', label: 'Content', count: 1 },
           ],
         },
         {
-          id: "featured",
-          label: "Featured",
-          type: "checkbox",
-          options: [{ value: "true", label: "Featured Only", count: 3 }],
+          id: 'featured',
+          label: 'Featured',
+          type: 'checkbox',
+          options: [{ value: 'true', label: 'Featured Only', count: 3 }],
         },
         {
-          id: "provider",
-          label: "Provider",
-          type: "checkbox",
-          options: [{ value: "GalaxyCo", label: "GalaxyCo", count: 6 }],
+          id: 'provider',
+          label: 'Provider',
+          type: 'checkbox',
+          options: [{ value: 'GalaxyCo', label: 'GalaxyCo', count: 6 }],
         },
       ]}
       activeFilters={activeFilters}
@@ -200,8 +179,8 @@ export default function MarketplacePage() {
       isEmpty={filteredTemplates.length === 0}
       emptyMessage={
         searchQuery || Object.keys(activeFilters).length > 0
-          ? "No templates match your search or filters"
-          : "No templates available"
+          ? 'No templates match your search or filters'
+          : 'No templates available'
       }
       emptyAction={
         <Button variant="outline" onClick={handleClearFilters}>

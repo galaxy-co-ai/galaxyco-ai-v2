@@ -11,7 +11,7 @@ import type {
   GridNodeStatus,
   GridEdgeType,
   GridExecutionStatus,
-} from "@galaxyco/database";
+} from '@galaxyco/database';
 
 // Re-export for use in other files
 export type { GridNodeType, GridNodeStatus };
@@ -28,7 +28,7 @@ export interface GridTemplate {
   tags: string[];
   thumbnail_url: string | null;
   preview_data: TemplatePreviewData;
-  complexity: "beginner" | "intermediate" | "advanced";
+  complexity: 'beginner' | 'intermediate' | 'advanced';
   estimated_time: number | null; // in minutes
   uses: number;
   rating: number | null; // 0-5
@@ -139,40 +139,34 @@ export interface BaseNodeConfig {
 }
 
 export interface TriggerNodeConfig extends BaseNodeConfig {
-  type: "trigger";
-  triggerType: "manual" | "webhook" | "schedule" | "event";
+  type: 'trigger';
+  triggerType: 'manual' | 'webhook' | 'schedule' | 'event';
   schedule?: string; // cron expression
   webhookUrl?: string;
 }
 
 export interface ActionNodeConfig extends BaseNodeConfig {
-  type: "action";
+  type: 'action';
   actionType: string;
   parameters: Record<string, unknown>;
 }
 
 export interface ConditionNodeConfig extends BaseNodeConfig {
-  type: "condition";
+  type: 'condition';
   expression: string; // e.g., "{{input.value}} > 100"
-  operator:
-    | "equals"
-    | "not_equals"
-    | "greater_than"
-    | "less_than"
-    | "contains"
-    | "custom";
+  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'custom';
 }
 
 export interface LoopNodeConfig extends BaseNodeConfig {
-  type: "loop";
-  loopType: "for_each" | "while" | "until";
+  type: 'loop';
+  loopType: 'for_each' | 'while' | 'until';
   iterableExpression: string; // e.g., "{{input.items}}"
   maxIterations?: number;
 }
 
 export interface AiNodeConfig extends BaseNodeConfig {
-  type: "ai";
-  provider: "openai" | "anthropic" | "cohere" | "custom";
+  type: 'ai';
+  provider: 'openai' | 'anthropic' | 'cohere' | 'custom';
   model: string;
   prompt: string;
   temperature?: number;
@@ -180,52 +174,52 @@ export interface AiNodeConfig extends BaseNodeConfig {
 }
 
 export interface WebhookNodeConfig extends BaseNodeConfig {
-  type: "webhook";
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  type: 'webhook';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   url: string;
   headers?: Record<string, string>;
   body?: string;
 }
 
 export interface ApiNodeConfig extends BaseNodeConfig {
-  type: "api";
+  type: 'api';
   endpoint: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   body?: string;
 }
 
 export interface DatabaseNodeConfig extends BaseNodeConfig {
-  type: "database";
-  operation: "query" | "insert" | "update" | "delete";
+  type: 'database';
+  operation: 'query' | 'insert' | 'update' | 'delete';
   query: string;
   parameters?: Record<string, unknown>;
 }
 
 export interface TransformNodeConfig extends BaseNodeConfig {
-  type: "transform";
+  type: 'transform';
   transformation: string; // JavaScript expression
   outputSchema?: Record<string, unknown>;
 }
 
 export interface FilterNodeConfig extends BaseNodeConfig {
-  type: "filter";
+  type: 'filter';
   predicate: string; // JavaScript expression returning boolean
 }
 
 export interface MergeNodeConfig extends BaseNodeConfig {
-  type: "merge";
-  mergeStrategy: "first" | "all" | "race";
+  type: 'merge';
+  mergeStrategy: 'first' | 'all' | 'race';
 }
 
 export interface AggregateNodeConfig extends BaseNodeConfig {
-  type: "aggregate";
-  aggregationType: "sum" | "count" | "average" | "min" | "max";
+  type: 'aggregate';
+  aggregationType: 'sum' | 'count' | 'average' | 'min' | 'max';
   field: string;
 }
 
 export interface BranchNodeConfig extends BaseNodeConfig {
-  type: "branch";
+  type: 'branch';
   branches: Array<{
     condition: string;
     label: string;
@@ -233,12 +227,12 @@ export interface BranchNodeConfig extends BaseNodeConfig {
 }
 
 export interface DelayNodeConfig extends BaseNodeConfig {
-  type: "delay";
+  type: 'delay';
   duration: number; // in milliseconds
 }
 
 export interface EmailNodeConfig extends BaseNodeConfig {
-  type: "email";
+  type: 'email';
   to: string;
   subject: string;
   body: string;
@@ -247,21 +241,21 @@ export interface EmailNodeConfig extends BaseNodeConfig {
 }
 
 export interface NotificationNodeConfig extends BaseNodeConfig {
-  type: "notification";
-  channel: "email" | "sms" | "slack" | "webhook";
+  type: 'notification';
+  channel: 'email' | 'sms' | 'slack' | 'webhook';
   recipient: string;
   message: string;
 }
 
 export interface IntegrationNodeConfig extends BaseNodeConfig {
-  type: "integration";
+  type: 'integration';
   integrationId: string;
   action: string;
   parameters: Record<string, unknown>;
 }
 
 export interface CustomNodeConfig extends BaseNodeConfig {
-  type: "custom";
+  type: 'custom';
   code: string; // JavaScript/TypeScript code
   inputs?: Record<string, unknown>;
   outputs?: Record<string, unknown>;

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   BookOpen,
   MessageCircle,
@@ -14,103 +14,103 @@ import {
   Search,
   ExternalLink,
   ArrowRight,
-} from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const helpCategories = [
   {
-    id: "getting-started",
-    title: "Getting Started",
+    id: 'getting-started',
+    title: 'Getting Started',
     icon: BookOpen,
-    description: "Learn the basics and get up and running quickly",
+    description: 'Learn the basics and get up and running quickly',
     articleCount: 12,
-    href: "/docs/getting-started",
-    color: "bg-blue-50 text-blue-600",
+    href: '/docs/getting-started',
+    color: 'bg-blue-50 text-blue-600',
   },
   {
-    id: "guides",
-    title: "Guides & Tutorials",
+    id: 'guides',
+    title: 'Guides & Tutorials',
     icon: Video,
-    description: "Step-by-step tutorials for common tasks",
+    description: 'Step-by-step tutorials for common tasks',
     articleCount: 24,
-    href: "/docs/guides",
-    color: "bg-purple-50 text-purple-600",
+    href: '/docs/guides',
+    color: 'bg-purple-50 text-purple-600',
   },
   {
-    id: "api",
-    title: "API Reference",
+    id: 'api',
+    title: 'API Reference',
     icon: Code,
-    description: "Complete API documentation and examples",
+    description: 'Complete API documentation and examples',
     articleCount: 48,
-    href: "/docs/api-reference",
-    color: "bg-cyan-50 text-cyan-600",
+    href: '/docs/api-reference',
+    color: 'bg-cyan-50 text-cyan-600',
   },
   {
-    id: "faq",
-    title: "FAQ",
+    id: 'faq',
+    title: 'FAQ',
     icon: FileQuestion,
-    description: "Answers to frequently asked questions",
+    description: 'Answers to frequently asked questions',
     articleCount: 36,
-    href: "/help/faq",
-    color: "bg-green-50 text-green-600",
+    href: '/help/faq',
+    color: 'bg-green-50 text-green-600',
   },
   {
-    id: "community",
-    title: "Community",
+    id: 'community',
+    title: 'Community',
     icon: Users,
-    description: "Connect with other users and share knowledge",
+    description: 'Connect with other users and share knowledge',
     articleCount: 0,
-    href: "https://community.galaxyco.ai",
+    href: 'https://community.galaxyco.ai',
     external: true,
-    color: "bg-orange-50 text-orange-600",
+    color: 'bg-orange-50 text-orange-600',
   },
   {
-    id: "contact",
-    title: "Contact Support",
+    id: 'contact',
+    title: 'Contact Support',
     icon: MessageCircle,
-    description: "Get help from our support team",
+    description: 'Get help from our support team',
     articleCount: 0,
-    href: "/help/contact",
-    color: "bg-pink-50 text-pink-600",
+    href: '/help/contact',
+    color: 'bg-pink-50 text-pink-600',
   },
 ];
 
 const popularArticles = [
   {
-    title: "How to create your first AI agent",
-    category: "Getting Started",
-    readTime: "5 min read",
-    href: "/docs/getting-started#create-agent",
+    title: 'How to create your first AI agent',
+    category: 'Getting Started',
+    readTime: '5 min read',
+    href: '/docs/getting-started#create-agent',
   },
   {
-    title: "Connecting external data sources",
-    category: "Guides",
-    readTime: "8 min read",
-    href: "/docs/guides/data-sources",
+    title: 'Connecting external data sources',
+    category: 'Guides',
+    readTime: '8 min read',
+    href: '/docs/guides/data-sources',
   },
   {
-    title: "Agent execution and monitoring",
-    category: "Guides",
-    readTime: "6 min read",
-    href: "/docs/guides/monitoring",
+    title: 'Agent execution and monitoring',
+    category: 'Guides',
+    readTime: '6 min read',
+    href: '/docs/guides/monitoring',
   },
   {
-    title: "API authentication and rate limits",
-    category: "API Reference",
-    readTime: "4 min read",
-    href: "/docs/api-reference#auth",
+    title: 'API authentication and rate limits',
+    category: 'API Reference',
+    readTime: '4 min read',
+    href: '/docs/api-reference#auth',
   },
 ];
 
 export default function HelpPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <PageShell
       title="Help Center"
       subtitle="Find answers, explore guides, and get support"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Help" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Help' }]}
     >
       <div className="space-y-8">
         {/* Search Section */}
@@ -144,14 +144,14 @@ export default function HelpPage() {
                 <Link
                   key={category.id}
                   href={category.href}
-                  target={category.external ? "_blank" : undefined}
-                  rel={category.external ? "noopener noreferrer" : undefined}
+                  target={category.external ? '_blank' : undefined}
+                  rel={category.external ? 'noopener noreferrer' : undefined}
                   className="group relative rounded-lg border border-border bg-card p-6 transition-all hover:shadow-md hover:border-primary/50"
                 >
                   <div className="flex items-start gap-4">
                     <div
                       className={cn(
-                        "flex h-12 w-12 items-center justify-center rounded-lg",
+                        'flex h-12 w-12 items-center justify-center rounded-lg',
                         category.color,
                       )}
                     >
@@ -166,9 +166,7 @@ export default function HelpPage() {
                           <ExternalLink className="h-4 w-4 text-muted-foreground" />
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {category.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground mb-2">{category.description}</p>
                       {category.articleCount > 0 && (
                         <p className="text-xs text-muted-foreground">
                           {category.articleCount} articles

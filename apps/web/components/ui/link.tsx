@@ -1,7 +1,7 @@
-import * as React from "react";
-import NextLink from "next/link";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import NextLink from 'next/link';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Link component using GalaxyCo.ai Design System tokens
@@ -14,55 +14,46 @@ import { cn } from "@/lib/utils";
  */
 const linkVariants = cva(
   [
-    "inline-flex items-center gap-1.5",
-    "transition-colors duration-fast",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-    "disabled:pointer-events-none disabled:opacity-50",
+    'inline-flex items-center gap-1.5',
+    'transition-colors duration-fast',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+    'disabled:pointer-events-none disabled:opacity-50',
   ],
   {
     variants: {
       variant: {
         // Primary brand link
         primary: [
-          "text-primary",
-          "hover:text-primary-hover",
-          "underline-offset-4 decoration-primary/30",
+          'text-primary',
+          'hover:text-primary-hover',
+          'underline-offset-4 decoration-primary/30',
         ],
         // Muted/secondary link
         muted: [
-          "text-foreground-muted",
-          "hover:text-foreground",
-          "underline-offset-4 decoration-foreground-muted/30",
+          'text-foreground-muted',
+          'hover:text-foreground',
+          'underline-offset-4 decoration-foreground-muted/30',
         ],
         // Default with underline
-        underline: [
-          "text-foreground",
-          "underline",
-          "hover:text-primary",
-          "underline-offset-4",
-        ],
+        underline: ['text-foreground', 'underline', 'hover:text-primary', 'underline-offset-4'],
         // No underline (nav links)
-        "no-underline": [
-          "text-foreground",
-          "hover:text-primary",
-          "no-underline",
-        ],
+        'no-underline': ['text-foreground', 'hover:text-primary', 'no-underline'],
       },
       size: {
-        sm: "text-sm",
-        base: "text-base",
-        lg: "text-lg",
+        sm: 'text-sm',
+        base: 'text-base',
+        lg: 'text-lg',
       },
     },
     defaultVariants: {
-      variant: "primary",
-      size: "base",
+      variant: 'primary',
+      size: 'base',
     },
   },
 );
 
 export interface LinkProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "size">,
+  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'size'>,
     VariantProps<typeof linkVariants> {
   /**
    * The URL to link to
@@ -84,22 +75,13 @@ export interface LinkProps
 
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   (
-    {
-      className,
-      variant,
-      size,
-      href,
-      external = false,
-      disabled = false,
-      children,
-      ...props
-    },
+    { className, variant, size, href, external = false, disabled = false, children, ...props },
     ref,
   ) => {
     const linkClasses = cn(linkVariants({ variant, size }), className);
 
     // External links use standard <a> tag
-    if (external || href.startsWith("http") || href.startsWith("mailto:")) {
+    if (external || href.startsWith('http') || href.startsWith('mailto:')) {
       return (
         <a
           ref={ref}
@@ -136,6 +118,6 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   },
 );
 
-Link.displayName = "Link";
+Link.displayName = 'Link';
 
 export { Link, linkVariants };

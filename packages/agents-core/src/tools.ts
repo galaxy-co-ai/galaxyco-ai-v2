@@ -2,7 +2,7 @@
  * Tool System - Utilities for creating and managing tools
  */
 
-import { Tool, ToolDefinition, ToolCategory, ToolMetadata } from "./types";
+import { Tool, ToolDefinition, ToolCategory, ToolMetadata } from './types';
 
 /**
  * Create a simple function tool
@@ -30,12 +30,12 @@ export function createTool(
 
   return {
     definition: {
-      type: "function",
+      type: 'function',
       function: {
         name,
         description,
         parameters: {
-          type: "object",
+          type: 'object',
           properties: cleanedProperties,
           required: requiredFields,
         },
@@ -52,11 +52,7 @@ export function createTool(
  *   async function search(query: string) { ... }
  */
 export function functionTool(name: string, description: string) {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     // Store tool metadata on the function
@@ -78,12 +74,12 @@ export function extractTool(fn: Function): Tool | null {
 
   return {
     definition: {
-      type: "function",
+      type: 'function',
       function: {
         name: metadata.name,
         description: metadata.description,
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {}, // TODO: Extract from TypeScript types
           required: [],
         },

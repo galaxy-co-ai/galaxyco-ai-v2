@@ -1,65 +1,57 @@
-import { Metadata } from "next";
-import {
-  CheckCircle2,
-  Circle,
-  Clock,
-  AlertCircle,
-  Plus,
-  Filter,
-  Search,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Avatar } from "@/components/ui/avatar";
+import { Metadata } from 'next';
+import { CheckCircle2, Circle, Clock, AlertCircle, Plus, Filter, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Avatar } from '@/components/ui/avatar';
 
 export const metadata: Metadata = {
-  title: "Tasks | GalaxyCo.ai",
-  description: "Mobile task management",
+  title: 'Tasks | GalaxyCo.ai',
+  description: 'Mobile task management',
 };
 
 // Mock tasks data
 const tasks = [
   {
-    id: "1",
-    title: "Complete Q4 Marketing Strategy",
-    priority: "high",
-    status: "in-progress",
-    dueDate: "2025-10-20",
-    assignee: { name: "Sarah J.", avatar: "SJ" },
+    id: '1',
+    title: 'Complete Q4 Marketing Strategy',
+    priority: 'high',
+    status: 'in-progress',
+    dueDate: '2025-10-20',
+    assignee: { name: 'Sarah J.', avatar: 'SJ' },
   },
   {
-    id: "2",
-    title: "Review Sales Dashboard",
-    priority: "medium",
-    status: "todo",
-    dueDate: "2025-10-18",
-    assignee: { name: "Michael C.", avatar: "MC" },
+    id: '2',
+    title: 'Review Sales Dashboard',
+    priority: 'medium',
+    status: 'todo',
+    dueDate: '2025-10-18',
+    assignee: { name: 'Michael C.', avatar: 'MC' },
   },
   {
-    id: "3",
-    title: "Update API Documentation",
-    priority: "high",
-    status: "in-progress",
-    dueDate: "2025-10-19",
-    assignee: { name: "Emily R.", avatar: "ER" },
+    id: '3',
+    title: 'Update API Documentation',
+    priority: 'high',
+    status: 'in-progress',
+    dueDate: '2025-10-19',
+    assignee: { name: 'Emily R.', avatar: 'ER' },
   },
   {
-    id: "4",
-    title: "Client Onboarding - Acme",
-    priority: "urgent",
-    status: "todo",
-    dueDate: "2025-10-17",
-    assignee: { name: "David K.", avatar: "DK" },
+    id: '4',
+    title: 'Client Onboarding - Acme',
+    priority: 'urgent',
+    status: 'todo',
+    dueDate: '2025-10-17',
+    assignee: { name: 'David K.', avatar: 'DK' },
   },
 ];
 
 export default function MobileTasksPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "done":
+      case 'done':
         return <CheckCircle2 className="h-5 w-5 text-success" />;
-      case "in-progress":
+      case 'in-progress':
         return <AlertCircle className="h-5 w-5 text-warning" />;
       default:
         return <Circle className="h-5 w-5 text-foreground-muted" />;
@@ -68,14 +60,14 @@ export default function MobileTasksPage() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent":
-        return "destructive";
-      case "high":
-        return "default";
-      case "medium":
-        return "secondary";
+      case 'urgent':
+        return 'destructive';
+      case 'high':
+        return 'default';
+      case 'medium':
+        return 'secondary';
       default:
-        return "outline";
+        return 'outline';
     }
   };
 
@@ -88,11 +80,7 @@ export default function MobileTasksPage() {
         {/* Search */}
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-muted" />
-          <Input
-            placeholder="Search tasks..."
-            className="pl-10 h-10"
-            aria-label="Search tasks"
-          />
+          <Input placeholder="Search tasks..." className="pl-10 h-10" aria-label="Search tasks" />
         </div>
 
         {/* Quick Filters */}
@@ -117,30 +105,22 @@ export default function MobileTasksPage() {
       {/* Tasks List */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {tasks.map((task) => {
-          const isOverdue =
-            new Date(task.dueDate) < new Date() && task.status !== "done";
+          const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'done';
 
           return (
             <div
               key={task.id}
               className={`rounded-lg border p-4 active:bg-background-subtle transition-colors ${
-                isOverdue
-                  ? "border-destructive/50 bg-destructive/5"
-                  : "border-border bg-card"
+                isOverdue ? 'border-destructive/50 bg-destructive/5' : 'border-border bg-card'
               }`}
             >
               {/* Status and Title */}
               <div className="flex items-start gap-3 mb-2">
-                <button
-                  className="mt-0.5 touch-manipulation"
-                  aria-label="Toggle task status"
-                >
+                <button className="mt-0.5 touch-manipulation" aria-label="Toggle task status">
                   {getStatusIcon(task.status)}
                 </button>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-base leading-tight">
-                    {task.title}
-                  </h3>
+                  <h3 className="font-medium text-base leading-tight">{task.title}</h3>
                 </div>
               </div>
 
@@ -150,19 +130,19 @@ export default function MobileTasksPage() {
                   <Badge
                     variant={
                       getPriorityColor(task.priority) as
-                        | "default"
-                        | "secondary"
-                        | "outline"
-                        | "destructive"
+                        | 'default'
+                        | 'secondary'
+                        | 'outline'
+                        | 'destructive'
                     }
                     size="sm"
                   >
                     {task.priority}
                   </Badge>
                   <span className="text-sm text-foreground-muted">
-                    {new Date(task.dueDate).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
+                    {new Date(task.dueDate).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
                     })}
                   </span>
                 </div>

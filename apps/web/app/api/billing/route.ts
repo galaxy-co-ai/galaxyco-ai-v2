@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 /**
  * GET /api/billing
@@ -11,17 +11,14 @@ export async function GET(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "workspaceId is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
     // TODO: In production, this would:
@@ -32,52 +29,44 @@ export async function GET(req: NextRequest) {
     // Stub data for now
     const billingData = {
       subscription: {
-        id: "sub_stub",
-        status: "active",
-        plan: "professional",
+        id: 'sub_stub',
+        status: 'active',
+        plan: 'professional',
         price: 9900, // cents
-        currency: "usd",
-        interval: "month",
-        currentPeriodStart: new Date(
-          Date.now() - 15 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
-        currentPeriodEnd: new Date(
-          Date.now() + 15 * 24 * 60 * 60 * 1000,
-        ).toISOString(),
+        currency: 'usd',
+        interval: 'month',
+        currentPeriodStart: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+        currentPeriodEnd: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
         cancelAtPeriodEnd: false,
       },
       paymentMethod: {
-        id: "pm_stub",
-        type: "card",
+        id: 'pm_stub',
+        type: 'card',
         card: {
-          brand: "visa",
-          last4: "4242",
+          brand: 'visa',
+          last4: '4242',
           expMonth: 12,
           expYear: 2025,
         },
       },
       invoices: [
         {
-          id: "in_1",
-          number: "INV-2024-001",
-          status: "paid",
+          id: 'in_1',
+          number: 'INV-2024-001',
+          status: 'paid',
           amount: 9900,
-          currency: "usd",
-          created: new Date(
-            Date.now() - 30 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          invoicePdf: "#",
+          currency: 'usd',
+          created: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          invoicePdf: '#',
         },
         {
-          id: "in_2",
-          number: "INV-2024-002",
-          status: "paid",
+          id: 'in_2',
+          number: 'INV-2024-002',
+          status: 'paid',
           amount: 9900,
-          currency: "usd",
-          created: new Date(
-            Date.now() - 60 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          invoicePdf: "#",
+          currency: 'usd',
+          created: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
+          invoicePdf: '#',
         },
       ],
       usage: {
@@ -89,11 +78,11 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(billingData);
   } catch (error) {
-    console.error("Get billing error:", error);
+    console.error('Get billing error:', error);
     return NextResponse.json(
       {
-        error: "Failed to fetch billing information",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to fetch billing information',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -110,17 +99,14 @@ export async function POST(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
     const { workspaceId, action, data } = body;
 
     if (!workspaceId || !action) {
-      return NextResponse.json(
-        { error: "workspaceId and action are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId and action are required' }, { status: 400 });
     }
 
     // TODO: Handle Stripe actions:
@@ -134,11 +120,11 @@ export async function POST(req: NextRequest) {
       message: `Billing action '${action}' would be processed (stub)`,
     });
   } catch (error) {
-    console.error("Update billing error:", error);
+    console.error('Update billing error:', error);
     return NextResponse.json(
       {
-        error: "Failed to update billing",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update billing',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

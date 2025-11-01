@@ -2,4 +2,4 @@ export {
   documentProcessingJob,
   embeddingUpdateJob,
   documentCategorizationJob,
-} from "./document-processing";
+} from './document-processing';

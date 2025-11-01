@@ -830,19 +830,19 @@ Add Web Vitals reporting:
 
 ```typescript
 // Add this import
-import { reportWebVitals } from "@/lib/web-vitals";
+import { reportWebVitals } from '@/lib/web-vitals';
 
 // Add this to the root layout component
 export function reportWebVitals(metric: NextWebVitalsMetric) {
   // Send to Sentry
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     Sentry.captureMessage(`Web Vital: ${metric.name}`, {
-      level: "info",
+      level: 'info',
       tags: {
         web_vital: metric.name,
       },
       contexts: {
-        "Web Vitals": {
+        'Web Vitals': {
           value: metric.value,
           rating: metric.rating,
           delta: metric.delta,
@@ -853,7 +853,7 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 
   // Send to analytics
   if (window.plausible) {
-    window.plausible("Web Vital", {
+    window.plausible('Web Vital', {
       props: {
         metric: metric.name,
         value: metric.value,
@@ -867,7 +867,7 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 **Create**: `apps/web/lib/web-vitals.ts`
 
 ```typescript
-import type { Metric } from "web-vitals";
+import type { Metric } from 'web-vitals';
 
 export function reportWebVitals(metric: Metric) {
   const body = JSON.stringify({
@@ -880,11 +880,11 @@ export function reportWebVitals(metric: Metric) {
 
   // Send to analytics endpoint
   if (navigator.sendBeacon) {
-    navigator.sendBeacon("/api/analytics/web-vitals", body);
+    navigator.sendBeacon('/api/analytics/web-vitals', body);
   } else {
-    fetch("/api/analytics/web-vitals", {
+    fetch('/api/analytics/web-vitals', {
       body,
-      method: "POST",
+      method: 'POST',
       keepalive: true,
     });
   }
@@ -896,15 +896,15 @@ export function reportWebVitals(metric: Metric) {
 **Create**: `apps/web/app/api/analytics/web-vitals/route.ts`
 
 ```typescript
-import { NextResponse } from "next/server";
-import { logger } from "@/lib/utils/logger";
+import { NextResponse } from 'next/server';
+import { logger } from '@/lib/utils/logger';
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
 
     // Log web vitals
-    logger.info("Web Vital recorded", {
+    logger.info('Web Vital recorded', {
       metric: data.name,
       value: data.value,
       rating: data.rating,
@@ -916,8 +916,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    logger.error("Error recording web vital", { error });
-    return NextResponse.json({ error: "Failed to record" }, { status: 500 });
+    logger.error('Error recording web vital', { error });
+    return NextResponse.json({ error: 'Failed to record' }, { status: 500 });
   }
 }
 ```
@@ -1027,8 +1027,8 @@ Add after workspace creation:
 
 ```typescript
 // Track analytics event
-if (typeof window !== "undefined" && window.posthog) {
-  window.posthog.capture("workspace_created", {
+if (typeof window !== 'undefined' && window.posthog) {
+  window.posthog.capture('workspace_created', {
     workspace_id: workspace.id,
     workspace_name: workspaceName,
     user_role: setupData.role,

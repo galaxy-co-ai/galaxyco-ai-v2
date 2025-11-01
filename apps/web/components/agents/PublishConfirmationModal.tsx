@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   colors,
   spacing,
@@ -8,7 +8,7 @@ import {
   radius,
   shadows,
   zIndex,
-} from "@/lib/constants/design-system";
+} from '@/lib/constants/design-system';
 
 interface PublishConfirmationModalProps {
   agentName: string;
@@ -17,9 +17,12 @@ interface PublishConfirmationModalProps {
   isPublishing?: boolean;
 }
 
-export const PublishConfirmationModal: React.FC<
-  PublishConfirmationModalProps
-> = ({ agentName, onConfirm, onCancel, isPublishing = false }) => {
+export const PublishConfirmationModal: React.FC<PublishConfirmationModalProps> = ({
+  agentName,
+  onConfirm,
+  onCancel,
+  isPublishing = false,
+}) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleConfirm = async () => {
@@ -31,11 +34,11 @@ export const PublishConfirmationModal: React.FC<
   };
 
   const checklistItems = [
-    { id: 1, text: "Agent name and description are clear", icon: "📝" },
-    { id: 2, text: "System prompt is properly configured", icon: "🤖" },
-    { id: 3, text: "AI model and parameters are set", icon: "⚙️" },
-    { id: 4, text: "Trigger type is configured", icon: "🎯" },
-    { id: 5, text: "Agent has been tested (optional)", icon: "🧪" },
+    { id: 1, text: 'Agent name and description are clear', icon: '📝' },
+    { id: 2, text: 'System prompt is properly configured', icon: '🤖' },
+    { id: 3, text: 'AI model and parameters are set', icon: '⚙️' },
+    { id: 4, text: 'Trigger type is configured', icon: '🎯' },
+    { id: 5, text: 'Agent has been tested (optional)', icon: '🧪' },
   ];
 
   return (
@@ -44,32 +47,32 @@ export const PublishConfirmationModal: React.FC<
       <div
         onClick={!isPublishing && !showSuccess ? onCancel : undefined}
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(4px)",
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
           zIndex: zIndex.modal,
-          animation: "fadeIn 200ms ease-in-out",
+          animation: 'fadeIn 200ms ease-in-out',
         }}
       />
 
       {/* Modal */}
       <div
         style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "90%",
-          maxWidth: "500px",
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90%',
+          maxWidth: '500px',
           backgroundColor: colors.background.primary,
           borderRadius: radius.xl,
           boxShadow: shadows.xl,
           zIndex: zIndex.modal + 1,
-          animation: "slideUp 300ms ease-out",
+          animation: 'slideUp 300ms ease-out',
         }}
       >
         {!showSuccess ? (
@@ -83,7 +86,7 @@ export const PublishConfirmationModal: React.FC<
             >
               <h2
                 style={{
-                  fontSize: typography.sizes["2xl"],
+                  fontSize: typography.sizes['2xl'],
                   fontWeight: typography.weights.bold,
                   color: colors.text.primary,
                   margin: 0,
@@ -121,8 +124,8 @@ export const PublishConfirmationModal: React.FC<
                   <div
                     key={item.id}
                     style={{
-                      display: "flex",
-                      alignItems: "flex-start",
+                      display: 'flex',
+                      alignItems: 'flex-start',
                       gap: spacing.md,
                       padding: spacing.md,
                       marginBottom: spacing.sm,
@@ -130,15 +133,13 @@ export const PublishConfirmationModal: React.FC<
                       borderRadius: radius.md,
                     }}
                   >
-                    <span style={{ fontSize: typography.sizes.xl }}>
-                      {item.icon}
-                    </span>
+                    <span style={{ fontSize: typography.sizes.xl }}>{item.icon}</span>
                     <span
                       style={{
                         flex: 1,
                         fontSize: typography.sizes.sm,
                         color: colors.text.primary,
-                        paddingTop: "2px",
+                        paddingTop: '2px',
                       }}
                     >
                       {item.text}
@@ -171,8 +172,8 @@ export const PublishConfirmationModal: React.FC<
                     margin: 0,
                   }}
                 >
-                  💡 Once published, this agent will be available for execution.
-                  You can pause or edit it at any time.
+                  💡 Once published, this agent will be available for execution. You can pause or
+                  edit it at any time.
                 </p>
               </div>
             </div>
@@ -180,7 +181,7 @@ export const PublishConfirmationModal: React.FC<
             {/* Actions */}
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 gap: spacing.sm,
                 padding: spacing.xl,
                 borderTop: `1px solid ${colors.border.default}`,
@@ -196,21 +197,20 @@ export const PublishConfirmationModal: React.FC<
                   fontSize: typography.sizes.base,
                   fontWeight: typography.weights.medium,
                   color: colors.text.secondary,
-                  backgroundColor: "transparent",
+                  backgroundColor: 'transparent',
                   border: `1px solid ${colors.border.default}`,
                   borderRadius: radius.md,
-                  cursor: isPublishing ? "not-allowed" : "pointer",
+                  cursor: isPublishing ? 'not-allowed' : 'pointer',
                   opacity: isPublishing ? 0.5 : 1,
-                  transition: "all 200ms",
+                  transition: 'all 200ms',
                 }}
                 onMouseEnter={(e) => {
                   if (!isPublishing) {
-                    e.currentTarget.style.backgroundColor =
-                      colors.background.secondary;
+                    e.currentTarget.style.backgroundColor = colors.background.secondary;
                   }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
                 Cancel
@@ -227,25 +227,25 @@ export const PublishConfirmationModal: React.FC<
                   fontWeight: typography.weights.semibold,
                   color: colors.background.primary,
                   backgroundColor: colors.primaryColor,
-                  border: "none",
+                  border: 'none',
                   borderRadius: radius.md,
-                  cursor: isPublishing ? "not-allowed" : "pointer",
+                  cursor: isPublishing ? 'not-allowed' : 'pointer',
                   opacity: isPublishing ? 0.7 : 1,
-                  transition: "all 200ms",
+                  transition: 'all 200ms',
                   boxShadow: shadows.sm,
                 }}
                 onMouseEnter={(e) => {
                   if (!isPublishing) {
-                    e.currentTarget.style.opacity = "0.9";
+                    e.currentTarget.style.opacity = '0.9';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isPublishing) {
-                    e.currentTarget.style.opacity = "1";
+                    e.currentTarget.style.opacity = '1';
                   }
                 }}
               >
-                {isPublishing ? "Publishing..." : "Confirm & Publish"}
+                {isPublishing ? 'Publishing...' : 'Confirm & Publish'}
               </button>
             </div>
           </>
@@ -253,23 +253,23 @@ export const PublishConfirmationModal: React.FC<
           /* Success State */
           <div
             style={{
-              padding: spacing["4xl"],
-              textAlign: "center",
-              animation: "scaleIn 300ms ease-out",
+              padding: spacing['4xl'],
+              textAlign: 'center',
+              animation: 'scaleIn 300ms ease-out',
             }}
           >
             <div
               style={{
-                fontSize: "64px",
+                fontSize: '64px',
                 marginBottom: spacing.lg,
-                animation: "bounce 600ms ease-in-out",
+                animation: 'bounce 600ms ease-in-out',
               }}
             >
               ✨
             </div>
             <h2
               style={{
-                fontSize: typography.sizes["2xl"],
+                fontSize: typography.sizes['2xl'],
                 fontWeight: typography.weights.bold,
                 color: colors.successColor,
                 marginBottom: spacing.sm,

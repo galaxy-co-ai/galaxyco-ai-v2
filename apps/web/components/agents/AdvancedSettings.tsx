@@ -1,21 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { FormInput as Input } from "@/components/ui/form-input";
+import React, { useState } from 'react';
+import { FormInput as Input } from '@/components/ui/form-input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { FormTextarea as Textarea } from "@/components/ui/form-textarea";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-} from "@/lib/constants/design-system";
+} from '@/components/ui/select';
+import { FormTextarea as Textarea } from '@/components/ui/form-textarea';
+import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 
 interface AdvancedSettingsProps {
   settings: {
@@ -26,7 +21,7 @@ interface AdvancedSettingsProps {
     enableCaching?: boolean;
     cacheTTL?: number;
   };
-  onChange: (updates: Partial<AdvancedSettingsProps["settings"]>) => void;
+  onChange: (updates: Partial<AdvancedSettingsProps['settings']>) => void;
   disabled?: boolean;
 }
 
@@ -38,26 +33,26 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div style={{ marginBottom: spacing["2xl"] }}>
+    <div style={{ marginBottom: spacing['2xl'] }}>
       {/* Section Header (Collapsible) */}
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
         disabled={disabled}
         style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           padding: `${spacing.md} 0`,
-          backgroundColor: "transparent",
-          border: "none",
+          backgroundColor: 'transparent',
+          border: 'none',
           borderTop: `1px solid ${colors.border.default}`,
-          cursor: disabled ? "not-allowed" : "pointer",
+          cursor: disabled ? 'not-allowed' : 'pointer',
           opacity: disabled ? 0.6 : 1,
         }}
       >
-        <div style={{ textAlign: "left" }}>
+        <div style={{ textAlign: 'left' }}>
           <h3
             style={{
               fontSize: typography.sizes.lg,
@@ -74,17 +69,15 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               color: colors.text.tertiary,
             }}
           >
-            {isExpanded
-              ? "Click to collapse"
-              : "Configure timeouts, retries, and rate limits"}
+            {isExpanded ? 'Click to collapse' : 'Configure timeouts, retries, and rate limits'}
           </p>
         </div>
         <span
           style={{
-            fontSize: typography.sizes["2xl"],
+            fontSize: typography.sizes['2xl'],
             color: colors.text.tertiary,
-            transition: "transform 200ms",
-            transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+            transition: 'transform 200ms',
+            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
         >
           ▼
@@ -99,7 +92,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             padding: spacing.lg,
             backgroundColor: colors.background.secondary,
             borderRadius: radius.lg,
-            animation: "slideDown 200ms ease-out",
+            animation: 'slideDown 200ms ease-out',
           }}
         >
           {/* Performance Settings */}
@@ -119,11 +112,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <Input
               label="Timeout (seconds)"
               type="number"
-              value={settings.timeout?.toString() || ""}
+              value={settings.timeout?.toString() || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value
-                  ? parseInt(e.target.value, 10)
-                  : undefined;
+                const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ timeout: value });
               }}
               placeholder="e.g., 30"
@@ -137,11 +128,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <Input
               label="Max Retries"
               type="number"
-              value={settings.maxRetries?.toString() || ""}
+              value={settings.maxRetries?.toString() || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value
-                  ? parseInt(e.target.value, 10)
-                  : undefined;
+                const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ maxRetries: value });
               }}
               placeholder="e.g., 3"
@@ -155,11 +144,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             <Input
               label="Rate Limit (per minute)"
               type="number"
-              value={settings.rateLimitPerMinute?.toString() || ""}
+              value={settings.rateLimitPerMinute?.toString() || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value
-                  ? parseInt(e.target.value, 10)
-                  : undefined;
+                const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                 onChange({ rateLimitPerMinute: value });
               }}
               placeholder="e.g., 60"
@@ -173,7 +160,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           {/* Divider */}
           <div
             style={{
-              height: "1px",
+              height: '1px',
               backgroundColor: colors.border.default,
               margin: `${spacing.lg} 0`,
             }}
@@ -195,11 +182,11 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             {/* Enable Logging Toggle */}
             <label
               style={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 gap: spacing.md,
                 marginBottom: spacing.md,
-                cursor: disabled ? "not-allowed" : "pointer",
+                cursor: disabled ? 'not-allowed' : 'pointer',
                 opacity: disabled ? 0.6 : 1,
               }}
             >
@@ -211,9 +198,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 }
                 disabled={disabled}
                 style={{
-                  width: "20px",
-                  height: "20px",
-                  cursor: disabled ? "not-allowed" : "pointer",
+                  width: '20px',
+                  height: '20px',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
                 }}
               />
               <div>
@@ -240,11 +227,11 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
             {/* Enable Caching Toggle */}
             <label
               style={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 gap: spacing.md,
                 marginBottom: spacing.md,
-                cursor: disabled ? "not-allowed" : "pointer",
+                cursor: disabled ? 'not-allowed' : 'pointer',
                 opacity: disabled ? 0.6 : 1,
               }}
             >
@@ -256,9 +243,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 }
                 disabled={disabled}
                 style={{
-                  width: "20px",
-                  height: "20px",
-                  cursor: disabled ? "not-allowed" : "pointer",
+                  width: '20px',
+                  height: '20px',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
                 }}
               />
               <div>
@@ -287,11 +274,9 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
               <Input
                 label="Cache TTL (seconds)"
                 type="number"
-                value={settings.cacheTTL?.toString() || ""}
+                value={settings.cacheTTL?.toString() || ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value
-                    ? parseInt(e.target.value, 10)
-                    : undefined;
+                  const value = e.target.value ? parseInt(e.target.value, 10) : undefined;
                   onChange({ cacheTTL: value });
                 }}
                 placeholder="e.g., 3600"
@@ -320,9 +305,8 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 margin: 0,
               }}
             >
-              💡 <strong>Tip:</strong> Leave settings empty to use defaults.
-              These settings help optimize performance and prevent rate limit
-              issues.
+              💡 <strong>Tip:</strong> Leave settings empty to use defaults. These settings help
+              optimize performance and prevent rate limit issues.
             </p>
           </div>
         </div>

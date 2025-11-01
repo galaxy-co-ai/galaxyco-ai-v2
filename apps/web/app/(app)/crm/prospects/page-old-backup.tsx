@@ -1,27 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { ConfidenceBadge } from "@/components/shared/confidence-badge";
-import { mockProspects } from "@/lib/fixtures";
-import { Plus, Building2, Mail, Linkedin, User } from "lucide-react";
+import { useState } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { ConfidenceBadge } from '@/components/shared/confidence-badge';
+import { mockProspects } from '@/lib/fixtures';
+import { Plus, Building2, Mail, Linkedin, User } from 'lucide-react';
 
 export default function ProspectsPage() {
   const prospects = mockProspects;
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   // Filter prospects
   const filteredProspects = prospects.filter((prospect) => {
     // Search filter
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       prospect.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prospect.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prospect.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -29,8 +27,7 @@ export default function ProspectsPage() {
 
     // Status filter
     const statusFilter = activeFilters.status || [];
-    const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(prospect.status);
+    const matchesStatus = statusFilter.length === 0 || statusFilter.includes(prospect.status);
 
     return matchesSearch && matchesStatus;
   });
@@ -44,14 +41,14 @@ export default function ProspectsPage() {
 
   const handleClearFilters = () => {
     setActiveFilters({});
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   return (
     <ListPage
       title="Prospects"
       subtitle="Manage enriched prospects and leads"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Prospects" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Prospects' }]}
       searchQuery={searchQuery}
       searchPlaceholder="Search prospects by name, email, or company..."
       onSearchChange={setSearchQuery}
@@ -59,14 +56,14 @@ export default function ProspectsPage() {
       onViewModeChange={setViewMode}
       filters={[
         {
-          id: "status",
-          label: "Status",
-          type: "checkbox",
+          id: 'status',
+          label: 'Status',
+          type: 'checkbox',
           options: [
-            { value: "new", label: "New" },
-            { value: "contacted", label: "Contacted" },
-            { value: "qualified", label: "Qualified" },
-            { value: "nurturing", label: "Nurturing" },
+            { value: 'new', label: 'New' },
+            { value: 'contacted', label: 'Contacted' },
+            { value: 'qualified', label: 'Qualified' },
+            { value: 'nurturing', label: 'Nurturing' },
           ],
         },
       ]}
@@ -90,9 +87,7 @@ export default function ProspectsPage() {
     >
       {filteredProspects.length === 0 && prospects.length > 0 ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            No prospects match your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">No prospects match your search or filters</p>
           <Button variant="outline" onClick={handleClearFilters}>
             Clear Filters
           </Button>
@@ -115,9 +110,7 @@ export default function ProspectsPage() {
                   />
                   <div>
                     <h3 className="font-semibold">{prospect.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {prospect.title}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{prospect.title}</p>
                   </div>
                 </div>
                 <Badge variant="secondary">{prospect.status}</Badge>
@@ -132,17 +125,13 @@ export default function ProspectsPage() {
               {/* Email */}
               <div className="flex items-center gap-2 mb-4">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground truncate">
-                  {prospect.email}
-                </span>
+                <span className="text-sm text-muted-foreground truncate">{prospect.email}</span>
               </div>
 
               {/* Confidence Score */}
               {prospect.enrichmentData && (
                 <div className="mb-4">
-                  <ConfidenceBadge
-                    score={prospect.enrichmentData.confidenceScore}
-                  />
+                  <ConfidenceBadge score={prospect.enrichmentData.confidenceScore} />
                 </div>
               )}
 
@@ -153,11 +142,7 @@ export default function ProspectsPage() {
                   Email
                 </Button>
                 <Button size="sm" variant="outline" asChild>
-                  <a
-                    href={prospect.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={prospect.linkedinUrl} target="_blank" rel="noopener noreferrer">
                     <Linkedin className="h-4 w-4" />
                   </a>
                 </Button>

@@ -2,7 +2,7 @@
  * Agent Class - Core agent implementation following OpenAI SDK patterns
  */
 
-import { Agent as IAgent, AgentConfig, Tool, Guardrail } from "./types";
+import { Agent as IAgent, AgentConfig, Tool, Guardrail } from './types';
 
 export class Agent implements IAgent {
   public readonly id: string;
@@ -15,12 +15,10 @@ export class Agent implements IAgent {
   public readonly guardrails: Guardrail[];
 
   constructor(config: AgentConfig & { id?: string }) {
-    this.id =
-      config.id ||
-      `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.id = config.id || `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.name = config.name;
     this.instructions = config.instructions;
-    this.model = config.model || "gpt-4o-mini";
+    this.model = config.model || 'gpt-4o-mini';
     this.temperature = config.temperature ?? 0.7;
     this.maxTokens = config.maxTokens;
     this.tools = config.tools || [];
@@ -35,19 +33,19 @@ export class Agent implements IAgent {
    */
   private validate(): void {
     if (!this.name || this.name.trim().length === 0) {
-      throw new Error("Agent name is required");
+      throw new Error('Agent name is required');
     }
 
     if (!this.instructions || this.instructions.trim().length === 0) {
-      throw new Error("Agent instructions are required");
+      throw new Error('Agent instructions are required');
     }
 
     if (this.temperature < 0 || this.temperature > 2) {
-      throw new Error("Temperature must be between 0 and 2");
+      throw new Error('Temperature must be between 0 and 2');
     }
 
     if (this.maxTokens && this.maxTokens < 1) {
-      throw new Error("maxTokens must be positive");
+      throw new Error('maxTokens must be positive');
     }
   }
 
@@ -56,46 +54,38 @@ export class Agent implements IAgent {
    * This allows agents to call other agents as tools
    */
   asTool(toolName?: string, description?: string): Tool {
-    const name =
-      toolName || `call_${this.name.toLowerCase().replace(/\s+/g, "_")}`;
+    const name = toolName || `call_${this.name.toLowerCase().replace(/\s+/g, '_')}`;
     const desc = description || `Delegate task to ${this.name} agent`;
 
     return {
       definition: {
-        type: "function",
+        type: 'function',
         function: {
           name,
           description: desc,
           parameters: {
-            type: "object",
+            type: 'object',
             properties: {
               input: {
-                type: "string",
-                description: "The input message or task to send to the agent",
+                type: 'string',
+                description: 'The input message or task to send to the agent',
               },
               context: {
-                type: "object",
-                description: "Optional context to pass to the agent",
+                type: 'object',
+                description: 'Optional context to pass to the agent',
               },
             },
-            required: ["input"],
+            required: ['input'],
           },
         },
       },
-      execute: async (args: {
-        input: string;
-        context?: Record<string, any>;
-      }) => {
+      execute: async (args: { input: string; context?: Record<string, any> }) => {
         // Import Runner dynamically to avoid circular dependency
-        const { Runner } = await import("./runner");
+        const { Runner } = await import('./runner');
 
-        const result = await Runner.run(
-          this,
-          [{ role: "user", content: args.input }],
-          {
-            context: args.context,
-          },
-        );
+        const result = await Runner.run(this, [{ role: 'user', content: args.input }], {
+          context: args.context,
+        });
 
         return {
           success: result.success,
@@ -151,7 +141,7 @@ export class Agent implements IAgent {
       maxTokens: this.maxTokens,
       toolCount: this.tools.length,
       guardrailCount: this.guardrails.length,
-      instructions: this.instructions.substring(0, 100) + "...",
+      instructions: this.instructions.substring(0, 100) + '...',
     };
   }
 }

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import React from 'react';
+import { Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 export interface CommandItem {
   id: string;
@@ -29,11 +29,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   isOpen,
   onClose,
   commands,
-  placeholder = "Search commands...",
+  placeholder = 'Search commands...',
   emptyState,
   className,
 }) => {
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -45,9 +45,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     return commands.filter((cmd) => {
       const labelMatch = cmd.label.toLowerCase().includes(searchLower);
       const descMatch = cmd.description?.toLowerCase().includes(searchLower);
-      const keywordMatch = cmd.keywords?.some((k) =>
-        k.toLowerCase().includes(searchLower),
-      );
+      const keywordMatch = cmd.keywords?.some((k) => k.toLowerCase().includes(searchLower));
       return labelMatch || descMatch || keywordMatch;
     });
   }, [commands, search]);
@@ -56,7 +54,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     const groups = new Map<string, CommandItem[]>();
 
     filteredCommands.forEach((cmd) => {
-      const category = cmd.category || "Other";
+      const category = cmd.category || 'Other';
       if (!groups.has(category)) {
         groups.set(category, []);
       }
@@ -75,7 +73,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   React.useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-      setSearch("");
+      setSearch('');
       setSelectedIndex(0);
     }
   }, [isOpen]);
@@ -86,20 +84,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowDown") {
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex((prev) =>
-        prev < filteredCommands.length - 1 ? prev + 1 : 0,
-      );
-    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prev) => (prev < filteredCommands.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex((prev) =>
-        prev > 0 ? prev - 1 : filteredCommands.length - 1,
-      );
-    } else if (e.key === "Enter" && filteredCommands[selectedIndex]) {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredCommands.length - 1));
+    } else if (e.key === 'Enter' && filteredCommands[selectedIndex]) {
       e.preventDefault();
       handleSelect(filteredCommands[selectedIndex]);
-    } else if (e.key === "Escape") {
+    } else if (e.key === 'Escape') {
       onClose();
     }
   };
@@ -107,11 +101,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className={cn(
-          "max-w-2xl p-0 gap-0 overflow-hidden",
-          "top-[20%] translate-y-0",
-          className,
-        )}
+        className={cn('max-w-2xl p-0 gap-0 overflow-hidden', 'top-[20%] translate-y-0', className)}
         onKeyDown={handleKeyDown}
       >
         {/* Search Input */}
@@ -134,11 +124,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         <div className="max-h-[400px] overflow-y-auto">
           {filteredCommands.length === 0 ? (
             <div className="py-12 text-center">
-              {emptyState || (
-                <p className="text-sm text-muted-foreground">
-                  No commands found
-                </p>
-              )}
+              {emptyState || <p className="text-sm text-muted-foreground">No commands found</p>}
             </div>
           ) : (
             <div>
@@ -169,11 +155,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                             onClick={() => handleSelect(command)}
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
                             className={cn(
-                              "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-150",
-                              "focus:outline-none",
+                              'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-150',
+                              'focus:outline-none',
                               isSelected
-                                ? "bg-accent text-accent-foreground"
-                                : "hover:bg-accent/50",
+                                ? 'bg-accent text-accent-foreground'
+                                : 'hover:bg-accent/50',
                             )}
                           >
                             {/* Icon */}
@@ -216,30 +202,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/30">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">
-                ↑
-              </kbd>
-              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">
-                ↓
-              </kbd>
+              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">↑</kbd>
+              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">↓</kbd>
               Navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">
-                ↵
-              </kbd>
+              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">↵</kbd>
               Select
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">
-                ESC
-              </kbd>
+              <kbd className="px-1.5 py-0.5 rounded border border-border bg-background">ESC</kbd>
               Close
             </span>
           </div>
           <span className="text-xs text-muted-foreground">
             {filteredCommands.length} result
-            {filteredCommands.length !== 1 ? "s" : ""}
+            {filteredCommands.length !== 1 ? 's' : ''}
           </span>
         </div>
       </DialogContent>
@@ -247,4 +225,4 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   );
 };
 
-CommandPalette.displayName = "CommandPalette";
+CommandPalette.displayName = 'CommandPalette';

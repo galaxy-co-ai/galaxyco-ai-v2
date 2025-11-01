@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useRef, useCallback } from "react";
-import { X, Upload, FileText, CheckCircle, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState, useRef, useCallback } from 'react';
+import { X, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -13,16 +13,12 @@ interface UploadModalProps {
 interface UploadingFile {
   file: File;
   progress: number;
-  status: "uploading" | "processing" | "complete" | "error";
+  status: 'uploading' | 'processing' | 'complete' | 'error';
   category?: string;
   error?: string;
 }
 
-export function UploadModal({
-  isOpen,
-  onClose,
-  onUploadComplete,
-}: UploadModalProps) {
+export function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +55,7 @@ export function UploadModal({
     const newUploads: UploadingFile[] = files.map((file) => ({
       file,
       progress: 0,
-      status: "uploading" as const,
+      status: 'uploading' as const,
     }));
 
     setUploadingFiles((prev) => [...prev, ...newUploads]);
@@ -69,25 +65,23 @@ export function UploadModal({
       try {
         // Create FormData
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
 
         // Upload with progress tracking
         const xhr = new XMLHttpRequest();
 
-        xhr.upload.addEventListener("progress", (e) => {
+        xhr.upload.addEventListener('progress', (e) => {
           if (e.lengthComputable) {
             const progress = (e.loaded / e.total) * 100;
             setUploadingFiles((prev) =>
               prev.map((upload, idx) =>
-                upload.file === file
-                  ? { ...upload, progress: Math.round(progress) }
-                  : upload,
+                upload.file === file ? { ...upload, progress: Math.round(progress) } : upload,
               ),
             );
           }
         });
 
-        xhr.addEventListener("load", async () => {
+        xhr.addEventListener('load', async () => {
           if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             setUploadingFiles((prev) =>
@@ -96,40 +90,38 @@ export function UploadModal({
                   ? {
                       ...upload,
                       progress: 100,
-                      status: "complete",
+                      status: 'complete',
                       category: response.document?.category,
                     }
                   : upload,
               ),
             );
           } else {
-            throw new Error("Upload failed");
+            throw new Error('Upload failed');
           }
         });
 
-        xhr.addEventListener("error", () => {
+        xhr.addEventListener('error', () => {
           setUploadingFiles((prev) =>
             prev.map((upload) =>
               upload.file === file
-                ? { ...upload, status: "error", error: "Upload failed" }
+                ? { ...upload, status: 'error', error: 'Upload failed' }
                 : upload,
             ),
           );
         });
 
-        xhr.open("POST", "/api/documents/upload");
+        xhr.open('POST', '/api/documents/upload');
         xhr.send(formData);
 
         // Wait for upload to complete before starting next one
         await new Promise<void>((resolve) => {
-          xhr.addEventListener("loadend", () => resolve());
+          xhr.addEventListener('loadend', () => resolve());
         });
       } catch (error) {
         setUploadingFiles((prev) =>
           prev.map((upload) =>
-            upload.file === file
-              ? { ...upload, status: "error", error: "Upload failed" }
-              : upload,
+            upload.file === file ? { ...upload, status: 'error', error: 'Upload failed' } : upload,
           ),
         );
       }
@@ -151,16 +143,12 @@ export function UploadModal({
   if (!isOpen) return null;
 
   const allComplete =
-    uploadingFiles.length > 0 &&
-    uploadingFiles.every((f) => f.status === "complete");
+    uploadingFiles.length > 0 && uploadingFiles.every((f) => f.status === 'complete');
 
   return (
     <div className="fixed inset-0 z-modal flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm"
-        onClick={handleClose}
-      />
+      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={handleClose} />
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-2xl rounded-lg border bg-white shadow-2xl dark:bg-neutral-900">
@@ -191,10 +179,10 @@ export function UploadModal({
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               className={cn(
-                "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 text-center transition-colors",
+                'flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 text-center transition-colors',
                 isDragging
-                  ? "border-primary bg-primary/5"
-                  : "border-neutral-300 hover:border-neutral-400 dark:border-neutral-700",
+                  ? 'border-primary bg-primary/5'
+                  : 'border-neutral-300 hover:border-neutral-400 dark:border-neutral-700',
               )}
             >
               <Upload className="h-12 w-12 text-neutral-400" />
@@ -231,9 +219,9 @@ export function UploadModal({
                   className="flex items-center gap-4 rounded-lg border bg-neutral-50 p-4 dark:bg-neutral-800"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white dark:bg-neutral-900">
-                    {upload.status === "complete" ? (
+                    {upload.status === 'complete' ? (
                       <CheckCircle className="h-5 w-5 text-green-600" />
-                    ) : upload.status === "error" ? (
+                    ) : upload.status === 'error' ? (
                       <AlertCircle className="h-5 w-5 text-red-600" />
                     ) : (
                       <FileText className="h-5 w-5 text-neutral-600" />
@@ -244,14 +232,12 @@ export function UploadModal({
                       {upload.file.name}
                     </h4>
                     <div className="mt-1 flex items-center gap-2">
-                      {upload.status === "complete" ? (
+                      {upload.status === 'complete' ? (
                         <p className="text-xs text-green-600">
-                          Complete • {upload.category?.replace(/_/g, " ")}
+                          Complete • {upload.category?.replace(/_/g, ' ')}
                         </p>
-                      ) : upload.status === "error" ? (
-                        <p className="text-xs text-red-600">
-                          {upload.error || "Upload failed"}
-                        </p>
+                      ) : upload.status === 'error' ? (
+                        <p className="text-xs text-red-600">{upload.error || 'Upload failed'}</p>
                       ) : (
                         <>
                           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
@@ -290,7 +276,7 @@ export function UploadModal({
             onClick={handleClose}
             className="h-10 rounded-md border px-4 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800"
           >
-            {allComplete ? "Done" : "Cancel"}
+            {allComplete ? 'Done' : 'Cancel'}
           </button>
         </div>
       </div>

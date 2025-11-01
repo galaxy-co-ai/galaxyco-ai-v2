@@ -1,16 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import {
-  users,
-  workspaceMembers,
-  notifications,
-} from "@galaxyco/database/schema";
-import { eq, and, desc } from "drizzle-orm";
-import { createNotificationSchema } from "@/lib/validation/communication";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, notifications } from '@galaxyco/database/schema';
+import { eq, and, desc } from 'drizzle-orm';
+import { createNotificationSchema } from '@/lib/validation/communication';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * POST /api/notifications
@@ -27,36 +23,31 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized notification creation attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized notification creation attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.CRM_CREATE,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CRM_CREATE);
     if (!rateLimitResult.success) {
-      logger.warn("Notifications creation rate limit exceeded", {
+      logger.warn('Notifications creation rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
         reset: rateLimitResult.reset,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
           retryAfter: rateLimitResult.reset,
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(rateLimitResult.limit),
-            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-            "X-RateLimit-Reset": String(rateLimitResult.reset),
-            "Retry-After": String(
-              rateLimitResult.reset - Math.floor(Date.now() / 1000),
-            ),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(rateLimitResult.reset - Math.floor(Date.now() / 1000)),
           },
         },
       );
@@ -68,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid notification creation request", {
+      logger.warn('Invalid notification creation request', {
         errors: formattedError.errors,
       });
       return NextResponse.json(formattedError, {
@@ -84,7 +75,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 5. Verify workspace membership
@@ -97,7 +88,7 @@ export async function POST(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -114,15 +105,12 @@ export async function POST(req: NextRequest) {
       metadata: notificationData.metadata || {},
     };
 
-    const [notification] = await db
-      .insert(notifications)
-      .values(insertValues)
-      .returning();
+    const [notification] = await db.insert(notifications).values(insertValues).returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Notifications created successfully", {
+    logger.info('Notifications created successfully', {
       userId: user.id,
       workspaceId,
       notificationId: notification.id,
@@ -135,25 +123,22 @@ export async function POST(req: NextRequest) {
     });
 
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      String(rateLimitResult.remaining),
-    );
-    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
+    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
 
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Create notification error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Create notification error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to create notification",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create notification',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -174,19 +159,19 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized notifications list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized notifications list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -197,7 +182,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -210,17 +195,14 @@ export async function GET(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
 
     // 5. Fetch notifications from database
     const userNotifications = await db.query.notifications.findMany({
-      where: and(
-        eq(notifications.workspaceId, workspaceId),
-        eq(notifications.userId, user.id),
-      ),
+      where: and(eq(notifications.workspaceId, workspaceId), eq(notifications.userId, user.id)),
       orderBy: [desc(notifications.createdAt)],
       limit,
       offset,
@@ -233,13 +215,10 @@ export async function GET(req: NextRequest) {
       offset,
     });
   } catch (error) {
-    logger.error("List notifications error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List notifications error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch notifications" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 });
   }
 }

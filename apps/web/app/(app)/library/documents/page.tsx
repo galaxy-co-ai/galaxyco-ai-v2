@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
-import { ListPage } from "@/components/templates/list-page";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
+import { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
+import { ListPage } from '@/components/templates/list-page';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
 import {
   FileText,
   File,
@@ -19,8 +19,8 @@ import {
   Upload,
   Eye,
   Share2,
-} from "lucide-react";
-import Link from "next/link";
+} from 'lucide-react';
+import Link from 'next/link';
 
 interface Document {
   id: string;
@@ -41,11 +41,9 @@ export default function DocumentsPage() {
   const { currentWorkspace } = useWorkspace();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   // Fetch documents from API
   useEffect(() => {
@@ -54,19 +52,17 @@ export default function DocumentsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/documents?workspaceId=${currentWorkspace.id}&limit=100`,
-        );
+        const res = await fetch(`/api/documents?workspaceId=${currentWorkspace.id}&limit=100`);
 
         if (!res.ok) {
-          throw new Error("Failed to fetch documents");
+          throw new Error('Failed to fetch documents');
         }
 
         const data = await res.json();
         setDocuments(data.documents || []);
       } catch (error) {
-        console.error("Failed to fetch documents:", error);
-        toast.error("Failed to load documents");
+        console.error('Failed to fetch documents:', error);
+        toast.error('Failed to load documents');
       } finally {
         setIsLoading(false);
       }
@@ -77,35 +73,29 @@ export default function DocumentsPage() {
 
   // Helper to format file size from bytes
   const formatFileSize = (bytes: number | null): string => {
-    if (!bytes) return "0 B";
-    const sizes = ["B", "KB", "MB", "GB"];
+    if (!bytes) return '0 B';
+    const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
   // Helper to get display name for document
   const getDocName = (doc: Document): string => {
-    return doc.fileName || doc.title || "Untitled Document";
+    return doc.fileName || doc.title || 'Untitled Document';
   };
 
   // Helper to get file type from MIME type or filename
   const getFileType = (doc: Document): string => {
     if (doc.type) return doc.type;
-    if (doc.mimeType?.includes("pdf")) return "pdf";
-    if (doc.mimeType?.includes("image")) return "image";
-    if (doc.mimeType?.includes("video")) return "video";
-    if (
-      doc.mimeType?.includes("spreadsheet") ||
-      doc.mimeType?.includes("excel")
-    )
-      return "spreadsheet";
-    if (doc.mimeType?.includes("csv")) return "csv";
-    if (
-      doc.mimeType?.includes("presentation") ||
-      doc.mimeType?.includes("powerpoint")
-    )
-      return "presentation";
-    return "document";
+    if (doc.mimeType?.includes('pdf')) return 'pdf';
+    if (doc.mimeType?.includes('image')) return 'image';
+    if (doc.mimeType?.includes('video')) return 'video';
+    if (doc.mimeType?.includes('spreadsheet') || doc.mimeType?.includes('excel'))
+      return 'spreadsheet';
+    if (doc.mimeType?.includes('csv')) return 'csv';
+    if (doc.mimeType?.includes('presentation') || doc.mimeType?.includes('powerpoint'))
+      return 'presentation';
+    return 'document';
   };
 
   if (isLoading) {
@@ -119,11 +109,11 @@ export default function DocumentsPage() {
   const filteredDocuments = documents.filter((doc) => {
     const docName = getDocName(doc);
     const docType = getFileType(doc);
-    const description = doc.summary || "";
+    const description = doc.summary || '';
     const tags = doc.tags || [];
 
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       docName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -147,15 +137,15 @@ export default function DocumentsPage() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case "pdf":
-      case "document":
-      case "markdown":
-      case "text":
+      case 'pdf':
+      case 'document':
+      case 'markdown':
+      case 'text':
         return <FileText className="h-8 w-8" />;
-      case "spreadsheet":
-      case "csv":
+      case 'spreadsheet':
+      case 'csv':
         return <FileSpreadsheet className="h-8 w-8" />;
-      case "image":
+      case 'image':
         return <ImageIcon className="h-8 w-8" />;
       default:
         return <File className="h-8 w-8" />;
@@ -164,34 +154,29 @@ export default function DocumentsPage() {
 
   const getFileTypeColor = (type: string) => {
     switch (type) {
-      case "pdf":
-        return "text-red-500";
-      case "spreadsheet":
-      case "csv":
-        return "text-green-500";
-      case "image":
-        return "text-blue-500";
-      case "document":
-        return "text-blue-600";
-      case "presentation":
-        return "text-orange-500";
-      case "video":
-        return "text-purple-500";
+      case 'pdf':
+        return 'text-red-500';
+      case 'spreadsheet':
+      case 'csv':
+        return 'text-green-500';
+      case 'image':
+        return 'text-blue-500';
+      case 'document':
+        return 'text-blue-600';
+      case 'presentation':
+        return 'text-orange-500';
+      case 'video':
+        return 'text-purple-500';
       default:
-        return "text-gray-500";
+        return 'text-gray-500';
     }
   };
 
   return (
     <ListPage
       title="Documents"
-      subtitle={`${filteredDocuments.length} document${
-        filteredDocuments.length !== 1 ? "s" : ""
-      }`}
-      breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Documents" },
-      ]}
+      subtitle={`${filteredDocuments.length} document${filteredDocuments.length !== 1 ? 's' : ''}`}
+      breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Documents' }]}
       actions={
         <Button>
           <Upload className="mr-2 h-4 w-4" />
@@ -206,17 +191,17 @@ export default function DocumentsPage() {
       showViewToggle
       filters={[
         {
-          id: "type",
-          label: "File Type",
-          type: "checkbox",
+          id: 'type',
+          label: 'File Type',
+          type: 'checkbox',
           options: [
-            { value: "pdf", label: "PDF", count: 0 },
-            { value: "document", label: "Document", count: 0 },
-            { value: "spreadsheet", label: "Spreadsheet", count: 0 },
-            { value: "csv", label: "CSV", count: 0 },
-            { value: "image", label: "Image", count: 0 },
-            { value: "video", label: "Video", count: 0 },
-            { value: "presentation", label: "Presentation", count: 0 },
+            { value: 'pdf', label: 'PDF', count: 0 },
+            { value: 'document', label: 'Document', count: 0 },
+            { value: 'spreadsheet', label: 'Spreadsheet', count: 0 },
+            { value: 'csv', label: 'CSV', count: 0 },
+            { value: 'image', label: 'Image', count: 0 },
+            { value: 'video', label: 'Video', count: 0 },
+            { value: 'presentation', label: 'Presentation', count: 0 },
           ],
         },
       ]}
@@ -225,7 +210,7 @@ export default function DocumentsPage() {
       onClearFilters={handleClearFilters}
       showFilters
     >
-      {viewMode === "grid" ? (
+      {viewMode === 'grid' ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredDocuments.map((doc) => {
             const docName = getDocName(doc);
@@ -248,13 +233,11 @@ export default function DocumentsPage() {
                 </div>
 
                 <Link href={`/library/documents/${doc.id}`}>
-                  <h3 className="mb-2 font-semibold hover:text-primary">
-                    {docName}
-                  </h3>
+                  <h3 className="mb-2 font-semibold hover:text-primary">{docName}</h3>
                 </Link>
 
                 <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
-                  {doc.summary || "No description available"}
+                  {doc.summary || 'No description available'}
                 </p>
 
                 <div className="mb-4 flex flex-wrap gap-1">
@@ -268,9 +251,7 @@ export default function DocumentsPage() {
                 <div className="space-y-2 border-t border-border pt-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Size</span>
-                    <span className="font-medium">
-                      {formatFileSize(doc.fileSize)}
-                    </span>
+                    <span className="font-medium">{formatFileSize(doc.fileSize)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Modified</span>
@@ -321,10 +302,7 @@ export default function DocumentsPage() {
                   const docType = getFileType(doc);
 
                   return (
-                    <tr
-                      key={doc.id}
-                      className="border-b border-border hover:bg-muted/50"
-                    >
+                    <tr key={doc.id} className="border-b border-border hover:bg-muted/50">
                       <td className="py-4 pl-6">
                         <div className="flex items-center gap-3">
                           <div className={`${getFileTypeColor(docType)}`}>
@@ -332,12 +310,10 @@ export default function DocumentsPage() {
                           </div>
                           <div>
                             <Link href={`/library/documents/${doc.id}`}>
-                              <p className="font-medium hover:text-primary">
-                                {docName}
-                              </p>
+                              <p className="font-medium hover:text-primary">{docName}</p>
                             </Link>
                             <p className="text-xs text-muted-foreground line-clamp-1">
-                              {doc.summary || "No description"}
+                              {doc.summary || 'No description'}
                             </p>
                           </div>
                         </div>
@@ -347,9 +323,7 @@ export default function DocumentsPage() {
                           {docType}
                         </Badge>
                       </td>
-                      <td className="py-4 text-sm">
-                        {formatFileSize(doc.fileSize)}
-                      </td>
+                      <td className="py-4 text-sm">{formatFileSize(doc.fileSize)}</td>
                       <td className="py-4">
                         <Badge variant="secondary" className="text-xs">
                           {doc.status}
@@ -384,9 +358,7 @@ export default function DocumentsPage() {
         <Card className="p-12 text-center">
           <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
           <h3 className="mb-2 text-lg font-semibold">No documents found</h3>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Try adjusting your search or filters
-          </p>
+          <p className="mb-4 text-sm text-muted-foreground">Try adjusting your search or filters</p>
           <Button variant="outline" onClick={handleClearFilters}>
             Clear Filters
           </Button>

@@ -6844,15 +6844,7 @@
     "public.prospect_stage": {
       "name": "prospect_stage",
       "schema": "public",
-      "values": [
-        "new",
-        "contacted",
-        "qualified",
-        "proposal",
-        "negotiation",
-        "won",
-        "lost"
-      ]
+      "values": ["new", "contacted", "qualified", "proposal", "negotiation", "won", "lost"]
     },
     "public.subscription_tier": {
       "name": "subscription_tier",

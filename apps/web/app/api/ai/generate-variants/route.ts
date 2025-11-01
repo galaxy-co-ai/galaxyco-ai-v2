@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
-import { auth } from "@clerk/nextjs/server";
-import { nanoid } from "nanoid";
+import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from 'openai';
+import { auth } from '@clerk/nextjs/server';
+import { nanoid } from 'nanoid';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 const GENERATION_SYSTEM_PROMPT = `You are an AI agent architect for GalaxyCo's Agent Builder.
 
@@ -37,12 +37,12 @@ Output valid JSON with this structure:
 Be specific and actionable. Each step should be a clear action.`;
 
 interface GeneratedVariant {
-  type: "basic" | "advanced" | "minimal";
+  type: 'basic' | 'advanced' | 'minimal';
   name: string;
   description: string;
   steps: string[];
   integrations: string[];
-  complexity: "low" | "medium" | "high";
+  complexity: 'low' | 'medium' | 'high';
 }
 
 function createWorkflowNodes(steps: string[], variantId: string) {
@@ -52,7 +52,7 @@ function createWorkflowNodes(steps: string[], variantId: string) {
 
     return {
       id: `${variantId}-node-${index}`,
-      type: isStart ? "start" : isEnd ? "end" : "action",
+      type: isStart ? 'start' : isEnd ? 'end' : 'action',
       label: step,
       description: step,
       position: { x: 150, y: 100 + index * 120 },
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     // Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -81,15 +81,8 @@ export async function POST(req: NextRequest) {
 
     const finalPrompt = enhancedPrompt || prompt;
 
-    if (
-      !finalPrompt ||
-      typeof finalPrompt !== "string" ||
-      finalPrompt.trim().length < 10
-    ) {
-      return NextResponse.json(
-        { error: "Prompt must be at least 10 characters" },
-        { status: 400 },
-      );
+    if (!finalPrompt || typeof finalPrompt !== 'string' || finalPrompt.trim().length < 10) {
+      return NextResponse.json({ error: 'Prompt must be at least 10 characters' }, { status: 400 });
     }
 
     // Try OpenAI first
@@ -97,10 +90,7 @@ export async function POST(req: NextRequest) {
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
     if (!openaiKey && !anthropicKey) {
-      return NextResponse.json(
-        { error: "No AI API keys configured" },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: 'No AI API keys configured' }, { status: 500 });
     }
 
     let generatedVariants: GeneratedVariant[];
@@ -109,38 +99,38 @@ export async function POST(req: NextRequest) {
       const openai = new OpenAI({ apiKey: openaiKey });
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: 'gpt-4o-mini',
         messages: [
-          { role: "system", content: GENERATION_SYSTEM_PROMPT },
+          { role: 'system', content: GENERATION_SYSTEM_PROMPT },
           {
-            role: "user",
+            role: 'user',
             content: `Generate 3 agent variants for this description:\n\n"${finalPrompt}"\n\nReturn valid JSON only, no markdown.`,
           },
         ],
         max_tokens: 1500,
         temperature: 0.8,
-        response_format: { type: "json_object" },
+        response_format: { type: 'json_object' },
       });
 
-      const response = completion.choices[0]?.message?.content || "{}";
+      const response = completion.choices[0]?.message?.content || '{}';
       const parsed = JSON.parse(response);
       generatedVariants = parsed.variants || [];
     } else {
       // Use Anthropic
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": anthropicKey!,
-          "anthropic-version": "2023-06-01",
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicKey!,
+          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: "claude-3-5-sonnet-20241022",
+          model: 'claude-3-5-sonnet-20241022',
           max_tokens: 1500,
           system: GENERATION_SYSTEM_PROMPT,
           messages: [
             {
-              role: "user",
+              role: 'user',
               content: `Generate 3 agent variants for this description:\n\n"${finalPrompt}"\n\nReturn valid JSON only, no markdown.`,
             },
           ],
@@ -152,11 +142,10 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await response.json();
-      const text = data.content[0]?.text || "{}";
+      const text = data.content[0]?.text || '{}';
 
       // Extract JSON from potential markdown code blocks
-      const jsonMatch =
-        text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
+      const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
       const jsonText = jsonMatch ? jsonMatch[1] || jsonMatch[0] : text;
 
       const parsed = JSON.parse(jsonText);
@@ -180,16 +169,16 @@ export async function POST(req: NextRequest) {
         integrations: gv.integrations,
         metadata: {
           generatedAt: new Date(),
-          modelUsed: openaiKey ? "gpt-4o-mini" : "claude-3-5-sonnet",
+          modelUsed: openaiKey ? 'gpt-4o-mini' : 'claude-3-5-sonnet',
         },
       };
     });
 
     // Generate suggestions
     const suggestions = [
-      "Add error handling for failed integrations",
-      "Consider testing with sample data first",
-      "Review required permissions for integrations",
+      'Add error handling for failed integrations',
+      'Consider testing with sample data first',
+      'Review required permissions for integrations',
     ];
 
     return NextResponse.json({
@@ -197,10 +186,7 @@ export async function POST(req: NextRequest) {
       suggestions,
     });
   } catch (error) {
-    console.error("Generate variants API error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate agent variants" },
-      { status: 500 },
-    );
+    console.error('Generate variants API error:', error);
+    return NextResponse.json({ error: 'Failed to generate agent variants' }, { status: 500 });
   }
 }

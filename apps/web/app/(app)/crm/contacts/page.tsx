@@ -1,30 +1,22 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  Mail,
-  Phone,
-  Building2,
-  Calendar,
-  MoreVertical,
-  UserPlus,
-  Search,
-} from "lucide-react";
+} from '@/components/ui/select';
+import { Mail, Phone, Building2, Calendar, MoreVertical, UserPlus, Search } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -45,7 +37,7 @@ export default function ContactsPage() {
   const { currentWorkspace } = useWorkspace();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function fetchContacts() {
@@ -55,21 +47,21 @@ export default function ContactsPage() {
         setIsLoading(true);
         const params = new URLSearchParams({
           workspaceId: currentWorkspace.id,
-          limit: "100",
+          limit: '100',
         });
 
         if (searchQuery) {
-          params.append("search", searchQuery);
+          params.append('search', searchQuery);
         }
 
         const res = await fetch(`/api/contacts?${params}`);
-        if (!res.ok) throw new Error("Failed to fetch contacts");
+        if (!res.ok) throw new Error('Failed to fetch contacts');
 
         const data = await res.json();
         setContacts(data.contacts);
       } catch (error) {
-        console.error("Failed to fetch contacts:", error);
-        toast.error("Failed to load contacts");
+        console.error('Failed to fetch contacts:', error);
+        toast.error('Failed to load contacts');
       } finally {
         setIsLoading(false);
       }
@@ -87,20 +79,14 @@ export default function ContactsPage() {
   }
 
   const getFullName = (contact: Contact) => {
-    return (
-      [contact.firstName, contact.lastName].filter(Boolean).join(" ") ||
-      contact.email
-    );
+    return [contact.firstName, contact.lastName].filter(Boolean).join(' ') || contact.email;
   };
 
   return (
     <PageShell
       title="Contacts"
       subtitle="Manage your professional contacts"
-      breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Contacts" },
-      ]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Contacts' }]}
       actions={
         <Button>
           <UserPlus className="mr-2 h-4 w-4" />
@@ -124,7 +110,7 @@ export default function ContactsPage() {
       {/* Results */}
       <div className="mb-4">
         <p className="text-sm text-muted-foreground">
-          {contacts.length} contact{contacts.length !== 1 ? "s" : ""} found
+          {contacts.length} contact{contacts.length !== 1 ? 's' : ''} found
         </p>
       </div>
 
@@ -145,13 +131,9 @@ export default function ContactsPage() {
                   size="lg"
                 />
                 <div>
-                  <h3 className="font-semibold text-lg">
-                    {getFullName(contact)}
-                  </h3>
+                  <h3 className="font-semibold text-lg">{getFullName(contact)}</h3>
                   {contact.title && (
-                    <p className="text-sm text-muted-foreground">
-                      {contact.title}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{contact.title}</p>
                   )}
                 </div>
               </div>
@@ -174,9 +156,7 @@ export default function ContactsPage() {
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground truncate">
-                  {contact.email}
-                </span>
+                <span className="text-muted-foreground truncate">{contact.email}</span>
               </div>
               {contact.phone && (
                 <div className="flex items-center gap-2 text-sm">
@@ -188,8 +168,7 @@ export default function ContactsPage() {
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-muted-foreground">
-                    Last contact:{" "}
-                    {new Date(contact.lastContactedAt).toLocaleDateString()}
+                    Last contact: {new Date(contact.lastContactedAt).toLocaleDateString()}
                   </span>
                 </div>
               )}
@@ -215,9 +194,7 @@ export default function ContactsPage() {
           <UserPlus className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No contacts found</h3>
           <p className="text-muted-foreground mb-4">
-            {searchQuery
-              ? "Try adjusting your search"
-              : "Get started by adding your first contact"}
+            {searchQuery ? 'Try adjusting your search' : 'Get started by adding your first contact'}
           </p>
           <Button>
             <UserPlus className="mr-2 h-4 w-4" />

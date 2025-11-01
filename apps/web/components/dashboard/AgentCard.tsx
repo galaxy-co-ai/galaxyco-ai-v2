@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { MoreVertical, Edit, Copy, Trash2 } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { MoreVertical, Edit, Copy, Trash2 } from 'lucide-react';
 
 interface AgentStats {
   executionsToday: number;
@@ -17,7 +17,7 @@ interface Agent {
   icon: string;
   category: string;
   isActive: boolean;
-  status: "active" | "paused" | "error";
+  status: 'active' | 'paused' | 'error';
   stats: AgentStats;
 }
 
@@ -42,29 +42,29 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
     }
   };
 
-  const getStatusColor = (status: Agent["status"]) => {
+  const getStatusColor = (status: Agent['status']) => {
     switch (status) {
-      case "active":
-        return "#10B981"; // green
-      case "paused":
-        return "#9CA3AF"; // gray
-      case "error":
-        return "#EF4444"; // red
+      case 'active':
+        return '#10B981'; // green
+      case 'paused':
+        return '#9CA3AF'; // gray
+      case 'error':
+        return '#EF4444'; // red
       default:
-        return "#9CA3AF";
+        return '#9CA3AF';
     }
   };
 
-  const getStatusLabel = (status: Agent["status"]) => {
+  const getStatusLabel = (status: Agent['status']) => {
     switch (status) {
-      case "active":
-        return "Active";
-      case "paused":
-        return "Paused";
-      case "error":
-        return "Error";
+      case 'active':
+        return 'Active';
+      case 'paused':
+        return 'Paused';
+      case 'error':
+        return 'Error';
       default:
-        return "Unknown";
+        return 'Unknown';
     }
   };
 
@@ -80,7 +80,7 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
   };
 
   const formatLastRun = (date: Date | null) => {
-    if (!date) return "Never";
+    if (!date) return 'Never';
 
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -88,17 +88,14 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return "Just now";
+    if (minutes < 1) return 'Just now';
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${days}d ago`;
   };
 
   return (
-    <Link
-      href={`/agents/${agent.id}`}
-      className="block no-underline text-inherit"
-    >
+    <Link href={`/agents/${agent.id}`} className="block no-underline text-inherit">
       <article className="bg-white border border-gray-200 rounded-xl p-6 cursor-pointer transition-all hover:border-blue-500 hover:shadow-md relative">
         {/* Header with Avatar and Toggle */}
         <div className="flex items-start justify-between mb-4">
@@ -116,20 +113,18 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
             disabled={isToggling}
             className="relative w-11 h-6 rounded-full border-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              background: agent.isActive ? "#10B981" : "#F3F4F6",
+              background: agent.isActive ? '#10B981' : '#F3F4F6',
             }}
           >
             <div
               className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all"
-              style={{ left: agent.isActive ? "22px" : "2px" }}
+              style={{ left: agent.isActive ? '22px' : '2px' }}
             />
           </button>
         </div>
 
         {/* Agent Name */}
-        <h3 className="text-lg font-semibold mb-2 text-gray-900">
-          {agent.name}
-        </h3>
+        <h3 className="text-lg font-semibold mb-2 text-gray-900">{agent.name}</h3>
 
         {/* Status Indicator */}
         <div className="flex items-center gap-2 mb-4">
@@ -137,25 +132,21 @@ export default function AgentCard({ agent, onToggle }: AgentCardProps) {
             className="w-2 h-2 rounded-full"
             style={{ background: getStatusColor(agent.status) }}
           />
-          <span className="text-sm text-gray-600 font-medium">
-            {getStatusLabel(agent.status)}
-          </span>
+          <span className="text-sm text-gray-600 font-medium">{getStatusLabel(agent.status)}</span>
         </div>
 
         {/* Stats */}
         <div className="grid gap-2 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Today:</span>
-            <span className="text-gray-900 font-semibold">
-              {agent.stats.executionsToday} runs
-            </span>
+            <span className="text-gray-900 font-semibold">{agent.stats.executionsToday} runs</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Success:</span>
             <span
               className="font-semibold"
               style={{
-                color: agent.stats.successRate >= 90 ? "#10B981" : "#F59E0B",
+                color: agent.stats.successRate >= 90 ? '#10B981' : '#F59E0B',
               }}
             >
               {agent.stats.successRate}%

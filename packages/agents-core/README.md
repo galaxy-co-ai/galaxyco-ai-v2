@@ -52,19 +52,19 @@ pnpm install
 ### Creating a Basic Agent
 
 ```typescript
-import { Agent, ExecutionService } from "@galaxyco/agents-core";
+import { Agent, ExecutionService } from '@galaxyco/agents-core';
 
 const agent = new Agent({
-  name: "My Custom Agent",
-  model: "gpt-4o-mini",
-  systemPrompt: "You are a helpful assistant...",
+  name: 'My Custom Agent',
+  model: 'gpt-4o-mini',
+  systemPrompt: 'You are a helpful assistant...',
   tools: [], // Optional tools
 });
 
 const service = new ExecutionService();
 const result = await service.execute(agent, {
-  input: "Hello, world!",
-  context: { userId: "user_123" },
+  input: 'Hello, world!',
+  context: { userId: 'user_123' },
 });
 
 console.log(result.output);
@@ -73,12 +73,12 @@ console.log(result.output);
 ### Using Tools
 
 ```typescript
-import { Agent, tools } from "@galaxyco/agents-core";
+import { Agent, tools } from '@galaxyco/agents-core';
 
 const agent = new Agent({
-  name: "Agent with Tools",
-  model: "gpt-4o-mini",
-  systemPrompt: "You can search the web and analyze data.",
+  name: 'Agent with Tools',
+  model: 'gpt-4o-mini',
+  systemPrompt: 'You can search the web and analyze data.',
   tools: [tools.webSearch, tools.dataAnalysis],
 });
 ```
@@ -86,16 +86,12 @@ const agent = new Agent({
 ### With Guardrails
 
 ```typescript
-import { Agent, guardrails } from "@galaxyco/agents-core";
+import { Agent, guardrails } from '@galaxyco/agents-core';
 
 const agent = new Agent({
-  name: "Safe Agent",
-  model: "gpt-4o-mini",
-  guardrails: [
-    guardrails.contentFilter,
-    guardrails.rateLimiter,
-    guardrails.costLimiter,
-  ],
+  name: 'Safe Agent',
+  model: 'gpt-4o-mini',
+  guardrails: [guardrails.contentFilter, guardrails.rateLimiter, guardrails.costLimiter],
 });
 ```
 
@@ -210,8 +206,8 @@ export async function runCustomAgent(input: string) {
 ### With Database
 
 ```typescript
-import { Agent } from "@galaxyco/agents-core";
-import { db } from "@galaxyco/database";
+import { Agent } from '@galaxyco/agents-core';
+import { db } from '@galaxyco/database';
 
 // Persist agent configurations
 await db.agents.create({
@@ -251,7 +247,7 @@ try {
 ### 3. Use Monitoring
 
 ```typescript
-import { monitor } from "@galaxyco/agents-core/monitoring";
+import { monitor } from '@galaxyco/agents-core/monitoring';
 
 const result = await monitor.track(() => service.execute(agent, input), {
   agentId: agent.id,

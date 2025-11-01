@@ -83,10 +83,10 @@ Multiple security layers:
 
 ```typescript
 const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/health",
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/health',
   // ... explicit public routes only
 ]);
 ```
@@ -97,7 +97,7 @@ const isPublicRoute = createRouteMatcher([
 export async function requireSession(): Promise<UserSession> {
   const session = await userSessionService.getCurrentSession();
   if (!session) {
-    throw new Error("Unauthorized - no valid session"); // ✅ Fail closed
+    throw new Error('Unauthorized - no valid session'); // ✅ Fail closed
   }
   return session;
 }
@@ -151,11 +151,9 @@ export function logCrossTenantAttempt(
   requestedTenantId: string,
 ) {
   Sentry.withScope((scope) => {
-    scope.setTag("security_incident", true);
-    scope.setLevel("error");
-    Sentry.captureException(
-      new Error(`Cross-tenant access attempt: ${userId}`),
-    );
+    scope.setTag('security_incident', true);
+    scope.setLevel('error');
+    Sentry.captureException(new Error(`Cross-tenant access attempt: ${userId}`));
   });
 }
 ```
@@ -209,7 +207,7 @@ try {
   const context = await getCurrentTenantContext();
   await db.execute(sql`SELECT set_tenant_context(${context.tenantId}::uuid)`);
 } catch (error) {
-  console.error("Failed to set tenant context:", error);
+  console.error('Failed to set tenant context:', error);
   // Continues for non-API routes ⚠️
 }
 ```
@@ -227,18 +225,15 @@ try {
   const context = await getCurrentTenantContext();
   await db.execute(sql`SELECT set_tenant_context(${context.tenantId}::uuid)`);
 } catch (error) {
-  logger.error("Failed to set tenant context", {
-    error: error instanceof Error ? error.message : "Unknown error",
+  logger.error('Failed to set tenant context', {
+    error: error instanceof Error ? error.message : 'Unknown error',
     path: request.nextUrl.pathname,
     userId,
   });
 
   // Always fail closed for authenticated routes
   if (!isPublicRoute(request)) {
-    return NextResponse.json(
-      { error: "Authentication error" },
-      { status: 403 },
-    );
+    return NextResponse.json({ error: 'Authentication error' }, { status: 403 });
   }
 }
 ```
@@ -273,11 +268,11 @@ export async function requireSession(): Promise<UserSession> {
 
   if (!session) {
     // Log failed session attempt
-    logger.warn("Session validation failed", {
+    logger.warn('Session validation failed', {
       timestamp: new Date().toISOString(),
     });
 
-    throw new Error("Unauthorized - no valid session");
+    throw new Error('Unauthorized - no valid session');
   }
 
   // Optional: Check session age and refresh if needed
@@ -310,17 +305,11 @@ export async function requireSession(): Promise<UserSession> {
 
 ```typescript
 // Add these headers for defense in depth
-response.headers.set("X-Frame-Options", "DENY");
-response.headers.set("X-Content-Type-Options", "nosniff");
-response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-response.headers.set(
-  "Permissions-Policy",
-  "camera=(), microphone=(), geolocation=()",
-);
-response.headers.set(
-  "Strict-Transport-Security",
-  "max-age=31536000; includeSubDomains",
-);
+response.headers.set('X-Frame-Options', 'DENY');
+response.headers.set('X-Content-Type-Options', 'nosniff');
+response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 ```
 
 **Impact**: Low  
@@ -337,7 +326,7 @@ All authentication checks fail closed (deny by default):
 
 ```typescript
 if (!clerkUserId) {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 }
 ```
 
@@ -347,10 +336,7 @@ Users only access their workspace data:
 
 ```typescript
 const membership = await db.query.workspaceMembers.findFirst({
-  where: and(
-    eq(workspaceMembers.workspaceId, workspaceId),
-    eq(workspaceMembers.userId, user.id),
-  ),
+  where: and(eq(workspaceMembers.workspaceId, workspaceId), eq(workspaceMembers.userId, user.id)),
 });
 ```
 

@@ -1,27 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
 import {
   agents,
   agentSchedules,
   agentExecutions,
   workspaceMembers,
-} from "@galaxyco/database/schema";
-import { eq, and, desc } from "drizzle-orm";
+} from '@galaxyco/database/schema';
+import { eq, and, desc } from 'drizzle-orm';
 
 /**
  * GET /api/agents/[id]
  * Fetch a single agent with schedule and recent executions
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const agentId = params.id;
@@ -35,7 +32,7 @@ export async function GET(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
     // Verify workspace membership
@@ -45,7 +42,7 @@ export async function GET(
     });
 
     if (!membership || membership.user.clerkUserId !== clerkUserId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Fetch recent executions (last 5)
@@ -63,14 +60,12 @@ export async function GET(
     const metrics = {
       successRate:
         allExecutions.length > 0
-          ? (allExecutions.filter((e) => e.status === "completed").length /
-              allExecutions.length) *
+          ? (allExecutions.filter((e) => e.status === 'completed').length / allExecutions.length) *
             100
           : 0,
       avgDuration:
         allExecutions.length > 0
-          ? allExecutions.reduce((sum, e) => sum + (e.durationMs || 0), 0) /
-            allExecutions.length
+          ? allExecutions.reduce((sum, e) => sum + (e.durationMs || 0), 0) / allExecutions.length
           : 0,
       totalRuns: allExecutions.length,
       lastRunAt: agent.lastExecutedAt,
@@ -85,11 +80,8 @@ export async function GET(
       },
     });
   } catch (error) {
-    logger.error("[API] Get agent error", error);
-    return NextResponse.json(
-      { error: "Failed to fetch agent" },
-      { status: 500 },
-    );
+    logger.error('[API] Get agent error', error);
+    return NextResponse.json({ error: 'Failed to fetch agent' }, { status: 500 });
   }
 }
 
@@ -97,14 +89,11 @@ export async function GET(
  * PATCH /api/agents/[id]
  * Update agent details
  */
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const agentId = params.id;
@@ -117,7 +106,7 @@ export async function PATCH(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
     // Verify workspace membership
@@ -127,7 +116,7 @@ export async function PATCH(
     });
 
     if (!membership || membership.user.clerkUserId !== clerkUserId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Update agent
@@ -153,11 +142,8 @@ export async function PATCH(
 
     return NextResponse.json({ agent: updatedAgent, success: true });
   } catch (error) {
-    logger.error("[API] Update agent error", error);
-    return NextResponse.json(
-      { error: "Failed to update agent" },
-      { status: 500 },
-    );
+    logger.error('[API] Update agent error', error);
+    return NextResponse.json({ error: 'Failed to update agent' }, { status: 500 });
   }
 }
 
@@ -165,14 +151,11 @@ export async function PATCH(
  * DELETE /api/agents/[id]
  * Delete an agent (with cascade to schedule and executions)
  */
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const agentId = params.id;
@@ -183,7 +166,7 @@ export async function DELETE(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
     // Verify workspace membership
@@ -193,7 +176,7 @@ export async function DELETE(
     });
 
     if (!membership || membership.user.clerkUserId !== clerkUserId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Delete agent (cascade handles schedule and executions)
@@ -201,10 +184,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    logger.error("[API] Delete agent error", error);
-    return NextResponse.json(
-      { error: "Failed to delete agent" },
-      { status: 500 },
-    );
+    logger.error('[API] Delete agent error', error);
+    return NextResponse.json({ error: 'Failed to delete agent' }, { status: 500 });
   }
 }

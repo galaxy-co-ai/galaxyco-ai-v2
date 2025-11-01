@@ -5,68 +5,57 @@
  * These tools help agents extract insights, summarize content, and create outputs.
  */
 
-import { createTool } from "../tools";
-import type { Tool } from "../types";
+import { createTool } from '../tools';
+import type { Tool } from '../types';
 
 /**
  * Analyze text/document tool
  */
 export function createAnalyzeTextTool(): Tool {
   return createTool(
-    "analyze_text",
-    "Analyze text to extract key information, sentiment, and insights",
+    'analyze_text',
+    'Analyze text to extract key information, sentiment, and insights',
     {
       text: {
-        type: "string",
-        description: "Text content to analyze",
+        type: 'string',
+        description: 'Text content to analyze',
       },
       analysisType: {
-        type: "array",
-        description: "Types of analysis to perform",
+        type: 'array',
+        description: 'Types of analysis to perform',
         items: {
-          type: "string",
-          enum: [
-            "summary",
-            "sentiment",
-            "key_points",
-            "entities",
-            "action_items",
-            "questions",
-          ],
+          type: 'string',
+          enum: ['summary', 'sentiment', 'key_points', 'entities', 'action_items', 'questions'],
         },
       },
       maxLength: {
-        type: "number",
-        description: "Maximum length for summary (if requested)",
+        type: 'number',
+        description: 'Maximum length for summary (if requested)',
         required: false,
       },
     },
-    async (args: {
-      text: string;
-      analysisType: string[];
-      maxLength?: number;
-    }) => {
+    async (args: { text: string; analysisType: string[]; maxLength?: number }) => {
       const results: any = {};
 
       // Mock analysis results
-      if (args.analysisType.includes("summary")) {
+      if (args.analysisType.includes('summary')) {
         results.summary = `Summary of ${args.text.length} characters of text...`;
       }
-      if (args.analysisType.includes("sentiment")) {
+      if (args.analysisType.includes('sentiment')) {
         results.sentiment = {
-          overall: "neutral",
+          overall: 'neutral',
           score: 0.5,
-          emotions: ["professional", "informative"],
+          emotions: ['professional', 'informative'],
         };
       }
-      if (args.analysisType.includes("key_points")) {
+      if (args.analysisType.includes('key_points')) {
         results.keyPoints = [
-          "Main topic identified",
-          "Supporting details found",
-          "Conclusion present",
+          'Main topic identified',
+          'Supporting details found',
+          'Conclusion present',
         ];
       }
-      if (args.analysisType.includes("entities")) {
+      if (args.analysisType.includes('entities')) {
         results.entities = {
           people: [],
           organizations: [],
@@ -74,10 +63,10 @@ export function createAnalyzeTextTool(): Tool {
           dates: [],
         };
       }
-      if (args.analysisType.includes("action_items")) {
+      if (args.analysisType.includes('action_items')) {
         results.actionItems = [];
       }
-      if (args.analysisType.includes("questions")) {
+      if (args.analysisType.includes('questions')) {
         results.questions = [];
       }
 
@@ -95,51 +84,37 @@ export function createAnalyzeTextTool(): Tool {
  */
 export function createGenerateContentTool(): Tool {
   return createTool(
-    "generate_content",
-    "Generate various types of content based on templates and requirements",
+    'generate_content',
+    'Generate various types of content based on templates and requirements',
     {
       contentType: {
-        type: "string",
-        description: "Type of content to generate",
-        enum: [
-          "email",
-          "blog_post",
-          "social_media",
-          "documentation",
-          "report",
-          "presentation",
-        ],
+        type: 'string',
+        description: 'Type of content to generate',
+        enum: ['email', 'blog_post', 'social_media', 'documentation', 'report', 'presentation'],
       },
       topic: {
-        type: "string",
-        description: "Main topic or subject",
+        type: 'string',
+        description: 'Main topic or subject',
       },
       tone: {
-        type: "string",
-        description: "Desired tone of content",
-        enum: [
-          "professional",
-          "casual",
-          "friendly",
-          "formal",
-          "technical",
-          "creative",
-        ],
+        type: 'string',
+        description: 'Desired tone of content',
+        enum: ['professional', 'casual', 'friendly', 'formal', 'technical', 'creative'],
       },
       length: {
-        type: "string",
-        description: "Desired length",
-        enum: ["short", "medium", "long"],
+        type: 'string',
+        description: 'Desired length',
+        enum: ['short', 'medium', 'long'],
       },
       keyPoints: {
-        type: "array",
-        description: "Key points to include",
-        items: { type: "string" },
+        type: 'array',
+        description: 'Key points to include',
+        items: { type: 'string' },
         required: false,
       },
       targetAudience: {
-        type: "string",
-        description: "Target audience description",
+        type: 'string',
+        description: 'Target audience description',
         required: false,
       },
     },
@@ -168,8 +143,8 @@ export function createGenerateContentTool(): Tool {
         keyPoints: args.keyPoints || [],
         targetAudience: args.targetAudience,
         generatedAt: new Date().toISOString(),
-        status: "generated",
-        message: "Content generation requires LLM integration",
+        status: 'generated',
+        message: 'Content generation requires LLM integration',
       };
     },
   );
@@ -180,30 +155,25 @@ export function createGenerateContentTool(): Tool {
  */
 export function createExtractDataTool(): Tool {
   return createTool(
-    "extract_data",
-    "Extract structured data from various sources (CSV, JSON, tables, etc.)",
+    'extract_data',
+    'Extract structured data from various sources (CSV, JSON, tables, etc.)',
     {
       source: {
-        type: "string",
-        description: "Data source (URL, file path, or raw data)",
+        type: 'string',
+        description: 'Data source (URL, file path, or raw data)',
       },
       sourceType: {
-        type: "string",
-        description: "Type of data source",
-        enum: ["csv", "json", "html_table", "text", "pdf"],
+        type: 'string',
+        description: 'Type of data source',
+        enum: ['csv', 'json', 'html_table', 'text', 'pdf'],
       },
       extractionRules: {
-        type: "object",
-        description:
-          "Rules for data extraction (field mappings, filters, etc.)",
+        type: 'object',
+        description: 'Rules for data extraction (field mappings, filters, etc.)',
         required: false,
       },
     },
-    async (args: {
-      source: string;
-      sourceType: string;
-      extractionRules?: any;
-    }) => {
+    async (args: { source: string; sourceType: string; extractionRules?: any }) => {
       // Mock data extraction
       return {
         sourceType: args.sourceType,
@@ -212,8 +182,8 @@ export function createExtractDataTool(): Tool {
         columnCount: 0,
         extractionRules: args.extractionRules,
         extractedAt: new Date().toISOString(),
-        status: "extracted",
-        message: "Data extraction requires integration with parsing libraries",
+        status: 'extracted',
+        message: 'Data extraction requires integration with parsing libraries',
       };
     },
   );
@@ -224,30 +194,27 @@ export function createExtractDataTool(): Tool {
  */
 export function createCompareDocumentsTool(): Tool {
   return createTool(
-    "compare_documents",
-    "Compare two or more documents to find similarities and differences",
+    'compare_documents',
+    'Compare two or more documents to find similarities and differences',
     {
       documents: {
-        type: "array",
-        description: "Array of documents to compare",
+        type: 'array',
+        description: 'Array of documents to compare',
         items: {
-          type: "object",
+          type: 'object',
           properties: {
-            id: { type: "string" },
-            content: { type: "string" },
+            id: { type: 'string' },
+            content: { type: 'string' },
           },
         },
       },
       comparisonType: {
-        type: "string",
-        description: "Type of comparison",
-        enum: ["similarity", "diff", "overlap", "unique"],
+        type: 'string',
+        description: 'Type of comparison',
+        enum: ['similarity', 'diff', 'overlap', 'unique'],
       },
     },
-    async (args: {
-      documents: { id: string; content: string }[];
-      comparisonType: string;
-    }) => {
+    async (args: { documents: { id: string; content: string }[]; comparisonType: string }) => {
       // Mock comparison results
       return {
         documentCount: args.documents.length,
@@ -259,7 +226,7 @@ export function createCompareDocumentsTool(): Tool {
           uniqueElements: {},
         },
         comparedAt: new Date().toISOString(),
-        message: "Document comparison requires text analysis integration",
+        message: 'Document comparison requires text analysis integration',
       };
     },
   );
@@ -270,33 +237,33 @@ export function createCompareDocumentsTool(): Tool {
  */
 export function createGenerateReportTool(): Tool {
   return createTool(
-    "generate_report",
-    "Generate comprehensive reports from data and analysis",
+    'generate_report',
+    'Generate comprehensive reports from data and analysis',
     {
       title: {
-        type: "string",
-        description: "Report title",
+        type: 'string',
+        description: 'Report title',
       },
       sections: {
-        type: "array",
-        description: "Report sections to include",
+        type: 'array',
+        description: 'Report sections to include',
         items: {
-          type: "object",
+          type: 'object',
           properties: {
-            name: { type: "string" },
-            content: { type: "string" },
-            data: { type: "object", required: false },
+            name: { type: 'string' },
+            content: { type: 'string' },
+            data: { type: 'object', required: false },
           },
         },
       },
       format: {
-        type: "string",
-        description: "Output format",
-        enum: ["markdown", "html", "pdf", "json"],
+        type: 'string',
+        description: 'Output format',
+        enum: ['markdown', 'html', 'pdf', 'json'],
       },
       includeCharts: {
-        type: "boolean",
-        description: "Include data visualizations",
+        type: 'boolean',
+        description: 'Include data visualizations',
         required: false,
       },
     },
@@ -314,9 +281,9 @@ export function createGenerateReportTool(): Tool {
         sections: args.sections.length,
         includeCharts: args.includeCharts || false,
         generatedAt: new Date().toISOString(),
-        status: "generated",
+        status: 'generated',
         url: `https://app.example.com/reports/report_${Date.now()}`,
-        message: "Report generation complete",
+        message: 'Report generation complete',
       };
     },
   );

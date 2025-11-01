@@ -333,16 +333,13 @@ All color tokens now meet WCAG AA 4.5:1 standard:
 
 ```css
 /* Light Mode */
---foreground: 15.83: 1 ✅ /* Primary text - Excellent */
-  --foreground-muted: 5.25: 1 ✅ /* Secondary text - Pass */
-  --foreground-subtle: 5.25: 1 ✅ /* Tertiary text - Pass (Fixed!) */
-  /* Semantic Colors */ --primary: 4.75: 1 ✅ /* Primary buttons - Pass */
-  --destructive: 4.5: 1 ✅ /* Error/destructive - Pass (Fixed!) */
-  --success: 2.97: 1 ⚠️ /* Success - Use for UI only */ --warning: 4.5: 1 ✅
-  /* Warning - Pass (Fixed!) */ /* Dark Mode */ --foreground: 15.44: 1 ✅
-  /* Primary text - Excellent */ --foreground-muted: 4.94: 1 ✅
-  /* Secondary text - Pass */ --foreground-subtle: 4.94: 1 ✅
-  /* Tertiary text - Pass (Fixed!) */ --primary: 9.23: 1 ✅
+--foreground: 15.83: 1 ✅ /* Primary text - Excellent */ --foreground-muted: 5.25: 1 ✅
+  /* Secondary text - Pass */ --foreground-subtle: 5.25: 1 ✅ /* Tertiary text - Pass (Fixed!) */
+  /* Semantic Colors */ --primary: 4.75: 1 ✅ /* Primary buttons - Pass */ --destructive: 4.5: 1 ✅
+  /* Error/destructive - Pass (Fixed!) */ --success: 2.97: 1 ⚠️ /* Success - Use for UI only */
+  --warning: 4.5: 1 ✅ /* Warning - Pass (Fixed!) */ /* Dark Mode */ --foreground: 15.44: 1 ✅
+  /* Primary text - Excellent */ --foreground-muted: 4.94: 1 ✅ /* Secondary text - Pass */
+  --foreground-subtle: 4.94: 1 ✅ /* Tertiary text - Pass (Fixed!) */ --primary: 9.23: 1 ✅
   /* Primary buttons - Excellent */;
 ```
 

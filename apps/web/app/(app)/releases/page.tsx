@@ -1,54 +1,54 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Zap, Bug, Package } from "lucide-react";
-import Link from "next/link";
+import React, { useState } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, Zap, Bug, Package } from 'lucide-react';
+import Link from 'next/link';
 
 const releases = [
   {
-    version: "2.4.0",
-    date: "2025-10-15",
-    type: "major",
+    version: '2.4.0',
+    date: '2025-10-15',
+    type: 'major',
     features: [
-      { type: "new", text: "Agent Templates Marketplace" },
-      { type: "new", text: "Multi-Agent Workflows" },
-      { type: "improved", text: "40% faster agent execution" },
-      { type: "fixed", text: "Large document upload reliability" },
+      { type: 'new', text: 'Agent Templates Marketplace' },
+      { type: 'new', text: 'Multi-Agent Workflows' },
+      { type: 'improved', text: '40% faster agent execution' },
+      { type: 'fixed', text: 'Large document upload reliability' },
     ],
     breaking: false,
   },
   {
-    version: "2.3.0",
-    date: "2025-10-01",
-    type: "minor",
+    version: '2.3.0',
+    date: '2025-10-01',
+    type: 'minor',
     features: [
-      { type: "new", text: "API Playground" },
-      { type: "improved", text: "Enhanced dashboard analytics" },
-      { type: "security", text: "Two-factor authentication support" },
+      { type: 'new', text: 'API Playground' },
+      { type: 'improved', text: 'Enhanced dashboard analytics' },
+      { type: 'security', text: 'Two-factor authentication support' },
     ],
     breaking: false,
   },
   {
-    version: "2.2.0",
-    date: "2025-09-15",
-    type: "minor",
+    version: '2.2.0',
+    date: '2025-09-15',
+    type: 'minor',
     features: [
-      { type: "new", text: "Workspace Collaboration" },
-      { type: "improved", text: "Redesigned execution logs" },
-      { type: "deprecated", text: "API v1 endpoints (migrate to v2)" },
+      { type: 'new', text: 'Workspace Collaboration' },
+      { type: 'improved', text: 'Redesigned execution logs' },
+      { type: 'deprecated', text: 'API v1 endpoints (migrate to v2)' },
     ],
     breaking: true,
   },
   {
-    version: "2.1.0",
-    date: "2025-09-01",
-    type: "minor",
+    version: '2.1.0',
+    date: '2025-09-01',
+    type: 'minor',
     features: [
-      { type: "new", text: "Dark mode support" },
-      { type: "improved", text: "10x faster search performance" },
-      { type: "fixed", text: "Timezone display issues" },
+      { type: 'new', text: 'Dark mode support' },
+      { type: 'improved', text: '10x faster search performance' },
+      { type: 'fixed', text: 'Timezone display issues' },
     ],
     breaking: false,
   },
@@ -63,15 +63,15 @@ const typeIcons = {
 };
 
 const typeColors = {
-  new: "text-blue-600",
-  improved: "text-purple-600",
-  fixed: "text-green-600",
-  security: "text-red-600",
-  deprecated: "text-orange-600",
+  new: 'text-blue-600',
+  improved: 'text-purple-600',
+  fixed: 'text-green-600',
+  security: 'text-red-600',
+  deprecated: 'text-orange-600',
 };
 
 export default function ReleasesPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredReleases = releases.filter((release) => {
     if (searchQuery) {
@@ -90,7 +90,7 @@ export default function ReleasesPage() {
     <ListPage
       title="Release Notes"
       subtitle="Latest features and improvements"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Releases" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Releases' }]}
       searchQuery={searchQuery}
       searchPlaceholder="Search releases..."
       onSearchChange={setSearchQuery}
@@ -105,10 +105,7 @@ export default function ReleasesPage() {
     >
       <div className="space-y-6">
         {filteredReleases.map((release) => (
-          <div
-            key={release.version}
-            className="rounded-lg border border-border bg-card p-6"
-          >
+          <div key={release.version} className="rounded-lg border border-border bg-card p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -116,9 +113,9 @@ export default function ReleasesPage() {
                   <Badge
                     variant="secondary"
                     className={
-                      release.type === "major"
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                        : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                      release.type === 'major'
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                        : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                     }
                   >
                     {release.type}
@@ -133,11 +130,11 @@ export default function ReleasesPage() {
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Released on{" "}
-                  {new Date(release.date).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
+                  Released on{' '}
+                  {new Date(release.date).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
                   })}
                 </p>
               </div>
@@ -146,8 +143,7 @@ export default function ReleasesPage() {
             <div className="space-y-3">
               {release.features.map((feature, index) => {
                 const Icon = typeIcons[feature.type as keyof typeof typeIcons];
-                const color =
-                  typeColors[feature.type as keyof typeof typeColors];
+                const color = typeColors[feature.type as keyof typeof typeColors];
 
                 return (
                   <div key={index} className="flex items-start gap-3">
@@ -171,8 +167,8 @@ export default function ReleasesPage() {
                   ⚠️ Breaking Changes
                 </p>
                 <p className="text-sm text-red-700 dark:text-red-300">
-                  This release includes breaking changes. Please review the
-                  changelog before upgrading.
+                  This release includes breaking changes. Please review the changelog before
+                  upgrading.
                 </p>
               </div>
             )}

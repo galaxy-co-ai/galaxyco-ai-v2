@@ -9,22 +9,22 @@
  * - Supports log levels
  */
 
-type LogLevel = "debug" | "info" | "warn" | "error";
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogContext {
   [key: string]: any;
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === "development";
-  private isTest = process.env.NODE_ENV === "test";
+  private isDevelopment = process.env.NODE_ENV === 'development';
+  private isTest = process.env.NODE_ENV === 'test';
 
   /**
    * Debug level - verbose logging for development
    */
   debug(message: string, context?: LogContext): void {
     if (this.isDevelopment && !this.isTest) {
-      console.log(`[DEBUG] ${message}`, context || "");
+      console.log(`[DEBUG] ${message}`, context || '');
     }
   }
 
@@ -33,7 +33,7 @@ class Logger {
    */
   info(message: string, context?: LogContext): void {
     if (this.isDevelopment && !this.isTest) {
-      console.info(`[INFO] ${message}`, context || "");
+      console.info(`[INFO] ${message}`, context || '');
     }
   }
 
@@ -42,7 +42,7 @@ class Logger {
    */
   warn(message: string, context?: LogContext): void {
     if (this.isDevelopment && !this.isTest) {
-      console.warn(`[WARN] ${message}`, context || "");
+      console.warn(`[WARN] ${message}`, context || '');
     }
     // In production, could send to monitoring service
   }
@@ -53,14 +53,14 @@ class Logger {
    */
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     if (this.isDevelopment && !this.isTest) {
-      console.error(`[ERROR] ${message}`, error, context || "");
+      console.error(`[ERROR] ${message}`, error, context || '');
     }
 
     // In production, send to Sentry
     if (!this.isDevelopment && !this.isTest) {
       // Sentry integration handled by error boundaries and API error handlers
       // This is a fallback for uncaught errors
-      if (typeof window !== "undefined" && (window as any).Sentry) {
+      if (typeof window !== 'undefined' && (window as any).Sentry) {
         (window as any).Sentry.captureException(error || new Error(message), {
           extra: context,
         });
@@ -73,7 +73,7 @@ class Logger {
    */
   test(message: string, context?: LogContext): void {
     if (this.isTest) {
-      console.log(`[TEST] ${message}`, context || "");
+      console.log(`[TEST] ${message}`, context || '');
     }
   }
 }
@@ -86,7 +86,7 @@ export const logger = new Logger();
  * Use this when you need verbose logging that should never reach production
  */
 export function devLog(message: string, ...args: any[]): void {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`🔧 [DEV] ${message}`, ...args);
   }
 }
@@ -94,17 +94,10 @@ export function devLog(message: string, ...args: any[]): void {
 /**
  * API request logger for development
  */
-export function apiLog(
-  method: string,
-  endpoint: string,
-  status: number,
-  duration?: number,
-): void {
-  if (process.env.NODE_ENV === "development") {
-    const statusEmoji = status >= 200 && status < 300 ? "✅" : "❌";
-    const durationStr = duration ? ` (${duration}ms)` : "";
-    console.log(
-      `${statusEmoji} [API] ${method} ${endpoint} - ${status}${durationStr}`,
-    );
+export function apiLog(method: string, endpoint: string, status: number, duration?: number): void {
+  if (process.env.NODE_ENV === 'development') {
+    const statusEmoji = status >= 200 && status < 300 ? '✅' : '❌';
+    const durationStr = duration ? ` (${duration}ms)` : '';
+    console.log(`${statusEmoji} [API] ${method} ${endpoint} - ${status}${durationStr}`);
   }
 }

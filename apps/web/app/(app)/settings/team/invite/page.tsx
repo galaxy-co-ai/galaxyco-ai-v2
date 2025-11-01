@@ -1,30 +1,25 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Plus, Send, X } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Plus, Send, X } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function TeamInvitePage() {
-  const [invites, setInvites] = useState([
-    { id: "1", email: "", role: "member" },
-  ]);
+  const [invites, setInvites] = useState([{ id: '1', email: '', role: 'member' }]);
 
   const addInvite = () => {
-    setInvites([
-      ...invites,
-      { id: Math.random().toString(), email: "", role: "member" },
-    ]);
+    setInvites([...invites, { id: Math.random().toString(), email: '', role: 'member' }]);
   };
 
   const removeInvite = (id: string) => {
@@ -42,11 +37,11 @@ export default function TeamInvitePage() {
   const sendInvites = () => {
     const validInvites = invites.filter((inv) => inv.email.trim());
     if (validInvites.length === 0) {
-      toast.error("Please enter at least one email address");
+      toast.error('Please enter at least one email address');
       return;
     }
     toast.success(`Sent ${validInvites.length} invitation(s)`);
-    setInvites([{ id: "1", email: "", role: "member" }]);
+    setInvites([{ id: '1', email: '', role: 'member' }]);
   };
 
   return (
@@ -54,9 +49,9 @@ export default function TeamInvitePage() {
       title="Invite Team Members"
       subtitle="Send invitations to join your workspace"
       breadcrumbs={[
-        { label: "Settings", href: "/settings" },
-        { label: "Team", href: "/settings/team" },
-        { label: "Invite" },
+        { label: 'Settings', href: '/settings' },
+        { label: 'Team', href: '/settings/team' },
+        { label: 'Invite' },
       ]}
     >
       <div className="max-w-2xl">
@@ -78,10 +73,7 @@ export default function TeamInvitePage() {
                 </div>
                 <div className="w-48">
                   <Label htmlFor={`role-${invite.id}`}>Role</Label>
-                  <Select
-                    value={invite.role}
-                    onValueChange={(val) => updateRole(invite.id, val)}
-                  >
+                  <Select value={invite.role} onValueChange={(val) => updateRole(invite.id, val)}>
                     <SelectTrigger id={`role-${invite.id}`}>
                       <SelectValue />
                     </SelectTrigger>

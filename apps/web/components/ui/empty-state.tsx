@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { ReactNode } from "react";
-import { Button } from "./button";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { ReactNode } from 'react';
+import { Button } from './button';
+import { cn } from '@/lib/utils';
 
 interface EmptyStateProps {
   icon?: string | ReactNode;
-  iconType?: "emoji" | "svg" | "component";
+  iconType?: 'emoji' | 'svg' | 'component';
   title: string;
   description: string;
   helpText?: string;
@@ -15,13 +15,7 @@ interface EmptyStateProps {
   action?: {
     label: string;
     onClick: () => void;
-    variant?:
-      | "default"
-      | "destructive"
-      | "outline"
-      | "secondary"
-      | "ghost"
-      | "link";
+    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   };
   secondaryAction?: {
     label: string;
@@ -42,7 +36,7 @@ interface EmptyStateProps {
 
 export function EmptyState({
   icon,
-  iconType = "emoji",
+  iconType = 'emoji',
   title,
   description,
   helpText,
@@ -54,29 +48,27 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "text-center p-spacing-xl bg-background-subtle rounded-lg border border-dashed border-border max-w-2xl mx-auto",
+        'text-center p-spacing-xl bg-background-subtle rounded-lg border border-dashed border-border max-w-2xl mx-auto',
         className,
       )}
     >
       {icon && (
         <div
           className={cn(
-            "mb-6 flex justify-center items-center",
-            iconType === "emoji" ? "text-6xl opacity-70" : "text-5xl",
+            'mb-6 flex justify-center items-center',
+            iconType === 'emoji' ? 'text-6xl opacity-70' : 'text-5xl',
           )}
         >
-          {typeof icon === "string" ? icon : icon}
+          {typeof icon === 'string' ? icon : icon}
         </div>
       )}
 
-      <h3 className="text-heading-lg font-heading text-foreground mb-spacing-sm">
-        {title}
-      </h3>
+      <h3 className="text-heading-lg font-heading text-foreground mb-spacing-sm">{title}</h3>
 
       <p
         className={cn(
-          "text-body-md text-foreground-muted max-w-lg mx-auto leading-relaxed",
-          helpText || steps ? "mb-spacing-md" : "mb-spacing-lg",
+          'text-body-md text-foreground-muted max-w-lg mx-auto leading-relaxed',
+          helpText || steps ? 'mb-spacing-md' : 'mb-spacing-lg',
         )}
       >
         {description}
@@ -113,19 +105,11 @@ export function EmptyState({
 
       {action && (
         <div className="flex gap-spacing-md justify-center flex-wrap">
-          <Button
-            variant={action.variant || "default"}
-            size="lg"
-            onClick={action.onClick}
-          >
+          <Button variant={action.variant || 'default'} size="lg" onClick={action.onClick}>
             {action.label}
           </Button>
           {secondaryAction && (
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={secondaryAction.onClick}
-            >
+            <Button variant="secondary" size="lg" onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </Button>
           )}

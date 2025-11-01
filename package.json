@@ -37,9 +37,12 @@
     "@commitlint/config-conventional": "^20.0.0",
     "@playwright/test": "^1.56.0",
     "@stoplight/spectral-cli": "^6.13.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "axe-core": "^4.11.0",
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lighthouse": "^12.8.2",
     "lint-staged": "^16.2.3",
@@ -59,7 +62,10 @@
     "drizzle-orm": "^0.44.6"
   },
   "lint-staged": {
-    "*.{ts,tsx,json,md}": [
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
       "prettier --write"
     ]
   }

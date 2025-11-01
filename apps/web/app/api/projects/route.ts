@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers, projects } from "@galaxyco/database/schema";
-import { eq, and, desc } from "drizzle-orm";
-import { createProjectSchema } from "@/lib/validation/crm";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, projects } from '@galaxyco/database/schema';
+import { eq, and, desc } from 'drizzle-orm';
+import { createProjectSchema } from '@/lib/validation/crm';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * POST /api/projects
@@ -23,36 +23,31 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized project creation attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized project creation attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.CRM_CREATE,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CRM_CREATE);
     if (!rateLimitResult.success) {
-      logger.warn("Projects creation rate limit exceeded", {
+      logger.warn('Projects creation rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
         reset: rateLimitResult.reset,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
           retryAfter: rateLimitResult.reset,
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(rateLimitResult.limit),
-            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-            "X-RateLimit-Reset": String(rateLimitResult.reset),
-            "Retry-After": String(
-              rateLimitResult.reset - Math.floor(Date.now() / 1000),
-            ),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(rateLimitResult.reset - Math.floor(Date.now() / 1000)),
           },
         },
       );
@@ -64,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid project creation request", {
+      logger.warn('Invalid project creation request', {
         errors: formattedError.errors,
       });
       return NextResponse.json(formattedError, {
@@ -80,7 +75,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 5. Verify workspace membership
@@ -93,17 +88,17 @@ export async function POST(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
 
     // 6. Create project in database
     const status =
-      projectData.status === "active"
-        ? "in_progress"
-        : projectData.status === "archived"
-          ? "cancelled"
+      projectData.status === 'active'
+        ? 'in_progress'
+        : projectData.status === 'archived'
+          ? 'cancelled'
           : (projectData.status as any);
 
     const insertValues: typeof projects.$inferInsert = {
@@ -112,24 +107,19 @@ export async function POST(req: NextRequest) {
       description: projectData.description,
       status,
       customerId: projectData.customerId,
-      startDate: projectData.startDate
-        ? new Date(projectData.startDate)
-        : undefined,
+      startDate: projectData.startDate ? new Date(projectData.startDate) : undefined,
       endDate: projectData.endDate ? new Date(projectData.endDate) : undefined,
       budget: projectData.budget,
       tags: projectData.tags,
       customFields: projectData.metadata,
     };
 
-    const [project] = await db
-      .insert(projects)
-      .values(insertValues)
-      .returning();
+    const [project] = await db.insert(projects).values(insertValues).returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Project created successfully", {
+    logger.info('Project created successfully', {
       userId: user.id,
       workspaceId,
       projectId: project.id,
@@ -142,25 +132,22 @@ export async function POST(req: NextRequest) {
     });
 
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      String(rateLimitResult.remaining),
-    );
-    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
+    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
 
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Create project error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Create project error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to create project",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create project',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -181,19 +168,19 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized projects list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized projects list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -204,7 +191,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -217,7 +204,7 @@ export async function GET(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -244,13 +231,10 @@ export async function GET(req: NextRequest) {
       offset,
     });
   } catch (error) {
-    logger.error("List projects error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List projects error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch projects" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
   }
 }

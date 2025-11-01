@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Plus, Building2, Mail, Linkedin, User } from "lucide-react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Plus, Building2, Mail, Linkedin, User } from 'lucide-react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 
 interface Prospect {
   id: string;
@@ -35,11 +35,9 @@ export default function ProspectsPage() {
   const { currentWorkspace } = useWorkspace();
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
     async function fetchProspects() {
@@ -47,15 +45,13 @@ export default function ProspectsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/prospects?workspaceId=${currentWorkspace.id}&limit=100`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch prospects");
+        const res = await fetch(`/api/prospects?workspaceId=${currentWorkspace.id}&limit=100`);
+        if (!res.ok) throw new Error('Failed to fetch prospects');
         const data = await res.json();
         setProspects(data.prospects || []);
       } catch (error) {
-        console.error("Failed to fetch prospects:", error);
-        toast.error("Failed to load prospects");
+        console.error('Failed to fetch prospects:', error);
+        toast.error('Failed to load prospects');
       } finally {
         setIsLoading(false);
       }
@@ -68,20 +64,15 @@ export default function ProspectsPage() {
   const filteredProspects = prospects.filter((prospect) => {
     // Search filter
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       prospect.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (prospect.email?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase(),
-      ) ||
-      (prospect.company?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase(),
-      ) ||
-      (prospect.title?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+      (prospect.email?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (prospect.company?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (prospect.title?.toLowerCase() || '').includes(searchQuery.toLowerCase());
 
     // Status filter
     const statusFilter = activeFilters.status || [];
-    const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(prospect.stage);
+    const matchesStatus = statusFilter.length === 0 || statusFilter.includes(prospect.stage);
 
     return matchesSearch && matchesStatus;
   });
@@ -95,7 +86,7 @@ export default function ProspectsPage() {
 
   const handleClearFilters = () => {
     setActiveFilters({});
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   if (isLoading) {
@@ -110,7 +101,7 @@ export default function ProspectsPage() {
     <ListPage
       title="Prospects"
       subtitle="Manage enriched prospects and leads"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Prospects" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Prospects' }]}
       searchQuery={searchQuery}
       searchPlaceholder="Search prospects by name, email, or company..."
       onSearchChange={setSearchQuery}
@@ -118,14 +109,14 @@ export default function ProspectsPage() {
       onViewModeChange={setViewMode}
       filters={[
         {
-          id: "status",
-          label: "Status",
-          type: "checkbox",
+          id: 'status',
+          label: 'Status',
+          type: 'checkbox',
           options: [
-            { value: "new", label: "New" },
-            { value: "contacted", label: "Contacted" },
-            { value: "qualified", label: "Qualified" },
-            { value: "nurturing", label: "Nurturing" },
+            { value: 'new', label: 'New' },
+            { value: 'contacted', label: 'Contacted' },
+            { value: 'qualified', label: 'Qualified' },
+            { value: 'nurturing', label: 'Nurturing' },
           ],
         },
       ]}
@@ -149,9 +140,7 @@ export default function ProspectsPage() {
     >
       {filteredProspects.length === 0 && prospects.length > 0 ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            No prospects match your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">No prospects match your search or filters</p>
           <Button variant="outline" onClick={handleClearFilters}>
             Clear Filters
           </Button>
@@ -176,9 +165,7 @@ export default function ProspectsPage() {
                   />
                   <div>
                     <h3 className="font-semibold">{prospect.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {prospect.title || "No title"}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{prospect.title || 'No title'}</p>
                   </div>
                 </div>
                 <Badge variant="secondary">{prospect.stage}</Badge>
@@ -196,9 +183,7 @@ export default function ProspectsPage() {
               {prospect.email && (
                 <div className="flex items-center gap-2 mb-4">
                   <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground truncate">
-                    {prospect.email}
-                  </span>
+                  <span className="text-sm text-muted-foreground truncate">{prospect.email}</span>
                 </div>
               )}
 
@@ -208,10 +193,10 @@ export default function ProspectsPage() {
                   <Badge
                     className={
                       prospect.score >= 80
-                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
                         : prospect.score >= 50
-                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
-                          : "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300"
+                          ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                          : 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300'
                     }
                   >
                     Score: {prospect.score}/100
@@ -227,11 +212,7 @@ export default function ProspectsPage() {
                 </Button>
                 {prospect.linkedinUrl && (
                   <Button size="sm" variant="outline" asChild>
-                    <a
-                      href={prospect.linkedinUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={prospect.linkedinUrl} target="_blank" rel="noopener noreferrer">
                       <Linkedin className="h-4 w-4" />
                     </a>
                   </Button>

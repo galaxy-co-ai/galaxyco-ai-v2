@@ -239,20 +239,14 @@ python core/orchestrator.py
 
 ```typescript
 // apps/web/app/api/agents/approve/[workflow_id]/route.ts
-export async function POST(
-  request: Request,
-  { params }: { params: { workflow_id: string } },
-) {
+export async function POST(request: Request, { params }: { params: { workflow_id: string } }) {
   const { approved, workspace_id } = await request.json();
 
   // Call Python service
-  const response = await fetch(
-    `http://localhost:8000/workflows/${params.workflow_id}/approve`,
-    {
-      method: "POST",
-      body: JSON.stringify({ approved, workspace_id }),
-    },
-  );
+  const response = await fetch(`http://localhost:8000/workflows/${params.workflow_id}/approve`, {
+    method: 'POST',
+    body: JSON.stringify({ approved, workspace_id }),
+  });
 
   return Response.json(await response.json());
 }

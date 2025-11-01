@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaces } from "@galaxyco/database/schema";
-import { eq, desc } from "drizzle-orm";
-import { checkSystemAdmin } from "@/lib/auth/admin-check";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaces } from '@galaxyco/database/schema';
+import { eq, desc } from 'drizzle-orm';
+import { checkSystemAdmin } from '@/lib/auth/admin-check';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 // NOTE: Admin routes don't create resources, only list and update existing ones
 
@@ -22,23 +22,20 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized admin workspaces list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized admin workspaces list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     // 3. Check admin role
     const adminCheck = await checkSystemAdmin(clerkUserId);
     if (!adminCheck.authorized) {
-      logger.warn("Non-admin attempted to access workspaces", { clerkUserId });
-      return NextResponse.json(
-        { error: adminCheck.error },
-        { status: adminCheck.status },
-      );
+      logger.warn('Non-admin attempted to access workspaces', { clerkUserId });
+      return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
     }
 
     // 4. Fetch all workspaces from database
@@ -62,13 +59,10 @@ export async function GET(req: NextRequest) {
       offset,
     });
   } catch (error) {
-    logger.error("List admin workspaces error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List admin workspaces error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch workspaces" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch workspaces' }, { status: 500 });
   }
 }

@@ -1,16 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import {
-  users,
-  workspaceMembers,
-  dataImports,
-} from "@galaxyco/database/schema";
-import { eq, and, desc } from "drizzle-orm";
-import { createImportSchema } from "@/lib/validation/business";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, dataImports } from '@galaxyco/database/schema';
+import { eq, and, desc } from 'drizzle-orm';
+import { createImportSchema } from '@/lib/validation/business';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * POST /api/imports
@@ -27,36 +23,31 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized import creation attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized import creation attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.IMPORT_CREATE,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.IMPORT_CREATE);
     if (!rateLimitResult.success) {
-      logger.warn("Imports creation rate limit exceeded", {
+      logger.warn('Imports creation rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
         reset: rateLimitResult.reset,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
           retryAfter: rateLimitResult.reset,
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(rateLimitResult.limit),
-            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-            "X-RateLimit-Reset": String(rateLimitResult.reset),
-            "Retry-After": String(
-              rateLimitResult.reset - Math.floor(Date.now() / 1000),
-            ),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(rateLimitResult.reset - Math.floor(Date.now() / 1000)),
           },
         },
       );
@@ -68,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid import creation request", {
+      logger.warn('Invalid import creation request', {
         errors: formattedError.errors,
       });
       return NextResponse.json(formattedError, {
@@ -84,7 +75,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 5. Verify workspace membership
@@ -97,7 +88,7 @@ export async function POST(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -108,19 +99,16 @@ export async function POST(req: NextRequest) {
       name: importData.name,
       resourceType: importData.resource,
       fileName: `import-${Date.now()}.csv`,
-      status: "pending",
+      status: 'pending',
       requestedBy: user.id,
     };
 
-    const [importRecord] = await db
-      .insert(dataImports)
-      .values(insertValues)
-      .returning();
+    const [importRecord] = await db.insert(dataImports).values(insertValues).returning();
 
     // 7. Return success
     const durationMs = Date.now() - startTime;
 
-    logger.info("Import created successfully", {
+    logger.info('Import created successfully', {
       userId: user.id,
       workspaceId,
       importId: importRecord.id,
@@ -133,25 +121,22 @@ export async function POST(req: NextRequest) {
     });
 
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      String(rateLimitResult.remaining),
-    );
-    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
+    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
 
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Create import error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Create import error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to create import",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create import',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -172,19 +157,19 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized imports list request");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized imports list request');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get query params
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const workspaceId = searchParams.get('workspaceId');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = parseInt(searchParams.get('offset') || '0');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -195,7 +180,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -208,7 +193,7 @@ export async function GET(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -230,13 +215,10 @@ export async function GET(req: NextRequest) {
       offset,
     });
   } catch (error) {
-    logger.error("List imports error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('List imports error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch imports" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch imports' }, { status: 500 });
   }
 }

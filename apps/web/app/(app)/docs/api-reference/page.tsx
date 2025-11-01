@@ -1,150 +1,150 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Code, Copy, Lock, Search } from "lucide-react";
-import { logger } from "@/lib/utils/logger";
+import { useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Code, Copy, Lock, Search } from 'lucide-react';
+import { logger } from '@/lib/utils/logger';
 
 const apiEndpoints = [
   {
-    category: "Authentication",
+    category: 'Authentication',
     endpoints: [
       {
-        method: "POST",
-        path: "/api/auth/token",
-        description: "Generate an API access token",
+        method: 'POST',
+        path: '/api/auth/token',
+        description: 'Generate an API access token',
         authenticated: false,
       },
       {
-        method: "POST",
-        path: "/api/auth/refresh",
-        description: "Refresh an expired token",
+        method: 'POST',
+        path: '/api/auth/refresh',
+        description: 'Refresh an expired token',
         authenticated: true,
       },
     ],
   },
   {
-    category: "Agents",
+    category: 'Agents',
     endpoints: [
       {
-        method: "GET",
-        path: "/api/agents",
-        description: "List all agents in workspace",
+        method: 'GET',
+        path: '/api/agents',
+        description: 'List all agents in workspace',
         authenticated: true,
       },
       {
-        method: "POST",
-        path: "/api/agents",
-        description: "Create a new agent",
+        method: 'POST',
+        path: '/api/agents',
+        description: 'Create a new agent',
         authenticated: true,
       },
       {
-        method: "GET",
-        path: "/api/agents/:id",
-        description: "Get agent details",
+        method: 'GET',
+        path: '/api/agents/:id',
+        description: 'Get agent details',
         authenticated: true,
       },
       {
-        method: "PATCH",
-        path: "/api/agents/:id",
-        description: "Update an agent",
+        method: 'PATCH',
+        path: '/api/agents/:id',
+        description: 'Update an agent',
         authenticated: true,
       },
       {
-        method: "DELETE",
-        path: "/api/agents/:id",
-        description: "Delete an agent",
+        method: 'DELETE',
+        path: '/api/agents/:id',
+        description: 'Delete an agent',
         authenticated: true,
       },
       {
-        method: "POST",
-        path: "/api/agents/:id/execute",
-        description: "Execute an agent",
+        method: 'POST',
+        path: '/api/agents/:id/execute',
+        description: 'Execute an agent',
         authenticated: true,
       },
     ],
   },
   {
-    category: "Workflows",
+    category: 'Workflows',
     endpoints: [
       {
-        method: "GET",
-        path: "/api/workflows",
-        description: "List all workflows",
+        method: 'GET',
+        path: '/api/workflows',
+        description: 'List all workflows',
         authenticated: true,
       },
       {
-        method: "POST",
-        path: "/api/workflows",
-        description: "Create a new workflow",
+        method: 'POST',
+        path: '/api/workflows',
+        description: 'Create a new workflow',
         authenticated: true,
       },
       {
-        method: "GET",
-        path: "/api/workflows/:id",
-        description: "Get workflow details",
+        method: 'GET',
+        path: '/api/workflows/:id',
+        description: 'Get workflow details',
         authenticated: true,
       },
       {
-        method: "PUT",
-        path: "/api/workflows/:id",
-        description: "Update a workflow",
+        method: 'PUT',
+        path: '/api/workflows/:id',
+        description: 'Update a workflow',
         authenticated: true,
       },
       {
-        method: "DELETE",
-        path: "/api/workflows/:id",
-        description: "Delete a workflow",
+        method: 'DELETE',
+        path: '/api/workflows/:id',
+        description: 'Delete a workflow',
         authenticated: true,
       },
     ],
   },
   {
-    category: "Knowledge",
+    category: 'Knowledge',
     endpoints: [
       {
-        method: "GET",
-        path: "/api/knowledge",
-        description: "List knowledge items",
+        method: 'GET',
+        path: '/api/knowledge',
+        description: 'List knowledge items',
         authenticated: true,
       },
       {
-        method: "POST",
-        path: "/api/knowledge/upload",
-        description: "Upload documents to knowledge base",
+        method: 'POST',
+        path: '/api/knowledge/upload',
+        description: 'Upload documents to knowledge base',
         authenticated: true,
       },
       {
-        method: "DELETE",
-        path: "/api/knowledge/:id",
-        description: "Delete a knowledge item",
+        method: 'DELETE',
+        path: '/api/knowledge/:id',
+        description: 'Delete a knowledge item',
         authenticated: true,
       },
       {
-        method: "POST",
-        path: "/api/knowledge/search",
-        description: "Search knowledge base",
+        method: 'POST',
+        path: '/api/knowledge/search',
+        description: 'Search knowledge base',
         authenticated: true,
       },
     ],
   },
   {
-    category: "Analytics",
+    category: 'Analytics',
     endpoints: [
       {
-        method: "GET",
-        path: "/api/analytics/executions",
-        description: "Get execution analytics",
+        method: 'GET',
+        path: '/api/analytics/executions',
+        description: 'Get execution analytics',
         authenticated: true,
       },
       {
-        method: "GET",
-        path: "/api/analytics/agents/:id",
-        description: "Get agent-specific analytics",
+        method: 'GET',
+        path: '/api/analytics/agents/:id',
+        description: 'Get agent-specific analytics',
         authenticated: true,
       },
     ],
@@ -188,18 +188,16 @@ const agentData = await agent.json();
 `;
 
 export default function ApiReferencePage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredEndpoints = apiEndpoints
     .map((category) => ({
       ...category,
       endpoints: category.endpoints.filter(
         (endpoint) =>
-          searchQuery === "" ||
+          searchQuery === '' ||
           endpoint.path.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          endpoint.description
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
+          endpoint.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
           endpoint.method.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
     }))
@@ -207,13 +205,13 @@ export default function ApiReferencePage() {
 
   const getMethodColor = (method: string) => {
     const colors = {
-      GET: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-      POST: "bg-green-500/10 text-green-500 border-green-500/20",
-      PUT: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-      PATCH: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-      DELETE: "bg-red-500/10 text-red-500 border-red-500/20",
+      GET: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+      POST: 'bg-green-500/10 text-green-500 border-green-500/20',
+      PUT: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+      PATCH: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+      DELETE: 'bg-red-500/10 text-red-500 border-red-500/20',
     };
-    return colors[method as keyof typeof colors] || "bg-muted text-foreground";
+    return colors[method as keyof typeof colors] || 'bg-muted text-foreground';
   };
 
   return (
@@ -221,9 +219,9 @@ export default function ApiReferencePage() {
       title="API Reference"
       subtitle="Complete REST API documentation"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Documentation", href: "/docs" },
-        { label: "API Reference" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Documentation', href: '/docs' },
+        { label: 'API Reference' },
       ]}
     >
       <div className="space-y-8">
@@ -241,13 +239,11 @@ export default function ApiReferencePage() {
           <div className="space-y-2">
             <h3 className="font-semibold">Authentication</h3>
             <p className="text-sm text-muted-foreground">
-              All API requests require authentication using Bearer tokens.
-              Include your token in the Authorization header:
+              All API requests require authentication using Bearer tokens. Include your token in the
+              Authorization header:
             </p>
             <div className="flex items-center gap-2 rounded-lg bg-muted p-3">
-              <code className="flex-1 text-sm">
-                Authorization: Bearer YOUR_ACCESS_TOKEN
-              </code>
+              <code className="flex-1 text-sm">Authorization: Bearer YOUR_ACCESS_TOKEN</code>
               <Button variant="ghost" size="sm">
                 <Copy className="h-4 w-4" />
               </Button>
@@ -284,9 +280,7 @@ export default function ApiReferencePage() {
                     >
                       {endpoint.method}
                     </Badge>
-                    <code className="flex-1 text-sm font-mono">
-                      {endpoint.path}
-                    </code>
+                    <code className="flex-1 text-sm font-mono">{endpoint.path}</code>
                     {endpoint.authenticated && (
                       <Badge variant="secondary" className="gap-1">
                         <Lock className="h-3 w-3" />
@@ -294,9 +288,7 @@ export default function ApiReferencePage() {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {endpoint.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{endpoint.description}</p>
                 </div>
               ))}
             </div>
@@ -307,9 +299,7 @@ export default function ApiReferencePage() {
           <Card className="p-12 text-center">
             <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
             <h3 className="mb-2 text-lg font-semibold">No endpoints found</h3>
-            <p className="text-sm text-muted-foreground">
-              Try adjusting your search query
-            </p>
+            <p className="text-sm text-muted-foreground">Try adjusting your search query</p>
           </Card>
         )}
 
@@ -345,8 +335,7 @@ export default function ApiReferencePage() {
             </div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Rate limit headers are included in all API responses. Contact
-            support for higher limits.
+            Rate limit headers are included in all API responses. Contact support for higher limits.
           </p>
         </Card>
 
@@ -358,18 +347,14 @@ export default function ApiReferencePage() {
               <Code className="h-8 w-8 text-primary" />
               <div>
                 <p className="font-semibold">JavaScript / TypeScript</p>
-                <code className="text-xs text-muted-foreground">
-                  npm install @galaxyco/sdk
-                </code>
+                <code className="text-xs text-muted-foreground">npm install @galaxyco/sdk</code>
               </div>
             </div>
             <div className="flex items-center gap-3 rounded-lg border border-border p-4">
               <Code className="h-8 w-8 text-primary" />
               <div>
                 <p className="font-semibold">Python</p>
-                <code className="text-xs text-muted-foreground">
-                  pip install galaxyco
-                </code>
+                <code className="text-xs text-muted-foreground">pip install galaxyco</code>
               </div>
             </div>
           </div>

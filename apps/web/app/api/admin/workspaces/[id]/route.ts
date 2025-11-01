@@ -1,37 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers, workspaces } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { adminWorkspaceUpdateSchema } from "@/lib/validation/analytics";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
-import { checkSystemAdmin } from "@/lib/auth/admin-check";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, workspaces } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { adminWorkspaceUpdateSchema } from '@/lib/validation/analytics';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { checkSystemAdmin } from '@/lib/auth/admin-check';
 
 /**
  * GET /api/admin/workspaces/[id]
  * Get a single workspace by ID
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Check admin role
     const adminCheck = await checkSystemAdmin(clerkUserId);
     if (!adminCheck.authorized) {
-      logger.warn("Non-admin attempted to access workspace", { clerkUserId });
-      return NextResponse.json(
-        { error: adminCheck.error },
-        { status: adminCheck.status },
-      );
+      logger.warn('Non-admin attempted to access workspace', { clerkUserId });
+      return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
     }
 
     // 3. Fetch workspace from database
@@ -41,13 +35,10 @@ export async function GET(
     });
 
     if (!workspace) {
-      return NextResponse.json(
-        { error: "Workspace not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Workspace not found' }, { status: 404 });
     }
 
-    logger.info("Admin workspace fetched", {
+    logger.info('Admin workspace fetched', {
       userId: adminCheck.user.id,
       workspaceId,
     });
@@ -56,13 +47,10 @@ export async function GET(
       workspace,
     });
   } catch (error) {
-    logger.error("Fetch workspace error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Fetch workspace error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
-    return NextResponse.json(
-      { error: "Failed to fetch workspace" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch workspace' }, { status: 500 });
   }
 }
 
@@ -70,38 +58,26 @@ export async function GET(
  * PUT /api/admin/workspaces/[id]
  * Update a workspace
  */
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.ADMIN_OPS,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.ADMIN_OPS);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
     // 3. Check admin role
     const adminCheck = await checkSystemAdmin(clerkUserId);
     if (!adminCheck.authorized) {
-      logger.warn("Non-admin attempted to update workspace", { clerkUserId });
-      return NextResponse.json(
-        { error: adminCheck.error },
-        { status: adminCheck.status },
-      );
+      logger.warn('Non-admin attempted to update workspace', { clerkUserId });
+      return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
     }
 
     // 4. Validate request body
@@ -120,10 +96,7 @@ export async function PUT(
     });
 
     if (!workspace) {
-      return NextResponse.json(
-        { error: "Workspace not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Workspace not found' }, { status: 404 });
     }
 
     // 6. Update workspace in database
@@ -137,7 +110,7 @@ export async function PUT(
       .returning();
 
     const durationMs = Date.now() - startTime;
-    logger.info("Admin workspace updated successfully", {
+    logger.info('Admin workspace updated successfully', {
       userId: adminCheck.user.id,
       workspaceId,
       durationMs,
@@ -149,14 +122,11 @@ export async function PUT(
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Update workspace error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Update workspace error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       durationMs,
     });
-    return NextResponse.json(
-      { error: "Failed to update workspace" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to update workspace' }, { status: 500 });
   }
 }
 
@@ -164,38 +134,26 @@ export async function PUT(
  * DELETE /api/admin/workspaces/[id]
  * Delete a workspace
  */
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.ADMIN_OPS,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.ADMIN_OPS);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
     // 3. Check admin role
     const adminCheck = await checkSystemAdmin(clerkUserId);
     if (!adminCheck.authorized) {
-      logger.warn("Non-admin attempted to delete workspace", { clerkUserId });
-      return NextResponse.json(
-        { error: adminCheck.error },
-        { status: adminCheck.status },
-      );
+      logger.warn('Non-admin attempted to delete workspace', { clerkUserId });
+      return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
     }
 
     // 4. Check workspace exists
@@ -205,10 +163,7 @@ export async function DELETE(
     });
 
     if (!workspace) {
-      return NextResponse.json(
-        { error: "Workspace not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Workspace not found' }, { status: 404 });
     }
 
     // 5. Soft delete workspace (set isActive = false)
@@ -221,7 +176,7 @@ export async function DELETE(
       .where(eq(workspaces.id, workspaceId));
 
     const durationMs = Date.now() - startTime;
-    logger.info("Admin workspace deleted successfully", {
+    logger.info('Admin workspace deleted successfully', {
       userId: adminCheck.user.id,
       workspaceId,
       durationMs,
@@ -229,17 +184,14 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Workspace deleted successfully",
+      message: 'Workspace deleted successfully',
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Delete workspace error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Delete workspace error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       durationMs,
     });
-    return NextResponse.json(
-      { error: "Failed to delete workspace" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to delete workspace' }, { status: 500 });
   }
 }

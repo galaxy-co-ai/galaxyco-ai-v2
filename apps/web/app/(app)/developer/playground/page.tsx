@@ -1,46 +1,46 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import React, { useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Play, Copy } from "lucide-react";
-import { toast } from "sonner";
-import { useWorkspace } from "@/contexts/workspace-context";
+} from '@/components/ui/select';
+import { Play, Copy } from 'lucide-react';
+import { toast } from 'sonner';
+import { useWorkspace } from '@/contexts/workspace-context';
 
 export default function PlaygroundPage() {
   const { currentWorkspace } = useWorkspace();
   const [request, setRequest] = useState({
-    method: "GET",
-    resource: "/api/agents",
+    method: 'GET',
+    resource: '/api/agents',
     validateOnly: false,
   });
 
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleExecute = async () => {
     if (!currentWorkspace) {
-      toast.error("No workspace selected");
+      toast.error('No workspace selected');
       return;
     }
 
     setIsExecuting(true);
-    setResponse("");
+    setResponse('');
 
     try {
-      const res = await fetch("/api/playground", {
-        method: "POST",
+      const res = await fetch('/api/playground', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           workspaceId: currentWorkspace.id,
@@ -53,14 +53,13 @@ export default function PlaygroundPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to execute request");
+        throw new Error(data.error || 'Failed to execute request');
       }
 
       setResponse(JSON.stringify(data, null, 2));
-      toast.success("Request executed successfully");
+      toast.success('Request executed successfully');
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to execute request";
+      const errorMessage = error instanceof Error ? error.message : 'Failed to execute request';
       toast.error(errorMessage);
       setResponse(
         JSON.stringify(
@@ -79,14 +78,14 @@ export default function PlaygroundPage() {
 
   const handleCopyResponse = () => {
     navigator.clipboard.writeText(response);
-    toast.success("Response copied to clipboard");
+    toast.success('Response copied to clipboard');
   };
 
   return (
     <PageShell
       title="API Playground"
       subtitle="Test API endpoints interactively"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Playground" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Playground' }]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Request Builder */}
@@ -99,9 +98,7 @@ export default function PlaygroundPage() {
                   <Label htmlFor="method">Method</Label>
                   <Select
                     value={request.method}
-                    onValueChange={(value) =>
-                      setRequest({ ...request, method: value })
-                    }
+                    onValueChange={(value) => setRequest({ ...request, method: value })}
                   >
                     <SelectTrigger id="method">
                       <SelectValue placeholder="Method" />
@@ -118,18 +115,14 @@ export default function PlaygroundPage() {
                   <Label htmlFor="resource">Resource</Label>
                   <Select
                     value={request.resource}
-                    onValueChange={(value) =>
-                      setRequest({ ...request, resource: value })
-                    }
+                    onValueChange={(value) => setRequest({ ...request, resource: value })}
                   >
                     <SelectTrigger id="resource">
                       <SelectValue placeholder="Select resource" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="/api/agents">Agents</SelectItem>
-                      <SelectItem value="/api/executions">
-                        Executions
-                      </SelectItem>
+                      <SelectItem value="/api/executions">Executions</SelectItem>
                       <SelectItem value="/api/documents">Documents</SelectItem>
                       <SelectItem value="/api/contacts">Contacts</SelectItem>
                       <SelectItem value="/api/campaigns">Campaigns</SelectItem>
@@ -145,9 +138,7 @@ export default function PlaygroundPage() {
                     type="checkbox"
                     id="validateOnly"
                     checked={request.validateOnly}
-                    onChange={(e) =>
-                      setRequest({ ...request, validateOnly: e.target.checked })
-                    }
+                    onChange={(e) => setRequest({ ...request, validateOnly: e.target.checked })}
                     className="h-4 w-4 rounded border-gray-300"
                   />
                   <Label htmlFor="validateOnly" className="cursor-pointer">
@@ -155,18 +146,13 @@ export default function PlaygroundPage() {
                   </Label>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Test permissions and schema without actually executing the
-                  request
+                  Test permissions and schema without actually executing the request
                 </p>
               </div>
 
-              <Button
-                className="w-full"
-                onClick={handleExecute}
-                disabled={isExecuting}
-              >
+              <Button className="w-full" onClick={handleExecute} disabled={isExecuting}>
                 <Play className="mr-2 h-4 w-4" />
-                {isExecuting ? "Executing..." : "Execute Request"}
+                {isExecuting ? 'Executing...' : 'Execute Request'}
               </Button>
             </div>
           </div>

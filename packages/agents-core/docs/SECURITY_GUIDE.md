@@ -31,11 +31,11 @@ The platform includes **4 essential guardrails** that protect against security t
 **Configuration:**
 
 ```typescript
-import { createInputSafetyGuardrail } from "@galaxyco/agents-core";
+import { createInputSafetyGuardrail } from '@galaxyco/agents-core';
 
 const inputSafety = createInputSafetyGuardrail({
   enabled: true,
-  mode: "moderate", // 'strict' | 'moderate' | 'permissive'
+  mode: 'moderate', // 'strict' | 'moderate' | 'permissive'
   customPatterns: [], // Optional: Add your own regex patterns
 });
 ```
@@ -76,10 +76,10 @@ const inputSafety = createInputSafetyGuardrail({
 **Configuration:**
 
 ```typescript
-import { createOutputValidationGuardrail } from "@galaxyco/agents-core";
+import { createOutputValidationGuardrail } from '@galaxyco/agents-core';
 
 const outputValidation = createOutputValidationGuardrail({
-  mode: "redact", // 'block' | 'redact'
+  mode: 'redact', // 'block' | 'redact'
 });
 ```
 
@@ -104,10 +104,10 @@ const outputValidation = createOutputValidationGuardrail({
 
 ```typescript
 // Original AI output:
-"Your API key is sk_test_abc123xyz456 for testing.";
+'Your API key is sk_test_abc123xyz456 for testing.';
 
 // After redaction:
-"Your API key is [REDACTED API KEY] for testing.";
+'Your API key is [REDACTED API KEY] for testing.';
 ```
 
 ---
@@ -126,7 +126,7 @@ const outputValidation = createOutputValidationGuardrail({
 **Configuration:**
 
 ```typescript
-import { createCostLimitGuardrail } from "@galaxyco/agents-core";
+import { createCostLimitGuardrail } from '@galaxyco/agents-core';
 
 const costLimit = createCostLimitGuardrail({
   maxTokens: 100000, // Stop after 100k tokens
@@ -177,15 +177,10 @@ The Runner tracks costs continuously and checks limits at the start of each iter
 **Configuration:**
 
 ```typescript
-import { createToolApprovalGuardrail } from "@galaxyco/agents-core";
+import { createToolApprovalGuardrail } from '@galaxyco/agents-core';
 
 const toolApproval = createToolApprovalGuardrail({
-  requireApproval: [
-    "delete_database",
-    "drop_table",
-    "send_payment",
-    "deploy_to_production",
-  ],
+  requireApproval: ['delete_database', 'drop_table', 'send_payment', 'deploy_to_production'],
   approvalCallback: async (toolName, args) => {
     // Implement your approval logic
     // Return true to approve, false to deny
@@ -227,8 +222,8 @@ Every agent execution requires:
 
 ```typescript
 const options: RunOptions = {
-  workspaceId: "workspace-123", // REQUIRED for tenant isolation
-  userId: "user-456", // REQUIRED for audit trail
+  workspaceId: 'workspace-123', // REQUIRED for tenant isolation
+  userId: 'user-456', // REQUIRED for audit trail
 };
 ```
 
@@ -251,7 +246,7 @@ The Runner enforces workspace context:
 
 ```typescript
 if (!options.workspaceId || !options.userId) {
-  throw new Error("workspaceId and userId are required (multi-tenant safety)");
+  throw new Error('workspaceId and userId are required (multi-tenant safety)');
 }
 ```
 
@@ -285,11 +280,11 @@ if (!options.workspaceId || !options.userId) {
 
 ```typescript
 // Log all guardrail failures
-logger.warn("Guardrail blocked execution", {
-  guardrail: "input-safety",
+logger.warn('Guardrail blocked execution', {
+  guardrail: 'input-safety',
   workspaceId: context.workspaceId,
   userId: context.userId,
-  reason: "Prompt injection detected",
+  reason: 'Prompt injection detected',
   timestamp: new Date().toISOString(),
 });
 ```
@@ -380,7 +375,7 @@ const agent = new Agent({
 console.log(`API Key: ${process.env.OPENAI_API_KEY}`);
 
 // ✅ Good - References by name only
-logger.info("Using OpenAI API key from environment");
+logger.info('Using OpenAI API key from environment');
 ```
 
 ### 5. Error Messages
@@ -392,7 +387,7 @@ Never leak sensitive information in error messages:
 throw new Error(`Database query failed: ${sqlQuery}`);
 
 // ✅ Good - Generic message
-throw new Error("Database operation failed");
+throw new Error('Database operation failed');
 ```
 
 ---
@@ -404,17 +399,17 @@ throw new Error("Database operation failed");
 Test common attacks:
 
 ```typescript
-describe("Security Tests", () => {
-  it("should block SQL injection attempts", async () => {
+describe('Security Tests', () => {
+  it('should block SQL injection attempts', async () => {
     const maliciousInput = "'; DROP TABLE users; --";
     const result = await agent.execute(maliciousInput);
     expect(result.success).toBe(false);
   });
 
-  it("should redact leaked API keys", async () => {
-    const result = await agent.execute("Show me an API key");
-    expect(result.output).not.toContain("sk_");
-    expect(result.output).toContain("[REDACTED");
+  it('should redact leaked API keys', async () => {
+    const result = await agent.execute('Show me an API key');
+    expect(result.output).not.toContain('sk_');
+    expect(result.output).toContain('[REDACTED');
   });
 });
 ```

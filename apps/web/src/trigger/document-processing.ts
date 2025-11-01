@@ -1,11 +1,8 @@
-import { db } from "@galaxyco/database";
-import {
-  knowledgeItems,
-  knowledgeCollections,
-} from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
-import { DocumentProcessor } from "../lib/services/document-processor";
-import { logger } from "@/lib/utils/logger";
+import { db } from '@galaxyco/database';
+import { knowledgeItems, knowledgeCollections } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
+import { DocumentProcessor } from '../lib/services/document-processor';
+import { logger } from '@/lib/utils/logger';
 
 interface DocumentProcessingPayload {
   documentId: string;
@@ -13,11 +10,9 @@ interface DocumentProcessingPayload {
   userId: string;
 }
 
-export async function documentProcessingJob(
-  payload: DocumentProcessingPayload,
-) {
+export async function documentProcessingJob(payload: DocumentProcessingPayload) {
   const { documentId, workspaceId, userId } = payload;
-  logger.info("Starting document processing", {
+  logger.info('Starting document processing', {
     documentId,
     workspaceId,
     userId,
@@ -27,7 +22,7 @@ export async function documentProcessingJob(
     // Update status to processing
     await db
       .update(knowledgeItems)
-      .set({ status: "processing", updatedAt: new Date() })
+      .set({ status: 'processing', updatedAt: new Date() })
       .where(eq(knowledgeItems.id, documentId));
 
     // Get document details
@@ -35,18 +30,17 @@ export async function documentProcessingJob(
       where: eq(knowledgeItems.id, documentId),
     });
     if (!document) throw new Error(`Document not found: ${documentId}`);
-    if (!document.sourceUrl) throw new Error("Document source URL not found");
+    if (!document.sourceUrl) throw new Error('Document source URL not found');
 
     // Download and process the document
     const response = await fetch(document.sourceUrl);
-    if (!response.ok)
-      throw new Error(`Failed to download document: ${response.statusText}`);
+    if (!response.ok) throw new Error(`Failed to download document: ${response.statusText}`);
 
     const buffer = await response.arrayBuffer();
     const file = new File([buffer], document.title, {
       type:
         (document as any).mimeType ??
-        (document.type === "document" ? "application/pdf" : "text/plain"),
+        (document.type === 'document' ? 'application/pdf' : 'text/plain'),
     });
 
     const processor = new DocumentProcessor();
@@ -71,12 +65,12 @@ export async function documentProcessingJob(
           processingDuration: processedData.processingTime,
           aiModel: processedData.model,
         } as any,
-        status: "ready",
+        status: 'ready',
         updatedAt: new Date(),
       })
       .where(eq(knowledgeItems.id, documentId));
 
-    logger.info("Document processing completed successfully", {
+    logger.info('Document processing completed successfully', {
       documentId,
       wordCount: processedData.wordCount,
       summaryLength: processedData.summary?.length || 0,
@@ -92,7 +86,7 @@ export async function documentProcessingJob(
       keywords: processedData.keywords || [],
     };
   } catch (error) {
-    logger.error("Document processing failed", {
+    logger.error('Document processing failed', {
       documentId,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -100,19 +94,16 @@ export async function documentProcessingJob(
     // Update status to failed
     await db
       .update(knowledgeItems)
-      .set({ status: "failed", updatedAt: new Date() })
+      .set({ status: 'failed', updatedAt: new Date() })
       .where(eq(knowledgeItems.id, documentId));
 
     throw error;
   }
 }
 
-export async function embeddingUpdateJob(payload: {
-  documentId: string;
-  content: string;
-}) {
+export async function embeddingUpdateJob(payload: { documentId: string; content: string }) {
   const { documentId, content } = payload;
-  logger.info("Updating document embeddings", { documentId });
+  logger.info('Updating document embeddings', { documentId });
 
   try {
     const processor = new DocumentProcessor();
@@ -123,11 +114,11 @@ export async function embeddingUpdateJob(payload: {
       .set({ embeddings: embeddings as any, updatedAt: new Date() })
       .where(eq(knowledgeItems.id, documentId));
 
-    logger.info("Embeddings updated successfully", { documentId });
+    logger.info('Embeddings updated successfully', { documentId });
 
     return { success: true, documentId, embeddingsLength: embeddings.length };
   } catch (error) {
-    logger.error("Embedding update failed", {
+    logger.error('Embedding update failed', {
       documentId,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -140,7 +131,7 @@ export async function documentCategorizationJob(payload: {
   workspaceId: string;
 }) {
   const { documentId, workspaceId } = payload;
-  logger.info("Auto-categorizing document", { documentId });
+  logger.info('Auto-categorizing document', { documentId });
 
   try {
     // Get document details
@@ -150,8 +141,8 @@ export async function documentCategorizationJob(payload: {
     if (!document) throw new Error(`Document not found: ${documentId}`);
 
     if (!document.content && !document.summary) {
-      logger.info("No content available for categorization", { documentId });
-      return { success: false, reason: "No content available" } as const;
+      logger.info('No content available for categorization', { documentId });
+      return { success: false, reason: 'No content available' } as const;
     }
 
     // Get existing collections for this workspace
@@ -161,12 +152,9 @@ export async function documentCategorizationJob(payload: {
 
     // Use AI to suggest category/collection
     const processor = new DocumentProcessor();
-    const contentForAnalysis =
-      document.summary || document.content!.substring(0, 1000);
+    const contentForAnalysis = document.summary || document.content!.substring(0, 1000);
     const suggestions = await processor.suggestCategories(contentForAnalysis, {
-      existingCollections: (collections as Array<{ name: string }>).map(
-        (c) => c.name,
-      ),
+      existingCollections: (collections as Array<{ name: string }>).map((c) => c.name),
       documentTitle: document.title,
       documentType: document.type,
     });
@@ -189,7 +177,7 @@ export async function documentCategorizationJob(payload: {
       })
       .where(eq(knowledgeItems.id, documentId));
 
-    logger.info("Document categorization completed", {
+    logger.info('Document categorization completed', {
       documentId,
       suggestedCategories: suggestions.suggestedCategories,
       suggestedTags: suggestions.suggestedTags,
@@ -198,7 +186,7 @@ export async function documentCategorizationJob(payload: {
 
     return { success: true, documentId, suggestions } as const;
   } catch (error) {
-    console.error("Document categorization failed", {
+    console.error('Document categorization failed', {
       documentId,
       error: error instanceof Error ? error.message : String(error),
     });

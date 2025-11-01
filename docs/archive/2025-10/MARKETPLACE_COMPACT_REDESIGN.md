@@ -113,24 +113,22 @@ Successfully updated the marketplace page to use the same compact, OpenSea-inspi
 ### Spacing Scale (4px base unit)
 
 ```css
---space-1: 4px --space-2: 8px --space-3: 12px --space-4: 16px --space-6: 24px
-  --space-8: 32px;
+--space-1: 4px --space-2: 8px --space-3: 12px --space-4: 16px --space-6: 24px --space-8: 32px;
 ```
 
 ### Typography Scale (Compact)
 
 ```css
---text-xs: 11px /* Labels, metadata */ --text-sm: 13px
-  /* Body text, descriptions */ --text-base: 14px /* Primary content */
-  --text-lg: 16px /* Card titles */ --text-xl: 18px /* Section headers */
-  --text-2xl: 24px /* Page titles */;
+--text-xs: 11px /* Labels, metadata */ --text-sm: 13px /* Body text, descriptions */
+  --text-base: 14px /* Primary content */ --text-lg: 16px /* Card titles */ --text-xl: 18px
+  /* Section headers */ --text-2xl: 24px /* Page titles */;
 ```
 
 ### Line Heights (Compact)
 
 ```css
---leading-tight: 1.25 /* Headings */ --leading-snug: 1.375 /* Body text */
-  --leading-normal: 1.5 /* Reading content */;
+--leading-tight: 1.25 /* Headings */ --leading-snug: 1.375 /* Body text */ --leading-normal: 1.5
+  /* Reading content */;
 ```
 
 ## Results

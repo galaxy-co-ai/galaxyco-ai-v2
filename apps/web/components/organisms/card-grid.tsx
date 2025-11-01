@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Grid, List, SlidersHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+import React from 'react';
+import { Grid, List, SlidersHorizontal } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export type ViewMode = "grid" | "list";
+export type ViewMode = 'grid' | 'list';
 
 export interface CardGridProps<T> {
   items: T[];
@@ -36,11 +36,11 @@ export interface CardGridProps<T> {
 export function CardGrid<T>({
   items,
   renderCard,
-  viewMode = "grid",
+  viewMode = 'grid',
   onViewModeChange,
   searchValue,
   onSearchChange,
-  searchPlaceholder = "Search...",
+  searchPlaceholder = 'Search...',
   onFilterClick,
   filterCount,
   isLoading,
@@ -52,7 +52,7 @@ export function CardGrid<T>({
   className,
 }: CardGridProps<T>) {
   const gridColsClass = cn(
-    "grid gap-4",
+    'grid gap-4',
     gridCols.sm && `grid-cols-${gridCols.sm}`,
     gridCols.md && `md:grid-cols-${gridCols.md}`,
     gridCols.lg && `lg:grid-cols-${gridCols.lg}`,
@@ -60,7 +60,7 @@ export function CardGrid<T>({
   );
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn('space-y-4', className)}>
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex-1 flex items-center gap-2">
@@ -79,12 +79,7 @@ export function CardGrid<T>({
 
           {/* Filter Button */}
           {onFilterClick && (
-            <Button
-              variant="outline"
-              size="default"
-              onClick={onFilterClick}
-              className="relative"
-            >
+            <Button variant="outline" size="default" onClick={onFilterClick} className="relative">
               <SlidersHorizontal className="h-4 w-4 mr-2" />
               Filters
               {filterCount !== undefined && filterCount > 0 && (
@@ -107,18 +102,18 @@ export function CardGrid<T>({
           {onViewModeChange && (
             <div className="flex items-center border border-border rounded-lg p-1">
               <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => onViewModeChange("grid")}
+                onClick={() => onViewModeChange('grid')}
                 className="h-8 px-3"
                 aria-label="Grid view"
               >
                 <Grid className="h-4 w-4" />
               </Button>
               <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => onViewModeChange("list")}
+                onClick={() => onViewModeChange('list')}
                 className="h-8 px-3"
                 aria-label="List view"
               >
@@ -131,7 +126,7 @@ export function CardGrid<T>({
 
       {/* Content */}
       {isLoading ? (
-        <div className={viewMode === "grid" ? gridColsClass : "space-y-4"}>
+        <div className={viewMode === 'grid' ? gridColsClass : 'space-y-4'}>
           {Array.from({ length: loadingCount }).map((_, index) => (
             <Skeleton key={index} className="h-48 w-full rounded-lg" />
           ))}
@@ -145,7 +140,7 @@ export function CardGrid<T>({
           )}
         </div>
       ) : (
-        <div className={viewMode === "grid" ? gridColsClass : "space-y-4"}>
+        <div className={viewMode === 'grid' ? gridColsClass : 'space-y-4'}>
           {items.map((item, index) => (
             <div key={index}>{renderCard(item, viewMode)}</div>
           ))}
@@ -155,4 +150,4 @@ export function CardGrid<T>({
   );
 }
 
-CardGrid.displayName = "CardGrid";
+CardGrid.displayName = 'CardGrid';

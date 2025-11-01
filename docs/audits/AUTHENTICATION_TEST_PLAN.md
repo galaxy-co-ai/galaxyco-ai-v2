@@ -65,18 +65,18 @@
 
 ```typescript
 // tests/auth/setup.ts
-import { test as setup } from "@playwright/test";
-import path from "path";
+import { test as setup } from '@playwright/test';
+import path from 'path';
 
-const authFile = path.join(__dirname, "../.auth/user.json");
+const authFile = path.join(__dirname, '../.auth/user.json');
 
-setup("authenticate", async ({ page }) => {
+setup('authenticate', async ({ page }) => {
   // Login
-  await page.goto("/sign-in");
+  await page.goto('/sign-in');
   await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
   await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
   await page.click('button[type="submit"]');
-  await page.waitForURL("/dashboard");
+  await page.waitForURL('/dashboard');
 
   // Save authentication state
   await page.context().storageState({ path: authFile });
@@ -87,54 +87,52 @@ setup("authenticate", async ({ page }) => {
 
 ```typescript
 // tests/auth/login.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Authentication", () => {
+test.describe('Authentication', () => {
   test.use({ storageState: { cookies: [], origins: [] } }); // No auth
 
-  test("should redirect to sign-in when accessing protected route", async ({
-    page,
-  }) => {
-    await page.goto("/dashboard");
+  test('should redirect to sign-in when accessing protected route', async ({ page }) => {
+    await page.goto('/dashboard');
     await expect(page).toHaveURL(/sign-in/);
   });
 
-  test("should login successfully with valid credentials", async ({ page }) => {
-    await page.goto("/sign-in");
+  test('should login successfully with valid credentials', async ({ page }) => {
+    await page.goto('/sign-in');
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
 
-    await page.waitForURL("/dashboard");
-    expect(page.url()).toContain("/dashboard");
+    await page.waitForURL('/dashboard');
+    expect(page.url()).toContain('/dashboard');
   });
 
-  test("should show error with invalid credentials", async ({ page }) => {
-    await page.goto("/sign-in");
-    await page.fill('input[name="email"]', "invalid@example.com");
-    await page.fill('input[name="password"]', "wrongpassword");
+  test('should show error with invalid credentials', async ({ page }) => {
+    await page.goto('/sign-in');
+    await page.fill('input[name="email"]', 'invalid@example.com');
+    await page.fill('input[name="password"]', 'wrongpassword');
     await page.click('button[type="submit"]');
 
     // Wait for error message
-    await page.waitForSelector("text=Invalid credentials", { timeout: 5000 });
-    const errorMessage = await page.textContent(".error-message");
-    expect(errorMessage).toContain("Invalid");
+    await page.waitForSelector('text=Invalid credentials', { timeout: 5000 });
+    const errorMessage = await page.textContent('.error-message');
+    expect(errorMessage).toContain('Invalid');
   });
 
-  test("should logout successfully", async ({ page }) => {
+  test('should logout successfully', async ({ page }) => {
     // Login first
-    await page.goto("/sign-in");
+    await page.goto('/sign-in');
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
-    await page.waitForURL("/dashboard");
+    await page.waitForURL('/dashboard');
 
     // Logout
     await page.click('button:has-text("Sign Out")');
-    await page.waitForURL("/");
+    await page.waitForURL('/');
 
     // Try accessing protected route
-    await page.goto("/dashboard");
+    await page.goto('/dashboard');
     await expect(page).toHaveURL(/sign-in/);
   });
 });
@@ -144,21 +142,19 @@ test.describe("Authentication", () => {
 
 ```typescript
 // tests/api/auth.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("API Authentication", () => {
-  const baseURL = process.env.BASE_URL || "http://localhost:3000";
+test.describe('API Authentication', () => {
+  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
 
-  test("should return 401 for unauthenticated API request", async ({
-    request,
-  }) => {
+  test('should return 401 for unauthenticated API request', async ({ request }) => {
     const response = await request.get(`${baseURL}/api/agents`, {
-      params: { workspaceId: "test-workspace" },
+      params: { workspaceId: 'test-workspace' },
     });
     expect(response.status()).toBe(401);
   });
 
-  test("should return 403 for cross-workspace access", async ({ request }) => {
+  test('should return 403 for cross-workspace access', async ({ request }) => {
     // Get auth token for User A
     const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
       data: {
@@ -176,7 +172,7 @@ test.describe("API Authentication", () => {
     expect(response.status()).toBe(403);
   });
 
-  test("should allow access to own workspace", async ({ request }) => {
+  test('should allow access to own workspace', async ({ request }) => {
     const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
       data: {
         email: process.env.TEST_USER_A_EMAIL,
@@ -198,12 +194,12 @@ test.describe("API Authentication", () => {
 
 ```typescript
 // tests/api/rate-limit.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Rate Limiting", () => {
-  const baseURL = process.env.BASE_URL || "http://localhost:3000";
+test.describe('Rate Limiting', () => {
+  const baseURL = process.env.BASE_URL || 'http://localhost:3000';
 
-  test("should enforce rate limits on agent creation", async ({ request }) => {
+  test('should enforce rate limits on agent creation', async ({ request }) => {
     // Login
     const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
       data: {
@@ -221,7 +217,7 @@ test.describe("Rate Limiting", () => {
         data: {
           workspaceId,
           name: `Test Agent ${i}`,
-          description: "Test agent for rate limiting",
+          description: 'Test agent for rate limiting',
           workflow: [],
         },
       });
@@ -237,12 +233,12 @@ test.describe("Rate Limiting", () => {
 
     // Check rate limit headers
     const headers = responses[100].headers();
-    expect(headers["x-ratelimit-limit"]).toBeDefined();
-    expect(headers["x-ratelimit-remaining"]).toBe("0");
-    expect(headers["x-ratelimit-reset"]).toBeDefined();
+    expect(headers['x-ratelimit-limit']).toBeDefined();
+    expect(headers['x-ratelimit-remaining']).toBe('0');
+    expect(headers['x-ratelimit-reset']).toBeDefined();
   });
 
-  test("should reset rate limit after time window", async ({ request }) => {
+  test('should reset rate limit after time window', async ({ request }) => {
     // Hit rate limit
     const loginResponse = await request.post(`${baseURL}/api/auth/login`, {
       data: {
@@ -260,7 +256,7 @@ test.describe("Rate Limiting", () => {
         data: {
           workspaceId,
           name: `Test Agent ${i}`,
-          description: "Test",
+          description: 'Test',
           workflow: [],
         },
       });
@@ -268,7 +264,7 @@ test.describe("Rate Limiting", () => {
     }
 
     // Get reset time
-    const resetHeader = rateLimitResponse!.headers()["x-ratelimit-reset"];
+    const resetHeader = rateLimitResponse!.headers()['x-ratelimit-reset'];
     const resetTime = parseInt(resetHeader) * 1000;
     const waitTime = resetTime - Date.now() + 1000; // Add 1 second buffer
 
@@ -280,8 +276,8 @@ test.describe("Rate Limiting", () => {
       headers: { Authorization: `Bearer ${token}` },
       data: {
         workspaceId,
-        name: "Test Agent After Reset",
-        description: "Test",
+        name: 'Test Agent After Reset',
+        description: 'Test',
         workflow: [],
       },
     });
@@ -295,43 +291,43 @@ test.describe("Rate Limiting", () => {
 
 ```typescript
 // tests/auth/session.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Session Management", () => {
-  test("should persist session across page reloads", async ({ page }) => {
+test.describe('Session Management', () => {
+  test('should persist session across page reloads', async ({ page }) => {
     // Login
-    await page.goto("/sign-in");
+    await page.goto('/sign-in');
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
-    await page.waitForURL("/dashboard");
+    await page.waitForURL('/dashboard');
 
     // Reload page
     await page.reload();
 
     // Should still be on dashboard
-    expect(page.url()).toContain("/dashboard");
+    expect(page.url()).toContain('/dashboard');
   });
 
-  test("should clear session on logout", async ({ page, context }) => {
+  test('should clear session on logout', async ({ page, context }) => {
     // Login
-    await page.goto("/sign-in");
+    await page.goto('/sign-in');
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
-    await page.waitForURL("/dashboard");
+    await page.waitForURL('/dashboard');
 
     // Logout
     await page.click('button:has-text("Sign Out")');
-    await page.waitForURL("/");
+    await page.waitForURL('/');
 
     // Check cookies cleared
     const cookies = await context.cookies();
-    const sessionCookie = cookies.find((c) => c.name.includes("clerk"));
+    const sessionCookie = cookies.find((c) => c.name.includes('clerk'));
     expect(sessionCookie).toBeUndefined();
   });
 
-  test("should handle concurrent sessions", async ({ browser }) => {
+  test('should handle concurrent sessions', async ({ browser }) => {
     const context1 = await browser.newContext();
     const context2 = await browser.newContext();
 
@@ -340,27 +336,24 @@ test.describe("Session Management", () => {
 
     // Login on both contexts
     for (const page of [page1, page2]) {
-      await page.goto("/sign-in");
+      await page.goto('/sign-in');
       await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
-      await page.fill(
-        'input[name="password"]',
-        process.env.TEST_USER_PASSWORD!,
-      );
+      await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
       await page.click('button[type="submit"]');
-      await page.waitForURL("/dashboard");
+      await page.waitForURL('/dashboard');
     }
 
     // Both should be logged in
-    expect(page1.url()).toContain("/dashboard");
-    expect(page2.url()).toContain("/dashboard");
+    expect(page1.url()).toContain('/dashboard');
+    expect(page2.url()).toContain('/dashboard');
 
     // Logout on page1
     await page1.click('button:has-text("Sign Out")');
-    await page1.waitForURL("/");
+    await page1.waitForURL('/');
 
     // Page2 should still be logged in
     await page2.reload();
-    expect(page2.url()).toContain("/dashboard");
+    expect(page2.url()).toContain('/dashboard');
 
     await context1.close();
     await context2.close();
@@ -391,33 +384,33 @@ TEST_WORKSPACE_B_ID=workspace-b-uuid
 
 ```typescript
 // scripts/setup-test-data.ts
-import { db } from "@galaxyco/database";
-import { users, workspaces, workspaceMembers } from "@galaxyco/database/schema";
-import { hash } from "bcrypt";
+import { db } from '@galaxyco/database';
+import { users, workspaces, workspaceMembers } from '@galaxyco/database/schema';
+import { hash } from 'bcrypt';
 
 async function setupTestData() {
   // Create Test User A (Workspace A)
   const userA = await db
     .insert(users)
     .values({
-      clerkUserId: "test_user_a",
-      email: "usera@galaxyco.ai",
-      name: "Test User A",
+      clerkUserId: 'test_user_a',
+      email: 'usera@galaxyco.ai',
+      name: 'Test User A',
     })
     .returning();
 
   const workspaceA = await db
     .insert(workspaces)
     .values({
-      name: "Workspace A",
-      slug: "workspace-a",
+      name: 'Workspace A',
+      slug: 'workspace-a',
     })
     .returning();
 
   await db.insert(workspaceMembers).values({
     userId: userA[0].id,
     workspaceId: workspaceA[0].id,
-    role: "owner",
+    role: 'owner',
     isActive: true,
   });
 
@@ -425,28 +418,28 @@ async function setupTestData() {
   const userB = await db
     .insert(users)
     .values({
-      clerkUserId: "test_user_b",
-      email: "userb@galaxyco.ai",
-      name: "Test User B",
+      clerkUserId: 'test_user_b',
+      email: 'userb@galaxyco.ai',
+      name: 'Test User B',
     })
     .returning();
 
   const workspaceB = await db
     .insert(workspaces)
     .values({
-      name: "Workspace B",
-      slug: "workspace-b",
+      name: 'Workspace B',
+      slug: 'workspace-b',
     })
     .returning();
 
   await db.insert(workspaceMembers).values({
     userId: userB[0].id,
     workspaceId: workspaceB[0].id,
-    role: "owner",
+    role: 'owner',
     isActive: true,
   });
 
-  console.log("Test data created successfully!");
+  console.log('Test data created successfully!');
   console.log(`Workspace A ID: ${workspaceA[0].id}`);
   console.log(`Workspace B ID: ${workspaceB[0].id}`);
 }
@@ -472,45 +465,45 @@ pnpm exec playwright install
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests",
+  testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: 'html',
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
-    trace: "on-first-retry",
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    trace: 'on-first-retry',
   },
 
   projects: [
     {
-      name: "setup",
+      name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-      dependencies: ["setup"],
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
     },
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-      dependencies: ["setup"],
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      dependencies: ['setup'],
     },
     {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-      dependencies: ["setup"],
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      dependencies: ['setup'],
     },
   ],
 
   webServer: {
-    command: "pnpm dev",
-    url: "http://localhost:3000",
+    command: 'pnpm dev',
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },
 });

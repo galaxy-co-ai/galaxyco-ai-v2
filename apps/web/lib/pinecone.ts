@@ -1,4 +1,4 @@
-import { Pinecone } from "@pinecone-database/pinecone";
+import { Pinecone } from '@pinecone-database/pinecone';
 
 /**
  * Pinecone client singleton
@@ -12,7 +12,7 @@ export function getPineconeClient(): Pinecone {
 
     if (!apiKey) {
       throw new Error(
-        "Pinecone API key missing. Please set PINECONE_API_KEY environment variable.",
+        'Pinecone API key missing. Please set PINECONE_API_KEY environment variable.',
       );
     }
 
@@ -33,9 +33,7 @@ export function getPineconeIndex() {
   const indexName = process.env.PINECONE_INDEX;
 
   if (!indexName) {
-    throw new Error(
-      "Pinecone index name missing. Please set PINECONE_INDEX environment variable.",
-    );
+    throw new Error('Pinecone index name missing. Please set PINECONE_INDEX environment variable.');
   }
 
   return client.index(indexName);

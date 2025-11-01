@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Validation Utilities
@@ -6,29 +6,24 @@ import { z } from "zod";
  */
 
 // Common validation patterns
-export const idSchema = z.string().uuid("Invalid ID format");
-export const emailSchema = z.string().email("Invalid email address");
-export const urlSchema = z.string().url("Invalid URL format");
-export const dateSchema = z.string().datetime("Invalid date format");
+export const idSchema = z.string().uuid('Invalid ID format');
+export const emailSchema = z.string().email('Invalid email address');
+export const urlSchema = z.string().url('Invalid URL format');
+export const dateSchema = z.string().datetime('Invalid date format');
 
 // Agent validation schemas
 export const agentNameSchema = z
   .string()
-  .min(3, "Agent name must be at least 3 characters")
-  .max(100, "Agent name cannot exceed 100 characters")
-  .regex(/^[a-zA-Z0-9\s\-_]+$/, "Agent name contains invalid characters");
+  .min(3, 'Agent name must be at least 3 characters')
+  .max(100, 'Agent name cannot exceed 100 characters')
+  .regex(/^[a-zA-Z0-9\s\-_]+$/, 'Agent name contains invalid characters');
 
 export const agentDescriptionSchema = z
   .string()
-  .max(500, "Description cannot exceed 500 characters")
+  .max(500, 'Description cannot exceed 500 characters')
   .optional();
 
-export const agentStatusSchema = z.enum([
-  "draft",
-  "active",
-  "paused",
-  "archived",
-]);
+export const agentStatusSchema = z.enum(['draft', 'active', 'paused', 'archived']);
 
 export const createAgentSchema = z.object({
   workspaceId: idSchema,
@@ -51,18 +46,15 @@ export const updateAgentSchema = z.object({
 
 // Chat validation schemas
 export const chatMessageSchema = z.object({
-  role: z.enum(["user", "assistant", "system"]),
-  content: z
-    .string()
-    .min(1, "Message content is required")
-    .max(10000, "Message too long"),
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string().min(1, 'Message content is required').max(10000, 'Message too long'),
 });
 
 export const chatRequestSchema = z.object({
   messages: z
     .array(chatMessageSchema)
-    .min(1, "At least one message is required")
-    .max(100, "Too many messages in conversation"),
+    .min(1, 'At least one message is required')
+    .max(100, 'Too many messages in conversation'),
   conversationId: idSchema.optional(),
   model: z.string().optional(),
   temperature: z.number().min(0).max(2).optional(),
@@ -71,22 +63,22 @@ export const chatRequestSchema = z.object({
 // Document validation schemas
 export const documentTitleSchema = z
   .string()
-  .min(1, "Title is required")
-  .max(255, "Title cannot exceed 255 characters");
+  .min(1, 'Title is required')
+  .max(255, 'Title cannot exceed 255 characters');
 
 export const documentCategorySchema = z.enum([
-  "company_info",
-  "case_studies",
-  "service_offerings",
-  "team_bios",
-  "brand_assets",
-  "other",
+  'company_info',
+  'case_studies',
+  'service_offerings',
+  'team_bios',
+  'brand_assets',
+  'other',
 ]);
 
 export const uploadDocumentSchema = z.object({
   title: documentTitleSchema,
   category: documentCategorySchema.optional(),
-  source: z.enum(["file", "url", "text"]),
+  source: z.enum(['file', 'url', 'text']),
   content: z.string().optional(),
   url: urlSchema.optional(),
 });
@@ -94,41 +86,41 @@ export const uploadDocumentSchema = z.object({
 // File upload validation constants
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 export const ALLOWED_MIME_TYPES = [
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
-  "application/vnd.ms-excel", // XLS
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // XLSX
-  "text/plain",
-  "text/csv",
-  "text/markdown",
-  "text/x-markdown",
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/webp",
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+  'application/vnd.ms-excel', // XLS
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+  'text/plain',
+  'text/csv',
+  'text/markdown',
+  'text/x-markdown',
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/webp',
 ] as const;
 
 export const ALLOWED_FILE_EXTENSIONS = [
-  ".md",
-  ".txt",
-  ".csv",
-  ".json",
-  ".pdf",
-  ".docx",
-  ".doc",
-  ".xls",
-  ".xlsx",
-  ".png",
-  ".jpg",
-  ".jpeg",
-  ".webp",
+  '.md',
+  '.txt',
+  '.csv',
+  '.json',
+  '.pdf',
+  '.docx',
+  '.doc',
+  '.xls',
+  '.xlsx',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.webp',
 ] as const;
 
 // File upload FormData validation schema
 export const fileUploadSchema = z.object({
   file: z
     .instanceof(File)
-    .refine((file) => file.size > 0, "File cannot be empty")
+    .refine((file) => file.size > 0, 'File cannot be empty')
     .refine(
       (file) => file.size <= MAX_FILE_SIZE,
       `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`,
@@ -139,7 +131,7 @@ export const fileUploadSchema = z.object({
       // Check file extension as fallback
       const fileName = file.name.toLowerCase();
       return ALLOWED_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
-    }, "File type not supported. Supported: PDF, Word, Excel, Text, Markdown, Images"),
+    }, 'File type not supported. Supported: PDF, Word, Excel, Text, Markdown, Images'),
   collectionId: idSchema.optional(),
 });
 
@@ -148,9 +140,7 @@ export type FileUploadInput = z.infer<typeof fileUploadSchema>;
 // Test run validation schemas
 export const testRunSchema = z.object({
   agentName: agentNameSchema,
-  workflowSteps: z
-    .array(z.any())
-    .min(1, "At least one workflow step is required"),
+  workflowSteps: z.array(z.any()).min(1, 'At least one workflow step is required'),
   companyName: z.string().optional(),
   targetRole: z.string().optional(),
   targetIndustry: z.string().optional(),
@@ -159,9 +149,9 @@ export const testRunSchema = z.object({
 // Workspace validation schemas
 export const workspaceNameSchema = z
   .string()
-  .min(2, "Workspace name must be at least 2 characters")
-  .max(50, "Workspace name cannot exceed 50 characters")
-  .regex(/^[a-zA-Z0-9\s\-_&.]+$/, "Workspace name contains invalid characters");
+  .min(2, 'Workspace name must be at least 2 characters')
+  .max(50, 'Workspace name cannot exceed 50 characters')
+  .regex(/^[a-zA-Z0-9\s\-_&.]+$/, 'Workspace name contains invalid characters');
 
 export const createWorkspaceSchema = z.object({
   name: workspaceNameSchema,
@@ -170,9 +160,9 @@ export const createWorkspaceSchema = z.object({
 // User profile validation schemas
 export const userNameSchema = z
   .string()
-  .min(2, "Name must be at least 2 characters")
-  .max(50, "Name cannot exceed 50 characters")
-  .regex(/^[a-zA-Z\s\-']+$/, "Name contains invalid characters");
+  .min(2, 'Name must be at least 2 characters')
+  .max(50, 'Name cannot exceed 50 characters')
+  .regex(/^[a-zA-Z\s\-']+$/, 'Name contains invalid characters');
 
 export const updateProfileSchema = z.object({
   firstName: userNameSchema.optional(),
@@ -212,9 +202,9 @@ export function formatValidationError(error: z.ZodError): {
   errors: Array<{ field: string; message: string }>;
 } {
   return {
-    message: "Validation failed",
+    message: 'Validation failed',
     errors: error.errors.map((err) => ({
-      field: err.path.join("."),
+      field: err.path.join('.'),
       message: err.message,
     })),
   };

@@ -1,21 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import {
-  Calendar,
-  CheckCircle2,
-  Clock,
-  MoreVertical,
-  Plus,
-  AlertCircle,
-} from "lucide-react";
+import { useState, useEffect } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { Calendar, CheckCircle2, Clock, MoreVertical, Plus, AlertCircle } from 'lucide-react';
 
 interface Task {
   id: string;
@@ -40,10 +33,10 @@ export default function TasksPage() {
   const { currentWorkspace } = useWorkspace();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [priorityFilter, setPriorityFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
     async function fetchTasks() {
@@ -51,15 +44,13 @@ export default function TasksPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/tasks?workspaceId=${currentWorkspace.id}&limit=100`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch tasks");
+        const res = await fetch(`/api/tasks?workspaceId=${currentWorkspace.id}&limit=100`);
+        if (!res.ok) throw new Error('Failed to fetch tasks');
         const data = await res.json();
         setTasks(data.tasks || []);
       } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-        toast.error("Failed to load tasks");
+        console.error('Failed to fetch tasks:', error);
+        toast.error('Failed to load tasks');
       } finally {
         setIsLoading(false);
       }
@@ -70,39 +61,29 @@ export default function TasksPage() {
 
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (task.description?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase(),
-      );
+      (task.description?.toLowerCase() || '').includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "all" || task.status === statusFilter;
-    const matchesPriority =
-      priorityFilter === "all" || task.priority === priorityFilter;
+    const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
+    const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter;
 
     return matchesSearch && matchesStatus && matchesPriority;
   });
 
   const renderTaskCard = (task: Task) => {
-    const priorityColors: Record<
-      string,
-      "destructive" | "default" | "secondary" | "outline"
-    > = {
-      urgent: "destructive",
-      high: "default",
-      medium: "secondary",
-      low: "outline",
+    const priorityColors: Record<string, 'destructive' | 'default' | 'secondary' | 'outline'> = {
+      urgent: 'destructive',
+      high: 'default',
+      medium: 'secondary',
+      low: 'outline',
     };
 
-    const statusColors: Record<
-      string,
-      "default" | "secondary" | "outline" | "destructive"
-    > = {
-      todo: "secondary",
-      in_progress: "default",
-      done: "outline",
-      blocked: "destructive",
+    const statusColors: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
+      todo: 'secondary',
+      in_progress: 'default',
+      done: 'outline',
+      blocked: 'destructive',
     };
 
     const statusIcons: Record<string, React.ReactElement> = {
@@ -112,18 +93,15 @@ export default function TasksPage() {
       blocked: <AlertCircle className="h-4 w-4" />,
     };
 
-    const isOverdue =
-      task.dueDate &&
-      new Date(task.dueDate) < new Date() &&
-      task.status !== "done";
+    const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'done';
 
     return (
       <div
         key={task.id}
         className={`group relative rounded-lg border bg-card p-6 hover:shadow-md transition-all ${
           isOverdue
-            ? "border-destructive/50 bg-destructive/5"
-            : "border-border hover:border-primary/50"
+            ? 'border-destructive/50 bg-destructive/5'
+            : 'border-border hover:border-primary/50'
         }`}
       >
         {/* Header */}
@@ -131,7 +109,7 @@ export default function TasksPage() {
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-1">{task.title}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {task.description || "No description"}
+              {task.description || 'No description'}
             </p>
           </div>
           <Button variant="ghost" size="sm">
@@ -146,8 +124,8 @@ export default function TasksPage() {
           </Badge>
           <Badge variant={statusColors[task.status]} className="gap-1">
             {statusIcons[task.status]}
-            {task.status === "in_progress"
-              ? "In Progress"
+            {task.status === 'in_progress'
+              ? 'In Progress'
               : task.status.charAt(0).toUpperCase() + task.status.slice(1)}
           </Badge>
           {isOverdue && <Badge variant="destructive">Overdue</Badge>}
@@ -200,7 +178,7 @@ export default function TasksPage() {
     <ListPage
       title="Tasks"
       subtitle="Manage your tasks and track progress"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Tasks" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Tasks' }]}
       searchPlaceholder="Search tasks..."
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
@@ -224,9 +202,9 @@ export default function TasksPage() {
           <Button
             variant="outline"
             onClick={() => {
-              setSearchQuery("");
-              setStatusFilter("all");
-              setPriorityFilter("all");
+              setSearchQuery('');
+              setStatusFilter('all');
+              setPriorityFilter('all');
             }}
           >
             Clear Filters

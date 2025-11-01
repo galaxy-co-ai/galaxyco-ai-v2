@@ -179,13 +179,8 @@ Atoms (Basic building blocks)
 **Variants:**
 
 ```tsx
-type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "destructive"
-  | "ghost"
-  | "outline";
-type ButtonSize = "sm" | "md" | "lg";
+type ButtonVariant = 'primary' | 'secondary' | 'destructive' | 'ghost' | 'outline';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
   variant?: ButtonVariant;
@@ -193,7 +188,7 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   icon?: React.ReactNode;
-  iconPosition?: "left" | "right";
+  iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
@@ -219,19 +214,19 @@ interface ButtonProps {
 
 ```tsx
 // Primary
-"bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active";
+'bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active';
 
 // Secondary
-"bg-secondary text-secondary-foreground hover:bg-secondary-hover";
+'bg-secondary text-secondary-foreground hover:bg-secondary-hover';
 
 // Destructive
-"bg-destructive text-destructive-foreground hover:bg-destructive/90";
+'bg-destructive text-destructive-foreground hover:bg-destructive/90';
 
 // Ghost
-"text-foreground hover:bg-hover active:bg-active";
+'text-foreground hover:bg-hover active:bg-active';
 
 // Outline
-"border border-border bg-background hover:bg-hover";
+'border border-border bg-background hover:bg-hover';
 ```
 
 **Accessibility:**
@@ -250,14 +245,7 @@ interface ButtonProps {
 **Types:**
 
 ```tsx
-type InputType =
-  | "text"
-  | "email"
-  | "password"
-  | "number"
-  | "search"
-  | "tel"
-  | "url";
+type InputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
 
 interface InputProps {
   type?: InputType;
@@ -267,7 +255,7 @@ interface InputProps {
   disabled?: boolean;
   error?: string;
   icon?: React.ReactNode;
-  iconPosition?: "left" | "right";
+  iconPosition?: 'left' | 'right';
   required?: boolean;
 }
 ```
@@ -318,12 +306,12 @@ interface InputProps {
 **Variants:**
 
 ```tsx
-type CardVariant = "default" | "elevated" | "outline";
+type CardVariant = 'default' | 'elevated' | 'outline';
 
 interface CardProps {
   variant?: CardVariant;
   interactive?: boolean; // Adds hover state
-  padding?: "none" | "sm" | "md" | "lg";
+  padding?: 'none' | 'sm' | 'md' | 'lg';
   children: React.ReactNode;
 }
 ```
@@ -339,16 +327,16 @@ interface CardProps {
 
 ```tsx
 // Default
-"bg-background-elevated border border-border rounded-lg";
+'bg-background-elevated border border-border rounded-lg';
 
 // Elevated (with shadow)
-"bg-background-elevated border border-border rounded-lg shadow-md";
+'bg-background-elevated border border-border rounded-lg shadow-md';
 
 // Outline
-"bg-background border-2 border-border rounded-lg";
+'bg-background border-2 border-border rounded-lg';
 
 // Interactive
-"hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer";
+'hover:border-border-hover hover:shadow-md transition-all duration-fast cursor-pointer';
 ```
 
 ---
@@ -360,16 +348,11 @@ interface CardProps {
 **Variants:**
 
 ```tsx
-type BadgeVariant =
-  | "default"
-  | "success"
-  | "warning"
-  | "destructive"
-  | "outline";
+type BadgeVariant = 'default' | 'success' | 'warning' | 'destructive' | 'outline';
 
 interface BadgeProps {
   variant?: BadgeVariant;
-  size?: "sm" | "md";
+  size?: 'sm' | 'md';
   children: React.ReactNode;
 }
 ```
@@ -428,8 +411,8 @@ interface DataTableProps<T> {
   };
   sorting?: {
     sortBy: string;
-    sortOrder: "asc" | "desc";
-    onSortChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
+    sortOrder: 'asc' | 'desc';
+    onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   };
   selection?: {
     selectedRows: string[];
@@ -450,7 +433,7 @@ interface ColumnDef<T> {
   cell?: (value: any, row: T) => React.ReactNode;
   sortable?: boolean;
   width?: string;
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
 }
 ```
 
@@ -481,7 +464,7 @@ interface ModalProps {
   onOpenChange: (open: boolean) => void;
   title?: string;
   description?: string;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   children: React.ReactNode;
   footer?: React.ReactNode;
   closeButton?: boolean;
@@ -552,7 +535,7 @@ const overlayVariants = {
 interface ToastProps {
   title: string;
   description?: string;
-  variant?: "default" | "success" | "warning" | "destructive";
+  variant?: 'default' | 'success' | 'warning' | 'destructive';
   duration?: number; // ms (default 5000)
   action?: {
     label: string;
@@ -583,9 +566,9 @@ const toastVariants = {
 const { toast } = useToast();
 
 toast({
-  title: "Agent deployed",
-  description: "Your sales agent is now live",
-  variant: "success",
+  title: 'Agent deployed',
+  description: 'Your sales agent is now live',
+  variant: 'success',
 });
 ```
 

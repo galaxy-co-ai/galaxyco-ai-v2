@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 import {
   User,
   Bell,
@@ -10,21 +10,21 @@ import {
   ChevronRight,
   Moon,
   Sun,
-} from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
-import { Switch } from "@/components/ui/switch";
+} from 'lucide-react';
+import { Avatar } from '@/components/ui/avatar';
+import { Switch } from '@/components/ui/switch';
 
 export const metadata: Metadata = {
-  title: "Settings | GalaxyCo.ai",
-  description: "Mobile settings",
+  title: 'Settings | GalaxyCo.ai',
+  description: 'Mobile settings',
 };
 
 // Mock user data
 const user = {
-  name: "Alex Chen",
-  email: "alex.chen@company.com",
-  avatar: "AC",
-  workspace: "Acme Corporation",
+  name: 'Alex Chen',
+  email: 'alex.chen@company.com',
+  avatar: 'AC',
+  workspace: 'Acme Corporation',
 };
 
 export default function MobileSettingsPage() {
@@ -43,12 +43,8 @@ export default function MobileSettingsPage() {
             <Avatar fallback={user.avatar} size="xl" />
             <div className="flex-1 min-w-0">
               <h2 className="font-semibold text-lg truncate">{user.name}</h2>
-              <p className="text-sm text-foreground-muted truncate">
-                {user.email}
-              </p>
-              <p className="text-xs text-foreground-muted mt-1">
-                {user.workspace}
-              </p>
+              <p className="text-sm text-foreground-muted truncate">{user.email}</p>
+              <p className="text-xs text-foreground-muted mt-1">{user.workspace}</p>
             </div>
             <button
               className="text-sm text-primary font-medium touch-manipulation"

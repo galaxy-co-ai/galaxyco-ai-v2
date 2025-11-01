@@ -1,19 +1,9 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import {
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Clock,
-  Zap,
-  Play,
-} from "lucide-react";
-import { Card } from "@/components/ui/card";
-import {
-  mockRecentActivity,
-  ActivityItem,
-} from "@/lib/mock-data/dashboard-agents";
+import Link from 'next/link';
+import { CheckCircle, AlertTriangle, XCircle, Clock, Zap, Play } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { mockRecentActivity, ActivityItem } from '@/lib/mock-data/dashboard-agents';
 
 export default function RecentActivity() {
   const formatTimestamp = (date: Date) => {
@@ -22,37 +12,37 @@ export default function RecentActivity() {
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
 
-    if (minutes < 1) return "Just now";
+    if (minutes < 1) return 'Just now';
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return `${Math.floor(hours / 24)}d ago`;
   };
 
-  const getStatusConfig = (status: ActivityItem["status"]) => {
+  const getStatusConfig = (status: ActivityItem['status']) => {
     switch (status) {
-      case "success":
+      case 'success':
         return {
           icon: CheckCircle,
-          color: "var(--success)",
-          bg: "var(--success-light)",
+          color: 'var(--success)',
+          bg: 'var(--success-light)',
         };
-      case "warning":
+      case 'warning':
         return {
           icon: AlertTriangle,
-          color: "var(--warning)",
-          bg: "var(--warning-light)",
+          color: 'var(--warning)',
+          bg: 'var(--warning-light)',
         };
-      case "error":
+      case 'error':
         return {
           icon: XCircle,
-          color: "var(--error)",
-          bg: "var(--error-light)",
+          color: 'var(--error)',
+          bg: 'var(--error-light)',
         };
       default:
         return {
           icon: Clock,
-          color: "var(--text-tertiary)",
-          bg: "var(--bg-secondary)",
+          color: 'var(--text-tertiary)',
+          bg: 'var(--bg-secondary)',
         };
     }
   };
@@ -64,21 +54,18 @@ export default function RecentActivity() {
         <div className="flex items-center gap-2">
           <div
             style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "var(--radius-lg)",
-              background: "var(--primary-50)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--primary-50)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Zap size={18} strokeWidth={2} color="var(--primary-500)" />
           </div>
-          <h2
-            className="text-lg font-semibold"
-            style={{ color: "var(--text-primary)" }}
-          >
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
             Recent Activity
           </h2>
         </div>
@@ -86,8 +73,8 @@ export default function RecentActivity() {
           href="/dashboard?tab=activity"
           className="text-sm font-medium"
           style={{
-            color: "var(--primary-500)",
-            textDecoration: "none",
+            color: 'var(--primary-500)',
+            textDecoration: 'none',
           }}
         >
           View All →
@@ -101,12 +88,12 @@ export default function RecentActivity() {
             {/* Timeline line */}
             <div
               style={{
-                position: "absolute",
-                left: "16px",
-                top: "8px",
-                bottom: "8px",
-                width: "2px",
-                background: "var(--border-default)",
+                position: 'absolute',
+                left: '16px',
+                top: '8px',
+                bottom: '8px',
+                width: '2px',
+                background: 'var(--border-default)',
               }}
             />
 
@@ -116,30 +103,23 @@ export default function RecentActivity() {
                 const StatusIcon = statusConfig.icon;
 
                 return (
-                  <div
-                    key={item.id}
-                    className="relative flex items-start gap-4 pb-4 last:pb-0"
-                  >
+                  <div key={item.id} className="relative flex items-start gap-4 pb-4 last:pb-0">
                     {/* Timeline dot */}
                     <div
                       style={{
-                        width: "32px",
-                        height: "32px",
-                        borderRadius: "50%",
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
                         background: statusConfig.bg,
                         border: `2px solid var(--bg-primary)`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "relative",
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
                         zIndex: 1,
                       }}
                     >
-                      <StatusIcon
-                        size={16}
-                        strokeWidth={2}
-                        color={statusConfig.color}
-                      />
+                      <StatusIcon size={16} strokeWidth={2} color={statusConfig.color} />
                     </div>
 
                     {/* Content */}
@@ -148,32 +128,26 @@ export default function RecentActivity() {
                         <div className="flex items-center gap-2">
                           <span
                             className="text-sm font-semibold"
-                            style={{ color: "var(--text-primary)" }}
+                            style={{ color: 'var(--text-primary)' }}
                           >
                             {item.agentName}
                           </span>
                           <span
                             className="badge badge-primary"
                             style={{
-                              fontSize: "0.75rem",
-                              padding: "0.125rem 0.5rem",
+                              fontSize: '0.75rem',
+                              padding: '0.125rem 0.5rem',
                             }}
                           >
                             {item.status}
                           </span>
                         </div>
-                        <span
-                          className="text-xs"
-                          style={{ color: "var(--text-tertiary)" }}
-                        >
+                        <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
                           {formatTimestamp(item.timestamp)}
                         </span>
                       </div>
 
-                      <p
-                        className="text-sm mt-1"
-                        style={{ color: "var(--text-secondary)" }}
-                      >
+                      <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
                         {item.action}
                       </p>
                     </div>
@@ -187,25 +161,22 @@ export default function RecentActivity() {
           <div className="text-center py-8">
             <div
               style={{
-                width: "48px",
-                height: "48px",
-                borderRadius: "50%",
-                background: "var(--bg-secondary)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "0 auto var(--space-4)",
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: 'var(--bg-secondary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto var(--space-4)',
               }}
             >
               <Clock size={24} strokeWidth={2} color="var(--text-tertiary)" />
             </div>
-            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
               No recent activity
             </p>
-            <p
-              className="text-xs mt-1"
-              style={{ color: "var(--text-tertiary)" }}
-            >
+            <p className="text-xs mt-1" style={{ color: 'var(--text-tertiary)' }}>
               Agent executions will appear here
             </p>
           </div>

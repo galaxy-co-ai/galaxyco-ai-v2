@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Search, Bell, HelpCircle, Settings, Zap } from "lucide-react";
-import { UserButton, useUser } from "@clerk/nextjs";
-import Image from "next/image";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useState, useEffect } from 'react';
+import { Search, Bell, HelpCircle, Settings, Zap } from 'lucide-react';
+import { UserButton, useUser } from '@clerk/nextjs';
+import Image from 'next/image';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { useSidebar } from '../../contexts/SidebarContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +15,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { AISetupWizard } from "@/components/onboarding/AISetupWizard";
+} from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { AISetupWizard } from '@/components/onboarding/AISetupWizard';
 
 interface TopBarProps {
   className?: string;
@@ -35,7 +35,7 @@ export function TopBar({ className }: TopBarProps) {
   const { user } = useUser();
   const [isMobile, setIsMobile] = useState(false);
   const [showSetupWizard, setShowSetupWizard] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const checkMobile = () => {
@@ -43,22 +43,21 @@ export function TopBar({ className }: TopBarProps) {
     };
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Get user display info
-  const userDisplayName = user?.fullName || user?.firstName || "User";
-  const userEmail =
-    user?.primaryEmailAddress?.emailAddress || "user@example.com";
+  const userDisplayName = user?.fullName || user?.firstName || 'User';
+  const userEmail = user?.primaryEmailAddress?.emailAddress || 'user@example.com';
   const userInitial = userDisplayName.charAt(0).toUpperCase();
 
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 h-16 w-full",
-        "bg-card border-b border-border",
-        "transition-all duration-200 ease-in-out",
+        'fixed top-0 left-0 right-0 z-50 h-16 w-full',
+        'bg-card border-b border-border',
+        'transition-all duration-200 ease-in-out',
         className,
       )}
     >
@@ -113,9 +112,9 @@ export function TopBar({ className }: TopBarProps) {
             size="icon"
             onClick={() => setShowSetupWizard(true)}
             className={cn(
-              "h-9 w-9 hover:bg-hover relative",
-              "bg-gradient-to-r from-primary/10 to-purple-500/10",
-              "border border-primary/20",
+              'h-9 w-9 hover:bg-hover relative',
+              'bg-gradient-to-r from-primary/10 to-purple-500/10',
+              'border border-primary/20',
             )}
           >
             <Zap className="w-5 h-5 text-primary" />
@@ -159,9 +158,7 @@ export function TopBar({ className }: TopBarProps) {
                   <div className="text-sm text-muted-foreground mt-1">
                     Lisa replied to your outreach email about AI solutions
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    15 min ago
-                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">15 min ago</div>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
@@ -171,9 +168,7 @@ export function TopBar({ className }: TopBarProps) {
                   <div className="text-sm text-muted-foreground mt-1">
                     Successfully enriched 5 new prospects
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    45 min ago
-                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">45 min ago</div>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
@@ -183,9 +178,7 @@ export function TopBar({ className }: TopBarProps) {
                   <div className="text-sm text-muted-foreground mt-1">
                     Lead Qualification Pipeline finished processing 12 prospects
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    2 hours ago
-                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">2 hours ago</div>
                 </DropdownMenuItem>
               </div>
 
@@ -199,16 +192,14 @@ export function TopBar({ className }: TopBarProps) {
           {/* User Profile with Clerk */}
           <div className="flex items-center gap-2 pl-2 border-l border-border">
             <div className="flex flex-col items-end mr-2">
-              <span className="text-sm font-medium text-foreground">
-                {userDisplayName}
-              </span>
+              <span className="text-sm font-medium text-foreground">{userDisplayName}</span>
               <span className="text-xs text-muted-foreground">{userEmail}</span>
             </div>
             <UserButton
               afterSignOutUrl="/"
               appearance={{
                 elements: {
-                  avatarBox: "w-9 h-9",
+                  avatarBox: 'w-9 h-9',
                 },
               }}
             />
@@ -217,10 +208,7 @@ export function TopBar({ className }: TopBarProps) {
       </div>
 
       {/* AI Setup Wizard Dialog */}
-      <AISetupWizard
-        open={showSetupWizard}
-        onClose={() => setShowSetupWizard(false)}
-      />
+      <AISetupWizard open={showSetupWizard} onClose={() => setShowSetupWizard(false)} />
     </header>
   );
 }

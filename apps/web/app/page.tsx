@@ -3,19 +3,19 @@
  * October 15, 2025
  */
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ArrowRight, Bot, Workflow, BarChart3 } from "lucide-react";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { ArrowRight, Bot, Workflow, BarChart3 } from 'lucide-react';
+import { currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 export default async function HomePage() {
   const user = await currentUser();
 
   // If user is authenticated, redirect to dashboard
   if (user) {
-    redirect("/dashboard");
+    redirect('/dashboard');
   }
 
   return (
@@ -62,9 +62,8 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
-            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that
-            deliver measurable outcomes from Day 1. No setup. No waiting. Just
-            results.
+            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that deliver measurable
+            outcomes from Day 1. No setup. No waiting. Just results.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -91,8 +90,7 @@ export default async function HomePage() {
                 AI Agents
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                Research, email, and CRM agents working 24/7 to grow your
-                business
+                Research, email, and CRM agents working 24/7 to grow your business
               </p>
             </div>
 
@@ -104,8 +102,7 @@ export default async function HomePage() {
                 Smart Workflows
               </h3>
               <p className="text-neutral-600 dark:text-neutral-400">
-                End-to-end automation pipelines that adapt to your business
-                needs
+                End-to-end automation pipelines that adapt to your business needs
               </p>
             </div>
 

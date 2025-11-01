@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Plus,
   Search,
@@ -20,11 +20,11 @@ import {
   Clock,
   AlertCircle,
   MoreHorizontal,
-} from "lucide-react";
-import { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 
 interface Project {
   id: string;
@@ -45,42 +45,36 @@ interface Project {
   updatedAt: string;
 }
 
-const statusConfig: Record<
-  string,
-  { label: string; icon: any; className: string }
-> = {
+const statusConfig: Record<string, { label: string; icon: any; className: string }> = {
   planning: {
-    label: "Planning",
+    label: 'Planning',
     icon: Clock,
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
   },
   in_progress: {
-    label: "In Progress",
+    label: 'In Progress',
     icon: AlertCircle,
-    className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
   },
   review: {
-    label: "Review",
+    label: 'Review',
     icon: FolderKanban,
-    className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
   },
   completed: {
-    label: "Completed",
+    label: 'Completed',
     icon: CheckCircle2,
-    className:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
   },
   on_hold: {
-    label: "On Hold",
+    label: 'On Hold',
     icon: Clock,
-    className:
-      "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
+    className: 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
   },
   cancelled: {
-    label: "Cancelled",
+    label: 'Cancelled',
     icon: AlertCircle,
-    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   },
 };
 
@@ -88,9 +82,9 @@ export default function ProjectsPage() {
   const { currentWorkspace } = useWorkspace();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "kanban">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'kanban'>('grid');
 
   useEffect(() => {
     async function fetchProjects() {
@@ -98,15 +92,13 @@ export default function ProjectsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/projects?workspaceId=${currentWorkspace.id}&limit=100`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch projects");
+        const res = await fetch(`/api/projects?workspaceId=${currentWorkspace.id}&limit=100`);
+        if (!res.ok) throw new Error('Failed to fetch projects');
         const data = await res.json();
         setProjects(data.projects || []);
       } catch (error) {
-        console.error("Failed to fetch projects:", error);
-        toast.error("Failed to load projects");
+        console.error('Failed to fetch projects:', error);
+        toast.error('Failed to load projects');
       } finally {
         setIsLoading(false);
       }
@@ -118,29 +110,25 @@ export default function ProjectsPage() {
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (project.description?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase(),
-      );
-    const matchesStatus =
-      statusFilter === "all" || project.status === statusFilter;
+      (project.description?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const projectsByStatus = {
-    planning: filteredProjects.filter((p) => p.status === "planning"),
-    in_progress: filteredProjects.filter((p) => p.status === "in_progress"),
-    review: filteredProjects.filter((p) => p.status === "review"),
-    completed: filteredProjects.filter((p) => p.status === "completed"),
-    on_hold: filteredProjects.filter((p) => p.status === "on_hold"),
-    cancelled: filteredProjects.filter((p) => p.status === "cancelled"),
+    planning: filteredProjects.filter((p) => p.status === 'planning'),
+    in_progress: filteredProjects.filter((p) => p.status === 'in_progress'),
+    review: filteredProjects.filter((p) => p.status === 'review'),
+    completed: filteredProjects.filter((p) => p.status === 'completed'),
+    on_hold: filteredProjects.filter((p) => p.status === 'on_hold'),
+    cancelled: filteredProjects.filter((p) => p.status === 'cancelled'),
   };
 
   const ProjectCard = ({ project }: { project: Project }) => {
     const StatusIcon = statusConfig[project.status]?.icon || Clock;
     const daysUntilDue = project.endDate
       ? Math.ceil(
-          (new Date(project.endDate).getTime() - new Date().getTime()) /
-            (1000 * 60 * 60 * 24),
+          (new Date(project.endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
         )
       : null;
 
@@ -150,7 +138,7 @@ export default function ProjectsPage() {
           <div className="flex-1">
             <h3 className="font-semibold mb-1">{project.name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">
-              {project.description || "No description"}
+              {project.description || 'No description'}
             </p>
           </div>
           <Button variant="ghost" size="sm">
@@ -191,9 +179,7 @@ export default function ProjectsPage() {
             {daysUntilDue !== null && (
               <div
                 className={`flex items-center gap-1 ${
-                  daysUntilDue < 7
-                    ? "text-destructive"
-                    : "text-muted-foreground"
+                  daysUntilDue < 7 ? 'text-destructive' : 'text-muted-foreground'
                 }`}
               >
                 <Calendar className="h-4 w-4" />
@@ -224,7 +210,7 @@ export default function ProjectsPage() {
     <PageShell
       title="Projects"
       subtitle="Track and manage your team's projects"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Projects" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Projects' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -241,19 +227,19 @@ export default function ProjectsPage() {
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">In Progress</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "in_progress").length}
+            {projects.filter((p) => p.status === 'in_progress').length}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">In Review</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "review").length}
+            {projects.filter((p) => p.status === 'review').length}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Completed</p>
           <p className="text-2xl font-bold">
-            {projects.filter((p) => p.status === "completed").length}
+            {projects.filter((p) => p.status === 'completed').length}
           </p>
         </div>
       </div>
@@ -285,16 +271,16 @@ export default function ProjectsPage() {
         </Select>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("grid")}
+            onClick={() => setViewMode('grid')}
           >
             Grid
           </Button>
           <Button
-            variant={viewMode === "kanban" ? "default" : "outline"}
+            variant={viewMode === 'kanban' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("kanban")}
+            onClick={() => setViewMode('kanban')}
           >
             Kanban
           </Button>
@@ -302,7 +288,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Grid View */}
-      {viewMode === "grid" && (
+      {viewMode === 'grid' && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
@@ -311,7 +297,7 @@ export default function ProjectsPage() {
       )}
 
       {/* Kanban View */}
-      {viewMode === "kanban" && (
+      {viewMode === 'kanban' && (
         <div className="grid gap-4 lg:grid-cols-4">
           {Object.entries(projectsByStatus).map(([status, statusProjects]) => (
             <div key={status} className="space-y-3">
@@ -322,9 +308,7 @@ export default function ProjectsPage() {
                       <Badge className={statusConfig[status].className}>
                         {statusConfig[status].label}
                       </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        {statusProjects.length}
-                      </span>
+                      <span className="text-sm text-muted-foreground">{statusProjects.length}</span>
                     </>
                   )}
                 </div>
@@ -337,7 +321,7 @@ export default function ProjectsPage() {
                   >
                     <h4 className="font-semibold mb-2">{project.name}</h4>
                     <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {project.description || "No description"}
+                      {project.description || 'No description'}
                     </p>
                     <div className="mt-3 pt-3 border-t border-border">
                       <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
@@ -371,9 +355,7 @@ export default function ProjectsPage() {
         <div className="rounded-lg border border-border bg-card p-12 text-center">
           <FolderKanban className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No projects found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Create Your First Project

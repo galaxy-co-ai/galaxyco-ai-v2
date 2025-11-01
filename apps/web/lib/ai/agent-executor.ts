@@ -5,17 +5,14 @@
  * Supports the knowledge base search tool and other function tools.
  */
 
-import OpenAI from "openai";
-import { logger } from "@/lib/utils/logger";
+import OpenAI from 'openai';
+import { logger } from '@/lib/utils/logger';
 import type {
   ChatCompletionMessageParam,
   ChatCompletionTool,
-} from "openai/resources/chat/completions";
-import { createKnowledgeSearchTool } from "../../../../packages/agents-core/src/tools/knowledge-search";
-import type {
-  Tool,
-  ExecutionContext,
-} from "../../../../packages/agents-core/src/types";
+} from 'openai/resources/chat/completions';
+import { createKnowledgeSearchTool } from '../../../../packages/agents-core/src/tools/knowledge-search';
+import type { Tool, ExecutionContext } from '../../../../packages/agents-core/src/types';
 
 export interface AgentExecutionOptions {
   agentId: string;
@@ -91,7 +88,7 @@ export async function executeAgentWithTools(
 
   // Convert tools to OpenAI format
   const openAITools: ChatCompletionTool[] = availableTools.map((tool) => ({
-    type: "function" as const,
+    type: 'function' as const,
     function: {
       name: tool.definition.function.name,
       description: tool.definition.function.description,
@@ -105,7 +102,7 @@ export async function executeAgentWithTools(
   // Add system message if provided
   if (options.systemPrompt) {
     messages.push({
-      role: "system",
+      role: 'system',
       content: options.systemPrompt,
     });
   }
@@ -122,7 +119,7 @@ export async function executeAgentWithTools(
 
   // Execute with tool calling loop (max 5 iterations to prevent infinite loops)
   let currentMessages = [...messages];
-  let finalResponse: string = "";
+  let finalResponse: string = '';
   let totalUsage = {
     promptTokens: 0,
     completionTokens: 0,
@@ -136,7 +133,7 @@ export async function executeAgentWithTools(
         model: options.model,
         messages: currentMessages,
         tools: openAITools.length > 0 ? openAITools : undefined,
-        tool_choice: openAITools.length > 0 ? "auto" : undefined,
+        tool_choice: openAITools.length > 0 ? 'auto' : undefined,
         temperature: options.temperature ?? 0.7,
         max_tokens: options.maxTokens,
       });
@@ -155,25 +152,20 @@ export async function executeAgentWithTools(
       currentMessages.push(response.message);
 
       // Check if there are tool calls
-      if (
-        response.message.tool_calls &&
-        response.message.tool_calls.length > 0
-      ) {
+      if (response.message.tool_calls && response.message.tool_calls.length > 0) {
         // Execute each tool call
         for (const toolCall of response.message.tool_calls) {
-          if (toolCall.type !== "function" || !toolCall.function) continue;
+          if (toolCall.type !== 'function' || !toolCall.function) continue;
           const toolName = toolCall.function.name;
           const toolArgs = JSON.parse(toolCall.function.arguments);
 
           // Find the tool
-          const tool = availableTools.find(
-            (t) => t.definition.function.name === toolName,
-          );
+          const tool = availableTools.find((t) => t.definition.function.name === toolName);
 
           if (!tool) {
             logger.error(`Tool not found: ${toolName}`);
             currentMessages.push({
-              role: "tool",
+              role: 'tool',
               tool_call_id: toolCall.id,
               content: JSON.stringify({
                 error: `Tool '${toolName}' not found`,
@@ -198,14 +190,14 @@ export async function executeAgentWithTools(
 
             // Add tool result to messages
             currentMessages.push({
-              role: "tool",
+              role: 'tool',
               tool_call_id: toolCall.id,
               content: JSON.stringify(toolResult),
             });
           } catch (error: any) {
             logger.error(`[Agent Executor] Tool execution error`, error);
             currentMessages.push({
-              role: "tool",
+              role: 'tool',
               tool_call_id: toolCall.id,
               content: JSON.stringify({
                 error: error.message,
@@ -226,10 +218,10 @@ export async function executeAgentWithTools(
       }
 
       // No content and no tool calls - something went wrong
-      logger.warn("[Agent Executor] No content or tool calls in response");
+      logger.warn('[Agent Executor] No content or tool calls in response');
       break;
     } catch (error: any) {
-      logger.error("[Agent Executor] OpenAI API error", error);
+      logger.error('[Agent Executor] OpenAI API error', error);
       throw new Error(`Agent execution failed: ${error.message}`);
     }
   }
@@ -239,8 +231,7 @@ export async function executeAgentWithTools(
   // Calculate cost (approximate, based on gpt-4-turbo pricing)
   // $0.01 per 1K prompt tokens, $0.03 per 1K completion tokens
   const cost =
-    (totalUsage.promptTokens / 1000) * 0.01 +
-    (totalUsage.completionTokens / 1000) * 0.03;
+    (totalUsage.promptTokens / 1000) * 0.01 + (totalUsage.completionTokens / 1000) * 0.03;
 
   return {
     success: true,
@@ -264,12 +255,12 @@ export function formatToolCalls(
   }>,
 ): string {
   if (!toolCalls || toolCalls.length === 0) {
-    return "No tools were used in this execution.";
+    return 'No tools were used in this execution.';
   }
 
   return toolCalls
     .map((call, index) => {
       return `Tool ${index + 1}: ${call.toolName}\nArguments: ${JSON.stringify(call.arguments, null, 2)}\nResult: ${JSON.stringify(call.result, null, 2)}`;
     })
-    .join("\n\n---\n\n");
+    .join('\n\n---\n\n');
 }

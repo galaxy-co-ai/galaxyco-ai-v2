@@ -4,10 +4,10 @@
  * October 15, 2025
  */
 
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { breakpoints } from "@/lib/design-tokens";
+import { useState, useEffect } from 'react';
+import { breakpoints } from '@/lib/design-tokens';
 
 // Convert breakpoint strings to numbers
 const breakpointValues = {
@@ -16,31 +16,31 @@ const breakpointValues = {
   md: parseInt(breakpoints.md), // 768px
   lg: parseInt(breakpoints.lg), // 1024px
   xl: parseInt(breakpoints.xl), // 1280px
-  "2xl": parseInt(breakpoints["2xl"]), // 1536px
+  '2xl': parseInt(breakpoints['2xl']), // 1536px
 };
 
 export type Breakpoint = keyof typeof breakpointValues;
 
 // Hook to detect current breakpoint
 export function useBreakpoint() {
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>("lg");
+  const [breakpoint, setBreakpoint] = useState<Breakpoint>('lg');
 
   useEffect(() => {
     const updateBreakpoint = () => {
       const width = window.innerWidth;
 
       if (width < breakpointValues.xs) {
-        setBreakpoint("xs");
+        setBreakpoint('xs');
       } else if (width < breakpointValues.sm) {
-        setBreakpoint("sm");
+        setBreakpoint('sm');
       } else if (width < breakpointValues.md) {
-        setBreakpoint("md");
+        setBreakpoint('md');
       } else if (width < breakpointValues.lg) {
-        setBreakpoint("lg");
+        setBreakpoint('lg');
       } else if (width < breakpointValues.xl) {
-        setBreakpoint("xl");
+        setBreakpoint('xl');
       } else {
-        setBreakpoint("2xl");
+        setBreakpoint('2xl');
       }
     };
 
@@ -48,10 +48,10 @@ export function useBreakpoint() {
     updateBreakpoint();
 
     // Add event listener
-    window.addEventListener("resize", updateBreakpoint);
+    window.addEventListener('resize', updateBreakpoint);
 
     // Cleanup
-    return () => window.removeEventListener("resize", updateBreakpoint);
+    return () => window.removeEventListener('resize', updateBreakpoint);
   }, []);
 
   return breakpoint;
@@ -70,10 +70,10 @@ export function useMobile() {
     checkMobile();
 
     // Add event listener
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
 
     // Cleanup
-    return () => window.removeEventListener("resize", checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return isMobile;
@@ -93,10 +93,10 @@ export function useTablet() {
     checkTablet();
 
     // Add event listener
-    window.addEventListener("resize", checkTablet);
+    window.addEventListener('resize', checkTablet);
 
     // Cleanup
-    return () => window.removeEventListener("resize", checkTablet);
+    return () => window.removeEventListener('resize', checkTablet);
   }, []);
 
   return isTablet;
@@ -115,10 +115,10 @@ export function useDesktop() {
     checkDesktop();
 
     // Add event listener
-    window.addEventListener("resize", checkDesktop);
+    window.addEventListener('resize', checkDesktop);
 
     // Cleanup
-    return () => window.removeEventListener("resize", checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
   return isDesktop;
@@ -126,20 +126,18 @@ export function useDesktop() {
 
 // Hook to get screen size category
 export function useScreenSize() {
-  const [screenSize, setScreenSize] = useState<"mobile" | "tablet" | "desktop">(
-    "desktop",
-  );
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   useEffect(() => {
     const updateScreenSize = () => {
       const width = window.innerWidth;
 
       if (width < breakpointValues.md) {
-        setScreenSize("mobile");
+        setScreenSize('mobile');
       } else if (width < breakpointValues.lg) {
-        setScreenSize("tablet");
+        setScreenSize('tablet');
       } else {
-        setScreenSize("desktop");
+        setScreenSize('desktop');
       }
     };
 
@@ -147,10 +145,10 @@ export function useScreenSize() {
     updateScreenSize();
 
     // Add event listener
-    window.addEventListener("resize", updateScreenSize);
+    window.addEventListener('resize', updateScreenSize);
 
     // Cleanup
-    return () => window.removeEventListener("resize", updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
   }, []);
 
   return screenSize;
@@ -169,10 +167,10 @@ export function useMediaQuery(query: string) {
     setMatches(mediaQuery.matches);
 
     // Add listener
-    mediaQuery.addEventListener("change", handleChange);
+    mediaQuery.addEventListener('change', handleChange);
 
     // Cleanup
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, [query]);
 
   return matches;
@@ -189,19 +187,19 @@ export function useMaxWidth(width: number) {
 
 // Hook to detect if user prefers reduced motion
 export function useReducedMotion() {
-  return useMediaQuery("(prefers-reduced-motion: reduce)");
+  return useMediaQuery('(prefers-reduced-motion: reduce)');
 }
 
 // Hook to detect if user prefers dark mode
 export function usePrefersDarkMode() {
-  return useMediaQuery("(prefers-color-scheme: dark)");
+  return useMediaQuery('(prefers-color-scheme: dark)');
 }
 
 // Hook to get viewport dimensions
 export function useViewport() {
   const [viewport, setViewport] = useState({
-    width: typeof window !== "undefined" ? window.innerWidth : 1024,
-    height: typeof window !== "undefined" ? window.innerHeight : 768,
+    width: typeof window !== 'undefined' ? window.innerWidth : 1024,
+    height: typeof window !== 'undefined' ? window.innerHeight : 768,
   });
 
   useEffect(() => {
@@ -213,10 +211,10 @@ export function useViewport() {
     };
 
     // Add event listener
-    window.addEventListener("resize", updateViewport);
+    window.addEventListener('resize', updateViewport);
 
     // Cleanup
-    return () => window.removeEventListener("resize", updateViewport);
+    return () => window.removeEventListener('resize', updateViewport);
   }, []);
 
   return viewport;
@@ -227,7 +225,7 @@ export function useTouch() {
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    setIsTouch("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
   return isTouch;

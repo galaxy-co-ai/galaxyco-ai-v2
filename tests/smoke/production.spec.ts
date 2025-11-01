@@ -1,30 +1,30 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-const baseUrl = process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000";
+const baseUrl = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
 
-test.describe("Production Smoke Tests", () => {
-  test("health endpoint responds", async ({ request }) => {
+test.describe('Production Smoke Tests', () => {
+  test('health endpoint responds', async ({ request }) => {
     const response = await request.get(`${baseUrl}/api/health`);
     expect(response.status()).toBe(200);
 
     const body = await response.json();
-    expect(body).toHaveProperty("status", "ok");
-    expect(body).toHaveProperty("timestamp");
+    expect(body).toHaveProperty('status', 'ok');
+    expect(body).toHaveProperty('timestamp');
   });
 
-  test("homepage loads successfully", async ({ page }) => {
+  test('homepage loads successfully', async ({ page }) => {
     await page.goto(baseUrl);
 
     // Wait for the page to load
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState('networkidle');
 
     // Check for essential elements
     await expect(page).toHaveTitle(/GalaxyCo/);
 
     // Verify no console errors
     const errors = [];
-    page.on("console", (msg) => {
-      if (msg.type() === "error") {
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
         errors.push(msg.text());
       }
     });
@@ -32,11 +32,11 @@ test.describe("Production Smoke Tests", () => {
     expect(errors).toHaveLength(0);
   });
 
-  test("auth flow is accessible", async ({ page }) => {
+  test('auth flow is accessible', async ({ page }) => {
     await page.goto(`${baseUrl}/sign-in`);
 
     // Wait for Clerk to load
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState('networkidle');
 
     // Check if sign-in form is present
     const signInForm = page.locator(
@@ -45,17 +45,17 @@ test.describe("Production Smoke Tests", () => {
     await expect(signInForm).toBeVisible({ timeout: 10000 });
   });
 
-  test("database connection works", async ({ request }) => {
+  test('database connection works', async ({ request }) => {
     const response = await request.get(`${baseUrl}/api/health/db`);
     expect(response.status()).toBe(200);
 
     const body = await response.json();
-    expect(body).toHaveProperty("database", "connected");
+    expect(body).toHaveProperty('database', 'connected');
   });
 
-  test("essential API routes respond", async ({ request }) => {
+  test('essential API routes respond', async ({ request }) => {
     // Test public API routes
-    const publicRoutes = ["/api/health", "/api/health/db"];
+    const publicRoutes = ['/api/health', '/api/health/db'];
 
     for (const route of publicRoutes) {
       const response = await request.get(`${baseUrl}${route}`);
@@ -63,27 +63,27 @@ test.describe("Production Smoke Tests", () => {
     }
   });
 
-  test("static assets load correctly", async ({ page }) => {
+  test('static assets load correctly', async ({ page }) => {
     await page.goto(baseUrl);
 
     // Check that favicon loads
     const favicon = await page.locator('link[rel*=\"icon\"]');
     if ((await favicon.count()) > 0) {
-      const href = await favicon.getAttribute("href");
+      const href = await favicon.getAttribute('href');
       if (href) {
         const response = await page.request.get(
-          href.startsWith("http") ? href : `${baseUrl}${href}`,
+          href.startsWith('http') ? href : `${baseUrl}${href}`,
         );
         expect(response.status()).toBeLessThan(400);
       }
     }
   });
 
-  test("performance baseline", async ({ page }) => {
+  test('performance baseline', async ({ page }) => {
     const startTime = Date.now();
 
     await page.goto(baseUrl);
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState('networkidle');
 
     const loadTime = Date.now() - startTime;
 

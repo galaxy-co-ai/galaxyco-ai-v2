@@ -1,5 +1,5 @@
 export interface Message {
-  role: "system" | "user" | "assistant";
+  role: 'system' | 'user' | 'assistant';
   content: string;
 }
 
@@ -46,4 +46,4 @@ export interface AIProvider {
   estimateCost(params: ExecuteParams): number;
 }
 
-export type AIProviderType = "openai" | "anthropic" | "google" | "custom";
+export type AIProviderType = 'openai' | 'anthropic' | 'google' | 'custom';

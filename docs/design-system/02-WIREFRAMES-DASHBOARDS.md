@@ -157,9 +157,7 @@
 <div className="bg-background-elevated border border-border rounded-lg p-6">
   <div className="flex items-center justify-between mb-4">
     <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
-    <button className="text-sm text-primary hover:text-primary-hover">
-      Export
-    </button>
+    <button className="text-sm text-primary hover:text-primary-hover">Export</button>
   </div>
   <div className="space-y-3">
     {activities.map((activity) => (
@@ -314,9 +312,7 @@
 ```jsx
 <div className="bg-gradient-to-br from-primary/10 to-background rounded-xl p-12 mb-8">
   <div className="max-w-2xl">
-    <h1 className="text-4xl font-bold text-foreground mb-4">
-      📚 Resource Library
-    </h1>
+    <h1 className="text-4xl font-bold text-foreground mb-4">📚 Resource Library</h1>
     <p className="text-lg text-foreground-muted mb-6">
       Your central hub for templates, guides, and workflows
     </p>
@@ -383,18 +379,13 @@
 
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6">
-  <h2 className="text-xl font-semibold text-foreground mb-4">
-    Featured Resources
-  </h2>
+  <h2 className="text-xl font-semibold text-foreground mb-4">Featured Resources</h2>
   <div className="relative">
     <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2">
       {featured.map((item) => (
         <div key={item.id} className="flex-shrink-0 w-72 snap-start">
           <div className="bg-background border border-border rounded-lg p-4 hover:border-primary transition-colors">
-            <img
-              src={item.thumbnail}
-              className="w-full h-40 object-cover rounded mb-3"
-            />
+            <img src={item.thumbnail} className="w-full h-40 object-cover rounded mb-3" />
             <h4 className="font-medium text-foreground mb-1">{item.title}</h4>
             <p className="text-sm text-foreground-muted">{item.description}</p>
           </div>
@@ -625,11 +616,11 @@
         <a
           href={`#${heading.id}`}
           className={cn(
-            "block text-sm transition-colors duration-fast",
+            'block text-sm transition-colors duration-fast',
             activeHeading === heading.id
-              ? "text-primary font-medium"
-              : "text-foreground-muted hover:text-foreground",
-            heading.level === 3 && "ml-4",
+              ? 'text-primary font-medium'
+              : 'text-foreground-muted hover:text-foreground',
+            heading.level === 3 && 'ml-4',
           )}
         >
           {heading.text}
@@ -639,16 +630,11 @@
   </ul>
 
   <div className="mt-8 pt-8 border-t border-border">
-    <h3 className="text-sm font-semibold text-foreground mb-4">
-      Related Links
-    </h3>
+    <h3 className="text-sm font-semibold text-foreground mb-4">Related Links</h3>
     <ul className="space-y-2">
       {relatedLinks.map((link) => (
         <li key={link.id}>
-          <Link
-            to={link.href}
-            className="text-sm text-primary hover:text-primary-hover"
-          >
+          <Link to={link.href} className="text-sm text-primary hover:text-primary-hover">
             {link.title} →
           </Link>
         </li>

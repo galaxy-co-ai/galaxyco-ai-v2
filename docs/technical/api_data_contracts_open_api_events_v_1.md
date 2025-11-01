@@ -177,27 +177,19 @@ paths:
     get:
       security: [{ bearerAuth: [] }]
       responses:
-        "200":
+        '200':
           {
             description: OK,
-            content:
-              {
-                application/json:
-                  { schema: { $ref: "#/components/schemas/Budget" } },
-              },
+            content: { application/json: { schema: { $ref: '#/components/schemas/Budget' } } },
           }
   /knowledge/sources:ingest:
     post:
       requestBody:
         {
           required: true,
-          content:
-            {
-              application/json:
-                { schema: { $ref: "#/components/schemas/IngestRequest" } },
-            },
+          content: { application/json: { schema: { $ref: '#/components/schemas/IngestRequest' } } },
         }
-      responses: { "202": { description: Accepted } }
+      responses: { '202': { description: Accepted } }
 components:
   securitySchemes: { bearerAuth: { type: http, scheme: bearer } }
 ```

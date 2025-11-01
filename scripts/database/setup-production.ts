@@ -1,15 +1,15 @@
-import { config } from "dotenv";
-import { resolve } from "path";
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
-import readline from "readline";
+import { config } from 'dotenv';
+import { resolve } from 'path';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import readline from 'readline';
 
 // Load environment
-config({ path: resolve(process.cwd(), ".env.local") });
+config({ path: resolve(process.cwd(), '.env.local') });
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
-  throw new Error("DATABASE_URL not found");
+  throw new Error('DATABASE_URL not found');
 }
 
 const sql = neon(DATABASE_URL);
@@ -29,48 +29,48 @@ function prompt(question: string): Promise<string> {
 }
 
 async function setup() {
-  console.log("\n🚀 GalaxyCo.ai Production Setup\n");
-  console.log("This will create your workspace and link your Clerk account.\n");
+  console.log('\n🚀 GalaxyCo.ai Production Setup\n');
+  console.log('This will create your workspace and link your Clerk account.\n');
 
   try {
     // Get user input
     const clerkUserId = await prompt(
-      "Your Clerk User ID (from browser console: window.Clerk?.user?.id): ",
+      'Your Clerk User ID (from browser console: window.Clerk?.user?.id): ',
     );
-    if (!clerkUserId.startsWith("user_")) {
+    if (!clerkUserId.startsWith('user_')) {
       console.error("❌ Invalid Clerk User ID. Must start with 'user_'");
       process.exit(1);
     }
 
     const workspaceName = await prompt("Workspace Name (e.g., 'Acme Corp'): ");
     if (!workspaceName.trim()) {
-      console.error("❌ Workspace name cannot be empty");
+      console.error('❌ Workspace name cannot be empty');
       process.exit(1);
     }
 
     const workspaceSlug = workspaceName
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
 
-    const userEmail = await prompt("Your Email: ");
-    const firstName = await prompt("Your First Name: ");
-    const lastName = await prompt("Your Last Name: ");
+    const userEmail = await prompt('Your Email: ');
+    const firstName = await prompt('Your First Name: ');
+    const lastName = await prompt('Your Last Name: ');
 
-    console.log("\n📝 Creating your workspace...\n");
-    console.log("Workspace:", workspaceName);
-    console.log("Slug:", workspaceSlug);
-    console.log("Owner:", `${firstName} ${lastName} (${userEmail})`);
-    console.log("Clerk ID:", clerkUserId);
+    console.log('\n📝 Creating your workspace...\n');
+    console.log('Workspace:', workspaceName);
+    console.log('Slug:', workspaceSlug);
+    console.log('Owner:', `${firstName} ${lastName} (${userEmail})`);
+    console.log('Clerk ID:', clerkUserId);
 
-    const confirm = await prompt("\nProceed? (y/n): ");
-    if (confirm.toLowerCase() !== "y") {
-      console.log("Cancelled.");
+    const confirm = await prompt('\nProceed? (y/n): ');
+    if (confirm.toLowerCase() !== 'y') {
+      console.log('Cancelled.');
       process.exit(0);
     }
 
     // 1. Create user
-    console.log("\n1️⃣  Creating user...");
+    console.log('\n1️⃣  Creating user...');
     const userResult = await db.execute(`
       INSERT INTO users (id, clerk_user_id, email, first_name, last_name, created_at, updated_at)
       VALUES (
@@ -91,10 +91,10 @@ async function setup() {
       RETURNING id;
     `);
     const userId = userResult.rows[0].id;
-    console.log("✅ User created/updated:", userId);
+    console.log('✅ User created/updated:', userId);
 
     // 2. Create workspace
-    console.log("\n2️⃣  Creating workspace...");
+    console.log('\n2️⃣  Creating workspace...');
     const workspaceResult = await db.execute(`
       INSERT INTO workspaces (
         id, name, slug, subscription_tier, subscription_status,
@@ -116,10 +116,10 @@ async function setup() {
       RETURNING id;
     `);
     const workspaceId = workspaceResult.rows[0].id;
-    console.log("✅ Workspace created:", workspaceId);
+    console.log('✅ Workspace created:', workspaceId);
 
     // 3. Link user to workspace as owner
-    console.log("\n3️⃣  Making you the workspace owner...");
+    console.log('\n3️⃣  Making you the workspace owner...');
     await db.execute(`
       INSERT INTO workspace_members (id, workspace_id, user_id, role, created_at, updated_at)
       VALUES (
@@ -135,21 +135,21 @@ async function setup() {
         role = 'owner',
         updated_at = NOW();
     `);
-    console.log("✅ You are now the workspace owner");
+    console.log('✅ You are now the workspace owner');
 
-    console.log("\n🎉 Setup Complete!\n");
-    console.log("Your workspace is ready:");
+    console.log('\n🎉 Setup Complete!\n');
+    console.log('Your workspace is ready:');
     console.log(`  - Name: ${workspaceName}`);
     console.log(`  - Slug: ${workspaceSlug}`);
     console.log(`  - Owner: ${firstName} ${lastName}`);
-    console.log("\n📱 Next steps:");
-    console.log("1. Refresh your browser");
-    console.log("2. Navigate to My Work, CRM, or Analytics");
-    console.log("3. Your workspace should now load!\n");
+    console.log('\n📱 Next steps:');
+    console.log('1. Refresh your browser');
+    console.log('2. Navigate to My Work, CRM, or Analytics');
+    console.log('3. Your workspace should now load!\n');
 
     rl.close();
   } catch (error) {
-    console.error("\n❌ Error:", error);
+    console.error('\n❌ Error:', error);
     rl.close();
     process.exit(1);
   }

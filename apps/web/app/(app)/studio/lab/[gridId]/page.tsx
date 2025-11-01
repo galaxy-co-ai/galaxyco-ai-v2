@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useCallback, use } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ReactFlow,
   Background,
@@ -16,22 +16,22 @@ import {
   type NodeTypes,
   applyNodeChanges,
   applyEdgeChanges,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import { useHotkeys } from "react-hotkeys-hook";
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import { useHotkeys } from 'react-hotkeys-hook';
 import {
   useCanvasStore,
   selectNodes,
   selectEdges,
   selectCanUndo,
   selectCanRedo,
-} from "@/lib/studio/canvas-store";
-import { CanvasNode } from "@/components/studio/canvas-node";
-import { CanvasToolbar } from "@/components/studio/canvas-toolbar";
-import { Button } from "@/components/ui/button";
-import { Undo2, Redo2, Save, ZoomIn, ZoomOut, Maximize } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+} from '@/lib/studio/canvas-store';
+import { CanvasNode } from '@/components/studio/canvas-node';
+import { CanvasToolbar } from '@/components/studio/canvas-toolbar';
+import { Button } from '@/components/ui/button';
+import { Undo2, Redo2, Save, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 const nodeTypes: NodeTypes = {
   custom: CanvasNode,
@@ -75,7 +75,7 @@ export default function LabPage({ params }: PageProps) {
 
       // Update store with debouncing handled by auto-save
       changes.forEach((change) => {
-        if (change.type === "position" && change.dragging === false) {
+        if (change.type === 'position' && change.dragging === false) {
           updateNode(change.id, { position: change.position });
         }
       });
@@ -97,7 +97,7 @@ export default function LabPage({ params }: PageProps) {
         id: `${connection.source}-${connection.target}`,
         source: connection.source,
         target: connection.target,
-        type: "default",
+        type: 'default',
       });
     },
     [addEdge],
@@ -105,7 +105,7 @@ export default function LabPage({ params }: PageProps) {
 
   // Keyboard shortcuts
   useHotkeys(
-    "ctrl+z, cmd+z",
+    'ctrl+z, cmd+z',
     (e: KeyboardEvent) => {
       e.preventDefault();
       if (canUndo) undo();
@@ -114,7 +114,7 @@ export default function LabPage({ params }: PageProps) {
   );
 
   useHotkeys(
-    "ctrl+y, cmd+y, ctrl+shift+z, cmd+shift+z",
+    'ctrl+y, cmd+y, ctrl+shift+z, cmd+shift+z',
     (e: KeyboardEvent) => {
       e.preventDefault();
       if (canRedo) redo();
@@ -123,7 +123,7 @@ export default function LabPage({ params }: PageProps) {
   );
 
   useHotkeys(
-    "delete, backspace",
+    'delete, backspace',
     (e: KeyboardEvent) => {
       e.preventDefault();
       if (selectedNodes.length > 0) {
@@ -134,28 +134,28 @@ export default function LabPage({ params }: PageProps) {
   );
 
   useHotkeys(
-    "ctrl+c, cmd+c",
+    'ctrl+c, cmd+c',
     (e: KeyboardEvent) => {
       e.preventDefault();
       copy();
-      toast.success("Copied to clipboard");
+      toast.success('Copied to clipboard');
     },
     [copy],
   );
 
   useHotkeys(
-    "ctrl+v, cmd+v",
+    'ctrl+v, cmd+v',
     (e: KeyboardEvent) => {
       e.preventDefault();
       paste();
-      toast.success("Pasted from clipboard");
+      toast.success('Pasted from clipboard');
     },
     [paste],
   );
 
-  useHotkeys("ctrl+s, cmd+s", (e: KeyboardEvent) => {
+  useHotkeys('ctrl+s, cmd+s', (e: KeyboardEvent) => {
     e.preventDefault();
-    toast.success("Auto-saving...");
+    toast.success('Auto-saving...');
     // Auto-save is handled automatically
   });
 
@@ -192,11 +192,7 @@ export default function LabPage({ params }: PageProps) {
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
           className="bg-background"
         >
-          <Background
-            color="hsl(var(--muted-foreground) / 0.1)"
-            gap={16}
-            size={1}
-          />
+          <Background color="hsl(var(--muted-foreground) / 0.1)" gap={16} size={1} />
 
           <Controls
             showZoom={false}
@@ -207,7 +203,7 @@ export default function LabPage({ params }: PageProps) {
 
           <MiniMap
             nodeColor={(node) => {
-              return "hsl(var(--primary) / 0.5)";
+              return 'hsl(var(--primary) / 0.5)';
             }}
             maskColor="hsl(var(--background) / 0.8)"
             className="!bg-card !border !border-border !shadow-lg !rounded-lg"
@@ -216,28 +212,13 @@ export default function LabPage({ params }: PageProps) {
           {/* Floating Controls */}
           <Panel position="bottom-right" className="flex items-center gap-2">
             <div className="flex items-center gap-1 bg-card/90 backdrop-blur-md border border-border rounded-lg p-1 shadow-lg">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleZoomOut}
-                className="h-8 w-8 p-0"
-              >
+              <Button variant="ghost" size="sm" onClick={handleZoomOut} className="h-8 w-8 p-0">
                 <ZoomOut className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleFitView}
-                className="h-8 w-8 p-0"
-              >
+              <Button variant="ghost" size="sm" onClick={handleFitView} className="h-8 w-8 p-0">
                 <Maximize className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleZoomIn}
-                className="h-8 w-8 p-0"
-              >
+              <Button variant="ghost" size="sm" onClick={handleZoomIn} className="h-8 w-8 p-0">
                 <ZoomIn className="h-4 w-4" />
               </Button>
             </div>
@@ -271,9 +252,7 @@ export default function LabPage({ params }: PageProps) {
             {/* Save indicator */}
             <div className="flex items-center gap-2 bg-card/90 backdrop-blur-md border border-border rounded-lg px-3 py-1.5 shadow-lg">
               <Save className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">
-                All changes saved
-              </span>
+              <span className="text-xs text-muted-foreground">All changes saved</span>
             </div>
           </Panel>
         </ReactFlow>

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo } from "react";
-import Link from "next/link";
-import { Bot, Plus, Activity, TrendingUp, CheckCircle2 } from "lucide-react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { MetricCard } from "@/components/agents/metric-card";
-import { useWorkspace } from "@/contexts/workspace-context";
-import type { AgentWithSchedule, AgentStatus } from "@/lib/agents/types";
-import { toast } from "sonner";
-import { logger } from "@/lib/utils/logger";
+import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
+import { Bot, Plus, Activity, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { MetricCard } from '@/components/agents/metric-card';
+import { useWorkspace } from '@/contexts/workspace-context';
+import type { AgentWithSchedule, AgentStatus } from '@/lib/agents/types';
+import { toast } from 'sonner';
+import { logger } from '@/lib/utils/logger';
 
 export default function AgentsPage() {
   const { currentWorkspace } = useWorkspace();
@@ -18,13 +18,11 @@ export default function AgentsPage() {
   const [agents, setAgents] = useState<AgentWithSchedule[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Filter state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   // Fetch agents
   useEffect(() => {
@@ -38,28 +36,22 @@ export default function AgentsPage() {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `/api/agents?workspaceId=${currentWorkspace.id}`,
-        );
+        const response = await fetch(`/api/agents?workspaceId=${currentWorkspace.id}`);
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to fetch agents");
+          throw new Error(errorData.error || 'Failed to fetch agents');
         }
 
         const data = await response.json();
         setAgents(data.agents || []);
       } catch (err) {
-        logger.error("Failed to fetch agents", {
+        logger.error('Failed to fetch agents', {
           error: err instanceof Error ? err.message : String(err),
           workspaceId: currentWorkspace?.id,
         });
-        setError(
-          err instanceof Error ? err : new Error("Failed to load agents"),
-        );
-        toast.error(
-          err instanceof Error ? err.message : "Failed to load agents",
-        );
+        setError(err instanceof Error ? err : new Error('Failed to load agents'));
+        toast.error(err instanceof Error ? err.message : 'Failed to load agents');
       } finally {
         setIsLoading(false);
       }
@@ -71,11 +63,8 @@ export default function AgentsPage() {
   // Compute metrics
   const metrics = useMemo(() => {
     const total = agents.length;
-    const active = agents.filter((a) => a.status === "active").length;
-    const totalRuns = agents.reduce(
-      (sum, a) => sum + (a.executionCount || 0),
-      0,
-    );
+    const active = agents.filter((a) => a.status === 'active').length;
+    const totalRuns = agents.reduce((sum, a) => sum + (a.executionCount || 0), 0);
 
     // Calculate success rate (would come from executions in production)
     const successRate = agents.length > 0 ? 85 : 0; // Placeholder
@@ -95,9 +84,7 @@ export default function AgentsPage() {
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesName = agent.name.toLowerCase().includes(query);
-        const matchesDescription = agent.description
-          ?.toLowerCase()
-          .includes(query);
+        const matchesDescription = agent.description?.toLowerCase().includes(query);
         if (!matchesName && !matchesDescription) return false;
       }
 
@@ -121,7 +108,7 @@ export default function AgentsPage() {
 
   const handleClearFilters = () => {
     setActiveFilters({});
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   return (
@@ -136,18 +123,14 @@ export default function AgentsPage() {
             value={metrics.totalRuns.toLocaleString()}
             icon={TrendingUp}
           />
-          <MetricCard
-            label="Success Rate"
-            value={`${metrics.successRate}%`}
-            icon={CheckCircle2}
-          />
+          <MetricCard label="Success Rate" value={`${metrics.successRate}%`} icon={CheckCircle2} />
         </div>
       )}
 
       <ListPage
         title="AI Agents"
         subtitle="Manage and monitor your autonomous AI agents"
-        breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Agents" }]}
+        breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Agents' }]}
         searchQuery={searchQuery}
         searchPlaceholder="Search agents by name or description..."
         onSearchChange={setSearchQuery}
@@ -155,14 +138,14 @@ export default function AgentsPage() {
         onViewModeChange={setViewMode}
         filters={[
           {
-            id: "status",
-            label: "Status",
-            type: "checkbox",
+            id: 'status',
+            label: 'Status',
+            type: 'checkbox',
             options: [
-              { value: "active", label: "Active" },
-              { value: "draft", label: "Draft" },
-              { value: "paused", label: "Paused" },
-              { value: "archived", label: "Archived" },
+              { value: 'active', label: 'Active' },
+              { value: 'draft', label: 'Draft' },
+              { value: 'paused', label: 'Paused' },
+              { value: 'archived', label: 'Archived' },
             ],
           },
         ]}
@@ -192,9 +175,7 @@ export default function AgentsPage() {
       >
         {filteredAgents.length === 0 && agents.length > 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4">
-              No agents match your search or filters
-            </p>
+            <p className="text-muted-foreground mb-4">No agents match your search or filters</p>
             <Button variant="outline" onClick={handleClearFilters}>
               Clear Filters
             </Button>
@@ -216,20 +197,18 @@ export default function AgentsPage() {
                       <h3 className="font-semibold group-hover:text-primary transition-colors">
                         {agent.name}
                       </h3>
-                      <p className="text-sm text-muted-foreground capitalize">
-                        {agent.type}
-                      </p>
+                      <p className="text-sm text-muted-foreground capitalize">{agent.type}</p>
                     </div>
                   </div>
                   <span
                     className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                      agent.status === "active"
-                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-                        : agent.status === "draft"
-                          ? "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-                          : agent.status === "paused"
-                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
-                            : "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                      agent.status === 'active'
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                        : agent.status === 'draft'
+                          ? 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
+                          : agent.status === 'paused'
+                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                            : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
                     }`}
                   >
                     {agent.status}
@@ -237,15 +216,13 @@ export default function AgentsPage() {
                 </div>
 
                 <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                  {agent.description || "No description"}
+                  {agent.description || 'No description'}
                 </p>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border">
                   <div>
                     <p className="text-xs text-muted-foreground">Runs</p>
-                    <p className="text-lg font-semibold">
-                      {agent.executionCount || 0}
-                    </p>
+                    <p className="text-lg font-semibold">{agent.executionCount || 0}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Version</p>

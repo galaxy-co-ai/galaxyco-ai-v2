@@ -8,25 +8,18 @@
  * 3. API call to server for default workspace
  */
 
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-  useCallback,
-} from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { logger } from "@/lib/utils/logger";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { logger } from '@/lib/utils/logger';
 
 export interface Workspace {
   id: string;
   name: string;
   slug: string;
-  plan: "free" | "starter" | "professional" | "enterprise";
-  role: "owner" | "admin" | "member" | "viewer";
+  plan: 'free' | 'starter' | 'professional' | 'enterprise';
+  role: 'owner' | 'admin' | 'member' | 'viewer';
 }
 
 export interface WorkspaceContextValue {
@@ -60,33 +53,33 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     try {
       setError(null);
 
-      let url = "/api/workspace/current";
+      let url = '/api/workspace/current';
       if (id) {
         // If setting specific workspace, update server-side cookie first
-        await fetch("/api/workspace/current", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        await fetch('/api/workspace/current', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ workspaceId: id }),
         });
       }
 
       const response = await fetch(url, {
-        headers: { "Cache-Control": "no-cache" },
+        headers: { 'Cache-Control': 'no-cache' },
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch workspace");
+        throw new Error(errorData.error || 'Failed to fetch workspace');
       }
 
       const data = await response.json();
 
       // Handle null workspace (new user without workspace yet) - this is normal!
       if (data.workspaceId === null || data.workspace === null) {
-        logger.info("No workspace found - user needs to create one");
+        logger.info('No workspace found - user needs to create one');
         setWorkspaceIdState(null);
         setWorkspace(null);
-        localStorage.removeItem("workspaceId");
+        localStorage.removeItem('workspaceId');
         return null;
       }
 
@@ -95,12 +88,12 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
 
       // Update localStorage for client-side persistence
       if (data.workspaceId) {
-        localStorage.setItem("workspaceId", data.workspaceId);
+        localStorage.setItem('workspaceId', data.workspaceId);
       }
 
       return data.workspaceId;
     } catch (err: any) {
-      logger.error("Failed to fetch workspace details", {
+      logger.error('Failed to fetch workspace details', {
         error: err.message,
       });
       setError(err.message);
@@ -118,9 +111,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
 
       try {
         // Priority 1: URL query parameter
-        const urlWorkspace = searchParams.get("w");
+        const urlWorkspace = searchParams.get('w');
         if (urlWorkspace) {
-          logger.info("Using workspace from URL", {
+          logger.info('Using workspace from URL', {
             workspaceId: urlWorkspace,
           });
           await fetchWorkspaceDetails(urlWorkspace);
@@ -129,9 +122,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         }
 
         // Priority 2: localStorage
-        const storedWorkspace = localStorage.getItem("workspaceId");
-        if (storedWorkspace && storedWorkspace !== "undefined") {
-          logger.info("Using workspace from localStorage", {
+        const storedWorkspace = localStorage.getItem('workspaceId');
+        if (storedWorkspace && storedWorkspace !== 'undefined') {
+          logger.info('Using workspace from localStorage', {
             workspaceId: storedWorkspace,
           });
           await fetchWorkspaceDetails(storedWorkspace);
@@ -140,10 +133,10 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         }
 
         // Priority 3: API default
-        logger.info("Fetching default workspace from API");
+        logger.info('Fetching default workspace from API');
         await fetchWorkspaceDetails();
       } catch (err: any) {
-        logger.error("Failed to initialize workspace", {
+        logger.error('Failed to initialize workspace', {
           error: err.message,
         });
         setError(err.message);
@@ -169,15 +162,15 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         setError(null);
 
         // Update server-side (sets cookie)
-        const response = await fetch("/api/workspace/current", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/workspace/current', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ workspaceId: id }),
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to set workspace");
+          throw new Error(errorData.error || 'Failed to set workspace');
         }
 
         const data = await response.json();
@@ -187,21 +180,21 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         setWorkspace(data.workspace);
 
         // Update localStorage
-        localStorage.setItem("workspaceId", data.workspaceId);
+        localStorage.setItem('workspaceId', data.workspaceId);
 
         // Update URL (without page reload)
         const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set("w", data.workspaceId);
+        currentUrl.searchParams.set('w', data.workspaceId);
         router.replace(currentUrl.pathname + currentUrl.search, {
           scroll: false,
         });
 
-        logger.info("Workspace switched successfully", {
+        logger.info('Workspace switched successfully', {
           workspaceName: data.workspace?.name,
           workspaceId: data.workspaceId,
         });
       } catch (err: any) {
-        logger.error("Failed to set workspace", {
+        logger.error('Failed to set workspace', {
           error: err.message,
         });
         setError(err.message);
@@ -230,11 +223,7 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     refreshWorkspace,
   };
 
-  return (
-    <WorkspaceContext.Provider value={contextValue}>
-      {children}
-    </WorkspaceContext.Provider>
-  );
+  return <WorkspaceContext.Provider value={contextValue}>{children}</WorkspaceContext.Provider>;
 }
 
 /**
@@ -246,8 +235,8 @@ export function useWorkspace(): WorkspaceContextValue {
 
   if (!context) {
     throw new Error(
-      "useWorkspace must be used within a WorkspaceProvider. " +
-        "Make sure to wrap your app with <WorkspaceProvider>.",
+      'useWorkspace must be used within a WorkspaceProvider. ' +
+        'Make sure to wrap your app with <WorkspaceProvider>.',
     );
   }
 

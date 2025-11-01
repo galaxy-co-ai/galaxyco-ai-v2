@@ -1,6 +1,6 @@
-import { Star, Users, Clock, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import type { GridTemplate } from "@/lib/studio/types";
+import { Star, Users, Clock, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import type { GridTemplate } from '@/lib/studio/types';
 
 interface TemplateCardProps {
   template: GridTemplate;
@@ -8,13 +8,11 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, onSelect }: TemplateCardProps) {
-  const complexity = template.complexity || "beginner";
+  const complexity = template.complexity || 'beginner';
   const complexityColors = {
-    beginner:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-    intermediate:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
-    advanced: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    beginner: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+    intermediate: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    advanced: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   };
 
   return (
@@ -33,7 +31,7 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
               {template.name}
             </h3>
             <p className="text-sm text-muted-foreground capitalize">
-              {template.category.replace(/-/g, " ")}
+              {template.category.replace(/-/g, ' ')}
             </p>
           </div>
         </div>
@@ -44,18 +42,14 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
 
       {/* Description */}
       <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[2.5rem]">
-        {template.description || "No description available"}
+        {template.description || 'No description available'}
       </p>
 
       {/* Tags */}
       {template.tags && template.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {template.tags.slice(0, 3).map((tag) => (
-            <Badge
-              key={tag}
-              variant="secondary"
-              className="text-xs px-2 py-0.5"
-            >
+            <Badge key={tag} variant="secondary" className="text-xs px-2 py-0.5">
               {tag}
             </Badge>
           ))}
@@ -71,24 +65,18 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
       <div className="grid grid-cols-3 gap-3 pt-3 border-t border-border">
         <div className="flex items-center gap-1.5">
           <Users className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">
-            {template.uses.toLocaleString()}
-          </span>
+          <span className="text-xs text-muted-foreground">{template.uses.toLocaleString()}</span>
         </div>
         {template.rating !== null && (
           <div className="flex items-center gap-1.5">
             <Star className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">
-              {template.rating.toFixed(1)}
-            </span>
+            <span className="text-xs text-muted-foreground">{template.rating.toFixed(1)}</span>
           </div>
         )}
         {template.estimated_time && (
           <div className="flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">
-              {template.estimated_time}m
-            </span>
+            <span className="text-xs text-muted-foreground">{template.estimated_time}m</span>
           </div>
         )}
       </div>

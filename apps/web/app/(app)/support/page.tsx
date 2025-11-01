@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from 'next';
+import Link from 'next/link';
 import {
   MessageCircle,
   Mail,
@@ -9,15 +9,15 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: "Support | GalaxyCo.ai",
-  description: "Get help and support",
+  title: 'Support | GalaxyCo.ai',
+  description: 'Get help and support',
 };
 
 export default function SupportPage() {
@@ -49,9 +49,7 @@ export default function SupportPage() {
               <MessageCircle className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold mb-2">Live Chat</h3>
-            <p className="text-sm text-foreground-muted">
-              Chat with our support team in real-time
-            </p>
+            <p className="text-sm text-foreground-muted">Chat with our support team in real-time</p>
           </Card>
         </Link>
 
@@ -61,9 +59,7 @@ export default function SupportPage() {
               <Mail className="h-6 w-6 text-success" />
             </div>
             <h3 className="font-semibold mb-2">Email Support</h3>
-            <p className="text-sm text-foreground-muted">
-              Get help via email within 24 hours
-            </p>
+            <p className="text-sm text-foreground-muted">Get help via email within 24 hours</p>
           </Card>
         </Link>
 
@@ -73,9 +69,7 @@ export default function SupportPage() {
               <Book className="h-6 w-6 text-warning" />
             </div>
             <h3 className="font-semibold mb-2">Documentation</h3>
-            <p className="text-sm text-foreground-muted">
-              Browse guides and API references
-            </p>
+            <p className="text-sm text-foreground-muted">Browse guides and API references</p>
           </Card>
         </Link>
 
@@ -84,9 +78,7 @@ export default function SupportPage() {
             <Phone className="h-6 w-6 text-foreground-muted" />
           </div>
           <h3 className="font-semibold mb-2">Phone Support</h3>
-          <p className="text-sm text-foreground-muted">
-            Available for Enterprise plans
-          </p>
+          <p className="text-sm text-foreground-muted">Available for Enterprise plans</p>
         </Card>
       </div>
 
@@ -99,9 +91,7 @@ export default function SupportPage() {
             </div>
             <div>
               <h3 className="font-semibold">All Systems Operational</h3>
-              <p className="text-sm text-foreground-muted">
-                Last updated: 5 minutes ago
-              </p>
+              <p className="text-sm text-foreground-muted">Last updated: 5 minutes ago</p>
             </div>
           </div>
           <Button asChild variant="outline">
@@ -116,28 +106,28 @@ export default function SupportPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
             {
-              title: "Getting Started with GalaxyCo.ai",
-              description: "Learn the basics and set up your first agent",
-              category: "Getting Started",
-              readTime: "5 min read",
+              title: 'Getting Started with GalaxyCo.ai',
+              description: 'Learn the basics and set up your first agent',
+              category: 'Getting Started',
+              readTime: '5 min read',
             },
             {
-              title: "Creating Your First Automation",
-              description: "Step-by-step guide to workflow automation",
-              category: "Workflows",
-              readTime: "8 min read",
+              title: 'Creating Your First Automation',
+              description: 'Step-by-step guide to workflow automation',
+              category: 'Workflows',
+              readTime: '8 min read',
             },
             {
-              title: "Managing API Keys and Authentication",
-              description: "Secure your API access with best practices",
-              category: "Security",
-              readTime: "6 min read",
+              title: 'Managing API Keys and Authentication',
+              description: 'Secure your API access with best practices',
+              category: 'Security',
+              readTime: '6 min read',
             },
             {
-              title: "Integrating with Third-Party Services",
-              description: "Connect GalaxyCo.ai with your favorite tools",
-              category: "Integrations",
-              readTime: "10 min read",
+              title: 'Integrating with Third-Party Services',
+              description: 'Connect GalaxyCo.ai with your favorite tools',
+              category: 'Integrations',
+              readTime: '10 min read',
             },
           ].map((article, index) => (
             <Card
@@ -154,9 +144,7 @@ export default function SupportPage() {
                 </span>
               </div>
               <h3 className="font-semibold mb-2">{article.title}</h3>
-              <p className="text-sm text-foreground-muted">
-                {article.description}
-              </p>
+              <p className="text-sm text-foreground-muted">{article.description}</p>
             </Card>
           ))}
         </div>
@@ -167,8 +155,7 @@ export default function SupportPage() {
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-2xl font-semibold mb-3">Still need help?</h2>
           <p className="text-foreground-muted mb-6">
-            Our support team is available 24/7 to assist you with any questions
-            or issues
+            Our support team is available 24/7 to assist you with any questions or issues
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg">

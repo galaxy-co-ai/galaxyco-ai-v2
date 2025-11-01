@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
+import React, { useEffect, useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<any | null>(null);
@@ -17,12 +17,12 @@ export default function AdminSettingsPage() {
     async function fetchSettings() {
       try {
         setIsLoading(true);
-        const res = await fetch("/api/admin/settings");
-        if (!res.ok) throw new Error("Failed to fetch settings");
+        const res = await fetch('/api/admin/settings');
+        if (!res.ok) throw new Error('Failed to fetch settings');
         const json = await res.json();
         setSettings(json.settings || {});
       } catch (e) {
-        console.error("Failed to load admin settings", e);
+        console.error('Failed to load admin settings', e);
       } finally {
         setIsLoading(false);
       }
@@ -33,16 +33,16 @@ export default function AdminSettingsPage() {
   async function saveSettings(updated: any) {
     try {
       setIsSaving(true);
-      const res = await fetch("/api/admin/settings", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated),
       });
-      if (!res.ok) throw new Error("Failed to save settings");
+      if (!res.ok) throw new Error('Failed to save settings');
       const json = await res.json();
       setSettings(json.settings);
     } catch (e) {
-      console.error("Failed to save settings", e);
+      console.error('Failed to save settings', e);
     } finally {
       setIsSaving(false);
     }
@@ -61,9 +61,9 @@ export default function AdminSettingsPage() {
       title="Platform Settings"
       subtitle="Configure global platform settings"
       breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Admin", href: "/admin" },
-        { label: "Settings" },
+        { label: 'Dashboard', href: '/' },
+        { label: 'Admin', href: '/admin' },
+        { label: 'Settings' },
       ]}
     >
       <Tabs defaultValue="general" className="w-full">
@@ -82,10 +82,8 @@ export default function AdminSettingsPage() {
                 <Label htmlFor="siteName">Site Name</Label>
                 <Input
                   id="siteName"
-                  value={settings.siteName || ""}
-                  onChange={(e) =>
-                    setSettings({ ...settings, siteName: e.target.value })
-                  }
+                  value={settings.siteName || ''}
+                  onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
@@ -93,10 +91,8 @@ export default function AdminSettingsPage() {
                 <Input
                   id="supportEmail"
                   type="email"
-                  value={settings.supportEmail || ""}
-                  onChange={(e) =>
-                    setSettings({ ...settings, supportEmail: e.target.value })
-                  }
+                  value={settings.supportEmail || ''}
+                  onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })}
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -117,9 +113,7 @@ export default function AdminSettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <Label htmlFor="maintenance">Maintenance Mode</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Put platform in maintenance mode
-                  </p>
+                  <p className="text-sm text-muted-foreground">Put platform in maintenance mode</p>
                 </div>
                 <Switch
                   id="maintenance"
@@ -130,16 +124,10 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex gap-3 pt-4">
-                <Button
-                  onClick={() => saveSettings(settings)}
-                  disabled={isSaving}
-                >
-                  {isSaving ? "Saving..." : "Save Changes"}
+                <Button onClick={() => saveSettings(settings)} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => window.location.reload()}
-                >
+                <Button variant="outline" onClick={() => window.location.reload()}>
                   Reset
                 </Button>
               </div>
@@ -154,9 +142,7 @@ export default function AdminSettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <Label htmlFor="twoFactor">Require 2FA for All Users</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Enforce two-factor authentication
-                  </p>
+                  <p className="text-sm text-muted-foreground">Enforce two-factor authentication</p>
                 </div>
                 <Switch
                   id="twoFactor"
@@ -167,16 +153,10 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex gap-3 pt-4">
-                <Button
-                  onClick={() => saveSettings(settings)}
-                  disabled={isSaving}
-                >
-                  {isSaving ? "Saving..." : "Save Changes"}
+                <Button onClick={() => saveSettings(settings)} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => window.location.reload()}
-                >
+                <Button variant="outline" onClick={() => window.location.reload()}>
                   Reset
                 </Button>
               </div>
@@ -187,9 +167,7 @@ export default function AdminSettingsPage() {
         <TabsContent value="integrations" className="space-y-6">
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="text-lg font-semibold mb-4">Integration Settings</h3>
-            <p className="text-muted-foreground">
-              Configure third-party integrations and API keys
-            </p>
+            <p className="text-muted-foreground">Configure third-party integrations and API keys</p>
           </div>
         </TabsContent>
 

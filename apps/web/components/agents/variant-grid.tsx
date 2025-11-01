@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Check } from "lucide-react";
-import type { AgentVariant } from "@/lib/stores/agent-builder-store";
+import { Check } from 'lucide-react';
+import type { AgentVariant } from '@/lib/stores/agent-builder-store';
 
 interface VariantGridProps {
   variants: AgentVariant[];
@@ -10,19 +10,19 @@ interface VariantGridProps {
 
 const VARIANT_COLORS = {
   basic: {
-    bg: "bg-purple-100 dark:bg-purple-900/20",
-    text: "text-purple-700 dark:text-purple-300",
-    border: "border-purple-300 dark:border-purple-700",
+    bg: 'bg-purple-100 dark:bg-purple-900/20',
+    text: 'text-purple-700 dark:text-purple-300',
+    border: 'border-purple-300 dark:border-purple-700',
   },
   advanced: {
-    bg: "bg-blue-100 dark:bg-blue-900/20",
-    text: "text-blue-700 dark:text-blue-300",
-    border: "border-blue-300 dark:border-blue-700",
+    bg: 'bg-blue-100 dark:bg-blue-900/20',
+    text: 'text-blue-700 dark:text-blue-300',
+    border: 'border-blue-300 dark:border-blue-700',
   },
   minimal: {
-    bg: "bg-green-100 dark:bg-green-900/20",
-    text: "text-green-700 dark:text-green-300",
-    border: "border-green-300 dark:border-green-700",
+    bg: 'bg-green-100 dark:bg-green-900/20',
+    text: 'text-green-700 dark:text-green-300',
+    border: 'border-green-300 dark:border-green-700',
   },
 };
 
@@ -40,11 +40,7 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
         {variants.map((variant) => {
           const colors = VARIANT_COLORS[variant.type];
           const stars =
-            variant.type === "basic"
-              ? "⭐⭐"
-              : variant.type === "advanced"
-                ? "⭐⭐⭐"
-                : "⭐";
+            variant.type === 'basic' ? '⭐⭐' : variant.type === 'advanced' ? '⭐⭐⭐' : '⭐';
 
           return (
             <div
@@ -72,17 +68,17 @@ export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-neutral-600 dark:text-neutral-400">
-                    🔌 {variant.integrations.join(", ")}
+                    🔌 {variant.integrations.join(', ')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-neutral-600 dark:text-neutral-400">
-                    ⏱️{" "}
-                    {variant.complexity === "low"
-                      ? "~2 min setup"
-                      : variant.complexity === "medium"
-                        ? "~5 min setup"
-                        : "~10 min setup"}
+                    ⏱️{' '}
+                    {variant.complexity === 'low'
+                      ? '~2 min setup'
+                      : variant.complexity === 'medium'
+                        ? '~5 min setup'
+                        : '~10 min setup'}
                   </span>
                 </div>
               </div>

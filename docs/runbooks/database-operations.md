@@ -37,12 +37,12 @@ node -e "require('./src/db').db.execute('SELECT 1')"
 
    ```typescript
    // Example: packages/database/src/schema/new-feature.ts
-   import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+   import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-   export const myNewTable = pgTable("my_new_table", {
-     id: uuid("id").primaryKey().defaultRandom(),
-     name: text("name").notNull(),
-     createdAt: timestamp("created_at").defaultNow().notNull(),
+   export const myNewTable = pgTable('my_new_table', {
+     id: uuid('id').primaryKey().defaultRandom(),
+     name: text('name').notNull(),
+     createdAt: timestamp('created_at').defaultNow().notNull(),
    });
    ```
 
@@ -50,7 +50,7 @@ node -e "require('./src/db').db.execute('SELECT 1')"
 
    ```typescript
    // packages/database/src/schema/index.ts
-   export * from "./new-feature";
+   export * from './new-feature';
    ```
 
 3. **Generate migration**:
@@ -99,29 +99,26 @@ npm run db:migrate
 
 ```typescript
 // Example query
-import { db } from "@galaxyco/database";
-import { workspaces } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@galaxyco/database';
+import { workspaces } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 // Select
 const workspace = await db
   .select()
   .from(workspaces)
-  .where(eq(workspaces.slug, "my-workspace"))
+  .where(eq(workspaces.slug, 'my-workspace'))
   .limit(1);
 
 // Insert
 await db.insert(workspaces).values({
-  name: "New Workspace",
-  slug: "new-workspace",
+  name: 'New Workspace',
+  slug: 'new-workspace',
   createdById: userId,
 });
 
 // Update
-await db
-  .update(workspaces)
-  .set({ name: "Updated Name" })
-  .where(eq(workspaces.id, workspaceId));
+await db.update(workspaces).set({ name: 'Updated Name' }).where(eq(workspaces.id, workspaceId));
 
 // Delete
 await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
@@ -130,7 +127,7 @@ await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
 ### Using Raw SQL (When Necessary)
 
 ```typescript
-import { db } from "@galaxyco/database";
+import { db } from '@galaxyco/database';
 
 // For complex queries Drizzle can't express
 const result = await db.execute(sql`
@@ -161,11 +158,11 @@ const result = await db.execute(sql`
 
 ```typescript
 // scripts/cleanup-workspace.mjs
-import { db } from "@galaxyco/database";
-import { workspaces, workspaceMembers } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@galaxyco/database';
+import { workspaces, workspaceMembers } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
-const WORKSPACE_SLUG = "workspace-to-delete";
+const WORKSPACE_SLUG = 'workspace-to-delete';
 
 // Delete workspace members first (foreign key dependency)
 await db
@@ -173,10 +170,7 @@ await db
   .where(
     eq(
       workspaceMembers.workspaceId,
-      db
-        .select({ id: workspaces.id })
-        .from(workspaces)
-        .where(eq(workspaces.slug, WORKSPACE_SLUG)),
+      db.select({ id: workspaces.id }).from(workspaces).where(eq(workspaces.slug, WORKSPACE_SLUG)),
     ),
   );
 
@@ -218,10 +212,7 @@ psql $DATABASE_URL -c "COPY table_name TO STDOUT CSV HEADER" > export.csv
 const agents = await db.select().from(agents);
 
 // ✅ GOOD - Filtered by workspace
-const agents = await db
-  .select()
-  .from(agents)
-  .where(eq(agents.workspaceId, userWorkspaceId));
+const agents = await db.select().from(agents).where(eq(agents.workspaceId, userWorkspaceId));
 ```
 
 ### Safe Query Patterns
@@ -233,24 +224,15 @@ async function getWorkspace(workspaceId: string, userId: string) {
   const membership = await db
     .select()
     .from(workspaceMembers)
-    .where(
-      and(
-        eq(workspaceMembers.workspaceId, workspaceId),
-        eq(workspaceMembers.userId, userId),
-      ),
-    )
+    .where(and(eq(workspaceMembers.workspaceId, workspaceId), eq(workspaceMembers.userId, userId)))
     .limit(1);
 
   if (!membership.length) {
-    throw new Error("Access denied");
+    throw new Error('Access denied');
   }
 
   // Then fetch workspace
-  return db
-    .select()
-    .from(workspaces)
-    .where(eq(workspaces.id, workspaceId))
-    .limit(1);
+  return db.select().from(workspaces).where(eq(workspaces.id, workspaceId)).limit(1);
 }
 ```
 
@@ -300,29 +282,29 @@ Already configured via Neon's connection pooler. Monitor in Neon console.
 
 ```typescript
 // scripts/seed-test-data.ts
-import { db } from "@galaxyco/database";
+import { db } from '@galaxyco/database';
 
 async function seedTestData() {
   // Create test workspace
   const [workspace] = await db
     .insert(workspaces)
     .values({
-      name: "Test Workspace",
-      slug: "test-workspace",
-      createdById: "test-user-id",
+      name: 'Test Workspace',
+      slug: 'test-workspace',
+      createdById: 'test-user-id',
     })
     .returning();
 
   // Create test agents
   await db.insert(agents).values([
     {
-      name: "Test Agent 1",
+      name: 'Test Agent 1',
       workspaceId: workspace.id,
       // ... other fields
     },
   ]);
 
-  console.log("✅ Test data seeded");
+  console.log('✅ Test data seeded');
 }
 
 seedTestData();
@@ -348,12 +330,9 @@ DATABASE_URL="test-branch-url" npm run db:migrate
 
 ```typescript
 // Add deletedAt column to schema
-deletedAt: (timestamp("deleted_at"),
+deletedAt: (timestamp('deleted_at'),
   // Soft delete
-  await db
-    .update(table)
-    .set({ deletedAt: new Date() })
-    .where(eq(table.id, id)));
+  await db.update(table).set({ deletedAt: new Date() }).where(eq(table.id, id)));
 
 // Query excluding deleted
 const active = await db.select().from(table).where(isNull(table.deletedAt));
@@ -381,11 +360,7 @@ await db
 ### Pagination
 
 ```typescript
-async function getPaginatedAgents(
-  workspaceId: string,
-  page = 1,
-  pageSize = 20,
-) {
+async function getPaginatedAgents(workspaceId: string, page = 1, pageSize = 20) {
   const offset = (page - 1) * pageSize;
 
   const agents = await db

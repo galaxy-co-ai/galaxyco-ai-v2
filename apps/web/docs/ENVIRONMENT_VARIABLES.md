@@ -364,21 +364,21 @@ Create `scripts/validate-env.js`:
 
 ```javascript
 const requiredVars = [
-  "DATABASE_URL",
-  "CLERK_SECRET_KEY",
-  "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
-  "ENCRYPTION_KEY",
+  'DATABASE_URL',
+  'CLERK_SECRET_KEY',
+  'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
+  'ENCRYPTION_KEY',
 ];
 
 const missingVars = requiredVars.filter((name) => !process.env[name]);
 
 if (missingVars.length > 0) {
-  console.error("❌ Missing required environment variables:");
+  console.error('❌ Missing required environment variables:');
   missingVars.forEach((name) => console.error(`   - ${name}`));
   process.exit(1);
 }
 
-console.log("✅ All required environment variables are set");
+console.log('✅ All required environment variables are set');
 ```
 
 ### Test Database Connection

@@ -1,17 +1,15 @@
-"use client";
+'use client';
 
-import { colors, radius } from "@/lib/constants/design-system";
-import { MARKETPLACE_CATEGORIES } from "@/lib/constants/marketplace-categories";
-import { usePathname, useRouter } from "next/navigation";
-import { useRef, useState, useEffect } from "react";
+import { colors, radius } from '@/lib/constants/design-system';
+import { MARKETPLACE_CATEGORIES } from '@/lib/constants/marketplace-categories';
+import { usePathname, useRouter } from 'next/navigation';
+import { useRef, useState, useEffect } from 'react';
 
 interface MarketplaceCategoriesProps {
   activeCategory?: string;
 }
 
-export default function MarketplaceCategories({
-  activeCategory,
-}: MarketplaceCategoriesProps) {
+export default function MarketplaceCategories({ activeCategory }: MarketplaceCategoriesProps) {
   const router = useRouter();
   const pathname = usePathname();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -30,13 +28,13 @@ export default function MarketplaceCategories({
 
   useEffect(() => {
     checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
   }, []);
 
   const handleCategoryClick = (slug: string | null) => {
     if (slug === null) {
-      router.push("/marketplace");
+      router.push('/marketplace');
     } else {
       router.push(`/marketplace/${slug}`);
     }
@@ -44,25 +42,25 @@ export default function MarketplaceCategories({
 
   const isActive = (slug: string | null) => {
     if (slug === null) {
-      return pathname === "/marketplace" || !activeCategory;
+      return pathname === '/marketplace' || !activeCategory;
     }
     return activeCategory === slug;
   };
 
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div style={{ position: 'relative', width: '100%' }}>
       {/* Left Fade Indicator */}
       {showLeftFade && (
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
             top: 0,
             bottom: 0,
-            width: "60px",
+            width: '60px',
             background:
-              "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
-            pointerEvents: "none",
+              'linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
             zIndex: 1,
           }}
         />
@@ -72,14 +70,14 @@ export default function MarketplaceCategories({
       {showRightFade && (
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             right: 0,
             top: 0,
             bottom: 0,
-            width: "60px",
+            width: '60px',
             background:
-              "linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)",
-            pointerEvents: "none",
+              'linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
             zIndex: 1,
           }}
         />
@@ -90,14 +88,14 @@ export default function MarketplaceCategories({
         ref={scrollContainerRef}
         onScroll={checkScroll}
         style={{
-          display: "flex",
-          gap: "0.75rem",
-          overflowX: "auto",
-          paddingBottom: "0.5rem",
-          scrollBehavior: "smooth",
-          WebkitOverflowScrolling: "touch",
-          scrollbarWidth: "none", // Firefox
-          msOverflowStyle: "none", // IE/Edge
+          display: 'flex',
+          gap: '0.75rem',
+          overflowX: 'auto',
+          paddingBottom: '0.5rem',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none', // Firefox
+          msOverflowStyle: 'none', // IE/Edge
         }}
         className="hide-scrollbar"
       >
@@ -105,21 +103,19 @@ export default function MarketplaceCategories({
         <button
           onClick={() => handleCategoryClick(null)}
           style={{
-            padding: "0.5rem 1.25rem", // ~38px height
-            background: isActive(null)
-              ? colors.primary[500]
-              : colors.background.primary,
-            color: isActive(null) ? "white" : colors.text.primary,
-            border: `1px solid ${isActive(null) ? "transparent" : colors.border.default}`,
+            padding: '0.5rem 1.25rem', // ~38px height
+            background: isActive(null) ? colors.primary[500] : colors.background.primary,
+            color: isActive(null) ? 'white' : colors.text.primary,
+            border: `1px solid ${isActive(null) ? 'transparent' : colors.border.default}`,
             borderRadius: radius.lg,
-            fontSize: "0.875rem",
-            fontWeight: "600",
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            transition: "all 0.2s",
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            transition: 'all 0.2s',
             flexShrink: 0,
           }}
           onMouseEnter={(e) => {
@@ -145,21 +141,19 @@ export default function MarketplaceCategories({
             key={category.id}
             onClick={() => handleCategoryClick(category.slug)}
             style={{
-              padding: "0.5rem 1.25rem",
-              background: isActive(category.slug)
-                ? colors.primary[500]
-                : colors.background.primary,
-              color: isActive(category.slug) ? "white" : colors.text.primary,
-              border: `1px solid ${isActive(category.slug) ? "transparent" : colors.border.default}`,
+              padding: '0.5rem 1.25rem',
+              background: isActive(category.slug) ? colors.primary[500] : colors.background.primary,
+              color: isActive(category.slug) ? 'white' : colors.text.primary,
+              border: `1px solid ${isActive(category.slug) ? 'transparent' : colors.border.default}`,
               borderRadius: radius.lg,
-              fontSize: "0.875rem",
-              fontWeight: "600",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              transition: "all 0.2s",
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s',
               flexShrink: 0,
             }}
             onMouseEnter={(e) => {

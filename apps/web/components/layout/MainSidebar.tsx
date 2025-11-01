@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { Rocket, Satellite, Globe, Users, Pin } from "lucide-react";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { Rocket, Satellite, Globe, Users, Pin } from 'lucide-react';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { useSidebar } from '../../contexts/SidebarContext';
 
 // Main navigation items with space-themed icons
 const MAIN_NAV_ITEMS = [
   {
-    id: "dashboard",
-    name: "Dashboard",
+    id: 'dashboard',
+    name: 'Dashboard',
     icon: Rocket,
-    path: "/dashboard",
+    path: '/dashboard',
   },
   {
-    id: "knowledge",
-    name: "Knowledge",
+    id: 'knowledge',
+    name: 'Knowledge',
     icon: Satellite,
-    path: "/knowledge",
+    path: '/knowledge',
   },
   {
-    id: "marketplace",
-    name: "Marketplace",
+    id: 'marketplace',
+    name: 'Marketplace',
     icon: Globe,
-    path: "/marketplace",
+    path: '/marketplace',
   },
   {
-    id: "agents",
-    name: "Agents",
+    id: 'agents',
+    name: 'Agents',
     icon: Users,
-    path: "/agents",
+    path: '/agents',
   },
 ];
 
@@ -53,8 +53,8 @@ export default function MainSidebar() {
 
   const isActive = (path: string) => {
     // Check if current path starts with the nav item path
-    if (path === "/dashboard") {
-      return pathname === "/" || pathname === "/dashboard";
+    if (path === '/dashboard') {
+      return pathname === '/' || pathname === '/dashboard';
     }
     return pathname.startsWith(path);
   };
@@ -66,8 +66,8 @@ export default function MainSidebar() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={cn(
-          "fixed left-0 top-0 bottom-0 bg-background border-r border-border z-40 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block",
-          isExpanded ? "w-60" : "w-16",
+          'fixed left-0 top-0 bottom-0 bg-background border-r border-border z-40 transition-all duration-300 ease-in-out overflow-x-hidden overflow-y-auto hidden md:block',
+          isExpanded ? 'w-60' : 'w-16',
         )}
       >
         {/* Header */}
@@ -77,20 +77,20 @@ export default function MainSidebar() {
             href="/dashboard"
             className="text-xl font-bold text-primary whitespace-nowrap no-underline flex items-center gap-2 hover:text-primary/90 transition-colors"
           >
-            {isExpanded ? "GalaxyCo.ai" : <Globe size={24} strokeWidth={2.5} />}
+            {isExpanded ? 'GalaxyCo.ai' : <Globe size={24} strokeWidth={2.5} />}
           </Link>
 
           {/* Pin Button */}
           {isExpanded && (
             <Button
               onClick={togglePin}
-              variant={isPinned ? "secondary" : "ghost"}
+              variant={isPinned ? 'secondary' : 'ghost'}
               size="icon"
               className="h-8 w-8"
-              title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
-              aria-label={isPinned ? "Unpin sidebar" : "Pin sidebar"}
+              title={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+              aria-label={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
             >
-              <Pin className={cn("h-4 w-4", isPinned && "fill-current")} />
+              <Pin className={cn('h-4 w-4', isPinned && 'fill-current')} />
             </Button>
           )}
         </div>
@@ -102,19 +102,17 @@ export default function MainSidebar() {
               key={item.id}
               href={item.path}
               className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 border-l-3 transition-all duration-200 no-underline text-sm font-medium",
+                'w-full flex items-center gap-3 px-4 py-3 border-l-3 transition-all duration-200 no-underline text-sm font-medium',
                 isActive(item.path)
-                  ? "bg-primary/10 border-l-primary text-primary"
-                  : "border-l-transparent text-foreground hover:bg-secondary",
-                !isExpanded && "justify-center",
+                  ? 'bg-primary/10 border-l-primary text-primary'
+                  : 'border-l-transparent text-foreground hover:bg-secondary',
+                !isExpanded && 'justify-center',
               )}
               title={isExpanded ? undefined : item.name}
             >
               <item.icon size={20} strokeWidth={2} className="flex-shrink-0" />
               {isExpanded && (
-                <span className="whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.name}
-                </span>
+                <span className="whitespace-nowrap overflow-hidden text-ellipsis">{item.name}</span>
               )}
             </Link>
           ))}

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { logger } from "@/lib/utils/logger";
-import { COLORS, SPACING } from "@/lib/design-system";
-import CreateCollectionModal from "./CreateCollectionModal";
+import { useState, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { COLORS, SPACING } from '@/lib/design-system';
+import CreateCollectionModal from './CreateCollectionModal';
 
 interface Collection {
   id: string;
@@ -30,26 +30,22 @@ export default function CollectionsSidebar({
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingCollection, setEditingCollection] = useState<Collection | null>(
-    null,
-  );
+  const [editingCollection, setEditingCollection] = useState<Collection | null>(null);
 
   // Fetch collections
   const fetchCollections = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `/api/knowledge/collections?workspaceId=${workspaceId}`,
-      );
+      const response = await fetch(`/api/knowledge/collections?workspaceId=${workspaceId}`);
 
       if (!response.ok) {
-        throw new Error("Failed to fetch collections");
+        throw new Error('Failed to fetch collections');
       }
 
       const data = await response.json();
       setCollections(data.collections || []);
     } catch (error) {
-      logger.error("Error fetching collections", error);
+      logger.error('Error fetching collections', error);
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +60,7 @@ export default function CollectionsSidebar({
   const handleDelete = async (collectionId: string) => {
     if (
       !confirm(
-        "Are you sure you want to delete this collection? Items will not be deleted, just ungrouped.",
+        'Are you sure you want to delete this collection? Items will not be deleted, just ungrouped.',
       )
     ) {
       return;
@@ -74,12 +70,12 @@ export default function CollectionsSidebar({
       const response = await fetch(
         `/api/knowledge/collections/${collectionId}?workspaceId=${workspaceId}`,
         {
-          method: "DELETE",
+          method: 'DELETE',
         },
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete collection");
+        throw new Error('Failed to delete collection');
       }
 
       // If deleted collection was selected, clear selection
@@ -89,8 +85,8 @@ export default function CollectionsSidebar({
 
       fetchCollections();
     } catch (error: any) {
-      logger.error("Error deleting collection", error);
-      alert("Failed to delete collection: " + error.message);
+      logger.error('Error deleting collection', error);
+      alert('Failed to delete collection: ' + error.message);
     }
   };
 
@@ -98,12 +94,12 @@ export default function CollectionsSidebar({
     <>
       <div
         style={{
-          width: "260px",
-          height: "100%",
+          width: '260px',
+          height: '100%',
           backgroundColor: COLORS.background.primary,
           borderRight: `1px solid ${COLORS.border.primary}`,
-          display: "flex",
-          flexDirection: "column",
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         {/* Header */}
@@ -116,8 +112,8 @@ export default function CollectionsSidebar({
           <h3
             style={{
               margin: 0,
-              fontSize: "14px",
-              fontWeight: "600",
+              fontSize: '14px',
+              fontWeight: '600',
               color: COLORS.text.primary,
               marginBottom: SPACING.md,
             }}
@@ -127,22 +123,22 @@ export default function CollectionsSidebar({
           <button
             onClick={() => setShowCreateModal(true)}
             style={{
-              width: "100%",
+              width: '100%',
               padding: `${SPACING.sm} ${SPACING.md}`,
-              fontSize: "13px",
-              fontWeight: "500",
+              fontSize: '13px',
+              fontWeight: '500',
               backgroundColor: COLORS.accent.primary,
-              color: "#fff",
-              border: "none",
+              color: '#fff',
+              border: 'none',
               borderRadius: SPACING.radius.md,
-              cursor: "pointer",
-              transition: "opacity 0.2s ease",
+              cursor: 'pointer',
+              transition: 'opacity 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = "0.9";
+              e.currentTarget.style.opacity = '0.9';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = "1";
+              e.currentTarget.style.opacity = '1';
             }}
           >
             + New Collection
@@ -153,7 +149,7 @@ export default function CollectionsSidebar({
         <div
           style={{
             flex: 1,
-            overflow: "auto",
+            overflow: 'auto',
             padding: SPACING.sm,
           }}
         >
@@ -171,8 +167,8 @@ export default function CollectionsSidebar({
             <div
               style={{
                 padding: SPACING.lg,
-                textAlign: "center",
-                fontSize: "13px",
+                textAlign: 'center',
+                fontSize: '13px',
                 color: COLORS.text.secondary,
               }}
             >
@@ -182,8 +178,8 @@ export default function CollectionsSidebar({
             <div
               style={{
                 padding: SPACING.lg,
-                textAlign: "center",
-                fontSize: "13px",
+                textAlign: 'center',
+                fontSize: '13px',
                 color: COLORS.text.secondary,
               }}
             >
@@ -250,29 +246,27 @@ function CollectionItem({
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       style={{
-        position: "relative",
+        position: 'relative',
         marginBottom: SPACING.xs,
       }}
     >
       <button
         onClick={onClick}
         style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
           gap: SPACING.sm,
           padding: `${SPACING.sm} ${SPACING.md}`,
-          fontSize: "13px",
-          fontWeight: "500",
-          backgroundColor: isSelected
-            ? `${COLORS.accent.primary}15`
-            : "transparent",
+          fontSize: '13px',
+          fontWeight: '500',
+          backgroundColor: isSelected ? `${COLORS.accent.primary}15` : 'transparent',
           color: isSelected ? COLORS.accent.primary : COLORS.text.primary,
-          border: "none",
+          border: 'none',
           borderRadius: SPACING.radius.md,
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-          textAlign: "left",
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          textAlign: 'left',
         }}
         onMouseEnter={(e) => {
           if (!isSelected) {
@@ -281,19 +275,19 @@ function CollectionItem({
         }}
         onMouseLeave={(e) => {
           if (!isSelected) {
-            e.currentTarget.style.backgroundColor = "transparent";
+            e.currentTarget.style.backgroundColor = 'transparent';
           }
         }}
       >
         {/* Icon or Color Dot */}
         {icon ? (
-          <span style={{ fontSize: "16px" }}>{icon}</span>
+          <span style={{ fontSize: '16px' }}>{icon}</span>
         ) : (
           <div
             style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
               backgroundColor: color,
               flexShrink: 0,
             }}
@@ -304,9 +298,9 @@ function CollectionItem({
         <span
           style={{
             flex: 1,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
           {label}
@@ -315,7 +309,7 @@ function CollectionItem({
         {/* Count */}
         <span
           style={{
-            fontSize: "11px",
+            fontSize: '11px',
             color: COLORS.text.secondary,
             flexShrink: 0,
           }}
@@ -328,15 +322,13 @@ function CollectionItem({
       {showActions && onEdit && onDelete && (
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             right: SPACING.sm,
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
+            top: '50%',
+            transform: 'translateY(-50%)',
+            display: 'flex',
             gap: SPACING.xs,
-            backgroundColor: isSelected
-              ? `${COLORS.accent.primary}15`
-              : COLORS.background.primary,
+            backgroundColor: isSelected ? `${COLORS.accent.primary}15` : COLORS.background.primary,
             paddingLeft: SPACING.xs,
           }}
         >
@@ -347,10 +339,10 @@ function CollectionItem({
             }}
             style={{
               padding: SPACING.xs,
-              fontSize: "14px",
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
+              fontSize: '14px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
               color: COLORS.text.secondary,
             }}
             title="Edit"
@@ -364,10 +356,10 @@ function CollectionItem({
             }}
             style={{
               padding: SPACING.xs,
-              fontSize: "14px",
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
+              fontSize: '14px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
               color: COLORS.text.secondary,
             }}
             title="Delete"

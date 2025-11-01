@@ -5,11 +5,11 @@
  * Uses pattern matching and heuristics to detect suspicious input.
  */
 
-import type { Guardrail, GuardrailResult } from "../types";
+import type { Guardrail, GuardrailResult } from '../types';
 
 export interface InputSafetyConfig {
   enabled?: boolean;
-  mode?: "strict" | "moderate" | "permissive";
+  mode?: 'strict' | 'moderate' | 'permissive';
   customPatterns?: RegExp[];
 }
 
@@ -45,15 +45,13 @@ const INJECTION_PATTERNS = [
 /**
  * Create input safety guardrail
  */
-export function createInputSafetyGuardrail(
-  config: InputSafetyConfig = {},
-): Guardrail {
-  const { enabled = true, mode = "moderate", customPatterns = [] } = config;
+export function createInputSafetyGuardrail(config: InputSafetyConfig = {}): Guardrail {
+  const { enabled = true, mode = 'moderate', customPatterns = [] } = config;
 
   return {
-    name: "input-safety",
-    description: "Prevents prompt injection and malicious instructions",
-    type: "input",
+    name: 'input-safety',
+    description: 'Prevents prompt injection and malicious instructions',
+    type: 'input',
     enabled,
 
     async check(input: any): Promise<GuardrailResult> {
@@ -63,7 +61,7 @@ export function createInputSafetyGuardrail(
       }
 
       // Convert input to string for checking
-      const text = typeof input === "string" ? input : JSON.stringify(input);
+      const text = typeof input === 'string' ? input : JSON.stringify(input);
 
       // Check against injection patterns
       const allPatterns = [...INJECTION_PATTERNS, ...customPatterns];
@@ -72,8 +70,8 @@ export function createInputSafetyGuardrail(
         if (pattern.test(text)) {
           return {
             passed: false,
-            action: "block",
-            reason: "Input contains potential prompt injection pattern",
+            action: 'block',
+            reason: 'Input contains potential prompt injection pattern',
             metadata: {
               pattern: pattern.source,
               mode,
@@ -83,14 +81,13 @@ export function createInputSafetyGuardrail(
       }
 
       // In strict mode, also check for excessive special characters
-      if (mode === "strict") {
-        const specialCharRatio =
-          (text.match(/[<>{}[\]|\\]/g) || []).length / text.length;
+      if (mode === 'strict') {
+        const specialCharRatio = (text.match(/[<>{}[\]|\\]/g) || []).length / text.length;
         if (specialCharRatio > 0.1) {
           return {
             passed: false,
-            action: "block",
-            reason: "Input contains suspicious special character patterns",
+            action: 'block',
+            reason: 'Input contains suspicious special character patterns',
             metadata: { specialCharRatio, mode },
           };
         }

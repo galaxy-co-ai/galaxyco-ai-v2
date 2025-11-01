@@ -37,13 +37,11 @@ export interface ComponentProps {
 }
 
 // Component.tsx
-export const Component = forwardRef<HTMLElement, ComponentProps>(
-  (props, ref) => {
-    // Implementation
-  },
-);
+export const Component = forwardRef<HTMLElement, ComponentProps>((props, ref) => {
+  // Implementation
+});
 
-Component.displayName = "Component";
+Component.displayName = 'Component';
 ```
 
 ---
@@ -65,13 +63,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
    * Visual style variant
    * @default 'primary'
    */
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline";
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
 
   /**
    * Size variant
    * @default 'md'
    */
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
   /**
    * Disabled state
@@ -214,13 +212,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
    * Visual state variant
    * @default 'default'
    */
-  variant?: "default" | "error" | "success";
+  variant?: 'default' | 'error' | 'success';
 
   /**
    * Size variant
    * @default 'md'
    */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 
   /**
    * Left addon (icon or text)
@@ -336,13 +334,13 @@ interface BadgeProps {
    * Color variant
    * @default 'default'
    */
-  variant?: "default" | "success" | "warning" | "danger" | "info";
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
 
   /**
    * Size variant
    * @default 'md'
    */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 
   /**
    * Badge content
@@ -371,11 +369,11 @@ interface BadgeProps {
 
 ```typescript
 const variants = {
-  default: "bg-muted text-muted-foreground",
-  success: "bg-success/10 text-success border border-success/20",
-  warning: "bg-warning/10 text-warning border border-warning/20",
-  danger: "bg-destructive/10 text-destructive border border-destructive/20",
-  info: "bg-primary/10 text-primary border border-primary/20",
+  default: 'bg-muted text-muted-foreground',
+  success: 'bg-success/10 text-success border border-success/20',
+  warning: 'bg-warning/10 text-warning border border-warning/20',
+  danger: 'bg-destructive/10 text-destructive border border-destructive/20',
+  info: 'bg-primary/10 text-primary border border-primary/20',
 };
 ```
 
@@ -423,18 +421,18 @@ interface AvatarProps {
    * Size variant
    * @default 'md'
    */
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
   /**
    * Shape variant
    * @default 'circle'
    */
-  variant?: "circle" | "square";
+  variant?: 'circle' | 'square';
 
   /**
    * Status indicator
    */
-  status?: "online" | "offline" | "away" | "busy";
+  status?: 'online' | 'offline' | 'away' | 'busy';
 }
 ```
 
@@ -655,7 +653,7 @@ interface RadioGroupProps {
     description?: string;
     isDisabled?: boolean;
   }>;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 ```
 
@@ -699,7 +697,7 @@ interface ToggleProps {
    * Size variant
    * @default 'md'
    */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 ```
 
@@ -751,7 +749,7 @@ interface SpinnerProps {
    * Size variant
    * @default 'md'
    */
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
   /**
    * Color (Tailwind class)
@@ -815,7 +813,7 @@ interface SkeletonProps {
    * Skeleton shape
    * @default 'text'
    */
-  variant?: "text" | "circle" | "rectangle";
+  variant?: 'text' | 'circle' | 'rectangle';
 
   /**
    * Width (CSS value)
@@ -837,7 +835,7 @@ interface SkeletonProps {
    * Animation type
    * @default 'pulse'
    */
-  animation?: "pulse" | "shimmer" | "none";
+  animation?: 'pulse' | 'shimmer' | 'none';
 }
 ```
 
@@ -913,13 +911,13 @@ interface ProgressProps {
    * Visual variant
    * @default 'bar'
    */
-  variant?: "bar" | "circle" | "ring";
+  variant?: 'bar' | 'circle' | 'ring';
 
   /**
    * Size (for circle/ring)
    * @default 'md'
    */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 
   /**
    * Show percentage text
@@ -936,7 +934,7 @@ interface ProgressProps {
    * Color variant
    * @default 'primary'
    */
-  color?: "primary" | "success" | "warning" | "danger";
+  color?: 'primary' | 'success' | 'warning' | 'danger';
 }
 ```
 

@@ -4,43 +4,37 @@
  * October 19, 2025
  */
 
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import {
-  Download,
-  Upload,
-  FileText,
-  ChevronRight,
-  Database,
-} from "lucide-react";
+import Link from 'next/link';
+import { Card } from '@/components/ui/card';
+import { Download, Upload, FileText, ChevronRight, Database } from 'lucide-react';
 
 export default function DataHub() {
   const dataSections = [
     {
-      title: "Exports",
-      href: "/data/exports",
+      title: 'Exports',
+      href: '/data/exports',
       icon: Download,
-      description: "Export data and generate reports",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+      description: 'Export data and generate reports',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
     },
     {
-      title: "Imports",
-      href: "/data/imports",
+      title: 'Imports',
+      href: '/data/imports',
       icon: Upload,
-      description: "Import data from external sources",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      description: 'Import data from external sources',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
     },
     {
-      title: "Audit Log",
-      href: "/data/audit-log",
+      title: 'Audit Log',
+      href: '/data/audit-log',
       icon: FileText,
-      description: "View system activity and changes",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
+      description: 'View system activity and changes',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
     },
   ];
 
@@ -49,9 +43,7 @@ export default function DataHub() {
       <div className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              Data Management
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">Data Management</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Export, import, and audit your data
             </p>
@@ -76,12 +68,8 @@ export default function DataHub() {
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {section.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {section.description}
-                  </p>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground">{section.description}</p>
                 </Card>
               </Link>
             );

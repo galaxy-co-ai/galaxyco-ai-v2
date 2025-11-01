@@ -8,38 +8,35 @@
  * All queries use withTenant() helper to enforce workspace isolation.
  */
 
-import { createTool } from "../tools";
-import type { Tool, ExecutionContext } from "../types";
-import { db, withTenant, agents } from "@galaxyco/database";
-import { like, or, eq } from "drizzle-orm";
+import { createTool } from '../tools';
+import type { Tool, ExecutionContext } from '../types';
+import { db, withTenant, agents } from '@galaxyco/database';
+import { like, or, eq } from 'drizzle-orm';
 
 /**
  * Search agents in workspace
  */
 export function createSearchAgentsTool(): Tool {
   return createTool(
-    "search_agents",
-    "Search for agents in the current workspace by name, type, or description",
+    'search_agents',
+    'Search for agents in the current workspace by name, type, or description',
     {
       query: {
-        type: "string",
-        description: "Search query (name, type, or description)",
+        type: 'string',
+        description: 'Search query (name, type, or description)',
       },
       limit: {
-        type: "number",
-        description: "Maximum number of results (default: 10)",
+        type: 'number',
+        description: 'Maximum number of results (default: 10)',
         required: false,
       },
     },
-    async (
-      args: { query: string; limit?: number },
-      context?: ExecutionContext,
-    ) => {
+    async (args: { query: string; limit?: number }, context?: ExecutionContext) => {
       try {
         if (!context?.workspaceId) {
           return {
             success: false,
-            error: "Workspace context required for database queries",
+            error: 'Workspace context required for database queries',
             agents: [],
           };
         }
@@ -50,10 +47,7 @@ export function createSearchAgentsTool(): Tool {
         // Query using withTenant for workspace isolation
         const tenantDb = withTenant(db, workspaceId);
         const results = await tenantDb.query.agents.findMany({
-          where: or(
-            like(agents.name, `%${query}%`),
-            like(agents.description, `%${query}%`),
-          ),
+          where: or(like(agents.name, `%${query}%`), like(agents.description, `%${query}%`)),
           limit,
           columns: {
             id: true,
@@ -73,7 +67,7 @@ export function createSearchAgentsTool(): Tool {
       } catch (error: any) {
         return {
           success: false,
-          error: error.message || "Failed to search agents",
+          error: error.message || 'Failed to search agents',
           agents: [],
         };
       }
@@ -86,12 +80,12 @@ export function createSearchAgentsTool(): Tool {
  */
 export function createGetAgentTool(): Tool {
   return createTool(
-    "get_agent",
-    "Get detailed information about a specific agent by ID",
+    'get_agent',
+    'Get detailed information about a specific agent by ID',
     {
       agentId: {
-        type: "string",
-        description: "The ID of the agent to retrieve",
+        type: 'string',
+        description: 'The ID of the agent to retrieve',
       },
     },
     async (args: { agentId: string }, context?: ExecutionContext) => {
@@ -99,7 +93,7 @@ export function createGetAgentTool(): Tool {
         if (!context?.workspaceId) {
           return {
             success: false,
-            error: "Workspace context required for database queries",
+            error: 'Workspace context required for database queries',
           };
         }
 
@@ -135,7 +129,7 @@ export function createGetAgentTool(): Tool {
       } catch (error: any) {
         return {
           success: false,
-          error: error.message || "Failed to get agent",
+          error: error.message || 'Failed to get agent',
         };
       }
     },
@@ -147,15 +141,15 @@ export function createGetAgentTool(): Tool {
  */
 export function createGetWorkspaceStatsTool(): Tool {
   return createTool(
-    "get_workspace_stats",
-    "Get statistics about the current workspace (agent count, executions, etc.)",
+    'get_workspace_stats',
+    'Get statistics about the current workspace (agent count, executions, etc.)',
     {},
     async (args: Record<string, never>, context?: ExecutionContext) => {
       try {
         if (!context?.workspaceId) {
           return {
             success: false,
-            error: "Workspace context required for database queries",
+            error: 'Workspace context required for database queries',
           };
         }
 
@@ -166,9 +160,7 @@ export function createGetWorkspaceStatsTool(): Tool {
         const allAgents = await tenantDb.query.agents.findMany();
 
         const totalAgents = allAgents.length;
-        const activeAgents = allAgents.filter(
-          (agent) => agent.status === "active",
-        ).length;
+        const activeAgents = allAgents.filter((agent) => agent.status === 'active').length;
 
         // Get execution counts
         const allExecutions = await tenantDb.query.agentExecutions.findMany();
@@ -185,7 +177,7 @@ export function createGetWorkspaceStatsTool(): Tool {
       } catch (error: any) {
         return {
           success: false,
-          error: error.message || "Failed to get workspace stats",
+          error: error.message || 'Failed to get workspace stats',
         };
       }
     },
@@ -196,9 +188,5 @@ export function createGetWorkspaceStatsTool(): Tool {
  * Create all database tools
  */
 export function createDatabaseTools(): Tool[] {
-  return [
-    createSearchAgentsTool(),
-    createGetAgentTool(),
-    createGetWorkspaceStatsTool(),
-  ];
+  return [createSearchAgentsTool(), createGetAgentTool(), createGetWorkspaceStatsTool()];
 }

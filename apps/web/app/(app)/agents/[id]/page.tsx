@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   ArrowLeft,
   Play,
@@ -13,24 +13,24 @@ import {
   CheckCircle2,
   TrendingUp,
   AlertCircle,
-} from "lucide-react";
-import { DetailPage } from "@/components/templates/detail-page";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { toast } from "sonner";
-import { ExecutionList } from "@/components/agents/execution-list";
-import { logger } from "@/lib/utils/logger";
+} from 'lucide-react';
+import { DetailPage } from '@/components/templates/detail-page';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { ExecutionList } from '@/components/agents/execution-list';
+import { logger } from '@/lib/utils/logger';
 
 // Minimal agent type for fields used here
 interface AgentExecution {
   id: string;
-  status: "pending" | "running" | "completed" | "failed";
+  status: 'pending' | 'running' | 'completed' | 'failed';
   createdAt: string;
   durationMs?: number | null;
 }
 
 interface AgentSchedule {
-  triggerType: "manual" | "scheduled" | "webhook";
+  triggerType: 'manual' | 'scheduled' | 'webhook';
   cron?: string | null;
 }
 
@@ -38,7 +38,7 @@ interface AgentData {
   id: string;
   name: string;
   description?: string | null;
-  status: "draft" | "active" | "paused";
+  status: 'draft' | 'active' | 'paused';
   version?: string | number;
   schedule?: AgentSchedule | null;
   recentExecutions?: AgentExecution[];
@@ -49,11 +49,7 @@ interface AgentData {
   };
 }
 
-export default function AgentDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function AgentDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [agent, setAgent] = useState<AgentData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,22 +62,18 @@ export default function AgentDetailPage({
         const response = await fetch(`/api/agents/${params.id}`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch agent");
+          throw new Error('Failed to fetch agent');
         }
 
         const data = await response.json();
         setAgent(data.agent);
       } catch (err) {
-        logger.error("Failed to fetch agent", {
+        logger.error('Failed to fetch agent', {
           agentId: params.id,
           error: err instanceof Error ? err.message : String(err),
         });
-        setError(
-          err instanceof Error ? err : new Error("Failed to load agent"),
-        );
-        toast.error(
-          err instanceof Error ? err.message : "Failed to load agent",
-        );
+        setError(err instanceof Error ? err : new Error('Failed to load agent'));
+        toast.error(err instanceof Error ? err.message : 'Failed to load agent');
       } finally {
         setIsLoading(false);
       }
@@ -93,22 +85,22 @@ export default function AgentDetailPage({
   const handleToggleStatus = async () => {
     if (!agent) return;
 
-    const newStatus = agent.status === "active" ? "paused" : "active";
+    const newStatus = agent.status === 'active' ? 'paused' : 'active';
 
     try {
       const response = await fetch(`/api/agents/${agent.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
 
-      if (!response.ok) throw new Error("Failed to update status");
+      if (!response.ok) throw new Error('Failed to update status');
 
       const data = await response.json();
       setAgent(data.agent);
-      toast.success(`Agent ${newStatus === "active" ? "activated" : "paused"}`);
+      toast.success(`Agent ${newStatus === 'active' ? 'activated' : 'paused'}`);
     } catch (error) {
-      toast.error("Failed to update agent status");
+      toast.error('Failed to update agent status');
     }
   };
 
@@ -116,24 +108,22 @@ export default function AgentDetailPage({
     if (!agent) return;
 
     if (
-      !confirm(
-        `Are you sure you want to delete "${agent.name}"? This action cannot be undone.`,
-      )
+      !confirm(`Are you sure you want to delete "${agent.name}"? This action cannot be undone.`)
     ) {
       return;
     }
 
     try {
       const response = await fetch(`/api/agents/${agent.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
-      if (!response.ok) throw new Error("Failed to delete agent");
+      if (!response.ok) throw new Error('Failed to delete agent');
 
-      toast.success("Agent deleted");
-      router.push("/agents");
+      toast.success('Agent deleted');
+      router.push('/agents');
     } catch (error) {
-      toast.error("Failed to delete agent");
+      toast.error('Failed to delete agent');
     }
   };
 
@@ -141,31 +131,29 @@ export default function AgentDetailPage({
   const metrics = agent
     ? [
         {
-          label: "Total Runs",
+          label: 'Total Runs',
           value: agent.metrics?.totalRuns ?? 0,
           icon: <Activity className="h-5 w-5" />,
         },
         {
-          label: "Success Rate",
+          label: 'Success Rate',
           value: `${Math.round(agent.metrics?.successRate ?? 0)}%`,
           change:
-            agent.metrics?.successRate && agent.metrics.successRate > 90
-              ? "+2.4%"
-              : undefined,
+            agent.metrics?.successRate && agent.metrics.successRate > 90 ? '+2.4%' : undefined,
           trend:
             agent.metrics?.successRate && agent.metrics.successRate > 90
-              ? ("up" as const)
-              : ("neutral" as const),
+              ? ('up' as const)
+              : ('neutral' as const),
           icon: <CheckCircle2 className="h-5 w-5" />,
         },
         {
-          label: "Avg Duration",
+          label: 'Avg Duration',
           value: `${(((agent.metrics?.avgDuration ?? 0) as number) / 1000).toFixed(1)}s`,
           icon: <Clock className="h-5 w-5" />,
         },
         {
-          label: "Version",
-          value: String(agent.version ?? "—"),
+          label: 'Version',
+          value: String(agent.version ?? '—'),
           icon: <TrendingUp className="h-5 w-5" />,
         },
       ]
@@ -182,18 +170,18 @@ export default function AgentDetailPage({
       </Link>
 
       <DetailPage
-        title={agent?.name || "Agent"}
-        subtitle={agent?.description || "No description"}
+        title={agent?.name || 'Agent'}
+        subtitle={agent?.description || 'No description'}
         breadcrumbs={[
-          { label: "Dashboard", href: "/" },
-          { label: "Agents", href: "/agents" },
-          { label: agent?.name || "Detail" },
+          { label: 'Dashboard', href: '/' },
+          { label: 'Agents', href: '/agents' },
+          { label: agent?.name || 'Detail' },
         ]}
         actions={
           agent && (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleToggleStatus}>
-                {agent.status === "active" ? (
+                {agent.status === 'active' ? (
                   <>
                     <Pause className="h-4 w-4 mr-2" /> Pause
                   </>
@@ -217,24 +205,24 @@ export default function AgentDetailPage({
         metrics={metrics}
         tabs={[
           {
-            id: "overview",
-            label: "Overview",
+            id: 'overview',
+            label: 'Overview',
             content: agent && <OverviewTab agent={agent} />,
           },
           {
-            id: "workflow",
-            label: "Workflow",
+            id: 'workflow',
+            label: 'Workflow',
             content: <WorkflowTab />,
           },
           {
-            id: "executions",
-            label: "Executions",
+            id: 'executions',
+            label: 'Executions',
             badge: agent?.recentExecutions?.length,
             content: agent && <ExecutionsTab agent={agent} />,
           },
           {
-            id: "settings",
-            label: "Settings",
+            id: 'settings',
+            label: 'Settings',
             content: <SettingsTab />,
           },
         ]}
@@ -258,9 +246,9 @@ function OverviewTab({ agent }: { agent: AgentData }) {
                 className="flex items-center justify-between py-2 border-b border-border last:border-0"
               >
                 <div className="flex items-center gap-3">
-                  {execution.status === "completed" ? (
+                  {execution.status === 'completed' ? (
                     <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-                  ) : execution.status === "failed" ? (
+                  ) : execution.status === 'failed' ? (
                     <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   ) : (
                     <Clock className="h-4 w-4 text-muted-foreground" />
@@ -268,18 +256,14 @@ function OverviewTab({ agent }: { agent: AgentData }) {
                   <span className="text-sm capitalize">{execution.status}</span>
                 </div>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  {execution.durationMs && (
-                    <span>{(execution.durationMs / 1000).toFixed(1)}s</span>
-                  )}
+                  {execution.durationMs && <span>{(execution.durationMs / 1000).toFixed(1)}s</span>}
                   <span>{new Date(execution.createdAt).toLocaleString()}</span>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground text-center py-8">
-            No executions yet
-          </p>
+          <p className="text-sm text-muted-foreground text-center py-8">No executions yet</p>
         )}
       </Card>
     </div>
@@ -289,9 +273,7 @@ function OverviewTab({ agent }: { agent: AgentData }) {
 function WorkflowTab() {
   return (
     <Card className="p-6">
-      <p className="text-muted-foreground">
-        Workflow visualization coming soon
-      </p>
+      <p className="text-muted-foreground">Workflow visualization coming soon</p>
     </Card>
   );
 }

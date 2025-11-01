@@ -25,7 +25,7 @@ interface SearchBarProps {
   placeholder?: string;
   shortcuts?: string; // Display "⌘K"
   isLoading?: boolean;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 ```
 
@@ -133,8 +133,8 @@ interface TabsProps {
   }>;
   activeTab?: string;
   onChange?: (tabId: string) => void;
-  variant?: "line" | "pills";
-  size?: "sm" | "md" | "lg";
+  variant?: 'line' | 'pills';
+  size?: 'sm' | 'md' | 'lg';
 }
 ```
 
@@ -179,7 +179,7 @@ interface AccordionProps {
   }>;
   defaultOpen?: string[]; // IDs of initially open items
   allowMultiple?: boolean;
-  variant?: "default" | "bordered" | "separated";
+  variant?: 'default' | 'bordered' | 'separated';
 }
 ```
 
@@ -224,8 +224,8 @@ interface DropdownMenuProps {
     isDisabled?: boolean;
     shortcut?: string; // e.g., "⌘D"
   }>;
-  align?: "start" | "center" | "end";
-  side?: "top" | "bottom" | "left" | "right";
+  align?: 'start' | 'center' | 'end';
+  side?: 'top' | 'bottom' | 'left' | 'right';
 }
 ```
 
@@ -258,7 +258,7 @@ interface DropdownMenuProps {
 
 ```typescript
 interface ToastProps {
-  variant: "info" | "success" | "warning" | "error";
+  variant: 'info' | 'success' | 'warning' | 'error';
   title?: string;
   description: string;
   duration?: number; // ms, 0 = persistent
@@ -438,7 +438,7 @@ interface DataTableProps<T> {
     filterable?: boolean;
     render?: (row: T) => ReactNode;
     width?: string;
-    align?: "left" | "center" | "right";
+    align?: 'left' | 'center' | 'right';
   }>;
   rowActions?: Array<{
     label: string;
@@ -454,7 +454,7 @@ interface DataTableProps<T> {
   isLoading?: boolean;
   emptyState?: ReactNode;
   pagination?: PaginationProps;
-  onSort?: (key: string, direction: "asc" | "desc") => void;
+  onSort?: (key: string, direction: 'asc' | 'desc') => void;
   onFilter?: (filters: Record<string, any>) => void;
 }
 ```
@@ -579,7 +579,7 @@ interface ModalProps {
   description?: string;
   children: ReactNode;
   footer?: ReactNode;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
 }
@@ -625,8 +625,8 @@ interface DrawerProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  placement?: "left" | "right" | "top" | "bottom";
-  size?: "sm" | "md" | "lg" | "full";
+  placement?: 'left' | 'right' | 'top' | 'bottom';
+  size?: 'sm' | 'md' | 'lg' | 'full';
 }
 ```
 
@@ -661,7 +661,7 @@ interface StepperProps {
   }>;
   currentStep: number;
   onStepChange: (step: number) => void;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 ```
 
@@ -698,7 +698,7 @@ interface NotificationPanelProps {
     description?: string;
     timestamp: string;
     isRead: boolean;
-    type: "info" | "success" | "warning" | "error";
+    type: 'info' | 'success' | 'warning' | 'error';
     onClick?: () => void;
   }>;
   onMarkAllRead?: () => void;
@@ -775,7 +775,7 @@ Su Mo Tu We Th Fr Sa
 
 ```typescript
 interface ChartProps {
-  type: "line" | "bar" | "area" | "donut" | "pie";
+  type: 'line' | 'bar' | 'area' | 'donut' | 'pie';
   data: Array<Record<string, any>>;
   categories: string[];
   index: string;
@@ -790,13 +790,13 @@ interface ChartProps {
 **Using Tremor:**
 
 ```tsx
-import { LineChart } from "@tremor/react";
+import { LineChart } from '@tremor/react';
 
 <LineChart
   data={data}
   index="date"
-  categories={["revenue", "expenses"]}
-  colors={["blue", "red"]}
+  categories={['revenue', 'expenses']}
+  colors={['blue', 'red']}
   valueFormatter={(v) => `$${v.toLocaleString()}`}
 />;
 ```

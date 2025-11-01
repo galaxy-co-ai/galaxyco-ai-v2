@@ -1,29 +1,23 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { useParams } from 'next/navigation';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  Search,
-  ExternalLink,
-} from "lucide-react";
-import { useState } from "react";
+} from '@/components/ui/select';
+import { CheckCircle2, XCircle, Clock, Search, ExternalLink } from 'lucide-react';
+import { useState } from 'react';
 
 interface WorkflowRun {
   id: string;
-  status: "success" | "error" | "running";
+  status: 'success' | 'error' | 'running';
   startTime: string;
   duration: number;
   trigger: string;
@@ -33,38 +27,38 @@ interface WorkflowRun {
 
 const mockRuns: WorkflowRun[] = [
   {
-    id: "run_abc123",
-    status: "success",
-    startTime: "2025-10-18 15:42:10",
+    id: 'run_abc123',
+    status: 'success',
+    startTime: '2025-10-18 15:42:10',
     duration: 3200,
-    trigger: "webhook",
+    trigger: 'webhook',
     stepsCompleted: 3,
     totalSteps: 3,
   },
   {
-    id: "run_def456",
-    status: "error",
-    startTime: "2025-10-18 14:28:15",
+    id: 'run_def456',
+    status: 'error',
+    startTime: '2025-10-18 14:28:15',
     duration: 1800,
-    trigger: "manual",
+    trigger: 'manual',
     stepsCompleted: 2,
     totalSteps: 3,
   },
   {
-    id: "run_ghi789",
-    status: "success",
-    startTime: "2025-10-18 13:15:42",
+    id: 'run_ghi789',
+    status: 'success',
+    startTime: '2025-10-18 13:15:42',
     duration: 2950,
-    trigger: "schedule",
+    trigger: 'schedule',
     stepsCompleted: 3,
     totalSteps: 3,
   },
   {
-    id: "run_jkl012",
-    status: "running",
-    startTime: "2025-10-18 15:50:00",
+    id: 'run_jkl012',
+    status: 'running',
+    startTime: '2025-10-18 15:50:00',
     duration: 0,
-    trigger: "webhook",
+    trigger: 'webhook',
     stepsCompleted: 1,
     totalSteps: 3,
   },
@@ -72,16 +66,14 @@ const mockRuns: WorkflowRun[] = [
 
 export default function WorkflowRunsPage() {
   const params = useParams<{ id: string }>();
-  const id = params?.id || "1";
+  const id = params?.id || '1';
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   const filteredRuns = mockRuns.filter((run) => {
-    const matchesSearch = run.id
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || run.status === statusFilter;
+    const matchesSearch = run.id.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || run.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -90,9 +82,9 @@ export default function WorkflowRunsPage() {
       title="Workflow Runs"
       subtitle="View execution history and run details"
       breadcrumbs={[
-        { label: "Workflows", href: "/workflows" },
-        { label: "Lead Enrichment", href: `/workflows/${id}` },
-        { label: "Runs" },
+        { label: 'Workflows', href: '/workflows' },
+        { label: 'Lead Enrichment', href: `/workflows/${id}` },
+        { label: 'Runs' },
       ]}
     >
       {/* Filters */}
@@ -127,9 +119,7 @@ export default function WorkflowRunsPage() {
               <tr>
                 <th className="text-left p-4 font-medium text-sm">Run ID</th>
                 <th className="text-left p-4 font-medium text-sm">Status</th>
-                <th className="text-left p-4 font-medium text-sm">
-                  Start Time
-                </th>
+                <th className="text-left p-4 font-medium text-sm">Start Time</th>
                 <th className="text-left p-4 font-medium text-sm">Duration</th>
                 <th className="text-left p-4 font-medium text-sm">Trigger</th>
                 <th className="text-left p-4 font-medium text-sm">Progress</th>
@@ -139,9 +129,9 @@ export default function WorkflowRunsPage() {
             <tbody>
               {filteredRuns.map((run) => {
                 const StatusIcon =
-                  run.status === "success"
+                  run.status === 'success'
                     ? CheckCircle2
-                    : run.status === "error"
+                    : run.status === 'error'
                       ? XCircle
                       : Clock;
 
@@ -154,11 +144,11 @@ export default function WorkflowRunsPage() {
                     <td className="p-4">
                       <Badge
                         className={
-                          run.status === "success"
-                            ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-                            : run.status === "error"
-                              ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
-                              : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          run.status === 'success'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                            : run.status === 'error'
+                              ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+                              : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
                         }
                       >
                         <StatusIcon className="h-3 w-3 mr-1" />
@@ -167,7 +157,7 @@ export default function WorkflowRunsPage() {
                     </td>
                     <td className="p-4 text-sm">{run.startTime}</td>
                     <td className="p-4 text-sm">
-                      {run.status === "running" ? "-" : `${run.duration}ms`}
+                      {run.status === 'running' ? '-' : `${run.duration}ms`}
                     </td>
                     <td className="p-4">
                       <Badge variant="outline">{run.trigger}</Badge>
@@ -192,9 +182,7 @@ export default function WorkflowRunsPage() {
         <div className="rounded-lg border bg-card p-12 text-center mt-6">
           <Clock className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No runs found</h3>
-          <p className="text-muted-foreground">
-            Try adjusting your search or filters
-          </p>
+          <p className="text-muted-foreground">Try adjusting your search or filters</p>
         </div>
       )}
     </PageShell>

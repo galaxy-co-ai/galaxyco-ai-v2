@@ -213,15 +213,15 @@ galaxyco-ai-2.0/
 module.exports = {
   experimental: {
     serverActions: {
-      bodySizeLimit: "2mb",
+      bodySizeLimit: '2mb',
     },
   },
   // Force dynamic rendering for API routes
   async headers() {
     return [
       {
-        source: "/api/:path*",
-        headers: [{ key: "Cache-Control", value: "no-store, must-revalidate" }],
+        source: '/api/:path*',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
       },
     ];
   },

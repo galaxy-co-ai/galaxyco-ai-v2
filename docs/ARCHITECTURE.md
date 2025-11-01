@@ -190,16 +190,16 @@ const agents = await db.select().from(schema.agents);
 
 ```typescript
 // Database schema
-export const workspaceMembers = pgTable("workspace_members", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  workspaceId: uuid("workspace_id")
+export const workspaceMembers = pgTable('workspace_members', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  workspaceId: uuid('workspace_id')
     .notNull()
     .references(() => workspaces.id),
-  userId: uuid("user_id")
+  userId: uuid('user_id')
     .notNull()
     .references(() => users.id),
-  role: userRoleEnum("role").notNull().default("member"),
-  permissions: jsonb("permissions")
+  role: userRoleEnum('role').notNull().default('member'),
+  permissions: jsonb('permissions')
     .$type<{
       agents?: { create?: boolean; edit?: boolean; delete?: boolean };
       billing?: { view?: boolean; manage?: boolean };
@@ -270,7 +270,7 @@ export default clerkMiddleware((auth, request) => {
   // 3. Permission check
   if (requiresAdmin(request.url)) {
     const hasPermission = await checkWorkspaceAdmin(userId, workspaceId);
-    if (!hasPermission) return new Response("Forbidden", { status: 403 });
+    if (!hasPermission) return new Response('Forbidden', { status: 403 });
   }
 
   return NextResponse.next();
@@ -435,45 +435,45 @@ See [API Design Specification](api/API_DESIGN_SPECIFICATION.md) for complete det
 #### Workspaces (Tenant Boundary)
 
 ```typescript
-export const workspaces = pgTable("workspaces", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  subscriptionTier: subscriptionTierEnum("subscription_tier").default("free"),
-  settings: jsonb("settings"),
-  encryptedApiKeys: jsonb("encrypted_api_keys"), // AES-256-GCM encrypted
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+export const workspaces = pgTable('workspaces', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  subscriptionTier: subscriptionTierEnum('subscription_tier').default('free'),
+  settings: jsonb('settings'),
+  encryptedApiKeys: jsonb('encrypted_api_keys'), // AES-256-GCM encrypted
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 ```
 
 #### Users
 
 ```typescript
-export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  clerkUserId: text("clerk_user_id").notNull().unique(),
-  email: text("email").notNull(),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  preferences: jsonb("preferences"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clerkUserId: text('clerk_user_id').notNull().unique(),
+  email: text('email').notNull(),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  preferences: jsonb('preferences'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 ```
 
 #### Workspace Members (Junction Table with RBAC)
 
 ```typescript
-export const workspaceMembers = pgTable("workspace_members", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  workspaceId: uuid("workspace_id")
+export const workspaceMembers = pgTable('workspace_members', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  workspaceId: uuid('workspace_id')
     .notNull()
     .references(() => workspaces.id),
-  userId: uuid("user_id")
+  userId: uuid('user_id')
     .notNull()
     .references(() => users.id),
-  role: userRoleEnum("role").notNull().default("member"),
-  permissions: jsonb("permissions"),
-  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  role: userRoleEnum('role').notNull().default('member'),
+  permissions: jsonb('permissions'),
+  joinedAt: timestamp('joined_at').notNull().defaultNow(),
 });
 ```
 
@@ -538,17 +538,17 @@ See [Database Schema](database/SCHEMA.md) for complete documentation.
 Every sensitive operation is logged:
 
 ```typescript
-export const auditLogs = pgTable("audit_logs", {
-  id: uuid("id").primaryKey(),
-  workspaceId: uuid("workspace_id").notNull(),
-  userId: uuid("user_id"),
-  action: text("action").notNull(), // 'create', 'update', 'delete'
-  resourceType: text("resource_type").notNull(),
-  resourceId: text("resource_id"),
-  changes: jsonb("changes"), // before/after diff
-  ipAddress: text("ip_address"),
-  userAgent: text("user_agent"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+export const auditLogs = pgTable('audit_logs', {
+  id: uuid('id').primaryKey(),
+  workspaceId: uuid('workspace_id').notNull(),
+  userId: uuid('user_id'),
+  action: text('action').notNull(), // 'create', 'update', 'delete'
+  resourceType: text('resource_type').notNull(),
+  resourceId: text('resource_id'),
+  changes: jsonb('changes'), // before/after diff
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 ```
 

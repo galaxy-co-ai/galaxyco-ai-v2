@@ -6,26 +6,26 @@
  * ALL queries MUST include tenant_id filter in WHERE clauses
  */
 
-"use server";
+'use server';
 
-import { auth } from "@clerk/nextjs/server";
-import { cookies } from "next/headers";
-import { db } from "@galaxyco/database";
-import { workspaceMembers, users } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { logger } from "@/lib/utils/logger";
+import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
+import { db } from '@galaxyco/database';
+import { workspaceMembers, users } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { logger } from '@/lib/utils/logger';
 
 export interface WorkspaceResolution {
   id: string;
-  source: "cookie" | "default" | "none";
+  source: 'cookie' | 'default' | 'none';
 }
 
 export interface Workspace {
   id: string;
   name: string;
   slug: string;
-  plan: "free" | "starter" | "professional" | "enterprise";
-  role: "owner" | "admin" | "member" | "viewer";
+  plan: 'free' | 'starter' | 'professional' | 'enterprise';
+  role: 'owner' | 'admin' | 'member' | 'viewer';
 }
 
 /**
@@ -37,16 +37,16 @@ export interface Workspace {
 export async function getCurrentWorkspaceId(): Promise<WorkspaceResolution> {
   // 1. Check cookie first
   const cookieStore = cookies();
-  const workspaceId = cookieStore.get("workspaceId")?.value;
+  const workspaceId = cookieStore.get('workspaceId')?.value;
 
-  if (workspaceId && workspaceId !== "undefined") {
-    return { id: workspaceId, source: "cookie" };
+  if (workspaceId && workspaceId !== 'undefined') {
+    return { id: workspaceId, source: 'cookie' };
   }
 
   // 2. Fallback to first workspace for user
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
-    return { id: "", source: "none" };
+    return { id: '', source: 'none' };
   }
 
   try {
@@ -71,15 +71,15 @@ export async function getCurrentWorkspaceId(): Promise<WorkspaceResolution> {
       // Set cookie for future requests
       await setWorkspaceCookie(firstWorkspaceId);
 
-      return { id: firstWorkspaceId, source: "default" };
+      return { id: firstWorkspaceId, source: 'default' };
     }
   } catch (error) {
-    logger.error("Failed to fetch default workspace", {
+    logger.error('Failed to fetch default workspace', {
       error: error instanceof Error ? error.message : String(error),
     });
   }
 
-  return { id: "", source: "none" };
+  return { id: '', source: 'none' };
 }
 
 /**
@@ -88,12 +88,12 @@ export async function getCurrentWorkspaceId(): Promise<WorkspaceResolution> {
 export async function setWorkspaceCookie(workspaceId: string): Promise<void> {
   const cookieStore = cookies();
 
-  cookieStore.set("workspaceId", workspaceId, {
+  cookieStore.set('workspaceId', workspaceId, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30, // 30 days
-    path: "/",
+    path: '/',
   });
 }
 
@@ -101,9 +101,7 @@ export async function setWorkspaceCookie(workspaceId: string): Promise<void> {
  * Get full workspace details with user role
  * SECURITY: Validates user has access to workspace
  */
-export async function getWorkspaceDetails(
-  workspaceId: string,
-): Promise<Workspace | null> {
+export async function getWorkspaceDetails(workspaceId: string): Promise<Workspace | null> {
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
     return null;
@@ -131,7 +129,7 @@ export async function getWorkspaceDetails(
     });
 
     if (!membership?.workspace) {
-      logger.warn("Unauthorized workspace access attempt", {
+      logger.warn('Unauthorized workspace access attempt', {
         clerkUserId,
         workspaceId,
       });
@@ -146,7 +144,7 @@ export async function getWorkspaceDetails(
       role: membership.role,
     };
   } catch (error) {
-    logger.error("Failed to fetch workspace details", {
+    logger.error('Failed to fetch workspace details', {
       workspaceId,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -173,9 +171,7 @@ export async function getUserWorkspaces(): Promise<Workspace[]> {
           with: {
             workspace: true,
           },
-          orderBy: (workspaceMembers, { asc }) => [
-            asc(workspaceMembers.joinedAt),
-          ],
+          orderBy: (workspaceMembers, { asc }) => [asc(workspaceMembers.joinedAt)],
         },
       },
     });
@@ -192,7 +188,7 @@ export async function getUserWorkspaces(): Promise<Workspace[]> {
       role: membership.role,
     }));
   } catch (error) {
-    logger.error("Failed to fetch user workspaces", {
+    logger.error('Failed to fetch user workspaces', {
       error: error instanceof Error ? error.message : String(error),
     });
     return [];
@@ -203,9 +199,7 @@ export async function getUserWorkspaces(): Promise<Workspace[]> {
  * Validate user has access to specific workspace
  * SECURITY: Prevents cross-tenant data access
  */
-export async function validateWorkspaceAccess(
-  workspaceId: string,
-): Promise<boolean> {
+export async function validateWorkspaceAccess(workspaceId: string): Promise<boolean> {
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
     return false;
@@ -230,7 +224,7 @@ export async function validateWorkspaceAccess(
 
     return !!membership;
   } catch (error) {
-    logger.error("Failed to validate workspace access", {
+    logger.error('Failed to validate workspace access', {
       workspaceId,
       error: error instanceof Error ? error.message : String(error),
     });

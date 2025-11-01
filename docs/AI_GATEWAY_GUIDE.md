@@ -52,34 +52,34 @@ NODE_ENV=development  # or 'production'
 ### Basic Text Generation
 
 ```typescript
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 const response = await AIGatewayService.generateText({
-  tenantId: "workspace_123",
-  userId: "user_456",
-  agentId: "agent_789",
-  model: "gpt-4o-mini",
+  tenantId: 'workspace_123',
+  userId: 'user_456',
+  agentId: 'agent_789',
+  model: 'gpt-4o-mini',
   messages: [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "What is the weather like today?" },
+    { role: 'system', content: 'You are a helpful assistant.' },
+    { role: 'user', content: 'What is the weather like today?' },
   ],
   temperature: 0.7,
   maxTokens: 1000,
 });
 
 console.log(response.content);
-console.log("Cost:", response.cost);
-console.log("Tokens:", response.usage.totalTokens);
-console.log("Latency:", response.latencyMs, "ms");
+console.log('Cost:', response.cost);
+console.log('Tokens:', response.usage.totalTokens);
+console.log('Latency:', response.latencyMs, 'ms');
 ```
 
 ### Streaming Responses
 
 ```typescript
 const streamResponse = await AIGatewayService.generateTextStream({
-  tenantId: "workspace_123",
-  model: "claude-3-5-sonnet-20241022",
-  messages: [{ role: "user", content: "Write a story about AI" }],
+  tenantId: 'workspace_123',
+  model: 'claude-3-5-sonnet-20241022',
+  messages: [{ role: 'user', content: 'Write a story about AI' }],
 });
 
 // Stream the response
@@ -162,7 +162,7 @@ try {
   // - Original error message
   // - Request ID for debugging
   // - Automatically logged to monitoring
-  console.error("AI Gateway Error:", error.message);
+  console.error('AI Gateway Error:', error.message);
 }
 ```
 

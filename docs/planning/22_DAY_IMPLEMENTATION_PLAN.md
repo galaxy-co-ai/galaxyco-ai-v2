@@ -214,43 +214,41 @@ CREATE INDEX idx_paa_activity_log_workspace ON paa_activity_log(workspace_id, cr
 
 ```typescript
 interface TaskCharacteristics {
-  taskType: "analysis" | "generation" | "reasoning" | "classification";
-  priority: "speed" | "quality" | "balance";
-  complexity: "simple" | "moderate" | "complex";
-  budget?: "low" | "moderate" | "high";
+  taskType: 'analysis' | 'generation' | 'reasoning' | 'classification';
+  priority: 'speed' | 'quality' | 'balance';
+  complexity: 'simple' | 'moderate' | 'complex';
+  budget?: 'low' | 'moderate' | 'high';
 }
 
 class IntelligentModelRouter {
   selectModel(chars: TaskCharacteristics): string {
     // Simple + Speed → gpt-4o-mini (fast, cheap)
-    if (chars.complexity === "simple" && chars.priority === "speed") {
-      return "gpt-4o-mini";
+    if (chars.complexity === 'simple' && chars.priority === 'speed') {
+      return 'gpt-4o-mini';
     }
 
     // Complex Reasoning → claude-3-5-sonnet (excellent reasoning)
-    if (chars.complexity === "complex" && chars.taskType === "reasoning") {
-      return "claude-3-5-sonnet-20241022";
+    if (chars.complexity === 'complex' && chars.taskType === 'reasoning') {
+      return 'claude-3-5-sonnet-20241022';
     }
 
     // Creative Generation → claude (quality)
-    if (chars.taskType === "generation") {
-      return chars.budget === "low"
-        ? "claude-3-5-haiku-20241022"
-        : "claude-3-5-sonnet-20241022";
+    if (chars.taskType === 'generation') {
+      return chars.budget === 'low' ? 'claude-3-5-haiku-20241022' : 'claude-3-5-sonnet-20241022';
     }
 
     // Default: gpt-4o-mini (cost-effective)
-    return "gpt-4o-mini";
+    return 'gpt-4o-mini';
   }
 
   getFallbackModel(primary: string): string {
     const fallbacks = {
-      "gpt-4o": "claude-3-5-sonnet-20241022",
-      "gpt-4o-mini": "claude-3-5-haiku-20241022",
-      "claude-3-5-sonnet-20241022": "gpt-4o",
-      "claude-3-5-haiku-20241022": "gpt-4o-mini",
+      'gpt-4o': 'claude-3-5-sonnet-20241022',
+      'gpt-4o-mini': 'claude-3-5-haiku-20241022',
+      'claude-3-5-sonnet-20241022': 'gpt-4o',
+      'claude-3-5-haiku-20241022': 'gpt-4o-mini',
     };
-    return fallbacks[primary] || "gpt-4o-mini";
+    return fallbacks[primary] || 'gpt-4o-mini';
   }
 }
 ```
@@ -325,10 +323,7 @@ class IntelligentModelRouter {
 
 ```typescript
 // POST /api/paa/suggestions/{id}/apply
-export async function POST(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   const { id } = params;
   const suggestion = await db.query.paaSuggestions.findFirst({
     where: eq(paaSuggestions.id, id),
@@ -338,10 +333,7 @@ export async function POST(
   await executeSuggestion(suggestion);
 
   // Mark as applied
-  await db
-    .update(paaSuggestions)
-    .set({ appliedAt: new Date() })
-    .where(eq(paaSuggestions.id, id));
+  await db.update(paaSuggestions).set({ appliedAt: new Date() }).where(eq(paaSuggestions.id, id));
 
   return Response.json({ success: true });
 }
@@ -426,7 +418,7 @@ CREATE TABLE user_notification_badges (
 // Server-Sent Events endpoint
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const workspaceId = searchParams.get("workspaceId");
+  const workspaceId = searchParams.get('workspaceId');
 
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
@@ -437,16 +429,16 @@ export async function GET(req: Request) {
   });
 
   // Cleanup on disconnect
-  req.signal.addEventListener("abort", () => {
+  req.signal.addEventListener('abort', () => {
     unsubscribe();
     writer.close();
   });
 
   return new Response(stream.readable, {
     headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
     },
   });
 }

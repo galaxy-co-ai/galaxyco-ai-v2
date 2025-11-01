@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   AlertCircle,
@@ -8,23 +8,17 @@ import {
   AlertTriangle,
   Search,
   ServerCrash,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { getErrorType, isRetryableError } from "@/lib/errors";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getErrorType, isRetryableError } from '@/lib/errors';
 
 interface ErrorDisplayProps {
   error: unknown;
   onRetry?: () => void;
   onDismiss?: () => void;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   showIcon?: boolean;
 }
 
@@ -38,7 +32,7 @@ export function ErrorDisplay({
   onRetry,
   onDismiss,
   className,
-  size = "md",
+  size = 'md',
   showIcon = true,
 }: ErrorDisplayProps) {
   const errorType = getErrorType(error);
@@ -46,38 +40,30 @@ export function ErrorDisplay({
   const config = getErrorConfig(errorType);
 
   const sizeClasses = {
-    sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg",
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-lg',
   };
 
   return (
     <Card className={className}>
-      <CardHeader className={size === "sm" ? "p-4" : undefined}>
+      <CardHeader className={size === 'sm' ? 'p-4' : undefined}>
         {showIcon && (
           <div className="flex items-center space-x-2">
             <config.icon className={`h-5 w-5 ${config.color}`} />
             <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>
           </div>
         )}
-        {!showIcon && (
-          <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>
-        )}
+        {!showIcon && <CardTitle className={sizeClasses[size]}>{config.title}</CardTitle>}
         <CardDescription className={sizeClasses[size]}>
           {config.getDescription(error)}
         </CardDescription>
       </CardHeader>
 
       {(onRetry || onDismiss) && (
-        <CardContent
-          className={`flex space-x-2 ${size === "sm" ? "p-4 pt-0" : "pt-0"}`}
-        >
+        <CardContent className={`flex space-x-2 ${size === 'sm' ? 'p-4 pt-0' : 'pt-0'}`}>
           {onRetry && canRetry && (
-            <Button
-              onClick={onRetry}
-              size={size === "sm" ? "sm" : "default"}
-              className="flex-1"
-            >
+            <Button onClick={onRetry} size={size === 'sm' ? 'sm' : 'default'} className="flex-1">
               <RefreshCw className="mr-2 h-4 w-4" />
               Try Again
             </Button>
@@ -86,8 +72,8 @@ export function ErrorDisplay({
             <Button
               onClick={onDismiss}
               variant="outline"
-              size={size === "sm" ? "sm" : "default"}
-              className={onRetry && canRetry ? "" : "flex-1"}
+              size={size === 'sm' ? 'sm' : 'default'}
+              className={onRetry && canRetry ? '' : 'flex-1'}
             >
               Dismiss
             </Button>
@@ -103,7 +89,7 @@ export function ErrorDisplay({
  */
 export function InlineError({
   error,
-  className = "text-sm text-red-600 dark:text-red-400",
+  className = 'text-sm text-red-600 dark:text-red-400',
 }: {
   error: unknown;
   className?: string;
@@ -144,7 +130,7 @@ export function ToastError({ error }: { error: unknown }) {
 export function EmptyStateError({
   error,
   onRetry,
-  title = "Unable to load data",
+  title = 'Unable to load data',
   className,
 }: {
   error: unknown;
@@ -160,9 +146,7 @@ export function EmptyStateError({
     <div className={`text-center py-12 ${className}`}>
       <config.icon className={`mx-auto h-12 w-12 ${config.color} mb-4`} />
       <h3 className="text-lg font-medium mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4 max-w-md mx-auto">
-        {config.getDescription(error)}
-      </p>
+      <p className="text-muted-foreground mb-4 max-w-md mx-auto">{config.getDescription(error)}</p>
       {onRetry && canRetry && (
         <Button onClick={onRetry} variant="outline">
           <RefreshCw className="mr-2 h-4 w-4" />
@@ -194,9 +178,7 @@ export function PageError({
       <div className="text-center max-w-md">
         <config.icon className={`mx-auto h-16 w-16 ${config.color} mb-6`} />
         <h1 className="text-2xl font-bold mb-4">{config.title}</h1>
-        <p className="text-muted-foreground mb-6">
-          {config.getDescription(error)}
-        </p>
+        <p className="text-muted-foreground mb-6">{config.getDescription(error)}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {onRetry && canRetry && (
             <Button onClick={onRetry}>
@@ -220,74 +202,66 @@ function getErrorConfig(errorType: string) {
   const configs = {
     network: {
       icon: Wifi,
-      color: "text-orange-600 dark:text-orange-400",
-      title: "Connection Problem",
-      getDescription: () =>
-        "Please check your internet connection and try again.",
+      color: 'text-orange-600 dark:text-orange-400',
+      title: 'Connection Problem',
+      getDescription: () => 'Please check your internet connection and try again.',
     },
     auth: {
       icon: Lock,
-      color: "text-blue-600 dark:text-blue-400",
-      title: "Authentication Required",
-      getDescription: () => "Please sign in to continue.",
+      color: 'text-blue-600 dark:text-blue-400',
+      title: 'Authentication Required',
+      getDescription: () => 'Please sign in to continue.',
     },
     permission: {
       icon: Lock,
-      color: "text-red-600 dark:text-red-400",
-      title: "Access Denied",
-      getDescription: () =>
-        "You don't have permission to access this resource.",
+      color: 'text-red-600 dark:text-red-400',
+      title: 'Access Denied',
+      getDescription: () => "You don't have permission to access this resource.",
     },
     validation: {
       icon: AlertTriangle,
-      color: "text-yellow-600 dark:text-yellow-400",
-      title: "Invalid Input",
+      color: 'text-yellow-600 dark:text-yellow-400',
+      title: 'Invalid Input',
       getDescription: (error: unknown) =>
-        error instanceof Error
-          ? error.message
-          : "Please check your input and try again.",
+        error instanceof Error ? error.message : 'Please check your input and try again.',
     },
     notFound: {
       icon: Search,
-      color: "text-gray-600 dark:text-gray-400",
-      title: "Not Found",
-      getDescription: () => "The requested resource could not be found.",
+      color: 'text-gray-600 dark:text-gray-400',
+      title: 'Not Found',
+      getDescription: () => 'The requested resource could not be found.',
     },
     conflict: {
       icon: AlertTriangle,
-      color: "text-yellow-600 dark:text-yellow-400",
-      title: "Conflict",
+      color: 'text-yellow-600 dark:text-yellow-400',
+      title: 'Conflict',
       getDescription: (error: unknown) =>
-        error instanceof Error
-          ? error.message
-          : "There was a conflict with your request.",
+        error instanceof Error ? error.message : 'There was a conflict with your request.',
     },
     rateLimit: {
       icon: AlertTriangle,
-      color: "text-orange-600 dark:text-orange-400",
-      title: "Rate Limited",
-      getDescription: () =>
-        "Too many requests. Please wait a moment and try again.",
+      color: 'text-orange-600 dark:text-orange-400',
+      title: 'Rate Limited',
+      getDescription: () => 'Too many requests. Please wait a moment and try again.',
     },
     server: {
       icon: ServerCrash,
-      color: "text-red-600 dark:text-red-400",
-      title: "Server Error",
-      getDescription: () =>
-        "Something went wrong on our end. Please try again later.",
+      color: 'text-red-600 dark:text-red-400',
+      title: 'Server Error',
+      getDescription: () => 'Something went wrong on our end. Please try again later.',
     },
     api: {
       icon: AlertCircle,
-      color: "text-red-600 dark:text-red-400",
-      title: "API Error",
+      color: 'text-red-600 dark:text-red-400',
+      title: 'API Error',
       getDescription: (error: unknown) =>
-        error instanceof Error ? error.message : "An API error occurred.",
+        error instanceof Error ? error.message : 'An API error occurred.',
     },
     unknown: {
       icon: AlertCircle,
-      color: "text-red-600 dark:text-red-400",
-      title: "Unexpected Error",
-      getDescription: () => "An unexpected error occurred. Please try again.",
+      color: 'text-red-600 dark:text-red-400',
+      title: 'Unexpected Error',
+      getDescription: () => 'An unexpected error occurred. Please try again.',
     },
   };
 

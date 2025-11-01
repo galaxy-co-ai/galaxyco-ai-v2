@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates";
-import { Card } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import { Target, Mail, TrendingUp } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { Target, Mail, TrendingUp } from 'lucide-react';
 
 interface MarketingAnalytics {
   campaigns: {
@@ -31,17 +31,15 @@ export default function MarketingAnalyticsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/analytics/marketing?workspaceId=${currentWorkspace.id}`,
-        );
+        const res = await fetch(`/api/analytics/marketing?workspaceId=${currentWorkspace.id}`);
 
-        if (!res.ok) throw new Error("Failed to fetch marketing analytics");
+        if (!res.ok) throw new Error('Failed to fetch marketing analytics');
 
         const data = await res.json();
         setAnalytics(data.analytics);
       } catch (error) {
-        console.error("Failed to fetch marketing analytics:", error);
-        toast.error("Failed to load marketing analytics");
+        console.error('Failed to fetch marketing analytics:', error);
+        toast.error('Failed to load marketing analytics');
       } finally {
         setIsLoading(false);
       }
@@ -64,38 +62,36 @@ export default function MarketingAnalyticsPage() {
         title="Marketing Analytics"
         subtitle="Campaigns, prospects, and email performance"
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Analytics", href: "/analytics" },
-          { label: "Marketing" },
+          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Marketing' },
         ]}
       >
-        <div className="text-center text-muted-foreground">
-          No marketing data available
-        </div>
+        <div className="text-center text-muted-foreground">No marketing data available</div>
       </DetailPage>
     );
   }
 
   const metrics = [
     {
-      label: "Total Campaigns",
+      label: 'Total Campaigns',
       value: analytics.campaigns.total,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <Target className="h-5 w-5" />,
     },
     {
-      label: "Prospects",
+      label: 'Prospects',
       value: analytics.prospects.total,
-      change: "",
-      trend: "up" as const,
+      change: '',
+      trend: 'up' as const,
       icon: <TrendingUp className="h-5 w-5" />,
     },
     {
-      label: "Email Threads",
+      label: 'Email Threads',
       value: analytics.emails.total,
       change: analytics.emails.period,
-      trend: "neutral" as const,
+      trend: 'neutral' as const,
       icon: <Mail className="h-5 w-5" />,
     },
   ];
@@ -105,9 +101,9 @@ export default function MarketingAnalyticsPage() {
       title="Marketing Analytics"
       subtitle="Campaigns, prospects, and email performance"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Analytics", href: "/analytics" },
-        { label: "Marketing" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Analytics', href: '/analytics' },
+        { label: 'Marketing' },
       ]}
       metrics={metrics}
     >

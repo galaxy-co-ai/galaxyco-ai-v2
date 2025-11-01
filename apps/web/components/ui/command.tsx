@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { type DialogProps } from "@radix-ui/react-dialog";
-import { Command as CommandPrimitive } from "cmdk";
-import { Search } from "lucide-react";
+import * as React from 'react';
+import { type DialogProps } from '@radix-ui/react-dialog';
+import { Command as CommandPrimitive } from 'cmdk';
+import { Search } from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { cn } from '@/lib/utils';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -15,7 +15,7 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-background text-foreground shadow-elevation-low",
+      'flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-background text-foreground shadow-elevation-low',
       className,
     )}
     {...props}
@@ -29,11 +29,11 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
       <DialogContent className="overflow-hidden p-0 shadow-elevation-high">
         <Command
           className={cn(
-            "[&_[cmdk-group-heading]]:px-spacing-sm [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-foreground-muted",
-            "[&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-spacing-sm",
-            "[&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5",
-            "[&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-spacing-sm [&_[cmdk-item]]:py-spacing-sm",
-            "[&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5",
+            '[&_[cmdk-group-heading]]:px-spacing-sm [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-foreground-muted',
+            '[&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-spacing-sm',
+            '[&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5',
+            '[&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-spacing-sm [&_[cmdk-item]]:py-spacing-sm',
+            '[&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5',
           )}
         >
           {children}
@@ -55,9 +55,9 @@ const CommandInput = React.forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "flex h-10 w-full bg-transparent py-spacing-sm text-body-sm text-foreground",
-        "outline-none placeholder:text-foreground-subtle",
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        'flex h-10 w-full bg-transparent py-spacing-sm text-body-sm text-foreground',
+        'outline-none placeholder:text-foreground-subtle',
+        'disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}
@@ -73,10 +73,7 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn(
-      "max-h-[300px] overflow-y-auto overflow-x-hidden py-spacing-xs",
-      className,
-    )}
+    className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden py-spacing-xs', className)}
     {...props}
   />
 ));
@@ -103,10 +100,10 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      "overflow-hidden p-spacing-xs text-foreground",
-      "[&_[cmdk-group-heading]]:px-spacing-sm [&_[cmdk-group-heading]]:py-spacing-xs",
-      "[&_[cmdk-group-heading]]:text-caption [&_[cmdk-group-heading]]:font-medium",
-      "[&_[cmdk-group-heading]]:text-foreground-muted [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide",
+      'overflow-hidden p-spacing-xs text-foreground',
+      '[&_[cmdk-group-heading]]:px-spacing-sm [&_[cmdk-group-heading]]:py-spacing-xs',
+      '[&_[cmdk-group-heading]]:text-caption [&_[cmdk-group-heading]]:font-medium',
+      '[&_[cmdk-group-heading]]:text-foreground-muted [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide',
       className,
     )}
     {...props}
@@ -121,7 +118,7 @@ const CommandSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn("-mx-spacing-xs h-px bg-border my-spacing-xs", className)}
+    className={cn('-mx-spacing-xs h-px bg-border my-spacing-xs', className)}
     {...props}
   />
 ));
@@ -134,13 +131,13 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center gap-spacing-sm rounded-sm",
-      "px-spacing-sm py-spacing-xs text-body-sm text-foreground outline-none",
-      "transition-colors duration-fast",
-      "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
-      "data-[selected=true]:bg-hover data-[selected=true]:text-foreground",
-      "hover:bg-hover hover:text-foreground",
-      "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-foreground-muted",
+      'relative flex cursor-default select-none items-center gap-spacing-sm rounded-sm',
+      'px-spacing-sm py-spacing-xs text-body-sm text-foreground outline-none',
+      'transition-colors duration-fast',
+      'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
+      'data-[selected=true]:bg-hover data-[selected=true]:text-foreground',
+      'hover:bg-hover hover:text-foreground',
+      '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-foreground-muted',
       className,
     )}
     {...props}
@@ -149,22 +146,19 @@ const CommandItem = React.forwardRef<
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
-const CommandShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
       className={cn(
-        "ml-auto text-caption font-mono tracking-wide text-foreground-subtle",
-        "bg-background-subtle px-spacing-xs py-spacing-2xs rounded border border-border",
+        'ml-auto text-caption font-mono tracking-wide text-foreground-subtle',
+        'bg-background-subtle px-spacing-xs py-spacing-2xs rounded border border-border',
         className,
       )}
       {...props}
     />
   );
 };
-CommandShortcut.displayName = "CommandShortcut";
+CommandShortcut.displayName = 'CommandShortcut';
 
 export {
   Command,

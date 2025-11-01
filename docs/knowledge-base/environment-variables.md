@@ -199,7 +199,7 @@ dotenv -e .env.test -- npm run test
 
 ```typescript
 // In API route or server component
-console.log("Database URL exists:", !!process.env.DATABASE_URL);
+console.log('Database URL exists:', !!process.env.DATABASE_URL);
 
 // NEVER log actual values:
 // ❌ console.log(process.env.DATABASE_URL)

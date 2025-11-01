@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright Test Configuration for GalaxyCo.ai
@@ -10,7 +10,7 @@ import { defineConfig, devices } from "@playwright/test";
  * - Smoke tests for critical paths
  */
 export default defineConfig({
-  testDir: "./tests",
+  testDir: './tests',
 
   // Maximum time one test can run
   timeout: 30 * 1000,
@@ -29,69 +29,69 @@ export default defineConfig({
 
   // Reporter to use
   reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["json", { outputFile: "test-results/results.json" }],
-    ["list"],
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['list'],
   ],
 
   // Shared settings for all the projects below
   use: {
     // Base URL to use in actions like `await page.goto('/')`
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000",
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
 
     // Collect trace when retrying the failed test
-    trace: "on-first-retry",
+    trace: 'on-first-retry',
 
     // Take screenshot on failure
-    screenshot: "only-on-failure",
+    screenshot: 'only-on-failure',
 
     // Video on failure
-    video: "retain-on-failure",
+    video: 'retain-on-failure',
   },
 
   // Configure projects for major browsers and viewports
   projects: [
     // Desktop Chrome
     {
-      name: "Desktop Chrome",
+      name: 'Desktop Chrome',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 900 },
       },
     },
 
     // Desktop Large
     {
-      name: "Desktop Large",
+      name: 'Desktop Large',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
       },
     },
 
     // Tablet
     {
-      name: "Tablet",
+      name: 'Tablet',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         viewport: { width: 768, height: 1024 },
       },
     },
 
     // Mobile (iPhone 12)
     {
-      name: "Mobile",
+      name: 'Mobile',
       use: {
-        ...devices["iPhone 12"],
+        ...devices['iPhone 12'],
         viewport: { width: 375, height: 667 },
       },
     },
 
     // Mobile Large (iPhone 12 Pro Max)
     {
-      name: "Mobile Large",
+      name: 'Mobile Large',
       use: {
-        ...devices["iPhone 12 Pro Max"],
+        ...devices['iPhone 12 Pro Max'],
         viewport: { width: 414, height: 896 },
       },
     },
@@ -99,8 +99,8 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests
   webServer: {
-    command: "pnpm dev",
-    url: "http://localhost:3000",
+    command: 'pnpm dev',
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

@@ -87,11 +87,11 @@ name: CI
 on:
   pull_request:
     paths:
-      - "apps/**"
-      - "packages/**"
-      - "services/**"
-      - "turbo.json"
-      - "pnpm-lock.yaml"
+      - 'apps/**'
+      - 'packages/**'
+      - 'services/**'
+      - 'turbo.json'
+      - 'pnpm-lock.yaml'
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -122,7 +122,7 @@ name: Deploy Web (Vercel)
 on:
   push:
     branches: [main, develop]
-    paths: ["apps/web/**", "packages/**"]
+    paths: ['apps/web/**', 'packages/**']
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -149,9 +149,9 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - "apps/api/**"
-      - "services/agents/**"
-      - ".github/workflows/build-push.yml"
+      - 'apps/api/**'
+      - 'services/agents/**'
+      - '.github/workflows/build-push.yml'
 jobs:
   ecr:
     runs-on: ubuntu-latest

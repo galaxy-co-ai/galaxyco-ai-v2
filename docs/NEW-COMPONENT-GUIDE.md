@@ -103,9 +103,7 @@ apps/web/components/v2/
 ```tsx
 <button
   className={`px-4 py-2 rounded-lg transition-colors ${
-    isActive
-      ? "bg-blue-500 text-white"
-      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+    isActive ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
   }`}
 >
   {label}
@@ -227,9 +225,7 @@ export function ErrorState({ error, retry }: Props) {
   return (
     <div className="text-center py-12">
       <div className="text-6xl mb-4">⚠️</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-        Something went wrong
-      </h3>
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">Something went wrong</h3>
       <p className="text-gray-600 mb-6">{error.message}</p>
       {retry && (
         <button
@@ -247,11 +243,9 @@ export function ErrorState({ error, retry }: Props) {
 ### Card Pattern
 
 ```tsx
-export function Card({ children, className = "" }: Props) {
+export function Card({ children, className = '' }: Props) {
   return (
-    <article
-      className={`bg-white rounded-lg border border-gray-200 p-6 ${className}`}
-    >
+    <article className={`bg-white rounded-lg border border-gray-200 p-6 ${className}`}>
       {children}
     </article>
   );
@@ -279,10 +273,7 @@ export function Modal({ isOpen, onClose, title, children }: Props) {
       <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         <header className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             ✕
           </button>
         </header>
@@ -322,9 +313,7 @@ export function Modal({ isOpen, onClose, title, children }: Props) {
 ### Use React.memo for expensive components
 
 ```tsx
-export const ExpensiveList = React.memo(function ExpensiveList({
-  items,
-}: Props) {
+export const ExpensiveList = React.memo(function ExpensiveList({ items }: Props) {
   return (
     <ul>
       {items.map((item) => (
@@ -338,7 +327,7 @@ export const ExpensiveList = React.memo(function ExpensiveList({
 ### Lazy load heavy components
 
 ```tsx
-const HeavyChart = lazy(() => import("./HeavyChart"));
+const HeavyChart = lazy(() => import('./HeavyChart'));
 
 export function Dashboard() {
   return (
@@ -355,20 +344,20 @@ export function Dashboard() {
 
 ```tsx
 // ComponentName.test.tsx
-import { render, screen, fireEvent } from "@testing-library/react";
-import { ComponentName } from "./ComponentName";
+import { render, screen, fireEvent } from '@testing-library/react';
+import { ComponentName } from './ComponentName';
 
-describe("ComponentName", () => {
-  it("renders with title", () => {
+describe('ComponentName', () => {
+  it('renders with title', () => {
     render(<ComponentName title="Test" value={42} />);
-    expect(screen.getByText("Test")).toBeInTheDocument();
+    expect(screen.getByText('Test')).toBeInTheDocument();
   });
 
-  it("calls onAction when button clicked", () => {
+  it('calls onAction when button clicked', () => {
     const handleAction = jest.fn();
     render(<ComponentName title="Test" value={42} onAction={handleAction} />);
 
-    fireEvent.click(screen.getByRole("button"));
+    fireEvent.click(screen.getByRole('button'));
     expect(handleAction).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { FormPage } from "@/components/templates/form-page";
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
-import { Bell, Mail, Smartphone, Monitor } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { FormPage } from '@/components/templates/form-page';
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
+import { Bell, Mail, Smartphone, Monitor } from 'lucide-react';
 
 type NotificationPreferences = {
   email?: {
@@ -58,8 +58,8 @@ export default function NotificationsSettingsPage() {
   useEffect(() => {
     async function fetchPreferences() {
       try {
-        const res = await fetch("/api/users/me/preferences");
-        if (!res.ok) throw new Error("Failed to fetch preferences");
+        const res = await fetch('/api/users/me/preferences');
+        if (!res.ok) throw new Error('Failed to fetch preferences');
         const data = await res.json();
         const prefs = data.preferences.notifications as NotificationPreferences;
 
@@ -89,7 +89,7 @@ export default function NotificationsSettingsPage() {
           setInAppComments(prefs.inApp.comments ?? true);
         }
       } catch (error) {
-        toast.error("Failed to load notification preferences");
+        toast.error('Failed to load notification preferences');
       } finally {
         setIsPageLoading(false);
       }
@@ -126,16 +126,16 @@ export default function NotificationsSettingsPage() {
         },
       };
 
-      const res = await fetch("/api/users/me/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/users/me/preferences', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(preferences),
       });
 
-      if (!res.ok) throw new Error("Failed to update preferences");
-      toast.success("Notification preferences updated");
+      if (!res.ok) throw new Error('Failed to update preferences');
+      toast.success('Notification preferences updated');
     } catch (error) {
-      toast.error("Failed to update notification preferences");
+      toast.error('Failed to update notification preferences');
     } finally {
       setIsLoading(false);
     }
@@ -158,9 +158,9 @@ export default function NotificationsSettingsPage() {
       title="Notification Preferences"
       subtitle="Control how and when you receive notifications"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Settings", href: "/settings" },
-        { label: "Notifications" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Settings', href: '/settings' },
+        { label: 'Notifications' },
       ]}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
@@ -175,9 +175,7 @@ export default function NotificationsSettingsPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold">Email Notifications</h3>
-              <p className="text-sm text-muted-foreground">
-                Receive notifications via email
-              </p>
+              <p className="text-sm text-muted-foreground">Receive notifications via email</p>
             </div>
           </div>
           <div className="space-y-4 border-t border-border pt-4">
@@ -188,10 +186,7 @@ export default function NotificationsSettingsPage() {
                   When your agents complete tasks or encounter errors
                 </p>
               </div>
-              <Switch
-                checked={emailAgentUpdates}
-                onCheckedChange={setEmailAgentUpdates}
-              />
+              <Switch checked={emailAgentUpdates} onCheckedChange={setEmailAgentUpdates} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -200,10 +195,7 @@ export default function NotificationsSettingsPage() {
                   Critical workflow failures and status changes
                 </p>
               </div>
-              <Switch
-                checked={emailWorkflowAlerts}
-                onCheckedChange={setEmailWorkflowAlerts}
-              />
+              <Switch checked={emailWorkflowAlerts} onCheckedChange={setEmailWorkflowAlerts} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -212,10 +204,7 @@ export default function NotificationsSettingsPage() {
                   When team members make changes or leave comments
                 </p>
               </div>
-              <Switch
-                checked={emailTeamActivity}
-                onCheckedChange={setEmailTeamActivity}
-              />
+              <Switch checked={emailTeamActivity} onCheckedChange={setEmailTeamActivity} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -224,10 +213,7 @@ export default function NotificationsSettingsPage() {
                   A digest of your workspace activity every week
                 </p>
               </div>
-              <Switch
-                checked={emailWeeklySummary}
-                onCheckedChange={setEmailWeeklySummary}
-              />
+              <Switch checked={emailWeeklySummary} onCheckedChange={setEmailWeeklySummary} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -262,14 +248,9 @@ export default function NotificationsSettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Agent Updates</p>
-                <p className="text-sm text-muted-foreground">
-                  Real-time updates from your agents
-                </p>
+                <p className="text-sm text-muted-foreground">Real-time updates from your agents</p>
               </div>
-              <Switch
-                checked={pushAgentUpdates}
-                onCheckedChange={setPushAgentUpdates}
-              />
+              <Switch checked={pushAgentUpdates} onCheckedChange={setPushAgentUpdates} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -278,22 +259,14 @@ export default function NotificationsSettingsPage() {
                   Immediate alerts for critical workflow issues
                 </p>
               </div>
-              <Switch
-                checked={pushWorkflowAlerts}
-                onCheckedChange={setPushWorkflowAlerts}
-              />
+              <Switch checked={pushWorkflowAlerts} onCheckedChange={setPushWorkflowAlerts} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
                 <p className="font-medium">Team Activity</p>
-                <p className="text-sm text-muted-foreground">
-                  Updates from team members
-                </p>
+                <p className="text-sm text-muted-foreground">Updates from team members</p>
               </div>
-              <Switch
-                checked={pushTeamActivity}
-                onCheckedChange={setPushTeamActivity}
-              />
+              <Switch checked={pushTeamActivity} onCheckedChange={setPushTeamActivity} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -302,10 +275,7 @@ export default function NotificationsSettingsPage() {
                   When someone mentions you in a comment
                 </p>
               </div>
-              <Switch
-                checked={pushMentions}
-                onCheckedChange={setPushMentions}
-              />
+              <Switch checked={pushMentions} onCheckedChange={setPushMentions} />
             </div>
           </div>
         </Card>
@@ -331,10 +301,7 @@ export default function NotificationsSettingsPage() {
                   Agent execution results and status changes
                 </p>
               </div>
-              <Switch
-                checked={inAppAgentUpdates}
-                onCheckedChange={setInAppAgentUpdates}
-              />
+              <Switch checked={inAppAgentUpdates} onCheckedChange={setInAppAgentUpdates} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -343,22 +310,14 @@ export default function NotificationsSettingsPage() {
                   Workflow status and error notifications
                 </p>
               </div>
-              <Switch
-                checked={inAppWorkflowAlerts}
-                onCheckedChange={setInAppWorkflowAlerts}
-              />
+              <Switch checked={inAppWorkflowAlerts} onCheckedChange={setInAppWorkflowAlerts} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
                 <p className="font-medium">Team Activity</p>
-                <p className="text-sm text-muted-foreground">
-                  Team member actions and updates
-                </p>
+                <p className="text-sm text-muted-foreground">Team member actions and updates</p>
               </div>
-              <Switch
-                checked={inAppTeamActivity}
-                onCheckedChange={setInAppTeamActivity}
-              />
+              <Switch checked={inAppTeamActivity} onCheckedChange={setInAppTeamActivity} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -367,10 +326,7 @@ export default function NotificationsSettingsPage() {
                   When you are mentioned in discussions
                 </p>
               </div>
-              <Switch
-                checked={inAppMentions}
-                onCheckedChange={setInAppMentions}
-              />
+              <Switch checked={inAppMentions} onCheckedChange={setInAppMentions} />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
@@ -379,10 +335,7 @@ export default function NotificationsSettingsPage() {
                   New comments and replies on your items
                 </p>
               </div>
-              <Switch
-                checked={inAppComments}
-                onCheckedChange={setInAppComments}
-              />
+              <Switch checked={inAppComments} onCheckedChange={setInAppComments} />
             </div>
           </div>
         </Card>

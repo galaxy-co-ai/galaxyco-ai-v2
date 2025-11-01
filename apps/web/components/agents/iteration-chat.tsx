@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Sparkles, Plus, Settings } from "lucide-react";
-import type { Iteration } from "@/lib/stores/agent-builder-store";
-import { formatRelativeTime } from "@/lib/utils";
+import { useState, useRef, useEffect } from 'react';
+import { Send, Loader2, Sparkles, Plus, Settings } from 'lucide-react';
+import type { Iteration } from '@/lib/stores/agent-builder-store';
+import { formatRelativeTime } from '@/lib/utils';
 
 interface IterationChatProps {
   messages: Iteration[];
@@ -12,22 +12,18 @@ interface IterationChatProps {
 }
 
 const SUGGESTED_ACTIONS = [
-  "Add email notification",
-  "Add error handling",
-  "Include data validation",
-  "Add Slack integration",
+  'Add email notification',
+  'Add error handling',
+  'Include data validation',
+  'Add Slack integration',
 ];
 
-export function IterationChat({
-  messages,
-  onSendMessage,
-  isSending,
-}: IterationChatProps) {
-  const [input, setInput] = useState("");
+export function IterationChat({ messages, onSendMessage, isSending }: IterationChatProps) {
+  const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -39,7 +35,7 @@ export function IterationChat({
     if (!input.trim() || isSending) return;
 
     const message = input.trim();
-    setInput("");
+    setInput('');
     await onSendMessage(message);
   };
 
@@ -63,9 +59,8 @@ export function IterationChat({
                 Refine Your Agent
               </h3>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                Describe changes you&apos;d like to make to your agent&apos;s
-                workflow. You can add steps, modify logic, or integrate new
-                services.
+                Describe changes you&apos;d like to make to your agent&apos;s workflow. You can add
+                steps, modify logic, or integrate new services.
               </p>
             </div>
           </div>
@@ -74,28 +69,26 @@ export function IterationChat({
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
                   className={`max-w-[80%] rounded-lg px-4 py-3 ${
-                    message.role === "user"
-                      ? "bg-primary text-white"
-                      : message.role === "system"
-                        ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-sm"
-                        : "bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100"
+                    message.role === 'user'
+                      ? 'bg-primary text-white'
+                      : message.role === 'system'
+                        ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-sm'
+                        : 'bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100'
                   }`}
                 >
-                  {message.role !== "system" && (
+                  {message.role !== 'system' && (
                     <div className="mb-1 text-xs opacity-70">
-                      {message.role === "user" ? "You" : "Agent Builder"} ·{" "}
+                      {message.role === 'user' ? 'You' : 'Agent Builder'} ·{' '}
                       {formatRelativeTime(message.timestamp)}
                     </div>
                   )}
-                  <div className="text-sm whitespace-pre-wrap">
-                    {message.content}
-                  </div>
+                  <div className="text-sm whitespace-pre-wrap">{message.content}</div>
 
-                  {message.workflowUpdate && message.role === "assistant" && (
+                  {message.workflowUpdate && message.role === 'assistant' && (
                     <div className="mt-3 rounded-md bg-black/5 dark:bg-white/5 p-2 text-xs">
                       <div className="font-medium mb-1">✓ Workflow updated</div>
                       <div className="opacity-70">
@@ -124,9 +117,7 @@ export function IterationChat({
       {/* Suggested Actions */}
       {messages.length > 0 && !isSending && (
         <div className="border-t border-neutral-200 dark:border-neutral-800 p-3">
-          <div className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">
-            Quick actions:
-          </div>
+          <div className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">Quick actions:</div>
           <div className="flex flex-wrap gap-2">
             {SUGGESTED_ACTIONS.map((action) => (
               <button
@@ -149,7 +140,7 @@ export function IterationChat({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
               }

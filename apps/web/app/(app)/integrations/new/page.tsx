@@ -1,44 +1,41 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Save } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Save } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function NewIntegrationPage() {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("webhook");
-  const [endpoint, setEndpoint] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState('');
+  const [type, setType] = useState('webhook');
+  const [endpoint, setEndpoint] = useState('');
+  const [apiKey, setApiKey] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleCreate = () => {
     if (!name || !endpoint) {
-      toast.error("Please fill in all required fields");
+      toast.error('Please fill in all required fields');
       return;
     }
-    toast.success("Integration created successfully");
+    toast.success('Integration created successfully');
   };
 
   return (
     <PageShell
       title="New Integration"
       subtitle="Connect an external service or API"
-      breadcrumbs={[
-        { label: "Integrations", href: "/integrations" },
-        { label: "New" },
-      ]}
+      breadcrumbs={[{ label: 'Integrations', href: '/integrations' }, { label: 'New' }]}
     >
       <div className="max-w-2xl">
         <div className="rounded-lg border bg-card p-6">

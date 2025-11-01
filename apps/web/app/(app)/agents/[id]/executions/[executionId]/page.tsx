@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ExecutionDetail } from "@/components/agents/execution-detail";
-import { PageHeader } from "@/components/layout/page-header";
+import { ExecutionDetail } from '@/components/agents/execution-detail';
+import { PageHeader } from '@/components/layout/page-header';
 
 interface ExecutionDetailPageProps {
   params: {
@@ -10,9 +10,7 @@ interface ExecutionDetailPageProps {
   };
 }
 
-export default function ExecutionDetailPage({
-  params,
-}: ExecutionDetailPageProps) {
+export default function ExecutionDetailPage({ params }: ExecutionDetailPageProps) {
   return (
     <div className="space-y-6">
       <PageHeader

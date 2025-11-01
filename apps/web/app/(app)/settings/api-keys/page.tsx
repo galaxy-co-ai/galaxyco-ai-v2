@@ -1,51 +1,42 @@
-import { Metadata } from "next";
-import {
-  Key,
-  Plus,
-  Copy,
-  Eye,
-  EyeOff,
-  Trash2,
-  Calendar,
-  Shield,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Metadata } from 'next';
+import { Key, Plus, Copy, Eye, EyeOff, Trash2, Calendar, Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: "API Keys | GalaxyCo.ai",
-  description: "Manage your API keys and access tokens",
+  title: 'API Keys | GalaxyCo.ai',
+  description: 'Manage your API keys and access tokens',
 };
 
 // Mock API keys
 const apiKeys = [
   {
-    id: "1",
-    name: "Production API Key",
-    key: "gxy_live_•••••••••••••••••••••••1234",
-    created: "2025-09-15",
-    lastUsed: "2 hours ago",
-    permissions: ["read", "write"],
-    status: "active",
+    id: '1',
+    name: 'Production API Key',
+    key: 'gxy_live_•••••••••••••••••••••••1234',
+    created: '2025-09-15',
+    lastUsed: '2 hours ago',
+    permissions: ['read', 'write'],
+    status: 'active',
   },
   {
-    id: "2",
-    name: "Development Key",
-    key: "gxy_test_•••••••••••••••••••••••5678",
-    created: "2025-10-01",
-    lastUsed: "5 days ago",
-    permissions: ["read"],
-    status: "active",
+    id: '2',
+    name: 'Development Key',
+    key: 'gxy_test_•••••••••••••••••••••••5678',
+    created: '2025-10-01',
+    lastUsed: '5 days ago',
+    permissions: ['read'],
+    status: 'active',
   },
   {
-    id: "3",
-    name: "CI/CD Pipeline",
-    key: "gxy_live_•••••••••••••••••••••••9012",
-    created: "2025-08-20",
-    lastUsed: "1 hour ago",
-    permissions: ["read", "write", "delete"],
-    status: "active",
+    id: '3',
+    name: 'CI/CD Pipeline',
+    key: 'gxy_live_•••••••••••••••••••••••9012',
+    created: '2025-08-20',
+    lastUsed: '1 hour ago',
+    permissions: ['read', 'write', 'delete'],
+    status: 'active',
   },
 ];
 
@@ -65,12 +56,10 @@ export default function APIKeysPage() {
         <div className="flex items-start gap-3">
           <Shield className="h-5 w-5 text-warning shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-sm mb-1">
-              Keep your API keys secure
-            </p>
+            <p className="font-semibold text-sm mb-1">Keep your API keys secure</p>
             <p className="text-sm text-foreground-muted">
-              Never share your API keys publicly or commit them to version
-              control. Anyone with your API key can access your account.
+              Never share your API keys publicly or commit them to version control. Anyone with your
+              API key can access your account.
             </p>
           </div>
         </div>
@@ -96,9 +85,7 @@ export default function APIKeysPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Your API Keys</h2>
-          <span className="text-sm text-foreground-muted">
-            {apiKeys.length} keys
-          </span>
+          <span className="text-sm text-foreground-muted">{apiKeys.length} keys</span>
         </div>
 
         {apiKeys.map((apiKey) => (
@@ -111,12 +98,7 @@ export default function APIKeysPage() {
                 <div>
                   <h3 className="font-semibold mb-1">{apiKey.name}</h3>
                   <div className="flex items-center gap-2">
-                    <Badge
-                      variant={
-                        apiKey.status === "active" ? "default" : "secondary"
-                      }
-                      size="sm"
-                    >
+                    <Badge variant={apiKey.status === 'active' ? 'default' : 'secondary'} size="sm">
                       {apiKey.status}
                     </Badge>
                     {apiKey.permissions.map((permission) => (
@@ -169,8 +151,7 @@ export default function APIKeysPage() {
       <Card className="p-6 mt-6">
         <h3 className="font-semibold mb-3">API Documentation</h3>
         <p className="text-sm text-foreground-muted mb-4">
-          Learn how to use API keys to authenticate requests to the GalaxyCo.ai
-          API.
+          Learn how to use API keys to authenticate requests to the GalaxyCo.ai API.
         </p>
         <div className="space-y-3">
           <a

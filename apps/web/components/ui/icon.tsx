@@ -1,7 +1,7 @@
-import * as React from "react";
-import { LucideIcon } from "lucide-react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { LucideIcon } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Icon component using GalaxyCo.ai Design System tokens
@@ -12,24 +12,24 @@ import { cn } from "@/lib/utils";
  * <Icon icon={Star} size="lg" />
  * <Icon icon={<Star />} size="sm" className="text-primary" />
  */
-const iconVariants = cva("flex-shrink-0", {
+const iconVariants = cva('flex-shrink-0', {
   variants: {
     size: {
-      xs: "h-3 w-3", // 12px
-      sm: "h-4 w-4", // 16px
-      default: "h-5 w-5", // 20px (md)
-      lg: "h-6 w-6", // 24px
-      xl: "h-8 w-8", // 32px
-      "2xl": "h-12 w-12", // 48px
+      xs: 'h-3 w-3', // 12px
+      sm: 'h-4 w-4', // 16px
+      default: 'h-5 w-5', // 20px (md)
+      lg: 'h-6 w-6', // 24px
+      xl: 'h-8 w-8', // 32px
+      '2xl': 'h-12 w-12', // 48px
     },
   },
   defaultVariants: {
-    size: "default",
+    size: 'default',
   },
 });
 
 export interface IconProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, "size">,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'size'>,
     VariantProps<typeof iconVariants> {
   /**
    * Lucide icon component or ReactNode
@@ -49,7 +49,7 @@ const Icon = React.forwardRef<HTMLElement, IconProps>(
     const iconClasses = cn(iconVariants({ size }), className);
 
     // If icon is a Lucide component (function), render it
-    if (typeof icon === "function") {
+    if (typeof icon === 'function') {
       const LucideComponent = icon as LucideIcon;
       return (
         <LucideComponent
@@ -70,6 +70,6 @@ const Icon = React.forwardRef<HTMLElement, IconProps>(
   },
 );
 
-Icon.displayName = "Icon";
+Icon.displayName = 'Icon';
 
 export { Icon, iconVariants };

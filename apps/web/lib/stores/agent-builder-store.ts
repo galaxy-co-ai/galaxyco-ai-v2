@@ -1,10 +1,10 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
-export type BuilderStep = "prompt" | "variants" | "iteration" | "test";
+export type BuilderStep = 'prompt' | 'variants' | 'iteration' | 'test';
 
-export type WorkflowNodeType = "start" | "action" | "condition" | "end";
-export type WorkflowNodeStatus = "pending" | "active" | "complete" | "error";
+export type WorkflowNodeType = 'start' | 'action' | 'condition' | 'end';
+export type WorkflowNodeStatus = 'pending' | 'active' | 'complete' | 'error';
 
 export interface WorkflowNode {
   id: string;
@@ -24,8 +24,8 @@ export interface WorkflowEdge {
   condition?: string;
 }
 
-export type VariantType = "basic" | "advanced" | "minimal";
-export type ComplexityLevel = "low" | "medium" | "high";
+export type VariantType = 'basic' | 'advanced' | 'minimal';
+export type ComplexityLevel = 'low' | 'medium' | 'high';
 
 export interface AgentVariant {
   id: string;
@@ -41,20 +41,20 @@ export interface AgentVariant {
 
 export interface Iteration {
   id: string;
-  role: "user" | "assistant" | "system";
+  role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
   workflowUpdate?: WorkflowNode[];
 }
 
 export interface TestInputs {
-  triggerType: "manual" | "scheduled" | "event";
+  triggerType: 'manual' | 'scheduled' | 'event';
   sampleData: Record<string, any>;
   mockIntegrations: boolean;
 }
 
 // Import TestResult from test-types instead of defining here
-import type { TestResult as TestResultType } from "@/lib/agents/test-types";
+import type { TestResult as TestResultType } from '@/lib/agents/test-types';
 export type TestResult = TestResultType;
 
 interface AgentBuilderState {
@@ -96,9 +96,9 @@ interface AgentBuilderState {
 }
 
 const initialState = {
-  currentStep: "prompt" as BuilderStep,
+  currentStep: 'prompt' as BuilderStep,
   agentId: null,
-  promptText: "",
+  promptText: '',
   enhancedPrompt: null,
   variants: [],
   selectedVariant: null,
@@ -126,13 +126,13 @@ export const useAgentBuilder = create<AgentBuilderState>()(
 
         setEnhancedPrompt: (prompt) => set({ enhancedPrompt: prompt }),
 
-        setVariants: (variants) => set({ variants, currentStep: "variants" }),
+        setVariants: (variants) => set({ variants, currentStep: 'variants' }),
 
         selectVariant: (variant) =>
           set({
             selectedVariant: variant,
             workflow: variant.workflow,
-            currentStep: "iteration",
+            currentStep: 'iteration',
           }),
 
         addIteration: (iteration) =>
@@ -151,7 +151,7 @@ export const useAgentBuilder = create<AgentBuilderState>()(
         reset: () => set(initialState),
       }),
       {
-        name: "agent-builder-storage",
+        name: 'agent-builder-storage',
         partialize: (state) => ({
           promptText: state.promptText,
           enhancedPrompt: state.enhancedPrompt,

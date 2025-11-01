@@ -5,8 +5,8 @@
  * This enables RAG (Retrieval Augmented Generation) capabilities for agents.
  */
 
-import { createTool } from "../tools";
-import type { Tool, ExecutionContext } from "../types";
+import { createTool } from '../tools';
+import type { Tool, ExecutionContext } from '../types';
 
 /**
  * Create knowledge base search tool
@@ -17,26 +17,25 @@ import type { Tool, ExecutionContext } from "../types";
  * @param apiBaseUrl - Base URL for API calls (defaults to /api)
  * @returns Tool definition for knowledge base search
  */
-export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
+export function createKnowledgeSearchTool(apiBaseUrl: string = '/api'): Tool {
   return createTool(
-    "searchKnowledgeBase",
+    'searchKnowledgeBase',
     "Search the workspace's knowledge base for relevant information using semantic search. Returns documents, content snippets, and relevance scores. Use this when you need to find information from uploaded documents, URLs, or text content.",
     {
       query: {
-        type: "string",
+        type: 'string',
         description:
           "The search query. Use natural language to describe what information you're looking for.",
       },
       collectionId: {
-        type: "string",
+        type: 'string',
         description:
-          "Optional: Limit search to a specific collection ID. If not provided, searches across all collections.",
+          'Optional: Limit search to a specific collection ID. If not provided, searches across all collections.',
         required: false,
       },
       limit: {
-        type: "number",
-        description:
-          "Optional: Maximum number of results to return (default: 5, max: 20)",
+        type: 'number',
+        description: 'Optional: Maximum number of results to return (default: 5, max: 20)',
         required: false,
       },
     },
@@ -51,7 +50,7 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
       // Validate context
       if (!context?.workspaceId) {
         throw new Error(
-          "Knowledge search requires workspace context. Ensure workspaceId is provided.",
+          'Knowledge search requires workspace context. Ensure workspaceId is provided.',
         );
       }
 
@@ -70,9 +69,9 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
         const response = await fetch(
           `${apiBaseUrl}/knowledge/search?workspaceId=${context.workspaceId}`,
           {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(searchPayload),
           },
@@ -82,9 +81,7 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
           const errorData = (await response.json().catch(() => ({}))) as {
             error?: string;
           };
-          throw new Error(
-            errorData.error || `Search API error: ${response.statusText}`,
-          );
+          throw new Error(errorData.error || `Search API error: ${response.statusText}`);
         }
 
         const data = (await response.json()) as {
@@ -96,8 +93,7 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
         if (!data.results || data.results.length === 0) {
           return {
             success: true,
-            message:
-              "No relevant information found in the knowledge base for this query.",
+            message: 'No relevant information found in the knowledge base for this query.',
             query: args.query,
             resultsCount: 0,
             results: [],
@@ -105,20 +101,16 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
         }
 
         // Format results with source attribution
-        const formattedResults = data.results.map(
-          (result: any, index: number) => ({
-            rank: index + 1,
-            title: result.title,
-            contentSnippet: result.content
-              ? result.content.substring(0, 500) + "..."
-              : "",
-            similarity: result.similarity,
-            type: result.type,
-            collectionId: result.collectionId,
-            sourceId: result.id,
-            createdAt: result.createdAt,
-          }),
-        );
+        const formattedResults = data.results.map((result: any, index: number) => ({
+          rank: index + 1,
+          title: result.title,
+          contentSnippet: result.content ? result.content.substring(0, 500) + '...' : '',
+          similarity: result.similarity,
+          type: result.type,
+          collectionId: result.collectionId,
+          sourceId: result.id,
+          createdAt: result.createdAt,
+        }));
 
         return {
           success: true,
@@ -127,19 +119,15 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
           resultsCount: formattedResults.length,
           results: formattedResults,
           metadata: {
-            searchedCollections: args.collectionId
-              ? [args.collectionId]
-              : "all",
+            searchedCollections: args.collectionId ? [args.collectionId] : 'all',
             averageSimilarity:
-              formattedResults.reduce(
-                (sum: number, r: any) => sum + r.similarity,
-                0,
-              ) / formattedResults.length,
+              formattedResults.reduce((sum: number, r: any) => sum + r.similarity, 0) /
+              formattedResults.length,
             timestamp: new Date().toISOString(),
           },
         };
       } catch (error: any) {
-        console.error("[Knowledge Search Tool] Error:", error);
+        console.error('[Knowledge Search Tool] Error:', error);
 
         // Return error in a format the LLM can understand
         return {
@@ -162,14 +150,14 @@ export function createKnowledgeSearchTool(apiBaseUrl: string = "/api"): Tool {
  */
 export function formatResultsForCitation(results: any[]): string {
   if (!results || results.length === 0) {
-    return "No sources found.";
+    return 'No sources found.';
   }
 
   return results
     .map((result, index) => {
       return `[${index + 1}] ${result.title} (similarity: ${(result.similarity * 100).toFixed(0)}%)`;
     })
-    .join("\n");
+    .join('\n');
 }
 
 /**
@@ -179,12 +167,12 @@ export function formatResultsForCitation(results: any[]): string {
  */
 export function extractContentFromResults(results: any[]): string {
   if (!results || results.length === 0) {
-    return "";
+    return '';
   }
 
   return results
     .map((result, index) => {
       return `Document ${index + 1}: ${result.title}\n${result.contentSnippet}`;
     })
-    .join("\n\n---\n\n");
+    .join('\n\n---\n\n');
 }

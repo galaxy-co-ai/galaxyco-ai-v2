@@ -15,18 +15,18 @@ import {
   createAIProvider,
   getProviderConfigFromEnv,
   validateProviderConfig,
-} from "./ai-provider-wrapper";
-import { logAgentExecution } from "./agent-logger";
-import { logger } from "@/lib/utils/logger";
+} from './ai-provider-wrapper';
+import { logAgentExecution } from './agent-logger';
+import { logger } from '@/lib/utils/logger';
 
 export type AgentTriggerType =
-  | "manual"
-  | "schedule"
-  | "webhook"
-  | "event"
-  | "email"
-  | "knowledge_update"
-  | "user_action";
+  | 'manual'
+  | 'schedule'
+  | 'webhook'
+  | 'event'
+  | 'email'
+  | 'knowledge_update'
+  | 'user_action';
 
 export interface AgentTrigger {
   type: AgentTriggerType;
@@ -40,7 +40,7 @@ export interface AgentTrigger {
 
 export interface AgentInput {
   name: string;
-  type: "text" | "number" | "boolean" | "file" | "json" | "array";
+  type: 'text' | 'number' | 'boolean' | 'file' | 'json' | 'array';
   required: boolean;
   description: string;
   default?: any;
@@ -54,7 +54,7 @@ export interface AgentInput {
 
 export interface AgentOutput {
   name: string;
-  type: "text" | "number" | "boolean" | "file" | "json" | "array";
+  type: 'text' | 'number' | 'boolean' | 'file' | 'json' | 'array';
   description: string;
 }
 
@@ -63,7 +63,7 @@ export interface AgentExecutionContext {
   userId: string;
   workspaceId: string;
   executionId: string;
-  triggeredBy: "user" | "system" | "schedule" | "webhook";
+  triggeredBy: 'user' | 'system' | 'schedule' | 'webhook';
   metadata?: Record<string, any>;
 }
 
@@ -127,9 +127,7 @@ export abstract class BaseAgent {
   /**
    * Initialize AI provider with error handling and fallback logic
    */
-  protected async initializeAI(
-    context: AgentExecutionContext,
-  ): Promise<AIProviderWrapper> {
+  protected async initializeAI(context: AgentExecutionContext): Promise<AIProviderWrapper> {
     if (this.aiWrapper) {
       return this.aiWrapper;
     }
@@ -139,23 +137,15 @@ export abstract class BaseAgent {
 
     // Get primary provider config
     const primaryConfig = getProviderConfigFromEnv(this.aiProvider.primary);
-    if (
-      !primaryConfig ||
-      !validateProviderConfig(this.aiProvider.primary, primaryConfig)
-    ) {
-      throw new Error(
-        `Failed to configure primary AI provider: ${this.aiProvider.primary}`,
-      );
+    if (!primaryConfig || !validateProviderConfig(this.aiProvider.primary, primaryConfig)) {
+      throw new Error(`Failed to configure primary AI provider: ${this.aiProvider.primary}`);
     }
 
     // Get fallback provider config (optional)
     let fallbackConfig = null;
     if (this.aiProvider.fallback) {
       fallbackConfig = getProviderConfigFromEnv(this.aiProvider.fallback);
-      if (
-        !fallbackConfig ||
-        !validateProviderConfig(this.aiProvider.fallback, fallbackConfig)
-      ) {
+      if (!fallbackConfig || !validateProviderConfig(this.aiProvider.fallback, fallbackConfig)) {
         logger.warn(
           `[AGENT ${this.id}] Fallback provider unavailable: ${this.aiProvider.fallback}`,
         );
@@ -193,10 +183,7 @@ export abstract class BaseAgent {
     const errors: string[] = [];
 
     for (const input of this.inputs) {
-      if (
-        input.required &&
-        (inputs[input.name] === undefined || inputs[input.name] === null)
-      ) {
+      if (input.required && (inputs[input.name] === undefined || inputs[input.name] === null)) {
         errors.push(`Required input '${input.name}' is missing`);
         continue;
       }
@@ -206,28 +193,28 @@ export abstract class BaseAgent {
 
         // Type validation
         switch (input.type) {
-          case "text":
-            if (typeof value !== "string") {
+          case 'text':
+            if (typeof value !== 'string') {
               errors.push(`Input '${input.name}' must be a string`);
             }
             break;
-          case "number":
-            if (typeof value !== "number") {
+          case 'number':
+            if (typeof value !== 'number') {
               errors.push(`Input '${input.name}' must be a number`);
             }
             break;
-          case "boolean":
-            if (typeof value !== "boolean") {
+          case 'boolean':
+            if (typeof value !== 'boolean') {
               errors.push(`Input '${input.name}' must be a boolean`);
             }
             break;
-          case "array":
+          case 'array':
             if (!Array.isArray(value)) {
               errors.push(`Input '${input.name}' must be an array`);
             }
             break;
-          case "json":
-            if (typeof value !== "object") {
+          case 'json':
+            if (typeof value !== 'object') {
               errors.push(`Input '${input.name}' must be a valid JSON object`);
             }
             break;
@@ -237,41 +224,24 @@ export abstract class BaseAgent {
         if (input.validation) {
           const validation = input.validation;
 
-          if (
-            validation.min !== undefined &&
-            typeof value === "number" &&
-            value < validation.min
-          ) {
-            errors.push(
-              `Input '${input.name}' must be at least ${validation.min}`,
-            );
+          if (validation.min !== undefined && typeof value === 'number' && value < validation.min) {
+            errors.push(`Input '${input.name}' must be at least ${validation.min}`);
           }
 
-          if (
-            validation.max !== undefined &&
-            typeof value === "number" &&
-            value > validation.max
-          ) {
-            errors.push(
-              `Input '${input.name}' must be at most ${validation.max}`,
-            );
+          if (validation.max !== undefined && typeof value === 'number' && value > validation.max) {
+            errors.push(`Input '${input.name}' must be at most ${validation.max}`);
           }
 
-          if (validation.pattern && typeof value === "string") {
+          if (validation.pattern && typeof value === 'string') {
             const regex = new RegExp(validation.pattern);
             if (!regex.test(value)) {
-              errors.push(
-                `Input '${input.name}' does not match required pattern`,
-              );
+              errors.push(`Input '${input.name}' does not match required pattern`);
             }
           }
 
-          if (
-            validation.allowedValues &&
-            !validation.allowedValues.includes(value)
-          ) {
+          if (validation.allowedValues && !validation.allowedValues.includes(value)) {
             errors.push(
-              `Input '${input.name}' must be one of: ${validation.allowedValues.join(", ")}`,
+              `Input '${input.name}' must be one of: ${validation.allowedValues.join(', ')}`,
             );
           }
         }
@@ -303,9 +273,7 @@ export abstract class BaseAgent {
       // Validate inputs
       const validation = this.validateInputs(inputs);
       if (!validation.valid) {
-        throw new Error(
-          `Input validation failed: ${validation.errors.join(", ")}`,
-        );
+        throw new Error(`Input validation failed: ${validation.errors.join(', ')}`);
       }
 
       // Execute the agent's core logic
@@ -340,18 +308,14 @@ export abstract class BaseAgent {
       return result;
     } catch (error) {
       const duration = Date.now() - startTime;
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
       result = {
         success: false,
         data: {},
         error: {
           message: errorMessage,
-          code:
-            error instanceof Error && "code" in error
-              ? (error as any).code
-              : "EXECUTION_ERROR",
+          code: error instanceof Error && 'code' in error ? (error as any).code : 'EXECUTION_ERROR',
         },
         metadata: {
           duration,
@@ -394,11 +358,11 @@ export abstract class BaseAgent {
 
     // Create test context
     const testContext: AgentExecutionContext = {
-      tenantId: "test-tenant",
-      userId: "test-user",
-      workspaceId: "test-workspace",
+      tenantId: 'test-tenant',
+      userId: 'test-user',
+      workspaceId: 'test-workspace',
       executionId: `test-${Date.now()}`,
-      triggeredBy: "system",
+      triggeredBy: 'system',
       metadata: { isTest: true },
     };
 
@@ -448,7 +412,7 @@ export abstract class BaseAgent {
           data: {},
           error: {
             message: error instanceof Error ? error.message : String(error),
-            code: "TEST_FAILURE",
+            code: 'TEST_FAILURE',
           },
         },
         issues,
@@ -469,27 +433,26 @@ export abstract class BaseAgent {
       }
 
       switch (input.type) {
-        case "text":
-          mockInputs[input.name] =
-            input.validation?.allowedValues?.[0] || "test-value";
+        case 'text':
+          mockInputs[input.name] = input.validation?.allowedValues?.[0] || 'test-value';
           break;
-        case "number":
+        case 'number':
           mockInputs[input.name] = input.validation?.min || 1;
           break;
-        case "boolean":
+        case 'boolean':
           mockInputs[input.name] = true;
           break;
-        case "array":
-          mockInputs[input.name] = ["test-item"];
+        case 'array':
+          mockInputs[input.name] = ['test-item'];
           break;
-        case "json":
-          mockInputs[input.name] = { test: "data" };
+        case 'json':
+          mockInputs[input.name] = { test: 'data' };
           break;
-        case "file":
-          mockInputs[input.name] = "test-file.txt";
+        case 'file':
+          mockInputs[input.name] = 'test-file.txt';
           break;
         default:
-          mockInputs[input.name] = "test-value";
+          mockInputs[input.name] = 'test-value';
       }
     }
 
@@ -505,23 +468,20 @@ export abstract class BaseAgent {
     // Check if aiProvider is defined (might not be during build-time instantiation)
     if (!this.aiProvider) {
       logger.warn(
-        `[AGENT ${this.id || "unknown"}] AI provider not defined, skipping environment validation`,
+        `[AGENT ${this.id || 'unknown'}] AI provider not defined, skipping environment validation`,
       );
       return;
     }
 
     // Check AI provider keys
-    if (this.aiProvider.primary === "openai" && !process.env.OPENAI_API_KEY) {
-      missingVars.push("OPENAI_API_KEY");
+    if (this.aiProvider.primary === 'openai' && !process.env.OPENAI_API_KEY) {
+      missingVars.push('OPENAI_API_KEY');
     }
-    if (
-      this.aiProvider.primary === "anthropic" &&
-      !process.env.ANTHROPIC_API_KEY
-    ) {
-      missingVars.push("ANTHROPIC_API_KEY");
+    if (this.aiProvider.primary === 'anthropic' && !process.env.ANTHROPIC_API_KEY) {
+      missingVars.push('ANTHROPIC_API_KEY');
     }
-    if (this.aiProvider.primary === "google" && !process.env.GOOGLE_AI_KEY) {
-      missingVars.push("GOOGLE_AI_KEY");
+    if (this.aiProvider.primary === 'google' && !process.env.GOOGLE_AI_KEY) {
+      missingVars.push('GOOGLE_AI_KEY');
     }
 
     // Check any additional required environment variables
@@ -542,7 +502,7 @@ export abstract class BaseAgent {
    * Helper method to send AI requests with the standardized wrapper
    */
   protected async sendAIRequest(
-    messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
+    messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
     context: AgentExecutionContext,
     options?: {
       temperature?: number;
@@ -588,9 +548,7 @@ export class AgentRegistry {
     });
   }
 
-  static async testAll(): Promise<
-    Record<string, { success: boolean; issues: string[] }>
-  > {
+  static async testAll(): Promise<Record<string, { success: boolean; issues: string[] }>> {
     const results: Record<string, { success: boolean; issues: string[] }> = {};
 
     for (const [agentId, AgentClass] of this.agents) {

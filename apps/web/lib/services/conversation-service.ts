@@ -5,7 +5,7 @@
  * and user preferences.
  */
 
-import { db } from "@galaxyco/database";
+import { db } from '@galaxyco/database';
 import {
   aiConversations,
   aiMessages,
@@ -15,9 +15,9 @@ import {
   type NewAiMessage,
   type NewAiConversation,
   type AiUserPreferences,
-} from "@galaxyco/database/schema";
-import { and, eq, desc, sql } from "drizzle-orm";
-import { nanoid } from "nanoid";
+} from '@galaxyco/database/schema';
+import { and, eq, desc, sql } from 'drizzle-orm';
+import { nanoid } from 'nanoid';
 
 export interface CreateConversationParams {
   userId: string;
@@ -36,11 +36,11 @@ export interface CreateConversationParams {
 
 export interface AddMessageParams {
   conversationId: string;
-  role: "user" | "assistant" | "system";
+  role: 'user' | 'assistant' | 'system';
   content: string;
   metadata?: {
     sources?: Array<{
-      type: "document" | "knowledge_item" | "agent" | "prospect";
+      type: 'document' | 'knowledge_item' | 'agent' | 'prospect';
       id: string;
       title: string;
       relevanceScore?: number;
@@ -66,9 +66,7 @@ export class ConversationService {
   /**
    * Create a new conversation
    */
-  async createConversation(
-    params: CreateConversationParams,
-  ): Promise<AiConversation> {
+  async createConversation(params: CreateConversationParams): Promise<AiConversation> {
     const { userId, workspaceId, title, context } = params;
 
     const conversation = await db
@@ -77,7 +75,7 @@ export class ConversationService {
         id: nanoid(),
         userId,
         workspaceId,
-        title: title || "New Conversation",
+        title: title || 'New Conversation',
         context: context || {},
       })
       .returning();
@@ -110,10 +108,7 @@ export class ConversationService {
     }
 
     // Get user preferences
-    const userPreferences = await this.getUserPreferences(
-      conversation.userId,
-      workspaceId,
-    );
+    const userPreferences = await this.getUserPreferences(conversation.userId, workspaceId);
 
     return {
       conversation,
@@ -131,10 +126,7 @@ export class ConversationService {
     limit: number = 20,
   ): Promise<AiConversation[]> {
     const conversations = await db.query.aiConversations.findMany({
-      where: and(
-        eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId),
-      ),
+      where: and(eq(aiConversations.userId, userId), eq(aiConversations.workspaceId, workspaceId)),
       orderBy: (conversations, { desc }) => [desc(conversations.lastMessageAt)],
       limit,
     });
@@ -171,12 +163,12 @@ export class ConversationService {
       .where(eq(aiConversations.id, conversationId));
 
     // Update title from first user message if needed
-    if (role === "user") {
+    if (role === 'user') {
       const conversation = await db.query.aiConversations.findFirst({
         where: eq(aiConversations.id, conversationId),
       });
 
-      if (conversation && conversation.title === "New Conversation") {
+      if (conversation && conversation.title === 'New Conversation') {
         await this.generateConversationTitle(conversationId, content);
       }
     }
@@ -192,10 +184,7 @@ export class ConversationService {
     firstMessage: string,
   ): Promise<void> {
     // Simple title generation - take first 50 chars
-    const title =
-      firstMessage.length > 50
-        ? firstMessage.slice(0, 47) + "..."
-        : firstMessage;
+    const title = firstMessage.length > 50 ? firstMessage.slice(0, 47) + '...' : firstMessage;
 
     await db
       .update(aiConversations)
@@ -209,10 +198,7 @@ export class ConversationService {
   /**
    * Get user preferences
    */
-  async getUserPreferences(
-    userId: string,
-    workspaceId: string,
-  ): Promise<AiUserPreferences | null> {
+  async getUserPreferences(userId: string, workspaceId: string): Promise<AiUserPreferences | null> {
     const preferences = await db.query.aiUserPreferences.findFirst({
       where: and(
         eq(aiUserPreferences.userId, userId),
@@ -243,10 +229,7 @@ export class ConversationService {
           updatedAt: new Date(),
         })
         .where(
-          and(
-            eq(aiUserPreferences.userId, userId),
-            eq(aiUserPreferences.workspaceId, workspaceId),
-          ),
+          and(eq(aiUserPreferences.userId, userId), eq(aiUserPreferences.workspaceId, workspaceId)),
         )
         .returning();
 
@@ -270,17 +253,11 @@ export class ConversationService {
   /**
    * Delete a conversation and all its messages
    */
-  async deleteConversation(
-    conversationId: string,
-    workspaceId: string,
-  ): Promise<boolean> {
+  async deleteConversation(conversationId: string, workspaceId: string): Promise<boolean> {
     const result = await db
       .delete(aiConversations)
       .where(
-        and(
-          eq(aiConversations.id, conversationId),
-          eq(aiConversations.workspaceId, workspaceId),
-        ),
+        and(eq(aiConversations.id, conversationId), eq(aiConversations.workspaceId, workspaceId)),
       );
 
     return !!result;
@@ -296,10 +273,7 @@ export class ConversationService {
   ): Promise<AiConversation[]> {
     // Get conversations with matching titles or content
     const conversations = await db.query.aiConversations.findMany({
-      where: and(
-        eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId),
-      ),
+      where: and(eq(aiConversations.userId, userId), eq(aiConversations.workspaceId, workspaceId)),
       with: {
         messages: {
           where: (messages, { like }) => like(messages.content, `%${query}%`),
@@ -311,9 +285,7 @@ export class ConversationService {
 
     // Filter to those with matching title or messages
     const filtered = conversations.filter(
-      (conv) =>
-        conv.title.toLowerCase().includes(query.toLowerCase()) ||
-        conv.messages.length > 0,
+      (conv) => conv.title.toLowerCase().includes(query.toLowerCase()) || conv.messages.length > 0,
     );
 
     return filtered;
@@ -322,10 +294,7 @@ export class ConversationService {
   /**
    * Pin/unpin a conversation
    */
-  async togglePinConversation(
-    conversationId: string,
-    workspaceId: string,
-  ): Promise<boolean> {
+  async togglePinConversation(conversationId: string, workspaceId: string): Promise<boolean> {
     const conversation = await db.query.aiConversations.findFirst({
       where: and(
         eq(aiConversations.id, conversationId),
@@ -363,10 +332,7 @@ export class ConversationService {
         updatedAt: new Date(),
       })
       .where(
-        and(
-          eq(aiConversations.id, conversationId),
-          eq(aiConversations.workspaceId, workspaceId),
-        ),
+        and(eq(aiConversations.id, conversationId), eq(aiConversations.workspaceId, workspaceId)),
       );
   }
 
@@ -383,10 +349,7 @@ export class ConversationService {
     mostUsedTags: string[];
   }> {
     const conversations = await db.query.aiConversations.findMany({
-      where: and(
-        eq(aiConversations.userId, userId),
-        eq(aiConversations.workspaceId, workspaceId),
-      ),
+      where: and(eq(aiConversations.userId, userId), eq(aiConversations.workspaceId, workspaceId)),
       with: {
         messages: true,
       },
@@ -398,8 +361,7 @@ export class ConversationService {
 
     const averageMessageLength =
       allMessages.length > 0
-        ? allMessages.reduce((sum, m) => sum + m.content.length, 0) /
-          allMessages.length
+        ? allMessages.reduce((sum, m) => sum + m.content.length, 0) / allMessages.length
         : 0;
 
     // Count tags

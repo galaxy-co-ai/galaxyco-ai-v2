@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, RefreshCcw, Home, Mail } from "lucide-react";
-import Link from "next/link";
-import { logger } from "@/lib/utils/logger";
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, RefreshCcw, Home, Mail } from 'lucide-react';
+import Link from 'next/link';
+import { logger } from '@/lib/utils/logger';
 
 export default function Error({
   error,
@@ -15,7 +15,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log error to error reporting service
-    logger.error("Global error", error);
+    logger.error('Global error', error);
   }, [error]);
 
   return (
@@ -31,20 +31,16 @@ export default function Error({
         {/* Error Message */}
         <h1 className="text-4xl font-bold mb-4">Something went wrong</h1>
         <p className="text-lg text-muted-foreground mb-8">
-          We&apos;re sorry, but something unexpected happened. Our team has been
-          notified and we&apos;re working on it.
+          We&apos;re sorry, but something unexpected happened. Our team has been notified and
+          we&apos;re working on it.
         </p>
 
         {/* Error Details (Development only) */}
-        {process.env.NODE_ENV === "development" && error.message && (
+        {process.env.NODE_ENV === 'development' && error.message && (
           <div className="mb-8 p-4 bg-muted rounded-lg text-left max-w-lg mx-auto">
-            <p className="text-sm font-mono text-destructive break-all">
-              {error.message}
-            </p>
+            <p className="text-sm font-mono text-destructive break-all">{error.message}</p>
             {error.digest && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Error ID: {error.digest}
-              </p>
+              <p className="text-xs text-muted-foreground mt-2">Error ID: {error.digest}</p>
             )}
           </div>
         )}
@@ -79,7 +75,7 @@ export default function Error({
 
         {/* Additional Info */}
         <p className="mt-8 text-xs text-muted-foreground">
-          Error reference: {error.digest || "N/A"}
+          Error reference: {error.digest || 'N/A'}
         </p>
       </div>
     </div>

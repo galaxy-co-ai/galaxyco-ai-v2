@@ -960,8 +960,7 @@ $category-sales: #ef4444; // Red
 ```scss
 // Font Family
 $font-primary:
-  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-  Arial, sans-serif;
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
 // Font Sizes
 $text-xs: 12px; // Captions, labels

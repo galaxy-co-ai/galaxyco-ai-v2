@@ -1,8 +1,8 @@
-import React from "react";
-import { Breadcrumb } from "@/components/organisms/breadcrumb";
-import { DashboardHeader } from "@/components/organisms/dashboard-header";
-import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle } from "lucide-react";
+import React from 'react';
+import { Breadcrumb } from '@/components/organisms/breadcrumb';
+import { DashboardHeader } from '@/components/organisms/dashboard-header';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AlertCircle } from 'lucide-react';
 
 export interface PageShellProps {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ export interface PageShellProps {
   /** Custom className for content area */
   contentClassName?: string;
   /** Max width constraint (default: 7xl) */
-  maxWidth?: "full" | "7xl" | "6xl" | "5xl" | "4xl";
+  maxWidth?: 'full' | '7xl' | '6xl' | '5xl' | '4xl';
 }
 
 /**
@@ -65,17 +65,17 @@ export function PageShell({
   isLoading = false,
   error = null,
   isEmpty = false,
-  emptyMessage = "No data available",
+  emptyMessage = 'No data available',
   emptyAction,
-  contentClassName = "",
-  maxWidth = "7xl",
+  contentClassName = '',
+  maxWidth = '7xl',
 }: PageShellProps) {
   const maxWidthClass = {
-    full: "max-w-full",
-    "7xl": "max-w-7xl",
-    "6xl": "max-w-6xl",
-    "5xl": "max-w-5xl",
-    "4xl": "max-w-4xl",
+    full: 'max-w-full',
+    '7xl': 'max-w-7xl',
+    '6xl': 'max-w-6xl',
+    '5xl': 'max-w-5xl',
+    '4xl': 'max-w-4xl',
   }[maxWidth];
 
   return (
@@ -96,11 +96,7 @@ export function PageShell({
         {/* Page Header */}
         {(title || subtitle || actions) && (
           <div className="mb-6">
-            <DashboardHeader
-              title={title || ""}
-              subtitle={subtitle}
-              actions={actions}
-            />
+            <DashboardHeader title={title || ''} subtitle={subtitle} actions={actions} />
           </div>
         )}
 
@@ -119,11 +115,9 @@ export function PageShell({
           {!isLoading && error && (
             <div className="rounded-lg border border-destructive bg-destructive/10 p-8 text-center">
               <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive" />
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
-                Something went wrong
-              </h3>
+              <h3 className="mb-2 text-lg font-semibold text-foreground">Something went wrong</h3>
               <p className="text-sm text-muted-foreground">
-                {error.message || "An unexpected error occurred"}
+                {error.message || 'An unexpected error occurred'}
               </p>
             </div>
           )}
@@ -146,9 +140,7 @@ export function PageShell({
                   />
                 </svg>
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
-                {emptyMessage}
-              </h3>
+              <h3 className="mb-2 text-lg font-semibold text-foreground">{emptyMessage}</h3>
               {emptyAction && <div className="mt-4">{emptyAction}</div>}
             </div>
           )}

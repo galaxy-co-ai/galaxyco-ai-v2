@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { ListPage } from "@/components/templates";
-import { DataTable } from "@/components/organisms/data-table";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { ListPage } from '@/components/templates';
+import { DataTable } from '@/components/organisms/data-table';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -16,17 +16,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { UserPlus, Mail, MoreVertical, Shield, User } from "lucide-react";
+} from '@/components/ui/select';
+import { UserPlus, Mail, MoreVertical, Shield, User } from 'lucide-react';
 
 type TeamMember = {
   id: string;
@@ -54,13 +54,11 @@ export default function SettingsTeamPage() {
   const { currentWorkspace } = useWorkspace();
   const [isLoading, setIsLoading] = useState(true);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState("member");
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteRole, setInviteRole] = useState('member');
 
   useEffect(() => {
     async function fetchMembers() {
@@ -70,11 +68,11 @@ export default function SettingsTeamPage() {
         const res = await fetch(
           `/api/workspaces/current/members?workspaceId=${currentWorkspace.id}`,
         );
-        if (!res.ok) throw new Error("Failed to fetch members");
+        if (!res.ok) throw new Error('Failed to fetch members');
         const data = await res.json();
         setTeamMembers(data.members);
       } catch (error) {
-        toast.error("Failed to load team members");
+        toast.error('Failed to load team members');
       } finally {
         setIsLoading(false);
       }
@@ -87,9 +85,9 @@ export default function SettingsTeamPage() {
     if (!currentWorkspace?.id || !inviteEmail) return;
 
     try {
-      const res = await fetch("/api/workspaces/current/members", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/workspaces/current/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           workspaceId: currentWorkspace.id,
           email: inviteEmail,
@@ -97,31 +95,29 @@ export default function SettingsTeamPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to invite member");
-      toast.success("Invitation sent successfully");
+      if (!res.ok) throw new Error('Failed to invite member');
+      toast.success('Invitation sent successfully');
       setIsInviteOpen(false);
-      setInviteEmail("");
-      setInviteRole("member");
+      setInviteEmail('');
+      setInviteRole('member');
     } catch (error) {
-      toast.error("Failed to send invitation");
+      toast.error('Failed to send invitation');
     }
   };
 
   // Filter members
   const filteredMembers = teamMembers.filter((member) => {
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       member.user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const roleFilter = activeFilters.role || [];
-    const matchesRole =
-      roleFilter.length === 0 || roleFilter.includes(member.role);
+    const matchesRole = roleFilter.length === 0 || roleFilter.includes(member.role);
 
     const statusFilter = activeFilters.status || [];
-    const statusValue = member.isActive ? "active" : "inactive";
-    const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(statusValue);
+    const statusValue = member.isActive ? 'active' : 'inactive';
+    const matchesStatus = statusFilter.length === 0 || statusFilter.includes(statusValue);
 
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -149,10 +145,7 @@ export default function SettingsTeamPage() {
     <ListPage
       title="Team Settings"
       subtitle="Manage team members and permissions"
-      breadcrumbs={[
-        { label: "Settings", href: "/settings" },
-        { label: "Team" },
-      ]}
+      breadcrumbs={[{ label: 'Settings', href: '/settings' }, { label: 'Team' }]}
       actions={
         <Dialog open={isInviteOpen} onOpenChange={setIsInviteOpen}>
           <DialogTrigger asChild>
@@ -164,9 +157,7 @@ export default function SettingsTeamPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Invite Team Member</DialogTitle>
-              <DialogDescription>
-                Send an invitation to join your workspace
-              </DialogDescription>
+              <DialogDescription>Send an invitation to join your workspace</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
@@ -192,10 +183,7 @@ export default function SettingsTeamPage() {
                 </Select>
               </div>
               <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsInviteOpen(false)}
-                >
+                <Button variant="outline" onClick={() => setIsInviteOpen(false)}>
                   Cancel
                 </Button>
                 <Button onClick={handleInvite}>
@@ -213,22 +201,22 @@ export default function SettingsTeamPage() {
       showViewToggle={false}
       filters={[
         {
-          id: "role",
-          label: "Role",
-          type: "checkbox",
+          id: 'role',
+          label: 'Role',
+          type: 'checkbox',
           options: [
-            { value: "owner", label: "Owner", count: 1 },
-            { value: "admin", label: "Admin", count: 1 },
-            { value: "member", label: "Member", count: 2 },
+            { value: 'owner', label: 'Owner', count: 1 },
+            { value: 'admin', label: 'Admin', count: 1 },
+            { value: 'member', label: 'Member', count: 2 },
           ],
         },
         {
-          id: "status",
-          label: "Status",
-          type: "checkbox",
+          id: 'status',
+          label: 'Status',
+          type: 'checkbox',
           options: [
-            { value: "active", label: "Active", count: 3 },
-            { value: "invited", label: "Invited", count: 1 },
+            { value: 'active', label: 'Active', count: 3 },
+            { value: 'invited', label: 'Invited', count: 1 },
           ],
         },
       ]}
@@ -272,28 +260,20 @@ export default function SettingsTeamPage() {
                         </div>
                       </Avatar>
                       <div>
-                        <div className="font-medium text-foreground">
-                          {member.user.name}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {member.user.email}
-                        </div>
+                        <div className="font-medium text-foreground">{member.user.name}</div>
+                        <div className="text-sm text-muted-foreground">{member.user.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      {member.role === "owner" && (
-                        <Shield className="h-4 w-4 text-warning" />
-                      )}
-                      <span className="capitalize text-foreground">
-                        {member.role}
-                      </span>
+                      {member.role === 'owner' && <Shield className="h-4 w-4 text-warning" />}
+                      <span className="capitalize text-foreground">{member.role}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge variant={member.isActive ? "success" : "secondary"}>
-                      {member.isActive ? "active" : "inactive"}
+                    <Badge variant={member.isActive ? 'success' : 'secondary'}>
+                      {member.isActive ? 'active' : 'inactive'}
                     </Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">

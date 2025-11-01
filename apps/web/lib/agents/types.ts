@@ -3,13 +3,13 @@
  * Complete type definitions for the Agents Builder system
  */
 
-import type { Agent, AgentSchedule, AgentExecution } from "@galaxyco/database";
+import type { Agent, AgentSchedule, AgentExecution } from '@galaxyco/database';
 
 // ============================================================================
 // Workflow Types (For Builder)
 // ============================================================================
 
-export type WorkflowNodeType = "start" | "action" | "condition" | "end";
+export type WorkflowNodeType = 'start' | 'action' | 'condition' | 'end';
 
 export interface WorkflowNode {
   id: string;
@@ -31,15 +31,10 @@ export interface WorkflowEdge {
 // Agent Types (Extended from DB)
 // ============================================================================
 
-export type AgentStatus = "draft" | "active" | "paused" | "archived";
-export type AgentVariant = "minimal" | "basic" | "advanced";
-export type TriggerType = "manual" | "scheduled" | "webhook";
-export type ExecutionStatus =
-  | "pending"
-  | "running"
-  | "completed"
-  | "failed"
-  | "cancelled";
+export type AgentStatus = 'draft' | 'active' | 'paused' | 'archived';
+export type AgentVariant = 'minimal' | 'basic' | 'advanced';
+export type TriggerType = 'manual' | 'scheduled' | 'webhook';
+export type ExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 
 // Agent with computed metrics and relations
 export interface AgentWithSchedule extends Agent {
@@ -99,7 +94,7 @@ export interface ExecutionStepLog {
   id: string;
   nodeId: string;
   step: string;
-  status: "pending" | "running" | "completed" | "failed";
+  status: 'pending' | 'running' | 'completed' | 'failed';
   startedAt?: Date;
   completedAt?: Date;
   duration?: number;
@@ -109,7 +104,7 @@ export interface ExecutionStepLog {
 
 export interface ExecutionOutputItem {
   id: string;
-  type: "ai-result" | "notification" | "data" | "document";
+  type: 'ai-result' | 'notification' | 'data' | 'document';
   title?: string;
   content: any;
   timestamp: Date;
@@ -225,67 +220,62 @@ export interface SchedulePreset {
 
 export const SCHEDULE_PRESETS: SchedulePreset[] = [
   {
-    label: "Every hour",
-    value: "hourly",
-    cron: "0 * * * *",
-    description: "Runs at the top of every hour",
+    label: 'Every hour',
+    value: 'hourly',
+    cron: '0 * * * *',
+    description: 'Runs at the top of every hour',
   },
   {
-    label: "Every 6 hours",
-    value: "6hours",
-    cron: "0 */6 * * *",
-    description: "Runs 4 times daily",
+    label: 'Every 6 hours',
+    value: '6hours',
+    cron: '0 */6 * * *',
+    description: 'Runs 4 times daily',
   },
   {
-    label: "Daily at 9 AM",
-    value: "daily-9am",
-    cron: "0 9 * * *",
-    description: "Runs once daily",
+    label: 'Daily at 9 AM',
+    value: 'daily-9am',
+    cron: '0 9 * * *',
+    description: 'Runs once daily',
   },
   {
-    label: "Weekdays at 9 AM",
-    value: "weekdays-9am",
-    cron: "0 9 * * 1-5",
-    description: "Runs Mon-Fri",
+    label: 'Weekdays at 9 AM',
+    value: 'weekdays-9am',
+    cron: '0 9 * * 1-5',
+    description: 'Runs Mon-Fri',
   },
   {
-    label: "Weekly on Monday",
-    value: "weekly-mon",
-    cron: "0 9 * * 1",
-    description: "Runs every Monday",
+    label: 'Weekly on Monday',
+    value: 'weekly-mon',
+    cron: '0 9 * * 1',
+    description: 'Runs every Monday',
   },
   {
-    label: "Custom",
-    value: "custom",
-    description: "Define your own cron expression",
+    label: 'Custom',
+    value: 'custom',
+    description: 'Define your own cron expression',
   },
 ];
 
 export const TIMEZONE_OPTIONS = [
-  "America/Chicago",
-  "America/New_York",
-  "America/Los_Angeles",
-  "America/Denver",
-  "Europe/London",
-  "Europe/Paris",
-  "Europe/Berlin",
-  "Asia/Tokyo",
-  "Asia/Shanghai",
-  "Asia/Dubai",
-  "Australia/Sydney",
+  'America/Chicago',
+  'America/New_York',
+  'America/Los_Angeles',
+  'America/Denver',
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Asia/Tokyo',
+  'Asia/Shanghai',
+  'Asia/Dubai',
+  'Australia/Sydney',
 ];
 
 // ============================================================================
 // Helper Types
 // ============================================================================
 
-export type SortDirection = "asc" | "desc";
-export type SortField =
-  | "name"
-  | "status"
-  | "createdAt"
-  | "lastExecutedAt"
-  | "executionCount";
+export type SortDirection = 'asc' | 'desc';
+export type SortField = 'name' | 'status' | 'createdAt' | 'lastExecutedAt' | 'executionCount';
 
 export interface SortConfig {
   field: SortField;

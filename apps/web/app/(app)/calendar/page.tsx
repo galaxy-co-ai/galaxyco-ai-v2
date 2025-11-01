@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates/detail-page";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates/detail-page';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -18,7 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Video,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface CalendarEvent {
   id: string;
@@ -45,37 +45,37 @@ interface CalendarEvent {
 
 const calendarMetrics = [
   {
-    label: "Events Today",
-    value: "3",
-    change: "2 upcoming",
-    trend: "neutral" as const,
+    label: 'Events Today',
+    value: '3',
+    change: '2 upcoming',
+    trend: 'neutral' as const,
     icon: <CalendarIcon className="h-5 w-5" />,
   },
   {
-    label: "This Week",
-    value: "12",
-    change: "vs 10 last week",
-    trend: "up" as const,
+    label: 'This Week',
+    value: '12',
+    change: 'vs 10 last week',
+    trend: 'up' as const,
     icon: <Clock className="h-5 w-5" />,
   },
   {
-    label: "Total Hours",
-    value: "18.5h",
-    change: "scheduled",
-    trend: "neutral" as const,
+    label: 'Total Hours',
+    value: '18.5h',
+    change: 'scheduled',
+    trend: 'neutral' as const,
     icon: <Clock className="h-5 w-5" />,
   },
   {
-    label: "Meetings",
-    value: "8",
-    change: "67% of events",
-    trend: "neutral" as const,
+    label: 'Meetings',
+    value: '8',
+    change: '67% of events',
+    trend: 'neutral' as const,
     icon: <Users className="h-5 w-5" />,
   },
 ];
 
 function CalendarView() {
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const today = new Date();
 
   return (
@@ -84,9 +84,9 @@ function CalendarView() {
         {/* Calendar Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold">
-            {today.toLocaleString("default", {
-              month: "long",
-              year: "numeric",
+            {today.toLocaleString('default', {
+              month: 'long',
+              year: 'numeric',
             })}
           </h3>
           <div className="flex gap-2">
@@ -106,10 +106,7 @@ function CalendarView() {
         <div className="grid grid-cols-7 gap-2">
           {/* Day headers */}
           {daysOfWeek.map((day) => (
-            <div
-              key={day}
-              className="text-center text-sm font-medium text-muted-foreground py-2"
-            >
+            <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
               {day}
             </div>
           ))}
@@ -123,15 +120,15 @@ function CalendarView() {
               <div
                 key={i}
                 className={`aspect-square p-2 rounded-lg border border-border hover:bg-muted/50 cursor-pointer transition-colors ${
-                  isToday ? "bg-primary/10 border-primary" : ""
+                  isToday ? 'bg-primary/10 border-primary' : ''
                 }`}
               >
                 <div
                   className={`text-sm ${
-                    isToday ? "font-bold text-primary" : "text-muted-foreground"
+                    isToday ? 'font-bold text-primary' : 'text-muted-foreground'
                   }`}
                 >
-                  {day > 0 && day <= 31 ? day : ""}
+                  {day > 0 && day <= 31 ? day : ''}
                 </div>
                 {/* Event dots */}
                 {day === 17 && (
@@ -151,11 +148,11 @@ function CalendarView() {
 
 function UpcomingEvents({ events }: { events: CalendarEvent[] }) {
   const typeColors = {
-    meeting: "default",
-    demo: "secondary",
-    standup: "outline",
-    review: "default",
-    "one-on-one": "secondary",
+    meeting: 'default',
+    demo: 'secondary',
+    standup: 'outline',
+    review: 'default',
+    'one-on-one': 'secondary',
   } as const;
 
   if (events.length === 0) {
@@ -186,29 +183,22 @@ function UpcomingEvents({ events }: { events: CalendarEvent[] }) {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
                     <span>{new Date(event.startTime).toLocaleString()}</span>
-                    {event.endTime && (
-                      <span>• {new Date(event.endTime).toLocaleString()}</span>
-                    )}
+                    {event.endTime && <span>• {new Date(event.endTime).toLocaleString()}</span>}
                   </div>
                 </div>
-                <Badge variant="default">
-                  {event.isAllDay ? "All Day" : "Event"}
-                </Badge>
+                <Badge variant="default">{event.isAllDay ? 'All Day' : 'Event'}</Badge>
               </div>
 
               {/* Event Details */}
               <div className="space-y-2">
                 {event.location && (
                   <div className="flex items-center gap-2 text-sm">
-                    {event.meetingUrl ||
-                    event.location?.toLowerCase().includes("virtual") ? (
+                    {event.meetingUrl || event.location?.toLowerCase().includes('virtual') ? (
                       <Video className="h-4 w-4 text-muted-foreground" />
                     ) : (
                       <MapPin className="h-4 w-4 text-muted-foreground" />
                     )}
-                    <span className="text-muted-foreground">
-                      {event.location}
-                    </span>
+                    <span className="text-muted-foreground">{event.location}</span>
                   </div>
                 )}
 
@@ -219,20 +209,18 @@ function UpcomingEvents({ events }: { events: CalendarEvent[] }) {
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-muted-foreground" />
                       <div className="flex -space-x-2">
-                        {event.attendees
-                          .slice(0, 3)
-                          .map((attendee: any, index: number) => (
-                            <Avatar
-                              key={index}
-                              src={`https://api.dicebear.com/7.x/initials/svg?seed=${attendee.name || attendee.email}`}
-                              alt={attendee.name || attendee.email}
-                              fallback={(attendee.name || attendee.email || "U")
-                                .slice(0, 2)
-                                .toUpperCase()}
-                              size="sm"
-                              className="border-2 border-background"
-                            />
-                          ))}
+                        {event.attendees.slice(0, 3).map((attendee: any, index: number) => (
+                          <Avatar
+                            key={index}
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${attendee.name || attendee.email}`}
+                            alt={attendee.name || attendee.email}
+                            fallback={(attendee.name || attendee.email || 'U')
+                              .slice(0, 2)
+                              .toUpperCase()}
+                            size="sm"
+                            className="border-2 border-background"
+                          />
+                        ))}
                       </div>
                       {event.attendees.length > 3 && (
                         <span className="text-xs text-muted-foreground">
@@ -250,11 +238,7 @@ function UpcomingEvents({ events }: { events: CalendarEvent[] }) {
                 </Button>
                 {event.meetingUrl && (
                   <Button size="sm" asChild>
-                    <a
-                      href={event.meetingUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={event.meetingUrl} target="_blank" rel="noopener noreferrer">
                       <Video className="mr-2 h-4 w-4" />
                       Join
                     </a>
@@ -278,7 +262,7 @@ function WeekView() {
           Week view coming soon. Use calendar view or upcoming events for now.
         </p>
         <div className="grid gap-4 md:grid-cols-7">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
             <div key={day} className="p-4 rounded-lg border border-border">
               <div className="text-sm font-medium mb-2">{day}</div>
               <div className="text-xs text-muted-foreground">No events</div>
@@ -301,15 +285,13 @@ export default function CalendarPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/calendar?workspaceId=${currentWorkspace.id}&limit=100`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch events");
+        const res = await fetch(`/api/calendar?workspaceId=${currentWorkspace.id}&limit=100`);
+        if (!res.ok) throw new Error('Failed to fetch events');
         const data = await res.json();
         setEvents(data.events || []);
       } catch (error) {
-        console.error("Failed to fetch events:", error);
-        toast.error("Failed to load calendar events");
+        console.error('Failed to fetch events:', error);
+        toast.error('Failed to load calendar events');
       } finally {
         setIsLoading(false);
       }
@@ -348,49 +330,49 @@ export default function CalendarPage() {
 
   const dynamicMetrics = [
     {
-      label: "Events Today",
+      label: 'Events Today',
       value: todayEvents.length.toString(),
       change: `${todayEvents.length} scheduled`,
-      trend: "neutral" as const,
+      trend: 'neutral' as const,
       icon: <CalendarIcon className="h-5 w-5" />,
     },
     {
-      label: "This Week",
+      label: 'This Week',
       value: thisWeekEvents.length.toString(),
       change: `${thisWeekEvents.length} upcoming`,
-      trend: "neutral" as const,
+      trend: 'neutral' as const,
       icon: <Clock className="h-5 w-5" />,
     },
     {
-      label: "Total Hours",
+      label: 'Total Hours',
       value: `${totalHours.toFixed(1)}h`,
-      change: "scheduled",
-      trend: "neutral" as const,
+      change: 'scheduled',
+      trend: 'neutral' as const,
       icon: <Clock className="h-5 w-5" />,
     },
     {
-      label: "Total Events",
+      label: 'Total Events',
       value: events.length.toString(),
-      change: "all time",
-      trend: "neutral" as const,
+      change: 'all time',
+      trend: 'neutral' as const,
       icon: <Users className="h-5 w-5" />,
     },
   ];
 
   const tabs = [
     {
-      id: "calendar",
-      label: "Calendar",
+      id: 'calendar',
+      label: 'Calendar',
       content: <CalendarView />,
     },
     {
-      id: "upcoming",
-      label: "Upcoming",
+      id: 'upcoming',
+      label: 'Upcoming',
       content: <UpcomingEvents events={events} />,
     },
     {
-      id: "week",
-      label: "Week",
+      id: 'week',
+      label: 'Week',
       content: <WeekView />,
     },
   ];
@@ -399,7 +381,7 @@ export default function CalendarPage() {
     <DetailPage
       title="Calendar"
       subtitle="Manage your schedule and upcoming events"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Calendar" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Calendar' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />

@@ -188,23 +188,23 @@
     <span className="text-sm text-foreground-muted">View:</span>
     <div className="flex border border-border rounded-lg overflow-hidden">
       <button
-        onClick={() => setView("grid")}
+        onClick={() => setView('grid')}
         className={cn(
-          "px-3 py-1.5 text-sm transition-colors",
-          view === "grid"
-            ? "bg-primary text-primary-foreground"
-            : "bg-background hover:bg-hover text-foreground-muted",
+          'px-3 py-1.5 text-sm transition-colors',
+          view === 'grid'
+            ? 'bg-primary text-primary-foreground'
+            : 'bg-background hover:bg-hover text-foreground-muted',
         )}
       >
         <Grid className="w-4 h-4" />
       </button>
       <button
-        onClick={() => setView("list")}
+        onClick={() => setView('list')}
         className={cn(
-          "px-3 py-1.5 text-sm transition-colors border-l border-border",
-          view === "list"
-            ? "bg-primary text-primary-foreground"
-            : "bg-background hover:bg-hover text-foreground-muted",
+          'px-3 py-1.5 text-sm transition-colors border-l border-border',
+          view === 'list'
+            ? 'bg-primary text-primary-foreground'
+            : 'bg-background hover:bg-hover text-foreground-muted',
         )}
       >
         <List className="w-4 h-4" />
@@ -346,7 +346,7 @@
 ```jsx
 <div className="flex items-center justify-between pt-6 border-t border-border">
   <div className="text-sm text-foreground-muted">
-    Showing <span className="font-medium text-foreground">1-12</span> of{" "}
+    Showing <span className="font-medium text-foreground">1-12</span> of{' '}
     <span className="font-medium text-foreground">43</span> results
   </div>
 
@@ -365,10 +365,10 @@
         key={num}
         onClick={() => setPage(num)}
         className={cn(
-          "w-9 h-9 text-sm rounded-lg transition-colors",
+          'w-9 h-9 text-sm rounded-lg transition-colors',
           page === num
-            ? "bg-primary text-primary-foreground"
-            : "border border-border hover:border-border-hover",
+            ? 'bg-primary text-primary-foreground'
+            : 'border border-border hover:border-border-hover',
         )}
       >
         {num}
@@ -590,10 +590,10 @@
         key={tab.id}
         to={tab.href}
         className={cn(
-          "inline-flex items-center gap-2 py-3 px-1 border-b-2 text-sm font-medium transition-colors whitespace-nowrap",
+          'inline-flex items-center gap-2 py-3 px-1 border-b-2 text-sm font-medium transition-colors whitespace-nowrap',
           isActive
-            ? "border-primary text-primary"
-            : "border-transparent text-foreground-muted hover:text-foreground hover:border-border",
+            ? 'border-primary text-primary'
+            : 'border-transparent text-foreground-muted hover:text-foreground hover:border-border',
         )}
       >
         <tab.icon className="w-4 h-4" />
@@ -622,12 +622,10 @@
 
 ```jsx
 <section className="bg-background-elevated border border-border rounded-lg p-6 mb-6">
-  <h2 className="text-lg font-semibold text-foreground mb-4">
-    About this agent
-  </h2>
+  <h2 className="text-lg font-semibold text-foreground mb-4">About this agent</h2>
   <p className="text-foreground-muted leading-relaxed">
-    This agent automates sales outreach and follow-ups with personalized
-    messaging for leads in your CRM.
+    This agent automates sales outreach and follow-ups with personalized messaging for leads in your
+    CRM.
   </p>
 </section>
 ```
@@ -765,10 +763,10 @@
             <Link
               to={item.href}
               className={cn(
-                "flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors",
+                'flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors',
                 isActive
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-foreground-muted hover:bg-hover hover:text-foreground",
+                  ? 'bg-primary/10 text-primary font-medium'
+                  : 'text-foreground-muted hover:bg-hover hover:text-foreground',
               )}
             >
               <item.icon className="w-4 h-4" />
@@ -796,9 +794,7 @@
 
 ```jsx
 <div className="bg-background-elevated border border-border rounded-lg p-6 mb-6">
-  <h3 className="text-lg font-semibold text-foreground mb-1">
-    Personal Information
-  </h3>
+  <h3 className="text-lg font-semibold text-foreground mb-1">Personal Information</h3>
   <p className="text-sm text-foreground-muted mb-6">
     Update your personal details and how we can reach you
   </p>
@@ -806,10 +802,7 @@
   <div className="space-y-6">
     {/* Text Input */}
     <div>
-      <label
-        htmlFor="fullName"
-        className="block text-sm font-medium text-foreground mb-2"
-      >
+      <label htmlFor="fullName" className="block text-sm font-medium text-foreground mb-2">
         Full Name
       </label>
       <input
@@ -824,10 +817,7 @@
 
     {/* Email Input */}
     <div>
-      <label
-        htmlFor="email"
-        className="block text-sm font-medium text-foreground mb-2"
-      >
+      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
         Email Address
       </label>
       <input
@@ -844,9 +834,7 @@
 
     {/* File Upload */}
     <div>
-      <label className="block text-sm font-medium text-foreground mb-2">
-        Profile Photo
-      </label>
+      <label className="block text-sm font-medium text-foreground mb-2">Profile Photo</label>
       <div className="flex items-center gap-4">
         <div
           className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center
@@ -891,10 +879,7 @@
 ```jsx
 <div className="space-y-4">
   {options.map((option) => (
-    <label
-      key={option.id}
-      className="flex items-start gap-3 cursor-pointer group"
-    >
+    <label key={option.id} className="flex items-start gap-3 cursor-pointer group">
       <input
         type="checkbox"
         checked={option.checked}
@@ -907,9 +892,7 @@
           {option.label}
         </div>
         {option.description && (
-          <div className="text-xs text-foreground-muted mt-1">
-            {option.description}
-          </div>
+          <div className="text-xs text-foreground-muted mt-1">{option.description}</div>
         )}
       </div>
     </label>

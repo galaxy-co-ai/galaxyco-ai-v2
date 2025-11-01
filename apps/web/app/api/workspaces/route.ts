@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { workspaceMembers, users, workspaces } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { workspaceMembers, users, workspaces } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 /**
  * GET /api/workspaces
@@ -14,7 +14,7 @@ export async function GET() {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. First find the user by clerkUserId
@@ -23,7 +23,7 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 3. Fetch user's workspaces through memberships
@@ -44,11 +44,8 @@ export async function GET() {
 
     return NextResponse.json(workspaces);
   } catch (error) {
-    logger.error("[API] List workspaces error", error);
-    return NextResponse.json(
-      { error: "Failed to fetch workspaces" },
-      { status: 500 },
-    );
+    logger.error('[API] List workspaces error', error);
+    return NextResponse.json({ error: 'Failed to fetch workspaces' }, { status: 500 });
   }
 }
 
@@ -60,24 +57,21 @@ export async function POST(request: Request) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
     const { name, userEmail, userFirstName, userLastName } = body;
 
     if (!name || !name.trim()) {
-      return NextResponse.json(
-        { error: "Workspace name is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Workspace name is required' }, { status: 400 });
     }
 
     // Generate slug from name
     const slug = name
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
 
     // 1. Create or update user
     let user = await db.query.users.findFirst({
@@ -89,9 +83,9 @@ export async function POST(request: Request) {
         .insert(users)
         .values({
           clerkUserId,
-          email: userEmail || "user@example.com",
-          firstName: userFirstName || "User",
-          lastName: userLastName || "",
+          email: userEmail || 'user@example.com',
+          firstName: userFirstName || 'User',
+          lastName: userLastName || '',
         })
         .returning();
       user = newUser;
@@ -104,7 +98,7 @@ export async function POST(request: Request) {
 
     if (existingWorkspace) {
       return NextResponse.json(
-        { error: "A workspace with this name already exists" },
+        { error: 'A workspace with this name already exists' },
         { status: 400 },
       );
     }
@@ -115,11 +109,11 @@ export async function POST(request: Request) {
       .values({
         name: name.trim(),
         slug,
-        subscriptionTier: "professional",
-        subscriptionStatus: "active",
+        subscriptionTier: 'professional',
+        subscriptionStatus: 'active',
         settings: {
           branding: {
-            primaryColor: "#6366f1",
+            primaryColor: '#6366f1',
           },
         },
       })
@@ -129,7 +123,7 @@ export async function POST(request: Request) {
     await db.insert(workspaceMembers).values({
       workspaceId: workspace.id,
       userId: user.id,
-      role: "owner",
+      role: 'owner',
     });
 
     return NextResponse.json({
@@ -140,10 +134,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    logger.error("[API] Create workspace error", error);
-    return NextResponse.json(
-      { error: "Failed to create workspace" },
-      { status: 500 },
-    );
+    logger.error('[API] Create workspace error', error);
+    return NextResponse.json({ error: 'Failed to create workspace' }, { status: 500 });
   }
 }

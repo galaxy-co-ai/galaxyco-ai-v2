@@ -351,10 +351,7 @@ Every tenant (workspace) is isolated at the database level:
 
 ```typescript
 // All database queries include workspaceId filter
-const agents = await db
-  .select()
-  .from(agents)
-  .where(eq(agents.workspaceId, currentWorkspaceId));
+const agents = await db.select().from(agents).where(eq(agents.workspaceId, currentWorkspaceId));
 ```
 
 **Multi-Tenancy Layers:**
@@ -415,12 +412,12 @@ graph LR
 
 ```typescript
 // packages/database/schema/workspace-members.ts
-export const workspaceMembers = pgTable("workspace_members", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  workspaceId: uuid("workspace_id").notNull(),
-  userId: uuid("user_id").notNull(),
-  role: text("role").notNull(), // owner | admin | member | viewer
-  isActive: boolean("is_active").default(true),
+export const workspaceMembers = pgTable('workspace_members', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  workspaceId: uuid('workspace_id').notNull(),
+  userId: uuid('user_id').notNull(),
+  role: text('role').notNull(), // owner | admin | member | viewer
+  isActive: boolean('is_active').default(true),
 });
 ```
 
@@ -577,9 +574,9 @@ DATABASE_URL=$PROD_URL pnpm db:migrate
 **Structured Logging:**
 
 ```typescript
-logger.info("Agent executed successfully", {
-  agentId: "abc123",
-  workspaceId: "xyz789",
+logger.info('Agent executed successfully', {
+  agentId: 'abc123',
+  workspaceId: 'xyz789',
   duration: 1234,
   success: true,
 });

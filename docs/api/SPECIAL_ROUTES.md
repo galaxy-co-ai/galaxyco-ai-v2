@@ -51,15 +51,12 @@ GET /api/analytics/sales?workspaceId=<id>&limit=50&offset=0
 **Implementation:**
 
 ```typescript
-import { checkSystemAdmin } from "@/lib/auth/admin-check";
+import { checkSystemAdmin } from '@/lib/auth/admin-check';
 
 // Check admin role
 const adminCheck = await checkSystemAdmin(clerkUserId);
 if (!adminCheck.authorized) {
-  return NextResponse.json(
-    { error: adminCheck.error },
-    { status: adminCheck.status },
-  );
+  return NextResponse.json({ error: adminCheck.error }, { status: adminCheck.status });
 }
 ```
 
@@ -143,7 +140,7 @@ Test API requests in a sandboxed environment without affecting real resources.
 When creating a webhook, a secret is generated and returned (only shown once):
 
 ```typescript
-import { generateWebhookSecret } from "@/lib/webhooks/signature";
+import { generateWebhookSecret } from '@/lib/webhooks/signature';
 
 const secret = generateWebhookSecret(); // 32 bytes, base64 encoded
 ```
@@ -153,10 +150,10 @@ const secret = generateWebhookSecret(); // 32 bytes, base64 encoded
 For incoming webhook events (Phase 2):
 
 ```typescript
-import { verifyWebhookRequest } from "@/lib/webhooks/signature";
+import { verifyWebhookRequest } from '@/lib/webhooks/signature';
 
 // Get signature from header
-const signature = req.headers.get("x-webhook-signature");
+const signature = req.headers.get('x-webhook-signature');
 
 // Verify signature and timestamp
 const verification = verifyWebhookRequest(

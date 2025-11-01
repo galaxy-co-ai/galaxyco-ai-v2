@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PageShell, PageShellProps } from "./page-shell";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FilterPanel } from "@/components/organisms/filter-panel";
-import { Search, Filter, Grid, List } from "lucide-react";
+import React, { useState } from 'react';
+import { PageShell, PageShellProps } from './page-shell';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { FilterPanel } from '@/components/organisms/filter-panel';
+import { Search, Filter, Grid, List } from 'lucide-react';
 
-export type ViewMode = "grid" | "list";
+export type ViewMode = 'grid' | 'list';
 
 export interface ListPageFilter {
   id: string;
   label: string;
-  type: "checkbox" | "radio";
+  type: 'checkbox' | 'radio';
   options: Array<{ value: string; label: string; count?: number }>;
 }
 
-export interface ListPageProps extends Omit<PageShellProps, "children"> {
+export interface ListPageProps extends Omit<PageShellProps, 'children'> {
   /** Search query */
   searchQuery?: string;
   /** Search placeholder text */
@@ -85,10 +85,10 @@ export interface ListPageProps extends Omit<PageShellProps, "children"> {
  * ```
  */
 export function ListPage({
-  searchQuery = "",
-  searchPlaceholder = "Search...",
+  searchQuery = '',
+  searchPlaceholder = 'Search...',
   onSearchChange,
-  viewMode = "grid",
+  viewMode = 'grid',
   onViewModeChange,
   showViewToggle = true,
   filters = [],
@@ -152,17 +152,17 @@ export function ListPage({
           {showViewToggle && onViewModeChange && (
             <div className="flex items-center rounded-lg border border-border bg-card">
               <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => onViewModeChange("grid")}
+                onClick={() => onViewModeChange('grid')}
                 className="rounded-r-none"
               >
                 <Grid className="h-4 w-4" />
               </Button>
               <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => onViewModeChange("list")}
+                onClick={() => onViewModeChange('list')}
                 className="rounded-l-none"
               >
                 <List className="h-4 w-4" />

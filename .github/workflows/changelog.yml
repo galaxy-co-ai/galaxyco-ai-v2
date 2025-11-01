@@ -8,11 +8,11 @@ on:
   workflow_dispatch:
     inputs:
       days:
-        description: "Number of days to look back"
+        description: 'Number of days to look back'
         required: false
-        default: "7"
+        default: '7'
       include_json:
-        description: "Generate JSON output"
+        description: 'Generate JSON output'
         required: false
         type: boolean
         default: false
@@ -40,8 +40,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "pnpm"
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

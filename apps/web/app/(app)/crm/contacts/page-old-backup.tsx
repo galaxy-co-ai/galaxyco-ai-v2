@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ListPage } from "@/components/templates/list-page";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
+import { useState } from 'react';
+import { ListPage } from '@/components/templates/list-page';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
 import {
   Mail,
   Phone,
@@ -14,137 +14,136 @@ import {
   UserPlus,
   Download,
   Upload,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Mock data for contacts
 const mockContacts = [
   {
-    id: "1",
-    name: "Sarah Johnson",
-    email: "sarah.johnson@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    company: "Acme Corporation",
-    role: "Marketing Director",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-15",
-    tags: ["Enterprise", "Priority"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+    id: '1',
+    name: 'Sarah Johnson',
+    email: 'sarah.johnson@acmecorp.com',
+    phone: '+1 (555) 123-4567',
+    company: 'Acme Corporation',
+    role: 'Marketing Director',
+    type: 'customer',
+    status: 'active',
+    lastContact: '2025-10-15',
+    tags: ['Enterprise', 'Priority'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
   },
   {
-    id: "2",
-    name: "Michael Chen",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    company: "TechStart Inc",
-    role: "CTO",
-    type: "lead",
-    status: "active",
-    lastContact: "2025-10-16",
-    tags: ["Tech", "Decision Maker"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
+    id: '2',
+    name: 'Michael Chen',
+    email: 'm.chen@techstart.io',
+    phone: '+1 (555) 234-5678',
+    company: 'TechStart Inc',
+    role: 'CTO',
+    type: 'lead',
+    status: 'active',
+    lastContact: '2025-10-16',
+    tags: ['Tech', 'Decision Maker'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
   },
   {
-    id: "3",
-    name: "Emily Rodriguez",
-    email: "emily.r@globalventures.com",
-    phone: "+1 (555) 345-6789",
-    company: "Global Ventures",
-    role: "Sales Manager",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-14",
-    tags: ["Sales", "High Value"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+    id: '3',
+    name: 'Emily Rodriguez',
+    email: 'emily.r@globalventures.com',
+    phone: '+1 (555) 345-6789',
+    company: 'Global Ventures',
+    role: 'Sales Manager',
+    type: 'customer',
+    status: 'active',
+    lastContact: '2025-10-14',
+    tags: ['Sales', 'High Value'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emily',
   },
   {
-    id: "4",
-    name: "David Kim",
-    email: "david@innovatelab.com",
-    phone: "+1 (555) 456-7890",
-    company: "InnovateLab",
-    role: "Founder",
-    type: "lead",
-    status: "nurturing",
-    lastContact: "2025-10-10",
-    tags: ["Startup", "Warm Lead"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+    id: '4',
+    name: 'David Kim',
+    email: 'david@innovatelab.com',
+    phone: '+1 (555) 456-7890',
+    company: 'InnovateLab',
+    role: 'Founder',
+    type: 'lead',
+    status: 'nurturing',
+    lastContact: '2025-10-10',
+    tags: ['Startup', 'Warm Lead'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
   },
   {
-    id: "5",
-    name: "Jessica Martinez",
-    email: "j.martinez@enterprise-solutions.com",
-    phone: "+1 (555) 567-8901",
-    company: "Enterprise Solutions",
-    role: "VP Operations",
-    type: "customer",
-    status: "active",
-    lastContact: "2025-10-17",
-    tags: ["Enterprise", "Champion"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
+    id: '5',
+    name: 'Jessica Martinez',
+    email: 'j.martinez@enterprise-solutions.com',
+    phone: '+1 (555) 567-8901',
+    company: 'Enterprise Solutions',
+    role: 'VP Operations',
+    type: 'customer',
+    status: 'active',
+    lastContact: '2025-10-17',
+    tags: ['Enterprise', 'Champion'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica',
   },
   {
-    id: "6",
-    name: "Robert Taylor",
-    email: "rtaylor@futuretech.net",
-    phone: "+1 (555) 678-9012",
-    company: "FutureTech",
-    role: "Head of Product",
-    type: "lead",
-    status: "cold",
-    lastContact: "2025-09-20",
-    tags: ["Product", "Cold Lead"],
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
+    id: '6',
+    name: 'Robert Taylor',
+    email: 'rtaylor@futuretech.net',
+    phone: '+1 (555) 678-9012',
+    company: 'FutureTech',
+    role: 'Head of Product',
+    type: 'lead',
+    status: 'cold',
+    lastContact: '2025-09-20',
+    tags: ['Product', 'Cold Lead'],
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Robert',
   },
 ];
 
 const typeOptions = [
-  { value: "all", label: "All Types" },
-  { value: "customer", label: "Customer" },
-  { value: "lead", label: "Lead" },
-  { value: "partner", label: "Partner" },
+  { value: 'all', label: 'All Types' },
+  { value: 'customer', label: 'Customer' },
+  { value: 'lead', label: 'Lead' },
+  { value: 'partner', label: 'Partner' },
 ];
 
 const statusOptions = [
-  { value: "all", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "nurturing", label: "Nurturing" },
-  { value: "cold", label: "Cold" },
+  { value: 'all', label: 'All Status' },
+  { value: 'active', label: 'Active' },
+  { value: 'nurturing', label: 'Nurturing' },
+  { value: 'cold', label: 'Cold' },
 ];
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState(mockContacts);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Filter contacts based on search and filters
   const filteredContacts = contacts.filter((contact) => {
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       contact.company.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesType = typeFilter === "all" || contact.type === typeFilter;
-    const matchesStatus =
-      statusFilter === "all" || contact.status === statusFilter;
+    const matchesType = typeFilter === 'all' || contact.type === typeFilter;
+    const matchesStatus = statusFilter === 'all' || contact.status === statusFilter;
 
     return matchesSearch && matchesType && matchesStatus;
   });
 
   const renderContactCard = (contact: (typeof mockContacts)[0]) => {
-    const statusColors: Record<string, "default" | "secondary" | "outline"> = {
-      active: "default",
-      nurturing: "secondary",
-      cold: "outline",
+    const statusColors: Record<string, 'default' | 'secondary' | 'outline'> = {
+      active: 'default',
+      nurturing: 'secondary',
+      cold: 'outline',
     };
 
-    const typeColors: Record<string, "default" | "secondary" | "outline"> = {
-      customer: "default",
-      lead: "secondary",
-      partner: "outline",
+    const typeColors: Record<string, 'default' | 'secondary' | 'outline'> = {
+      customer: 'default',
+      lead: 'secondary',
+      partner: 'outline',
     };
 
     return (
@@ -183,9 +182,7 @@ export default function ContactsPage() {
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-sm">
             <Mail className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground truncate">
-              {contact.email}
-            </span>
+            <span className="text-muted-foreground truncate">{contact.email}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Phone className="h-4 w-4 text-muted-foreground" />
@@ -241,7 +238,7 @@ export default function ContactsPage() {
     <ListPage
       title="Contacts"
       subtitle="Manage your contacts and relationships"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Contacts" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Contacts' }]}
       searchPlaceholder="Search contacts..."
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
@@ -275,9 +272,9 @@ export default function ContactsPage() {
           <Button
             variant="outline"
             onClick={() => {
-              setSearchQuery("");
-              setTypeFilter("all");
-              setStatusFilter("all");
+              setSearchQuery('');
+              setTypeFilter('all');
+              setStatusFilter('all');
             }}
           >
             Clear Filters

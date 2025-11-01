@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { COLORS, SPACING } from "@/lib/design-system";
+import { COLORS, SPACING } from '@/lib/design-system';
 
 interface KnowledgeItemCardProps {
   id: string;
   title: string;
-  type: "document" | "image" | "url" | "text";
-  status: "processing" | "ready" | "error";
+  type: 'document' | 'image' | 'url' | 'text';
+  status: 'processing' | 'ready' | 'error';
   fileName?: string | null;
   fileSize?: number | null;
   sourceUrl?: string | null;
@@ -18,22 +18,22 @@ interface KnowledgeItemCardProps {
 }
 
 const TYPE_ICONS = {
-  document: "📄",
-  url: "🔗",
-  text: "📝",
-  image: "🖼️",
+  document: '📄',
+  url: '🔗',
+  text: '📝',
+  image: '🖼️',
 };
 
 const STATUS_COLORS = {
   processing: COLORS.text.secondary,
   ready: COLORS.accent.primary,
-  error: "#ef4444",
+  error: '#ef4444',
 };
 
 const STATUS_LABELS = {
-  processing: "Processing...",
-  ready: "Ready",
-  error: "Error",
+  processing: 'Processing...',
+  ready: 'Ready',
+  error: 'Error',
 };
 
 function formatFileSize(bytes: number): string {
@@ -50,15 +50,15 @@ function formatDate(dateString: string): string {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return "Just now";
+  if (diffMins < 1) return 'Just now';
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
   if (diffDays < 7) return `${diffDays}d ago`;
 
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
   });
 }
 
@@ -85,28 +85,26 @@ export default function KnowledgeItemCard({
         border: `1px solid ${COLORS.border.primary}`,
         borderRadius: SPACING.radius.lg,
         padding: SPACING.md,
-        transition: "all 0.2s ease",
+        transition: 'all 0.2s ease',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = COLORS.accent.primary;
-        e.currentTarget.style.transform = "translateY(-2px)";
-        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+        e.currentTarget.style.transform = 'translateY(-2px)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = COLORS.border.primary;
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = "none";
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = 'none';
       }}
     >
       {/* Header with Icon and Status */}
-      <div
-        style={{ display: "flex", alignItems: "flex-start", gap: SPACING.sm }}
-      >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: SPACING.sm }}>
         {/* Type Icon */}
         <div
           style={{
-            fontSize: "32px",
-            lineHeight: "1",
+            fontSize: '32px',
+            lineHeight: '1',
             flexShrink: 0,
           }}
         >
@@ -118,16 +116,16 @@ export default function KnowledgeItemCard({
           {/* Title */}
           <h3
             style={{
-              fontSize: "14px",
-              fontWeight: "600",
+              fontSize: '14px',
+              fontWeight: '600',
               color: COLORS.text.primary,
               marginBottom: SPACING.xs,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
               WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              lineHeight: "1.4",
+              WebkitBoxOrient: 'vertical',
+              lineHeight: '1.4',
             }}
           >
             {title}
@@ -136,11 +134,11 @@ export default function KnowledgeItemCard({
           {/* Status Badge */}
           <div
             style={{
-              display: "inline-flex",
-              alignItems: "center",
+              display: 'inline-flex',
+              alignItems: 'center',
               gap: SPACING.xs,
-              fontSize: "11px",
-              fontWeight: "500",
+              fontSize: '11px',
+              fontWeight: '500',
               color: STATUS_COLORS[status],
               backgroundColor: `${STATUS_COLORS[status]}15`,
               padding: `${SPACING.xs} ${SPACING.sm}`,
@@ -148,8 +146,8 @@ export default function KnowledgeItemCard({
               marginBottom: SPACING.sm,
             }}
           >
-            {status === "processing" && (
-              <span style={{ animation: "spin 1s linear infinite" }}>⚙️</span>
+            {status === 'processing' && (
+              <span style={{ animation: 'spin 1s linear infinite' }}>⚙️</span>
             )}
             {STATUS_LABELS[status]}
           </div>
@@ -157,28 +155,26 @@ export default function KnowledgeItemCard({
           {/* Metadata */}
           <div
             style={{
-              fontSize: "12px",
+              fontSize: '12px',
               color: COLORS.text.secondary,
-              display: "flex",
-              flexDirection: "column",
+              display: 'flex',
+              flexDirection: 'column',
               gap: SPACING.xs,
             }}
           >
             {fileName && (
               <div
                 style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {fileName}
               </div>
             )}
 
-            <div
-              style={{ display: "flex", alignItems: "center", gap: SPACING.sm }}
-            >
+            <div style={{ display: 'flex', alignItems: 'center', gap: SPACING.sm }}>
               <span>{formatDate(createdAt)}</span>
               {fileSize && (
                 <>
@@ -193,8 +189,8 @@ export default function KnowledgeItemCard({
           {tags.length > 0 && (
             <div
               style={{
-                display: "flex",
-                flexWrap: "wrap",
+                display: 'flex',
+                flexWrap: 'wrap',
                 gap: SPACING.xs,
                 marginTop: SPACING.sm,
               }}
@@ -203,7 +199,7 @@ export default function KnowledgeItemCard({
                 <span
                   key={tag}
                   style={{
-                    fontSize: "11px",
+                    fontSize: '11px',
                     padding: `2px ${SPACING.xs}`,
                     backgroundColor: COLORS.background.tertiary,
                     color: COLORS.text.secondary,
@@ -216,7 +212,7 @@ export default function KnowledgeItemCard({
               {tags.length > 3 && (
                 <span
                   style={{
-                    fontSize: "11px",
+                    fontSize: '11px',
                     padding: `2px ${SPACING.xs}`,
                     color: COLORS.text.secondary,
                   }}
@@ -229,9 +225,7 @@ export default function KnowledgeItemCard({
         </div>
 
         {/* Favorite Star */}
-        {isFavorite && (
-          <div style={{ fontSize: "16px", flexShrink: 0 }}>⭐</div>
-        )}
+        {isFavorite && <div style={{ fontSize: '16px', flexShrink: 0 }}>⭐</div>}
       </div>
     </div>
   );

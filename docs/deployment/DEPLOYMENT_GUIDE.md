@@ -231,9 +231,9 @@ After deploying the web app, update the API's CORS configuration:
 Open browser console on the web app:
 
 ```javascript
-fetch("https://galaxyco-ai-v2-api.vercel.app/api/workspaces", {
+fetch('https://galaxyco-ai-v2-api.vercel.app/api/workspaces', {
   headers: {
-    Authorization: "Bearer <your-jwt-token>",
+    Authorization: 'Bearer <your-jwt-token>',
   },
 })
   .then((r) => r.json())
@@ -409,7 +409,7 @@ For API routes that don't need Node.js runtime:
 ```javascript
 // apps/api/src/routes/health.ts
 export const config = {
-  runtime: "edge",
+  runtime: 'edge',
 };
 ```
 

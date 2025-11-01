@@ -4,8 +4,7 @@ category: navigation
 status: active
 last_updated: 2025-10-14
 author: AI Assistant
-related:
-  [../README.md, ../WARP.md, ../QUICK_REFERENCE.md, ./ORGANIZATION_PLAN.md]
+related: [../README.md, ../WARP.md, ../QUICK_REFERENCE.md, ./ORGANIZATION_PLAN.md]
 ---
 
 # 📚 GalaxyCo.ai Documentation Hub
@@ -286,12 +285,12 @@ A centralized service for all AI provider calls with:
 **Quick Start:**
 
 ```typescript
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 const response = await AIGatewayService.generateText({
-  tenantId: "workspace_123",
-  model: "gpt-4o-mini",
-  messages: [{ role: "user", content: "Hello!" }],
+  tenantId: 'workspace_123',
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Hello!' }],
 });
 ```
 

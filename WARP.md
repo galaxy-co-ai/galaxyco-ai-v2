@@ -102,14 +102,14 @@ galaxyco-ai-2.0/
 **NEVER** call AI providers (OpenAI, Anthropic) directly. Always use the centralized AI Gateway service.
 
 ```typescript
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 const response = await AIGatewayService.generateText({
-  tenantId: "workspace_123",
-  userId: "user_456",
-  agentId: "agent_789",
-  model: "gpt-4o-mini",
-  messages: [{ role: "user", content: "Hello!" }],
+  tenantId: 'workspace_123',
+  userId: 'user_456',
+  agentId: 'agent_789',
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'Hello!' }],
 });
 ```
 
@@ -137,6 +137,37 @@ pnpm lint         # ESLint
 ```
 
 **Block changes if any health checks fail.**
+
+### GitKraken CLI Integration ✅ NEW (Nov 1, 2025)
+
+**Status**: Installed and configured with MCP server support
+
+GitKraken CLI (`gk`) provides AI-powered git workflows:
+
+```bash
+# AI-generated commits
+gk ai commit --add-description
+
+# Work items for multi-repo feature development
+gk work start "feature description"
+gk work commit
+gk work pr create
+
+# AI-powered PR descriptions
+gk ai pr create
+
+# Changelog generation
+gk ai changelog main..develop
+```
+
+**MCP Server**: Installed for Cursor 2.0, providing:
+
+- Git operations via AI assistant
+- GitHub API integration
+- Jira issue tracking
+- AI commit/PR generation
+
+**Reference**: `docs/devtools/gitkraken-cli.md`, `docs/devtools/cursor-setup.md`
 
 ### Agent Execution Architecture ✅ NEW
 

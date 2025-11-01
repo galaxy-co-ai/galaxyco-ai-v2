@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import useSWR from "swr";
-import { ListPage } from "@/components/templates/list-page";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Webhook, Plus, Play, MoreHorizontal, Loader2 } from "lucide-react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
+import React, { useState } from 'react';
+import useSWR from 'swr';
+import { ListPage } from '@/components/templates/list-page';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Webhook, Plus, Play, MoreHorizontal, Loader2 } from 'lucide-react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
 
 interface WebhookType {
   id: string;
@@ -31,28 +31,24 @@ interface WebhooksResponse {
 const fetcher = async (url: string) => {
   const res = await fetch(url);
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: "Failed to fetch" }));
-    throw new Error(error.error || "Failed to fetch webhooks");
+    const error = await res.json().catch(() => ({ error: 'Failed to fetch' }));
+    throw new Error(error.error || 'Failed to fetch webhooks');
   }
   return res.json();
 };
 
 export default function WebhooksPage() {
   const { currentWorkspace } = useWorkspace();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
-    {},
-  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
 
   const { data, error, isLoading } = useSWR<WebhooksResponse>(
-    currentWorkspace
-      ? `/api/webhooks?workspaceId=${currentWorkspace.id}&limit=100`
-      : null,
+    currentWorkspace ? `/api/webhooks?workspaceId=${currentWorkspace.id}&limit=100` : null,
     fetcher,
     {
       revalidateOnFocus: false,
       onError: (err: Error) => {
-        toast.error(err.message || "Failed to load webhooks");
+        toast.error(err.message || 'Failed to load webhooks');
       },
     },
   );
@@ -77,7 +73,7 @@ export default function WebhooksPage() {
     <ListPage
       title="Webhooks"
       subtitle="Manage webhook integrations"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Webhooks" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Webhooks' }]}
       searchQuery={searchQuery}
       searchPlaceholder="Search webhooks..."
       onSearchChange={setSearchQuery}
@@ -89,7 +85,7 @@ export default function WebhooksPage() {
       }
       onClearFilters={() => {
         setActiveFilters({});
-        setSearchQuery("");
+        setSearchQuery('');
       }}
       actions={
         <Button size="sm">
@@ -122,29 +118,16 @@ export default function WebhooksPage() {
             <table className="w-full">
               <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium">
-                    Name
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">
-                    URL
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">
-                    Events
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium">
-                    Created
-                  </th>
-                  <th className="px-4 py-3 text-right text-sm font-medium">
-                    Actions
-                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Name</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">URL</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Events</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium">Created</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {filteredWebhooks.map((webhook: WebhookType) => (
-                  <tr
-                    key={webhook.id}
-                    className="hover:bg-muted/50 transition-colors"
-                  >
+                  <tr key={webhook.id} className="hover:bg-muted/50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
@@ -156,23 +139,17 @@ export default function WebhooksPage() {
                     <td className="px-4 py-3">
                       <code className="text-xs text-muted-foreground">
                         {webhook.url.length > 40
-                          ? webhook.url.substring(0, 40) + "..."
+                          ? webhook.url.substring(0, 40) + '...'
                           : webhook.url}
                       </code>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1 flex-wrap">
-                        {webhook.events
-                          .slice(0, 2)
-                          .map((event: string, i: number) => (
-                            <Badge
-                              key={i}
-                              variant="secondary"
-                              className="text-xs"
-                            >
-                              {event}
-                            </Badge>
-                          ))}
+                        {webhook.events.slice(0, 2).map((event: string, i: number) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            {event}
+                          </Badge>
+                        ))}
                         {webhook.events.length > 2 && (
                           <Badge variant="secondary" className="text-xs">
                             +{webhook.events.length - 2}

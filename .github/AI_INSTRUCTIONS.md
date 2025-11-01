@@ -55,10 +55,7 @@ export async function GET(request: Request) {
     const tenantId = await getTenantId(userId);
 
     // 2. Apply tenant filter to ALL queries
-    const data = await db
-      .select()
-      .from(table)
-      .where(eq(table.tenantId, tenantId));
+    const data = await db.select().from(table).where(eq(table.tenantId, tenantId));
 
     // 3. Return with proper error handling
     return Response.json({ data });
@@ -94,10 +91,7 @@ const response = await apiRequest('/api/endpoint', {}, tenantId);
 
 ```typescript
 // ✅ ALWAYS filter by tenant_id
-const agents = await db
-  .select()
-  .from(agentsTable)
-  .where(eq(agentsTable.tenantId, tenantId));
+const agents = await db.select().from(agentsTable).where(eq(agentsTable.tenantId, tenantId));
 
 // ❌ NEVER query without tenant filter
 const agents = await db.select().from(agentsTable); // SECURITY RISK
@@ -107,14 +101,14 @@ const agents = await db.select().from(agentsTable); // SECURITY RISK
 
 ```typescript
 // ✅ ALWAYS use AI Gateway
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 const response = await AIGatewayService.generateText({
   tenantId,
   userId,
   agentId,
-  model: "gpt-4o-mini",
-  messages: [{ role: "user", content: prompt }],
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: prompt }],
 });
 
 // ❌ NEVER call AI providers directly
@@ -125,7 +119,7 @@ const response = await openai.chat.completions.create(); // FORBIDDEN
 
 ```typescript
 // ✅ Reference by name only
-console.log("Database connection configured");
+console.log('Database connection configured');
 
 // ❌ NEVER print values
 console.log(`Database URL: ${process.env.DATABASE_URL}`); // SECURITY RISK

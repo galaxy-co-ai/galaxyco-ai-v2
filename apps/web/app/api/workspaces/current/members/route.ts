@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { workspaceMembers, users } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { workspaceMembers, users } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
 
 /**
  * GET /api/workspaces/current/members
@@ -12,17 +12,14 @@ export async function GET(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "workspaceId is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
     // Get current user
@@ -31,7 +28,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!currentUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Verify user has access to workspace
@@ -43,7 +40,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!membership) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Get all workspace members
@@ -74,9 +71,7 @@ export async function GET(req: NextRequest) {
         firstName: m.user.firstName,
         lastName: m.user.lastName,
         avatarUrl: m.user.avatarUrl,
-        name:
-          `${m.user.firstName || ""} ${m.user.lastName || ""}`.trim() ||
-          m.user.email,
+        name: `${m.user.firstName || ''} ${m.user.lastName || ''}`.trim() || m.user.email,
       },
     }));
 
@@ -85,11 +80,11 @@ export async function GET(req: NextRequest) {
       total: formattedMembers.length,
     });
   } catch (error) {
-    console.error("Get workspace members error:", error);
+    console.error('Get workspace members error:', error);
     return NextResponse.json(
       {
-        error: "Failed to fetch workspace members",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to fetch workspace members',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -104,17 +99,14 @@ export async function POST(req: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await req.json();
-    const { workspaceId, email, role = "member" } = body;
+    const { workspaceId, email, role = 'member' } = body;
 
     if (!workspaceId || !email) {
-      return NextResponse.json(
-        { error: "workspaceId and email are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'workspaceId and email are required' }, { status: 400 });
     }
 
     // Get current user
@@ -123,7 +115,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!currentUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Verify user has admin access
@@ -134,8 +126,8 @@ export async function POST(req: NextRequest) {
       ),
     });
 
-    if (!membership || !["owner", "admin"].includes(membership.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!membership || !['owner', 'admin'].includes(membership.role)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // TODO: In real implementation:
@@ -145,21 +137,21 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Invitation would be sent (stub implementation)",
+      message: 'Invitation would be sent (stub implementation)',
       invitation: {
         email,
         role,
         workspaceId,
-        status: "pending",
+        status: 'pending',
         sentAt: new Date().toISOString(),
       },
     });
   } catch (error) {
-    console.error("Invite member error:", error);
+    console.error('Invite member error:', error);
     return NextResponse.json(
       {
-        error: "Failed to invite member",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to invite member',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

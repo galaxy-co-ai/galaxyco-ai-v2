@@ -16,23 +16,23 @@
  *   - Store securely (password manager, Vercel dashboard, etc.)
  */
 
-const crypto = require("crypto");
+const crypto = require('crypto');
 
 // Generate 32-byte (256-bit) random key
-const key = crypto.randomBytes(32).toString("hex");
+const key = crypto.randomBytes(32).toString('hex');
 
-console.log("\n🔐 Generated Encryption Key\n");
-console.log("═".repeat(80));
-console.log("\nYour new encryption key:");
-console.log("\n  " + key);
-console.log("\n" + "═".repeat(80));
-console.log("\n📋 Add this to your .env.local file:\n");
-console.log("  ENCRYPTION_KEY=" + key);
-console.log("\n" + "═".repeat(80));
-console.log("\n⚠️  IMPORTANT SECURITY NOTES:\n");
-console.log("  • Keep this secret! Never commit it to version control");
-console.log("  • Use different keys for production vs development");
-console.log("  • Store in password manager or Vercel dashboard");
-console.log("  • If compromised, rotate immediately and re-encrypt all data");
-console.log("\n" + "═".repeat(80));
-console.log("\n✅ Key generation complete!\n");
+console.log('\n🔐 Generated Encryption Key\n');
+console.log('═'.repeat(80));
+console.log('\nYour new encryption key:');
+console.log('\n  ' + key);
+console.log('\n' + '═'.repeat(80));
+console.log('\n📋 Add this to your .env.local file:\n');
+console.log('  ENCRYPTION_KEY=' + key);
+console.log('\n' + '═'.repeat(80));
+console.log('\n⚠️  IMPORTANT SECURITY NOTES:\n');
+console.log('  • Keep this secret! Never commit it to version control');
+console.log('  • Use different keys for production vs development');
+console.log('  • Store in password manager or Vercel dashboard');
+console.log('  • If compromised, rotate immediately and re-encrypt all data');
+console.log('\n' + '═'.repeat(80));
+console.log('\n✅ Key generation complete!\n');

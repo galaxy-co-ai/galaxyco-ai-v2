@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { PageShell, PageShellProps } from "./page-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { WizardStep } from "@/components/organisms/wizard-step";
+import React from 'react';
+import { PageShell, PageShellProps } from './page-shell';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { WizardStep } from '@/components/organisms/wizard-step';
 
 export interface FormStep {
   id: string;
@@ -14,7 +14,7 @@ export interface FormStep {
   isValid?: boolean;
 }
 
-export interface FormPageProps extends Omit<PageShellProps, "children"> {
+export interface FormPageProps extends Omit<PageShellProps, 'children'> {
   /** Multi-step wizard configuration */
   steps?: FormStep[];
   /** Current step index (0-based) */
@@ -34,7 +34,7 @@ export interface FormPageProps extends Omit<PageShellProps, "children"> {
   /** Simple form content (no wizard) */
   children?: React.ReactNode;
   /** Max form width */
-  formWidth?: "sm" | "md" | "lg" | "xl" | "full";
+  formWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
 /**
@@ -80,11 +80,11 @@ export function FormPage({
   onStepChange,
   onSubmit,
   onCancel,
-  submitText = "Save",
-  cancelText = "Cancel",
+  submitText = 'Save',
+  cancelText = 'Cancel',
   isSubmitting = false,
   children,
-  formWidth = "lg",
+  formWidth = 'lg',
   ...pageShellProps
 }: FormPageProps) {
   const isMultiStep = steps.length > 0;
@@ -93,11 +93,11 @@ export function FormPage({
   const currentStepConfig = steps[currentStep];
 
   const formWidthClass = {
-    sm: "max-w-md",
-    md: "max-w-2xl",
-    lg: "max-w-4xl",
-    xl: "max-w-6xl",
-    full: "max-w-full",
+    sm: 'max-w-md',
+    md: 'max-w-2xl',
+    lg: 'max-w-4xl',
+    xl: 'max-w-6xl',
+    full: 'max-w-full',
   }[formWidth];
 
   const handleNext = () => {
@@ -118,10 +118,7 @@ export function FormPage({
   };
 
   return (
-    <PageShell
-      {...pageShellProps}
-      contentClassName={`mx-auto ${formWidthClass}`}
-    >
+    <PageShell {...pageShellProps} contentClassName={`mx-auto ${formWidthClass}`}>
       <Card className="p-6 sm:p-8">
         {/* Multi-step Wizard */}
         {isMultiStep ? (
@@ -161,12 +158,7 @@ export function FormPage({
               </div>
 
               <div className="flex items-center gap-3">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={onCancel}
-                  disabled={isSubmitting}
-                >
+                <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
                   {cancelText}
                 </Button>
 
@@ -176,8 +168,7 @@ export function FormPage({
                     onClick={handleNext}
                     disabled={
                       isSubmitting ||
-                      (currentStepConfig?.isValid !== undefined &&
-                        !currentStepConfig.isValid)
+                      (currentStepConfig?.isValid !== undefined && !currentStepConfig.isValid)
                     }
                   >
                     Next
@@ -188,11 +179,10 @@ export function FormPage({
                     onClick={handleSubmit}
                     disabled={
                       isSubmitting ||
-                      (currentStepConfig?.isValid !== undefined &&
-                        !currentStepConfig.isValid)
+                      (currentStepConfig?.isValid !== undefined && !currentStepConfig.isValid)
                     }
                   >
-                    {isSubmitting ? "Saving..." : submitText}
+                    {isSubmitting ? 'Saving...' : submitText}
                   </Button>
                 )}
               </div>
@@ -206,16 +196,11 @@ export function FormPage({
 
             {/* Submit Buttons */}
             <div className="mt-8 flex items-center justify-end gap-3 border-t border-border pt-6">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={onCancel}
-                disabled={isSubmitting}
-              >
+              <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
                 {cancelText}
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : submitText}
+                {isSubmitting ? 'Saving...' : submitText}
               </Button>
             </div>
           </form>

@@ -1,40 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database/client";
-import { integrations, oauthTokens } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { decryptTokens } from "@/lib/encryption";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database/client';
+import { integrations, oauthTokens } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { decryptTokens } from '@/lib/encryption';
 
 /**
  * POST /api/integrations/[id]/disconnect
  *
  * Disconnects an integration and revokes tokens
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { userId, orgId } = await auth();
     if (!userId || !orgId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const integrationId = params.id;
 
     // Fetch integration
     const integration = await db.query.integrations.findFirst({
-      where: and(
-        eq(integrations.id, integrationId),
-        eq(integrations.workspaceId, orgId),
-      ),
+      where: and(eq(integrations.id, integrationId), eq(integrations.workspaceId, orgId)),
     });
 
     if (!integration) {
-      return NextResponse.json(
-        { error: "Integration not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Integration not found' }, { status: 404 });
     }
 
     // Get OAuth tokens
@@ -52,21 +43,17 @@ export async function POST(
         });
 
         // Revoke based on provider
-        if (integration.provider === "google" && decrypted.access_token) {
+        if (integration.provider === 'google' && decrypted.access_token) {
           // Revoke Google token
-          await fetch(
-            `https://oauth2.googleapis.com/revoke?token=${decrypted.access_token}`,
-            { method: "POST" },
-          );
-        } else if (
-          integration.provider === "microsoft" &&
-          decrypted.access_token
-        ) {
+          await fetch(`https://oauth2.googleapis.com/revoke?token=${decrypted.access_token}`, {
+            method: 'POST',
+          });
+        } else if (integration.provider === 'microsoft' && decrypted.access_token) {
           // Microsoft doesn't have a simple revoke endpoint
           // Tokens will expire naturally (no revocation needed)
         }
       } catch (error) {
-        console.error("Token revocation failed:", error);
+        console.error('Token revocation failed:', error);
         // Continue with deletion even if revocation fails
       }
 
@@ -79,13 +66,10 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      message: "Integration disconnected successfully",
+      message: 'Integration disconnected successfully',
     });
   } catch (error) {
-    console.error("Disconnect integration error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    console.error('Disconnect integration error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

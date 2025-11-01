@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import {
   Download,
   Share2,
@@ -15,58 +15,58 @@ import {
   Image as ImageIcon,
   FileJson,
   FileArchive,
-} from "lucide-react";
+} from 'lucide-react';
 
 const mockFiles: Record<
   string,
   {
     id: string;
     name: string;
-    type: "pdf" | "image" | "json" | "zip";
+    type: 'pdf' | 'image' | 'json' | 'zip';
     size: string;
     uploadedAt: string;
     owner: string;
     url?: string;
   }
 > = {
-  "1": {
-    id: "1",
-    name: "proposal.pdf",
-    type: "pdf",
-    size: "1.2 MB",
-    uploadedAt: "2025-10-10",
-    owner: "Alex",
+  '1': {
+    id: '1',
+    name: 'proposal.pdf',
+    type: 'pdf',
+    size: '1.2 MB',
+    uploadedAt: '2025-10-10',
+    owner: 'Alex',
   },
-  "2": {
-    id: "2",
-    name: "avatar.png",
-    type: "image",
-    size: "320 KB",
-    uploadedAt: "2025-10-11",
-    owner: "Sam",
-    url: "/images/placeholder.png",
+  '2': {
+    id: '2',
+    name: 'avatar.png',
+    type: 'image',
+    size: '320 KB',
+    uploadedAt: '2025-10-11',
+    owner: 'Sam',
+    url: '/images/placeholder.png',
   },
-  "3": {
-    id: "3",
-    name: "data.json",
-    type: "json",
-    size: "8 KB",
-    uploadedAt: "2025-10-12",
-    owner: "Taylor",
+  '3': {
+    id: '3',
+    name: 'data.json',
+    type: 'json',
+    size: '8 KB',
+    uploadedAt: '2025-10-12',
+    owner: 'Taylor',
   },
 };
 
 export default function FileDetailPage() {
   const params = useParams<{ id: string }>();
-  const id = (params?.id || "1").toString();
-  const file = useMemo(() => mockFiles[id] ?? mockFiles["1"], [id]);
+  const id = (params?.id || '1').toString();
+  const file = useMemo(() => mockFiles[id] ?? mockFiles['1'], [id]);
 
   const icon =
-    file.type === "pdf" ? (
+    file.type === 'pdf' ? (
       <FileText className="h-12 w-12" />
-    ) : file.type === "image" ? (
+    ) : file.type === 'image' ? (
       <ImageIcon className="h-12 w-12" />
-    ) : file.type === "json" ? (
+    ) : file.type === 'json' ? (
       <FileJson className="h-12 w-12" />
     ) : (
       <FileArchive className="h-12 w-12" />
@@ -76,7 +76,7 @@ export default function FileDetailPage() {
     <PageShell
       title={file.name}
       subtitle="File details and actions"
-      breadcrumbs={[{ label: "Files", href: "/files" }, { label: file.name }]}
+      breadcrumbs={[{ label: 'Files', href: '/files' }, { label: file.name }]}
     >
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 rounded-lg border bg-card p-6">
@@ -85,9 +85,7 @@ export default function FileDetailPage() {
             <div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">{file.type.toUpperCase()}</Badge>
-                <span className="text-sm text-muted-foreground">
-                  {file.size}
-                </span>
+                <span className="text-sm text-muted-foreground">{file.size}</span>
               </div>
               <p className="text-xs text-muted-foreground">
                 Uploaded {file.uploadedAt} by {file.owner}
@@ -96,10 +94,10 @@ export default function FileDetailPage() {
           </div>
 
           <div className="rounded-md border bg-background-subtle p-6 text-center">
-            {file.type === "image" ? (
+            {file.type === 'image' ? (
               <div className="relative mx-auto max-h-96 h-96 w-full max-w-2xl">
                 <Image
-                  src={file.url ?? ""}
+                  src={file.url ?? ''}
                   alt={file.name}
                   fill
                   className="object-contain rounded"
@@ -155,9 +153,7 @@ export default function FileDetailPage() {
               </div>
               <div>
                 <Label>URL</Label>
-                <p className="truncate text-muted-foreground">
-                  {file.url ?? "—"}
-                </p>
+                <p className="truncate text-muted-foreground">{file.url ?? '—'}</p>
               </div>
             </div>
           </div>

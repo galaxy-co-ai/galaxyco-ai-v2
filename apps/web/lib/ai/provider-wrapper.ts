@@ -9,16 +9,16 @@
  * - Security best practices (no hardcoded keys)
  */
 
-import { getCurrentTenantContext } from "../db/tenant-filter";
-import { logAgentExecution } from "../agents/agent-logger";
-import { logger } from "@/lib/utils/logger";
+import { getCurrentTenantContext } from '../db/tenant-filter';
+import { logAgentExecution } from '../agents/agent-logger';
+import { logger } from '@/lib/utils/logger';
 
 export interface AIOptions {
   model?: string;
   temperature?: number;
   maxTokens?: number;
   timeout?: number;
-  fallbackProvider?: "openai" | "anthropic" | "google";
+  fallbackProvider?: 'openai' | 'anthropic' | 'google';
   retryCount?: number;
   tenantId?: string;
   userId?: string;
@@ -40,7 +40,7 @@ export interface AIResponse {
 }
 
 export interface ProviderConfig {
-  name: "openai" | "anthropic" | "google";
+  name: 'openai' | 'anthropic' | 'google';
   apiKey: string;
   models: {
     default: string;
@@ -74,14 +74,14 @@ function getProviderConfig(provider: string): ProviderConfig {
   }
 
   switch (provider) {
-    case "openai":
+    case 'openai':
       return {
-        name: "openai",
+        name: 'openai',
         apiKey,
         models: {
-          default: "gpt-4o",
-          fast: "gpt-4o-mini",
-          smart: "gpt-4o",
+          default: 'gpt-4o',
+          fast: 'gpt-4o-mini',
+          smart: 'gpt-4o',
         },
         limits: {
           maxTokens: 4096,
@@ -89,14 +89,14 @@ function getProviderConfig(provider: string): ProviderConfig {
         },
       };
 
-    case "anthropic":
+    case 'anthropic':
       return {
-        name: "anthropic",
+        name: 'anthropic',
         apiKey,
         models: {
-          default: "claude-3-5-sonnet-20241022",
-          fast: "claude-3-haiku-20240307",
-          smart: "claude-3-5-sonnet-20241022",
+          default: 'claude-3-5-sonnet-20241022',
+          fast: 'claude-3-haiku-20240307',
+          smart: 'claude-3-5-sonnet-20241022',
         },
         limits: {
           maxTokens: 4096,
@@ -104,14 +104,14 @@ function getProviderConfig(provider: string): ProviderConfig {
         },
       };
 
-    case "google":
+    case 'google':
       return {
-        name: "google",
+        name: 'google',
         apiKey,
         models: {
-          default: "gemini-1.5-pro",
-          fast: "gemini-1.5-flash",
-          smart: "gemini-1.5-pro",
+          default: 'gemini-1.5-pro',
+          fast: 'gemini-1.5-flash',
+          smart: 'gemini-1.5-pro',
         },
         limits: {
           maxTokens: 4096,
@@ -133,50 +133,45 @@ async function callProvider(
   options: AIOptions,
 ): Promise<string> {
   const model = options.model || config.models.default;
-  const maxTokens = Math.min(
-    options.maxTokens || 1000,
-    config.limits.maxTokens,
-  );
+  const maxTokens = Math.min(options.maxTokens || 1000, config.limits.maxTokens);
   const temperature = options.temperature ?? 0.7;
 
   switch (config.name) {
-    case "openai": {
-      const { OpenAI } = await import("openai");
+    case 'openai': {
+      const { OpenAI } = await import('openai');
       const client = new OpenAI({ apiKey: config.apiKey });
 
       const response = await client.chat.completions.create({
         model,
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
         max_tokens: maxTokens,
         temperature,
       });
 
-      return response.choices[0]?.message?.content || "";
+      return response.choices[0]?.message?.content || '';
     }
 
-    case "anthropic": {
-      const { Anthropic } = await import("@anthropic-ai/sdk");
+    case 'anthropic': {
+      const { Anthropic } = await import('@anthropic-ai/sdk');
       const client = new Anthropic({ apiKey: config.apiKey });
 
       const response = await client.messages.create({
         model,
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
         max_tokens: maxTokens,
         temperature,
       });
 
-      return response.content[0]?.type === "text"
-        ? response.content[0].text
-        : "";
+      return response.content[0]?.type === 'text' ? response.content[0].text : '';
     }
 
-    case "google": {
-      const { GoogleGenerativeAI } = await import("@google/generative-ai");
+    case 'google': {
+      const { GoogleGenerativeAI } = await import('@google/generative-ai');
       const client = new GoogleGenerativeAI(config.apiKey);
       const genModel = client.getGenerativeModel({ model });
 
       const response = await genModel.generateContent({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
           maxOutputTokens: maxTokens,
           temperature,
@@ -220,9 +215,7 @@ export async function callAIProvider(
     // Retry logic
     for (let attempt = 1; attempt <= retryCount; attempt++) {
       try {
-        logger.info(
-          `[AI PROVIDER] Attempt ${attempt}/${retryCount} with ${provider}`,
-        );
+        logger.info(`[AI PROVIDER] Attempt ${attempt}/${retryCount} with ${provider}`);
 
         const response = await Promise.race([
           callProvider(config, prompt, options),
@@ -237,8 +230,8 @@ export async function callAIProvider(
             agentId: options.agentId,
             tenantId,
             userId,
-            input: { prompt: prompt.substring(0, 100) + "..." },
-            output: { response: response.substring(0, 100) + "..." },
+            input: { prompt: prompt.substring(0, 100) + '...' },
+            output: { response: response.substring(0, 100) + '...' },
             duration,
             success: true,
             provider,
@@ -265,29 +258,21 @@ export async function callAIProvider(
 
         // Wait before retry (exponential backoff)
         if (attempt < retryCount) {
-          await new Promise((resolve) =>
-            setTimeout(resolve, Math.pow(2, attempt) * 1000),
-          );
+          await new Promise((resolve) => setTimeout(resolve, Math.pow(2, attempt) * 1000));
         }
       }
     }
 
     // Primary provider failed, try fallback
     if (options.fallbackProvider) {
-      logger.info(
-        `[AI PROVIDER] Trying fallback provider: ${options.fallbackProvider}`,
-      );
+      logger.info(`[AI PROVIDER] Trying fallback provider: ${options.fallbackProvider}`);
 
       try {
-        const fallbackResult = await callAIProvider(
-          options.fallbackProvider,
-          prompt,
-          {
-            ...options,
-            fallbackProvider: undefined, // Prevent infinite recursion
-            retryCount: 1, // Single attempt for fallback
-          },
-        );
+        const fallbackResult = await callAIProvider(options.fallbackProvider, prompt, {
+          ...options,
+          fallbackProvider: undefined, // Prevent infinite recursion
+          retryCount: 1, // Single attempt for fallback
+        });
 
         return {
           ...fallbackResult,
@@ -300,7 +285,7 @@ export async function callAIProvider(
 
     // All attempts failed
     const duration = Date.now() - startTime;
-    const errorMessage = lastError?.message || "Unknown error occurred";
+    const errorMessage = lastError?.message || 'Unknown error occurred';
 
     // Log failed execution
     if (options.agentId && tenantId && userId) {
@@ -308,12 +293,12 @@ export async function callAIProvider(
         agentId: options.agentId,
         tenantId,
         userId,
-        input: { prompt: prompt.substring(0, 100) + "..." },
+        input: { prompt: prompt.substring(0, 100) + '...' },
         output: { error: errorMessage },
         duration,
         success: false,
         provider,
-        model: options.model || "unknown",
+        model: options.model || 'unknown',
       });
     }
 
@@ -346,7 +331,7 @@ export async function callAIProvider(
 export async function callAIForAgent(
   agentId: string,
   prompt: string,
-  provider: "openai" | "anthropic" | "google" = "openai",
+  provider: 'openai' | 'anthropic' | 'google' = 'openai',
   options: Partial<AIOptions> = {},
 ): Promise<AIResponse> {
   try {
@@ -357,7 +342,7 @@ export async function callAIForAgent(
       agentId,
       tenantId: context.tenantId,
       userId: context.userId,
-      fallbackProvider: provider === "openai" ? "anthropic" : "openai",
+      fallbackProvider: provider === 'openai' ? 'anthropic' : 'openai',
     });
   } catch (error) {
     return {
@@ -374,7 +359,7 @@ export async function callAIForAgent(
  * Get available providers and their status
  */
 export function getProviderStatus(): Record<string, boolean> {
-  const providers = ["openai", "anthropic", "google"];
+  const providers = ['openai', 'anthropic', 'google'];
   const status: Record<string, boolean> = {};
 
   for (const provider of providers) {

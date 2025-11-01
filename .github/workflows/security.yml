@@ -7,7 +7,7 @@ on:
     branches: [main, staging, develop]
   schedule:
     # Run security scans daily at 2 AM UTC
-    - cron: "0 2 * * *"
+    - cron: '0 2 * * *'
 
 permissions:
   contents: read
@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Run npm audit
         run: |
@@ -99,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript", "typescript"]
+        language: ['javascript', 'typescript']
 
     steps:
       - name: Checkout code
@@ -117,7 +117,7 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          category: "/language:${{ matrix.language }}"
+          category: '/language:${{ matrix.language }}'
 
   # Job 4: Secret Scanning
   secret-scan:
@@ -181,9 +181,9 @@ jobs:
       - name: Run OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: "galaxyco-ai-2.0"
-          path: "."
-          format: "HTML"
+          project: 'galaxyco-ai-2.0'
+          path: '.'
+          format: 'HTML'
           args: >
             --enableRetired
             --enableExperimental
@@ -219,7 +219,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

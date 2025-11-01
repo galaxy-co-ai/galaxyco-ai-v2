@@ -4,13 +4,13 @@
  * Redirects to onboarding if no workspace is available
  */
 
-"use client";
+'use client';
 
-import React, { ReactNode, useEffect } from "react";
-import { logger } from "@/lib/utils/logger";
-import { useRouter } from "next/navigation";
-import { useWorkspace } from "@/hooks/useWorkspace";
-import { colors, spacing, typography } from "@/lib/constants/design-system";
+import React, { ReactNode, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { useRouter } from 'next/navigation';
+import { useWorkspace } from '@/hooks/useWorkspace';
+import { colors, spacing, typography } from '@/lib/constants/design-system';
 
 interface RequireWorkspaceProps {
   children: ReactNode;
@@ -21,7 +21,7 @@ interface RequireWorkspaceProps {
 export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
   children,
   fallback,
-  redirectTo = "/onboarding",
+  redirectTo = '/onboarding',
 }) => {
   const { workspaceId, workspace, isLoading, error } = useWorkspace();
   const router = useRouter();
@@ -34,7 +34,7 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
 
     // Redirect if no workspace is available
     if (!workspaceId && !error) {
-      logger.info("No workspace found, redirecting to onboarding");
+      logger.info('No workspace found, redirecting to onboarding');
       router.push(redirectTo);
     }
   }, [workspaceId, isLoading, error, router, redirectTo]);
@@ -45,28 +45,26 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
       fallback || (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "200px",
-            flexDirection: "column",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '200px',
+            flexDirection: 'column',
             gap: spacing.md,
             color: colors.text.secondary,
           }}
         >
           <div
             style={{
-              width: "32px",
-              height: "32px",
+              width: '32px',
+              height: '32px',
               border: `3px solid ${colors.background.tertiary}`,
               borderTop: `3px solid ${colors.primaryColor}`,
-              borderRadius: "50%",
-              animation: "spin 1s linear infinite",
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
             }}
           />
-          <div style={{ fontSize: typography.sizes.sm }}>
-            Loading workspace...
-          </div>
+          <div style={{ fontSize: typography.sizes.sm }}>Loading workspace...</div>
         </div>
       )
     );
@@ -77,18 +75,18 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
     return (
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "200px",
-          flexDirection: "column",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '200px',
+          flexDirection: 'column',
           gap: spacing.md,
           color: colors.danger,
-          textAlign: "center",
+          textAlign: 'center',
           padding: spacing.lg,
         }}
       >
-        <div style={{ fontSize: "48px" }}>⚠️</div>
+        <div style={{ fontSize: '48px' }}>⚠️</div>
         <div>
           <h2
             style={{
@@ -116,9 +114,9 @@ export const RequireWorkspace: React.FC<RequireWorkspaceProps> = ({
             padding: `${spacing.sm} ${spacing.lg}`,
             backgroundColor: colors.primaryColor,
             color: colors.background.primary,
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
             fontSize: typography.sizes.sm,
             fontWeight: typography.weights.medium,
           }}
@@ -149,10 +147,7 @@ export function withRequireWorkspace<P extends object>(
   },
 ) {
   const WrappedComponent = (props: P) => (
-    <RequireWorkspace
-      fallback={options?.fallback}
-      redirectTo={options?.redirectTo}
-    >
+    <RequireWorkspace fallback={options?.fallback} redirectTo={options?.redirectTo}>
       <Component {...props} />
     </RequireWorkspace>
   );

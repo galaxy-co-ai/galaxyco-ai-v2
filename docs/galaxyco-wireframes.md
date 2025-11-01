@@ -1301,9 +1301,8 @@ $agent-crm: #10b981; // Green
 ```scss
 // Font Family
 $font-primary:
-  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-  Arial, sans-serif;
-$font-mono: "SF Mono", Monaco, "Cascadia Code", "Courier New", monospace;
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
 
 // Font Sizes
 $text-xs: 12px; // Captions, labels

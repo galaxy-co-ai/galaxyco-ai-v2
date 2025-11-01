@@ -27,12 +27,12 @@ Enable agents to search and retrieve information from the knowledge base, creati
 ```typescript
 // Define tool for agents to search knowledge base
 export const knowledgeSearchTool = {
-  name: "searchKnowledgeBase",
-  description: "Search the knowledge base for relevant information",
+  name: 'searchKnowledgeBase',
+  description: 'Search the knowledge base for relevant information',
   parameters: {
-    query: "string (required) - The search query",
-    collectionId: "string (optional) - Limit search to specific collection",
-    limit: "number (optional) - Max results (default 5)",
+    query: 'string (required) - The search query',
+    collectionId: 'string (optional) - Limit search to specific collection',
+    limit: 'number (optional) - Max results (default 5)',
   },
 };
 ```

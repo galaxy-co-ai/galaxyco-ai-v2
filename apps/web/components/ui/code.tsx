@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Code component using GalaxyCo.ai Design System tokens
@@ -13,33 +13,33 @@ import { cn } from "@/lib/utils";
  * console.log(greeting);
  * </Code>
  */
-const codeVariants = cva("font-mono", {
+const codeVariants = cva('font-mono', {
   variants: {
     variant: {
       // Inline code within text
       inline: [
-        "inline-flex items-center",
-        "px-1.5 py-0.5",
-        "rounded-sm",
-        "bg-muted text-foreground",
-        "text-sm",
-        "border border-border",
+        'inline-flex items-center',
+        'px-1.5 py-0.5',
+        'rounded-sm',
+        'bg-muted text-foreground',
+        'text-sm',
+        'border border-border',
       ],
       // Block code (multi-line)
       block: [
-        "block",
-        "p-4",
-        "rounded-md",
-        "bg-background-elevated text-foreground",
-        "text-sm",
-        "border border-border",
-        "overflow-x-auto",
-        "whitespace-pre",
+        'block',
+        'p-4',
+        'rounded-md',
+        'bg-background-elevated text-foreground',
+        'text-sm',
+        'border border-border',
+        'overflow-x-auto',
+        'whitespace-pre',
       ],
     },
   },
   defaultVariants: {
-    variant: "inline",
+    variant: 'inline',
   },
 });
 
@@ -56,7 +56,7 @@ export interface CodeProps
 const Code = React.forwardRef<HTMLElement, CodeProps>(
   ({ className, variant, language, children, ...props }, ref) => {
     // Use <code> for inline, <pre><code> for block
-    if (variant === "block") {
+    if (variant === 'block') {
       return (
         <pre
           ref={ref as React.Ref<HTMLPreElement>}
@@ -80,6 +80,6 @@ const Code = React.forwardRef<HTMLElement, CodeProps>(
   },
 );
 
-Code.displayName = "Code";
+Code.displayName = 'Code';
 
 export { Code, codeVariants };

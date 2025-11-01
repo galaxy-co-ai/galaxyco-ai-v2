@@ -5,29 +5,21 @@
  * Now using Next.js API routes (/api/agents) instead of external NestJS backend
  */
 
-const API_BASE_URL = "/api"; // Use Next.js API routes
+const API_BASE_URL = '/api'; // Use Next.js API routes
 
 interface CreateAgentPayload {
   name: string;
   description: string;
-  type:
-    | "scope"
-    | "call"
-    | "email"
-    | "note"
-    | "task"
-    | "roadmap"
-    | "content"
-    | "custom";
-  trigger: "webhook" | "schedule" | "manual" | "event";
-  aiProvider?: "openai" | "anthropic" | "custom";
+  type: 'scope' | 'call' | 'email' | 'note' | 'task' | 'roadmap' | 'content' | 'custom';
+  trigger: 'webhook' | 'schedule' | 'manual' | 'event';
+  aiProvider?: 'openai' | 'anthropic' | 'custom';
   model?: string;
   systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
   knowledgeBase?: {
     enabled: boolean;
-    scope?: "all" | "collections";
+    scope?: 'all' | 'collections';
     collectionIds?: string[];
     maxResults?: number;
   };
@@ -38,12 +30,12 @@ interface CreateAgentPayload {
 }
 
 interface UpdateAgentPayload extends Partial<CreateAgentPayload> {
-  status?: "draft" | "active" | "paused" | "archived";
+  status?: 'draft' | 'active' | 'paused' | 'archived';
 }
 
 interface TestAgentPayload {
   inputs: Record<string, any>;
-  mode?: "mock" | "live";
+  mode?: 'mock' | 'live';
 }
 
 /**
@@ -55,20 +47,17 @@ interface TestAgentPayload {
  */
 function buildHeaders(token: string, workspaceId: string): HeadersInit {
   return {
-    "Content-Type": "application/json",
-    "x-workspace-id": workspaceId,
+    'Content-Type': 'application/json',
+    'x-workspace-id': workspaceId,
   };
 }
 
 /**
  * Create a new agent
  */
-export async function createAgent(
-  payload: CreateAgentPayload,
-  headers: HeadersInit,
-): Promise<any> {
+export async function createAgent(payload: CreateAgentPayload, headers: HeadersInit): Promise<any> {
   // Extract workspace ID from headers
-  const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
+  const workspaceId = (headers as Record<string, string>)['x-workspace-id'];
 
   // Transform payload to match new API structure
   const apiPayload = {
@@ -77,16 +66,16 @@ export async function createAgent(
     type: payload.type,
     workspaceId,
     config: {
-      aiProvider: payload.aiProvider || "openai",
-      model: payload.model || "gpt-4",
+      aiProvider: payload.aiProvider || 'openai',
+      model: payload.model || 'gpt-4',
       temperature: payload.temperature || 0.7,
       maxTokens: payload.maxTokens || 1000,
-      systemPrompt: payload.systemPrompt || "",
+      systemPrompt: payload.systemPrompt || '',
       tools: [],
       triggers: payload.trigger ? [{ type: payload.trigger, config: {} }] : [],
       knowledgeBase: payload.knowledgeBase || {
         enabled: false,
-        scope: "all",
+        scope: 'all',
         collectionIds: [],
         maxResults: 5,
       },
@@ -94,17 +83,17 @@ export async function createAgent(
   };
 
   const response = await fetch(`${API_BASE_URL}/agents`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include", // Include cookies for Clerk auth
+    credentials: 'include', // Include cookies for Clerk auth
     body: JSON.stringify(apiPayload),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || error.message || "Failed to create agent");
+    throw new Error(error.error || error.message || 'Failed to create agent');
   }
 
   return response.json();
@@ -116,7 +105,7 @@ export async function createAgent(
 export async function listAgents(
   headers: HeadersInit,
   filters?: {
-    status?: "draft" | "active" | "paused" | "archived";
+    status?: 'draft' | 'active' | 'paused' | 'archived';
     search?: string;
     limit?: number;
     offset?: number;
@@ -125,26 +114,26 @@ export async function listAgents(
   const queryParams = new URLSearchParams();
 
   // Extract workspace ID from headers
-  const workspaceId = (headers as Record<string, string>)["x-workspace-id"];
+  const workspaceId = (headers as Record<string, string>)['x-workspace-id'];
   if (workspaceId) {
-    queryParams.set("workspaceId", workspaceId);
+    queryParams.set('workspaceId', workspaceId);
   }
 
-  if (filters?.status) queryParams.set("status", filters.status);
-  if (filters?.search) queryParams.set("search", filters.search);
-  if (filters?.limit) queryParams.set("limit", filters.limit.toString());
-  if (filters?.offset) queryParams.set("offset", filters.offset.toString());
+  if (filters?.status) queryParams.set('status', filters.status);
+  if (filters?.search) queryParams.set('search', filters.search);
+  if (filters?.limit) queryParams.set('limit', filters.limit.toString());
+  if (filters?.offset) queryParams.set('offset', filters.offset.toString());
 
-  const url = `${API_BASE_URL}/agents${queryParams.toString() ? `?${queryParams}` : ""}`;
+  const url = `${API_BASE_URL}/agents${queryParams.toString() ? `?${queryParams}` : ''}`;
 
   const response = await fetch(url, {
-    method: "GET",
-    credentials: "include", // Include cookies for Clerk auth
+    method: 'GET',
+    credentials: 'include', // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || "Failed to fetch agents");
+    throw new Error(error.error || 'Failed to fetch agents');
   }
 
   return response.json();
@@ -153,18 +142,15 @@ export async function listAgents(
 /**
  * Get single agent by ID
  */
-export async function getAgent(
-  agentId: string,
-  headers: HeadersInit,
-): Promise<any> {
+export async function getAgent(agentId: string, headers: HeadersInit): Promise<any> {
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
-    method: "GET",
-    credentials: "include", // Include cookies for Clerk auth
+    method: 'GET',
+    credentials: 'include', // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || "Failed to fetch agent");
+    throw new Error(error.error || 'Failed to fetch agent');
   }
 
   return response.json();
@@ -210,17 +196,17 @@ export async function updateAgent(
   }
 
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include", // Include cookies for Clerk auth
+    credentials: 'include', // Include cookies for Clerk auth
     body: JSON.stringify(apiPayload),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || error.message || "Failed to update agent");
+    throw new Error(error.error || error.message || 'Failed to update agent');
   }
 
   return response.json();
@@ -229,18 +215,15 @@ export async function updateAgent(
 /**
  * Delete (archive) an agent
  */
-export async function deleteAgent(
-  agentId: string,
-  headers: HeadersInit,
-): Promise<any> {
+export async function deleteAgent(agentId: string, headers: HeadersInit): Promise<any> {
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}`, {
-    method: "DELETE",
-    credentials: "include", // Include cookies for Clerk auth
+    method: 'DELETE',
+    credentials: 'include', // Include cookies for Clerk auth
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || "Failed to delete agent");
+    throw new Error(error.error || 'Failed to delete agent');
   }
 
   return response.json();
@@ -255,14 +238,14 @@ export async function testAgent(
   headers: HeadersInit,
 ): Promise<any> {
   const response = await fetch(`${API_BASE_URL}/agents/${agentId}/test`, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to test agent");
+    throw new Error(error.message || 'Failed to test agent');
   }
 
   return response.json();
@@ -272,21 +255,18 @@ export async function testAgent(
  * Execute agent with live AI (Phase 9)
  * Uses Next.js API route with access to AI providers
  */
-export async function executeAgentLive(
-  agentId: string,
-  inputs: Record<string, any>,
-): Promise<any> {
+export async function executeAgentLive(agentId: string, inputs: Record<string, any>): Promise<any> {
   const response = await fetch(`/api/agents/${agentId}/execute`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ inputs, mode: "live" }),
+    body: JSON.stringify({ inputs, mode: 'live' }),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.error || error.message || "Failed to execute agent");
+    throw new Error(error.error || error.message || 'Failed to execute agent');
   }
 
   return response.json();
@@ -296,23 +276,18 @@ export async function executeAgentLive(
  * Execute agent with mock responses
  * Uses Next.js API route without calling AI providers
  */
-export async function executeAgentMock(
-  agentId: string,
-  inputs: Record<string, any>,
-): Promise<any> {
+export async function executeAgentMock(agentId: string, inputs: Record<string, any>): Promise<any> {
   const response = await fetch(`/api/agents/${agentId}/execute`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ inputs, mode: "mock" }),
+    body: JSON.stringify({ inputs, mode: 'mock' }),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(
-      error.error || error.message || "Failed to execute agent (mock)",
-    );
+    throw new Error(error.error || error.message || 'Failed to execute agent (mock)');
   }
 
   return response.json();
@@ -325,21 +300,19 @@ export async function executeAgentMock(
 export async function executeAgent(
   agentId: string,
   inputs: Record<string, any>,
-  mode: "mock" | "live" = "live",
+  mode: 'mock' | 'live' = 'live',
 ): Promise<any> {
   const response = await fetch(`/api/agents/${agentId}/execute`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ inputs, mode }),
   });
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(
-      error.error || error.message || `Failed to execute agent (${mode})`,
-    );
+    throw new Error(error.error || error.message || `Failed to execute agent (${mode})`);
   }
 
   return response.json();

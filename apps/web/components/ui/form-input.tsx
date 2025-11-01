@@ -1,12 +1,11 @@
-"use client";
+'use client';
 
-import React, { forwardRef } from "react";
-import { Input } from "./input";
-import { Label } from "./label";
-import { cn } from "@/lib/utils";
+import React, { forwardRef } from 'react';
+import { Input } from './input';
+import { Label } from './label';
+import { cn } from '@/lib/utils';
 
-interface FormInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+interface FormInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helper?: string;
@@ -21,18 +20,7 @@ interface FormInputProps
  */
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   (
-    {
-      label,
-      error,
-      helper,
-      helperText,
-      leftIcon,
-      rightIcon,
-      className,
-      id,
-      required,
-      ...props
-    },
+    { label, error, helper, helperText, leftIcon, rightIcon, className, id, required, ...props },
     ref,
   ) => {
     const helperMessage = helperText || helper;
@@ -61,18 +49,14 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              leftIcon && "pl-10",
-              rightIcon && "pr-10",
-              error && "border-destructive focus-visible:ring-destructive",
+              leftIcon && 'pl-10',
+              rightIcon && 'pr-10',
+              error && 'border-destructive focus-visible:ring-destructive',
               className,
             )}
-            aria-invalid={error ? "true" : "false"}
+            aria-invalid={error ? 'true' : 'false'}
             aria-describedby={
-              error
-                ? `${inputId}-error`
-                : helperMessage
-                  ? `${inputId}-helper`
-                  : undefined
+              error ? `${inputId}-error` : helperMessage ? `${inputId}-helper` : undefined
             }
             {...props}
           />
@@ -87,11 +71,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
         {/* Error Message */}
         {error && (
-          <p
-            id={`${inputId}-error`}
-            className="text-sm text-destructive"
-            role="alert"
-          >
+          <p id={`${inputId}-error`} className="text-sm text-destructive" role="alert">
             {error}
           </p>
         )}
@@ -107,4 +87,4 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   },
 );
 
-FormInput.displayName = "FormInput";
+FormInput.displayName = 'FormInput';

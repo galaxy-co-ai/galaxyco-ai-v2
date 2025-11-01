@@ -17,9 +17,9 @@
  *   --since <hash>    Generate changelog since specific commit
  */
 
-import { execSync } from "child_process";
-import { writeFileSync } from "fs";
-import { resolve } from "path";
+import { execSync } from 'child_process';
+import { writeFileSync } from 'fs';
+import { resolve } from 'path';
 
 // ============================================================================
 // Types
@@ -72,11 +72,11 @@ interface CliOptions {
 function exec(command: string): string {
   try {
     return execSync(command, {
-      encoding: "utf-8",
+      encoding: 'utf-8',
       maxBuffer: 10 * 1024 * 1024,
     });
   } catch (error) {
-    return "";
+    return '';
   }
 }
 
@@ -84,22 +84,22 @@ function parseArgs(): CliOptions {
   const args = process.argv.slice(2);
   const options: CliOptions = {
     days: 7,
-    output: "docs/RECENT_CHANGES.md",
+    output: 'docs/RECENT_CHANGES.md',
     json: false,
   };
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case "--days":
+      case '--days':
         options.days = parseInt(args[++i], 10);
         break;
-      case "--output":
+      case '--output':
         options.output = args[++i];
         break;
-      case "--json":
+      case '--json':
         options.json = true;
         break;
-      case "--since":
+      case '--since':
         options.since = args[++i];
         break;
     }
@@ -112,33 +112,19 @@ function parseArgs(): CliOptions {
 // Git Operations
 // ============================================================================
 
-function getCommitStats(since: string): ChangelogData["stats"] {
-  const commits = exec(`git log ${since} --oneline`)
-    .trim()
-    .split("\n")
-    .filter(Boolean).length;
+function getCommitStats(since: string): ChangelogData['stats'] {
+  const commits = exec(`git log ${since} --oneline`).trim().split('\n').filter(Boolean).length;
 
   const diffStat = exec(`git diff --shortstat ${since}..HEAD`).trim();
-  const filesChanged = parseInt(
-    diffStat.match(/(\d+) files? changed/)?.[1] || "0",
-    10,
-  );
-  const additions = parseInt(
-    diffStat.match(/(\d+) insertions?/)?.[1] || "0",
-    10,
-  );
-  const deletions = parseInt(
-    diffStat.match(/(\d+) deletions?/)?.[1] || "0",
-    10,
-  );
+  const filesChanged = parseInt(diffStat.match(/(\d+) files? changed/)?.[1] || '0', 10);
+  const additions = parseInt(diffStat.match(/(\d+) insertions?/)?.[1] || '0', 10);
+  const deletions = parseInt(diffStat.match(/(\d+) deletions?/)?.[1] || '0', 10);
 
   return { commits, filesChanged, additions, deletions };
 }
 
-function parseConventionalCommit(
-  commitData: string,
-): ConventionalCommit | null {
-  const lines = commitData.split("\n");
+function parseConventionalCommit(commitData: string): ConventionalCommit | null {
+  const lines = commitData.split('\n');
   const [hash, author, timestamp, ...messageParts] = lines;
 
   // Validate inputs
@@ -146,8 +132,8 @@ function parseConventionalCommit(
     return null;
   }
 
-  const message = messageParts.join("\n").trim();
-  const firstLine = message.split("\n")[0];
+  const message = messageParts.join('\n').trim();
+  const firstLine = message.split('\n')[0];
 
   if (!firstLine) {
     return null;
@@ -171,10 +157,10 @@ function parseConventionalCommit(
     return {
       hash: hash.trim(),
       shortHash: hash.trim().substring(0, 7),
-      type: "other",
+      type: 'other',
       subject: firstLine,
-      body: message.split("\n").slice(1).join("\n").trim(),
-      breaking: message.includes("BREAKING CHANGE"),
+      body: message.split('\n').slice(1).join('\n').trim(),
+      breaking: message.includes('BREAKING CHANGE'),
       author: author.trim(),
       date: dateObj.toISOString(),
       timestamp: timestampNum,
@@ -183,8 +169,8 @@ function parseConventionalCommit(
   }
 
   const [, type, scope, breakingMarker, subject] = match;
-  const body = message.split("\n").slice(1).join("\n").trim();
-  const breaking = !!breakingMarker || body.includes("BREAKING CHANGE");
+  const body = message.split('\n').slice(1).join('\n').trim();
+  const breaking = !!breakingMarker || body.includes('BREAKING CHANGE');
 
   return {
     hash: hash.trim(),
@@ -202,11 +188,11 @@ function parseConventionalCommit(
 }
 
 function getCommits(since: string): ConventionalCommit[] {
-  const format = "%H%n%an%n%ct%n%B%n--END-COMMIT--";
+  const format = '%H%n%an%n%ct%n%B%n--END-COMMIT--';
   const log = exec(`git log ${since} --format="${format}"`);
 
   const commits: ConventionalCommit[] = [];
-  const commitBlocks = log.split("--END-COMMIT--").filter(Boolean);
+  const commitBlocks = log.split('--END-COMMIT--').filter(Boolean);
 
   for (const block of commitBlocks) {
     const commit = parseConventionalCommit(block.trim());
@@ -214,7 +200,7 @@ function getCommits(since: string): ConventionalCommit[] {
       // Get files changed in this commit
       const files = exec(`git show --name-only --pretty="" ${commit.hash}`)
         .trim()
-        .split("\n")
+        .split('\n')
         .filter(Boolean);
       commit.files = files;
       commits.push(commit);
@@ -224,9 +210,7 @@ function getCommits(since: string): ConventionalCommit[] {
   return commits;
 }
 
-function getFileChangeFrequency(
-  commits: ConventionalCommit[],
-): ChangelogData["fileChanges"] {
+function getFileChangeFrequency(commits: ConventionalCommit[]): ChangelogData['fileChanges'] {
   const fileMap = new Map<string, number>();
 
   for (const commit of commits) {
@@ -268,7 +252,7 @@ function generateChangelog(options: CliOptions): ChangelogData {
   // Group by scope
   const commitsByScope: Record<string, ConventionalCommit[]> = {};
   for (const commit of allCommits) {
-    const scope = commit.scope || "unscoped";
+    const scope = commit.scope || 'unscoped';
     if (!commitsByScope[scope]) {
       commitsByScope[scope] = [];
     }
@@ -301,62 +285,53 @@ function generateMarkdown(data: ChangelogData): string {
   const lines: string[] = [];
 
   // Header
-  lines.push("# 📝 Recent Changes - Auto-Generated");
-  lines.push("");
+  lines.push('# 📝 Recent Changes - Auto-Generated');
+  lines.push('');
   lines.push(`**Generated**: ${new Date(data.generated).toUTCString()}`);
   lines.push(`**Period**: ${data.period}`);
   lines.push(`**Source**: Git commit history (Conventional Commits)`);
-  lines.push("");
-  lines.push("---");
-  lines.push("");
+  lines.push('');
+  lines.push('---');
+  lines.push('');
 
   // Summary Stats
-  lines.push("## 📊 Summary");
-  lines.push("");
+  lines.push('## 📊 Summary');
+  lines.push('');
   lines.push(`- **Total Commits**: ${data.stats.commits}`);
   lines.push(`- **Files Changed**: ${data.stats.filesChanged}`);
   lines.push(`- **Lines Added**: +${data.stats.additions}`);
   lines.push(`- **Lines Removed**: -${data.stats.deletions}`);
   lines.push(`- **Breaking Changes**: ${data.breakingChanges.length}`);
-  lines.push("");
-  lines.push("---");
-  lines.push("");
+  lines.push('');
+  lines.push('---');
+  lines.push('');
 
   // Breaking Changes (if any)
   if (data.breakingChanges.length > 0) {
-    lines.push("## ⚠️ Breaking Changes");
-    lines.push("");
+    lines.push('## ⚠️ Breaking Changes');
+    lines.push('');
     for (const commit of data.breakingChanges) {
       lines.push(`### ${commit.shortHash} - ${commit.subject}`);
-      lines.push("");
+      lines.push('');
       lines.push(`**Type**: \`${commit.type}\``);
       if (commit.scope) lines.push(`**Scope**: \`${commit.scope}\``);
       lines.push(`**Author**: ${commit.author}`);
       lines.push(`**Date**: ${new Date(commit.date).toLocaleDateString()}`);
       if (commit.body) {
-        lines.push("");
+        lines.push('');
         lines.push(commit.body);
       }
-      lines.push("");
+      lines.push('');
     }
-    lines.push("---");
-    lines.push("");
+    lines.push('---');
+    lines.push('');
   }
 
   // Changes by Type
-  lines.push("## 🏷️ Changes by Type");
-  lines.push("");
+  lines.push('## 🏷️ Changes by Type');
+  lines.push('');
 
-  const typeOrder = [
-    "feat",
-    "fix",
-    "refactor",
-    "docs",
-    "test",
-    "chore",
-    "perf",
-    "style",
-  ];
+  const typeOrder = ['feat', 'fix', 'refactor', 'docs', 'test', 'chore', 'perf', 'style'];
   const sortedTypes = Object.keys(data.commitsByType).sort((a, b) => {
     const aIndex = typeOrder.indexOf(a);
     const bIndex = typeOrder.indexOf(b);
@@ -369,107 +344,105 @@ function generateMarkdown(data: ChangelogData): string {
   for (const type of sortedTypes) {
     const commits = data.commitsByType[type];
     lines.push(`### ${getTypeEmoji(type)} ${type} (${commits.length})`);
-    lines.push("");
+    lines.push('');
     for (const commit of commits) {
-      const scopeTag = commit.scope ? `**${commit.scope}**: ` : "";
+      const scopeTag = commit.scope ? `**${commit.scope}**: ` : '';
       lines.push(`- ${scopeTag}${commit.subject} (\`${commit.shortHash}\`)`);
     }
-    lines.push("");
+    lines.push('');
   }
 
-  lines.push("---");
-  lines.push("");
+  lines.push('---');
+  lines.push('');
 
   // Changes by Scope/Component
-  lines.push("## 📦 Changes by Scope");
-  lines.push("");
+  lines.push('## 📦 Changes by Scope');
+  lines.push('');
   const sortedScopes = Object.entries(data.commitsByScope)
     .sort((a, b) => b[1].length - a[1].length)
     .slice(0, 10);
 
   for (const [scope, commits] of sortedScopes) {
     lines.push(`### ${scope} (${commits.length} commits)`);
-    lines.push("");
+    lines.push('');
     for (const commit of commits) {
-      lines.push(
-        `- **${commit.type}**: ${commit.subject} (\`${commit.shortHash}\`)`,
-      );
+      lines.push(`- **${commit.type}**: ${commit.subject} (\`${commit.shortHash}\`)`);
     }
-    lines.push("");
+    lines.push('');
   }
 
-  lines.push("---");
-  lines.push("");
+  lines.push('---');
+  lines.push('');
 
   // File Changes
-  lines.push("## 📁 Most Frequently Changed Files");
-  lines.push("");
-  lines.push("| File | Changes |");
-  lines.push("|------|---------|");
+  lines.push('## 📁 Most Frequently Changed Files');
+  lines.push('');
+  lines.push('| File | Changes |');
+  lines.push('|------|---------|');
   for (const { path, changeCount } of data.fileChanges.slice(0, 20)) {
     lines.push(`| \`${path}\` | ${changeCount} |`);
   }
-  lines.push("");
-  lines.push("---");
-  lines.push("");
+  lines.push('');
+  lines.push('---');
+  lines.push('');
 
   // AI Context Summary
-  lines.push("## 🤖 AI Context Summary");
-  lines.push("");
-  lines.push("### What Changed");
-  lines.push("");
+  lines.push('## 🤖 AI Context Summary');
+  lines.push('');
+  lines.push('### What Changed');
+  lines.push('');
 
   // Summarize by type
   for (const type of sortedTypes.slice(0, 5)) {
     const commits = data.commitsByType[type];
     if (commits.length > 0) {
-      lines.push(`**${type}**: ${commits.map((c) => c.subject).join("; ")}`);
-      lines.push("");
+      lines.push(`**${type}**: ${commits.map((c) => c.subject).join('; ')}`);
+      lines.push('');
     }
   }
 
-  lines.push("### Key Files Modified");
-  lines.push("");
-  lines.push("```");
+  lines.push('### Key Files Modified');
+  lines.push('');
+  lines.push('```');
   for (const { path } of data.fileChanges.slice(0, 15)) {
     lines.push(path);
   }
-  lines.push("```");
-  lines.push("");
+  lines.push('```');
+  lines.push('');
 
-  lines.push("### Next Steps Checklist");
-  lines.push("");
-  lines.push("- [ ] Review breaking changes (if any)");
-  lines.push("- [ ] Verify all tests pass after recent changes");
-  lines.push("- [ ] Check modified files for TODOs or incomplete work");
-  lines.push("- [ ] Update CURRENT_SESSION.md with session summary");
-  lines.push("- [ ] Run health checks before committing");
-  lines.push("");
+  lines.push('### Next Steps Checklist');
+  lines.push('');
+  lines.push('- [ ] Review breaking changes (if any)');
+  lines.push('- [ ] Verify all tests pass after recent changes');
+  lines.push('- [ ] Check modified files for TODOs or incomplete work');
+  lines.push('- [ ] Update CURRENT_SESSION.md with session summary');
+  lines.push('- [ ] Run health checks before committing');
+  lines.push('');
 
   // Footer
-  lines.push("---");
-  lines.push("");
-  lines.push("_Generated by: `scripts/generate-changelog.ts`_");
-  lines.push("_To regenerate: `tsx scripts/generate-changelog.ts`_");
-  lines.push("");
+  lines.push('---');
+  lines.push('');
+  lines.push('_Generated by: `scripts/generate-changelog.ts`_');
+  lines.push('_To regenerate: `tsx scripts/generate-changelog.ts`_');
+  lines.push('');
 
-  return lines.join("\n");
+  return lines.join('\n');
 }
 
 function getTypeEmoji(type: string): string {
   const emojiMap: Record<string, string> = {
-    feat: "✨",
-    fix: "🐛",
-    docs: "📝",
-    refactor: "♻️",
-    test: "✅",
-    chore: "🔧",
-    perf: "⚡",
-    style: "💄",
-    ci: "👷",
-    build: "📦",
+    feat: '✨',
+    fix: '🐛',
+    docs: '📝',
+    refactor: '♻️',
+    test: '✅',
+    chore: '🔧',
+    perf: '⚡',
+    style: '💄',
+    ci: '👷',
+    build: '📦',
   };
-  return emojiMap[type] || "📌";
+  return emojiMap[type] || '📌';
 }
 
 // ============================================================================
@@ -479,31 +452,31 @@ function getTypeEmoji(type: string): string {
 function main() {
   const options = parseArgs();
 
-  console.log("📋 GalaxyCo.ai Changelog Generator");
-  console.log("===================================\n");
+  console.log('📋 GalaxyCo.ai Changelog Generator');
+  console.log('===================================\n');
 
   const data = generateChangelog(options);
 
   // Generate markdown
   const markdown = generateMarkdown(data);
   const outputPath = resolve(process.cwd(), options.output);
-  writeFileSync(outputPath, markdown, "utf-8");
+  writeFileSync(outputPath, markdown, 'utf-8');
   console.log(`✅ Markdown changelog saved: ${outputPath}`);
 
   // Generate JSON if requested
   if (options.json) {
-    const jsonPath = outputPath.replace(/\.md$/, ".json");
-    writeFileSync(jsonPath, JSON.stringify(data, null, 2), "utf-8");
+    const jsonPath = outputPath.replace(/\.md$/, '.json');
+    writeFileSync(jsonPath, JSON.stringify(data, null, 2), 'utf-8');
     console.log(`✅ JSON changelog saved: ${jsonPath}`);
   }
 
-  console.log("");
-  console.log("📊 Stats:");
+  console.log('');
+  console.log('📊 Stats:');
   console.log(`  • Commits: ${data.stats.commits}`);
   console.log(`  • Files: ${data.stats.filesChanged}`);
   console.log(`  • +${data.stats.additions} / -${data.stats.deletions} lines`);
-  console.log("");
-  console.log("💡 Next: Commit this changelog or integrate with CI/CD");
+  console.log('');
+  console.log('💡 Next: Commit this changelog or integrate with CI/CD');
 }
 
 main();

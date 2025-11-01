@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import { useParams } from 'next/navigation';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Save, Play, ArrowLeft, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Save, Play, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function WorkflowEditPage() {
   const params = useParams<{ id: string }>();
-  const id = params?.id || "1";
+  const id = params?.id || '1';
 
-  const [name, setName] = useState("Lead Enrichment Workflow");
+  const [name, setName] = useState('Lead Enrichment Workflow');
   const [description, setDescription] = useState(
-    "Automatically enrich new leads with data from multiple sources",
+    'Automatically enrich new leads with data from multiple sources',
   );
-  const [trigger, setTrigger] = useState("webhook");
-  const [status, setStatus] = useState("active");
+  const [trigger, setTrigger] = useState('webhook');
+  const [status, setStatus] = useState('active');
 
   const [steps, setSteps] = useState<
     Array<{
@@ -38,45 +38,42 @@ export default function WorkflowEditPage() {
     }>
   >([
     {
-      id: "1",
-      name: "Fetch Company Data",
-      type: "api_call",
-      config: { endpoint: "clearbit.com/api" },
+      id: '1',
+      name: 'Fetch Company Data',
+      type: 'api_call',
+      config: { endpoint: 'clearbit.com/api' },
     },
     {
-      id: "2",
-      name: "Enrich Contact Info",
-      type: "ai_agent",
-      config: { agent: "enrichment-agent" },
+      id: '2',
+      name: 'Enrich Contact Info',
+      type: 'ai_agent',
+      config: { agent: 'enrichment-agent' },
     },
     {
-      id: "3",
-      name: "Update CRM",
-      type: "api_call",
-      config: { endpoint: "salesforce.com/api" },
+      id: '3',
+      name: 'Update CRM',
+      type: 'api_call',
+      config: { endpoint: 'salesforce.com/api' },
     },
   ]);
 
   const addStep = () => {
     const newId = String(steps.length + 1);
-    setSteps([
-      ...steps,
-      { id: newId, name: "New Step", type: "api_call", config: {} },
-    ]);
-    toast.success("Step added");
+    setSteps([...steps, { id: newId, name: 'New Step', type: 'api_call', config: {} }]);
+    toast.success('Step added');
   };
 
   const removeStep = (id: string) => {
     setSteps(steps.filter((s) => s.id !== id));
-    toast.success("Step removed");
+    toast.success('Step removed');
   };
 
   const handleSave = () => {
-    toast.success("Workflow saved successfully");
+    toast.success('Workflow saved successfully');
   };
 
   const handleTest = () => {
-    toast.info("Test run started");
+    toast.info('Test run started');
   };
 
   return (
@@ -84,9 +81,9 @@ export default function WorkflowEditPage() {
       title={`Edit Workflow: ${name}`}
       subtitle="Configure workflow steps, triggers, and settings"
       breadcrumbs={[
-        { label: "Workflows", href: "/workflows" },
+        { label: 'Workflows', href: '/workflows' },
         { label: name, href: `/workflows/${id}` },
-        { label: "Edit" },
+        { label: 'Edit' },
       ]}
       actions={
         <div className="flex gap-2">
@@ -110,11 +107,7 @@ export default function WorkflowEditPage() {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="name">Workflow Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
 
               <div>
@@ -167,9 +160,7 @@ export default function WorkflowEditPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Success Rate:</span>
-                <span className="font-medium text-green-600 dark:text-green-400">
-                  98.5%
-                </span>
+                <span className="font-medium text-green-600 dark:text-green-400">98.5%</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Avg Duration:</span>
@@ -192,10 +183,7 @@ export default function WorkflowEditPage() {
 
             <div className="space-y-4">
               {steps.map((step, index) => (
-                <div
-                  key={step.id}
-                  className="rounded-lg border bg-background-subtle p-4"
-                >
+                <div key={step.id} className="rounded-lg border bg-background-subtle p-4">
                   <div className="flex items-start gap-4">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold text-sm">
                       {index + 1}
@@ -215,9 +203,7 @@ export default function WorkflowEditPage() {
                             <SelectContent>
                               <SelectItem value="api_call">API Call</SelectItem>
                               <SelectItem value="ai_agent">AI Agent</SelectItem>
-                              <SelectItem value="condition">
-                                Condition
-                              </SelectItem>
+                              <SelectItem value="condition">Condition</SelectItem>
                               <SelectItem value="delay">Delay</SelectItem>
                             </SelectContent>
                           </Select>
@@ -232,11 +218,7 @@ export default function WorkflowEditPage() {
                         />
                       </div>
                     </div>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => removeStep(step.id)}
-                    >
+                    <Button size="sm" variant="ghost" onClick={() => removeStep(step.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  AlertCircle,
-  RefreshCw,
-  Settings,
-  HelpCircle,
-  Plus,
-} from "lucide-react";
-import Link from "next/link";
-import { CreateWorkspaceModal } from "./create-workspace-modal";
+import { useEffect, useState } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { AlertCircle, RefreshCw, Settings, HelpCircle, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { CreateWorkspaceModal } from './create-workspace-modal';
 
 interface WorkspaceGuardProps {
   children: React.ReactNode;
@@ -41,8 +35,7 @@ interface WorkspaceGuardProps {
  * ```
  */
 export function WorkspaceGuard({ children, fallback }: WorkspaceGuardProps) {
-  const { currentWorkspace, workspaces, isLoading, refreshWorkspaces } =
-    useWorkspace();
+  const { currentWorkspace, workspaces, isLoading, refreshWorkspaces } = useWorkspace();
   const [loadingTimeout, setLoadingTimeout] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -75,12 +68,9 @@ export function WorkspaceGuard({ children, fallback }: WorkspaceGuardProps) {
       <div className="flex h-full items-center justify-center p-8">
         <Card className="max-w-md p-8 text-center">
           <AlertCircle className="mx-auto mb-4 h-12 w-12 text-warning" />
-          <h2 className="mb-2 text-xl font-semibold">
-            Taking longer than expected
-          </h2>
+          <h2 className="mb-2 text-xl font-semibold">Taking longer than expected</h2>
           <p className="mb-6 text-sm text-muted-foreground">
-            Loading your workspace is taking longer than usual. This could be a
-            network issue.
+            Loading your workspace is taking longer than usual. This could be a network issue.
           </p>
           <div className="flex flex-col gap-3">
             <Button
@@ -116,15 +106,11 @@ export function WorkspaceGuard({ children, fallback }: WorkspaceGuardProps) {
             </div>
             <h2 className="mb-2 text-xl font-semibold">Welcome to GalaxyCo!</h2>
             <p className="mb-6 text-sm text-muted-foreground">
-              Let&apos;s get you started by creating your first workspace. A
-              workspace is where you&apos;ll manage your agents, data, and team.
+              Let&apos;s get you started by creating your first workspace. A workspace is where
+              you&apos;ll manage your agents, data, and team.
             </p>
             <div className="flex flex-col gap-3">
-              <Button
-                onClick={() => setShowCreateModal(true)}
-                className="w-full"
-                size="lg"
-              >
+              <Button onClick={() => setShowCreateModal(true)} className="w-full" size="lg">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Workspace
               </Button>

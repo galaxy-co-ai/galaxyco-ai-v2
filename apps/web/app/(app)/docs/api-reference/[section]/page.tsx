@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Copy, Check, BookOpen, Link as LinkIcon, Shield } from "lucide-react";
-import { toast } from "sonner";
+import { useMemo, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Copy, Check, BookOpen, Link as LinkIcon, Shield } from 'lucide-react';
+import { toast } from 'sonner';
 
 const apiIndex: Record<
   string,
@@ -18,13 +18,13 @@ const apiIndex: Record<
     title: string;
     description: string;
     endpoints: Array<{
-      method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+      method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
       path: string;
       summary: string;
       auth: boolean;
       params?: Array<{
         name: string;
-        in: "query" | "path" | "body";
+        in: 'query' | 'path' | 'body';
         required?: boolean;
         type: string;
         description?: string;
@@ -34,14 +34,14 @@ const apiIndex: Record<
   }
 > = {
   authentication: {
-    title: "Authentication",
+    title: 'Authentication',
     description:
-      "Use API keys to authenticate requests. Include the key in the Authorization header.",
+      'Use API keys to authenticate requests. Include the key in the Authorization header.',
     endpoints: [
       {
-        method: "GET",
-        path: "/v1/me",
-        summary: "Get current API user",
+        method: 'GET',
+        path: '/v1/me',
+        summary: 'Get current API user',
         auth: true,
         example: {
           curl: `curl -s -H "Authorization: Bearer $API_KEY" https://api.galaxyco.ai/v1/me`,
@@ -52,28 +52,28 @@ const apiIndex: Record<
     ],
   },
   agents: {
-    title: "Agents",
-    description: "Create and manage AI agents.",
+    title: 'Agents',
+    description: 'Create and manage AI agents.',
     endpoints: [
       {
-        method: "POST",
-        path: "/v1/agents",
-        summary: "Create an agent",
+        method: 'POST',
+        path: '/v1/agents',
+        summary: 'Create an agent',
         auth: true,
         params: [
           {
-            name: "name",
-            in: "body",
+            name: 'name',
+            in: 'body',
             required: true,
-            type: "string",
-            description: "Agent display name",
+            type: 'string',
+            description: 'Agent display name',
           },
           {
-            name: "trigger",
-            in: "body",
+            name: 'trigger',
+            in: 'body',
             required: true,
-            type: "string",
-            description: "Event or schedule",
+            type: 'string',
+            description: 'Event or schedule',
           },
         ],
         example: {
@@ -83,9 +83,9 @@ const apiIndex: Record<
         },
       },
       {
-        method: "GET",
-        path: "/v1/agents",
-        summary: "List agents",
+        method: 'GET',
+        path: '/v1/agents',
+        summary: 'List agents',
         auth: true,
         example: {
           curl: `curl -s -H "Authorization: Bearer $API_KEY" https://api.galaxyco.ai/v1/agents`,
@@ -99,22 +99,19 @@ const apiIndex: Record<
 
 export default function ApiReferenceSectionPage() {
   const params = useParams<{ section: string }>();
-  const section = (params?.section || "authentication").toString();
+  const section = (params?.section || 'authentication').toString();
   const [copied, setCopied] = useState<string | null>(null);
 
-  const data = useMemo(
-    () => apiIndex[section] || apiIndex["authentication"],
-    [section],
-  );
+  const data = useMemo(() => apiIndex[section] || apiIndex['authentication'], [section]);
 
   const onCopy = async (text: string, id: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(id);
-      toast.success("Copied to clipboard");
+      toast.success('Copied to clipboard');
       setTimeout(() => setCopied(null), 1200);
     } catch (_) {
-      toast.error("Copy failed");
+      toast.error('Copy failed');
     }
   };
 
@@ -123,8 +120,8 @@ export default function ApiReferenceSectionPage() {
       title={data.title}
       subtitle={data.description}
       breadcrumbs={[
-        { label: "Docs", href: "/docs" },
-        { label: "API Reference", href: "/docs/api-reference" },
+        { label: 'Docs', href: '/docs' },
+        { label: 'API Reference', href: '/docs/api-reference' },
         { label: data.title },
       ]}
     >
@@ -147,16 +144,11 @@ export default function ApiReferenceSectionPage() {
                 <Label>Parameters</Label>
                 <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                   {e.params.map((p) => (
-                    <li
-                      key={p.name}
-                      className="rounded-md border bg-background/50 p-3 text-sm"
-                    >
+                    <li key={p.name} className="rounded-md border bg-background/50 p-3 text-sm">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{p.in}</Badge>
                         <span className="font-mono">{p.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {p.type}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{p.type}</span>
                         {p.required && (
                           <Badge className="ml-auto" variant="secondary">
                             required
@@ -164,9 +156,7 @@ export default function ApiReferenceSectionPage() {
                         )}
                       </div>
                       {p.description && (
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {p.description}
-                        </p>
+                        <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
                       )}
                     </li>
                   ))}
@@ -182,7 +172,7 @@ export default function ApiReferenceSectionPage() {
                   <TabsTrigger value="javascript">JavaScript</TabsTrigger>
                   <TabsTrigger value="python">Python</TabsTrigger>
                 </TabsList>
-                {(["curl", "javascript", "python"] as const).map((lang) => (
+                {(['curl', 'javascript', 'python'] as const).map((lang) => (
                   <TabsContent key={lang} value={lang}>
                     <div className="relative">
                       <pre className="mt-2 overflow-x-auto rounded-md bg-background-subtle p-4 text-xs leading-relaxed">
@@ -192,9 +182,7 @@ export default function ApiReferenceSectionPage() {
                         size="sm"
                         variant="secondary"
                         className="absolute right-2 top-2"
-                        onClick={() =>
-                          onCopy(e.example[lang], `${idx}-${lang}`)
-                        }
+                        onClick={() => onCopy(e.example[lang], `${idx}-${lang}`)}
                       >
                         {copied === `${idx}-${lang}` ? (
                           <>
@@ -218,8 +206,7 @@ export default function ApiReferenceSectionPage() {
           <div className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
             <span>
-              Looking for another section? Try agents, authentication, webhooks,
-              or documents.
+              Looking for another section? Try agents, authentication, webhooks, or documents.
             </span>
           </div>
         </div>

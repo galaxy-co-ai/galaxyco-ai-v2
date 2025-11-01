@@ -4,37 +4,37 @@
  * October 19, 2025
  */
 
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Code, Webhook, Terminal, ChevronRight, Wrench } from "lucide-react";
+import Link from 'next/link';
+import { Card } from '@/components/ui/card';
+import { Code, Webhook, Terminal, ChevronRight, Wrench } from 'lucide-react';
 
 export default function DeveloperHub() {
   const developerSections = [
     {
-      title: "API Explorer",
-      href: "/developer/api",
+      title: 'API Explorer',
+      href: '/developer/api',
       icon: Code,
-      description: "Explore and test API endpoints",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+      description: 'Explore and test API endpoints',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
     },
     {
-      title: "Webhooks",
-      href: "/developer/webhooks",
+      title: 'Webhooks',
+      href: '/developer/webhooks',
       icon: Webhook,
-      description: "Manage webhook integrations",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
+      description: 'Manage webhook integrations',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
     },
     {
-      title: "Playground",
-      href: "/developer/playground",
+      title: 'Playground',
+      href: '/developer/playground',
       icon: Terminal,
-      description: "Test and experiment with APIs",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      description: 'Test and experiment with APIs',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
     },
   ];
 
@@ -43,9 +43,7 @@ export default function DeveloperHub() {
       <div className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              Developer Tools
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">Developer Tools</h1>
             <p className="text-sm text-muted-foreground mt-1">
               API explorer, webhooks, and testing playground
             </p>
@@ -70,12 +68,8 @@ export default function DeveloperHub() {
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {section.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {section.description}
-                  </p>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground">{section.description}</p>
                 </Card>
               </Link>
             );

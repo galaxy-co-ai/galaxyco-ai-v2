@@ -3,7 +3,7 @@
  * Prevents runaway execution by enforcing token, cost, and iteration limits
  */
 
-import type { Guardrail, GuardrailResult, ExecutionContext } from "../types";
+import type { Guardrail, GuardrailResult, ExecutionContext } from '../types';
 
 export interface CostLimitConfig {
   maxTokens?: number;
@@ -12,26 +12,16 @@ export interface CostLimitConfig {
   timeoutMs?: number;
 }
 
-export function createCostLimitGuardrail(
-  config: CostLimitConfig = {},
-): Guardrail {
-  const {
-    maxTokens = 100000,
-    maxCostUsd = 1.0,
-    maxIterations = 10,
-    timeoutMs = 60000,
-  } = config;
+export function createCostLimitGuardrail(config: CostLimitConfig = {}): Guardrail {
+  const { maxTokens = 100000, maxCostUsd = 1.0, maxIterations = 10, timeoutMs = 60000 } = config;
 
   return {
-    name: "cost-limit",
-    description: "Enforces token, cost, and iteration limits",
-    type: "cost",
+    name: 'cost-limit',
+    description: 'Enforces token, cost, and iteration limits',
+    type: 'cost',
     enabled: true,
 
-    async check(
-      input: any,
-      context?: Record<string, any>,
-    ): Promise<GuardrailResult> {
+    async check(input: any, context?: Record<string, any>): Promise<GuardrailResult> {
       const ctx = context as ExecutionContext & {
         tokensUsed?: number;
         costUsd?: number;
@@ -41,7 +31,7 @@ export function createCostLimitGuardrail(
       if (ctx?.iterations && ctx.iterations > maxIterations) {
         return {
           passed: false,
-          action: "block",
+          action: 'block',
           reason: `Exceeded maximum iterations (${maxIterations})`,
           metadata: { iterations: ctx.iterations, maxIterations },
         };
@@ -51,7 +41,7 @@ export function createCostLimitGuardrail(
       if (ctx?.tokensUsed && ctx.tokensUsed > maxTokens) {
         return {
           passed: false,
-          action: "block",
+          action: 'block',
           reason: `Exceeded maximum tokens (${maxTokens})`,
           metadata: { tokensUsed: ctx.tokensUsed, maxTokens },
         };
@@ -61,7 +51,7 @@ export function createCostLimitGuardrail(
       if (ctx?.costUsd && ctx.costUsd > maxCostUsd) {
         return {
           passed: false,
-          action: "block",
+          action: 'block',
           reason: `Exceeded maximum cost ($${maxCostUsd})`,
           metadata: { costUsd: ctx.costUsd, maxCostUsd },
         };
@@ -73,7 +63,7 @@ export function createCostLimitGuardrail(
         if (elapsed >= timeoutMs) {
           return {
             passed: false,
-            action: "block",
+            action: 'block',
             reason: `Execution timeout (${timeoutMs}ms)`,
             metadata: { elapsedMs: elapsed, timeoutMs },
           };

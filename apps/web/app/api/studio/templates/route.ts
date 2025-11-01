@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@galaxyco/database";
-import { gridTemplates, users } from "@galaxyco/database/schema";
-import { eq, desc, and } from "drizzle-orm";
-import { logger } from "@/lib/utils/logger";
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@galaxyco/database';
+import { gridTemplates, users } from '@galaxyco/database/schema';
+import { eq, desc, and } from 'drizzle-orm';
+import { logger } from '@/lib/utils/logger';
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/studio/templates
@@ -14,13 +14,10 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "Workspace ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Workspace ID is required' }, { status: 400 });
     }
 
     // Fetch templates with author information
@@ -47,7 +44,7 @@ export async function GET(request: NextRequest) {
       .leftJoin(users, eq(gridTemplates.authorId, users.id))
       .orderBy(desc(gridTemplates.featured), desc(gridTemplates.uses));
 
-    logger.info("Fetched templates", {
+    logger.info('Fetched templates', {
       workspaceId,
       count: templates.length,
     });
@@ -57,13 +54,13 @@ export async function GET(request: NextRequest) {
       count: templates.length,
     });
   } catch (error) {
-    logger.error("Failed to fetch templates", {
+    logger.error('Failed to fetch templates', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to fetch templates",
+        error: 'Failed to fetch templates',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },

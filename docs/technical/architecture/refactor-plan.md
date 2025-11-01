@@ -49,10 +49,10 @@
 ```typescript
 // OpenAI-aligned Agent Structure
 const agent = new Agent({
-  name: "Customer Support",
-  instructions: "You help customers with their questions",
+  name: 'Customer Support',
+  instructions: 'You help customers with their questions',
   tools: [searchKnowledge, createTicket, escalateToHuman],
-  model: "gpt-4o",
+  model: 'gpt-4o',
   temperature: 0.7,
 });
 
@@ -124,7 +124,7 @@ export class Agent {
     this.name = config.name;
     this.instructions = config.instructions;
     this.tools = config.tools;
-    this.model = config.model || "gpt-4o-mini";
+    this.model = config.model || 'gpt-4o-mini';
   }
 
   asTool(): Tool {
@@ -134,11 +134,7 @@ export class Agent {
 
 // packages/agents-core/src/runner.ts
 export class Runner {
-  static async run(
-    agent: Agent,
-    input: Message[],
-    options?: RunOptions,
-  ): Promise<RunResult> {
+  static async run(agent: Agent, input: Message[], options?: RunOptions): Promise<RunResult> {
     // Execution loop implementation
   }
 }
@@ -269,12 +265,12 @@ CREATE TABLE agent_tools (
 
 ```typescript
 const managerAgent = new Agent({
-  name: "Project Manager",
-  instructions: "Coordinate between specialized agents",
+  name: 'Project Manager',
+  instructions: 'Coordinate between specialized agents',
   tools: [
-    scopeAgent.asTool("analyze_requirements"),
-    emailAgent.asTool("draft_response"),
-    taskAgent.asTool("create_task"),
+    scopeAgent.asTool('analyze_requirements'),
+    emailAgent.asTool('draft_response'),
+    taskAgent.asTool('create_task'),
   ],
 });
 ```
@@ -363,8 +359,8 @@ const managerAgent = new Agent({
 interface GuardrailConfig {
   input: {
     relevance: { enabled: boolean; threshold: number };
-    safety: { enabled: boolean; mode: "strict" | "moderate" };
-    pii: { enabled: boolean; actions: "block" | "redact" };
+    safety: { enabled: boolean; mode: 'strict' | 'moderate' };
+    pii: { enabled: boolean; actions: 'block' | 'redact' };
   };
   output: {
     validation: { schema?: object };
@@ -372,7 +368,7 @@ interface GuardrailConfig {
   };
   tools: {
     requireApproval: string[]; // Tool IDs requiring approval
-    riskThreshold: "low" | "medium" | "high";
+    riskThreshold: 'low' | 'medium' | 'high';
   };
 }
 ```

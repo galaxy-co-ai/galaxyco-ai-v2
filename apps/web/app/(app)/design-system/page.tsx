@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Separator } from "@/components/ui/separator";
+import * as React from 'react';
+import { Separator } from '@/components/ui/separator';
 import {
   Heading,
   Text,
@@ -22,13 +22,13 @@ import {
   Image as DSImage,
   Kbd,
   Divider,
-} from "@/components/ui";
-import { Star, User, Rocket, CheckCircle2 } from "lucide-react";
+} from '@/components/ui';
+import { Star, User, Rocket, CheckCircle2 } from 'lucide-react';
 
 export default function Page() {
   const [checked, setChecked] = React.useState(false);
   const [enabled, setEnabled] = React.useState(true);
-  const [text, setText] = React.useState("");
+  const [text, setText] = React.useState('');
 
   return (
     <main className="mx-auto max-w-5xl space-y-8 p-6">
@@ -49,13 +49,10 @@ export default function Page() {
           </div>
           <Heading level={3}>Text, Caption, Code, Link</Heading>
           <Text>
-            Body text with <Code variant="inline">inline code</Code> and a{" "}
+            Body text with <Code variant="inline">inline code</Code> and a{' '}
             <UILink href="/">link</UILink>.
           </Text>
-          <Caption
-            variant="subtle"
-            icon={<CheckCircle2 className="h-3.5 w-3.5" />}
-          >
+          <Caption variant="subtle" icon={<CheckCircle2 className="h-3.5 w-3.5" />}>
             Small helper caption with icon
           </Caption>
         </div>
@@ -68,10 +65,7 @@ export default function Page() {
         <Heading level={2}>Forms</Heading>
         <div className="flex flex-wrap items-center gap-6">
           <label className="flex items-center gap-2">
-            <Checkbox
-              checked={checked}
-              onCheckedChange={(v) => setChecked(!!v)}
-            />
+            <Checkbox checked={checked} onCheckedChange={(v) => setChecked(!!v)} />
             <Text>Checkbox</Text>
           </label>
           <label className="flex items-center gap-2">
@@ -133,7 +127,7 @@ export default function Page() {
       <section className="space-y-4">
         <Heading level={2}>Interactive</Heading>
         <div className="flex flex-wrap items-center gap-4">
-          <Kbd keys={["cmd", "k"]} />
+          <Kbd keys={['cmd', 'k']} />
           <Divider text="OR" />
         </div>
       </section>

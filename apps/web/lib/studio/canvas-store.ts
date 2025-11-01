@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { nanoid } from "nanoid";
-import type { Node, Edge, Viewport } from "@xyflow/react";
-import type { GridNode, GridEdge, GridNodeType } from "./types";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { nanoid } from 'nanoid';
+import type { Node, Edge, Viewport } from '@xyflow/react';
+import type { GridNode, GridEdge, GridNodeType } from './types';
 
 // ============================================================================
 // Types
@@ -12,7 +12,7 @@ interface CanvasState {
   // Grid metadata
   gridId: string | null;
   gridName: string;
-  gridStatus: "draft" | "published" | "archived";
+  gridStatus: 'draft' | 'published' | 'archived';
 
   // Canvas elements
   nodes: Node[];
@@ -48,15 +48,9 @@ interface CanvasSnapshot {
 
 interface CanvasActions {
   // Grid management
-  loadGrid: (
-    gridId: string,
-    name: string,
-    status: string,
-    nodes: Node[],
-    edges: Edge[],
-  ) => void;
+  loadGrid: (gridId: string, name: string, status: string, nodes: Node[], edges: Edge[]) => void;
   setGridName: (name: string) => void;
-  setGridStatus: (status: "draft" | "published" | "archived") => void;
+  setGridStatus: (status: 'draft' | 'published' | 'archived') => void;
 
   // Node operations
   addNode: (type: GridNodeType, position: { x: number; y: number }) => void;
@@ -106,8 +100,8 @@ type CanvasStore = CanvasState & CanvasActions;
 
 const initialState: CanvasState = {
   gridId: null,
-  gridName: "Untitled Grid",
-  gridStatus: "draft",
+  gridName: 'Untitled Grid',
+  gridStatus: 'draft',
   nodes: [],
   edges: [],
   viewport: { x: 0, y: 0, zoom: 1 },
@@ -135,7 +129,7 @@ export const useCanvasStore = create<CanvasStore>()(
         set({
           gridId,
           gridName: name,
-          gridStatus: status as "draft" | "published" | "archived",
+          gridStatus: status as 'draft' | 'published' | 'archived',
           nodes,
           edges,
           selectedNodes: [],
@@ -162,13 +156,13 @@ export const useCanvasStore = create<CanvasStore>()(
 
         const newNode: Node = {
           id: nanoid(),
-          type: "custom", // We'll use a custom component
+          type: 'custom', // We'll use a custom component
           position,
           data: {
             type,
             label: getDefaultLabel(type),
             config: {},
-            status: "idle",
+            status: 'idle',
           },
         };
 
@@ -185,9 +179,7 @@ export const useCanvasStore = create<CanvasStore>()(
         const snapshot = createSnapshot(state);
 
         set({
-          nodes: state.nodes.map((node) =>
-            node.id === nodeId ? { ...node, ...updates } : node,
-          ),
+          nodes: state.nodes.map((node) => (node.id === nodeId ? { ...node, ...updates } : node)),
           past: [...state.past, snapshot],
           future: [],
           isDirty: true,
@@ -200,9 +192,7 @@ export const useCanvasStore = create<CanvasStore>()(
 
         set({
           nodes: state.nodes.filter((node) => node.id !== nodeId),
-          edges: state.edges.filter(
-            (edge) => edge.source !== nodeId && edge.target !== nodeId,
-          ),
+          edges: state.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
           selectedNodes: state.selectedNodes.filter((id) => id !== nodeId),
           past: [...state.past, snapshot],
           future: [],
@@ -218,8 +208,7 @@ export const useCanvasStore = create<CanvasStore>()(
         set({
           nodes: state.nodes.filter((node) => !nodeIdSet.has(node.id)),
           edges: state.edges.filter(
-            (edge) =>
-              !nodeIdSet.has(edge.source) && !nodeIdSet.has(edge.target),
+            (edge) => !nodeIdSet.has(edge.source) && !nodeIdSet.has(edge.target),
           ),
           selectedNodes: state.selectedNodes.filter((id) => !nodeIdSet.has(id)),
           past: [...state.past, snapshot],
@@ -246,9 +235,7 @@ export const useCanvasStore = create<CanvasStore>()(
         const snapshot = createSnapshot(state);
 
         set({
-          edges: state.edges.map((edge) =>
-            edge.id === edgeId ? { ...edge, ...updates } : edge,
-          ),
+          edges: state.edges.map((edge) => (edge.id === edgeId ? { ...edge, ...updates } : edge)),
           past: [...state.past, snapshot],
           future: [],
           isDirty: true,
@@ -366,14 +353,10 @@ export const useCanvasStore = create<CanvasStore>()(
         const state = get();
         const selectedNodeIds = new Set(state.selectedNodes);
 
-        const nodesToCopy = state.nodes.filter((node) =>
-          selectedNodeIds.has(node.id),
-        );
+        const nodesToCopy = state.nodes.filter((node) => selectedNodeIds.has(node.id));
 
         const edgesToCopy = state.edges.filter(
-          (edge) =>
-            selectedNodeIds.has(edge.source) &&
-            selectedNodeIds.has(edge.target),
+          (edge) => selectedNodeIds.has(edge.source) && selectedNodeIds.has(edge.target),
         );
 
         set({
@@ -437,7 +420,7 @@ export const useCanvasStore = create<CanvasStore>()(
         set(initialState);
       },
     }),
-    { name: "CanvasStore" },
+    { name: 'CanvasStore' },
   ),
 );
 
@@ -456,27 +439,27 @@ function createSnapshot(state: CanvasState): CanvasSnapshot {
 
 function getDefaultLabel(type: GridNodeType): string {
   const labels: Record<GridNodeType, string> = {
-    trigger: "Trigger",
-    action: "Action",
-    condition: "Condition",
-    loop: "Loop",
-    ai: "AI",
-    webhook: "Webhook",
-    delay: "Delay",
-    transform: "Transform",
-    filter: "Filter",
-    aggregate: "Aggregate",
-    branch: "Branch",
-    merge: "Merge",
-    api: "API Call",
-    database: "Database",
-    email: "Email",
-    notification: "Notification",
-    integration: "Integration",
-    custom: "Custom",
+    trigger: 'Trigger',
+    action: 'Action',
+    condition: 'Condition',
+    loop: 'Loop',
+    ai: 'AI',
+    webhook: 'Webhook',
+    delay: 'Delay',
+    transform: 'Transform',
+    filter: 'Filter',
+    aggregate: 'Aggregate',
+    branch: 'Branch',
+    merge: 'Merge',
+    api: 'API Call',
+    database: 'Database',
+    email: 'Email',
+    notification: 'Notification',
+    integration: 'Integration',
+    custom: 'Custom',
   };
 
-  return labels[type] || "Node";
+  return labels[type] || 'Node';
 }
 
 // ============================================================================

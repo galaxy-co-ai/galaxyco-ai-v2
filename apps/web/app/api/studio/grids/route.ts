@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@galaxyco/database";
-import { galaxyGrids, gridNodes, gridEdges } from "@galaxyco/database/schema";
-import { eq, and, desc } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { nanoid } from "nanoid";
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@galaxyco/database';
+import { galaxyGrids, gridNodes, gridEdges } from '@galaxyco/database/schema';
+import { eq, and, desc } from 'drizzle-orm';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { nanoid } from 'nanoid';
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/studio/grids
@@ -17,17 +17,14 @@ export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
-      return NextResponse.json(
-        { error: "Workspace ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Workspace ID is required' }, { status: 400 });
     }
 
     const grids = await db
@@ -36,7 +33,7 @@ export async function GET(request: NextRequest) {
       .where(eq(galaxyGrids.workspaceId, workspaceId))
       .orderBy(desc(galaxyGrids.updatedAt));
 
-    logger.info("Fetched grids", {
+    logger.info('Fetched grids', {
       workspaceId,
       userId,
       count: grids.length,
@@ -47,13 +44,13 @@ export async function GET(request: NextRequest) {
       count: grids.length,
     });
   } catch (error) {
-    logger.error("Failed to fetch grids", {
+    logger.error('Failed to fetch grids', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to fetch grids",
+        error: 'Failed to fetch grids',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
@@ -69,17 +66,14 @@ export async function POST(request: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
     const { workspaceId, name, description } = body;
 
     if (!workspaceId || !name) {
-      return NextResponse.json(
-        { error: "Workspace ID and name are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Workspace ID and name are required' }, { status: 400 });
     }
 
     const gridId = nanoid();
@@ -90,7 +84,7 @@ export async function POST(request: NextRequest) {
         workspaceId,
         name,
         description: description || null,
-        status: "draft",
+        status: 'draft',
         version: 1,
         isTemplate: false,
         thumbnailUrl: null,
@@ -100,7 +94,7 @@ export async function POST(request: NextRequest) {
       })
       .returning();
 
-    logger.info("Created new grid", {
+    logger.info('Created new grid', {
       gridId,
       workspaceId,
       userId,
@@ -108,16 +102,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       grid: newGrid,
-      message: "Grid created successfully",
+      message: 'Grid created successfully',
     });
   } catch (error) {
-    logger.error("Failed to create grid", {
+    logger.error('Failed to create grid', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to create grid",
+        error: 'Failed to create grid',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },

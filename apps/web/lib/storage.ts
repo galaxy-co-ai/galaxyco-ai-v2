@@ -1,5 +1,5 @@
-import { put } from "@vercel/blob";
-import { logger } from "@/lib/utils/logger";
+import { put } from '@vercel/blob';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * Storage Helper for Vercel Blob
@@ -16,7 +16,7 @@ export async function uploadFileToBlob(
   try {
     // Upload to Vercel Blob
     const blob = await put(filename, file, {
-      access: "public",
+      access: 'public',
       contentType: options?.contentType,
     });
 
@@ -25,7 +25,7 @@ export async function uploadFileToBlob(
       downloadUrl: blob.downloadUrl || blob.url,
     };
   } catch (error: any) {
-    logger.error("Blob upload failed", {
+    logger.error('Blob upload failed', {
       filename,
       error: error.message,
     });
@@ -39,13 +39,13 @@ export async function uploadFileToBlob(
 export function generateUniqueFilename(originalFilename: string): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  const extension = originalFilename.split(".").pop();
-  const nameWithoutExt = originalFilename.replace(`.${extension}`, "");
+  const extension = originalFilename.split('.').pop();
+  const nameWithoutExt = originalFilename.replace(`.${extension}`, '');
 
   // Sanitize filename
   const sanitized = nameWithoutExt
     .toLowerCase()
-    .replace(/[^a-z0-9]/g, "-")
+    .replace(/[^a-z0-9]/g, '-')
     .substring(0, 50);
 
   return `${sanitized}-${timestamp}-${random}.${extension}`;

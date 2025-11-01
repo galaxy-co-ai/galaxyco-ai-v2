@@ -35,9 +35,7 @@
 
 ```typescript
 // Line 65-71: Real API call
-const agentsRes = await fetch(
-  `/api/agents?workspaceId=${currentWorkspace.id}&limit=5`,
-);
+const agentsRes = await fetch(`/api/agents?workspaceId=${currentWorkspace.id}&limit=5`);
 
 // Line 75-81: Real analytics API
 const salesRes = await fetch(

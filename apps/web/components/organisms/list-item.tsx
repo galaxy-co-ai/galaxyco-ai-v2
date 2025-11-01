@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export interface ListItemAction {
   label: string;
   icon?: React.ReactNode;
   onClick?: () => void;
-  variant?: "default" | "destructive" | "ghost";
+  variant?: 'default' | 'destructive' | 'ghost';
   disabled?: boolean;
 }
 
@@ -21,7 +21,7 @@ export interface ListItemProps {
   avatar?: React.ReactNode;
   badge?: {
     label: string;
-    variant?: "default" | "success" | "warning" | "destructive";
+    variant?: 'default' | 'success' | 'warning' | 'destructive';
   };
   metadata?: Array<{
     label: string;
@@ -56,15 +56,11 @@ export const ListItem: React.FC<ListItemProps> = ({
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium text-foreground truncate">
-                {title}
-              </h3>
+              <h3 className="text-sm font-medium text-foreground truncate">{title}</h3>
               {badge && <Badge variant={badge.variant}>{badge.label}</Badge>}
             </div>
             {description && (
-              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                {description}
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{description}</p>
             )}
           </div>
 
@@ -74,7 +70,7 @@ export const ListItem: React.FC<ListItemProps> = ({
               {actions.map((action, index) => (
                 <Button
                   key={index}
-                  variant={action.variant || "ghost"}
+                  variant={action.variant || 'ghost'}
                   size="sm"
                   onClick={(e) => {
                     e.preventDefault();
@@ -96,13 +92,8 @@ export const ListItem: React.FC<ListItemProps> = ({
         {metadata && metadata.length > 0 && (
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
             {metadata.map((meta, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-1.5 text-xs text-muted-foreground"
-              >
-                {meta.icon && (
-                  <span className="flex-shrink-0">{meta.icon}</span>
-                )}
+              <div key={index} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                {meta.icon && <span className="flex-shrink-0">{meta.icon}</span>}
                 <span className="font-medium">{meta.label}:</span>
                 <span>{meta.value}</span>
               </div>
@@ -114,11 +105,11 @@ export const ListItem: React.FC<ListItemProps> = ({
   );
 
   const baseClasses = cn(
-    "flex items-start gap-3 p-4 rounded-lg border border-border",
-    "bg-card transition-all duration-200",
-    "hover:border-border-hover hover:shadow-sm",
-    isSelected && "border-primary bg-accent",
-    (href || onClick) && "cursor-pointer",
+    'flex items-start gap-3 p-4 rounded-lg border border-border',
+    'bg-card transition-all duration-200',
+    'hover:border-border-hover hover:shadow-sm',
+    isSelected && 'border-primary bg-accent',
+    (href || onClick) && 'cursor-pointer',
     className,
   );
 
@@ -128,7 +119,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         href={href}
         className={cn(
           baseClasses,
-          "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
         )}
         onClick={onClick}
       >
@@ -143,8 +134,8 @@ export const ListItem: React.FC<ListItemProps> = ({
         type="button"
         className={cn(
           baseClasses,
-          "w-full text-left",
-          "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+          'w-full text-left',
+          'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
         )}
         onClick={onClick}
       >
@@ -156,4 +147,4 @@ export const ListItem: React.FC<ListItemProps> = ({
   return <div className={baseClasses}>{content}</div>;
 };
 
-ListItem.displayName = "ListItem";
+ListItem.displayName = 'ListItem';

@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import { useParams } from 'next/navigation';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Play, Zap } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Save, Play, Zap } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 interface AgentMetrics {
   successRate: number;
@@ -43,15 +43,15 @@ interface AgentApiResponse {
 
 export default function AgentEditPage() {
   const params = useParams<{ id: string }>();
-  const id = params?.id || "";
+  const id = params?.id || '';
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [name, setName] = useState("...");
-  const [description, setDescription] = useState("");
-  const [model, setModel] = useState("gpt-4");
-  const [temperature, setTemperature] = useState("0.7");
-  const [systemPrompt, setSystemPrompt] = useState("");
+  const [name, setName] = useState('...');
+  const [description, setDescription] = useState('');
+  const [model, setModel] = useState('gpt-4');
+  const [temperature, setTemperature] = useState('0.7');
+  const [systemPrompt, setSystemPrompt] = useState('');
   const [metrics, setMetrics] = useState<AgentMetrics | null>(null);
 
   useEffect(() => {
@@ -60,17 +60,17 @@ export default function AgentEditPage() {
       try {
         setLoading(true);
         const res = await fetch(`/api/agents/${id}`);
-        if (!res.ok) throw new Error("Failed to load agent");
+        if (!res.ok) throw new Error('Failed to load agent');
         const json: AgentApiResponse = await res.json();
         if (!active) return;
         const a = json.agent;
         setName(a.name);
-        setDescription(a.description || "");
-        setModel(a.config?.model || "gpt-4");
-        setSystemPrompt(a.config?.systemPrompt || "");
+        setDescription(a.description || '');
+        setModel(a.config?.model || 'gpt-4');
+        setSystemPrompt(a.config?.systemPrompt || '');
         setMetrics(a.metrics || null);
       } catch (e) {
-        toast.error("Failed to load agent");
+        toast.error('Failed to load agent');
       } finally {
         if (active) setLoading(false);
       }
@@ -85,8 +85,8 @@ export default function AgentEditPage() {
     try {
       setSaving(true);
       const res = await fetch(`/api/agents/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
           description,
@@ -97,52 +97,47 @@ export default function AgentEditPage() {
           },
         }),
       });
-      if (!res.ok) throw new Error("Failed to save agent");
-      toast.success("Agent configuration saved");
+      if (!res.ok) throw new Error('Failed to save agent');
+      toast.success('Agent configuration saved');
     } catch (e) {
-      toast.error("Failed to save agent");
+      toast.error('Failed to save agent');
     } finally {
       setSaving(false);
     }
   };
 
   const handleTest = () => {
-    toast.info("Test run started");
+    toast.info('Test run started');
   };
 
-  const totalRunsDisplay = useMemo(() => metrics?.totalRuns ?? "—", [metrics]);
+  const totalRunsDisplay = useMemo(() => metrics?.totalRuns ?? '—', [metrics]);
   const successRateDisplay = useMemo(
-    () => (metrics ? `${metrics.successRate.toFixed(1)}%` : "—"),
+    () => (metrics ? `${metrics.successRate.toFixed(1)}%` : '—'),
     [metrics],
   );
   const avgDurationDisplay = useMemo(
-    () => (metrics ? `${(metrics.avgDuration / 1000).toFixed(1)}s` : "—"),
+    () => (metrics ? `${(metrics.avgDuration / 1000).toFixed(1)}s` : '—'),
     [metrics],
   );
 
   return (
     <PageShell
-      title={loading ? "Loading agent..." : `Edit Agent: ${name}`}
+      title={loading ? 'Loading agent...' : `Edit Agent: ${name}`}
       subtitle="Configure agent behavior, model settings, and training data"
       breadcrumbs={[
-        { label: "Agents", href: "/agents" },
-        { label: name || "Agent", href: `/agents/${id}` },
-        { label: "Edit" },
+        { label: 'Agents', href: '/agents' },
+        { label: name || 'Agent', href: `/agents/${id}` },
+        { label: 'Edit' },
       ]}
       actions={
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleTest}
-            disabled={loading}
-          >
+          <Button variant="outline" size="sm" onClick={handleTest} disabled={loading}>
             <Play className="mr-2 h-4 w-4" />
             Test Agent
           </Button>
           <Button size="sm" onClick={handleSave} disabled={loading || saving}>
             <Save className="mr-2 h-4 w-4" />
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
       }
@@ -189,15 +184,9 @@ export default function AgentEditPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="gpt-4">GPT-4</SelectItem>
-                      <SelectItem value="gpt-3.5-turbo">
-                        GPT-3.5 Turbo
-                      </SelectItem>
-                      <SelectItem value="claude-3-opus">
-                        Claude 3 Opus
-                      </SelectItem>
-                      <SelectItem value="claude-3-sonnet">
-                        Claude 3 Sonnet
-                      </SelectItem>
+                      <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
+                      <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
+                      <SelectItem value="claude-3-sonnet">Claude 3 Sonnet</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -206,9 +195,7 @@ export default function AgentEditPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="temperature">
-                    Temperature ({temperature})
-                  </Label>
+                  <Label htmlFor="temperature">Temperature ({temperature})</Label>
                   <input
                     id="temperature"
                     type="range"
@@ -277,8 +264,8 @@ export default function AgentEditPage() {
                 disabled={loading}
               />
               <p className="text-sm text-muted-foreground">
-                Define how the agent should behave and what its goals are. Be
-                specific about the expected input and output format.
+                Define how the agent should behave and what its goals are. Be specific about the
+                expected input and output format.
               </p>
             </div>
           </div>
@@ -292,16 +279,9 @@ export default function AgentEditPage() {
             </p>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="rounded-lg border bg-background-subtle p-4"
-                >
+                <div key={i} className="rounded-lg border bg-background-subtle p-4">
                   <Label>Example {i}</Label>
-                  <Textarea
-                    placeholder="Input → Output example"
-                    rows={3}
-                    className="mt-2"
-                  />
+                  <Textarea placeholder="Input → Output example" rows={3} className="mt-2" />
                 </div>
               ))}
               <Button variant="outline" className="w-full" disabled={loading}>
@@ -314,17 +294,15 @@ export default function AgentEditPage() {
 
         <TabsContent value="tools">
           <div className="rounded-lg border bg-card p-6">
-            <h2 className="text-lg font-semibold mb-4">
-              Available Tools & Actions
-            </h2>
+            <h2 className="text-lg font-semibold mb-4">Available Tools & Actions</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                "Search Web",
-                "Query Database",
-                "Send Email",
-                "Update CRM",
-                "API Call",
-                "File Upload",
+                'Search Web',
+                'Query Database',
+                'Send Email',
+                'Update CRM',
+                'API Call',
+                'File Upload',
               ].map((tool) => (
                 <div
                   key={tool}

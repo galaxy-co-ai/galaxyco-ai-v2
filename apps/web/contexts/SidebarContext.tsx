@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from 'react';
 
 interface SidebarContextType {
   isExpanded: boolean;
@@ -18,7 +18,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 
   // Load pinned state from localStorage on mount
   useEffect(() => {
-    const pinned = localStorage.getItem("main-sidebar-pinned") === "true";
+    const pinned = localStorage.getItem('main-sidebar-pinned') === 'true';
     setIsPinned(pinned);
     setIsExpanded(pinned);
   }, []);
@@ -27,7 +27,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const togglePin = () => {
     const newPinned = !isPinned;
     setIsPinned(newPinned);
-    localStorage.setItem("main-sidebar-pinned", String(newPinned));
+    localStorage.setItem('main-sidebar-pinned', String(newPinned));
     if (newPinned) {
       setIsExpanded(true);
     }
@@ -51,7 +51,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 export function useSidebar() {
   const context = useContext(SidebarContext);
   if (context === undefined) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
+    throw new Error('useSidebar must be used within a SidebarProvider');
   }
   return context;
 }

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Badge component using GalaxyCo.ai Design System tokens
@@ -8,58 +8,44 @@ import { cn } from "@/lib/utils";
  */
 const badgeVariants = cva(
   [
-    "inline-flex items-center rounded-full border font-medium transition-colors duration-fast",
-    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+    'inline-flex items-center rounded-full border font-medium transition-colors duration-fast',
+    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
   ],
   {
     variants: {
       variant: {
         // Default - neutral styling
-        default: ["bg-background-subtle text-foreground border-border"],
+        default: ['bg-background-subtle text-foreground border-border'],
         // Primary - brand color
-        primary: ["bg-primary/10 text-primary border-primary/20"],
+        primary: ['bg-primary/10 text-primary border-primary/20'],
         // Secondary - alternative styling
-        secondary: ["bg-secondary/10 text-secondary border-secondary/20"],
+        secondary: ['bg-secondary/10 text-secondary border-secondary/20'],
         // Success - positive states
-        success: ["bg-success/10 text-success border-success/20"],
+        success: ['bg-success/10 text-success border-success/20'],
         // Warning - attention needed
-        warning: ["bg-warning/10 text-warning border-warning/20"],
+        warning: ['bg-warning/10 text-warning border-warning/20'],
         // Destructive - negative states
-        destructive: [
-          "bg-destructive/10 text-destructive border-destructive/20",
-        ],
+        destructive: ['bg-destructive/10 text-destructive border-destructive/20'],
         // Outline - bordered only
-        outline: [
-          "bg-transparent text-foreground border-border",
-          "hover:bg-background-subtle",
-        ],
+        outline: ['bg-transparent text-foreground border-border', 'hover:bg-background-subtle'],
         // Solid variants for high emphasis
-        "primary-solid": [
-          "bg-primary text-primary-foreground border-primary",
-          "shadow-sm",
-        ],
-        "success-solid": [
-          "bg-success text-success-foreground border-success",
-          "shadow-sm",
-        ],
-        "warning-solid": [
-          "bg-warning text-warning-foreground border-warning",
-          "shadow-sm",
-        ],
-        "destructive-solid": [
-          "bg-destructive text-destructive-foreground border-destructive",
-          "shadow-sm",
+        'primary-solid': ['bg-primary text-primary-foreground border-primary', 'shadow-sm'],
+        'success-solid': ['bg-success text-success-foreground border-success', 'shadow-sm'],
+        'warning-solid': ['bg-warning text-warning-foreground border-warning', 'shadow-sm'],
+        'destructive-solid': [
+          'bg-destructive text-destructive-foreground border-destructive',
+          'shadow-sm',
         ],
       },
       size: {
-        sm: "px-2 py-0.5 text-xs",
-        default: "px-2.5 py-1 text-xs",
-        lg: "px-3 py-1.5 text-sm",
+        sm: 'px-2 py-0.5 text-xs',
+        default: 'px-2.5 py-1 text-xs',
+        lg: 'px-3 py-1.5 text-sm',
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: 'default',
+      size: 'default',
     },
   },
 );
@@ -76,16 +62,9 @@ export interface BadgeProps
 }
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
-  (
-    { className, variant, size, icon, removable, onRemove, children, ...props },
-    ref,
-  ) => {
+  ({ className, variant, size, icon, removable, onRemove, children, ...props }, ref) => {
     return (
-      <div
-        className={cn(badgeVariants({ variant, size }), className)}
-        ref={ref}
-        {...props}
-      >
+      <div className={cn(badgeVariants({ variant, size }), className)} ref={ref} {...props}>
         {icon && <span className="mr-1 h-3 w-3">{icon}</span>}
         {children}
         {removable && (
@@ -115,6 +94,6 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     );
   },
 );
-Badge.displayName = "Badge";
+Badge.displayName = 'Badge';
 
 export { Badge, badgeVariants };

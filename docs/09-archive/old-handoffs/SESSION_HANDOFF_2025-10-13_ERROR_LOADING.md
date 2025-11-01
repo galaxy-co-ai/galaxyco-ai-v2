@@ -483,10 +483,10 @@ export default function DashboardPage() {
 
 ```typescript
 // Before
-const response = await fetch("/api/agents");
+const response = await fetch('/api/agents');
 
 // After
-const response = await apiRequest("/api/agents", {}, workspaceId);
+const response = await apiRequest('/api/agents', {}, workspaceId);
 ```
 
 ---

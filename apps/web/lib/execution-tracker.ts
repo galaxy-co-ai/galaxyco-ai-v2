@@ -1,14 +1,14 @@
-import { db } from "@galaxyco/database";
-import { agentExecutions, agents } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
-import type { ExecuteResult } from "./ai/types";
+import { db } from '@galaxyco/database';
+import { agentExecutions, agents } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
+import type { ExecuteResult } from './ai/types';
 
 export interface StartExecutionParams {
   agentId: string;
   workspaceId: string;
   userId: string;
   input: Record<string, any>;
-  triggerType: "manual" | "webhook" | "schedule" | "event";
+  triggerType: 'manual' | 'webhook' | 'schedule' | 'event';
 }
 
 export interface CompleteExecutionParams {
@@ -26,9 +26,7 @@ export interface FailExecutionParams {
  * Start tracking an agent execution
  * Returns the execution ID
  */
-export async function startExecution(
-  params: StartExecutionParams,
-): Promise<string> {
+export async function startExecution(params: StartExecutionParams): Promise<string> {
   const [execution] = await db
     .insert(agentExecutions)
     .values({
@@ -36,7 +34,7 @@ export async function startExecution(
       agentId: params.agentId,
       triggeredBy: params.userId,
       input: params.input,
-      status: "running",
+      status: 'running',
       startedAt: new Date(),
     })
     .returning({ id: agentExecutions.id });
@@ -47,15 +45,13 @@ export async function startExecution(
 /**
  * Mark execution as completed with results
  */
-export async function completeExecution(
-  params: CompleteExecutionParams,
-): Promise<void> {
+export async function completeExecution(params: CompleteExecutionParams): Promise<void> {
   const completedAt = new Date();
 
   await db
     .update(agentExecutions)
     .set({
-      status: "completed",
+      status: 'completed',
       output: params.output,
       durationMs: params.result.latencyMs,
       tokensUsed: params.result.usage.totalTokens,
@@ -84,13 +80,11 @@ export async function completeExecution(
 /**
  * Mark execution as failed
  */
-export async function failExecution(
-  params: FailExecutionParams,
-): Promise<void> {
+export async function failExecution(params: FailExecutionParams): Promise<void> {
   await db
     .update(agentExecutions)
     .set({
-      status: "failed",
+      status: 'failed',
       error: {
         message: params.error.message,
         code: params.error.name,
@@ -130,17 +124,13 @@ export async function getAgentStats(agentId: string) {
   });
 
   const total = executions.length;
-  const completed = executions.filter((e) => e.status === "completed").length;
-  const failed = executions.filter((e) => e.status === "failed").length;
-  const totalTokens = executions.reduce(
-    (sum, e) => sum + (e.tokensUsed || 0),
-    0,
-  );
+  const completed = executions.filter((e) => e.status === 'completed').length;
+  const failed = executions.filter((e) => e.status === 'failed').length;
+  const totalTokens = executions.reduce((sum, e) => sum + (e.tokensUsed || 0), 0);
   const totalCost = executions.reduce((sum, e) => sum + (e.cost || 0), 0) / 100; // Convert cents to dollars
   const avgDuration =
     executions.length > 0
-      ? executions.reduce((sum, e) => sum + (e.durationMs || 0), 0) /
-        executions.length
+      ? executions.reduce((sum, e) => sum + (e.durationMs || 0), 0) / executions.length
       : 0;
 
   return {

@@ -3,7 +3,7 @@
  * Sentry client-side configuration for Next.js 14+
  */
 
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 export async function onRequestError(err: Error) {
   Sentry.captureException(err);
@@ -17,13 +17,13 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Adjust trace sample rate based on environment
-  tracesSampleRate: process.env.NEXT_PUBLIC_ENV === "production" ? 0.2 : 1.0,
+  tracesSampleRate: process.env.NEXT_PUBLIC_ENV === 'production' ? 0.2 : 1.0,
 
   // Profile 5% of transactions on client (less than server)
   profilesSampleRate: 0.05,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
 
   // Capture Replay for 10% of all sessions
   // plus 100% of sessions with an error
@@ -31,7 +31,7 @@ Sentry.init({
   replaysSessionSampleRate: 0.1,
 
   // Don't report errors in development
-  enabled: process.env.NODE_ENV === "production",
+  enabled: process.env.NODE_ENV === 'production',
 
   environment: process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV,
 
@@ -41,29 +41,29 @@ Sentry.init({
   // Ignore common browser errors
   ignoreErrors: [
     // Browser extensions
-    "top.GLOBALS",
-    "originalCreateNotification",
-    "canvas.contentDocument",
-    "MyApp_RemoveAllHighlights",
-    "http://tt.epicplay.com",
+    'top.GLOBALS',
+    'originalCreateNotification',
+    'canvas.contentDocument',
+    'MyApp_RemoveAllHighlights',
+    'http://tt.epicplay.com',
     "Can't find variable: ZiteReader",
-    "jigsaw is not defined",
-    "ComboSearch is not defined",
-    "atomicFindClose",
-    "fb_xd_fragment",
-    "bmi_SafeAddOnload",
-    "EBCallBackMessageReceived",
-    "conduitPage",
+    'jigsaw is not defined',
+    'ComboSearch is not defined',
+    'atomicFindClose',
+    'fb_xd_fragment',
+    'bmi_SafeAddOnload',
+    'EBCallBackMessageReceived',
+    'conduitPage',
     // Random plugins/extensions
-    "ResizeObserver loop limit exceeded",
-    "ResizeObserver loop completed with undelivered notifications",
+    'ResizeObserver loop limit exceeded',
+    'ResizeObserver loop completed with undelivered notifications',
     // Network errors
-    "NetworkError",
-    "Network request failed",
-    "Failed to fetch",
-    "Load failed",
+    'NetworkError',
+    'Network request failed',
+    'Failed to fetch',
+    'Load failed',
     // Clerk errors (handled gracefully)
-    "Clerk:",
+    'Clerk:',
   ],
 
   // Filter out unwanted events
@@ -78,7 +78,7 @@ Sentry.init({
       const error = hint.originalException;
 
       // Don't send expected validation errors
-      if (error instanceof Error && error.message.includes("Validation")) {
+      if (error instanceof Error && error.message.includes('Validation')) {
         return null;
       }
     }
@@ -90,7 +90,7 @@ Sentry.init({
   beforeSendTransaction(event) {
     event.tags = {
       ...event.tags,
-      runtime: "browser",
+      runtime: 'browser',
     };
 
     return event;
@@ -103,9 +103,7 @@ Sentry.init({
       maskAllText: true,
       blockAllMedia: true,
       // Don't capture network requests with sensitive data
-      networkDetailAllowUrls: [
-        typeof window !== "undefined" ? window.location.origin : "",
-      ],
+      networkDetailAllowUrls: [typeof window !== 'undefined' ? window.location.origin : ''],
       networkCaptureBodies: false,
     }),
     // Browser profiling

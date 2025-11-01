@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useState, useEffect } from 'react';
+import { useSidebar } from '../../contexts/SidebarContext';
 
 interface MainContentProps {
   children: React.ReactNode;
@@ -17,16 +17,16 @@ export default function MainContent({ children }: MainContentProps) {
     };
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return (
     <main
       style={{
-        marginLeft: isMobile ? "0" : isExpanded ? "240px" : "64px", // Responsive space for sidebar
-        paddingTop: "64px", // Space for top bar
-        minHeight: "100vh",
+        marginLeft: isMobile ? '0' : isExpanded ? '240px' : '64px', // Responsive space for sidebar
+        paddingTop: '64px', // Space for top bar
+        minHeight: '100vh',
       }}
       className="main-content-wrapper transition-all duration-300 ease-in-out"
     >

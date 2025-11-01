@@ -1,39 +1,39 @@
-import { Metadata } from "next";
-import { ArrowLeft, Settings, ExternalLink, Check, X } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { Metadata } from 'next';
+import { ArrowLeft, Settings, ExternalLink, Check, X } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 
 export const metadata: Metadata = {
-  title: "Integration Details | GalaxyCo.ai",
-  description: "Configure and manage integration",
+  title: 'Integration Details | GalaxyCo.ai',
+  description: 'Configure and manage integration',
 };
 
 // Mock integration data
 const integration = {
-  id: "salesforce",
-  name: "Salesforce",
-  description: "Sync contacts, leads, and opportunities with Salesforce CRM",
-  category: "CRM",
-  status: "connected",
-  logo: "🔵",
-  website: "https://salesforce.com",
+  id: 'salesforce',
+  name: 'Salesforce',
+  description: 'Sync contacts, leads, and opportunities with Salesforce CRM',
+  category: 'CRM',
+  status: 'connected',
+  logo: '🔵',
+  website: 'https://salesforce.com',
   features: [
-    "Two-way contact sync",
-    "Lead management",
-    "Opportunity tracking",
-    "Custom field mapping",
-    "Real-time updates",
+    'Two-way contact sync',
+    'Lead management',
+    'Opportunity tracking',
+    'Custom field mapping',
+    'Real-time updates',
   ],
-  pricing: "Free",
-  connectedAt: "2025-10-15",
-  lastSync: "2 hours ago",
+  pricing: 'Free',
+  connectedAt: '2025-10-15',
+  lastSync: '2 hours ago',
 };
 
 export default function IntegrationDetailPage() {
-  const isConnected = integration.status === "connected";
+  const isConnected = integration.status === 'connected';
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -67,21 +67,13 @@ export default function IntegrationDetailPage() {
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-2xl font-semibold">{integration.name}</h1>
-                <Badge variant={isConnected ? "default" : "secondary"}>
-                  {integration.status}
-                </Badge>
+                <Badge variant={isConnected ? 'default' : 'secondary'}>{integration.status}</Badge>
               </div>
-              <p className="text-foreground-muted mb-3">
-                {integration.description}
-              </p>
+              <p className="text-foreground-muted mb-3">{integration.description}</p>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-foreground-muted">
-                  Category: {integration.category}
-                </span>
+                <span className="text-foreground-muted">Category: {integration.category}</span>
                 <span className="text-foreground-muted">·</span>
-                <span className="text-foreground-muted">
-                  {integration.pricing}
-                </span>
+                <span className="text-foreground-muted">{integration.pricing}</span>
                 <span className="text-foreground-muted">·</span>
                 <a
                   href={integration.website}
@@ -100,12 +92,9 @@ export default function IntegrationDetailPage() {
             <div className="flex items-center justify-between pt-4 border-t border-border">
               <div>
                 <p className="text-sm text-foreground-muted mb-1">
-                  Connected on{" "}
-                  {new Date(integration.connectedAt).toLocaleDateString()}
+                  Connected on {new Date(integration.connectedAt).toLocaleDateString()}
                 </p>
-                <p className="text-sm text-foreground-muted">
-                  Last synced: {integration.lastSync}
-                </p>
+                <p className="text-sm text-foreground-muted">Last synced: {integration.lastSync}</p>
               </div>
               <Button variant="destructive" size="sm">
                 Disconnect
@@ -150,18 +139,14 @@ export default function IntegrationDetailPage() {
               <div className="flex items-center justify-between py-3 border-b border-border">
                 <div>
                   <p className="font-medium">Two-way sync</p>
-                  <p className="text-sm text-foreground-muted">
-                    Sync changes in both directions
-                  </p>
+                  <p className="text-sm text-foreground-muted">Sync changes in both directions</p>
                 </div>
                 <Switch defaultChecked aria-label="Toggle two-way sync" />
               </div>
               <div className="flex items-center justify-between py-3">
                 <div>
                   <p className="font-medium">Email notifications</p>
-                  <p className="text-sm text-foreground-muted">
-                    Get notified about sync errors
-                  </p>
+                  <p className="text-sm text-foreground-muted">Get notified about sync errors</p>
                 </div>
                 <Switch aria-label="Toggle email notifications" />
               </div>
@@ -176,19 +161,19 @@ export default function IntegrationDetailPage() {
             <div className="space-y-3">
               {[
                 {
-                  time: "2 hours ago",
-                  status: "success",
-                  message: "Synced 45 contacts",
+                  time: '2 hours ago',
+                  status: 'success',
+                  message: 'Synced 45 contacts',
                 },
                 {
-                  time: "1 day ago",
-                  status: "success",
-                  message: "Synced 12 leads",
+                  time: '1 day ago',
+                  status: 'success',
+                  message: 'Synced 12 leads',
                 },
                 {
-                  time: "2 days ago",
-                  status: "error",
-                  message: "Sync failed: API rate limit",
+                  time: '2 days ago',
+                  status: 'error',
+                  message: 'Sync failed: API rate limit',
                 },
               ].map((activity, index) => (
                 <div
@@ -197,16 +182,12 @@ export default function IntegrationDetailPage() {
                 >
                   <div
                     className={`h-2 w-2 rounded-full shrink-0 ${
-                      activity.status === "success"
-                        ? "bg-success"
-                        : "bg-destructive"
+                      activity.status === 'success' ? 'bg-success' : 'bg-destructive'
                     }`}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm">{activity.message}</p>
-                    <p className="text-xs text-foreground-muted">
-                      {activity.time}
-                    </p>
+                    <p className="text-xs text-foreground-muted">{activity.time}</p>
                   </div>
                 </div>
               ))}

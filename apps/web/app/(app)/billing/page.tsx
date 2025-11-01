@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { DetailPage } from "@/components/templates/detail-page";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { DetailPage } from '@/components/templates/detail-page';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   CreditCard,
   Users,
@@ -15,101 +15,101 @@ import {
   Download,
   ExternalLink,
   Plus,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Mock data for billing
 const billingMetrics = [
   {
-    label: "Monthly Spend",
-    value: "$149",
-    change: "Pro Plan",
-    trend: "neutral" as const,
+    label: 'Monthly Spend',
+    value: '$149',
+    change: 'Pro Plan',
+    trend: 'neutral' as const,
     icon: <CreditCard className="h-5 w-5" />,
   },
   {
-    label: "Team Members",
-    value: "8/10",
-    change: "2 seats available",
-    trend: "neutral" as const,
+    label: 'Team Members',
+    value: '8/10',
+    change: '2 seats available',
+    trend: 'neutral' as const,
     icon: <Users className="h-5 w-5" />,
   },
   {
-    label: "AI Credits Used",
-    value: "7,240",
-    change: "2,760 remaining",
-    trend: "neutral" as const,
+    label: 'AI Credits Used',
+    value: '7,240',
+    change: '2,760 remaining',
+    trend: 'neutral' as const,
     icon: <Zap className="h-5 w-5" />,
   },
   {
-    label: "Storage Used",
-    value: "24.3 GB",
-    change: "75.7 GB available",
-    trend: "neutral" as const,
+    label: 'Storage Used',
+    value: '24.3 GB',
+    change: '75.7 GB available',
+    trend: 'neutral' as const,
     icon: <Database className="h-5 w-5" />,
   },
 ];
 
 const currentPlan = {
-  name: "Pro",
+  name: 'Pro',
   price: 149,
-  period: "month",
-  renewalDate: "November 17, 2025",
+  period: 'month',
+  renewalDate: 'November 17, 2025',
   features: [
-    "10 team members",
-    "10,000 AI credits/month",
-    "100 GB storage",
-    "Priority support",
-    "Advanced analytics",
-    "Custom integrations",
-    "API access",
-    "SSO authentication",
+    '10 team members',
+    '10,000 AI credits/month',
+    '100 GB storage',
+    'Priority support',
+    'Advanced analytics',
+    'Custom integrations',
+    'API access',
+    'SSO authentication',
   ],
 };
 
 const plans = [
   {
-    name: "Starter",
+    name: 'Starter',
     price: 29,
-    period: "month",
+    period: 'month',
     features: [
-      "3 team members",
-      "1,000 AI credits/month",
-      "10 GB storage",
-      "Email support",
-      "Basic analytics",
+      '3 team members',
+      '1,000 AI credits/month',
+      '10 GB storage',
+      'Email support',
+      'Basic analytics',
     ],
     popular: false,
   },
   {
-    name: "Pro",
+    name: 'Pro',
     price: 149,
-    period: "month",
+    period: 'month',
     features: [
-      "10 team members",
-      "10,000 AI credits/month",
-      "100 GB storage",
-      "Priority support",
-      "Advanced analytics",
-      "Custom integrations",
-      "API access",
+      '10 team members',
+      '10,000 AI credits/month',
+      '100 GB storage',
+      'Priority support',
+      'Advanced analytics',
+      'Custom integrations',
+      'API access',
     ],
     popular: true,
     current: true,
   },
   {
-    name: "Enterprise",
+    name: 'Enterprise',
     price: 499,
-    period: "month",
+    period: 'month',
     features: [
-      "Unlimited team members",
-      "Unlimited AI credits",
-      "1 TB storage",
-      "24/7 dedicated support",
-      "Enterprise analytics",
-      "Custom integrations",
-      "API access",
-      "SSO authentication",
-      "SLA guarantee",
+      'Unlimited team members',
+      'Unlimited AI credits',
+      '1 TB storage',
+      '24/7 dedicated support',
+      'Enterprise analytics',
+      'Custom integrations',
+      'API access',
+      'SSO authentication',
+      'SLA guarantee',
     ],
     popular: false,
   },
@@ -117,51 +117,51 @@ const plans = [
 
 const paymentMethods = [
   {
-    id: "1",
-    type: "card",
-    brand: "Visa",
-    last4: "4242",
-    expiry: "12/25",
+    id: '1',
+    type: 'card',
+    brand: 'Visa',
+    last4: '4242',
+    expiry: '12/25',
     isDefault: true,
   },
   {
-    id: "2",
-    type: "card",
-    brand: "Mastercard",
-    last4: "8888",
-    expiry: "06/26",
+    id: '2',
+    type: 'card',
+    brand: 'Mastercard',
+    last4: '8888',
+    expiry: '06/26',
     isDefault: false,
   },
 ];
 
 const recentInvoices = [
   {
-    id: "INV-001",
-    date: "October 17, 2025",
-    amount: "$149.00",
-    status: "paid",
-    downloadUrl: "#",
+    id: 'INV-001',
+    date: 'October 17, 2025',
+    amount: '$149.00',
+    status: 'paid',
+    downloadUrl: '#',
   },
   {
-    id: "INV-002",
-    date: "September 17, 2025",
-    amount: "$149.00",
-    status: "paid",
-    downloadUrl: "#",
+    id: 'INV-002',
+    date: 'September 17, 2025',
+    amount: '$149.00',
+    status: 'paid',
+    downloadUrl: '#',
   },
   {
-    id: "INV-003",
-    date: "August 17, 2025",
-    amount: "$149.00",
-    status: "paid",
-    downloadUrl: "#",
+    id: 'INV-003',
+    date: 'August 17, 2025',
+    amount: '$149.00',
+    status: 'paid',
+    downloadUrl: '#',
   },
   {
-    id: "INV-004",
-    date: "July 17, 2025",
-    amount: "$149.00",
-    status: "paid",
-    downloadUrl: "#",
+    id: 'INV-004',
+    date: 'July 17, 2025',
+    amount: '$149.00',
+    status: 'paid',
+    downloadUrl: '#',
   },
 ];
 
@@ -172,12 +172,9 @@ function PlanOverview() {
       <Card className="p-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h3 className="text-lg font-semibold mb-1">
-              Current Plan: {currentPlan.name}
-            </h3>
+            <h3 className="text-lg font-semibold mb-1">Current Plan: {currentPlan.name}</h3>
             <p className="text-sm text-muted-foreground">
-              ${currentPlan.price}/{currentPlan.period} • Renews on{" "}
-              {currentPlan.renewalDate}
+              ${currentPlan.price}/{currentPlan.period} • Renews on {currentPlan.renewalDate}
             </p>
           </div>
           <Badge variant="default">Active</Badge>
@@ -243,10 +240,8 @@ function Plans() {
             <div
               key={plan.name}
               className={`rounded-lg border p-6 ${
-                plan.current
-                  ? "border-primary bg-primary/5"
-                  : "border-border bg-card"
-              } ${plan.popular ? "ring-2 ring-primary" : ""}`}
+                plan.current ? 'border-primary bg-primary/5' : 'border-border bg-card'
+              } ${plan.popular ? 'ring-2 ring-primary' : ''}`}
             >
               {plan.popular && (
                 <Badge className="mb-2" variant="default">
@@ -272,7 +267,7 @@ function Plans() {
                 </Button>
               ) : (
                 <Button className="w-full">
-                  {plan.price > currentPlan.price ? "Upgrade" : "Downgrade"}
+                  {plan.price > currentPlan.price ? 'Upgrade' : 'Downgrade'}
                 </Button>
               )}
             </div>
@@ -309,9 +304,7 @@ function Billing() {
                   <p className="text-sm font-medium">
                     {method.brand} •••• {method.last4}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    Expires {method.expiry}
-                  </p>
+                  <p className="text-xs text-muted-foreground">Expires {method.expiry}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -340,9 +333,7 @@ function Billing() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">{invoice.id}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {invoice.date}
-                  </p>
+                  <p className="text-xs text-muted-foreground">{invoice.date}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -367,18 +358,18 @@ function Billing() {
 export default function BillingPage() {
   const tabs = [
     {
-      id: "overview",
-      label: "Overview",
+      id: 'overview',
+      label: 'Overview',
       content: <PlanOverview />,
     },
     {
-      id: "plans",
-      label: "Plans",
+      id: 'plans',
+      label: 'Plans',
       content: <Plans />,
     },
     {
-      id: "billing",
-      label: "Billing",
+      id: 'billing',
+      label: 'Billing',
       content: <Billing />,
     },
   ];
@@ -387,7 +378,7 @@ export default function BillingPage() {
     <DetailPage
       title="Billing & Subscription"
       subtitle="Manage your plan, payment methods, and invoices"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Billing" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Billing' }]}
       actions={
         <div className="flex gap-2">
           <Button variant="outline">

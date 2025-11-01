@@ -1,18 +1,18 @@
-import { generateText, streamText } from "ai";
+import { generateText, streamText } from 'ai';
 import {
   getModelInstance,
   getProviderFromModel,
   calculateCost,
   DEFAULT_SETTINGS,
   isModelSupported,
-} from "./config";
+} from './config';
 import type {
   AIGatewayRequest,
   AIGatewayResponse,
   AIGatewayStreamResponse,
   AIGatewayLog,
-} from "./types";
-import { logger } from "@/lib/utils/logger";
+} from './types';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * AI Gateway Service
@@ -22,9 +22,7 @@ export class AIGatewayService {
   /**
    * Execute a text generation request
    */
-  static async generateText(
-    request: AIGatewayRequest,
-  ): Promise<AIGatewayResponse> {
+  static async generateText(request: AIGatewayRequest): Promise<AIGatewayResponse> {
     const startTime = Date.now();
     const requestId = this.generateRequestId();
 
@@ -67,8 +65,7 @@ export class AIGatewayService {
         usage: {
           promptTokens,
           completionTokens,
-          totalTokens:
-            result.usage.totalTokens || promptTokens + completionTokens,
+          totalTokens: result.usage.totalTokens || promptTokens + completionTokens,
         },
         latencyMs,
         cost,
@@ -88,8 +85,7 @@ export class AIGatewayService {
         provider,
         promptTokens,
         completionTokens,
-        totalTokens:
-          result.usage.totalTokens || promptTokens + completionTokens,
+        totalTokens: result.usage.totalTokens || promptTokens + completionTokens,
         latencyMs,
         cost,
         success: true,
@@ -125,9 +121,7 @@ export class AIGatewayService {
   /**
    * Execute a streaming text generation request
    */
-  static async generateTextStream(
-    request: AIGatewayRequest,
-  ): Promise<AIGatewayStreamResponse> {
+  static async generateTextStream(request: AIGatewayRequest): Promise<AIGatewayStreamResponse> {
     const startTime = Date.now();
     const requestId = this.generateRequestId();
 
@@ -164,15 +158,9 @@ export class AIGatewayService {
         onFinish: async (finalResult) => {
           const latencyMs = Date.now() - startTime;
           const promptTokens = (finalResult.usage as any).promptTokens || 0;
-          const completionTokens =
-            (finalResult.usage as any).completionTokens || 0;
-          const totalTokens =
-            finalResult.usage.totalTokens || promptTokens + completionTokens;
-          const cost = calculateCost(
-            request.model,
-            promptTokens,
-            completionTokens,
-          );
+          const completionTokens = (finalResult.usage as any).completionTokens || 0;
+          const totalTokens = finalResult.usage.totalTokens || promptTokens + completionTokens;
+          const cost = calculateCost(request.model, promptTokens, completionTokens);
 
           // Log the completed stream
           await this.logRequest({
@@ -224,8 +212,8 @@ export class AIGatewayService {
     try {
       // TODO: Store in database (ai_gateway_logs table)
       // For now, log to console in development
-      if (process.env.NODE_ENV === "development") {
-        logger.info("AI Gateway request completed", {
+      if (process.env.NODE_ENV === 'development') {
+        logger.info('AI Gateway request completed', {
           requestId: log.requestId,
           tenantId: log.tenantId,
           userId: log.userId,
@@ -241,13 +229,13 @@ export class AIGatewayService {
       }
 
       // In production, you could send to external monitoring
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV === 'production') {
         // TODO: Send to monitoring service (e.g., Sentry, DataDog)
         // await sendToMonitoring(log);
       }
     } catch (error) {
       // Don't fail the request if logging fails
-      logger.error("AI Gateway failed to log request", {
+      logger.error('AI Gateway failed to log request', {
         error: error instanceof Error ? error.message : String(error),
         requestId: log.requestId,
       });

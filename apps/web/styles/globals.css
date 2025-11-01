@@ -8,16 +8,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Base layer enhancements */
 @layer base {
   /* CSS Custom Properties for design system tokens */
   :root {
     /* Font families */
-    --font-sans: "Inter", system-ui, "-apple-system", sans-serif;
-    --font-mono: "JetBrains Mono", "Menlo", "Monaco", monospace;
+    --font-sans: 'Inter', system-ui, '-apple-system', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
 
     /* Light mode colors (RGB format for alpha channel support) */
     --background: 255 255 255;
@@ -138,8 +138,8 @@
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+      'rlig' 1,
+      'calt' 1;
     /* Enable smooth transitions for theme switching */
     transition:
       background-color 200ms ease,

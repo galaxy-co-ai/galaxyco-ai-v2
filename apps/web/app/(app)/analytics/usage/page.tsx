@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates";
-import { Card } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import { Zap, FileText, Activity } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { Zap, FileText, Activity } from 'lucide-react';
 
 interface UsageAnalytics {
   agents: { total: number; active: number };
@@ -24,17 +24,15 @@ export default function UsageAnalyticsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/analytics/usage?workspaceId=${currentWorkspace.id}`,
-        );
+        const res = await fetch(`/api/analytics/usage?workspaceId=${currentWorkspace.id}`);
 
-        if (!res.ok) throw new Error("Failed to fetch usage analytics");
+        if (!res.ok) throw new Error('Failed to fetch usage analytics');
 
         const data = await res.json();
         setAnalytics(data.analytics);
       } catch (error) {
-        console.error("Failed to fetch usage analytics:", error);
-        toast.error("Failed to load usage analytics");
+        console.error('Failed to fetch usage analytics:', error);
+        toast.error('Failed to load usage analytics');
       } finally {
         setIsLoading(false);
       }
@@ -57,38 +55,36 @@ export default function UsageAnalyticsPage() {
         title="Platform Usage Analytics"
         subtitle="Agent activity and knowledge base metrics"
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Analytics", href: "/analytics" },
-          { label: "Usage" },
+          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Usage' },
         ]}
       >
-        <div className="text-center text-muted-foreground">
-          No usage data available
-        </div>
+        <div className="text-center text-muted-foreground">No usage data available</div>
       </DetailPage>
     );
   }
 
   const metrics = [
     {
-      label: "Total Agents",
+      label: 'Total Agents',
       value: analytics.agents.total,
       change: `${analytics.agents.active} active`,
-      trend: "up" as const,
+      trend: 'up' as const,
       icon: <Zap className="h-5 w-5" />,
     },
     {
-      label: "Knowledge Items",
+      label: 'Knowledge Items',
       value: analytics.knowledge.total,
       change: `${analytics.knowledge.recent} recent`,
-      trend: "up" as const,
+      trend: 'up' as const,
       icon: <FileText className="h-5 w-5" />,
     },
     {
-      label: "Active Agents",
+      label: 'Active Agents',
       value: analytics.agents.active,
       change: `${Math.round((analytics.agents.active / analytics.agents.total) * 100)}% of total`,
-      trend: "up" as const,
+      trend: 'up' as const,
       icon: <Activity className="h-5 w-5" />,
     },
   ];
@@ -98,9 +94,9 @@ export default function UsageAnalyticsPage() {
       title="Platform Usage Analytics"
       subtitle="Agent activity and knowledge base metrics"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Analytics", href: "/analytics" },
-        { label: "Usage" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Analytics', href: '/analytics' },
+        { label: 'Usage' },
       ]}
       metrics={metrics}
     >
@@ -118,9 +114,7 @@ export default function UsageAnalyticsPage() {
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Active Agents</p>
-                <p className="text-2xl font-bold text-success">
-                  {analytics.agents.active}
-                </p>
+                <p className="text-2xl font-bold text-success">{analytics.agents.active}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Inactive Agents</p>
@@ -139,17 +133,13 @@ export default function UsageAnalyticsPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Total Items</p>
-                <p className="text-2xl font-bold">
-                  {analytics.knowledge.total}
-                </p>
+                <p className="text-2xl font-bold">{analytics.knowledge.total}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
                   Recent (Last {analytics.knowledge.period})
                 </p>
-                <p className="text-2xl font-bold text-primary">
-                  {analytics.knowledge.recent}
-                </p>
+                <p className="text-2xl font-bold text-primary">{analytics.knowledge.recent}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">Older Items</p>
@@ -168,10 +158,7 @@ export default function UsageAnalyticsPage() {
               <div className="mb-2 flex items-center justify-between">
                 <p className="text-sm font-medium">Agent Activation Rate</p>
                 <p className="text-sm font-semibold">
-                  {Math.round(
-                    (analytics.agents.active / analytics.agents.total) * 100,
-                  )}
-                  %
+                  {Math.round((analytics.agents.active / analytics.agents.total) * 100)}%
                 </p>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -188,11 +175,7 @@ export default function UsageAnalyticsPage() {
               <div className="mb-2 flex items-center justify-between">
                 <p className="text-sm font-medium">Recent Knowledge Growth</p>
                 <p className="text-sm font-semibold">
-                  {Math.round(
-                    (analytics.knowledge.recent / analytics.knowledge.total) *
-                      100,
-                  )}
-                  %
+                  {Math.round((analytics.knowledge.recent / analytics.knowledge.total) * 100)}%
                 </p>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-muted">

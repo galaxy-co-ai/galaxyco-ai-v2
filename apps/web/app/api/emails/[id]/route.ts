@@ -1,34 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { updateEmailSchema } from "@/lib/validation/communication";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { updateEmailSchema } from '@/lib/validation/communication';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * GET /api/emails/[id]
  * Get a single email by ID
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const emailId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -38,7 +35,7 @@ export async function GET(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -50,7 +47,7 @@ export async function GET(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -67,13 +64,10 @@ export async function GET(
       email: mockEmail,
     });
   } catch (error) {
-    logger.error("Fetch email error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Fetch email error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
-    return NextResponse.json(
-      { error: "Failed to fetch email" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch email' }, { status: 500 });
   }
 }
 
@@ -81,35 +75,26 @@ export async function GET(
  * PUT /api/emails/[id]
  * Update a email
  */
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.EMAIL_SEND,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.EMAIL_SEND);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
     const emailId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -127,7 +112,7 @@ export async function PUT(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -139,7 +124,7 @@ export async function PUT(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -153,7 +138,7 @@ export async function PUT(
     };
 
     const durationMs = Date.now() - startTime;
-    logger.info("Emails updated successfully", {
+    logger.info('Emails updated successfully', {
       userId: user.id,
       workspaceId,
       emailId,
@@ -166,14 +151,11 @@ export async function PUT(
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Update email error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Update email error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       durationMs,
     });
-    return NextResponse.json(
-      { error: "Failed to update email" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to update email' }, { status: 500 });
   }
 }
 
@@ -181,35 +163,26 @@ export async function PUT(
  * DELETE /api/emails/[id]
  * Delete a email
  */
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.EMAIL_SEND,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.EMAIL_SEND);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
     const emailId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -219,7 +192,7 @@ export async function DELETE(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -231,14 +204,14 @@ export async function DELETE(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
 
     // PLACEHOLDER - Replace with actual soft delete in Phase 2
     const durationMs = Date.now() - startTime;
-    logger.info("Emails deleted successfully", {
+    logger.info('Emails deleted successfully', {
       userId: user.id,
       workspaceId,
       emailId,
@@ -247,17 +220,14 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Emails deleted successfully",
+      message: 'Emails deleted successfully',
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Delete email error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Delete email error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       durationMs,
     });
-    return NextResponse.json(
-      { error: "Failed to delete email" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to delete email' }, { status: 500 });
   }
 }

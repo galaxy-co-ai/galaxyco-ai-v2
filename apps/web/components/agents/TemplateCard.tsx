@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { AgentTemplate } from "@/lib/constants/agent-templates";
+import { AgentTemplate } from '@/lib/constants/agent-templates';
 import {
   colors,
   spacing,
@@ -8,7 +8,7 @@ import {
   shadows,
   typography,
   animation,
-} from "@/lib/constants/design-system";
+} from '@/lib/constants/design-system';
 
 interface TemplateCardProps {
   template: AgentTemplate;
@@ -24,20 +24,20 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
         border: `1px solid ${colors.neutral[200]}`,
         borderRadius: radius.lg,
         padding: spacing.xl,
-        cursor: "pointer",
+        cursor: 'pointer',
         transition: `all ${animation.timing.fast} ${animation.easing.default}`,
         boxShadow: shadows.card,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.transform = 'translateY(-4px)';
         e.currentTarget.style.boxShadow = shadows.cardHover;
-        e.currentTarget.style.borderColor = colors.primary["300"];
+        e.currentTarget.style.borderColor = colors.primary['300'];
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.transform = 'translateY(0)';
         e.currentTarget.style.boxShadow = shadows.card;
         e.currentTarget.style.borderColor = colors.neutral[200];
       }}
@@ -45,13 +45,13 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
       {/* Icon */}
       <div
         style={{
-          fontSize: "3rem",
+          fontSize: '3rem',
           marginBottom: spacing.md,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "72px",
-          height: "72px",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '72px',
+          height: '72px',
           background: colors.primaryLight,
           borderRadius: radius.lg,
         }}
@@ -88,9 +88,9 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
       {/* Tags */}
       <div
         style={{
-          display: "flex",
+          display: 'flex',
           gap: spacing.xs,
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
           marginBottom: spacing.md,
         }}
       >
@@ -114,9 +114,9 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
       {/* Footer */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           paddingTop: spacing.md,
           borderTop: `1px solid ${colors.neutral[200]}`,
         }}
@@ -125,9 +125,9 @@ export function TemplateCard({ template, onSelect }: TemplateCardProps) {
           style={{
             fontSize: typography.fontSize.xs,
             color: colors.neutral[500],
-            textTransform: "uppercase",
+            textTransform: 'uppercase',
             fontWeight: typography.fontWeight.medium,
-            letterSpacing: "0.05em",
+            letterSpacing: '0.05em',
           }}
         >
           {template.category}

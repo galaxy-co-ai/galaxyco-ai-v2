@@ -88,7 +88,7 @@
 
 ```typescript
 const hasKnowledgeBase = agent.config.knowledgeBase?.enabled === true;
-const useToolExecutor = hasKnowledgeBase && aiProvider === "openai";
+const useToolExecutor = hasKnowledgeBase && aiProvider === 'openai';
 ```
 
 **Response Enhanced:**
@@ -312,19 +312,19 @@ POST /api/agents/{agentId}/execute
 
 ```typescript
 // Test the knowledge search tool directly:
-import { createKnowledgeSearchTool } from "@galaxyco/agents-core/tools";
+import { createKnowledgeSearchTool } from '@galaxyco/agents-core/tools';
 
 const tool = createKnowledgeSearchTool();
 const context = {
-  executionId: "test",
-  workspaceId: "your-workspace-id",
-  userId: "your-user-id",
+  executionId: 'test',
+  workspaceId: 'your-workspace-id',
+  userId: 'your-user-id',
   // ...
 };
 
 const result = await tool.execute(
   {
-    query: "test query",
+    query: 'test query',
     limit: 5,
   },
   context,

@@ -127,32 +127,27 @@
       <div className="flex flex-col items-center">
         <div
           className={cn(
-            "w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm transition-colors",
+            'w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm transition-colors',
             index < currentStep
-              ? "bg-success text-success-foreground"
+              ? 'bg-success text-success-foreground'
               : index === currentStep
-                ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
-                : "bg-background-subtle text-foreground-muted border-2 border-border",
+                ? 'bg-primary text-primary-foreground ring-4 ring-primary/20'
+                : 'bg-background-subtle text-foreground-muted border-2 border-border',
           )}
         >
           {index < currentStep ? <Check className="w-5 h-5" /> : index + 1}
         </div>
         <span
           className={cn(
-            "mt-2 text-xs font-medium",
-            index <= currentStep ? "text-foreground" : "text-foreground-muted",
+            'mt-2 text-xs font-medium',
+            index <= currentStep ? 'text-foreground' : 'text-foreground-muted',
           )}
         >
           {step.label}
         </span>
       </div>
       {index < steps.length - 1 && (
-        <div
-          className={cn(
-            "h-0.5 w-24 mx-2",
-            index < currentStep ? "bg-success" : "bg-border",
-          )}
-        />
+        <div className={cn('h-0.5 w-24 mx-2', index < currentStep ? 'bg-success' : 'bg-border')} />
       )}
     </React.Fragment>
   ))}
@@ -175,9 +170,7 @@
 <div className="max-w-2xl mx-auto">
   <div className="bg-background-elevated border border-border rounded-lg p-8">
     <div className="flex items-center justify-between mb-6">
-      <h2 className="text-2xl font-semibold text-foreground">
-        Basic Information
-      </h2>
+      <h2 className="text-2xl font-semibold text-foreground">Basic Information</h2>
       <div className="flex items-center gap-2 text-sm text-foreground-muted">
         <Check className="w-4 h-4 text-success" />
         <span>Auto-saved 2 minutes ago</span>
@@ -204,10 +197,7 @@
 
 ```jsx
 <div>
-  <label
-    htmlFor="agentName"
-    className="block text-sm font-medium text-foreground mb-2"
-  >
+  <label htmlFor="agentName" className="block text-sm font-medium text-foreground mb-2">
     Agent Name <span className="text-destructive">*</span>
   </label>
   <input
@@ -217,12 +207,10 @@
     value={formData.name}
     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
     className={cn(
-      "w-full px-4 py-2.5 rounded-lg border bg-background-subtle transition-colors",
-      "focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary",
-      "placeholder:text-foreground-subtle",
-      errors.name
-        ? "border-destructive focus:ring-destructive"
-        : "border-border",
+      'w-full px-4 py-2.5 rounded-lg border bg-background-subtle transition-colors',
+      'focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary',
+      'placeholder:text-foreground-subtle',
+      errors.name ? 'border-destructive focus:ring-destructive' : 'border-border',
     )}
     placeholder="Enter agent name"
   />
@@ -248,10 +236,7 @@
 
 ```jsx
 <div>
-  <label
-    htmlFor="description"
-    className="block text-sm font-medium text-foreground mb-2"
-  >
+  <label htmlFor="description" className="block text-sm font-medium text-foreground mb-2">
     Description
   </label>
   <textarea
@@ -292,10 +277,7 @@
                    bg-primary/10 text-primary text-sm border border-primary/20"
       >
         {tag}
-        <button
-          onClick={() => removeTag(tag)}
-          className="hover:text-primary-hover"
-        >
+        <button onClick={() => removeTag(tag)} className="hover:text-primary-hover">
           <X className="w-3 h-3" />
         </button>
       </span>
@@ -328,8 +310,7 @@
   <div>
     <p className="text-sm font-medium text-foreground mb-1">Pro Tip</p>
     <p className="text-sm text-foreground-muted">
-      Use descriptive names to help your team find agents quickly. You can
-      always change this later.
+      Use descriptive names to help your team find agents quickly. You can always change this later.
     </p>
   </div>
 </div>
@@ -370,7 +351,7 @@
       className="px-6 py-2 text-sm bg-primary text-primary-foreground rounded-lg
                  hover:bg-primary-hover transition-colors font-medium flex items-center gap-2"
     >
-      {isLastStep ? "Complete" : `Next: ${nextStepName}`}
+      {isLastStep ? 'Complete' : `Next: ${nextStepName}`}
       <ChevronRight className="w-4 h-4" />
     </button>
   </div>
@@ -480,12 +461,8 @@
   <div className="w-full max-w-md">
     <div className="text-center mb-8">
       <Logo className="h-12 mx-auto mb-6" />
-      <h1 className="text-2xl font-bold text-foreground mb-2">
-        Sign in to GalaxyCo
-      </h1>
-      <p className="text-sm text-foreground-muted">
-        Welcome back! Please enter your details
-      </p>
+      <h1 className="text-2xl font-bold text-foreground mb-2">Sign in to GalaxyCo</h1>
+      <p className="text-sm text-foreground-muted">Welcome back! Please enter your details</p>
     </div>
 
     <div className="bg-background-elevated border border-border rounded-lg p-8">
@@ -509,16 +486,13 @@
 
 ```jsx
 <div>
-  <label
-    htmlFor="password"
-    className="block text-sm font-medium text-foreground mb-2"
-  >
+  <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
     Password
   </label>
   <div className="relative">
     <input
       id="password"
-      type={showPassword ? "text" : "password"}
+      type={showPassword ? 'text' : 'password'}
       required
       className="w-full px-4 py-2.5 pr-12 rounded-lg border border-border bg-background-subtle
                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
@@ -529,11 +503,7 @@
       className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground-muted
                  hover:text-foreground transition-colors"
     >
-      {showPassword ? (
-        <EyeOff className="w-5 h-5" />
-      ) : (
-        <Eye className="w-5 h-5" />
-      )}
+      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
     </button>
   </div>
 </div>
@@ -622,7 +592,7 @@
 
 ```jsx
 <p className="mt-6 text-center text-sm text-foreground-muted">
-  Don't have an account?{" "}
+  Don't have an account?{' '}
   <Link
     to="/signup"
     className="text-primary hover:text-primary-hover font-medium transition-colors"
@@ -677,13 +647,11 @@
     <div className="text-6xl mb-6">😕</div>
 
     <h1 className="text-6xl font-bold text-foreground mb-2">404</h1>
-    <h2 className="text-2xl font-semibold text-foreground mb-4">
-      Page Not Found
-    </h2>
+    <h2 className="text-2xl font-semibold text-foreground mb-4">Page Not Found</h2>
 
     <p className="text-foreground-muted mb-8 leading-relaxed">
-      The page you're looking for doesn't exist or has been moved. Please check
-      the URL or return to the dashboard.
+      The page you're looking for doesn't exist or has been moved. Please check the URL or return to
+      the dashboard.
     </p>
 
     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -847,8 +815,8 @@
     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
   </div>
   <p className="text-sm text-foreground-muted">
-    <span className="font-medium text-foreground">{resultCount} results</span>{" "}
-    found in {searchTime}s
+    <span className="font-medium text-foreground">{resultCount} results</span> found in {searchTime}
+    s
   </p>
 </div>
 ```
@@ -999,28 +967,21 @@
 ```jsx
 <div
   className={cn(
-    "p-4 rounded-lg border transition-colors cursor-pointer",
+    'p-4 rounded-lg border transition-colors cursor-pointer',
     notification.read
-      ? "bg-background-elevated border-border hover:border-border-hover"
-      : "bg-primary/5 border-primary/20 hover:border-primary/30",
+      ? 'bg-background-elevated border-border hover:border-border-hover'
+      : 'bg-primary/5 border-primary/20 hover:border-primary/30',
   )}
   onClick={() => handleNotificationClick(notification.id)}
 >
   <div className="flex items-start gap-3">
     <div
-      className={cn(
-        "w-2 h-2 rounded-full mt-2 flex-shrink-0",
-        !notification.read && "bg-primary",
-      )}
+      className={cn('w-2 h-2 rounded-full mt-2 flex-shrink-0', !notification.read && 'bg-primary')}
     />
     <div className="flex-1 min-w-0">
       <h4 className="font-medium text-foreground mb-1">{notification.title}</h4>
-      <p className="text-sm text-foreground-muted mb-2">
-        {notification.message}
-      </p>
-      <span className="text-xs text-foreground-subtle">
-        {formatTime(notification.createdAt)}
-      </span>
+      <p className="text-sm text-foreground-muted mb-2">{notification.message}</p>
+      <span className="text-xs text-foreground-subtle">{formatTime(notification.createdAt)}</span>
     </div>
     <button className="text-foreground-muted hover:text-foreground">
       <X className="w-4 h-4" />

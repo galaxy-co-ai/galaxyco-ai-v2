@@ -12,7 +12,7 @@ import {
   animation as importedAnimation,
   breakpoints as importedBreakpoints,
   zIndex as importedZIndex,
-} from "./constants/design-system";
+} from './constants/design-system';
 
 // Export with COLORS/SPACING naming convention for components
 export const COLORS = {
@@ -56,9 +56,9 @@ export const SPACING = {
   md: importedSpacing.md,
   lg: importedSpacing.lg,
   xl: importedSpacing.xl,
-  xxl: importedSpacing["2xl"],
-  xxxl: importedSpacing["3xl"],
-  xxxxl: importedSpacing["4xl"],
+  xxl: importedSpacing['2xl'],
+  xxxl: importedSpacing['3xl'],
+  xxxxl: importedSpacing['4xl'],
 
   // Radius for border-radius
   radius: {

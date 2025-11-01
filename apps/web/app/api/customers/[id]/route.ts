@@ -1,36 +1,33 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { updateCustomerSchema } from "@/lib/validation/crm";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { updateCustomerSchema } from '@/lib/validation/crm';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * GET /api/customers/[id]
  * Get a single customer by ID
  */
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized customer fetch attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized customer fetch attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const customerId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -41,7 +38,7 @@ export async function GET(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 3. Verify workspace membership
@@ -54,7 +51,7 @@ export async function GET(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -64,19 +61,19 @@ export async function GET(
     const mockCustomer = {
       id: customerId,
       workspaceId,
-      name: "Acme Corporation",
-      email: "contact@acme.com",
-      phone: "+1-555-0100",
-      website: "https://acme.com",
-      status: "active",
-      industry: "Technology",
-      size: "51-200",
+      name: 'Acme Corporation',
+      email: 'contact@acme.com',
+      phone: '+1-555-0100',
+      website: 'https://acme.com',
+      status: 'active',
+      industry: 'Technology',
+      size: '51-200',
       address: {
-        street: "123 Main St",
-        city: "San Francisco",
-        state: "CA",
-        zip: "94105",
-        country: "USA",
+        street: '123 Main St',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94105',
+        country: 'USA',
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -86,14 +83,11 @@ export async function GET(
       customer: mockCustomer,
     });
   } catch (error) {
-    logger.error("Fetch customer error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Fetch customer error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    return NextResponse.json(
-      { error: "Failed to fetch customer" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to fetch customer' }, { status: 500 });
   }
 }
 
@@ -101,32 +95,26 @@ export async function GET(
  * PUT /api/customers/[id]
  * Update a customer
  */
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized customer update attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized customer update attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.CRM_CREATE,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CRM_CREATE);
     if (!rateLimitResult.success) {
-      logger.warn("Customer update rate limit exceeded", {
+      logger.warn('Customer update rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
         },
         { status: 429 },
@@ -135,11 +123,11 @@ export async function PUT(
 
     const customerId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -150,7 +138,7 @@ export async function PUT(
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid customer update request", {
+      logger.warn('Invalid customer update request', {
         errors: formattedError.errors,
       });
       return NextResponse.json(formattedError, { status: 400 });
@@ -162,7 +150,7 @@ export async function PUT(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 5. Verify workspace membership
@@ -175,7 +163,7 @@ export async function PUT(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -191,7 +179,7 @@ export async function PUT(
 
     const durationMs = Date.now() - startTime;
 
-    logger.info("Customer updated successfully", {
+    logger.info('Customer updated successfully', {
       userId: user.id,
       workspaceId,
       customerId,
@@ -204,15 +192,15 @@ export async function PUT(
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Update customer error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Update customer error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to update customer",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update customer',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -223,38 +211,29 @@ export async function PUT(
  * DELETE /api/customers/[id]
  * Soft delete a customer
  */
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const startTime = Date.now();
   try {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized customer delete attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized customer delete attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.CRM_CREATE,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.CRM_CREATE);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
     const customerId = params.id;
     const searchParams = req.nextUrl.searchParams;
-    const workspaceId = searchParams.get("workspaceId");
+    const workspaceId = searchParams.get('workspaceId');
 
     if (!workspaceId) {
       return NextResponse.json(
-        { error: "Missing required query param: workspaceId" },
+        { error: 'Missing required query param: workspaceId' },
         { status: 400 },
       );
     }
@@ -265,7 +244,7 @@ export async function DELETE(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 4. Verify workspace membership
@@ -278,7 +257,7 @@ export async function DELETE(
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -287,7 +266,7 @@ export async function DELETE(
     // TODO: Replace with actual soft delete in Phase 2
     const durationMs = Date.now() - startTime;
 
-    logger.info("Customer deleted successfully", {
+    logger.info('Customer deleted successfully', {
       userId: user.id,
       workspaceId,
       customerId,
@@ -296,19 +275,19 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Customer deleted successfully",
+      message: 'Customer deleted successfully',
     });
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Delete customer error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Delete customer error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to delete customer",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to delete customer',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

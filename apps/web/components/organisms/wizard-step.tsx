@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Check, ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export interface WizardStepConfig {
   id: string;
@@ -39,9 +39,9 @@ export const WizardStep: React.FC<WizardStepProps> = ({
   onNext,
   onPrev,
   onComplete,
-  nextLabel = "Next",
-  prevLabel = "Back",
-  completeLabel = "Complete",
+  nextLabel = 'Next',
+  prevLabel = 'Back',
+  completeLabel = 'Complete',
   isNextDisabled,
   isLoading,
   showStepNumbers = true,
@@ -68,7 +68,7 @@ export const WizardStep: React.FC<WizardStepProps> = ({
   };
 
   return (
-    <div className={cn("space-y-8", className)}>
+    <div className={cn('space-y-8', className)}>
       {/* Progress Stepper */}
       <nav aria-label="Progress">
         <ol className="flex items-center justify-between">
@@ -80,18 +80,15 @@ export const WizardStep: React.FC<WizardStepProps> = ({
             return (
               <li
                 key={step.id}
-                className={cn(
-                  "relative flex-1",
-                  index < steps.length - 1 && "pr-8 sm:pr-16",
-                )}
+                className={cn('relative flex-1', index < steps.length - 1 && 'pr-8 sm:pr-16')}
               >
                 {/* Connection Line */}
                 {index < steps.length - 1 && (
                   <div className="absolute top-5 right-0 left-1/2 -z-10 h-0.5 bg-border">
                     <div
                       className={cn(
-                        "h-full bg-primary transition-all duration-500",
-                        isCompleted ? "w-full" : "w-0",
+                        'h-full bg-primary transition-all duration-500',
+                        isCompleted ? 'w-full' : 'w-0',
                       )}
                     />
                   </div>
@@ -103,26 +100,24 @@ export const WizardStep: React.FC<WizardStepProps> = ({
                   onClick={() => handleStepClick(index)}
                   disabled={!isClickable}
                   className={cn(
-                    "group relative flex flex-col items-center",
-                    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg",
-                    isClickable && "cursor-pointer",
+                    'group relative flex flex-col items-center',
+                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg',
+                    isClickable && 'cursor-pointer',
                   )}
-                  aria-current={isActive ? "step" : undefined}
+                  aria-current={isActive ? 'step' : undefined}
                 >
                   {/* Icon/Number Circle */}
                   <div
                     className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200",
-                      isActive &&
-                        "border-primary bg-primary text-primary-foreground scale-110",
-                      isCompleted &&
-                        "border-primary bg-primary text-primary-foreground",
+                      'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200',
+                      isActive && 'border-primary bg-primary text-primary-foreground scale-110',
+                      isCompleted && 'border-primary bg-primary text-primary-foreground',
                       !isActive &&
                         !isCompleted &&
-                        "border-border bg-background text-muted-foreground",
+                        'border-border bg-background text-muted-foreground',
                       isClickable &&
                         !isActive &&
-                        "group-hover:border-primary group-hover:bg-accent",
+                        'group-hover:border-primary group-hover:bg-accent',
                     )}
                   >
                     {isCompleted ? (
@@ -138,17 +133,15 @@ export const WizardStep: React.FC<WizardStepProps> = ({
                   <div className="mt-2 text-center">
                     <span
                       className={cn(
-                        "block text-xs sm:text-sm font-medium transition-colors",
-                        isActive && "text-foreground",
-                        isCompleted && "text-foreground",
-                        !isActive && !isCompleted && "text-muted-foreground",
+                        'block text-xs sm:text-sm font-medium transition-colors',
+                        isActive && 'text-foreground',
+                        isCompleted && 'text-foreground',
+                        !isActive && !isCompleted && 'text-muted-foreground',
                       )}
                     >
                       {step.label}
                       {step.optional && (
-                        <span className="ml-1 text-xs text-muted-foreground">
-                          (optional)
-                        </span>
+                        <span className="ml-1 text-xs text-muted-foreground">(optional)</span>
                       )}
                     </span>
                     {step.description && (
@@ -169,13 +162,9 @@ export const WizardStep: React.FC<WizardStepProps> = ({
         {/* Step Header */}
         {currentStepConfig && (
           <div className="mb-6 border-b border-border pb-4">
-            <h2 className="text-xl font-semibold text-foreground">
-              {currentStepConfig.label}
-            </h2>
+            <h2 className="text-xl font-semibold text-foreground">{currentStepConfig.label}</h2>
             {currentStepConfig.description && (
-              <p className="mt-1 text-sm text-muted-foreground">
-                {currentStepConfig.description}
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">{currentStepConfig.description}</p>
             )}
           </div>
         )}
@@ -215,4 +204,4 @@ export const WizardStep: React.FC<WizardStepProps> = ({
   );
 };
 
-WizardStep.displayName = "WizardStep";
+WizardStep.displayName = 'WizardStep';

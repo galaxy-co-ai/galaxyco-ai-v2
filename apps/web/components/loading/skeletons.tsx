@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 /**
  * Loading Skeleton Components
@@ -95,9 +95,7 @@ export function TableRowSkeleton({
   className?: string;
 }) {
   return (
-    <div
-      className={`grid grid-cols-${columns} gap-4 p-4 border-b ${className}`}
-    >
+    <div className={`grid grid-cols-${columns} gap-4 p-4 border-b ${className}`}>
       {Array.from({ length: columns }).map((_, index) => (
         <Skeleton key={index} className="h-4 w-full" />
       ))}

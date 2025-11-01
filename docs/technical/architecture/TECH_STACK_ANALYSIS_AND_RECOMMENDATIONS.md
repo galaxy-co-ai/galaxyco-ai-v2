@@ -496,12 +496,12 @@ Output: Structured CRM update
 
 ```typescript
 // trigger/lead-intel-agent.ts
-import { task } from "@trigger.dev/sdk/v3";
-import OpenAI from "openai";
-import * as cheerio from "cheerio";
+import { task } from '@trigger.dev/sdk/v3';
+import OpenAI from 'openai';
+import * as cheerio from 'cheerio';
 
 export const enrichLead = task({
-  id: "enrich-lead",
+  id: 'enrich-lead',
   run: async (payload: { linkedinUrl: string; companyDomain: string }) => {
     // 1. Scrape company website
     const companyInfo = await scrapeWebsite(payload.companyDomain);
@@ -515,15 +515,15 @@ export const enrichLead = task({
     // 4. Generate AI summary
     const openai = new OpenAI();
     const summary = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
+          role: 'system',
           content:
-            "You are a sales research assistant. Analyze this lead data and create a profile.",
+            'You are a sales research assistant. Analyze this lead data and create a profile.',
         },
         {
-          role: "user",
+          role: 'user',
           content: JSON.stringify({ companyInfo, recentNews, icpMatch }),
         },
       ],
@@ -553,34 +553,27 @@ export const enrichLead = task({
 
 ```typescript
 // trigger/outreach-writer-agent.ts
-import { task } from "@trigger.dev/sdk/v3";
-import OpenAI from "openai";
-import { Resend } from "resend";
+import { task } from '@trigger.dev/sdk/v3';
+import OpenAI from 'openai';
+import { Resend } from 'resend';
 
 export const generateOutreach = task({
-  id: "generate-outreach",
-  run: async (payload: {
-    leadProfile: any;
-    productDescription: string;
-    userEmail: string;
-  }) => {
+  id: 'generate-outreach',
+  run: async (payload: { leadProfile: any; productDescription: string; userEmail: string }) => {
     // 1. Query knowledge base for relevant case studies
-    const caseStudies = await findRelevantCaseStudies(
-      payload.leadProfile.industry,
-    );
+    const caseStudies = await findRelevantCaseStudies(payload.leadProfile.industry);
 
     // 2. Generate personalized email
     const openai = new OpenAI();
     const email = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
-          content:
-            "Generate a personalized cold email. 150-200 words. Professional tone.",
+          role: 'system',
+          content: 'Generate a personalized cold email. 150-200 words. Professional tone.',
         },
         {
-          role: "user",
+          role: 'user',
           content: JSON.stringify({
             lead: payload.leadProfile,
             product: payload.productDescription,
@@ -613,38 +606,38 @@ export const generateOutreach = task({
 
 ```typescript
 // trigger/crm-sync-agent.ts
-import { task } from "@trigger.dev/sdk/v3";
-import OpenAI from "openai";
+import { task } from '@trigger.dev/sdk/v3';
+import OpenAI from 'openai';
 
 export const syncCRM = task({
-  id: "sync-crm",
+  id: 'sync-crm',
   run: async (payload: { emailThread?: string; meetingNotes?: string }) => {
     // Use structured output to extract CRM fields
     const openai = new OpenAI();
     const extraction = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
-          content: "Extract CRM-relevant information from this conversation.",
+          role: 'system',
+          content: 'Extract CRM-relevant information from this conversation.',
         },
         {
-          role: "user",
-          content: payload.emailThread || payload.meetingNotes || "",
+          role: 'user',
+          content: payload.emailThread || payload.meetingNotes || '',
         },
       ],
       response_format: {
-        type: "json_schema",
+        type: 'json_schema',
         json_schema: {
-          name: "crm_update",
+          name: 'crm_update',
           schema: {
-            type: "object",
+            type: 'object',
             properties: {
-              nextSteps: { type: "array", items: { type: "string" } },
-              painPoints: { type: "array", items: { type: "string" } },
-              timeline: { type: "string" },
-              competitors: { type: "array", items: { type: "string" } },
-              dealStage: { type: "string" },
+              nextSteps: { type: 'array', items: { type: 'string' } },
+              painPoints: { type: 'array', items: { type: 'string' } },
+              timeline: { type: 'string' },
+              competitors: { type: 'array', items: { type: 'string' } },
+              dealStage: { type: 'string' },
             },
           },
         },

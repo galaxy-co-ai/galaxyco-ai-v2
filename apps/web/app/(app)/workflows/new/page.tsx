@@ -1,13 +1,13 @@
-import { Metadata } from "next";
-import { Save, Play, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
+import { Metadata } from 'next';
+import { Save, Play, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 
 export const metadata: Metadata = {
-  title: "New Workflow | GalaxyCo.ai",
-  description: "Create a new automation workflow",
+  title: 'New Workflow | GalaxyCo.ai',
+  description: 'Create a new automation workflow',
 };
 
 export default function NewWorkflowPage() {
@@ -25,9 +25,7 @@ export default function NewWorkflowPage() {
             </Button>
             <div>
               <h1 className="text-xl font-semibold">New Workflow</h1>
-              <p className="text-sm text-foreground-muted">
-                Create an automated workflow
-              </p>
+              <p className="text-sm text-foreground-muted">Create an automated workflow</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -49,18 +47,11 @@ export default function NewWorkflowPage() {
           <h2 className="text-lg font-semibold mb-4">Workflow Details</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Workflow Name
-              </label>
-              <Input
-                placeholder="e.g., Lead Nurturing Campaign"
-                defaultValue=""
-              />
+              <label className="block text-sm font-medium mb-2">Workflow Name</label>
+              <Input placeholder="e.g., Lead Nurturing Campaign" defaultValue="" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Description
-              </label>
+              <label className="block text-sm font-medium mb-2">Description</label>
               <textarea
                 className="w-full min-h-[100px] px-3 py-2 border border-border rounded-md bg-background resize-none"
                 placeholder="Describe what this workflow does..."
@@ -106,9 +97,7 @@ export default function NewWorkflowPage() {
                       Required
                     </span>
                   </div>
-                  <p className="text-sm text-foreground-muted mb-3">
-                    This workflow starts when...
-                  </p>
+                  <p className="text-sm text-foreground-muted mb-3">This workflow starts when...</p>
                   <select className="w-full h-9 px-3 border border-border rounded-md bg-background text-sm">
                     <option>New Contact Added</option>
                     <option>Email Opened</option>
@@ -129,8 +118,7 @@ export default function NewWorkflowPage() {
               <div className="flex-1 pb-6">
                 <div className="p-4 border-2 border-dashed border-border rounded-lg bg-background-subtle/50">
                   <p className="text-sm text-foreground-muted text-center">
-                    Click &quot;Add Step&quot; to continue building your
-                    workflow
+                    Click &quot;Add Step&quot; to continue building your workflow
                   </p>
                 </div>
               </div>
@@ -157,15 +145,15 @@ export default function NewWorkflowPage() {
           <h2 className="text-lg font-semibold mb-4">Available Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
-              "Send Email",
-              "Add Tag",
-              "Update Field",
-              "Create Task",
-              "Send Webhook",
-              "Wait/Delay",
-              "If/Then Branch",
-              "Send SMS",
-              "Create Note",
+              'Send Email',
+              'Add Tag',
+              'Update Field',
+              'Create Task',
+              'Send Webhook',
+              'Wait/Delay',
+              'If/Then Branch',
+              'Send SMS',
+              'Create Note',
             ].map((action) => (
               <button
                 key={action}

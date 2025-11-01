@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { DetailPage } from "@/components/templates/detail-page";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { DetailPage } from '@/components/templates/detail-page';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Eye,
   Download,
@@ -19,102 +19,101 @@ import {
   Link2,
   Copy,
   Settings,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Mock document data
 const documentData = {
-  id: "doc_001",
-  name: "Sales Playbook 2024.pdf",
-  type: "pdf",
-  size: "2.4 MB",
-  uploadDate: "2025-10-15T10:30:00Z",
-  modifiedDate: "2025-10-16T14:20:00Z",
+  id: 'doc_001',
+  name: 'Sales Playbook 2024.pdf',
+  type: 'pdf',
+  size: '2.4 MB',
+  uploadDate: '2025-10-15T10:30:00Z',
+  modifiedDate: '2025-10-16T14:20:00Z',
   owner: {
-    name: "Sarah Johnson",
-    avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
-    email: "sarah.johnson@company.com",
+    name: 'Sarah Johnson',
+    avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=SJ',
+    email: 'sarah.johnson@company.com',
   },
-  tags: ["sales", "playbook", "2024"],
+  tags: ['sales', 'playbook', '2024'],
   description:
-    "Complete sales methodology and process documentation for the 2024 fiscal year. Includes objection handling, qualification frameworks, and closing techniques.",
+    'Complete sales methodology and process documentation for the 2024 fiscal year. Includes objection handling, qualification frameworks, and closing techniques.',
   versions: [
     {
-      id: "v3",
-      version: "3.0",
-      uploadDate: "2025-10-16T14:20:00Z",
-      uploader: "Sarah Johnson",
-      size: "2.4 MB",
-      changes:
-        "Added new objection handling section, updated pricing guidelines",
+      id: 'v3',
+      version: '3.0',
+      uploadDate: '2025-10-16T14:20:00Z',
+      uploader: 'Sarah Johnson',
+      size: '2.4 MB',
+      changes: 'Added new objection handling section, updated pricing guidelines',
       isCurrent: true,
     },
     {
-      id: "v2",
-      version: "2.1",
-      uploadDate: "2025-10-12T09:15:00Z",
-      uploader: "Michael Chen",
-      size: "2.1 MB",
-      changes: "Updated competitor analysis section",
+      id: 'v2',
+      version: '2.1',
+      uploadDate: '2025-10-12T09:15:00Z',
+      uploader: 'Michael Chen',
+      size: '2.1 MB',
+      changes: 'Updated competitor analysis section',
       isCurrent: false,
     },
     {
-      id: "v1",
-      version: "2.0",
-      uploadDate: "2025-10-01T16:45:00Z",
-      uploader: "Sarah Johnson",
-      size: "1.8 MB",
-      changes: "Initial Q4 version with new territory assignments",
+      id: 'v1',
+      version: '2.0',
+      uploadDate: '2025-10-01T16:45:00Z',
+      uploader: 'Sarah Johnson',
+      size: '1.8 MB',
+      changes: 'Initial Q4 version with new territory assignments',
       isCurrent: false,
     },
   ],
   permissions: [
     {
-      id: "perm_1",
-      type: "user",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@company.com",
-      role: "Owner",
-      permissions: ["view", "edit", "share", "delete"],
-      avatar: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
+      id: 'perm_1',
+      type: 'user',
+      name: 'Sarah Johnson',
+      email: 'sarah.johnson@company.com',
+      role: 'Owner',
+      permissions: ['view', 'edit', 'share', 'delete'],
+      avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=SJ',
     },
     {
-      id: "perm_2",
-      type: "team",
-      name: "Sales Team",
-      role: "Editor",
-      permissions: ["view", "edit", "comment"],
+      id: 'perm_2',
+      type: 'team',
+      name: 'Sales Team',
+      role: 'Editor',
+      permissions: ['view', 'edit', 'comment'],
       memberCount: 12,
     },
     {
-      id: "perm_3",
-      type: "user",
-      name: "Michael Chen",
-      email: "michael.chen@company.com",
-      role: "Viewer",
-      permissions: ["view", "comment"],
-      avatar: "https://api.dicebear.com/7.x/initials/svg?seed=MC",
+      id: 'perm_3',
+      type: 'user',
+      name: 'Michael Chen',
+      email: 'michael.chen@company.com',
+      role: 'Viewer',
+      permissions: ['view', 'comment'],
+      avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=MC',
     },
   ],
 };
 
 const metrics = [
   {
-    label: "File Size",
+    label: 'File Size',
     value: documentData.size,
     icon: <FileText className="h-5 w-5" />,
   },
   {
-    label: "Created",
+    label: 'Created',
     value: new Date(documentData.uploadDate).toLocaleDateString(),
     icon: <Clock className="h-5 w-5" />,
   },
   {
-    label: "Modified",
+    label: 'Modified',
     value: new Date(documentData.modifiedDate).toLocaleDateString(),
     icon: <Edit className="h-5 w-5" />,
   },
   {
-    label: "Owner",
+    label: 'Owner',
     value: documentData.owner.name,
     icon: <User className="h-5 w-5" />,
   },
@@ -143,9 +142,7 @@ function PreviewTab() {
           <div className="text-center">
             <FileText className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
             <h4 className="mb-2 text-lg font-semibold">PDF Preview</h4>
-            <p className="text-sm text-muted-foreground">
-              Document preview would render here
-            </p>
+            <p className="text-sm text-muted-foreground">Document preview would render here</p>
             <p className="mt-1 text-xs text-muted-foreground">
               (PDF.js or similar viewer integration)
             </p>
@@ -164,11 +161,7 @@ function DetailsTab() {
         <div className="space-y-4">
           <div>
             <Label htmlFor="doc-name">Name</Label>
-            <Input
-              id="doc-name"
-              defaultValue={documentData.name}
-              className="mt-1"
-            />
+            <Input id="doc-name" defaultValue={documentData.name} className="mt-1" />
           </div>
           <div>
             <Label htmlFor="doc-description">Description</Label>
@@ -200,9 +193,7 @@ function DetailsTab() {
         <div className="space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">File Type</span>
-            <span className="font-medium">
-              {documentData.type.toUpperCase()}
-            </span>
+            <span className="font-medium">{documentData.type.toUpperCase()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Size</span>
@@ -227,9 +218,9 @@ function DetailsTab() {
                 src={documentData.owner.avatar}
                 alt={documentData.owner.name}
                 fallback={documentData.owner.name
-                  .split(" ")
+                  .split(' ')
                   .map((n) => n[0])
-                  .join("")}
+                  .join('')}
                 size="sm"
               />
               <span className="font-medium">{documentData.owner.name}</span>
@@ -251,9 +242,7 @@ function HistoryTab() {
             <div
               key={version.id}
               className={`rounded-lg border p-4 ${
-                version.isCurrent
-                  ? "border-primary/50 bg-primary/5"
-                  : "border-border"
+                version.isCurrent ? 'border-primary/50 bg-primary/5' : 'border-border'
               }`}
             >
               <div className="flex items-start justify-between">
@@ -266,9 +255,7 @@ function HistoryTab() {
                       </Badge>
                     )}
                   </div>
-                  <p className="mb-2 text-sm text-muted-foreground">
-                    {version.changes}
-                  </p>
+                  <p className="mb-2 text-sm text-muted-foreground">{version.changes}</p>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <span>Uploaded by {version.uploader}</span>
                     <span>{new Date(version.uploadDate).toLocaleString()}</span>
@@ -329,14 +316,14 @@ function SharingTab() {
               className="flex items-center justify-between rounded-lg border border-border p-4"
             >
               <div className="flex items-center gap-3">
-                {permission.type === "user" ? (
+                {permission.type === 'user' ? (
                   <Avatar
                     src={permission.avatar}
                     alt={permission.name}
                     fallback={permission.name
-                      .split(" ")
+                      .split(' ')
                       .map((n) => n[0])
-                      .join("")}
+                      .join('')}
                     size="sm"
                   />
                 ) : (
@@ -347,7 +334,7 @@ function SharingTab() {
                 <div>
                   <p className="text-sm font-medium">{permission.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {permission.type === "user"
+                    {permission.type === 'user'
                       ? permission.email
                       : `${permission.memberCount} members`}
                   </p>
@@ -373,8 +360,8 @@ export default function DocumentDetailPage() {
       title={documentData.name}
       subtitle={`${documentData.type.toUpperCase()} • ${documentData.size}`}
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Documents", href: "/documents" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Documents', href: '/documents' },
         { label: documentData.name },
       ]}
       actions={
@@ -400,24 +387,24 @@ export default function DocumentDetailPage() {
       metrics={metrics}
       tabs={[
         {
-          id: "preview",
-          label: "Preview",
+          id: 'preview',
+          label: 'Preview',
           content: <PreviewTab />,
         },
         {
-          id: "details",
-          label: "Details",
+          id: 'details',
+          label: 'Details',
           content: <DetailsTab />,
         },
         {
-          id: "history",
-          label: "History",
+          id: 'history',
+          label: 'History',
           badge: documentData.versions.length,
           content: <HistoryTab />,
         },
         {
-          id: "sharing",
-          label: "Sharing",
+          id: 'sharing',
+          label: 'Sharing',
           badge: documentData.permissions.length,
           content: <SharingTab />,
         },

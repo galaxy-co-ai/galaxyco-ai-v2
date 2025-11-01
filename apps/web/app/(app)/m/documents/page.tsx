@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   FileText,
   Image,
@@ -14,13 +14,13 @@ import {
   Search,
   Grid,
   List,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
 interface Document {
   id: string;
   name: string;
-  type: "pdf" | "image" | "doc" | "folder";
+  type: 'pdf' | 'image' | 'doc' | 'folder';
   size: string;
   modified: string;
   shared: boolean;
@@ -28,66 +28,66 @@ interface Document {
 
 const documents: Document[] = [
   {
-    id: "1",
-    name: "Q4 Report",
-    type: "pdf",
-    size: "2.4 MB",
-    modified: "Today",
+    id: '1',
+    name: 'Q4 Report',
+    type: 'pdf',
+    size: '2.4 MB',
+    modified: 'Today',
     shared: true,
   },
   {
-    id: "2",
-    name: "Product Images",
-    type: "folder",
-    size: "12 items",
-    modified: "Yesterday",
+    id: '2',
+    name: 'Product Images',
+    type: 'folder',
+    size: '12 items',
+    modified: 'Yesterday',
     shared: false,
   },
   {
-    id: "3",
-    name: "Proposal Draft",
-    type: "doc",
-    size: "156 KB",
-    modified: "2 days ago",
+    id: '3',
+    name: 'Proposal Draft',
+    type: 'doc',
+    size: '156 KB',
+    modified: '2 days ago',
     shared: true,
   },
   {
-    id: "4",
-    name: "Logo Files",
-    type: "image",
-    size: "845 KB",
-    modified: "3 days ago",
+    id: '4',
+    name: 'Logo Files',
+    type: 'image',
+    size: '845 KB',
+    modified: '3 days ago',
     shared: false,
   },
   {
-    id: "5",
-    name: "Meeting Notes",
-    type: "doc",
-    size: "89 KB",
-    modified: "5 days ago",
+    id: '5',
+    name: 'Meeting Notes',
+    type: 'doc',
+    size: '89 KB',
+    modified: '5 days ago',
     shared: false,
   },
   {
-    id: "6",
-    name: "Contract Template",
-    type: "pdf",
-    size: "1.1 MB",
-    modified: "1 week ago",
+    id: '6',
+    name: 'Contract Template',
+    type: 'pdf',
+    size: '1.1 MB',
+    modified: '1 week ago',
     shared: true,
   },
 ];
 
 const typeConfig = {
-  pdf: { icon: FileText, color: "text-red-500" },
-  doc: { icon: FileText, color: "text-blue-500" },
-  image: { icon: Image, color: "text-purple-500" },
-  folder: { icon: Folder, color: "text-yellow-500" },
+  pdf: { icon: FileText, color: 'text-red-500' },
+  doc: { icon: FileText, color: 'text-blue-500' },
+  image: { icon: Image, color: 'text-purple-500' },
+  folder: { icon: Folder, color: 'text-yellow-500' },
 };
 
 export default function MobileDocumentsPage() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
-  const getIcon = (type: Document["type"]) => {
+  const getIcon = (type: Document['type']) => {
     const Icon = typeConfig[type].icon;
     return <Icon className={`h-5 w-5 ${typeConfig[type].color}`} />;
   };
@@ -100,9 +100,7 @@ export default function MobileDocumentsPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-2xl font-bold">Documents</h1>
-              <p className="text-sm text-muted-foreground">
-                {documents.length} items
-              </p>
+              <p className="text-sm text-muted-foreground">{documents.length} items</p>
             </div>
             <div className="flex gap-2">
               <Button size="sm" variant="outline">
@@ -118,18 +116,18 @@ export default function MobileDocumentsPage() {
           {/* View Toggle */}
           <div className="flex gap-2">
             <Button
-              variant={viewMode === "list" ? "default" : "outline"}
+              variant={viewMode === 'list' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setViewMode("list")}
+              onClick={() => setViewMode('list')}
               className="flex-1"
             >
               <List className="h-4 w-4 mr-1" />
               List
             </Button>
             <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
+              variant={viewMode === 'grid' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setViewMode("grid")}
+              onClick={() => setViewMode('grid')}
               className="flex-1"
             >
               <Grid className="h-4 w-4 mr-1" />
@@ -140,7 +138,7 @@ export default function MobileDocumentsPage() {
       </div>
 
       {/* List View */}
-      {viewMode === "list" && (
+      {viewMode === 'list' && (
         <div className="p-4 space-y-2">
           {documents.map((doc) => (
             <div
@@ -152,10 +150,7 @@ export default function MobileDocumentsPage() {
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-medium truncate">{doc.name}</h3>
                   {doc.shared && (
-                    <Badge
-                      variant="secondary"
-                      className="text-xs px-1.5 py-0.5"
-                    >
+                    <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
                       Shared
                     </Badge>
                   )}
@@ -175,7 +170,7 @@ export default function MobileDocumentsPage() {
       )}
 
       {/* Grid View */}
-      {viewMode === "grid" && (
+      {viewMode === 'grid' && (
         <div className="p-4 grid grid-cols-2 gap-3">
           {documents.map((doc) => (
             <div
@@ -184,9 +179,7 @@ export default function MobileDocumentsPage() {
             >
               <div className="flex flex-col items-center text-center">
                 <div className="mb-3">{getIcon(doc.type)}</div>
-                <h3 className="font-medium text-sm truncate w-full mb-2">
-                  {doc.name}
-                </h3>
+                <h3 className="font-medium text-sm truncate w-full mb-2">{doc.name}</h3>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                   <span>{doc.size}</span>
                   {doc.shared && (

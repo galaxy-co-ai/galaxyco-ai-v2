@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Button component using GalaxyCo.ai Design System tokens
@@ -10,71 +10,68 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva(
   // Base styles using design tokens
   [
-    "inline-flex items-center justify-center gap-2 rounded font-medium",
-    "transition-colors duration-fast",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-    "disabled:pointer-events-none disabled:opacity-50",
-    "whitespace-nowrap",
+    'inline-flex items-center justify-center gap-2 rounded font-medium',
+    'transition-colors duration-fast',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'whitespace-nowrap',
   ],
   {
     variants: {
       variant: {
         // Default - balanced primary action (alias for primary)
         default: [
-          "bg-primary text-primary-foreground",
-          "hover:bg-primary-hover active:bg-primary-active",
-          "shadow",
+          'bg-primary text-primary-foreground',
+          'hover:bg-primary-hover active:bg-primary-active',
+          'shadow',
         ],
         // Primary - main brand actions
         primary: [
-          "bg-primary text-primary-foreground",
-          "hover:bg-primary-hover active:bg-primary-active",
-          "shadow",
+          'bg-primary text-primary-foreground',
+          'hover:bg-primary-hover active:bg-primary-active',
+          'shadow',
         ],
         // Secondary - alternative actions
         secondary: [
-          "bg-secondary text-secondary-foreground",
-          "hover:bg-secondary-hover active:bg-secondary-active",
-          "shadow-sm",
+          'bg-secondary text-secondary-foreground',
+          'hover:bg-secondary-hover active:bg-secondary-active',
+          'shadow-sm',
         ],
         // Destructive - dangerous actions
         destructive: [
-          "bg-destructive text-destructive-foreground",
-          "hover:bg-destructive/90 active:bg-destructive",
-          "shadow-sm",
+          'bg-destructive text-destructive-foreground',
+          'hover:bg-destructive/90 active:bg-destructive',
+          'shadow-sm',
         ],
         // Outline - bordered buttons
         outline: [
-          "border border-border bg-background text-foreground",
-          "hover:bg-hover hover:border-border-hover",
-          "active:bg-active",
+          'border border-border bg-background text-foreground',
+          'hover:bg-hover hover:border-border-hover',
+          'active:bg-active',
         ],
         // Ghost - minimal styling
-        ghost: [
-          "bg-transparent text-foreground",
-          "hover:bg-hover active:bg-active",
-        ],
+        ghost: ['bg-transparent text-foreground', 'hover:bg-hover active:bg-active'],
         // Link - text-only buttons
         link: [
-          "bg-transparent text-primary underline-offset-4",
-          "hover:underline active:text-primary-active",
-          "px-0 shadow-none",
+          'bg-transparent text-primary underline-offset-4',
+          'hover:underline active:text-primary-active',
+          'px-0 shadow-none',
         ],
       },
       size: {
         // Small - compact buttons
-        sm: "px-3 py-1.5 text-sm h-8",
+        sm: 'px-3 py-1.5 text-sm h-8',
         // Default - standard buttons
-        default: "px-4 py-2 text-sm h-10",
+        default: 'px-4 py-2 text-sm h-10',
         // Large - prominent buttons
-        lg: "px-6 py-3 text-base h-12",
+        lg: 'px-6 py-3 text-base h-12',
         // Icon - square buttons for icons
-        icon: "h-10 w-10 p-0",
+        icon: 'h-10 w-10 p-0',
       },
     },
     defaultVariants: {
-      variant: "primary",
-      size: "default",
+      variant: 'primary',
+      size: 'default',
     },
   },
 );
@@ -87,20 +84,8 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      loading,
-      disabled,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = asChild ? Slot : "button";
+  ({ className, variant, size, asChild = false, loading, disabled, children, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
 
     return (
       <Comp
@@ -140,6 +125,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   },
 );
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 export { Button, buttonVariants };

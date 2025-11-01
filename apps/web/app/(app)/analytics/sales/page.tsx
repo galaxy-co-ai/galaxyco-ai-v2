@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { DetailPage } from "@/components/templates";
-import { Card } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
-import { DollarSign, Users, Briefcase, FileText } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { DetailPage } from '@/components/templates';
+import { Card } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
+import { DollarSign, Users, Briefcase, FileText } from 'lucide-react';
 
 interface SalesAnalytics {
   revenue: { total: string; period: string };
@@ -28,17 +28,15 @@ export default function SalesAnalyticsPage() {
 
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/analytics/sales?workspaceId=${currentWorkspace.id}`,
-        );
+        const res = await fetch(`/api/analytics/sales?workspaceId=${currentWorkspace.id}`);
 
-        if (!res.ok) throw new Error("Failed to fetch sales analytics");
+        if (!res.ok) throw new Error('Failed to fetch sales analytics');
 
         const data = await res.json();
         setAnalytics(data.analytics);
       } catch (error) {
-        console.error("Failed to fetch sales analytics:", error);
-        toast.error("Failed to load sales analytics");
+        console.error('Failed to fetch sales analytics:', error);
+        toast.error('Failed to load sales analytics');
       } finally {
         setIsLoading(false);
       }
@@ -61,48 +59,43 @@ export default function SalesAnalyticsPage() {
         title="Sales Analytics"
         subtitle="Revenue, invoices, and customer metrics"
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Analytics", href: "/analytics" },
-          { label: "Sales" },
+          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Sales' },
         ]}
       >
-        <div className="text-center text-muted-foreground">
-          No sales data available
-        </div>
+        <div className="text-center text-muted-foreground">No sales data available</div>
       </DetailPage>
     );
   }
 
   const metrics = [
     {
-      label: "Total Revenue",
+      label: 'Total Revenue',
       value: `$${analytics.revenue.total}`,
       change: analytics.revenue.period,
-      trend: "up" as const,
+      trend: 'up' as const,
       icon: <DollarSign className="h-5 w-5" />,
     },
     {
-      label: "Customers",
+      label: 'Customers',
       value: analytics.customers.total,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <Users className="h-5 w-5" />,
     },
     {
-      label: "Projects",
+      label: 'Projects',
       value: analytics.projects.total,
-      change: "",
-      trend: "neutral" as const,
+      change: '',
+      trend: 'neutral' as const,
       icon: <Briefcase className="h-5 w-5" />,
     },
     {
-      label: "Invoices",
-      value: analytics.invoices.byStatus.reduce(
-        (sum, item) => sum + item.count,
-        0,
-      ),
-      change: "",
-      trend: "neutral" as const,
+      label: 'Invoices',
+      value: analytics.invoices.byStatus.reduce((sum, item) => sum + item.count, 0),
+      change: '',
+      trend: 'neutral' as const,
       icon: <FileText className="h-5 w-5" />,
     },
   ];
@@ -112,9 +105,9 @@ export default function SalesAnalyticsPage() {
       title="Sales Analytics"
       subtitle="Revenue, invoices, and customer metrics"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Analytics", href: "/analytics" },
-        { label: "Sales" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Analytics', href: '/analytics' },
+        { label: 'Sales' },
       ]}
       metrics={metrics}
     >
@@ -130,7 +123,7 @@ export default function SalesAnalyticsPage() {
                 <div>
                   <p className="font-medium capitalize">{item.status}</p>
                   <p className="text-sm text-muted-foreground">
-                    {item.count} {item.count === 1 ? "invoice" : "invoices"}
+                    {item.count} {item.count === 1 ? 'invoice' : 'invoices'}
                   </p>
                 </div>
                 <p className="text-lg font-semibold">${item.total}</p>
@@ -146,9 +139,7 @@ export default function SalesAnalyticsPage() {
               <h3 className="text-lg font-semibold">Customers</h3>
             </div>
             <p className="text-3xl font-bold">{analytics.customers.total}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Total customers in CRM
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">Total customers in CRM</p>
           </Card>
 
           <Card className="p-6">
@@ -157,9 +148,7 @@ export default function SalesAnalyticsPage() {
               <h3 className="text-lg font-semibold">Projects</h3>
             </div>
             <p className="text-3xl font-bold">{analytics.projects.total}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Active and completed projects
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">Active and completed projects</p>
           </Card>
         </div>
       </div>

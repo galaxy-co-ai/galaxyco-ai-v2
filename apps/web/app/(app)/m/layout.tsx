@@ -4,26 +4,22 @@
  * Bottom navigation, minimal chrome, mobile-optimized
  */
 
-"use client";
+'use client';
 
-import { Home, Bot, Plus, Bell, User } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { Home, Bot, Plus, Bell, User } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: "/m/dashboard", label: "Home", icon: Home },
-  { href: "/m/agents", label: "Agents", icon: Bot },
-  { href: "/agents/new", label: "Create", icon: Plus },
-  { href: "/m/notifications", label: "Alerts", icon: Bell },
-  { href: "/settings/profile", label: "Profile", icon: User },
+  { href: '/m/dashboard', label: 'Home', icon: Home },
+  { href: '/m/agents', label: 'Agents', icon: Bot },
+  { href: '/agents/new', label: 'Create', icon: Plus },
+  { href: '/m/notifications', label: 'Alerts', icon: Bell },
+  { href: '/settings/profile', label: 'Profile', icon: User },
 ];
 
-export default function MobileLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MobileLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
@@ -31,9 +27,7 @@ export default function MobileLayout({
       {/* Minimal Header */}
       <header className="sticky top-0 z-40 bg-background border-b border-border">
         <div className="px-4 h-14 flex items-center justify-between">
-          <div className="text-lg font-semibold text-foreground">
-            GalaxyCo.ai
-          </div>
+          <div className="text-lg font-semibold text-foreground">GalaxyCo.ai</div>
           <Link
             href="/notifications"
             className="relative p-2 hover:bg-hover rounded-lg transition-colors"
@@ -54,20 +48,20 @@ export default function MobileLayout({
             const Icon = item.icon;
             const isActive =
               pathname === item.href ||
-              (item.href.startsWith("/m/") && pathname?.startsWith(item.href));
-            const isCreate = item.label === "Create";
+              (item.href.startsWith('/m/') && pathname?.startsWith(item.href));
+            const isCreate = item.label === 'Create';
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors",
+                  'flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors',
                   isCreate
-                    ? "relative"
+                    ? 'relative'
                     : isActive
-                      ? "text-primary"
-                      : "text-foreground-muted hover:text-foreground",
+                      ? 'text-primary'
+                      : 'text-foreground-muted hover:text-foreground',
                 )}
               >
                 {isCreate ? (
@@ -76,9 +70,7 @@ export default function MobileLayout({
                   </div>
                 ) : (
                   <>
-                    <Icon
-                      className={cn("w-6 h-6", isActive && "fill-current")}
-                    />
+                    <Icon className={cn('w-6 h-6', isActive && 'fill-current')} />
                     <span className="text-xs font-medium">{item.label}</span>
                   </>
                 )}

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getRedisClient } from "./redis";
-import { logger } from "./utils/logger";
+import { NextRequest, NextResponse } from 'next/server';
+import { getRedisClient } from './redis';
+import { logger } from './utils/logger';
 
 /**
  * Rate Limit Configuration
@@ -38,119 +38,119 @@ export const RATE_LIMITS = {
   CHAT: {
     limit: 50,
     window: 60,
-    name: "chat",
+    name: 'chat',
   } as RateLimitConfig,
 
   // Document upload: 20 requests per 5 minutes per user
   UPLOAD: {
     limit: 20,
     window: 300,
-    name: "upload",
+    name: 'upload',
   } as RateLimitConfig,
 
   // Agent creation: 30 requests per 5 minutes per user
   AGENT_CREATE: {
     limit: 30,
     window: 300,
-    name: "agent_create",
+    name: 'agent_create',
   } as RateLimitConfig,
 
   // Agent operations (get, update): 100 requests per minute per user
   AGENT_OPS: {
     limit: 100,
     window: 60,
-    name: "agent_ops",
+    name: 'agent_ops',
   } as RateLimitConfig,
 
   // General API: 200 requests per minute per user
   GENERAL: {
     limit: 200,
     window: 60,
-    name: "general",
+    name: 'general',
   } as RateLimitConfig,
 
   // CRM Routes
   CRM_CREATE: {
     limit: 100,
     window: 60,
-    name: "crm_create",
+    name: 'crm_create',
   } as RateLimitConfig,
 
   CRM_READ: {
     limit: 1000,
     window: 60,
-    name: "crm_read",
+    name: 'crm_read',
   } as RateLimitConfig,
 
   // Business Operations
   INVOICE_CREATE: {
     limit: 50,
     window: 60,
-    name: "invoice_create",
+    name: 'invoice_create',
   } as RateLimitConfig,
 
   CAMPAIGN_OPS: {
     limit: 100,
     window: 60,
-    name: "campaign_ops",
+    name: 'campaign_ops',
   } as RateLimitConfig,
 
   EXPORT_CREATE: {
     limit: 10,
     window: 300, // 10 per 5 minutes
-    name: "export_create",
+    name: 'export_create',
   } as RateLimitConfig,
 
   IMPORT_CREATE: {
     limit: 10,
     window: 300, // 10 per 5 minutes
-    name: "import_create",
+    name: 'import_create',
   } as RateLimitConfig,
 
   // Communication
   EMAIL_SEND: {
     limit: 100,
     window: 3600, // 100 per hour
-    name: "email_send",
+    name: 'email_send',
   } as RateLimitConfig,
 
   CHAT_MESSAGE: {
     limit: 200,
     window: 60,
-    name: "chat_message",
+    name: 'chat_message',
   } as RateLimitConfig,
 
   // Analytics
   ANALYTICS_QUERY: {
     limit: 100,
     window: 60,
-    name: "analytics_query",
+    name: 'analytics_query',
   } as RateLimitConfig,
 
   REPORT_GENERATE: {
     limit: 20,
     window: 300, // 20 per 5 minutes
-    name: "report_generate",
+    name: 'report_generate',
   } as RateLimitConfig,
 
   // Developer Tools
   WEBHOOK_OPS: {
     limit: 50,
     window: 60,
-    name: "webhook_ops",
+    name: 'webhook_ops',
   } as RateLimitConfig,
 
   PLAYGROUND: {
     limit: 50,
     window: 60,
-    name: "playground",
+    name: 'playground',
   } as RateLimitConfig,
 
   // Admin (stricter limits)
   ADMIN_OPS: {
     limit: 30,
     window: 60,
-    name: "admin_ops",
+    name: 'admin_ops',
   } as RateLimitConfig,
 } as const;
 
@@ -207,8 +207,8 @@ export async function checkRateLimit(
     };
   } catch (error) {
     // If Redis fails, allow the request but log the error
-    logger.error("Rate limit check failed", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Rate limit check failed', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       identifier,
       config: config.name,
     });
@@ -245,13 +245,13 @@ export function withRateLimit(
       // Default: use IP address as identifier
       if (!identifier) {
         identifier =
-          req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-          req.headers.get("x-real-ip") ||
-          "unknown";
+          req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+          req.headers.get('x-real-ip') ||
+          'unknown';
       }
 
-      if (!identifier || identifier === "unknown") {
-        logger.warn("Rate limit: unable to identify request", {
+      if (!identifier || identifier === 'unknown') {
+        logger.warn('Rate limit: unable to identify request', {
           headers: Object.fromEntries(req.headers.entries()),
         });
         // Allow request if we can't identify the user
@@ -261,7 +261,7 @@ export function withRateLimit(
       const result = await checkRateLimit(identifier, config);
 
       if (!result.success) {
-        logger.warn("Rate limit exceeded", {
+        logger.warn('Rate limit exceeded', {
           identifier,
           config: config.name,
           limit: config.limit,
@@ -270,19 +270,17 @@ export function withRateLimit(
 
         return NextResponse.json(
           {
-            error: "Rate limit exceeded",
+            error: 'Rate limit exceeded',
             message: `Too many requests. Please try again in ${Math.ceil((result.reset - Date.now() / 1000) / 60)} minutes.`,
             retryAfter: result.reset,
           },
           {
             status: 429,
             headers: {
-              "X-RateLimit-Limit": String(result.limit),
-              "X-RateLimit-Remaining": String(result.remaining),
-              "X-RateLimit-Reset": String(result.reset),
-              "Retry-After": String(
-                result.reset - Math.floor(Date.now() / 1000),
-              ),
+              'X-RateLimit-Limit': String(result.limit),
+              'X-RateLimit-Remaining': String(result.remaining),
+              'X-RateLimit-Reset': String(result.reset),
+              'Retry-After': String(result.reset - Math.floor(Date.now() / 1000)),
             },
           },
         );
@@ -291,8 +289,8 @@ export function withRateLimit(
       // Add rate limit headers to successful responses
       return null; // Continue to handler, but headers will be added in response
     } catch (error) {
-      logger.error("Rate limit middleware error", {
-        error: error instanceof Error ? error.message : "Unknown error",
+      logger.error('Rate limit middleware error', {
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       // Fail open - allow request if middleware fails
       return null;
@@ -303,12 +301,9 @@ export function withRateLimit(
 /**
  * Add rate limit headers to response
  */
-export function addRateLimitHeaders(
-  response: NextResponse,
-  result: RateLimitResult,
-): NextResponse {
-  response.headers.set("X-RateLimit-Limit", String(result.limit));
-  response.headers.set("X-RateLimit-Remaining", String(result.remaining));
-  response.headers.set("X-RateLimit-Reset", String(result.reset));
+export function addRateLimitHeaders(response: NextResponse, result: RateLimitResult): NextResponse {
+  response.headers.set('X-RateLimit-Limit', String(result.limit));
+  response.headers.set('X-RateLimit-Remaining', String(result.remaining));
+  response.headers.set('X-RateLimit-Reset', String(result.reset));
   return response;
 }

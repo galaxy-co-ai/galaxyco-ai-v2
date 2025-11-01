@@ -1,4 +1,4 @@
-import { ExecutionList } from "@/components/agents/execution-list";
+import { ExecutionList } from '@/components/agents/execution-list';
 
 export default function AgentExecutionsTab({
   agentId,

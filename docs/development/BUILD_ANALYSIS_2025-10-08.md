@@ -59,7 +59,7 @@ npm run build  # Should no longer fail on config
 
 ```typescript
 // ❌ INSECURE - Hard-coded placeholder
-const result = await listAgents("workspace-id-placeholder", filters);
+const result = await listAgents('workspace-id-placeholder', filters);
 ```
 
 **Required Architecture:**
@@ -101,28 +101,28 @@ grep -r "workspace-id-placeholder" apps/web/
 #### a) Server-Side Helper (`apps/web/lib/workspace.ts`)
 
 ```typescript
-"use server";
-import { auth } from "@clerk/nextjs/server";
-import { cookies } from "next/headers";
-import { db, workspaceMembers, users } from "@galaxyco/database";
-import { eq, and } from "drizzle-orm";
+'use server';
+import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
+import { db, workspaceMembers, users } from '@galaxyco/database';
+import { eq, and } from 'drizzle-orm';
 
 export async function getCurrentWorkspaceId(): Promise<{
   id: string;
-  source: "cookie" | "default" | "none";
+  source: 'cookie' | 'default' | 'none';
 }> {
   // 1. Check cookie
   const cookieStore = cookies();
-  const workspaceId = cookieStore.get("workspaceId")?.value;
+  const workspaceId = cookieStore.get('workspaceId')?.value;
 
   if (workspaceId) {
-    return { id: workspaceId, source: "cookie" };
+    return { id: workspaceId, source: 'cookie' };
   }
 
   // 2. Fallback to first workspace for user
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) {
-    return { id: "", source: "none" };
+    return { id: '', source: 'none' };
   }
 
   const user = await db.query.users.findFirst({
@@ -138,10 +138,10 @@ export async function getCurrentWorkspaceId(): Promise<{
   const firstWorkspace = user?.workspaceMembers[0]?.workspaceId;
 
   if (firstWorkspace) {
-    return { id: firstWorkspace, source: "default" };
+    return { id: firstWorkspace, source: 'default' };
   }
 
-  return { id: "", source: "none" };
+  return { id: '', source: 'none' };
 }
 ```
 
@@ -220,14 +220,14 @@ export function useWorkspace() {
 #### c) API Endpoint (`apps/web/app/api/workspace/current/route.ts`)
 
 ```typescript
-import { NextResponse } from "next/server";
-import { getCurrentWorkspaceId } from "@/lib/workspace";
+import { NextResponse } from 'next/server';
+import { getCurrentWorkspaceId } from '@/lib/workspace';
 
 export async function GET() {
   const { id, source } = await getCurrentWorkspaceId();
 
   if (!id) {
-    return NextResponse.json({ error: "No workspace found" }, { status: 404 });
+    return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
   }
 
   return NextResponse.json({ id, source });
@@ -291,13 +291,13 @@ All database queries **MUST** include workspace filtering:
 const agents = await db.query.agents.findMany({
   where: and(
     eq(agents.workspaceId, workspaceId), // REQUIRED
-    eq(agents.status, "active"),
+    eq(agents.status, 'active'),
   ),
 });
 
 // ❌ WRONG - Missing workspace filter (security violation)
 const agents = await db.query.agents.findMany({
-  where: eq(agents.status, "active"),
+  where: eq(agents.status, 'active'),
 });
 ```
 

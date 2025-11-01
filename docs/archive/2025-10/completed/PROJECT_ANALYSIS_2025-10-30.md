@@ -333,8 +333,8 @@ docker push ghcr.io/galaxy-co-ai/galaxyco-api:latest
 Edit `packages/database/src/client.ts`:
 
 ```typescript
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 
 const sql = neon(getDatabaseUrl(), {
   fetchConnectionCache: true,

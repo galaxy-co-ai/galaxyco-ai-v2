@@ -162,11 +162,11 @@ assets/
 
 ```typescript
 // packages/assets/src/index.ts
-export { default as Logo } from "./brand/logo.svg";
-export { default as DashboardIcon } from "./icons/dashboard.svg";
+export { default as Logo } from './brand/logo.svg';
+export { default as DashboardIcon } from './icons/dashboard.svg';
 
 // apps/web/src/components/Header.tsx
-import { Logo } from "@galaxyco/assets";
+import { Logo } from '@galaxyco/assets';
 ```
 
 ---

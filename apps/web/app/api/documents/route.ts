@@ -1,15 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import {
-  knowledgeItems,
-  users,
-  workspaceMembers,
-} from "@galaxyco/database/schema";
-import { and, eq, desc, like } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { knowledgeItems, users, workspaceMembers } from '@galaxyco/database/schema';
+import { and, eq, desc, like } from 'drizzle-orm';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 /**
  * GET /api/documents
@@ -20,7 +16,7 @@ export async function GET(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Get user and workspace
@@ -29,7 +25,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const membership = await db.query.workspaceMembers.findFirst({
@@ -37,20 +33,17 @@ export async function GET(req: NextRequest) {
     });
 
     if (!membership) {
-      return NextResponse.json(
-        { error: "No workspace found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'No workspace found' }, { status: 404 });
     }
 
     const workspaceId = membership.workspaceId;
 
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const collectionId = searchParams.get("collectionId");
-    const type = searchParams.get("type");
-    const tags = searchParams.get("tags")?.split(",");
-    const query = searchParams.get("query");
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const collectionId = searchParams.get('collectionId');
+    const type = searchParams.get('type');
+    const tags = searchParams.get('tags')?.split(',');
+    const query = searchParams.get('query');
 
     // For now, return simple query results (semantic search can be added later)
     // if (query) {
@@ -85,10 +78,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ documents });
   } catch (error) {
-    logger.error("List documents error", error);
-    return NextResponse.json(
-      { error: "Failed to fetch documents" },
-      { status: 500 },
-    );
+    logger.error('List documents error', error);
+    return NextResponse.json({ error: 'Failed to fetch documents' }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { google } from "@ai-sdk/google";
-import { logger } from "@/lib/utils/logger";
+import { openai } from '@ai-sdk/openai';
+import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * AI Gateway Configuration
@@ -11,12 +11,12 @@ import { logger } from "@/lib/utils/logger";
 // Provider API keys (from environment variables)
 export const getProviderApiKey = (provider: string): string => {
   switch (provider) {
-    case "openai":
-      return process.env.OPENAI_API_KEY || "";
-    case "anthropic":
-      return process.env.ANTHROPIC_API_KEY || "";
-    case "google":
-      return process.env.GOOGLE_GENERATIVE_AI_API_KEY || "";
+    case 'openai':
+      return process.env.OPENAI_API_KEY || '';
+    case 'anthropic':
+      return process.env.ANTHROPIC_API_KEY || '';
+    case 'google':
+      return process.env.GOOGLE_GENERATIVE_AI_API_KEY || '';
     default:
       throw new Error(`Unknown provider: ${provider}`);
   }
@@ -25,43 +25,43 @@ export const getProviderApiKey = (provider: string): string => {
 // Model pricing per 1M tokens (as of January 2025)
 export const MODEL_PRICING = {
   // OpenAI models
-  "gpt-4": { input: 30, output: 60 },
-  "gpt-4-turbo": { input: 10, output: 30 },
-  "gpt-4o": { input: 5, output: 15 },
-  "gpt-4o-mini": { input: 0.15, output: 0.6 },
-  "gpt-3.5-turbo": { input: 0.5, output: 1.5 },
+  'gpt-4': { input: 30, output: 60 },
+  'gpt-4-turbo': { input: 10, output: 30 },
+  'gpt-4o': { input: 5, output: 15 },
+  'gpt-4o-mini': { input: 0.15, output: 0.6 },
+  'gpt-3.5-turbo': { input: 0.5, output: 1.5 },
 
   // Anthropic models
-  "claude-3-5-sonnet-20241022": { input: 3, output: 15 },
-  "claude-3-5-haiku-20241022": { input: 0.8, output: 4 },
-  "claude-3-opus-20240229": { input: 15, output: 75 },
-  "claude-3-sonnet-20240229": { input: 3, output: 15 },
-  "claude-3-haiku-20240307": { input: 0.25, output: 1.25 },
+  'claude-3-5-sonnet-20241022': { input: 3, output: 15 },
+  'claude-3-5-haiku-20241022': { input: 0.8, output: 4 },
+  'claude-3-opus-20240229': { input: 15, output: 75 },
+  'claude-3-sonnet-20240229': { input: 3, output: 15 },
+  'claude-3-haiku-20240307': { input: 0.25, output: 1.25 },
 
   // Google Gemini models (Gemini 2.x - latest stable models)
-  "gemini-2.5-flash": { input: 0.075, output: 0.3 },
-  "gemini-2.5-pro": { input: 3.5, output: 10.5 },
-  "gemini-2.0-flash": { input: 0.075, output: 0.3 },
-  "gemini-flash-latest": { input: 0.075, output: 0.3 },
-  "gemini-pro-latest": { input: 3.5, output: 10.5 },
+  'gemini-2.5-flash': { input: 0.075, output: 0.3 },
+  'gemini-2.5-pro': { input: 3.5, output: 10.5 },
+  'gemini-2.0-flash': { input: 0.075, output: 0.3 },
+  'gemini-flash-latest': { input: 0.075, output: 0.3 },
+  'gemini-pro-latest': { input: 3.5, output: 10.5 },
 } as const;
 
 // Supported models by provider
 export const PROVIDER_MODELS = {
-  openai: ["gpt-4", "gpt-4-turbo", "gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"],
+  openai: ['gpt-4', 'gpt-4-turbo', 'gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo'],
   anthropic: [
-    "claude-3-5-sonnet-20241022",
-    "claude-3-5-haiku-20241022",
-    "claude-3-opus-20240229",
-    "claude-3-sonnet-20240229",
-    "claude-3-haiku-20240307",
+    'claude-3-5-sonnet-20241022',
+    'claude-3-5-haiku-20241022',
+    'claude-3-opus-20240229',
+    'claude-3-sonnet-20240229',
+    'claude-3-haiku-20240307',
   ],
   google: [
-    "gemini-2.5-flash",
-    "gemini-2.5-pro",
-    "gemini-2.0-flash",
-    "gemini-flash-latest",
-    "gemini-pro-latest",
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.0-flash',
+    'gemini-flash-latest',
+    'gemini-pro-latest',
   ],
 } as const;
 
@@ -100,19 +100,19 @@ export function getModelInstance(modelName: string) {
   }
 
   // Temporarily set environment variable for this request
-  const envKey = provider === "openai" ? "OPENAI_API_KEY" : "ANTHROPIC_API_KEY";
+  const envKey = provider === 'openai' ? 'OPENAI_API_KEY' : 'ANTHROPIC_API_KEY';
   const originalKey = process.env[envKey];
   process.env[envKey] = apiKey;
 
   let model;
   switch (provider) {
-    case "openai":
+    case 'openai':
       model = openai(modelName);
       break;
-    case "anthropic":
+    case 'anthropic':
       model = anthropic(modelName);
       break;
-    case "google":
+    case 'google':
       model = google(modelName);
       break;
     default:
@@ -136,9 +136,9 @@ export function getModelInstance(modelName: string) {
  * Determine provider from model name
  */
 export function getProviderFromModel(model: string): string {
-  if (model.startsWith("gpt-")) return "openai";
-  if (model.startsWith("claude-")) return "anthropic";
-  if (model.startsWith("gemini-")) return "google";
+  if (model.startsWith('gpt-')) return 'openai';
+  if (model.startsWith('claude-')) return 'anthropic';
+  if (model.startsWith('gemini-')) return 'google';
   throw new Error(`Cannot determine provider for model: ${model}`);
 }
 
@@ -160,7 +160,7 @@ export function calculateCost(
   const pricing = MODEL_PRICING[model as keyof typeof MODEL_PRICING];
 
   if (!pricing) {
-    logger.warn("No pricing data available for model", { model });
+    logger.warn('No pricing data available for model', { model });
     return 0;
   }
 

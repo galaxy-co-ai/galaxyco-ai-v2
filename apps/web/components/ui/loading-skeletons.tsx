@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Card } from "./card";
-import { Skeleton } from "./skeleton";
+import * as React from 'react';
+import { Card } from './card';
+import { Skeleton } from './skeleton';
 
 /**
  * Loading Skeletons for Different App Sections

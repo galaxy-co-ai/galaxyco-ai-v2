@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from 'react';
 import {
   Upload,
   X,
@@ -10,16 +10,16 @@ import {
   AlertCircle,
   CheckCircle,
   Loader2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 interface UploadFile {
   id: string;
   file: File;
-  status: "pending" | "uploading" | "processing" | "success" | "error";
+  status: 'pending' | 'uploading' | 'processing' | 'success' | 'error';
   progress: number;
   error?: string;
 }
@@ -36,24 +36,24 @@ export function DocumentUpload({
   maxFiles = 10,
   maxSizeBytes = 10 * 1024 * 1024, // 10MB
   acceptedTypes = [
-    "application/pdf",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/msword",
-    "text/plain",
-    "text/markdown",
-    "text/x-markdown",
-    ".md",
-    ".txt",
-    ".csv",
-    "text/csv",
-    "application/json",
-    "text/html",
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-    "application/vnd.ms-excel",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/msword',
+    'text/plain',
+    'text/markdown',
+    'text/x-markdown',
+    '.md',
+    '.txt',
+    '.csv',
+    'text/csv',
+    'application/json',
+    'text/html',
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   ],
 }: DocumentUploadProps) {
   const [files, setFiles] = useState<UploadFile[]>([]);
@@ -61,12 +61,9 @@ export function DocumentUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith("image/")) {
+    if (file.type.startsWith('image/')) {
       return <ImageIcon className="h-5 w-5" />;
-    } else if (
-      file.type === "application/pdf" ||
-      file.type.includes("document")
-    ) {
+    } else if (file.type === 'application/pdf' || file.type.includes('document')) {
       return <FileText className="h-5 w-5" />;
     } else {
       return <File className="h-5 w-5" />;
@@ -74,24 +71,24 @@ export function DocumentUpload({
   };
 
   const formatFileSize = (bytes: number) => {
-    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const validateFile = (file: File): string | null => {
     // Check by file extension for files without proper MIME types
     const fileName = file.name.toLowerCase();
-    const fileExtension = "." + fileName.split(".").pop();
+    const fileExtension = '.' + fileName.split('.').pop();
 
     const isAccepted =
       acceptedTypes.includes(file.type) ||
       acceptedTypes.includes(fileExtension) ||
-      fileName.endsWith(".md") ||
-      fileName.endsWith(".markdown") ||
-      fileName.endsWith(".txt") ||
-      fileName.endsWith(".csv") ||
-      fileName.endsWith(".json");
+      fileName.endsWith('.md') ||
+      fileName.endsWith('.markdown') ||
+      fileName.endsWith('.txt') ||
+      fileName.endsWith('.csv') ||
+      fileName.endsWith('.json');
 
     if (!isAccepted) {
       return `File type not supported. Accepted types: PDF, Word, Excel, Text, Markdown (.md), CSV, JSON, Images`;
@@ -113,7 +110,7 @@ export function DocumentUpload({
         return {
           id: Math.random().toString(36).substr(2, 9),
           file,
-          status: error ? "error" : "pending",
+          status: error ? 'error' : 'pending',
           progress: 0,
           error: error || undefined,
         };
@@ -130,17 +127,15 @@ export function DocumentUpload({
   };
 
   const uploadFile = async (uploadFile: UploadFile) => {
-    if (uploadFile.status === "error") return;
+    if (uploadFile.status === 'error') return;
 
     setFiles((prev) =>
-      prev.map((f) =>
-        f.id === uploadFile.id ? { ...f, status: "uploading", progress: 0 } : f,
-      ),
+      prev.map((f) => (f.id === uploadFile.id ? { ...f, status: 'uploading', progress: 0 } : f)),
     );
 
     const formData = new FormData();
-    formData.append("file", uploadFile.file);
-    formData.append("title", uploadFile.file.name);
+    formData.append('file', uploadFile.file);
+    formData.append('title', uploadFile.file.name);
 
     try {
       const xhr = new XMLHttpRequest();
@@ -149,9 +144,7 @@ export function DocumentUpload({
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const progress = Math.round((event.loaded / event.total) * 100);
-          setFiles((prev) =>
-            prev.map((f) => (f.id === uploadFile.id ? { ...f, progress } : f)),
-          );
+          setFiles((prev) => prev.map((f) => (f.id === uploadFile.id ? { ...f, progress } : f)));
         }
       };
 
@@ -160,18 +153,14 @@ export function DocumentUpload({
         if (xhr.status === 200) {
           setFiles((prev) =>
             prev.map((f) =>
-              f.id === uploadFile.id
-                ? { ...f, status: "processing", progress: 100 }
-                : f,
+              f.id === uploadFile.id ? { ...f, status: 'processing', progress: 100 } : f,
             ),
           );
 
           // Simulate processing time (in real app, this would be handled by webhooks)
           setTimeout(() => {
             setFiles((prev) =>
-              prev.map((f) =>
-                f.id === uploadFile.id ? { ...f, status: "success" } : f,
-              ),
+              prev.map((f) => (f.id === uploadFile.id ? { ...f, status: 'success' } : f)),
             );
           }, 2000);
         } else {
@@ -186,15 +175,15 @@ export function DocumentUpload({
             f.id === uploadFile.id
               ? {
                   ...f,
-                  status: "error",
-                  error: "Upload failed. Please try again.",
+                  status: 'error',
+                  error: 'Upload failed. Please try again.',
                 }
               : f,
           ),
         );
       };
 
-      xhr.open("POST", "/api/documents/upload");
+      xhr.open('POST', '/api/documents/upload');
       xhr.send(formData);
     } catch (error) {
       setFiles((prev) =>
@@ -202,8 +191,8 @@ export function DocumentUpload({
           f.id === uploadFile.id
             ? {
                 ...f,
-                status: "error",
-                error: error instanceof Error ? error.message : "Upload failed",
+                status: 'error',
+                error: error instanceof Error ? error.message : 'Upload failed',
               }
             : f,
         ),
@@ -212,7 +201,7 @@ export function DocumentUpload({
   };
 
   const uploadAll = async () => {
-    const pendingFiles = files.filter((f) => f.status === "pending");
+    const pendingFiles = files.filter((f) => f.status === 'pending');
 
     // Upload files sequentially to avoid overwhelming the server
     for (const file of pendingFiles) {
@@ -221,9 +210,7 @@ export function DocumentUpload({
 
     // Check if all files are processed
     setTimeout(() => {
-      const allComplete = files.every(
-        (f) => f.status === "success" || f.status === "error",
-      );
+      const allComplete = files.every((f) => f.status === 'success' || f.status === 'error');
       if (allComplete && onUploadComplete) {
         onUploadComplete();
       }
@@ -259,45 +246,45 @@ export function DocumentUpload({
         addFiles(e.target.files);
       }
       // Reset input so same file can be selected again
-      e.target.value = "";
+      e.target.value = '';
     },
     [addFiles],
   );
 
-  const getStatusIcon = (status: UploadFile["status"]) => {
+  const getStatusIcon = (status: UploadFile['status']) => {
     switch (status) {
-      case "uploading":
-      case "processing":
+      case 'uploading':
+      case 'processing':
         return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />;
-      case "success":
+      case 'success':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "error":
+      case 'error':
         return <AlertCircle className="h-4 w-4 text-red-500" />;
       default:
         return null;
     }
   };
 
-  const getStatusText = (status: UploadFile["status"]) => {
+  const getStatusText = (status: UploadFile['status']) => {
     switch (status) {
-      case "pending":
-        return "Ready to upload";
-      case "uploading":
-        return "Uploading...";
-      case "processing":
-        return "Processing...";
-      case "success":
-        return "Complete";
-      case "error":
-        return "Failed";
+      case 'pending':
+        return 'Ready to upload';
+      case 'uploading':
+        return 'Uploading...';
+      case 'processing':
+        return 'Processing...';
+      case 'success':
+        return 'Complete';
+      case 'error':
+        return 'Failed';
       default:
-        return "";
+        return '';
     }
   };
 
-  const pendingCount = files.filter((f) => f.status === "pending").length;
-  const successCount = files.filter((f) => f.status === "success").length;
-  const errorCount = files.filter((f) => f.status === "error").length;
+  const pendingCount = files.filter((f) => f.status === 'pending').length;
+  const successCount = files.filter((f) => f.status === 'success').length;
+  const errorCount = files.filter((f) => f.status === 'error').length;
 
   return (
     <div className="space-y-6">
@@ -305,8 +292,8 @@ export function DocumentUpload({
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
           isDragOver
-            ? "border-primary bg-primary/5"
-            : "border-muted-foreground/25 hover:border-primary/50"
+            ? 'border-primary bg-primary/5'
+            : 'border-muted-foreground/25 hover:border-primary/50'
         }`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
@@ -324,18 +311,14 @@ export function DocumentUpload({
           ref={fileInputRef}
           type="file"
           multiple
-          accept={acceptedTypes.join(",")}
+          accept={acceptedTypes.join(',')}
           onChange={onFileSelect}
           className="hidden"
         />
         <div className="mt-4 text-sm text-muted-foreground">
+          <p>Supported formats: PDF, Word, Excel, Text, Markdown, CSV, JSON, Images</p>
           <p>
-            Supported formats: PDF, Word, Excel, Text, Markdown, CSV, JSON,
-            Images
-          </p>
-          <p>
-            Maximum file size: {formatFileSize(maxSizeBytes)} • Maximum files:{" "}
-            {maxFiles}
+            Maximum file size: {formatFileSize(maxSizeBytes)} • Maximum files: {maxFiles}
           </p>
         </div>
       </div>
@@ -347,7 +330,7 @@ export function DocumentUpload({
             <h4 className="text-lg font-medium">Files ({files.length})</h4>
             {pendingCount > 0 && (
               <Button onClick={uploadAll}>
-                Upload {pendingCount} File{pendingCount !== 1 ? "s" : ""}
+                Upload {pendingCount} File{pendingCount !== 1 ? 's' : ''}
               </Button>
             )}
           </div>
@@ -361,9 +344,7 @@ export function DocumentUpload({
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <p className="font-medium truncate">
-                          {uploadFile.file.name}
-                        </p>
+                        <p className="font-medium truncate">{uploadFile.file.name}</p>
                         <div className="flex items-center gap-2">
                           {getStatusIcon(uploadFile.status)}
                           <Badge variant="secondary" className="text-xs">
@@ -374,7 +355,7 @@ export function DocumentUpload({
 
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>{formatFileSize(uploadFile.file.size)}</span>
-                        {uploadFile.status !== "pending" && (
+                        {uploadFile.status !== 'pending' && (
                           <Button
                             variant="ghost"
                             size="sm"
@@ -385,17 +366,12 @@ export function DocumentUpload({
                         )}
                       </div>
 
-                      {uploadFile.status === "uploading" && (
-                        <Progress
-                          value={uploadFile.progress}
-                          className="mt-2 h-1"
-                        />
+                      {uploadFile.status === 'uploading' && (
+                        <Progress value={uploadFile.progress} className="mt-2 h-1" />
                       )}
 
                       {uploadFile.error && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {uploadFile.error}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{uploadFile.error}</p>
                       )}
                     </div>
                   </div>

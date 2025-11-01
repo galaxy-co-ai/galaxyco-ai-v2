@@ -1,78 +1,70 @@
-import { Metadata } from "next";
-import {
-  Search,
-  Phone,
-  Mail,
-  Building2,
-  Plus,
-  Filter,
-  MoreVertical,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Avatar } from "@/components/ui/avatar";
+import { Metadata } from 'next';
+import { Search, Phone, Mail, Building2, Plus, Filter, MoreVertical } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Avatar } from '@/components/ui/avatar';
 
 export const metadata: Metadata = {
-  title: "Contacts | GalaxyCo.ai",
-  description: "Mobile contact management",
+  title: 'Contacts | GalaxyCo.ai',
+  description: 'Mobile contact management',
 };
 
 // Mock contacts data
 const contacts = [
   {
-    id: "1",
-    name: "Sarah Johnson",
-    email: "sarah.j@acme.com",
-    phone: "+1 555-123-4567",
-    company: "Acme Corp",
-    role: "Marketing Director",
-    status: "active",
-    avatar: "SJ",
+    id: '1',
+    name: 'Sarah Johnson',
+    email: 'sarah.j@acme.com',
+    phone: '+1 555-123-4567',
+    company: 'Acme Corp',
+    role: 'Marketing Director',
+    status: 'active',
+    avatar: 'SJ',
   },
   {
-    id: "2",
-    name: "Michael Chen",
-    email: "m.chen@techstart.io",
-    phone: "+1 555-234-5678",
-    company: "TechStart",
-    role: "CTO",
-    status: "lead",
-    avatar: "MC",
+    id: '2',
+    name: 'Michael Chen',
+    email: 'm.chen@techstart.io',
+    phone: '+1 555-234-5678',
+    company: 'TechStart',
+    role: 'CTO',
+    status: 'lead',
+    avatar: 'MC',
   },
   {
-    id: "3",
-    name: "Emily Rodriguez",
-    email: "emily.r@global.com",
-    phone: "+1 555-345-6789",
-    company: "Global Ventures",
-    role: "Sales Manager",
-    status: "active",
-    avatar: "ER",
+    id: '3',
+    name: 'Emily Rodriguez',
+    email: 'emily.r@global.com',
+    phone: '+1 555-345-6789',
+    company: 'Global Ventures',
+    role: 'Sales Manager',
+    status: 'active',
+    avatar: 'ER',
   },
   {
-    id: "4",
-    name: "David Kim",
-    email: "david@innovate.com",
-    phone: "+1 555-456-7890",
-    company: "InnovateLab",
-    role: "Founder",
-    status: "prospect",
-    avatar: "DK",
+    id: '4',
+    name: 'David Kim',
+    email: 'david@innovate.com',
+    phone: '+1 555-456-7890',
+    company: 'InnovateLab',
+    role: 'Founder',
+    status: 'prospect',
+    avatar: 'DK',
   },
 ];
 
 export default function MobileContactsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "default";
-      case "lead":
-        return "secondary";
-      case "prospect":
-        return "outline";
+      case 'active':
+        return 'default';
+      case 'lead':
+        return 'secondary';
+      case 'prospect':
+        return 'outline';
       default:
-        return "outline";
+        return 'outline';
     }
   };
 
@@ -125,17 +117,10 @@ export default function MobileContactsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between mb-1">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-base truncate">
-                      {contact.name}
-                    </h3>
-                    <p className="text-sm text-foreground-muted truncate">
-                      {contact.role}
-                    </p>
+                    <h3 className="font-semibold text-base truncate">{contact.name}</h3>
+                    <p className="text-sm text-foreground-muted truncate">{contact.role}</p>
                   </div>
-                  <button
-                    className="ml-2 p-1 touch-manipulation"
-                    aria-label="More options"
-                  >
+                  <button className="ml-2 p-1 touch-manipulation" aria-label="More options">
                     <MoreVertical className="h-5 w-5 text-foreground-muted" />
                   </button>
                 </div>
@@ -143,9 +128,7 @@ export default function MobileContactsPage() {
                 {/* Company */}
                 <div className="flex items-center gap-2 mb-2">
                   <Building2 className="h-3.5 w-3.5 text-foreground-muted shrink-0" />
-                  <span className="text-sm text-foreground-muted truncate">
-                    {contact.company}
-                  </span>
+                  <span className="text-sm text-foreground-muted truncate">{contact.company}</span>
                 </div>
 
                 {/* Contact Methods */}
@@ -170,12 +153,7 @@ export default function MobileContactsPage() {
 
                 {/* Status */}
                 <Badge
-                  variant={
-                    getStatusColor(contact.status) as
-                      | "default"
-                      | "secondary"
-                      | "outline"
-                  }
+                  variant={getStatusColor(contact.status) as 'default' | 'secondary' | 'outline'}
                   size="sm"
                 >
                   {contact.status}

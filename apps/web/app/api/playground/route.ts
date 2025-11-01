@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { playgroundRequestSchema } from "@/lib/validation/analytics";
-import { safeValidateRequest, formatValidationError } from "@/lib/validation";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { playgroundRequestSchema } from '@/lib/validation/analytics';
+import { safeValidateRequest, formatValidationError } from '@/lib/validation';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 
 /**
  * POST /api/playground
@@ -26,36 +26,31 @@ export async function POST(req: NextRequest) {
     // 1. Auth check
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      logger.warn("Unauthorized request creation attempt");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      logger.warn('Unauthorized request creation attempt');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // 2. Rate limiting check
-    const rateLimitResult = await checkRateLimit(
-      clerkUserId,
-      RATE_LIMITS.PLAYGROUND,
-    );
+    const rateLimitResult = await checkRateLimit(clerkUserId, RATE_LIMITS.PLAYGROUND);
     if (!rateLimitResult.success) {
-      logger.warn("Playground creation rate limit exceeded", {
+      logger.warn('Playground creation rate limit exceeded', {
         userId: clerkUserId,
         limit: rateLimitResult.limit,
         reset: rateLimitResult.reset,
       });
       return NextResponse.json(
         {
-          error: "Rate limit exceeded",
+          error: 'Rate limit exceeded',
           message: `Too many requests. Please try again in ${Math.ceil((rateLimitResult.reset - Date.now() / 1000) / 60)} minutes.`,
           retryAfter: rateLimitResult.reset,
         },
         {
           status: 429,
           headers: {
-            "X-RateLimit-Limit": String(rateLimitResult.limit),
-            "X-RateLimit-Remaining": String(rateLimitResult.remaining),
-            "X-RateLimit-Reset": String(rateLimitResult.reset),
-            "Retry-After": String(
-              rateLimitResult.reset - Math.floor(Date.now() / 1000),
-            ),
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(rateLimitResult.reset - Math.floor(Date.now() / 1000)),
           },
         },
       );
@@ -67,7 +62,7 @@ export async function POST(req: NextRequest) {
 
     if (!validation.success) {
       const formattedError = formatValidationError(validation.error);
-      logger.warn("Invalid request creation request", {
+      logger.warn('Invalid request creation request', {
         errors: formattedError.errors,
       });
       return NextResponse.json(formattedError, {
@@ -83,7 +78,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // 5. Verify workspace membership
@@ -96,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     if (!membership) {
       return NextResponse.json(
-        { error: "Forbidden: User not a member of this workspace" },
+        { error: 'Forbidden: User not a member of this workspace' },
         { status: 403 },
       );
     }
@@ -112,11 +107,11 @@ export async function POST(req: NextRequest) {
       validation: {
         passed: true,
         checks: {
-          authentication: "✓ Valid",
-          authorization: "✓ Workspace member",
+          authentication: '✓ Valid',
+          authorization: '✓ Workspace member',
           rateLimit: `✓ ${rateLimitResult.remaining}/${rateLimitResult.limit} remaining`,
-          schema: "✓ Valid request body",
-          permissions: "✓ User has required permissions",
+          schema: '✓ Valid request body',
+          permissions: '✓ User has required permissions',
         },
       },
       mockResponse: requestData.validateOnly
@@ -133,7 +128,7 @@ export async function POST(req: NextRequest) {
     // 7. Return sandbox result
     const durationMs = Date.now() - startTime;
 
-    logger.info("Playground request executed", {
+    logger.info('Playground request executed', {
       userId: user.id,
       workspaceId,
       resource: requestData.resource,
@@ -148,25 +143,22 @@ export async function POST(req: NextRequest) {
     });
 
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(rateLimitResult.limit));
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      String(rateLimitResult.remaining),
-    );
-    response.headers.set("X-RateLimit-Reset", String(rateLimitResult.reset));
+    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
+    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
+    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
 
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    logger.error("Create request error", {
-      error: error instanceof Error ? error.message : "Unknown error",
+    logger.error('Create request error', {
+      error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       durationMs,
     });
     return NextResponse.json(
       {
-        error: "Failed to create request",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create request',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

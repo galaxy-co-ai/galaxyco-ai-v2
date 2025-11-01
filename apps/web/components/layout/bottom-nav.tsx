@@ -4,13 +4,13 @@
  * October 15, 2025
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Command, Users, Bot, Mail, Settings, FolderOpen } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Command, Users, Bot, Mail, Settings, FolderOpen } from 'lucide-react';
 
 interface BottomNavProps {
   className?: string;
@@ -19,29 +19,29 @@ interface BottomNavProps {
 // Mobile navigation items (reduced set)
 const mobileNavItems = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: 'Dashboard',
+    href: '/dashboard',
     icon: Command,
   },
   {
-    title: "Agents",
-    href: "/agents",
+    title: 'Agents',
+    href: '/agents',
     icon: Bot,
-    badge: "3",
+    badge: '3',
   },
   {
-    title: "Collections",
-    href: "/collections",
+    title: 'Collections',
+    href: '/collections',
     icon: FolderOpen,
   },
   {
-    title: "Emails",
-    href: "/emails",
+    title: 'Emails',
+    href: '/emails',
     icon: Mail,
   },
   {
-    title: "Settings",
-    href: "/settings",
+    title: 'Settings',
+    href: '/settings',
     icon: Settings,
   },
 ];
@@ -53,14 +53,14 @@ export function BottomNav({ className }: BottomNavProps) {
     <nav
       className={cn(
         // Fixed positioning at bottom
-        "fixed bottom-0 left-0 right-0 z-50",
+        'fixed bottom-0 left-0 right-0 z-50',
         // Height and safe area
-        "h-16 safe-bottom",
+        'h-16 safe-bottom',
         // Styling
-        "bg-white dark:bg-neutral-900",
-        "border-t border-neutral-200 dark:border-neutral-700",
+        'bg-white dark:bg-neutral-900',
+        'border-t border-neutral-200 dark:border-neutral-700',
         // Backdrop blur effect
-        "backdrop-blur-lg bg-white/90 dark:bg-neutral-900/90",
+        'backdrop-blur-lg bg-white/90 dark:bg-neutral-900/90',
         className,
       )}
     >
@@ -76,30 +76,30 @@ export function BottomNav({ className }: BottomNavProps) {
               href={item.href}
               className={cn(
                 // Base layout
-                "flex flex-col items-center justify-center",
-                "px-1 py-2 relative",
+                'flex flex-col items-center justify-center',
+                'px-1 py-2 relative',
                 // Touch target size (minimum 44px)
-                "min-h-[44px]",
+                'min-h-[44px]',
                 // Transition
-                "transition-colors duration-200",
+                'transition-colors duration-200',
                 // Color states
                 isActive
-                  ? "text-primary-600 dark:text-primary-400"
-                  : "text-neutral-600 dark:text-neutral-400",
+                  ? 'text-primary-600 dark:text-primary-400'
+                  : 'text-neutral-600 dark:text-neutral-400',
                 // Hover states
-                "hover:text-primary-600 dark:hover:text-primary-400",
+                'hover:text-primary-600 dark:hover:text-primary-400',
                 // Focus states
-                "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset",
-                "rounded-lg focus:ring-offset-2",
+                'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset',
+                'rounded-lg focus:ring-offset-2',
               )}
             >
               {/* Icon with badge */}
               <div className="relative">
                 <Icon
                   className={cn(
-                    "w-5 h-5 mb-1",
+                    'w-5 h-5 mb-1',
                     // Scale slightly when active
-                    isActive && "scale-110",
+                    isActive && 'scale-110',
                   )}
                 />
 
@@ -116,9 +116,9 @@ export function BottomNav({ className }: BottomNavProps) {
               {/* Label */}
               <span
                 className={cn(
-                  "text-xs font-medium leading-tight",
+                  'text-xs font-medium leading-tight',
                   // Truncate long labels
-                  "max-w-full truncate",
+                  'max-w-full truncate',
                 )}
               >
                 {item.title}

@@ -48,15 +48,15 @@ Search for agents in the current workspace by name, type, or description.
 ```typescript
 const tools = createDatabaseTools();
 const agent = new Agent({
-  name: "Search Assistant",
-  instructions: "Help users find agents",
+  name: 'Search Assistant',
+  instructions: 'Help users find agents',
   tools,
 });
 
 const result = await Runner.run(
   agent,
-  [{ role: "user", content: 'Find agents with "email" in the name' }],
-  { workspaceId: "workspace-123", userId: "user-456" },
+  [{ role: 'user', content: 'Find agents with "email" in the name' }],
+  { workspaceId: 'workspace-123', userId: 'user-456' },
 );
 ```
 
@@ -178,22 +178,19 @@ To add a new database tool:
 ```typescript
 export function createMyNewTool(): Tool {
   return createTool(
-    "my_new_tool",
-    "Description of what the tool does",
+    'my_new_tool',
+    'Description of what the tool does',
     {
-      param1: { type: "string", description: "Parameter description" },
+      param1: { type: 'string', description: 'Parameter description' },
       param2: {
-        type: "number",
-        description: "Optional param",
+        type: 'number',
+        description: 'Optional param',
         required: false,
       },
     },
-    async (
-      args: { param1: string; param2?: number },
-      context?: ExecutionContext,
-    ) => {
+    async (args: { param1: string; param2?: number }, context?: ExecutionContext) => {
       if (!context?.workspaceId) {
-        return { success: false, error: "Workspace context required" };
+        return { success: false, error: 'Workspace context required' };
       }
 
       try {

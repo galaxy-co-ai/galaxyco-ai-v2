@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react';
+import { useUser } from '@clerk/nextjs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 interface CreateWorkspaceModalProps {
   open: boolean;
@@ -21,52 +21,47 @@ interface CreateWorkspaceModalProps {
   onSuccess: () => void;
 }
 
-export function CreateWorkspaceModal({
-  open,
-  onClose,
-  onSuccess,
-}: CreateWorkspaceModalProps) {
+export function CreateWorkspaceModal({ open, onClose, onSuccess }: CreateWorkspaceModalProps) {
   const { user } = useUser();
-  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceName, setWorkspaceName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!workspaceName.trim()) {
-      toast.error("Please enter a workspace name");
+      toast.error('Please enter a workspace name');
       return;
     }
 
     if (!user) {
-      toast.error("You must be signed in to create a workspace");
+      toast.error('You must be signed in to create a workspace');
       return;
     }
 
     setIsCreating(true);
 
     try {
-      const response = await fetch("/api/workspaces", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/workspaces', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: workspaceName.trim(),
           clerkUserId: user.id,
-          userEmail:
-            user.primaryEmailAddress?.emailAddress || "user@example.com",
-          userFirstName: user.firstName || "User",
-          userLastName: user.lastName || "",
+          userEmail: user.primaryEmailAddress?.emailAddress || 'user@example.com',
+          userFirstName: user.firstName || 'User',
+          userLastName: user.lastName || '',
         }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to create workspace");
+        throw new Error(error.message || 'Failed to create workspace');
       }
 
       const data = await response.json();
 
-      toast.success("Workspace created successfully!");
+      toast.success('Workspace created successfully!');
       onSuccess();
       onClose();
 
@@ -75,10 +70,8 @@ export function CreateWorkspaceModal({
         window.location.reload();
       }, 500);
     } catch (error) {
-      console.error("Error creating workspace:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create workspace",
-      );
+      console.error('Error creating workspace:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to create workspace');
     } finally {
       setIsCreating(false);
     }
@@ -90,8 +83,7 @@ export function CreateWorkspaceModal({
         <DialogHeader>
           <DialogTitle>Create Your Workspace</DialogTitle>
           <DialogDescription>
-            Choose a name for your workspace. You can change this later in
-            settings.
+            Choose a name for your workspace. You can change this later in settings.
           </DialogDescription>
         </DialogHeader>
 
@@ -107,18 +99,12 @@ export function CreateWorkspaceModal({
               autoFocus
             />
             <p className="text-xs text-muted-foreground">
-              This is your team&apos;s workspace where you&apos;ll manage agents
-              and data.
+              This is your team&apos;s workspace where you&apos;ll manage agents and data.
             </p>
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={isCreating}
-            >
+            <Button type="button" variant="outline" onClick={onClose} disabled={isCreating}>
               Cancel
             </Button>
             <Button type="submit" disabled={isCreating}>
@@ -128,7 +114,7 @@ export function CreateWorkspaceModal({
                   Creating...
                 </>
               ) : (
-                "Create Workspace"
+                'Create Workspace'
               )}
             </Button>
           </div>

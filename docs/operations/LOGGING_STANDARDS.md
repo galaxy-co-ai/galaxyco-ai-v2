@@ -27,18 +27,18 @@ Structured logging is critical for debugging, monitoring, and maintaining produc
 ✅ **Good:**
 
 ```typescript
-logger.info("User created agent", {
-  userId: "user_123",
-  workspaceId: "workspace_456",
-  agentId: "agent_789",
-  agentName: "Lead Generator",
+logger.info('User created agent', {
+  userId: 'user_123',
+  workspaceId: 'workspace_456',
+  agentId: 'agent_789',
+  agentName: 'Lead Generator',
 });
 ```
 
 ❌ **Bad:**
 
 ```typescript
-console.log("User user_123 created agent agent_789 named Lead Generator");
+console.log('User user_123 created agent agent_789 named Lead Generator');
 ```
 
 **Why:** Structured logs are parseable, searchable, and aggregatable.
@@ -112,10 +112,10 @@ Location: `apps/web/lib/utils/logger.ts`
 **Example:**
 
 ```typescript
-logger.debug("Parsing workflow configuration", {
-  workflowId: "wf_123",
+logger.debug('Parsing workflow configuration', {
+  workflowId: 'wf_123',
   steps: 5,
-  triggers: ["manual", "scheduled"],
+  triggers: ['manual', 'scheduled'],
 });
 ```
 
@@ -132,9 +132,9 @@ logger.debug("Parsing workflow configuration", {
 **Example:**
 
 ```typescript
-logger.info("Agent executed successfully", {
-  agentId: "agent_123",
-  workspaceId: "ws_456",
+logger.info('Agent executed successfully', {
+  agentId: 'agent_123',
+  workspaceId: 'ws_456',
   duration: 1234,
   success: true,
 });
@@ -153,8 +153,8 @@ logger.info("Agent executed successfully", {
 **Example:**
 
 ```typescript
-logger.warn("API rate limit approaching", {
-  userId: "user_123",
+logger.warn('API rate limit approaching', {
+  userId: 'user_123',
   remaining: 10,
   limit: 100,
   resetAt: new Date(),
@@ -177,7 +177,7 @@ logger.warn("API rate limit approaching", {
 try {
   await executeAgent(agentId);
 } catch (error) {
-  logger.error("Agent execution failed", error, {
+  logger.error('Agent execution failed', error, {
     agentId,
     workspaceId,
     userId,
@@ -199,8 +199,8 @@ try {
 **Example:**
 
 ```typescript
-logger.test("Mock API response configured", {
-  endpoint: "/api/agents",
+logger.test('Mock API response configured', {
+  endpoint: '/api/agents',
   status: 200,
   responseTime: 50,
 });
@@ -232,14 +232,14 @@ Verbose | Normal | Alert | Critical
 **Examples:**
 
 ```typescript
-logger.debug("Entering user authentication flow", {
-  method: "email",
-  provider: "clerk",
+logger.debug('Entering user authentication flow', {
+  method: 'email',
+  provider: 'clerk',
 });
 
-logger.debug("Parsed configuration", {
+logger.debug('Parsed configuration', {
   config: parsedConfig,
-  source: "environment",
+  source: 'environment',
 });
 ```
 
@@ -257,14 +257,14 @@ logger.debug("Parsed configuration", {
 **Examples:**
 
 ```typescript
-logger.info("User signed in", {
-  userId: "user_123",
-  method: "email",
+logger.info('User signed in', {
+  userId: 'user_123',
+  method: 'email',
   timestamp: new Date(),
 });
 
-logger.info("Database migration completed", {
-  version: "0042",
+logger.info('Database migration completed', {
+  version: '0042',
   duration: 1234,
   tablesAffected: 3,
 });
@@ -285,14 +285,14 @@ logger.info("Database migration completed", {
 **Examples:**
 
 ```typescript
-logger.warn("Using deprecated API endpoint", {
-  endpoint: "/api/v1/agents",
-  replacement: "/api/v2/agents",
-  deprecationDate: "2025-12-31",
+logger.warn('Using deprecated API endpoint', {
+  endpoint: '/api/v1/agents',
+  replacement: '/api/v2/agents',
+  deprecationDate: '2025-12-31',
 });
 
-logger.warn("Slow database query detected", {
-  query: "SELECT * FROM agents",
+logger.warn('Slow database query detected', {
+  query: 'SELECT * FROM agents',
   duration: 5000,
   threshold: 1000,
 });
@@ -313,17 +313,17 @@ logger.warn("Slow database query detected", {
 **Examples:**
 
 ```typescript
-logger.error("Failed to connect to database", error, {
+logger.error('Failed to connect to database', error, {
   host: process.env.DATABASE_HOST,
-  database: "production",
+  database: 'production',
   retries: 3,
 });
 
-logger.error("Payment processing failed", error, {
-  userId: "user_123",
+logger.error('Payment processing failed', error, {
+  userId: 'user_123',
   amount: 9900,
-  currency: "USD",
-  provider: "stripe",
+  currency: 'USD',
+  provider: 'stripe',
 });
 ```
 
@@ -350,16 +350,16 @@ logger.error("Payment processing failed", error, {
 **Manual:**
 
 ```typescript
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.captureException(error, {
-  level: "error",
+  level: 'error',
   tags: {
-    feature: "agent-execution",
-    workspaceId: "ws_123",
+    feature: 'agent-execution',
+    workspaceId: 'ws_123',
   },
   extra: {
-    agentId: "agent_456",
+    agentId: 'agent_456',
     duration: 1234,
   },
 });
@@ -376,10 +376,10 @@ Sentry.setUser({
   email: maskedEmail, // user@example.com → u***@example.com
 });
 
-Sentry.setTag("feature", "document-processing");
-Sentry.setTag("environment", process.env.NODE_ENV);
+Sentry.setTag('feature', 'document-processing');
+Sentry.setTag('environment', process.env.NODE_ENV);
 
-Sentry.setContext("execution", {
+Sentry.setContext('execution', {
   agentId,
   duration,
   success,
@@ -409,8 +409,8 @@ Sentry tracks:
 ### API Routes
 
 ```typescript
-import { logger } from "@/lib/utils/logger";
-import { NextRequest, NextResponse } from "next/server";
+import { logger } from '@/lib/utils/logger';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const startTime = Date.now();
@@ -418,9 +418,9 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    logger.debug("API request received", {
-      endpoint: "/api/agents",
-      method: "POST",
+    logger.debug('API request received', {
+      endpoint: '/api/agents',
+      method: 'POST',
       body: body,
     });
 
@@ -428,7 +428,7 @@ export async function POST(req: NextRequest) {
 
     const duration = Date.now() - startTime;
 
-    logger.info("Agent created successfully", {
+    logger.info('Agent created successfully', {
       agentId: newAgent.id,
       workspaceId: body.workspaceId,
       duration,
@@ -438,16 +438,13 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const duration = Date.now() - startTime;
 
-    logger.error("Agent creation failed", error, {
-      endpoint: "/api/agents",
+    logger.error('Agent creation failed', error, {
+      endpoint: '/api/agents',
       duration,
       body: req.body,
     });
 
-    return NextResponse.json(
-      { error: "Failed to create agent" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Failed to create agent' }, { status: 500 });
   }
 }
 ```
@@ -455,10 +452,10 @@ export async function POST(req: NextRequest) {
 ### Database Operations
 
 ```typescript
-import { logger } from "@/lib/utils/logger";
+import { logger } from '@/lib/utils/logger';
 
 async function createAgent(data: CreateAgentInput) {
-  logger.debug("Creating agent in database", {
+  logger.debug('Creating agent in database', {
     workspaceId: data.workspaceId,
     agentName: data.name,
   });
@@ -466,16 +463,16 @@ async function createAgent(data: CreateAgentInput) {
   try {
     const [agent] = await db.insert(agents).values(data).returning();
 
-    logger.info("Agent created in database", {
+    logger.info('Agent created in database', {
       agentId: agent.id,
       workspaceId: data.workspaceId,
     });
 
     return agent;
   } catch (error) {
-    logger.error("Database insert failed", error, {
-      table: "agents",
-      operation: "insert",
+    logger.error('Database insert failed', error, {
+      table: 'agents',
+      operation: 'insert',
       workspaceId: data.workspaceId,
     });
     throw error;
@@ -486,15 +483,15 @@ async function createAgent(data: CreateAgentInput) {
 ### Background Jobs (Trigger.dev)
 
 ```typescript
-import { logger } from "@/lib/utils/logger";
-import { task } from "@trigger.dev/sdk/v3";
+import { logger } from '@/lib/utils/logger';
+import { task } from '@trigger.dev/sdk/v3';
 
 export const processDocument = task({
-  id: "process-document",
+  id: 'process-document',
   run: async (payload: { documentId: string; workspaceId: string }) => {
     const startTime = Date.now();
 
-    logger.info("🚀 Starting document processing", {
+    logger.info('🚀 Starting document processing', {
       documentId: payload.documentId,
       workspaceId: payload.workspaceId,
     });
@@ -504,7 +501,7 @@ export const processDocument = task({
 
       const duration = Date.now() - startTime;
 
-      logger.info("✅ Document processing complete", {
+      logger.info('✅ Document processing complete', {
         documentId: payload.documentId,
         duration,
         chunks: result.chunks,
@@ -514,7 +511,7 @@ export const processDocument = task({
     } catch (error) {
       const duration = Date.now() - startTime;
 
-      logger.error("❌ Document processing failed", error, {
+      logger.error('❌ Document processing failed', error, {
         documentId: payload.documentId,
         workspaceId: payload.workspaceId,
         duration,
@@ -570,7 +567,7 @@ export function AgentCard({ agent }: AgentCardProps) {
 try {
   await riskyOperation();
 } catch (error) {
-  logger.error("Risky operation failed", error, { context });
+  logger.error('Risky operation failed', error, { context });
   throw error; // Re-throw so caller knows it failed
 }
 
@@ -586,13 +583,13 @@ try {
 
 ```typescript
 // ✅ Good
-logger.error("Database connection failed", error, {
+logger.error('Database connection failed', error, {
   host: dbHost,
   database: dbName,
 });
 
 // ❌ Bad
-logger.error("Database connection failed", null, {
+logger.error('Database connection failed', null, {
   message: error.message, // Lost stack trace
 });
 ```
@@ -604,11 +601,11 @@ logger.error("Database connection failed", null, {
 try {
   const user = await findUser(id);
   if (!user) {
-    logger.warn("User not found", { userId: id }); // Warning, not error
+    logger.warn('User not found', { userId: id }); // Warning, not error
     return null;
   }
 } catch (error) {
-  logger.error("Database query failed", error); // Actual error
+  logger.error('Database query failed', error); // Actual error
   throw error;
 }
 ```
@@ -621,7 +618,7 @@ async function saveAgent(agent: Agent) {
   try {
     return await db.insert(agents).values(agent);
   } catch (error) {
-    logger.error("Insert failed", error); // First log
+    logger.error('Insert failed', error); // First log
     throw error;
   }
 }
@@ -630,7 +627,7 @@ async function createAgent(data: CreateAgentInput) {
   try {
     return await saveAgent(data);
   } catch (error) {
-    logger.error("Agent creation failed", error); // Second log (duplicate!)
+    logger.error('Agent creation failed', error); // Second log (duplicate!)
     throw error;
   }
 }
@@ -645,7 +642,7 @@ async function createAgent(data: CreateAgentInput) {
   try {
     return await saveAgent(data);
   } catch (error) {
-    logger.error("Agent creation failed", error); // Single log
+    logger.error('Agent creation failed', error); // Single log
     throw error;
   }
 }
@@ -707,21 +704,21 @@ Configure alerts in Sentry dashboard:
 
 ```typescript
 // User action
-logger.info("User performed action", { userId, action, resourceId });
+logger.info('User performed action', { userId, action, resourceId });
 
 // System event
-logger.info("Service started", { port, environment, version });
+logger.info('Service started', { port, environment, version });
 
 // Performance tracking
 const start = Date.now();
 // ... operation ...
-logger.info("Operation completed", { operation, duration: Date.now() - start });
+logger.info('Operation completed', { operation, duration: Date.now() - start });
 
 // Error with recovery
-logger.warn("Primary service failed, using fallback", { error, service });
+logger.warn('Primary service failed, using fallback', { error, service });
 
 // Critical error
-logger.error("Critical service failure", error, {
+logger.error('Critical service failure', error, {
   service,
   retries,
   fatal: true,
@@ -737,17 +734,17 @@ logger.error("Critical service failure", error, {
 **Before:**
 
 ```typescript
-console.log("Agent created:", agent.id);
-console.error("Failed to save:", error);
-console.warn("Deprecated feature used");
+console.log('Agent created:', agent.id);
+console.error('Failed to save:', error);
+console.warn('Deprecated feature used');
 ```
 
 **After:**
 
 ```typescript
-logger.info("Agent created", { agentId: agent.id });
-logger.error("Failed to save agent", error, { agentId: agent.id });
-logger.warn("Deprecated feature used", { feature: "old-api" });
+logger.info('Agent created', { agentId: agent.id });
+logger.error('Failed to save agent', error, { agentId: agent.id });
+logger.warn('Deprecated feature used', { feature: 'old-api' });
 ```
 
 ### Adding Context
@@ -755,15 +752,15 @@ logger.warn("Deprecated feature used", { feature: "old-api" });
 **Before:**
 
 ```typescript
-logger.info("User logged in");
+logger.info('User logged in');
 ```
 
 **After:**
 
 ```typescript
-logger.info("User logged in", {
+logger.info('User logged in', {
   userId: user.id,
-  method: "email",
+  method: 'email',
   timestamp: new Date(),
 });
 ```

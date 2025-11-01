@@ -3,8 +3,8 @@
  * Provides debounced search functionality with URL sync
  */
 
-import { useState, useEffect, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export interface SearchableAgent {
   id: string;
@@ -37,9 +37,7 @@ export function useMarketplaceSearch(
   const searchParams = useSearchParams();
 
   // Initialize search query from URL params
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams?.get("search") || "",
-  );
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('search') || '');
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -63,14 +61,12 @@ export function useMarketplaceSearch(
     const params = new URLSearchParams(window.location.search);
 
     if (debouncedQuery) {
-      params.set("search", debouncedQuery);
+      params.set('search', debouncedQuery);
     } else {
-      params.delete("search");
+      params.delete('search');
     }
 
-    const newUrl = params.toString()
-      ? `${currentPath}?${params.toString()}`
-      : currentPath;
+    const newUrl = params.toString() ? `${currentPath}?${params.toString()}` : currentPath;
 
     // Only update if URL actually changed
     if (newUrl !== window.location.pathname + window.location.search) {
@@ -80,7 +76,7 @@ export function useMarketplaceSearch(
 
   // Filter agents based on search query
   const filteredAgents = useMemo(() => {
-    if (!debouncedQuery || debouncedQuery.trim() === "") {
+    if (!debouncedQuery || debouncedQuery.trim() === '') {
       return agents;
     }
 
@@ -104,9 +100,7 @@ export function useMarketplaceSearch(
 
       // Search in tags
       if (agent.tags && Array.isArray(agent.tags)) {
-        const matchesTag = agent.tags.some((tag) =>
-          tag.toLowerCase().includes(query),
-        );
+        const matchesTag = agent.tags.some((tag) => tag.toLowerCase().includes(query));
         if (matchesTag) {
           return true;
         }
@@ -117,7 +111,7 @@ export function useMarketplaceSearch(
   }, [agents, debouncedQuery]);
 
   const clearSearch = () => {
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   return {

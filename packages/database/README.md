@@ -67,16 +67,16 @@ const agentsWith Workspace = await db
 ### Insert Data
 
 ```typescript
-import { db } from "@galaxyco/database";
-import { agents } from "@galaxyco/database/schema";
+import { db } from '@galaxyco/database';
+import { agents } from '@galaxyco/database/schema';
 
 const newAgent = await db
   .insert(agents)
   .values({
-    name: "My Agent",
-    workspaceId: "workspace_123",
-    model: "gpt-4o-mini",
-    systemPrompt: "You are a helpful assistant",
+    name: 'My Agent',
+    workspaceId: 'workspace_123',
+    model: 'gpt-4o-mini',
+    systemPrompt: 'You are a helpful assistant',
     createdAt: new Date(),
   })
   .returning();
@@ -85,14 +85,11 @@ const newAgent = await db
 ### Update Data
 
 ```typescript
-import { db } from "@galaxyco/database";
-import { agents } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@galaxyco/database';
+import { agents } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
-await db
-  .update(agents)
-  .set({ isActive: true })
-  .where(eq(agents.id, "agent_123"));
+await db.update(agents).set({ isActive: true }).where(eq(agents.id, 'agent_123'));
 ```
 
 ### Transactions
@@ -184,8 +181,8 @@ pnpm typecheck
 
 ```typescript
 // packages/database/src/client.ts
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 
 const sql = neon(process.env.DATABASE_URL!);
 export const db = drizzle(sql);
@@ -204,15 +201,12 @@ DATABASE_URL=postgresql://user:pass@host/database?sslmode=require
 ### ✅ Correct Usage
 
 ```typescript
-import { db } from "@galaxyco/database";
-import { agents } from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@galaxyco/database';
+import { agents } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
 
 // Always include workspace filter
-const myAgents = await db
-  .select()
-  .from(agents)
-  .where(eq(agents.workspaceId, currentWorkspaceId));
+const myAgents = await db.select().from(agents).where(eq(agents.workspaceId, currentWorkspaceId));
 ```
 
 ### ❌ NEVER Do This
@@ -227,13 +221,13 @@ const allAgents = await db.select().from(agents);
 ### Schema Types
 
 ```typescript
-import type { Agent, Workspace, User } from "@galaxyco/database/schema";
+import type { Agent, Workspace, User } from '@galaxyco/database/schema';
 
 // Fully typed
 const agent: Agent = {
-  id: "agent_123",
-  workspaceId: "workspace_123",
-  name: "My Agent",
+  id: 'agent_123',
+  workspaceId: 'workspace_123',
+  name: 'My Agent',
   // ... TypeScript knows all fields
 };
 ```
@@ -241,11 +235,11 @@ const agent: Agent = {
 ### Insert Types
 
 ```typescript
-import type { NewAgent } from "@galaxyco/database/schema";
+import type { NewAgent } from '@galaxyco/database/schema';
 
 const newAgent: NewAgent = {
-  workspaceId: "workspace_123",
-  name: "My Agent",
+  workspaceId: 'workspace_123',
+  name: 'My Agent',
   // ... only required fields needed
 };
 ```
@@ -267,12 +261,12 @@ await db.transaction(async (tx) => {
 const getAgentsByWorkspace = db
   .select()
   .from(agents)
-  .where(eq(agents.workspaceId, sql.placeholder("workspaceId")))
+  .where(eq(agents.workspaceId, sql.placeholder('workspaceId')))
   .prepare();
 
 // Reuse efficiently
-const result1 = await getAgentsByWorkspace.execute({ workspaceId: "ws_1" });
-const result2 = await getAgentsByWorkspace.execute({ workspaceId: "ws_2" });
+const result1 = await getAgentsByWorkspace.execute({ workspaceId: 'ws_1' });
+const result2 = await getAgentsByWorkspace.execute({ workspaceId: 'ws_2' });
 ```
 
 ### 3. Handle Errors Gracefully

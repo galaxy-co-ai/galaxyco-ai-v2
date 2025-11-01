@@ -1,13 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useCanvasStore } from "@/lib/studio/canvas-store";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { useState } from 'react';
+import { useCanvasStore } from '@/lib/studio/canvas-store';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Zap,
   Play,
@@ -29,9 +25,9 @@ import {
   Plus,
   Layout,
   ChevronDown,
-} from "lucide-react";
-import type { GridNodeType } from "@/lib/studio/types";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import type { GridNodeType } from '@/lib/studio/types';
+import { cn } from '@/lib/utils';
 
 // ============================================================================
 // Node Categories
@@ -39,54 +35,54 @@ import { cn } from "@/lib/utils";
 
 const NODE_CATEGORIES = [
   {
-    label: "Triggers",
+    label: 'Triggers',
     nodes: [
-      { type: "trigger" as GridNodeType, label: "Trigger", icon: Zap },
-      { type: "webhook" as GridNodeType, label: "Webhook", icon: Webhook },
+      { type: 'trigger' as GridNodeType, label: 'Trigger', icon: Zap },
+      { type: 'webhook' as GridNodeType, label: 'Webhook', icon: Webhook },
     ],
   },
   {
-    label: "Actions",
+    label: 'Actions',
     nodes: [
-      { type: "action" as GridNodeType, label: "Action", icon: Play },
-      { type: "ai" as GridNodeType, label: "AI", icon: Sparkles },
-      { type: "api" as GridNodeType, label: "API", icon: Globe },
-      { type: "database" as GridNodeType, label: "Database", icon: Database },
-      { type: "email" as GridNodeType, label: "Email", icon: Mail },
+      { type: 'action' as GridNodeType, label: 'Action', icon: Play },
+      { type: 'ai' as GridNodeType, label: 'AI', icon: Sparkles },
+      { type: 'api' as GridNodeType, label: 'API', icon: Globe },
+      { type: 'database' as GridNodeType, label: 'Database', icon: Database },
+      { type: 'email' as GridNodeType, label: 'Email', icon: Mail },
       {
-        type: "notification" as GridNodeType,
-        label: "Notification",
+        type: 'notification' as GridNodeType,
+        label: 'Notification',
         icon: Bell,
       },
     ],
   },
   {
-    label: "Logic",
+    label: 'Logic',
     nodes: [
       {
-        type: "condition" as GridNodeType,
-        label: "Condition",
+        type: 'condition' as GridNodeType,
+        label: 'Condition',
         icon: GitBranch,
       },
-      { type: "loop" as GridNodeType, label: "Loop", icon: Repeat },
-      { type: "branch" as GridNodeType, label: "Branch", icon: Share2 },
-      { type: "merge" as GridNodeType, label: "Merge", icon: Layers },
+      { type: 'loop' as GridNodeType, label: 'Loop', icon: Repeat },
+      { type: 'branch' as GridNodeType, label: 'Branch', icon: Share2 },
+      { type: 'merge' as GridNodeType, label: 'Merge', icon: Layers },
     ],
   },
   {
-    label: "Data",
+    label: 'Data',
     nodes: [
-      { type: "transform" as GridNodeType, label: "Transform", icon: Code },
-      { type: "filter" as GridNodeType, label: "Filter", icon: Filter },
-      { type: "aggregate" as GridNodeType, label: "Aggregate", icon: Layers },
+      { type: 'transform' as GridNodeType, label: 'Transform', icon: Code },
+      { type: 'filter' as GridNodeType, label: 'Filter', icon: Filter },
+      { type: 'aggregate' as GridNodeType, label: 'Aggregate', icon: Layers },
     ],
   },
   {
-    label: "Utility",
+    label: 'Utility',
     nodes: [
-      { type: "delay" as GridNodeType, label: "Delay", icon: Clock },
-      { type: "integration" as GridNodeType, label: "Integration", icon: Plug },
-      { type: "custom" as GridNodeType, label: "Custom", icon: Box },
+      { type: 'delay' as GridNodeType, label: 'Delay', icon: Clock },
+      { type: 'integration' as GridNodeType, label: 'Integration', icon: Plug },
+      { type: 'custom' as GridNodeType, label: 'Custom', icon: Box },
     ],
   },
 ];
@@ -125,11 +121,7 @@ export function CanvasToolbar() {
         {/* Add Node Button */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button
-              variant="default"
-              size="sm"
-              className="gap-2 bg-primary/90 hover:bg-primary"
-            >
+            <Button variant="default" size="sm" className="gap-2 bg-primary/90 hover:bg-primary">
               <Plus className="h-4 w-4" />
               Add Node
               <ChevronDown className="h-3 w-3 opacity-50" />
@@ -153,8 +145,8 @@ export function CanvasToolbar() {
                           key={node.type}
                           onClick={() => handleAddNode(node.type)}
                           className={cn(
-                            "w-full flex items-center gap-2 px-2 py-1.5 rounded-md",
-                            "text-sm hover:bg-accent transition-colors text-left",
+                            'w-full flex items-center gap-2 px-2 py-1.5 rounded-md',
+                            'text-sm hover:bg-accent transition-colors text-left',
                           )}
                         >
                           <Icon className="h-4 w-4 text-muted-foreground" />
@@ -170,12 +162,7 @@ export function CanvasToolbar() {
         </Popover>
 
         {/* Auto Layout */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleAutoLayout}
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" onClick={handleAutoLayout} className="gap-2">
           <Layout className="h-4 w-4" />
           Auto Layout
         </Button>

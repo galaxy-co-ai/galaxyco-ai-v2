@@ -34,44 +34,44 @@
 
 ```typescript
 // ❌ Before
-console.error("Failed to fetch data:", error);
+console.error('Failed to fetch data:', error);
 
 // ✅ After
-import { logger } from "@/lib/utils/logger";
-logger.error("Failed to fetch data", error);
+import { logger } from '@/lib/utils/logger';
+logger.error('Failed to fetch data', error);
 ```
 
 #### Example 2: Info Logging with Context
 
 ```typescript
 // ❌ Before
-console.log("User action:", { userId, action });
+console.log('User action:', { userId, action });
 
 // ✅ After
-import { logger } from "@/lib/utils/logger";
-logger.info("User action", { userId, action });
+import { logger } from '@/lib/utils/logger';
+logger.info('User action', { userId, action });
 ```
 
 #### Example 3: Debug Logging
 
 ```typescript
 // ❌ Before
-console.log("Debug info:", data);
+console.log('Debug info:', data);
 
 // ✅ After
-import { logger } from "@/lib/utils/logger";
-logger.debug("Debug info", { data });
+import { logger } from '@/lib/utils/logger';
+logger.debug('Debug info', { data });
 ```
 
 #### Example 4: API Route Logging
 
 ```typescript
 // ❌ Before
-console.error("[API] Error:", error);
+console.error('[API] Error:', error);
 
 // ✅ After
-import { logger } from "@/lib/utils/logger";
-logger.error("[API] Request failed", error, { endpoint, method });
+import { logger } from '@/lib/utils/logger';
+logger.error('[API] Request failed', error, { endpoint, method });
 ```
 
 ---

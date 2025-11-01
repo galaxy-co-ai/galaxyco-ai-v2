@@ -93,11 +93,11 @@ const DialogContent = React.forwardRef<
 ```typescript path=apps/web/components/ui/button.tsx start=10
 const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2 rounded font-medium",
-    "transition-colors duration-fast",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-    "disabled:pointer-events-none disabled:opacity-50",
-    "whitespace-nowrap",
+    'inline-flex items-center justify-center gap-2 rounded font-medium',
+    'transition-colors duration-fast',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+    'disabled:pointer-events-none disabled:opacity-50',
+    'whitespace-nowrap',
   ],
   // ...
 );

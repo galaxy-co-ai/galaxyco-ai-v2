@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Trash2, Loader2, AlertTriangle } from "lucide-react";
+import { useState } from 'react';
+import { Trash2, Loader2, AlertTriangle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { logger } from "@/lib/utils/logger";
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import { logger } from '@/lib/utils/logger';
 
 interface DeleteDialogProps {
   open: boolean;
@@ -34,20 +34,20 @@ export function DeleteDialog({
     try {
       setDeleting(true);
       const res = await fetch(`/api/documents/${documentId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
-      if (!res.ok) throw new Error("Failed to delete document");
+      if (!res.ok) throw new Error('Failed to delete document');
 
-      toast.success("Document deleted successfully");
+      toast.success('Document deleted successfully');
       onOpenChange(false);
       onSuccess?.();
     } catch (err) {
-      logger.error("Failed to delete document", {
+      logger.error('Failed to delete document', {
         error: err instanceof Error ? err.message : String(err),
         documentId,
       });
-      toast.error("Failed to delete document");
+      toast.error('Failed to delete document');
     } finally {
       setDeleting(false);
     }
@@ -64,12 +64,12 @@ export function DeleteDialog({
             <DialogTitle>Delete Document</DialogTitle>
           </div>
           <DialogDescription className="text-left">
-            Are you sure you want to delete{" "}
+            Are you sure you want to delete{' '}
             <span className="font-semibold text-neutral-900 dark:text-neutral-100">
               {documentName}
             </span>
-            ? This action cannot be undone and the document will be permanently
-            removed from your collection.
+            ? This action cannot be undone and the document will be permanently removed from your
+            collection.
           </DialogDescription>
         </DialogHeader>
 

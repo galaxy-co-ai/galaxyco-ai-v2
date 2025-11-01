@@ -239,11 +239,7 @@
   - **Check**: CORS allows Vercel preview and production domains
   - **Expected**:
     ```typescript
-    origin: [
-      "https://galaxyco.ai",
-      "https://*.vercel.app",
-      "http://localhost:3000",
-    ];
+    origin: ['https://galaxyco.ai', 'https://*.vercel.app', 'http://localhost:3000'];
     ```
 
 **Completion Criteria**:
@@ -413,17 +409,17 @@
   - **Example k6 script**:
 
   ```javascript
-  import http from "k6/http";
-  import { check, sleep } from "k6";
+  import http from 'k6/http';
+  import { check, sleep } from 'k6';
 
   export const options = {
     vus: 50,
-    duration: "5m",
+    duration: '5m',
   };
 
   export default function () {
-    const res = http.get("https://api.galaxyco.ai/health");
-    check(res, { "status is 200": (r) => r.status === 200 });
+    const res = http.get('https://api.galaxyco.ai/health');
+    check(res, { 'status is 200': (r) => r.status === 200 });
     sleep(0.5);
   }
   ```

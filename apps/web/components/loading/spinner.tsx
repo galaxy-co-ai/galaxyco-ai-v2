@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface SpinnerProps {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
 }
 
@@ -13,39 +13,37 @@ interface SpinnerProps {
  *
  * Animated spinner for loading states
  */
-export function Spinner({ size = "md", className }: SpinnerProps) {
+export function Spinner({ size = 'md', className }: SpinnerProps) {
   const sizeClasses = {
-    sm: "h-4 w-4",
-    md: "h-6 w-6",
-    lg: "h-8 w-8",
-    xl: "h-12 w-12",
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8',
+    xl: 'h-12 w-12',
   };
 
-  return (
-    <Loader2 className={cn("animate-spin", sizeClasses[size], className)} />
-  );
+  return <Loader2 className={cn('animate-spin', sizeClasses[size], className)} />;
 }
 
 /**
  * Inline Loading Component
  */
 export function InlineLoading({
-  text = "Loading...",
-  size = "md",
+  text = 'Loading...',
+  size = 'md',
   className,
 }: {
   text?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }) {
   const textSizes = {
-    sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg",
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-lg',
   };
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn('flex items-center space-x-2', className)}>
       <Spinner size={size} />
       <span className={textSizes[size]}>{text}</span>
     </div>
@@ -56,22 +54,19 @@ export function InlineLoading({
  * Centered Loading Component
  */
 export function CenteredLoading({
-  text = "Loading...",
-  size = "md",
+  text = 'Loading...',
+  size = 'md',
   className,
-  minHeight = "200px",
+  minHeight = '200px',
 }: {
   text?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   minHeight?: string;
 }) {
   return (
     <div
-      className={cn(
-        "flex flex-col items-center justify-center space-y-2",
-        className,
-      )}
+      className={cn('flex flex-col items-center justify-center space-y-2', className)}
       style={{ minHeight }}
     >
       <Spinner size={size} />
@@ -84,7 +79,7 @@ export function CenteredLoading({
  * Full Screen Loading Component
  */
 export function FullScreenLoading({
-  text = "Loading...",
+  text = 'Loading...',
   backdrop = true,
 }: {
   text?: string;
@@ -93,8 +88,8 @@ export function FullScreenLoading({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center",
-        backdrop && "bg-background/80 backdrop-blur-sm",
+        'fixed inset-0 z-50 flex items-center justify-center',
+        backdrop && 'bg-background/80 backdrop-blur-sm',
       )}
     >
       <div className="flex flex-col items-center space-y-4">
@@ -126,8 +121,8 @@ export function ButtonLoading({
       {...props}
       disabled={disabled || isLoading}
       className={cn(
-        "inline-flex items-center justify-center",
-        isLoading && "cursor-not-allowed opacity-70",
+        'inline-flex items-center justify-center',
+        isLoading && 'cursor-not-allowed opacity-70',
         props.className,
       )}
     >
@@ -143,7 +138,7 @@ export function ButtonLoading({
 export function ContentLoadingOverlay({
   isLoading,
   children,
-  text = "Loading...",
+  text = 'Loading...',
 }: {
   isLoading: boolean;
   children: React.ReactNode;
@@ -177,13 +172,11 @@ export function ProgressBar({
   showPercentage?: boolean;
 }) {
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn('w-full', className)}>
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm font-medium">Loading...</span>
         {showPercentage && (
-          <span className="text-sm text-muted-foreground">
-            {Math.round(progress)}%
-          </span>
+          <span className="text-sm text-muted-foreground">{Math.round(progress)}%</span>
         )}
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -201,19 +194,19 @@ export function ProgressBar({
  */
 export function DotsLoading({ className }: { className?: string }) {
   return (
-    <div className={cn("flex space-x-1", className)}>
+    <div className={cn('flex space-x-1', className)}>
       {[0, 1, 2].map((index) => (
         <div
           key={index}
           className={cn(
-            "h-2 w-2 rounded-full bg-current animate-pulse",
-            index === 0 && "animation-delay-0",
-            index === 1 && "animation-delay-150",
-            index === 2 && "animation-delay-300",
+            'h-2 w-2 rounded-full bg-current animate-pulse',
+            index === 0 && 'animation-delay-0',
+            index === 1 && 'animation-delay-150',
+            index === 2 && 'animation-delay-300',
           )}
           style={{
             animationDelay: `${index * 150}ms`,
-            animationDuration: "1s",
+            animationDuration: '1s',
           }}
         />
       ))}
@@ -231,5 +224,5 @@ export function PulseLoading({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <div className={cn("animate-pulse", className)}>{children}</div>;
+  return <div className={cn('animate-pulse', className)}>{children}</div>;
 }

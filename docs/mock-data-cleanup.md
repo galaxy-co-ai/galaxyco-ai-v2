@@ -140,7 +140,7 @@ Update `apps/web/app/dashboard/page.tsx`:
 
 ```typescript
 // Instead of:
-import { mockDashboardStats } from "@/lib/mock-data/dashboard-agents";
+import { mockDashboardStats } from '@/lib/mock-data/dashboard-agents';
 
 // Use:
 const stats = await fetchDashboardStats(workspaceId);
@@ -164,7 +164,7 @@ Update `apps/web/components/dashboard/RecentActivity.tsx`:
 
 ```typescript
 // Instead of:
-import { mockRecentActivity } from "@/lib/mock-data/dashboard-agents";
+import { mockRecentActivity } from '@/lib/mock-data/dashboard-agents';
 
 // Use:
 const activity = await fetchRecentActivity(workspaceId);

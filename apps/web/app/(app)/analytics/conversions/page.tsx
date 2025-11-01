@@ -1,17 +1,11 @@
-import { Metadata } from "next";
-import {
-  TrendingUp,
-  TrendingDown,
-  Target,
-  Users,
-  DollarSign,
-} from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Metadata } from 'next';
+import { TrendingUp, TrendingDown, Target, Users, DollarSign } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
-  title: "Conversion Analytics | GalaxyCo.ai",
-  description: "Track conversion rates and funnel performance",
+  title: 'Conversion Analytics | GalaxyCo.ai',
+  description: 'Track conversion rates and funnel performance',
 };
 
 export default function ConversionsAnalyticsPage() {
@@ -29,9 +23,7 @@ export default function ConversionsAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Overall Conversion Rate
-            </span>
+            <span className="text-sm text-foreground-muted">Overall Conversion Rate</span>
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -45,9 +37,7 @@ export default function ConversionsAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Total Conversions
-            </span>
+            <span className="text-sm text-foreground-muted">Total Conversions</span>
             <Users className="h-5 w-5 text-success" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -61,9 +51,7 @@ export default function ConversionsAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Revenue Generated
-            </span>
+            <span className="text-sm text-foreground-muted">Revenue Generated</span>
             <DollarSign className="h-5 w-5 text-warning" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -77,9 +65,7 @@ export default function ConversionsAnalyticsPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-foreground-muted">
-              Avg. Time to Convert
-            </span>
+            <span className="text-sm text-foreground-muted">Avg. Time to Convert</span>
             <Target className="h-5 w-5 text-foreground-muted" />
           </div>
           <div className="flex items-baseline gap-2">
@@ -97,11 +83,11 @@ export default function ConversionsAnalyticsPage() {
         <h2 className="text-xl font-semibold mb-6">Conversion Funnel</h2>
         <div className="space-y-4">
           {[
-            { stage: "Visitors", count: 12450, percentage: 100, dropOff: 0 },
-            { stage: "Sign Ups", count: 4980, percentage: 40, dropOff: 60 },
-            { stage: "Activated", count: 3486, percentage: 28, dropOff: 12 },
-            { stage: "Trial Started", count: 2490, percentage: 20, dropOff: 8 },
-            { stage: "Converted", count: 1847, percentage: 14.8, dropOff: 5.2 },
+            { stage: 'Visitors', count: 12450, percentage: 100, dropOff: 0 },
+            { stage: 'Sign Ups', count: 4980, percentage: 40, dropOff: 60 },
+            { stage: 'Activated', count: 3486, percentage: 28, dropOff: 12 },
+            { stage: 'Trial Started', count: 2490, percentage: 20, dropOff: 8 },
+            { stage: 'Converted', count: 1847, percentage: 14.8, dropOff: 5.2 },
           ].map((stage, index) => (
             <div key={index}>
               <div className="flex items-center justify-between mb-2">
@@ -141,28 +127,28 @@ export default function ConversionsAnalyticsPage() {
         <div className="space-y-4">
           {[
             {
-              name: "Email Nurture Campaign",
+              name: 'Email Nurture Campaign',
               conversions: 487,
               rate: 32.4,
-              trend: "up",
+              trend: 'up',
             },
             {
-              name: "Product Demo Follow-up",
+              name: 'Product Demo Follow-up',
               conversions: 356,
               rate: 28.7,
-              trend: "up",
+              trend: 'up',
             },
             {
-              name: "Trial Expiration Reminder",
+              name: 'Trial Expiration Reminder',
               conversions: 289,
               rate: 24.1,
-              trend: "down",
+              trend: 'down',
             },
             {
-              name: "Onboarding Sequence",
+              name: 'Onboarding Sequence',
               conversions: 245,
               rate: 19.8,
-              trend: "up",
+              trend: 'up',
             },
           ].map((workflow, index) => (
             <div
@@ -171,13 +157,11 @@ export default function ConversionsAnalyticsPage() {
             >
               <div className="flex-1">
                 <h3 className="font-semibold mb-1">{workflow.name}</h3>
-                <p className="text-sm text-foreground-muted">
-                  {workflow.conversions} conversions
-                </p>
+                <p className="text-sm text-foreground-muted">{workflow.conversions} conversions</p>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-2xl font-bold">{workflow.rate}%</span>
-                {workflow.trend === "up" ? (
+                {workflow.trend === 'up' ? (
                   <TrendingUp className="h-5 w-5 text-success" />
                 ) : (
                   <TrendingDown className="h-5 w-5 text-destructive" />
@@ -194,23 +178,23 @@ export default function ConversionsAnalyticsPage() {
         <div className="space-y-4">
           {[
             {
-              channel: "Email",
+              channel: 'Email',
               conversions: 847,
               rate: 31.2,
-              color: "primary",
+              color: 'primary',
             },
-            { channel: "Chat", conversions: 456, rate: 25.8, color: "success" },
+            { channel: 'Chat', conversions: 456, rate: 25.8, color: 'success' },
             {
-              channel: "Web Form",
+              channel: 'Web Form',
               conversions: 334,
               rate: 18.4,
-              color: "warning",
+              color: 'warning',
             },
             {
-              channel: "Phone",
+              channel: 'Phone',
               conversions: 210,
               rate: 12.7,
-              color: "destructive",
+              color: 'destructive',
             },
           ].map((channel, index) => (
             <div key={index} className="space-y-2">

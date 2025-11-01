@@ -101,7 +101,7 @@ Make it production-ready with proper TypeScript types and accessible markup.
 V0 will generate something like:
 
 ```tsx
-import { Star } from "lucide-react";
+import { Star } from 'lucide-react';
 
 interface MarketplaceAgentCardProps {
   agent: {
@@ -109,7 +109,7 @@ interface MarketplaceAgentCardProps {
     name: string;
     category: string;
     description: string;
-    price: string | "Free";
+    price: string | 'Free';
     rating: number;
     totalRuns: number;
     successRate: number;

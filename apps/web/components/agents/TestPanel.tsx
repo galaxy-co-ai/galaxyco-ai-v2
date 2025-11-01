@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { executeAgent } from "@/lib/actions/agent-actions";
-import { useWorkspaceAuth } from "@/hooks/use-workspace-auth";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-  shadows,
-} from "@/lib/constants/design-system";
+import React, { useState } from 'react';
+import { executeAgent } from '@/lib/actions/agent-actions';
+import { useWorkspaceAuth } from '@/hooks/use-workspace-auth';
+import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelProps {
   agentId?: string;
@@ -38,12 +32,12 @@ export const TestPanel: React.FC<TestPanelProps> = ({
 
   const handleRunTest = async () => {
     if (!agentId) {
-      setError("Agent must be saved before testing");
+      setError('Agent must be saved before testing');
       return;
     }
 
     if (!isAuthenticated) {
-      setError("Not authenticated. Please sign in and select a workspace.");
+      setError('Not authenticated. Please sign in and select a workspace.');
       return;
     }
 
@@ -55,16 +49,16 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       const inputs = JSON.parse(inputJson);
 
       // Execute agent with appropriate mode
-      const mode = useLiveMode ? "live" : "mock";
+      const mode = useLiveMode ? 'live' : 'mock';
       const result = await executeAgent(agentId, inputs, mode);
 
       setTestResult(result);
       onTestComplete?.(result);
     } catch (err: any) {
       if (err instanceof SyntaxError) {
-        setError("Invalid JSON input. Please check your syntax.");
+        setError('Invalid JSON input. Please check your syntax.');
       } else {
-        setError(err.message || "Test execution failed");
+        setError(err.message || 'Test execution failed');
       }
     } finally {
       setIsRunning(false);
@@ -72,7 +66,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
   };
 
   const handleClear = () => {
-    setInputJson("{\n  \n}");
+    setInputJson('{\n  \n}');
     setTestResult(null);
     setError(null);
   };
@@ -91,33 +85,33 @@ export const TestPanel: React.FC<TestPanelProps> = ({
       <div
         onClick={onClose}
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(4px)",
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
           zIndex: 40,
-          display: window.innerWidth <= 640 ? "block" : "none",
+          display: window.innerWidth <= 640 ? 'block' : 'none',
         }}
       />
 
       {/* Panel */}
       <div
         style={{
-          position: "fixed",
+          position: 'fixed',
           right: 0,
           top: 0,
           bottom: 0,
-          width: window.innerWidth <= 640 ? "100%" : "450px",
+          width: window.innerWidth <= 640 ? '100%' : '450px',
           backgroundColor: colors.background.primary,
           borderLeft: `1px solid ${colors.border.default}`,
           boxShadow: shadows.xl,
           zIndex: 50,
-          display: "flex",
-          flexDirection: "column",
-          animation: "slideInRight 300ms ease-out",
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'slideInRight 300ms ease-out',
         }}
       >
         {/* Header */}
@@ -125,9 +119,9 @@ export const TestPanel: React.FC<TestPanelProps> = ({
           style={{
             padding: spacing.lg,
             borderBottom: `1px solid ${colors.border.default}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <div>
@@ -156,25 +150,24 @@ export const TestPanel: React.FC<TestPanelProps> = ({
             type="button"
             onClick={onClose}
             style={{
-              width: "32px",
-              height: "32px",
-              backgroundColor: "transparent",
+              width: '32px',
+              height: '32px',
+              backgroundColor: 'transparent',
               border: `1px solid ${colors.border.default}`,
               borderRadius: radius.md,
-              cursor: "pointer",
+              cursor: 'pointer',
               fontSize: typography.sizes.lg,
               color: colors.text.tertiary,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 200ms",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 200ms',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                colors.background.secondary;
+              e.currentTarget.style.backgroundColor = colors.background.secondary;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
             ×
@@ -182,12 +175,12 @@ export const TestPanel: React.FC<TestPanelProps> = ({
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, overflow: "auto", padding: spacing.lg }}>
+        <div style={{ flex: 1, overflow: 'auto', padding: spacing.lg }}>
           {/* Execution Mode Toggle */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: spacing.md,
               marginBottom: spacing.md,
               padding: spacing.md,
@@ -216,8 +209,8 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 }}
               >
                 {useLiveMode
-                  ? "🚀 Live execution with real AI"
-                  : "🎭 Mock mode (simulated response)"}
+                  ? '🚀 Live execution with real AI'
+                  : '🎭 Mock mode (simulated response)'}
               </p>
             </div>
             <button
@@ -225,30 +218,28 @@ export const TestPanel: React.FC<TestPanelProps> = ({
               onClick={() => setUseLiveMode(!useLiveMode)}
               disabled={isRunning}
               style={{
-                position: "relative",
-                width: "56px",
-                height: "32px",
-                backgroundColor: useLiveMode
-                  ? colors.primaryColor
-                  : colors.background.tertiary,
+                position: 'relative',
+                width: '56px',
+                height: '32px',
+                backgroundColor: useLiveMode ? colors.primaryColor : colors.background.tertiary,
                 borderRadius: radius.full,
                 border: `1px solid ${colors.border.default}`,
-                cursor: isRunning ? "not-allowed" : "pointer",
-                transition: "all 200ms",
+                cursor: isRunning ? 'not-allowed' : 'pointer',
+                transition: 'all 200ms',
                 opacity: isRunning ? 0.6 : 1,
               }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  top: "3px",
-                  left: useLiveMode ? "26px" : "3px",
-                  width: "24px",
-                  height: "24px",
+                  position: 'absolute',
+                  top: '3px',
+                  left: useLiveMode ? '26px' : '3px',
+                  width: '24px',
+                  height: '24px',
                   backgroundColor: colors.background.primary,
                   borderRadius: radius.full,
                   boxShadow: shadows.sm,
-                  transition: "all 200ms",
+                  transition: 'all 200ms',
                 }}
               />
             </button>
@@ -258,7 +249,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
           <div style={{ marginBottom: spacing.xl }}>
             <label
               style={{
-                display: "block",
+                display: 'block',
                 marginBottom: spacing.sm,
                 fontSize: typography.sizes.sm,
                 fontWeight: typography.weights.medium,
@@ -273,17 +264,17 @@ export const TestPanel: React.FC<TestPanelProps> = ({
               disabled={isRunning}
               placeholder='{\n  "key": "value"\n}'
               style={{
-                width: "100%",
-                minHeight: "200px",
+                width: '100%',
+                minHeight: '200px',
                 padding: spacing.md,
                 fontSize: typography.sizes.sm,
-                fontFamily: "monospace",
+                fontFamily: 'monospace',
                 color: colors.text.primary,
                 backgroundColor: colors.background.secondary,
                 border: `1px solid ${colors.border.default}`,
                 borderRadius: radius.md,
-                resize: "vertical",
-                outline: "none",
+                resize: 'vertical',
+                outline: 'none',
                 opacity: isRunning ? 0.6 : 1,
               }}
             />
@@ -303,7 +294,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
           {/* Action Buttons */}
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               gap: spacing.sm,
               marginBottom: spacing.xl,
             }}
@@ -319,15 +310,15 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
                 backgroundColor: colors.primaryColor,
-                border: "none",
+                border: 'none',
                 borderRadius: radius.md,
-                cursor: isRunning || !agentId ? "not-allowed" : "pointer",
+                cursor: isRunning || !agentId ? 'not-allowed' : 'pointer',
                 opacity: isRunning || !agentId ? 0.6 : 1,
-                transition: "all 200ms",
+                transition: 'all 200ms',
                 boxShadow: shadows.sm,
               }}
             >
-              {isRunning ? "⏳ Running..." : "▶️ Run Test"}
+              {isRunning ? '⏳ Running...' : '▶️ Run Test'}
             </button>
             <button
               type="button"
@@ -338,21 +329,20 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.medium,
                 color: colors.text.secondary,
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
                 border: `1px solid ${colors.border.default}`,
                 borderRadius: radius.md,
-                cursor: isRunning ? "not-allowed" : "pointer",
+                cursor: isRunning ? 'not-allowed' : 'pointer',
                 opacity: isRunning ? 0.6 : 1,
-                transition: "all 200ms",
+                transition: 'all 200ms',
               }}
               onMouseEnter={(e) => {
                 if (!isRunning) {
-                  e.currentTarget.style.backgroundColor =
-                    colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = colors.background.secondary;
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               Clear
@@ -364,9 +354,9 @@ export const TestPanel: React.FC<TestPanelProps> = ({
             <div>
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   marginBottom: spacing.sm,
                 }}
               >
@@ -379,7 +369,7 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                 >
                   Output
                 </label>
-                <div style={{ display: "flex", gap: spacing.xs }}>
+                <div style={{ display: 'flex', gap: spacing.xs }}>
                   <button
                     type="button"
                     onClick={() => setShowRaw(!showRaw)}
@@ -388,14 +378,14 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                       fontSize: typography.sizes.xs,
                       fontWeight: typography.weights.medium,
                       color: colors.text.secondary,
-                      backgroundColor: "transparent",
+                      backgroundColor: 'transparent',
                       border: `1px solid ${colors.border.default}`,
                       borderRadius: radius.sm,
-                      cursor: "pointer",
-                      transition: "all 200ms",
+                      cursor: 'pointer',
+                      transition: 'all 200ms',
                     }}
                   >
-                    {showRaw ? "Pretty" : "Raw"}
+                    {showRaw ? 'Pretty' : 'Raw'}
                   </button>
                   <button
                     type="button"
@@ -405,11 +395,11 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                       fontSize: typography.sizes.xs,
                       fontWeight: typography.weights.medium,
                       color: colors.text.secondary,
-                      backgroundColor: "transparent",
+                      backgroundColor: 'transparent',
                       border: `1px solid ${colors.border.default}`,
                       borderRadius: radius.sm,
-                      cursor: "pointer",
-                      transition: "all 200ms",
+                      cursor: 'pointer',
+                      transition: 'all 200ms',
                     }}
                   >
                     📋 Copy
@@ -430,23 +420,19 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   style={{
                     margin: 0,
                     fontSize: typography.sizes.sm,
-                    fontFamily: "monospace",
+                    fontFamily: 'monospace',
                     color: colors.text.primary,
-                    whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
                   }}
                 >
-                  {showRaw
-                    ? JSON.stringify(testResult)
-                    : JSON.stringify(testResult, null, 2)}
+                  {showRaw ? JSON.stringify(testResult) : JSON.stringify(testResult, null, 2)}
                 </pre>
               </div>
 
               {/* Metrics */}
               {testResult.metrics && (
-                <div
-                  style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs }}
-                >
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.xs }}>
                   {/* Token count */}
                   {testResult.metrics.tokens && (
                     <div
@@ -511,15 +497,13 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   <div
                     style={{
                       padding: `${spacing.xs} ${spacing.sm}`,
-                      backgroundColor: testResult.success
-                        ? colors.successColor
-                        : colors.danger,
+                      backgroundColor: testResult.success ? colors.successColor : colors.danger,
                       borderRadius: radius.sm,
                       fontSize: typography.sizes.xs,
                       color: colors.background.primary,
                     }}
                   >
-                    {testResult.success ? "✓ Success" : "✗ Failed"}
+                    {testResult.success ? '✓ Success' : '✗ Failed'}
                   </div>
 
                   {/* Execution Mode */}
@@ -528,15 +512,13 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
                         backgroundColor:
-                          testResult.mode === "mock"
-                            ? colors.warningColor
-                            : colors.primaryColor,
+                          testResult.mode === 'mock' ? colors.warningColor : colors.primaryColor,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,
                       }}
                     >
-                      {testResult.mode === "mock" ? "🎭 Mock" : "🚀 Live"}
+                      {testResult.mode === 'mock' ? '🎭 Mock' : '🚀 Live'}
                     </div>
                   )}
                 </div>
@@ -561,9 +543,9 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                   margin: 0,
                 }}
               >
-                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click
-                &quot;Run Test&quot;. Toggle Live Mode to test with real AI
-                (requires API keys configured in Settings).
+                💡 <strong>Tip:</strong> Enter valid JSON inputs above and click &quot;Run
+                Test&quot;. Toggle Live Mode to test with real AI (requires API keys configured in
+                Settings).
               </p>
             </div>
           )}

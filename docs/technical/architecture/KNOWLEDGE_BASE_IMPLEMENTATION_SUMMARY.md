@@ -214,24 +214,24 @@ Agent synthesizes answer with citations
 
 ```typescript
 // Example test structure
-describe("Knowledge Base Integration", () => {
-  describe("UI Component", () => {
-    test("renders enabled toggle");
+describe('Knowledge Base Integration', () => {
+  describe('UI Component', () => {
+    test('renders enabled toggle');
     test('shows collections when scope is "collections"');
-    test("validates collection selection");
-    test("updates state correctly");
+    test('validates collection selection');
+    test('updates state correctly');
   });
 
-  describe("State Management", () => {
-    test("validates knowledge base config");
-    test("saves knowledge base config");
-    test("applies template with knowledge base");
+  describe('State Management', () => {
+    test('validates knowledge base config');
+    test('saves knowledge base config');
+    test('applies template with knowledge base');
   });
 
-  describe("Agent Execution", () => {
-    test("adds searchKnowledgeBase tool when enabled");
-    test("executes tool with correct parameters");
-    test("returns results with citations");
+  describe('Agent Execution', () => {
+    test('adds searchKnowledgeBase tool when enabled');
+    test('executes tool with correct parameters');
+    test('returns results with citations');
   });
 });
 ```

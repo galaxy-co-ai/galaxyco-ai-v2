@@ -119,24 +119,24 @@ ANTHROPIC_API_KEY=sk-ant-...
 ### Example Usage
 
 ```typescript
-import { AIGatewayService } from "@/lib/ai-gateway";
+import { AIGatewayService } from '@/lib/ai-gateway';
 
 const response = await AIGatewayService.generateText({
-  tenantId: "workspace_123",
-  userId: "user_456",
-  agentId: "agent_789",
-  model: "gpt-4o-mini",
+  tenantId: 'workspace_123',
+  userId: 'user_456',
+  agentId: 'agent_789',
+  model: 'gpt-4o-mini',
   messages: [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "Hello!" },
+    { role: 'system', content: 'You are a helpful assistant.' },
+    { role: 'user', content: 'Hello!' },
   ],
   temperature: 0.7,
   maxTokens: 1000,
 });
 
-console.log("Response:", response.content);
-console.log("Cost:", response.cost);
-console.log("Latency:", response.latencyMs, "ms");
+console.log('Response:', response.content);
+console.log('Cost:', response.cost);
+console.log('Latency:', response.latencyMs, 'ms');
 ```
 
 ## ✅ Benefits Achieved

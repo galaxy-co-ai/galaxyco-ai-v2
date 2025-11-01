@@ -4,43 +4,37 @@
  * October 19, 2025
  */
 
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import {
-  Receipt,
-  Megaphone,
-  Mail,
-  ChevronRight,
-  TrendingUp,
-} from "lucide-react";
+import Link from 'next/link';
+import { Card } from '@/components/ui/card';
+import { Receipt, Megaphone, Mail, ChevronRight, TrendingUp } from 'lucide-react';
 
 export default function BusinessHub() {
   const businessSections = [
     {
-      title: "Invoices",
-      href: "/business/invoices",
+      title: 'Invoices',
+      href: '/business/invoices',
       icon: Receipt,
-      description: "Invoice management and billing",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      description: 'Invoice management and billing',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
     },
     {
-      title: "Campaigns",
-      href: "/business/campaigns",
+      title: 'Campaigns',
+      href: '/business/campaigns',
       icon: Megaphone,
-      description: "Marketing campaigns and tracking",
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
+      description: 'Marketing campaigns and tracking',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
     },
     {
-      title: "Emails",
-      href: "/business/emails",
+      title: 'Emails',
+      href: '/business/emails',
       icon: Mail,
-      description: "Email threads and communications",
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+      description: 'Email threads and communications',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
     },
   ];
 
@@ -49,9 +43,7 @@ export default function BusinessHub() {
       <div className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              Business Operations
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">Business Operations</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Manage invoices, campaigns, and communications
             </p>
@@ -76,12 +68,8 @@ export default function BusinessHub() {
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {section.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {section.description}
-                  </p>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground">{section.description}</p>
                 </Card>
               </Link>
             );

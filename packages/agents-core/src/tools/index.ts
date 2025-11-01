@@ -6,28 +6,28 @@
  */
 
 // Import database tools (only implemented category so far)
-export * from "./database-tools";
+export * from './database-tools';
 // Knowledge search tool for RAG
-export * from "./knowledge-search";
+export * from './knowledge-search';
 // TODO: Uncomment as tools are implemented
 // export * from "./communication-tools";
 // export * from "./task-tools";
 // export * from "./analysis-tools";
 
 // Import tool creation functions
-import { createDatabaseTools } from "./database-tools";
-import { createKnowledgeSearchTool } from "./knowledge-search";
-import type { Tool } from "../types";
+import { createDatabaseTools } from './database-tools';
+import { createKnowledgeSearchTool } from './knowledge-search';
+import type { Tool } from '../types';
 
 /**
  * Tool categories for organization
  */
 export enum ToolCategory {
-  DATABASE = "database",
-  COMMUNICATION = "communication",
-  TASK = "task",
-  ANALYSIS = "analysis",
-  KNOWLEDGE = "knowledge",
+  DATABASE = 'database',
+  COMMUNICATION = 'communication',
+  TASK = 'task',
+  ANALYSIS = 'analysis',
+  KNOWLEDGE = 'knowledge',
 }
 
 /**
@@ -71,29 +71,29 @@ export function getToolsForAgentType(agentType: string): Tool[] {
  */
 export const TOOL_DESCRIPTIONS = {
   // Database Tools
-  search_agents: "Search for agents in the workspace",
-  get_agent: "Get detailed agent information",
-  get_workspace_stats: "Get workspace statistics",
+  search_agents: 'Search for agents in the workspace',
+  get_agent: 'Get detailed agent information',
+  get_workspace_stats: 'Get workspace statistics',
 
   // Communication Tools
-  draft_email: "Draft an email without sending",
-  send_email: "Send an email via configured service",
-  send_slack_message: "Send a Slack message",
-  create_notification: "Create in-app notification",
+  draft_email: 'Draft an email without sending',
+  send_email: 'Send an email via configured service',
+  send_slack_message: 'Send a Slack message',
+  create_notification: 'Create in-app notification',
 
   // Task Tools
-  create_task: "Create a new task/ticket",
-  update_task: "Update existing task",
-  search_tasks: "Search for tasks",
-  create_milestone: "Create project milestone",
+  create_task: 'Create a new task/ticket',
+  update_task: 'Update existing task',
+  search_tasks: 'Search for tasks',
+  create_milestone: 'Create project milestone',
 
   // Analysis Tools
-  analyze_text: "Analyze text for insights",
-  generate_content: "Generate various content types",
-  extract_data: "Extract data from sources",
-  compare_documents: "Compare multiple documents",
-  generate_report: "Generate comprehensive reports",
+  analyze_text: 'Analyze text for insights',
+  generate_content: 'Generate various content types',
+  extract_data: 'Extract data from sources',
+  compare_documents: 'Compare multiple documents',
+  generate_report: 'Generate comprehensive reports',
 
   // Knowledge Tools
-  searchKnowledgeBase: "Search the knowledge base using semantic search (RAG)",
+  searchKnowledgeBase: 'Search the knowledge base using semantic search (RAG)',
 };

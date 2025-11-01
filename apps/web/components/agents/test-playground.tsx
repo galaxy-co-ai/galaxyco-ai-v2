@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { logger } from "@/lib/utils/logger";
+import { useState } from 'react';
+import { logger } from '@/lib/utils/logger';
 import {
   Play,
   Check,
@@ -13,11 +13,11 @@ import {
   Download,
   Sparkles,
   Database,
-} from "lucide-react";
-import { DeployModal } from "./deploy-modal";
-import type { TestInputs, TestResult } from "@/lib/agents/test-types";
-import type { ScheduleConfigInput } from "@/lib/agents/types";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { DeployModal } from './deploy-modal';
+import type { TestInputs, TestResult } from '@/lib/agents/test-types';
+import type { ScheduleConfigInput } from '@/lib/agents/types';
+import { toast } from 'sonner';
 
 interface TestPlaygroundProps {
   agentId: string | null;
@@ -27,7 +27,7 @@ interface TestPlaygroundProps {
   isRunning?: boolean;
 }
 
-type TabView = "inputs" | "logs" | "outputs";
+type TabView = 'inputs' | 'logs' | 'outputs';
 
 export function TestPlayground({
   agentId,
@@ -36,23 +36,21 @@ export function TestPlayground({
   onRunTest,
   isRunning = false,
 }: TestPlaygroundProps) {
-  const [triggerType, setTriggerType] = useState<
-    "manual" | "scheduled" | "event"
-  >("manual");
+  const [triggerType, setTriggerType] = useState<'manual' | 'scheduled' | 'event'>('manual');
   const [sampleData, setSampleData] = useState<Record<string, string>>({
-    customerName: "John Doe",
-    email: "john@example.com",
-    notes: "Test inquiry about product pricing",
+    customerName: 'John Doe',
+    email: 'john@example.com',
+    notes: 'Test inquiry about product pricing',
   });
   const [mockIntegrations, setMockIntegrations] = useState(true);
 
   const [testResult, setTestResult] = useState<TestResult | null>(null);
-  const [activeTab, setActiveTab] = useState<TabView>("inputs");
+  const [activeTab, setActiveTab] = useState<TabView>('inputs');
   const [showDeployModal, setShowDeployModal] = useState(false);
 
   const handleRunTest = async () => {
     setTestResult(null);
-    setActiveTab("logs");
+    setActiveTab('logs');
 
     try {
       const result = await onRunTest({
@@ -64,49 +62,46 @@ export function TestPlayground({
       if (result) {
         setTestResult(result);
         if (result.success) {
-          setActiveTab("outputs");
+          setActiveTab('outputs');
         }
       }
     } catch (error) {
-      logger.error("Test error", error);
+      logger.error('Test error', error);
     }
   };
 
-  const canRun =
-    Object.values(sampleData).some((v) => v.trim() !== "") ||
-    triggerType === "manual";
+  const canRun = Object.values(sampleData).some((v) => v.trim() !== '') || triggerType === 'manual';
 
   const handleDeploy = async (scheduleConfig: ScheduleConfigInput) => {
     if (!agentId) {
-      toast.error("Agent must be saved before deploying");
+      toast.error('Agent must be saved before deploying');
       return;
     }
 
     try {
       const response = await fetch(`/api/agents/${agentId}/activate`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scheduleConfig }),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to activate agent");
+        throw new Error(error.error || 'Failed to activate agent');
       }
 
       const data = await response.json();
 
       // Show webhook secret if applicable
       if (data.schedule?.webhookSecret) {
-        toast.success(
-          `Agent activated! Webhook secret: ${data.schedule.webhookSecret}`,
-          { duration: 10000 },
-        );
+        toast.success(`Agent activated! Webhook secret: ${data.schedule.webhookSecret}`, {
+          duration: 10000,
+        });
       } else {
-        toast.success("Agent activated successfully!");
+        toast.success('Agent activated successfully!');
       }
     } catch (error) {
-      logger.error("Activation error", error);
+      logger.error('Activation error', error);
       throw error;
     }
   };
@@ -116,31 +111,31 @@ export function TestPlayground({
       {/* Desktop: 3 panels, Mobile: Tabs */}
       <div className="lg:hidden flex border-b border-neutral-200 dark:border-neutral-800">
         <button
-          onClick={() => setActiveTab("inputs")}
+          onClick={() => setActiveTab('inputs')}
           className={`flex-1 px-4 py-2 text-sm font-medium ${
-            activeTab === "inputs"
-              ? "border-b-2 border-primary text-primary"
-              : "text-neutral-600 dark:text-neutral-400"
+            activeTab === 'inputs'
+              ? 'border-b-2 border-primary text-primary'
+              : 'text-neutral-600 dark:text-neutral-400'
           }`}
         >
           Inputs
         </button>
         <button
-          onClick={() => setActiveTab("logs")}
+          onClick={() => setActiveTab('logs')}
           className={`flex-1 px-4 py-2 text-sm font-medium ${
-            activeTab === "logs"
-              ? "border-b-2 border-primary text-primary"
-              : "text-neutral-600 dark:text-neutral-400"
+            activeTab === 'logs'
+              ? 'border-b-2 border-primary text-primary'
+              : 'text-neutral-600 dark:text-neutral-400'
           }`}
         >
           Logs
         </button>
         <button
-          onClick={() => setActiveTab("outputs")}
+          onClick={() => setActiveTab('outputs')}
           className={`flex-1 px-4 py-2 text-sm font-medium ${
-            activeTab === "outputs"
-              ? "border-b-2 border-primary text-primary"
-              : "text-neutral-600 dark:text-neutral-400"
+            activeTab === 'outputs'
+              ? 'border-b-2 border-primary text-primary'
+              : 'text-neutral-600 dark:text-neutral-400'
           }`}
         >
           Outputs
@@ -150,7 +145,7 @@ export function TestPlayground({
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Inputs Panel */}
         <div
-          className={`${activeTab === "inputs" ? "block" : "hidden"} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6`}
+          className={`${activeTab === 'inputs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6`}
         >
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
             Test Configuration
@@ -163,11 +158,8 @@ export function TestPlayground({
                 Trigger
               </label>
               <div className="space-y-2">
-                {["manual", "scheduled", "event"].map((type) => (
-                  <label
-                    key={type}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
+                {['manual', 'scheduled', 'event'].map((type) => (
+                  <label key={type} className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="trigger"
@@ -206,17 +198,13 @@ export function TestPlayground({
                   type="email"
                   placeholder="Email"
                   value={sampleData.email}
-                  onChange={(e) =>
-                    setSampleData({ ...sampleData, email: e.target.value })
-                  }
+                  onChange={(e) => setSampleData({ ...sampleData, email: e.target.value })}
                   className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-2 text-sm"
                 />
                 <textarea
                   placeholder="Notes"
                   value={sampleData.notes}
-                  onChange={(e) =>
-                    setSampleData({ ...sampleData, notes: e.target.value })
-                  }
+                  onChange={(e) => setSampleData({ ...sampleData, notes: e.target.value })}
                   className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-2 text-sm resize-none"
                   rows={3}
                 />
@@ -236,9 +224,7 @@ export function TestPlayground({
                   Use Mock Integrations
                 </span>
               </label>
-              <p className="mt-1 text-xs text-neutral-500">
-                Avoid real API calls during testing
-              </p>
+              <p className="mt-1 text-xs text-neutral-500">Avoid real API calls during testing</p>
             </div>
 
             {/* Run Button */}
@@ -264,7 +250,7 @@ export function TestPlayground({
 
         {/* Live Logs Panel */}
         <div
-          className={`${activeTab === "logs" ? "block" : "hidden"} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
+          className={`${activeTab === 'logs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
         >
           <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -275,9 +261,9 @@ export function TestPlayground({
             {testResult ? (
               testResult.logs.map((log) => (
                 <div key={log.id} className="flex items-start gap-2 text-sm">
-                  {log.status === "completed" ? (
+                  {log.status === 'completed' ? (
                     <Check className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
-                  ) : log.status === "failed" ? (
+                  ) : log.status === 'failed' ? (
                     <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                   ) : (
                     <Loader2 className="h-4 w-4 text-primary animate-spin shrink-0 mt-0.5" />
@@ -292,9 +278,7 @@ export function TestPlayground({
                       {log.message}
                     </span>
                     {log.details && (
-                      <div className="mt-1 text-xs text-neutral-500">
-                        {log.details}
-                      </div>
+                      <div className="mt-1 text-xs text-neutral-500">{log.details}</div>
                     )}
                     {log.error && (
                       <div className="mt-1 text-xs text-red-600 dark:text-red-400">
@@ -306,9 +290,7 @@ export function TestPlayground({
               ))
             ) : (
               <p className="text-sm text-neutral-500 text-center py-8">
-                {isRunning
-                  ? "Starting test..."
-                  : "Click &quot;Run Test&quot; to begin"}
+                {isRunning ? 'Starting test...' : 'Click &quot;Run Test&quot; to begin'}
               </p>
             )}
           </div>
@@ -316,7 +298,7 @@ export function TestPlayground({
 
         {/* Outputs Panel */}
         <div
-          className={`${activeTab === "outputs" ? "block" : "hidden"} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
+          className={`${activeTab === 'outputs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
         >
           <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
@@ -331,19 +313,19 @@ export function TestPlayground({
                   className="rounded-lg border border-neutral-200 dark:border-neutral-700 p-4"
                 >
                   <div className="flex items-start gap-3">
-                    {output.type === "ai-result" && (
+                    {output.type === 'ai-result' && (
                       <Sparkles className="h-5 w-5 text-primary shrink-0" />
                     )}
-                    {output.type === "notification" && (
+                    {output.type === 'notification' && (
                       <Bell className="h-5 w-5 text-primary shrink-0" />
                     )}
-                    {output.type === "data" && (
+                    {output.type === 'data' && (
                       <Database className="h-5 w-5 text-primary shrink-0" />
                     )}
 
                     <div className="flex-1">
                       <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100 mb-2 capitalize">
-                        {output.type.replace("-", " ")}
+                        {output.type.replace('-', ' ')}
                       </div>
                       <div className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-pre-wrap">
                         {output.content}
@@ -362,8 +344,8 @@ export function TestPlayground({
             ) : (
               <p className="text-sm text-neutral-500 text-center py-8">
                 {isRunning
-                  ? "Waiting for outputs..."
-                  : "No outputs yet. Run a test to see results."}
+                  ? 'Waiting for outputs...'
+                  : 'No outputs yet. Run a test to see results.'}
               </p>
             )}
           </div>

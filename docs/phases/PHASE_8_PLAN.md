@@ -81,8 +81,8 @@ interface AgentBuilderState {
     tags: string[];
   };
   configuration: {
-    trigger: "webhook" | "schedule" | "manual";
-    aiProvider: "openai" | "anthropic" | "custom";
+    trigger: 'webhook' | 'schedule' | 'manual';
+    aiProvider: 'openai' | 'anthropic' | 'custom';
     model: string;
     systemPrompt: string;
     temperature: number;
@@ -141,7 +141,7 @@ interface AgentTemplate {
   name: string;
   description: string;
   icon: string;
-  category: "communication" | "content" | "support" | "sales" | "ops";
+  category: 'communication' | 'content' | 'support' | 'sales' | 'ops';
   prefilledConfig: Partial<AgentBuilderState>;
   sampleInputs: Record<string, any>;
   expectedOutputs: Record<string, any>;
@@ -301,7 +301,7 @@ interface TestResult {
 #### NestJS Controller: `agents.controller.ts`
 
 ```typescript
-@Controller("agents")
+@Controller('agents')
 @UseGuards(AuthGuard)
 export class AgentsController {
   @Post()
@@ -325,15 +325,15 @@ export class AgentsController {
     // Return paginated list
   }
 
-  @Get(":id")
-  async get(@Param("id") id: string, @Workspace() workspaceId: string) {
+  @Get(':id')
+  async get(@Param('id') id: string, @Workspace() workspaceId: string) {
     // Validate workspace access
     // Return agent details
   }
 
-  @Put(":id")
+  @Put(':id')
   async update(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Workspace() workspaceId: string,
     @Body() data: UpdateAgentDto,
   ) {
@@ -342,15 +342,15 @@ export class AgentsController {
     // Return updated agent
   }
 
-  @Delete(":id")
-  async delete(@Param("id") id: string, @Workspace() workspaceId: string) {
+  @Delete(':id')
+  async delete(@Param('id') id: string, @Workspace() workspaceId: string) {
     // Soft delete
     // Return success
   }
 
-  @Post(":id/test")
+  @Post(':id/test')
   async test(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Workspace() workspaceId: string,
     @Body() testData: TestAgentDto,
   ) {
@@ -374,10 +374,10 @@ class CreateAgentDto {
   @MaxLength(500)
   description: string;
 
-  @IsEnum(["webhook", "schedule", "manual"])
+  @IsEnum(['webhook', 'schedule', 'manual'])
   trigger: string;
 
-  @IsEnum(["openai", "anthropic"])
+  @IsEnum(['openai', 'anthropic'])
   aiProvider: string;
 
   @IsString()
@@ -409,28 +409,28 @@ class CreateAgentDto {
 
 ```typescript
 // From packages/database/src/schema.ts
-export const agents = pgTable("agents", {
-  id: text("id").primaryKey(),
-  workspaceId: text("workspace_id")
+export const agents = pgTable('agents', {
+  id: text('id').primaryKey(),
+  workspaceId: text('workspace_id')
     .notNull()
     .references(() => workspaces.id),
-  name: text("name").notNull(),
-  description: text("description"),
-  trigger: text("trigger", {
-    enum: ["webhook", "schedule", "manual", "event"],
+  name: text('name').notNull(),
+  description: text('description'),
+  trigger: text('trigger', {
+    enum: ['webhook', 'schedule', 'manual', 'event'],
   }).notNull(),
-  aiProvider: text("ai_provider", { enum: ["openai", "anthropic", "custom"] }),
-  model: text("model"),
-  systemPrompt: text("system_prompt"),
-  inputs: jsonb("inputs").$type<JsonSchema>(),
-  outputs: jsonb("outputs").$type<JsonSchema>(),
-  settings: jsonb("settings"),
-  isActive: boolean("is_active").default(true),
-  createdBy: text("created_by")
+  aiProvider: text('ai_provider', { enum: ['openai', 'anthropic', 'custom'] }),
+  model: text('model'),
+  systemPrompt: text('system_prompt'),
+  inputs: jsonb('inputs').$type<JsonSchema>(),
+  outputs: jsonb('outputs').$type<JsonSchema>(),
+  settings: jsonb('settings'),
+  isActive: boolean('is_active').default(true),
+  createdBy: text('created_by')
     .notNull()
     .references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 ```
 

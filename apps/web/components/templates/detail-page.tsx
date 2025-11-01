@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PageShell, PageShellProps } from "./page-shell";
-import { Card } from "@/components/ui/card";
+import React, { useState } from 'react';
+import { PageShell, PageShellProps } from './page-shell';
+import { Card } from '@/components/ui/card';
 
 export interface MetricCard {
   label: string;
   value: string | number;
   change?: string;
-  trend?: "up" | "down" | "neutral";
+  trend?: 'up' | 'down' | 'neutral';
   icon?: React.ReactNode;
 }
 
@@ -19,7 +19,7 @@ export interface TabConfig {
   badge?: string | number;
 }
 
-export interface DetailPageProps extends Omit<PageShellProps, "children"> {
+export interface DetailPageProps extends Omit<PageShellProps, 'children'> {
   /** Metric cards to display */
   metrics?: MetricCard[];
   /** Tab configuration */
@@ -74,9 +74,7 @@ export function DetailPage({
   children,
   ...pageShellProps
 }: DetailPageProps) {
-  const [internalActiveTab, setInternalActiveTab] = useState(
-    defaultTab || tabs[0]?.id || "",
-  );
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.id || '');
 
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
@@ -96,20 +94,16 @@ export function DetailPage({
             <Card key={index} className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {metric.label}
-                  </p>
-                  <p className="mt-2 text-3xl font-bold text-foreground">
-                    {metric.value}
-                  </p>
+                  <p className="text-sm font-medium text-muted-foreground">{metric.label}</p>
+                  <p className="mt-2 text-3xl font-bold text-foreground">{metric.value}</p>
                   {metric.change && (
                     <p
                       className={`mt-1 text-sm ${
-                        metric.trend === "up"
-                          ? "text-success"
-                          : metric.trend === "down"
-                            ? "text-destructive"
-                            : "text-muted-foreground"
+                        metric.trend === 'up'
+                          ? 'text-success'
+                          : metric.trend === 'down'
+                            ? 'text-destructive'
+                            : 'text-muted-foreground'
                       }`}
                     >
                       {metric.change}
@@ -117,9 +111,7 @@ export function DetailPage({
                   )}
                 </div>
                 {metric.icon && (
-                  <div className="rounded-lg bg-primary/10 p-3 text-primary">
-                    {metric.icon}
-                  </div>
+                  <div className="rounded-lg bg-primary/10 p-3 text-primary">{metric.icon}</div>
                 )}
               </div>
             </Card>
@@ -141,16 +133,14 @@ export function DetailPage({
                   onClick={() => handleTabChange(tab.id)}
                   className={`relative pb-4 text-sm font-medium transition-colors ${
                     activeTab === tab.id
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <span className="flex items-center gap-2">
                     {tab.label}
                     {tab.badge !== undefined && (
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs">
-                        {tab.badge}
-                      </span>
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs">{tab.badge}</span>
                     )}
                   </span>
                   {activeTab === tab.id && (
@@ -168,7 +158,7 @@ export function DetailPage({
                 key={tab.id}
                 role="tabpanel"
                 hidden={activeTab !== tab.id}
-                className={activeTab === tab.id ? "block" : "hidden"}
+                className={activeTab === tab.id ? 'block' : 'hidden'}
               >
                 {tab.content}
               </div>

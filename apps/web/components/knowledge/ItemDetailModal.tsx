@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { logger } from "@/lib/utils/logger";
-import { COLORS, SPACING } from "@/lib/design-system";
+import { useState, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { COLORS, SPACING } from '@/lib/design-system';
 
 interface KnowledgeItem {
   id: string;
   title: string;
-  type: "document" | "image" | "url" | "text";
-  status: "processing" | "ready" | "error";
+  type: 'document' | 'image' | 'url' | 'text';
+  status: 'processing' | 'ready' | 'error';
   fileName?: string | null;
   fileSize?: number | null;
   mimeType?: string | null;
@@ -31,29 +31,29 @@ interface ItemDetailModalProps {
   onDelete?: () => void;
 }
 
-type TabType = "content" | "metadata" | "actions";
+type TabType = 'content' | 'metadata' | 'actions';
 
 const TYPE_ICONS = {
-  document: "📄",
-  url: "🔗",
-  text: "📝",
-  image: "🖼️",
+  document: '📄',
+  url: '🔗',
+  text: '📝',
+  image: '🖼️',
 };
 
 function formatFileSize(bytes?: number | null): string {
-  if (!bytes) return "Unknown";
+  if (!bytes) return 'Unknown';
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
+  return new Date(dateString).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
   });
 }
 
@@ -67,9 +67,9 @@ export default function ItemDetailModal({
   const [item, setItem] = useState<KnowledgeItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabType>("content");
+  const [activeTab, setActiveTab] = useState<TabType>('content');
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState("");
+  const [editedTitle, setEditedTitle] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch item details
@@ -79,20 +79,18 @@ export default function ItemDetailModal({
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`,
-        );
+        const response = await fetch(`/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch item details");
+          throw new Error('Failed to fetch item details');
         }
 
         const data = await response.json();
         setItem(data.item);
         setEditedTitle(data.item.title);
       } catch (err: any) {
-        logger.error("Error fetching item", err);
-        setError(err.message || "Failed to load item");
+        logger.error('Error fetching item', err);
+        setError(err.message || 'Failed to load item');
       } finally {
         setIsLoading(false);
       }
@@ -109,17 +107,14 @@ export default function ItemDetailModal({
     }
 
     try {
-      const response = await fetch(
-        `/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: editedTitle }),
-        },
-      );
+      const response = await fetch(`/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editedTitle }),
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to update title");
+        throw new Error('Failed to update title');
       }
 
       const data = await response.json();
@@ -127,40 +122,33 @@ export default function ItemDetailModal({
       setIsEditing(false);
       onUpdate?.();
     } catch (err: any) {
-      logger.error("Error updating title", err);
-      alert("Failed to update title: " + err.message);
+      logger.error('Error updating title', err);
+      alert('Failed to update title: ' + err.message);
     }
   };
 
   // Handle delete
   const handleDelete = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this item? This cannot be undone.",
-      )
-    ) {
+    if (!confirm('Are you sure you want to delete this item? This cannot be undone.')) {
       return;
     }
 
     setIsDeleting(true);
 
     try {
-      const response = await fetch(
-        `/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`/api/knowledge/items/${itemId}?workspaceId=${workspaceId}`, {
+        method: 'DELETE',
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to delete item");
+        throw new Error('Failed to delete item');
       }
 
       onDelete?.();
       onClose();
     } catch (err: any) {
-      logger.error("Error deleting item", err);
-      alert("Failed to delete item: " + err.message);
+      logger.error('Error deleting item', err);
+      alert('Failed to delete item: ' + err.message);
       setIsDeleting(false);
     }
   };
@@ -175,25 +163,25 @@ export default function ItemDetailModal({
   // Handle ESC key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
   return (
     <div
       onClick={handleBackdropClick}
       style={{
-        position: "fixed",
+        position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         backgroundColor: COLORS.background.overlay,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         zIndex: 1000,
         padding: SPACING.lg,
       }}
@@ -202,12 +190,12 @@ export default function ItemDetailModal({
         style={{
           backgroundColor: COLORS.background.primary,
           borderRadius: SPACING.radius.lg,
-          maxWidth: "800px",
-          width: "100%",
-          maxHeight: "90vh",
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: "0 20px 25px rgba(0, 0, 0, 0.15)",
+          maxWidth: '800px',
+          width: '100%',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 20px 25px rgba(0, 0, 0, 0.15)',
         }}
       >
         {/* Header */}
@@ -215,16 +203,14 @@ export default function ItemDetailModal({
           style={{
             padding: SPACING.lg,
             borderBottom: `1px solid ${COLORS.border.primary}`,
-            display: "flex",
-            alignItems: "flex-start",
+            display: 'flex',
+            alignItems: 'flex-start',
             gap: SPACING.md,
           }}
         >
           {item && (
             <>
-              <div style={{ fontSize: "32px", flexShrink: 0 }}>
-                {TYPE_ICONS[item.type]}
-              </div>
+              <div style={{ fontSize: '32px', flexShrink: 0 }}>{TYPE_ICONS[item.type]}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 {isEditing ? (
                   <input
@@ -232,18 +218,18 @@ export default function ItemDetailModal({
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSaveTitle();
-                      if (e.key === "Escape") setIsEditing(false);
+                      if (e.key === 'Enter') handleSaveTitle();
+                      if (e.key === 'Escape') setIsEditing(false);
                     }}
                     autoFocus
                     style={{
-                      width: "100%",
-                      fontSize: "20px",
-                      fontWeight: "600",
+                      width: '100%',
+                      fontSize: '20px',
+                      fontWeight: '600',
                       padding: `${SPACING.xs} ${SPACING.sm}`,
                       border: `1px solid ${COLORS.accent.primary}`,
                       borderRadius: SPACING.radius.sm,
-                      outline: "none",
+                      outline: 'none',
                     }}
                   />
                 ) : (
@@ -251,19 +237,18 @@ export default function ItemDetailModal({
                     onClick={() => setIsEditing(true)}
                     style={{
                       margin: 0,
-                      fontSize: "20px",
-                      fontWeight: "600",
+                      fontSize: '20px',
+                      fontWeight: '600',
                       color: COLORS.text.primary,
-                      cursor: "pointer",
+                      cursor: 'pointer',
                       padding: `${SPACING.xs} ${SPACING.sm}`,
                       borderRadius: SPACING.radius.sm,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        COLORS.background.secondary;
+                      e.currentTarget.style.backgroundColor = COLORS.background.secondary;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
                     {item.title}
@@ -271,13 +256,13 @@ export default function ItemDetailModal({
                 )}
                 <div
                   style={{
-                    fontSize: "13px",
+                    fontSize: '13px',
                     color: COLORS.text.secondary,
                     marginTop: SPACING.xs,
                   }}
                 >
-                  {item.type.charAt(0).toUpperCase() + item.type.slice(1)} •
-                  Added {formatDate(item.createdAt)}
+                  {item.type.charAt(0).toUpperCase() + item.type.slice(1)} • Added{' '}
+                  {formatDate(item.createdAt)}
                 </div>
               </div>
             </>
@@ -285,13 +270,13 @@ export default function ItemDetailModal({
           <button
             onClick={onClose}
             style={{
-              fontSize: "24px",
+              fontSize: '24px',
               color: COLORS.text.secondary,
-              background: "none",
-              border: "none",
-              cursor: "pointer",
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               padding: SPACING.xs,
-              lineHeight: "1",
+              lineHeight: '1',
             }}
           >
             ×
@@ -301,29 +286,26 @@ export default function ItemDetailModal({
         {/* Tabs */}
         <div
           style={{
-            display: "flex",
+            display: 'flex',
             gap: SPACING.xs,
             padding: `${SPACING.md} ${SPACING.lg} 0`,
             borderBottom: `1px solid ${COLORS.border.primary}`,
           }}
         >
-          {(["content", "metadata", "actions"] as TabType[]).map((tab) => (
+          {(['content', 'metadata', 'actions'] as TabType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               style={{
                 padding: `${SPACING.sm} ${SPACING.md}`,
-                fontSize: "14px",
-                fontWeight: "500",
-                color:
-                  activeTab === tab
-                    ? COLORS.accent.primary
-                    : COLORS.text.secondary,
-                backgroundColor: "transparent",
-                border: "none",
-                borderBottom: `2px solid ${activeTab === tab ? COLORS.accent.primary : "transparent"}`,
-                cursor: "pointer",
-                transition: "all 0.2s ease",
+                fontSize: '14px',
+                fontWeight: '500',
+                color: activeTab === tab ? COLORS.accent.primary : COLORS.text.secondary,
+                backgroundColor: 'transparent',
+                border: 'none',
+                borderBottom: `2px solid ${activeTab === tab ? COLORS.accent.primary : 'transparent'}`,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
               }}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -335,14 +317,14 @@ export default function ItemDetailModal({
         <div
           style={{
             flex: 1,
-            overflow: "auto",
+            overflow: 'auto',
             padding: SPACING.lg,
           }}
         >
           {isLoading && (
             <div
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 padding: SPACING.xxl,
                 color: COLORS.text.secondary,
               }}
@@ -354,7 +336,7 @@ export default function ItemDetailModal({
           {error && (
             <div
               style={{
-                textAlign: "center",
+                textAlign: 'center',
                 padding: SPACING.xxl,
                 color: COLORS.error.DEFAULT,
               }}
@@ -366,16 +348,16 @@ export default function ItemDetailModal({
           {item && !isLoading && !error && (
             <>
               {/* Content Tab */}
-              {activeTab === "content" && (
+              {activeTab === 'content' && (
                 <div>
                   {item.content ? (
                     <div
                       style={{
-                        fontSize: "14px",
-                        lineHeight: "1.6",
+                        fontSize: '14px',
+                        lineHeight: '1.6',
                         color: COLORS.text.primary,
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
                       }}
                     >
                       {item.content}
@@ -383,42 +365,35 @@ export default function ItemDetailModal({
                   ) : (
                     <div
                       style={{
-                        textAlign: "center",
+                        textAlign: 'center',
                         padding: SPACING.xxl,
                         color: COLORS.text.secondary,
                       }}
                     >
                       No content available
-                      {item.status === "processing" && " - Still processing..."}
+                      {item.status === 'processing' && ' - Still processing...'}
                     </div>
                   )}
                 </div>
               )}
 
               {/* Metadata Tab */}
-              {activeTab === "metadata" && (
+              {activeTab === 'metadata' && (
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                     gap: SPACING.md,
                   }}
                 >
                   <MetadataRow label="ID" value={item.id} />
                   <MetadataRow label="Type" value={item.type} />
                   <MetadataRow label="Status" value={item.status} />
-                  {item.fileName && (
-                    <MetadataRow label="File Name" value={item.fileName} />
-                  )}
+                  {item.fileName && <MetadataRow label="File Name" value={item.fileName} />}
                   {item.fileSize && (
-                    <MetadataRow
-                      label="File Size"
-                      value={formatFileSize(item.fileSize)}
-                    />
+                    <MetadataRow label="File Size" value={formatFileSize(item.fileSize)} />
                   )}
-                  {item.mimeType && (
-                    <MetadataRow label="MIME Type" value={item.mimeType} />
-                  )}
+                  {item.mimeType && <MetadataRow label="MIME Type" value={item.mimeType} />}
                   {item.sourceUrl && (
                     <MetadataRow
                       label="Source URL"
@@ -429,7 +404,7 @@ export default function ItemDetailModal({
                           rel="noopener noreferrer"
                           style={{
                             color: COLORS.accent.primary,
-                            textDecoration: "underline",
+                            textDecoration: 'underline',
                           }}
                         >
                           {item.sourceUrl}
@@ -437,15 +412,9 @@ export default function ItemDetailModal({
                       }
                     />
                   )}
-                  <MetadataRow
-                    label="Created"
-                    value={formatDate(item.createdAt)}
-                  />
+                  <MetadataRow label="Created" value={formatDate(item.createdAt)} />
                   {item.processedAt && (
-                    <MetadataRow
-                      label="Processed"
-                      value={formatDate(item.processedAt)}
-                    />
+                    <MetadataRow label="Processed" value={formatDate(item.processedAt)} />
                   )}
                   {item.tags && item.tags.length > 0 && (
                     <MetadataRow
@@ -453,8 +422,8 @@ export default function ItemDetailModal({
                       value={
                         <div
                           style={{
-                            display: "flex",
-                            flexWrap: "wrap",
+                            display: 'flex',
+                            flexWrap: 'wrap',
                             gap: SPACING.xs,
                           }}
                         >
@@ -462,7 +431,7 @@ export default function ItemDetailModal({
                             <span
                               key={tag}
                               style={{
-                                fontSize: "12px",
+                                fontSize: '12px',
                                 padding: `${SPACING.xs} ${SPACING.sm}`,
                                 backgroundColor: COLORS.background.tertiary,
                                 borderRadius: SPACING.radius.full,
@@ -481,11 +450,11 @@ export default function ItemDetailModal({
                       value={
                         <pre
                           style={{
-                            fontSize: "12px",
+                            fontSize: '12px',
                             backgroundColor: COLORS.background.secondary,
                             padding: SPACING.sm,
                             borderRadius: SPACING.radius.sm,
-                            overflow: "auto",
+                            overflow: 'auto',
                           }}
                         >
                           {JSON.stringify(item.metadata, null, 2)}
@@ -497,11 +466,11 @@ export default function ItemDetailModal({
               )}
 
               {/* Actions Tab */}
-              {activeTab === "actions" && (
+              {activeTab === 'actions' && (
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                     gap: SPACING.md,
                   }}
                 >
@@ -510,7 +479,7 @@ export default function ItemDetailModal({
                       label="Download / View Source"
                       description="Open the original source file or URL"
                       icon="📥"
-                      onClick={() => window.open(item.sourceUrl!, "_blank")}
+                      onClick={() => window.open(item.sourceUrl!, '_blank')}
                     />
                   )}
 
@@ -519,7 +488,7 @@ export default function ItemDetailModal({
                     description="Change the title of this item"
                     icon="✏️"
                     onClick={() => {
-                      setActiveTab("content");
+                      setActiveTab('content');
                       setIsEditing(true);
                     }}
                   />
@@ -542,29 +511,23 @@ export default function ItemDetailModal({
   );
 }
 
-function MetadataRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) {
+function MetadataRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
       <div
         style={{
-          fontSize: "12px",
-          fontWeight: "600",
+          fontSize: '12px',
+          fontWeight: '600',
           color: COLORS.text.secondary,
           marginBottom: SPACING.xs,
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
         }}
       >
         {label}
       </div>
-      <div style={{ fontSize: "14px", color: COLORS.text.primary }}>
-        {typeof value === "string" ? value : value}
+      <div style={{ fontSize: '14px', color: COLORS.text.primary }}>
+        {typeof value === 'string' ? value : value}
       </div>
     </div>
   );
@@ -576,32 +539,32 @@ function ActionButton({
   icon,
   onClick,
   disabled = false,
-  variant = "default",
+  variant = 'default',
 }: {
   label: string;
   description: string;
   icon: string;
   onClick: () => void;
   disabled?: boolean;
-  variant?: "default" | "danger";
+  variant?: 'default' | 'danger';
 }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       style={{
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         gap: SPACING.md,
         padding: SPACING.md,
         backgroundColor: COLORS.background.secondary,
-        border: `1px solid ${variant === "danger" ? COLORS.error.DEFAULT : COLORS.border.primary}`,
+        border: `1px solid ${variant === 'danger' ? COLORS.error.DEFAULT : COLORS.border.primary}`,
         borderRadius: SPACING.radius.md,
-        cursor: disabled ? "not-allowed" : "pointer",
+        cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
-        transition: "all 0.2s ease",
-        width: "100%",
-        textAlign: "left",
+        transition: 'all 0.2s ease',
+        width: '100%',
+        textAlign: 'left',
       }}
       onMouseEnter={(e) => {
         if (!disabled) {
@@ -612,22 +575,19 @@ function ActionButton({
         e.currentTarget.style.backgroundColor = COLORS.background.secondary;
       }}
     >
-      <div style={{ fontSize: "24px" }}>{icon}</div>
+      <div style={{ fontSize: '24px' }}>{icon}</div>
       <div style={{ flex: 1 }}>
         <div
           style={{
-            fontSize: "14px",
-            fontWeight: "600",
-            color:
-              variant === "danger" ? COLORS.error.DEFAULT : COLORS.text.primary,
-            marginBottom: "2px",
+            fontSize: '14px',
+            fontWeight: '600',
+            color: variant === 'danger' ? COLORS.error.DEFAULT : COLORS.text.primary,
+            marginBottom: '2px',
           }}
         >
           {label}
         </div>
-        <div style={{ fontSize: "12px", color: COLORS.text.secondary }}>
-          {description}
-        </div>
+        <div style={{ fontSize: '12px', color: COLORS.text.secondary }}>{description}</div>
       </div>
     </button>
   );

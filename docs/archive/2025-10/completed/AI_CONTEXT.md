@@ -88,7 +88,7 @@ const data = await db.query.table.findMany();
 
 ```typescript
 // ✅ CORRECT
-import { encryptTokens } from "@/lib/encryption";
+import { encryptTokens } from '@/lib/encryption';
 const encrypted = encryptTokens({ access_token, refresh_token });
 
 // ❌ WRONG - Security violation

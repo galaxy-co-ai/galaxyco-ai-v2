@@ -57,14 +57,8 @@ Full-featured search with:
 **Search Behavior**:
 
 ```typescript
-const {
-  searchQuery,
-  setSearchQuery,
-  filteredAgents,
-  hasResults,
-  isSearching,
-  clearSearch,
-} = useMarketplaceSearch(agents);
+const { searchQuery, setSearchQuery, filteredAgents, hasResults, isSearching, clearSearch } =
+  useMarketplaceSearch(agents);
 ```
 
 ---
@@ -157,12 +151,7 @@ Category-specific pages with:
 Updated `AgentTemplate` interface:
 
 ```typescript
-category: "productivity" |
-  "analytics" |
-  "sales" |
-  "knowledge" |
-  "hr" |
-  "engineering";
+category: 'productivity' | 'analytics' | 'sales' | 'knowledge' | 'hr' | 'engineering';
 ```
 
 **Mappings**:

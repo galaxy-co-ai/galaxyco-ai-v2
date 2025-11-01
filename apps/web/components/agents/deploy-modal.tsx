@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { logger } from "@/lib/utils/logger";
-import { Rocket, AlertCircle, Check, Loader2 } from "lucide-react";
+import { useState } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { Rocket, AlertCircle, Check, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -10,10 +10,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { ScheduleConfig } from "./schedule-config";
-import type { ScheduleConfigInput } from "@/lib/agents/types";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { ScheduleConfig } from './schedule-config';
+import type { ScheduleConfigInput } from '@/lib/agents/types';
 
 interface DeployModalProps {
   isOpen: boolean;
@@ -23,18 +23,10 @@ interface DeployModalProps {
   onDeploy: (scheduleConfig: ScheduleConfigInput) => Promise<void>;
 }
 
-export function DeployModal({
-  isOpen,
-  onClose,
-  agentId,
-  agentName,
-  onDeploy,
-}: DeployModalProps) {
-  const [scheduleConfig, setScheduleConfig] = useState<
-    Partial<ScheduleConfigInput>
-  >({
-    triggerType: "manual",
-    timezone: "America/Chicago",
+export function DeployModal({ isOpen, onClose, agentId, agentName, onDeploy }: DeployModalProps) {
+  const [scheduleConfig, setScheduleConfig] = useState<Partial<ScheduleConfigInput>>({
+    triggerType: 'manual',
+    timezone: 'America/Chicago',
     enabled: true,
   });
   const [isDeploying, setIsDeploying] = useState(false);
@@ -43,13 +35,13 @@ export function DeployModal({
 
   const handleDeploy = async () => {
     // Validation
-    if (scheduleConfig.triggerType === "scheduled" && !scheduleConfig.cron) {
-      setError("Please configure a schedule");
+    if (scheduleConfig.triggerType === 'scheduled' && !scheduleConfig.cron) {
+      setError('Please configure a schedule');
       return;
     }
 
     if (!scheduleConfig.triggerType) {
-      setError("Please select a trigger type");
+      setError('Please select a trigger type');
       return;
     }
 
@@ -64,8 +56,8 @@ export function DeployModal({
         setSuccess(false);
       }, 1500);
     } catch (err) {
-      logger.error("Deploy error", err);
-      setError(err instanceof Error ? err.message : "Failed to deploy agent");
+      logger.error('Deploy error', err);
+      setError(err instanceof Error ? err.message : 'Failed to deploy agent');
     } finally {
       setIsDeploying(false);
     }
@@ -113,10 +105,7 @@ export function DeployModal({
           <>
             {/* Configuration */}
             <div className="py-4">
-              <ScheduleConfig
-                config={scheduleConfig}
-                onChange={setScheduleConfig}
-              />
+              <ScheduleConfig config={scheduleConfig} onChange={setScheduleConfig} />
             </div>
 
             {/* Error Message */}
@@ -124,20 +113,14 @@ export function DeployModal({
               <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-900 dark:bg-red-950">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700 dark:text-red-300">
-                    {error}
-                  </p>
+                  <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
                 </div>
               </div>
             )}
 
             {/* Footer */}
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={handleClose}
-                disabled={isDeploying}
-              >
+              <Button variant="outline" onClick={handleClose} disabled={isDeploying}>
                 Cancel
               </Button>
               <Button

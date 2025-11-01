@@ -1,105 +1,97 @@
-"use client";
+'use client';
 
-import { DetailPage } from "@/components/templates/detail-page";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  BarChart3,
-  TrendingUp,
-  Download,
-  Calendar,
-  FileText,
-  Plus,
-  Share2,
-} from "lucide-react";
+import { DetailPage } from '@/components/templates/detail-page';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { BarChart3, TrendingUp, Download, Calendar, FileText, Plus, Share2 } from 'lucide-react';
 
 const reportsMetrics = [
   {
-    label: "Total Reports",
-    value: "24",
-    change: "+3 this month",
-    trend: "up" as const,
+    label: 'Total Reports',
+    value: '24',
+    change: '+3 this month',
+    trend: 'up' as const,
     icon: <FileText className="h-5 w-5" />,
   },
   {
-    label: "Revenue",
-    value: "$124.5K",
-    change: "+12.5% vs last month",
-    trend: "up" as const,
+    label: 'Revenue',
+    value: '$124.5K',
+    change: '+12.5% vs last month',
+    trend: 'up' as const,
     icon: <TrendingUp className="h-5 w-5" />,
   },
   {
-    label: "Conversion Rate",
-    value: "3.2%",
-    change: "+0.4% improvement",
-    trend: "up" as const,
+    label: 'Conversion Rate',
+    value: '3.2%',
+    change: '+0.4% improvement',
+    trend: 'up' as const,
     icon: <BarChart3 className="h-5 w-5" />,
   },
   {
-    label: "Active Users",
-    value: "1,234",
-    change: "+8% growth",
-    trend: "up" as const,
+    label: 'Active Users',
+    value: '1,234',
+    change: '+8% growth',
+    trend: 'up' as const,
     icon: <TrendingUp className="h-5 w-5" />,
   },
 ];
 
 const mockReports = [
   {
-    id: "1",
-    name: "Sales Performance Q4",
-    type: "sales",
-    dateRange: "Oct 1 - Oct 17, 2025",
-    generatedBy: "Sarah Johnson",
-    status: "ready",
-    lastUpdated: "2 hours ago",
+    id: '1',
+    name: 'Sales Performance Q4',
+    type: 'sales',
+    dateRange: 'Oct 1 - Oct 17, 2025',
+    generatedBy: 'Sarah Johnson',
+    status: 'ready',
+    lastUpdated: '2 hours ago',
     metrics: {
-      totalSales: "$45.2K",
+      totalSales: '$45.2K',
       deals: 23,
-      conversionRate: "3.4%",
+      conversionRate: '3.4%',
     },
   },
   {
-    id: "2",
-    name: "Marketing Campaign ROI",
-    type: "marketing",
-    dateRange: "Sep 1 - Sep 30, 2025",
-    generatedBy: "Michael Chen",
-    status: "ready",
-    lastUpdated: "1 day ago",
+    id: '2',
+    name: 'Marketing Campaign ROI',
+    type: 'marketing',
+    dateRange: 'Sep 1 - Sep 30, 2025',
+    generatedBy: 'Michael Chen',
+    status: 'ready',
+    lastUpdated: '1 day ago',
     metrics: {
-      roi: "4.2x",
-      spend: "$12K",
-      revenue: "$50.4K",
+      roi: '4.2x',
+      spend: '$12K',
+      revenue: '$50.4K',
     },
   },
   {
-    id: "3",
-    name: "Agent Performance Analysis",
-    type: "analytics",
-    dateRange: "Oct 1 - Oct 17, 2025",
-    generatedBy: "Emily Rodriguez",
-    status: "ready",
-    lastUpdated: "3 hours ago",
+    id: '3',
+    name: 'Agent Performance Analysis',
+    type: 'analytics',
+    dateRange: 'Oct 1 - Oct 17, 2025',
+    generatedBy: 'Emily Rodriguez',
+    status: 'ready',
+    lastUpdated: '3 hours ago',
     metrics: {
-      totalExecutions: "1,234",
-      successRate: "94.2%",
-      avgDuration: "2.4s",
+      totalExecutions: '1,234',
+      successRate: '94.2%',
+      avgDuration: '2.4s',
     },
   },
   {
-    id: "4",
-    name: "Customer Retention Report",
-    type: "customer",
-    dateRange: "Q3 2025",
-    generatedBy: "David Kim",
-    status: "generating",
-    lastUpdated: "Just now",
+    id: '4',
+    name: 'Customer Retention Report',
+    type: 'customer',
+    dateRange: 'Q3 2025',
+    generatedBy: 'David Kim',
+    status: 'generating',
+    lastUpdated: 'Just now',
     metrics: {
-      retentionRate: "92%",
-      churnRate: "8%",
-      ltv: "$24K",
+      retentionRate: '92%',
+      churnRate: '8%',
+      ltv: '$24K',
     },
   },
 ];
@@ -120,16 +112,16 @@ function OverviewTab() {
         <div className="space-y-4">
           {mockReports.map((report) => {
             const statusColors = {
-              ready: "default",
-              generating: "secondary",
-              failed: "destructive",
+              ready: 'default',
+              generating: 'secondary',
+              failed: 'destructive',
             } as const;
 
             const typeColors = {
-              sales: "default",
-              marketing: "secondary",
-              analytics: "outline",
-              customer: "default",
+              sales: 'default',
+              marketing: 'secondary',
+              analytics: 'outline',
+              customer: 'default',
             } as const;
 
             return (
@@ -142,13 +134,8 @@ function OverviewTab() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold">{report.name}</h4>
-                      <Badge
-                        variant={
-                          typeColors[report.type as keyof typeof typeColors]
-                        }
-                      >
-                        {report.type.charAt(0).toUpperCase() +
-                          report.type.slice(1)}
+                      <Badge variant={typeColors[report.type as keyof typeof typeColors]}>
+                        {report.type.charAt(0).toUpperCase() + report.type.slice(1)}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -160,13 +147,8 @@ function OverviewTab() {
                       <span>• {report.lastUpdated}</span>
                     </div>
                   </div>
-                  <Badge
-                    variant={
-                      statusColors[report.status as keyof typeof statusColors]
-                    }
-                  >
-                    {report.status.charAt(0).toUpperCase() +
-                      report.status.slice(1)}
+                  <Badge variant={statusColors[report.status as keyof typeof statusColors]}>
+                    {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
                   </Badge>
                 </div>
 
@@ -176,14 +158,11 @@ function OverviewTab() {
                     <div key={key}>
                       <div className="text-xs text-muted-foreground mb-1">
                         {key
-                          .replace(/([A-Z])/g, " $1")
+                          .replace(/([A-Z])/g, ' $1')
                           .trim()
-                          .split(" ")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1),
-                          )
-                          .join(" ")}
+                          .split(' ')
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(' ')}
                       </div>
                       <div className="text-lg font-semibold">{value}</div>
                     </div>
@@ -216,9 +195,7 @@ function OverviewTab() {
         <div className="flex items-center justify-center h-64 bg-muted/50 rounded-lg">
           <div className="text-center">
             <BarChart3 className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              Chart visualization coming soon
-            </p>
+            <p className="text-sm text-muted-foreground">Chart visualization coming soon</p>
           </div>
         </div>
       </Card>
@@ -236,9 +213,7 @@ function ScheduledTab() {
             <div className="flex items-start justify-between mb-2">
               <div>
                 <h4 className="font-semibold">Weekly Sales Summary</h4>
-                <p className="text-sm text-muted-foreground">
-                  Every Monday at 9:00 AM
-                </p>
+                <p className="text-sm text-muted-foreground">Every Monday at 9:00 AM</p>
               </div>
               <Badge variant="default">Active</Badge>
             </div>
@@ -256,9 +231,7 @@ function ScheduledTab() {
             <div className="flex items-start justify-between mb-2">
               <div>
                 <h4 className="font-semibold">Monthly Analytics Report</h4>
-                <p className="text-sm text-muted-foreground">
-                  1st of every month at 8:00 AM
-                </p>
+                <p className="text-sm text-muted-foreground">1st of every month at 8:00 AM</p>
               </div>
               <Badge variant="default">Active</Badge>
             </div>
@@ -288,9 +261,7 @@ function CustomTab() {
         <div className="flex items-center justify-center h-48 bg-muted/50 rounded-lg">
           <div className="text-center">
             <FileText className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground mb-4">
-              Report builder coming soon
-            </p>
+            <p className="text-sm text-muted-foreground mb-4">Report builder coming soon</p>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               New Custom Report
@@ -305,18 +276,18 @@ function CustomTab() {
 export default function ReportsPage() {
   const tabs = [
     {
-      id: "overview",
-      label: "Overview",
+      id: 'overview',
+      label: 'Overview',
       content: <OverviewTab />,
     },
     {
-      id: "scheduled",
-      label: "Scheduled",
+      id: 'scheduled',
+      label: 'Scheduled',
       content: <ScheduledTab />,
     },
     {
-      id: "custom",
-      label: "Custom",
+      id: 'custom',
+      label: 'Custom',
       content: <CustomTab />,
     },
   ];
@@ -325,7 +296,7 @@ export default function ReportsPage() {
     <DetailPage
       title="Reports"
       subtitle="Generate and manage custom reports"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Reports" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Reports' }]}
       actions={
         <div className="flex gap-2">
           <Button variant="outline">

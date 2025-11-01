@@ -1,13 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { db } from "@galaxyco/database";
-import {
-  agentExecutions,
-  agents,
-  workspaceMembers,
-} from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { db } from '@galaxyco/database';
+import { agentExecutions, agents, workspaceMembers } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
 
 /**
  * GET /api/agents/[id]/executions/[executionId]
@@ -20,7 +16,7 @@ export async function GET(
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id: agentId, executionId } = params;
@@ -31,7 +27,7 @@ export async function GET(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
     // 2. Verify workspace membership
@@ -41,15 +37,12 @@ export async function GET(
     });
 
     if (!membership || membership.user.clerkUserId !== clerkUserId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // 3. Fetch execution with full details
     const execution = await db.query.agentExecutions.findFirst({
-      where: and(
-        eq(agentExecutions.id, executionId),
-        eq(agentExecutions.agentId, agentId),
-      ),
+      where: and(eq(agentExecutions.id, executionId), eq(agentExecutions.agentId, agentId)),
       with: {
         agent: {
           columns: {
@@ -72,10 +65,7 @@ export async function GET(
     });
 
     if (!execution) {
-      return NextResponse.json(
-        { error: "Execution not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Execution not found' }, { status: 404 });
     }
 
     // 4. Format execution logs from error/output data
@@ -83,66 +73,58 @@ export async function GET(
 
     // Add start log
     logs.push({
-      id: "start",
+      id: 'start',
       timestamp: execution.createdAt,
-      level: "info",
-      message: "Execution started",
-      details: execution.startedAt
-        ? `Started at ${execution.startedAt.toISOString()}`
-        : undefined,
+      level: 'info',
+      message: 'Execution started',
+      details: execution.startedAt ? `Started at ${execution.startedAt.toISOString()}` : undefined,
     });
 
     // Add input processing log
     if (execution.input) {
       logs.push({
-        id: "input",
+        id: 'input',
         timestamp: execution.startedAt || execution.createdAt,
-        level: "info",
-        message: "Processing input data",
+        level: 'info',
+        message: 'Processing input data',
         details: `Input contains ${Object.keys(execution.input).length} fields`,
       });
     }
 
     // Add completion/error logs
-    if (execution.status === "completed") {
+    if (execution.status === 'completed') {
       logs.push({
-        id: "complete",
+        id: 'complete',
         timestamp: execution.completedAt || execution.createdAt,
-        level: "success",
-        message: "Execution completed successfully",
-        details: execution.durationMs
-          ? `Completed in ${execution.durationMs}ms`
-          : undefined,
+        level: 'success',
+        message: 'Execution completed successfully',
+        details: execution.durationMs ? `Completed in ${execution.durationMs}ms` : undefined,
       });
 
       if (execution.output) {
         logs.push({
-          id: "output",
+          id: 'output',
           timestamp: execution.completedAt || execution.createdAt,
-          level: "info",
-          message: "Generated output",
+          level: 'info',
+          message: 'Generated output',
           details: `Output contains ${Object.keys(execution.output).length} fields`,
         });
       }
-    } else if (execution.status === "failed" && execution.error) {
+    } else if (execution.status === 'failed' && execution.error) {
       logs.push({
-        id: "error",
+        id: 'error',
         timestamp: execution.completedAt || execution.createdAt,
-        level: "error",
-        message: execution.error.message || "Execution failed",
-        details: execution.error.code
-          ? `Error code: ${execution.error.code}`
-          : undefined,
+        level: 'error',
+        message: execution.error.message || 'Execution failed',
+        details: execution.error.code ? `Error code: ${execution.error.code}` : undefined,
       });
-    } else if (execution.status === "running") {
+    } else if (execution.status === 'running') {
       logs.push({
-        id: "running",
+        id: 'running',
         timestamp: new Date(),
-        level: "info",
-        message: "Execution in progress...",
-        details: execution.durationMs
-          ? `Running for ${execution.durationMs}ms`
-          : undefined,
+        level: 'info',
+        message: 'Execution in progress...',
+        details: execution.durationMs ? `Running for ${execution.durationMs}ms` : undefined,
       });
     }
 
@@ -156,9 +138,7 @@ export async function GET(
       tokensUsed: execution.tokensUsed || 0,
       cost: execution.cost || 0,
       inputSize: execution.input ? JSON.stringify(execution.input).length : 0,
-      outputSize: execution.output
-        ? JSON.stringify(execution.output).length
-        : 0,
+      outputSize: execution.output ? JSON.stringify(execution.output).length : 0,
     };
 
     return NextResponse.json({
@@ -170,11 +150,11 @@ export async function GET(
       },
     });
   } catch (error) {
-    logger.error("[API] Get execution details error", error);
+    logger.error('[API] Get execution details error', error);
     return NextResponse.json(
       {
-        error: "Failed to fetch execution details",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to fetch execution details',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );
@@ -192,7 +172,7 @@ export async function PATCH(
   try {
     const { userId: clerkUserId } = await auth();
     if (!clerkUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id: agentId, executionId } = params;
@@ -205,7 +185,7 @@ export async function PATCH(
     });
 
     if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
     // 2. Verify workspace membership
@@ -215,46 +195,35 @@ export async function PATCH(
     });
 
     if (!membership || membership.user.clerkUserId !== clerkUserId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // 3. Get current execution
     const execution = await db.query.agentExecutions.findFirst({
-      where: and(
-        eq(agentExecutions.id, executionId),
-        eq(agentExecutions.agentId, agentId),
-      ),
+      where: and(eq(agentExecutions.id, executionId), eq(agentExecutions.agentId, agentId)),
     });
 
     if (!execution) {
-      return NextResponse.json(
-        { error: "Execution not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Execution not found' }, { status: 404 });
     }
 
     // 4. Handle different actions
     let updateData: any = {};
 
-    if (action === "cancel") {
-      if (!["pending", "running"].includes(execution.status)) {
+    if (action === 'cancel') {
+      if (!['pending', 'running'].includes(execution.status)) {
         return NextResponse.json(
-          { error: "Can only cancel pending or running executions" },
+          { error: 'Can only cancel pending or running executions' },
           { status: 400 },
         );
       }
       updateData = {
-        status: "cancelled" as const,
+        status: 'cancelled' as const,
         completedAt: new Date(),
-        durationMs: execution.startedAt
-          ? Date.now() - execution.startedAt.getTime()
-          : null,
+        durationMs: execution.startedAt ? Date.now() - execution.startedAt.getTime() : null,
       };
     } else {
-      return NextResponse.json(
-        { error: "Invalid action. Supported: cancel" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Invalid action. Supported: cancel' }, { status: 400 });
     }
 
     // 5. Update execution
@@ -270,11 +239,11 @@ export async function PATCH(
       message: `Execution ${action}ed successfully`,
     });
   } catch (error) {
-    logger.error("[API] Update execution error", error);
+    logger.error('[API] Update execution error', error);
     return NextResponse.json(
       {
-        error: "Failed to update execution",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update execution',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 },
     );

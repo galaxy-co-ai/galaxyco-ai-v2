@@ -1,94 +1,86 @@
-import React from "react";
-import { describe, it, expect } from "vitest";
-import { render } from "@testing-library/react";
-import { Kbd } from "../kbd";
+import React from 'react';
+import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
+import { Kbd } from '../kbd';
 
-describe("Kbd", () => {
-  it("renders single key", () => {
-    const { container } = render(React.createElement(Kbd, { keys: ["K"] }));
-    const kbd = container.querySelector("kbd");
+describe('Kbd', () => {
+  it('renders single key', () => {
+    const { container } = render(React.createElement(Kbd, { keys: ['K'] }));
+    const kbd = container.querySelector('kbd');
     expect(kbd).toBeInTheDocument();
-    expect(kbd?.textContent).toContain("K");
+    expect(kbd?.textContent).toContain('K');
   });
 
-  it("renders multiple keys with separator", () => {
-    const { container } = render(
-      React.createElement(Kbd, { keys: ["cmd", "k"] }),
-    );
-    const kbd = container.querySelector("kbd");
+  it('renders multiple keys with separator', () => {
+    const { container } = render(React.createElement(Kbd, { keys: ['cmd', 'k'] }));
+    const kbd = container.querySelector('kbd');
     expect(kbd?.textContent).toMatch(/[⌘⌃]\+K/);
   });
 
-  it("renders with custom separator", () => {
+  it('renders with custom separator', () => {
     const { container } = render(
       React.createElement(Kbd, {
-        keys: ["ctrl", "shift", "p"],
-        separator: " ",
+        keys: ['ctrl', 'shift', 'p'],
+        separator: ' ',
       }),
     );
-    const kbd = container.querySelector("kbd");
-    expect(kbd?.textContent).not.toContain("+");
+    const kbd = container.querySelector('kbd');
+    expect(kbd?.textContent).not.toContain('+');
   });
 
-  it("converts special keys to symbols", () => {
-    const { container: cCmd } = render(
-      React.createElement(Kbd, { keys: ["cmd"] }),
-    );
-    const { container: cShift } = render(
-      React.createElement(Kbd, { keys: ["shift"] }),
-    );
-    const { container: cEnter } = render(
-      React.createElement(Kbd, { keys: ["enter"] }),
-    );
+  it('converts special keys to symbols', () => {
+    const { container: cCmd } = render(React.createElement(Kbd, { keys: ['cmd'] }));
+    const { container: cShift } = render(React.createElement(Kbd, { keys: ['shift'] }));
+    const { container: cEnter } = render(React.createElement(Kbd, { keys: ['enter'] }));
 
     expect(cCmd.textContent).toMatch(/[⌘⌃]/);
-    expect(cShift.textContent).toContain("⇧");
-    expect(cEnter.textContent).toContain("↵");
+    expect(cShift.textContent).toContain('⇧');
+    expect(cEnter.textContent).toContain('↵');
   });
 
-  it("capitalizes regular keys", () => {
-    const { container } = render(React.createElement(Kbd, { keys: ["a"] }));
-    expect(container.textContent).toContain("A");
+  it('capitalizes regular keys', () => {
+    const { container } = render(React.createElement(Kbd, { keys: ['a'] }));
+    expect(container.textContent).toContain('A');
   });
 
-  it("renders arrow keys", () => {
+  it('renders arrow keys', () => {
     const { container } = render(
-      React.createElement(Kbd, { keys: ["up", "down", "left", "right"] }),
+      React.createElement(Kbd, { keys: ['up', 'down', 'left', 'right'] }),
     );
-    const text = container.textContent || "";
-    expect(text).toContain("↑");
-    expect(text).toContain("↓");
-    expect(text).toContain("←");
-    expect(text).toContain("→");
+    const text = container.textContent || '';
+    expect(text).toContain('↑');
+    expect(text).toContain('↓');
+    expect(text).toContain('←');
+    expect(text).toContain('→');
   });
 
-  it("renders with different variants", () => {
+  it('renders with different variants', () => {
     const { container: cDefault } = render(
-      React.createElement(Kbd, { keys: ["k"], variant: "default" }),
+      React.createElement(Kbd, { keys: ['k'], variant: 'default' }),
     );
     const { container: cOutline } = render(
-      React.createElement(Kbd, { keys: ["k"], variant: "outline" }),
+      React.createElement(Kbd, { keys: ['k'], variant: 'outline' }),
     );
 
-    expect(cDefault.firstChild).toHaveClass("bg-muted");
-    expect(cOutline.firstChild).toHaveClass("bg-background");
+    expect(cDefault.firstChild).toHaveClass('bg-muted');
+    expect(cOutline.firstChild).toHaveClass('bg-background');
   });
 
-  it("applies custom className", () => {
+  it('applies custom className', () => {
     const { container } = render(
-      React.createElement(Kbd, { keys: ["k"], className: "custom-kbd" }),
+      React.createElement(Kbd, { keys: ['k'], className: 'custom-kbd' }),
     );
-    expect(container.firstChild).toHaveClass("custom-kbd");
+    expect(container.firstChild).toHaveClass('custom-kbd');
   });
 
-  it("renders with border", () => {
-    const { container } = render(React.createElement(Kbd, { keys: ["k"] }));
-    expect(container.firstChild).toHaveClass("border");
+  it('renders with border', () => {
+    const { container } = render(React.createElement(Kbd, { keys: ['k'] }));
+    expect(container.firstChild).toHaveClass('border');
   });
 
-  it("forwards ref correctly", () => {
+  it('forwards ref correctly', () => {
     const ref = React.createRef<HTMLElement>();
-    render(React.createElement(Kbd, { keys: ["k"], ref }));
+    render(React.createElement(Kbd, { keys: ['k'], ref }));
     expect(ref.current).toBeDefined();
   });
 });

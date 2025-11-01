@@ -394,7 +394,7 @@ Enable debug logging in workflows:
 ```yaml
 # Add to workflow file
 env:
-  DEBUG: "*"
+  DEBUG: '*'
   ACTIONS_STEP_DEBUG: true
 ```
 

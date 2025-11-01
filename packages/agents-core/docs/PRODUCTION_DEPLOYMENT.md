@@ -273,7 +273,7 @@ Sentry.init({
   beforeSend(event) {
     // Redact sensitive data
     if (event.request?.data) {
-      event.request.data = "[REDACTED]";
+      event.request.data = '[REDACTED]';
     }
     return event;
   },
@@ -286,18 +286,18 @@ Sentry.init({
 
 ```typescript
 // Track execution time
-metrics.timing("agent.execution.duration", durationMs, {
+metrics.timing('agent.execution.duration', durationMs, {
   agentType: agent.type,
   success: result.success,
 });
 
 // Track cost
-metrics.gauge("agent.execution.cost", result.metadata.costUsd, {
+metrics.gauge('agent.execution.cost', result.metadata.costUsd, {
   model: agent.model,
 });
 
 // Track guardrail failures
-metrics.increment("guardrail.failure", {
+metrics.increment('guardrail.failure', {
   guardrail: guardrailName,
   workspaceId: context.workspaceId,
 });
@@ -390,7 +390,7 @@ const agent = await cache.get(
 
 // Cache tool definitions (1 hour TTL)
 const tools = await cache.get(
-  "tools:all",
+  'tools:all',
   async () => {
     return await loadAllTools();
   },
@@ -409,7 +409,7 @@ app.use(
     keyGenerator: (req) => req.auth.workspaceId,
     handler: (req, res) => {
       res.status(429).json({
-        error: "Rate limit exceeded",
+        error: 'Rate limit exceeded',
         retryAfter: 60,
       });
     },
@@ -427,7 +427,7 @@ app.use(
 
 ```typescript
 // Feature flag for new guardrail logic
-if (featureFlags.isEnabled("enhanced-guardrails", workspaceId)) {
+if (featureFlags.isEnabled('enhanced-guardrails', workspaceId)) {
   // Use new guardrail implementation
 } else {
   // Use existing implementation
@@ -439,9 +439,9 @@ if (featureFlags.isEnabled("enhanced-guardrails", workspaceId)) {
 Test different guardrail configurations:
 
 ```typescript
-const guardrailConfig = abTest("guardrail-strictness", workspaceId, {
-  control: { mode: "moderate" },
-  variant: { mode: "strict" },
+const guardrailConfig = abTest('guardrail-strictness', workspaceId, {
+  control: { mode: 'moderate' },
+  variant: { mode: 'strict' },
 });
 ```
 
@@ -453,8 +453,8 @@ Test new features without impacting users:
 // Run new guardrail in shadow mode (don't block, just log)
 const shadowResult = await newGuardrail.check(input);
 if (!shadowResult.passed) {
-  logger.info("Shadow guardrail would have blocked", {
-    guardrail: "input-safety-v2",
+  logger.info('Shadow guardrail would have blocked', {
+    guardrail: 'input-safety-v2',
     reason: shadowResult.reason,
   });
 }

@@ -1,6 +1,6 @@
-import "@testing-library/jest-dom";
-import { expect, afterEach, vi } from "vitest";
-import { cleanup } from "@testing-library/react";
+import '@testing-library/jest-dom';
+import { expect, afterEach, vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
 // Cleanup after each test
 afterEach(() => {
@@ -8,37 +8,37 @@ afterEach(() => {
 });
 
 // Mock Next.js router
-vi.mock("next/navigation", () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn(),
     prefetch: vi.fn(),
     back: vi.fn(),
-    pathname: "/",
+    pathname: '/',
     query: {},
   }),
-  usePathname: () => "/",
+  usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(),
 }));
 
 // Mock Clerk auth
-vi.mock("@clerk/nextjs", () => ({
+vi.mock('@clerk/nextjs', () => ({
   auth: () => ({
-    userId: "test-user-id",
-    sessionId: "test-session-id",
+    userId: 'test-user-id',
+    sessionId: 'test-session-id',
   }),
   useAuth: () => ({
-    userId: "test-user-id",
-    sessionId: "test-session-id",
+    userId: 'test-user-id',
+    sessionId: 'test-session-id',
     isLoaded: true,
     isSignedIn: true,
   }),
   useUser: () => ({
     user: {
-      id: "test-user-id",
-      firstName: "Test",
-      lastName: "User",
-      emailAddresses: [{ emailAddress: "test@example.com" }],
+      id: 'test-user-id',
+      firstName: 'Test',
+      lastName: 'User',
+      emailAddresses: [{ emailAddress: 'test@example.com' }],
     },
     isLoaded: true,
     isSignedIn: true,
@@ -47,8 +47,8 @@ vi.mock("@clerk/nextjs", () => ({
 }));
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "test-clerk-key";
-process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
+process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = 'test-clerk-key';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation(() => ({

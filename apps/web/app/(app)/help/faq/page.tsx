@@ -1,119 +1,119 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import React, { useState, useMemo } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Search, HelpCircle } from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/accordion';
+import { Search, HelpCircle } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const faqCategories = [
-  { id: "all", label: "All Questions", count: 24 },
-  { id: "getting-started", label: "Getting Started", count: 8 },
-  { id: "billing", label: "Billing & Plans", count: 6 },
-  { id: "agents", label: "AI Agents", count: 5 },
-  { id: "security", label: "Security & Privacy", count: 3 },
-  { id: "technical", label: "Technical", count: 2 },
+  { id: 'all', label: 'All Questions', count: 24 },
+  { id: 'getting-started', label: 'Getting Started', count: 8 },
+  { id: 'billing', label: 'Billing & Plans', count: 6 },
+  { id: 'agents', label: 'AI Agents', count: 5 },
+  { id: 'security', label: 'Security & Privacy', count: 3 },
+  { id: 'technical', label: 'Technical', count: 2 },
 ];
 
 const faqs = [
   {
-    category: "getting-started",
-    question: "How do I create my first AI agent?",
+    category: 'getting-started',
+    question: 'How do I create my first AI agent?',
     answer:
       "Creating your first agent is simple! Navigate to the Agents page, click 'Create Agent', choose a template or start from scratch, configure your agent's behavior and tools, then save and activate it. Check out our Getting Started guide for a detailed walkthrough.",
   },
   {
-    category: "getting-started",
-    question: "What is an AI agent?",
+    category: 'getting-started',
+    question: 'What is an AI agent?',
     answer:
-      "An AI agent is an autonomous program that can understand natural language instructions, make decisions, use tools, and complete tasks on your behalf. Agents can handle everything from data analysis to customer support.",
+      'An AI agent is an autonomous program that can understand natural language instructions, make decisions, use tools, and complete tasks on your behalf. Agents can handle everything from data analysis to customer support.',
   },
   {
-    category: "getting-started",
-    question: "Do I need coding knowledge to use GalaxyCo.ai?",
+    category: 'getting-started',
+    question: 'Do I need coding knowledge to use GalaxyCo.ai?',
     answer:
-      "No! GalaxyCo.ai is designed to be accessible to everyone. Our visual builder and pre-built templates let you create powerful agents without writing any code. Advanced users can optionally write custom code for specialized needs.",
+      'No! GalaxyCo.ai is designed to be accessible to everyone. Our visual builder and pre-built templates let you create powerful agents without writing any code. Advanced users can optionally write custom code for specialized needs.',
   },
   {
-    category: "billing",
-    question: "What plans are available?",
+    category: 'billing',
+    question: 'What plans are available?',
     answer:
-      "We offer Free, Professional, and Enterprise plans. The Free plan includes basic features and limited usage. Professional unlocks advanced features and higher limits. Enterprise provides custom solutions, dedicated support, and SLAs.",
+      'We offer Free, Professional, and Enterprise plans. The Free plan includes basic features and limited usage. Professional unlocks advanced features and higher limits. Enterprise provides custom solutions, dedicated support, and SLAs.',
   },
   {
-    category: "billing",
-    question: "How is usage calculated?",
+    category: 'billing',
+    question: 'How is usage calculated?',
     answer:
-      "Usage is based on AI model tokens consumed, agent execution time, and storage used. You can view detailed usage metrics in your billing dashboard. We provide generous free tier limits to get started.",
+      'Usage is based on AI model tokens consumed, agent execution time, and storage used. You can view detailed usage metrics in your billing dashboard. We provide generous free tier limits to get started.',
   },
   {
-    category: "billing",
-    question: "Can I upgrade or downgrade my plan anytime?",
+    category: 'billing',
+    question: 'Can I upgrade or downgrade my plan anytime?',
     answer:
-      "Yes! You can change your plan at any time. Upgrades take effect immediately. Downgrades apply at the end of your current billing cycle to avoid disruption.",
+      'Yes! You can change your plan at any time. Upgrades take effect immediately. Downgrades apply at the end of your current billing cycle to avoid disruption.',
   },
   {
-    category: "agents",
-    question: "How many agents can I create?",
+    category: 'agents',
+    question: 'How many agents can I create?',
     answer:
-      "The number of agents depends on your plan. Free tier allows 3 agents, Professional allows 25, and Enterprise has no limits. All active and draft agents count toward your quota.",
+      'The number of agents depends on your plan. Free tier allows 3 agents, Professional allows 25, and Enterprise has no limits. All active and draft agents count toward your quota.',
   },
   {
-    category: "agents",
-    question: "Can agents access my private data?",
+    category: 'agents',
+    question: 'Can agents access my private data?',
     answer:
-      "Yes, with your permission. Agents can access connected data sources, uploaded documents, and integrated services. All data access follows strict security protocols and workspace isolation rules.",
+      'Yes, with your permission. Agents can access connected data sources, uploaded documents, and integrated services. All data access follows strict security protocols and workspace isolation rules.',
   },
   {
-    category: "agents",
-    question: "What happens if an agent makes a mistake?",
+    category: 'agents',
+    question: 'What happens if an agent makes a mistake?',
     answer:
-      "All agent actions are logged for full auditability. You can review agent decisions, rollback changes if supported by the tool, and refine agent instructions to prevent future errors. Critical actions can require human approval.",
+      'All agent actions are logged for full auditability. You can review agent decisions, rollback changes if supported by the tool, and refine agent instructions to prevent future errors. Critical actions can require human approval.',
   },
   {
-    category: "security",
-    question: "Is my data secure?",
+    category: 'security',
+    question: 'Is my data secure?',
     answer:
-      "Absolutely. We use industry-standard encryption (TLS 1.3 in transit, AES-256 at rest), maintain SOC 2 compliance, conduct regular security audits, and follow strict data handling practices. Your data is never used to train AI models.",
+      'Absolutely. We use industry-standard encryption (TLS 1.3 in transit, AES-256 at rest), maintain SOC 2 compliance, conduct regular security audits, and follow strict data handling practices. Your data is never used to train AI models.',
   },
   {
-    category: "security",
-    question: "Who can access my workspace data?",
+    category: 'security',
+    question: 'Who can access my workspace data?',
     answer:
-      "Only team members you explicitly invite have access. Each user has role-based permissions (Admin, Member, Viewer). Enterprise plans support SSO and advanced access controls.",
+      'Only team members you explicitly invite have access. Each user has role-based permissions (Admin, Member, Viewer). Enterprise plans support SSO and advanced access controls.',
   },
   {
-    category: "technical",
-    question: "What AI models do you support?",
+    category: 'technical',
+    question: 'What AI models do you support?',
     answer:
-      "We support major AI providers including OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Google (PaLM), and more. You can choose different models per agent based on performance and cost requirements.",
+      'We support major AI providers including OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Google (PaLM), and more. You can choose different models per agent based on performance and cost requirements.',
   },
   {
-    category: "technical",
-    question: "Can I integrate with my existing tools?",
+    category: 'technical',
+    question: 'Can I integrate with my existing tools?',
     answer:
-      "Yes! We offer native integrations with 100+ popular services (Slack, Salesforce, Google Workspace, etc.) and support custom integrations via webhooks and API. Check our integrations marketplace for the full list.",
+      'Yes! We offer native integrations with 100+ popular services (Slack, Salesforce, Google Workspace, etc.) and support custom integrations via webhooks and API. Check our integrations marketplace for the full list.',
   },
 ];
 
 export default function FAQPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Filter FAQs based on search and category
   const filteredFaqs = useMemo(() => {
     let results = faqs;
 
     // Filter by category
-    if (selectedCategory !== "all") {
+    if (selectedCategory !== 'all') {
       results = results.filter((faq) => faq.category === selectedCategory);
     }
 
@@ -122,8 +122,7 @@ export default function FAQPage() {
       const query = searchQuery.toLowerCase();
       results = results.filter(
         (faq) =>
-          faq.question.toLowerCase().includes(query) ||
-          faq.answer.toLowerCase().includes(query),
+          faq.question.toLowerCase().includes(query) || faq.answer.toLowerCase().includes(query),
       );
     }
 
@@ -135,9 +134,9 @@ export default function FAQPage() {
       title="Frequently Asked Questions"
       subtitle="Find quick answers to common questions"
       breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Help", href: "/help" },
-        { label: "FAQ" },
+        { label: 'Dashboard', href: '/' },
+        { label: 'Help', href: '/help' },
+        { label: 'FAQ' },
       ]}
     >
       <div className="space-y-6">
@@ -160,9 +159,7 @@ export default function FAQPage() {
             {faqCategories.map((category) => (
               <Button
                 key={category.id}
-                variant={
-                  selectedCategory === category.id ? "default" : "outline"
-                }
+                variant={selectedCategory === category.id ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSelectedCategory(category.id)}
                 className="gap-2"
@@ -170,10 +167,8 @@ export default function FAQPage() {
                 {category.label}
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-xs",
-                    selectedCategory === category.id
-                      ? "bg-primary-foreground/20"
-                      : "bg-muted",
+                    'rounded-full px-2 py-0.5 text-xs',
+                    selectedCategory === category.id ? 'bg-primary-foreground/20' : 'bg-muted',
                   )}
                 >
                   {category.count}
@@ -196,9 +191,7 @@ export default function FAQPage() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <div className="ml-8 text-muted-foreground">
-                      {faq.answer}
-                    </div>
+                    <div className="ml-8 text-muted-foreground">{faq.answer}</div>
                   </AccordionContent>
                 </AccordionItem>
               ))}
@@ -214,8 +207,8 @@ export default function FAQPage() {
             <Button
               variant="outline"
               onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("all");
+                setSearchQuery('');
+                setSelectedCategory('all');
               }}
             >
               Clear Filters
@@ -227,8 +220,7 @@ export default function FAQPage() {
         <div className="rounded-lg border border-border bg-card p-6">
           <h3 className="text-lg font-semibold mb-2">Still need help?</h3>
           <p className="text-muted-foreground mb-4">
-            Can&apos;t find the answer you&apos;re looking for? Contact our
-            support team.
+            Can&apos;t find the answer you&apos;re looking for? Contact our support team.
           </p>
           <div className="flex gap-3">
             <Link href="/help/contact">

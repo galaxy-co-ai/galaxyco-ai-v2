@@ -130,7 +130,7 @@ const membership = await db.query.workspaceMembers.findFirst({
 });
 
 if (!membership || membership.user.clerkUserId !== clerkUserId) {
-  return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 }
 ```
 
@@ -159,7 +159,7 @@ While Drizzle parameterizes this query, wildcard characters in user input (`%`, 
 
 ```typescript
 // Escape wildcards in user input
-const sanitizedTag = tags[0].replace(/[%_]/g, "\\$&");
+const sanitizedTag = tags[0].replace(/[%_]/g, '\\$&');
 like(knowledgeItems.tags, `%${sanitizedTag}%`);
 ```
 
@@ -188,7 +188,7 @@ Same as above - wildcards in search queries could cause unexpected matches.
 
 ```typescript
 // Escape wildcards in search query
-const sanitizedQuery = query.replace(/[%_]/g, "\\$&");
+const sanitizedQuery = query.replace(/[%_]/g, '\\$&');
 where: (messages, { like }) => like(messages.content, `%${sanitizedQuery}%`);
 ```
 
@@ -229,7 +229,7 @@ const validation = safeValidateRequest(chatRequestSchema, body);
 Security events logged for monitoring:
 
 ```typescript
-logger.warn("Unauthorized document upload attempt");
+logger.warn('Unauthorized document upload attempt');
 ```
 
 ### ✅ 5. Error Handling
@@ -237,7 +237,7 @@ logger.warn("Unauthorized document upload attempt");
 Generic error messages prevent information disclosure:
 
 ```typescript
-return NextResponse.json({ error: "Failed to fetch agents" }, { status: 500 });
+return NextResponse.json({ error: 'Failed to fetch agents' }, { status: 500 });
 ```
 
 ---

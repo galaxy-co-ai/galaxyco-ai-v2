@@ -1,9 +1,9 @@
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@galaxyco/database"],
+  transpilePackages: ['@galaxyco/database'],
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -15,7 +15,7 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
     serverActions: {
-      bodySizeLimit: "2mb",
+      bodySizeLimit: '2mb',
     },
   },
   // Log level to reduce noise from expected dynamic route warnings

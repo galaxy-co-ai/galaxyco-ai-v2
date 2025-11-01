@@ -37,7 +37,7 @@ const easings = {
   easeIn: [0.4, 0, 1, 1],
 
   // Spring physics
-  spring: { type: "spring", stiffness: 500, damping: 30 },
+  spring: { type: 'spring', stiffness: 500, damping: 30 },
 };
 ```
 
@@ -123,24 +123,24 @@ export const modalVariants = {
 
 export const drawerVariants = {
   right: {
-    hidden: { x: "100%" },
+    hidden: { x: '100%' },
     visible: { x: 0 },
-    exit: { x: "100%" },
+    exit: { x: '100%' },
   },
   left: {
-    hidden: { x: "-100%" },
+    hidden: { x: '-100%' },
     visible: { x: 0 },
-    exit: { x: "-100%" },
+    exit: { x: '-100%' },
   },
   top: {
-    hidden: { y: "-100%" },
+    hidden: { y: '-100%' },
     visible: { y: 0 },
-    exit: { y: "-100%" },
+    exit: { y: '-100%' },
   },
   bottom: {
-    hidden: { y: "100%" },
+    hidden: { y: '100%' },
     visible: { y: 0 },
-    exit: { y: "100%" },
+    exit: { y: '100%' },
   },
 };
 ```
@@ -288,15 +288,15 @@ export const skeletonVariants = {
     transition: {
       duration: 1.5,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: 'easeInOut',
     },
   },
   shimmer: {
-    backgroundPosition: ["200% 0", "-200% 0"],
+    backgroundPosition: ['200% 0', '-200% 0'],
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "linear",
+      ease: 'linear',
     },
   },
 };
@@ -317,7 +317,7 @@ export const accordionVariants = {
     },
   },
   expanded: {
-    height: "auto",
+    height: 'auto',
     opacity: 1,
     transition: {
       duration: 0.3,
@@ -334,10 +334,10 @@ export const accordionVariants = {
 ```typescript
 export const progressVariants = {
   bar: {
-    width: ["0%", "100%"],
+    width: ['0%', '100%'],
     transition: {
       duration: 2,
-      ease: "linear",
+      ease: 'linear',
     },
   },
   spinner: {
@@ -345,7 +345,7 @@ export const progressVariants = {
     transition: {
       duration: 1,
       repeat: Infinity,
-      ease: "linear",
+      ease: 'linear',
     },
   },
 };
@@ -361,7 +361,7 @@ export const progressVariants = {
 // Card hover
 const cardHover = {
   scale: 1.02,
-  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
   transition: { duration: 0.2 },
 };
 
@@ -381,14 +381,14 @@ const iconHover = {
 const focusVariants = {
   focused: {
     scale: 1.01,
-    borderColor: "rgb(59, 130, 246)", // primary
-    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.1)",
+    borderColor: 'rgb(59, 130, 246)', // primary
+    boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)',
     transition: { duration: 0.15 },
   },
   blurred: {
     scale: 1,
-    borderColor: "rgb(229, 231, 235)", // border
-    boxShadow: "none",
+    borderColor: 'rgb(229, 231, 235)', // border
+    boxShadow: 'none',
     transition: { duration: 0.15 },
   },
 };

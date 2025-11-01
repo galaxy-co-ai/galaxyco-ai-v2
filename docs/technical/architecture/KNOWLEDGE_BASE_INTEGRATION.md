@@ -193,7 +193,7 @@ CREATE TABLE agents (
 ### Programmatic Configuration
 
 ```typescript
-import { useAgentBuilder } from "@/hooks/use-agent-builder";
+import { useAgentBuilder } from '@/hooks/use-agent-builder';
 
 const MyComponent = () => {
   const { state, updateKnowledgeBase } = useAgentBuilder();
@@ -201,15 +201,15 @@ const MyComponent = () => {
   // Enable knowledge base with all collections
   updateKnowledgeBase({
     enabled: true,
-    scope: "all",
+    scope: 'all',
     maxResults: 5,
   });
 
   // Enable with specific collections
   updateKnowledgeBase({
     enabled: true,
-    scope: "collections",
-    collectionIds: ["collection-uuid-1", "collection-uuid-2"],
+    scope: 'collections',
+    collectionIds: ['collection-uuid-1', 'collection-uuid-2'],
     maxResults: 8,
   });
 
@@ -291,15 +291,15 @@ Format:
 ### Executing Knowledge-Enabled Agents
 
 ```typescript
-import { executeAgent } from "@/lib/actions/agent-actions";
+import { executeAgent } from '@/lib/actions/agent-actions';
 
 // Execute agent with knowledge base query
 const result = await executeAgent(
   agentId,
   {
-    question: "What is our remote work policy?",
+    question: 'What is our remote work policy?',
   },
-  "live",
+  'live',
 );
 
 console.log(result.output);

@@ -4,13 +4,13 @@
  * October 15, 2025
  */
 
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   Mail,
@@ -26,7 +26,7 @@ import {
   HelpCircle,
   LogOut,
   Zap,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface SidebarProps {
   className?: string;
@@ -35,47 +35,47 @@ interface SidebarProps {
 // Navigation items - New IA structure (Week 2 refactor)
 const navigationItems = [
   {
-    title: "My Work",
-    href: "/my-work",
+    title: 'My Work',
+    href: '/my-work',
     icon: Command,
-    description: "Your daily workflow hub",
+    description: 'Your daily workflow hub',
   },
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: 'Dashboard',
+    href: '/dashboard',
     icon: TrendingUp,
-    description: "Platform overview",
+    description: 'Platform overview',
   },
   {
-    title: "Agents",
-    href: "/agents",
+    title: 'Agents',
+    href: '/agents',
     icon: Bot,
-    badge: "3",
-    description: "AI agent management",
+    badge: '3',
+    description: 'AI agent management',
   },
   {
-    title: "CRM",
-    href: "/crm/customers",
+    title: 'CRM',
+    href: '/crm/customers',
     icon: User,
-    description: "Customer management",
+    description: 'Customer management',
   },
   {
-    title: "Analytics",
-    href: "/analytics",
+    title: 'Analytics',
+    href: '/analytics',
     icon: Clock,
-    description: "Performance insights",
+    description: 'Performance insights',
   },
   {
-    title: "Library",
-    href: "/library",
+    title: 'Library',
+    href: '/library',
     icon: FolderOpen,
-    description: "Documents & resources",
+    description: 'Documents & resources',
   },
   {
-    title: "Automations",
-    href: "/automations",
+    title: 'Automations',
+    href: '/automations',
     icon: Megaphone,
-    description: "Workflows & integrations",
+    description: 'Workflows & integrations',
   },
 ];
 
@@ -87,8 +87,8 @@ export function MainSidebar({ className }: SidebarProps) {
 
   // Load pinned state from localStorage on mount
   useEffect(() => {
-    const savedPinState = localStorage.getItem("sidebar-pinned");
-    if (savedPinState === "true") {
+    const savedPinState = localStorage.getItem('sidebar-pinned');
+    if (savedPinState === 'true') {
       setIsPinned(true);
     }
   }, []);
@@ -97,11 +97,11 @@ export function MainSidebar({ className }: SidebarProps) {
   const togglePin = () => {
     const newPinState = !isPinned;
     setIsPinned(newPinState);
-    localStorage.setItem("sidebar-pinned", String(newPinState));
+    localStorage.setItem('sidebar-pinned', String(newPinState));
 
     // Emit custom event for same-tab updates
     window.dispatchEvent(
-      new CustomEvent("sidebar-toggle", {
+      new CustomEvent('sidebar-toggle', {
         detail: { isPinned: newPinState },
       }),
     );
@@ -113,13 +113,13 @@ export function MainSidebar({ className }: SidebarProps) {
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
         // Fixed positioning for desktop sidebar - below top bar
-        "fixed left-0 top-16 z-40 h-[calc(100vh-4rem)]",
+        'fixed left-0 top-16 z-40 h-[calc(100vh-4rem)]',
         // Responsive width with smooth transition
-        "transition-all duration-200 ease-in-out",
-        isExpanded ? "w-60" : "w-16",
+        'transition-all duration-200 ease-in-out',
+        isExpanded ? 'w-60' : 'w-16',
         // Surface styling using design tokens
-        "bg-card border-r border-border",
-        "flex flex-col shadow-sm",
+        'bg-card border-r border-border',
+        'flex flex-col shadow-sm',
         className,
       )}
     >
@@ -135,17 +135,17 @@ export function MainSidebar({ className }: SidebarProps) {
                 variant="ghost"
                 className={cn(
                   // Base styles
-                  "w-full h-12 rounded-lg",
-                  "hover:bg-hover",
-                  "transition-colors duration-200",
+                  'w-full h-12 rounded-lg',
+                  'hover:bg-hover',
+                  'transition-colors duration-200',
                   // Active state
-                  isActive && "bg-primary/10 text-primary",
+                  isActive && 'bg-primary/10 text-primary',
                   // Default text color
-                  !isActive && "text-muted-foreground",
+                  !isActive && 'text-muted-foreground',
                   // Layout
-                  "flex items-center gap-3",
-                  isExpanded ? "justify-start px-3" : "justify-center p-0",
-                  "font-normal relative",
+                  'flex items-center gap-3',
+                  isExpanded ? 'justify-start px-3' : 'justify-center p-0',
+                  'font-normal relative',
                 )}
               >
                 {/* Icon */}
@@ -153,17 +153,15 @@ export function MainSidebar({ className }: SidebarProps) {
 
                 {/* Label - visible when expanded */}
                 {isExpanded && (
-                  <span className="text-sm font-medium whitespace-nowrap">
-                    {item.title}
-                  </span>
+                  <span className="text-sm font-medium whitespace-nowrap">{item.title}</span>
                 )}
 
                 {/* Badge */}
                 {item.badge && (
                   <span
                     className={cn(
-                      "bg-primary text-primary-foreground text-[10px] px-1 h-4 min-w-[16px] flex items-center justify-center rounded-full shadow-sm",
-                      isExpanded ? "ml-auto" : "absolute -top-1 -right-1",
+                      'bg-primary text-primary-foreground text-[10px] px-1 h-4 min-w-[16px] flex items-center justify-center rounded-full shadow-sm',
+                      isExpanded ? 'ml-auto' : 'absolute -top-1 -right-1',
                     )}
                   >
                     {item.badge}
@@ -187,19 +185,14 @@ export function MainSidebar({ className }: SidebarProps) {
             variant="ghost"
             onClick={togglePin}
             className={cn(
-              "w-full h-10 rounded-lg",
-              "hover:bg-hover",
-              "flex items-center gap-3 justify-start px-3",
-              "text-muted-foreground",
-              isPinned && "bg-hover text-primary",
+              'w-full h-10 rounded-lg',
+              'hover:bg-hover',
+              'flex items-center gap-3 justify-start px-3',
+              'text-muted-foreground',
+              isPinned && 'bg-hover text-primary',
             )}
           >
-            <Pin
-              className={cn(
-                "w-4 h-4 flex-shrink-0",
-                isPinned && "fill-current",
-              )}
-            />
+            <Pin className={cn('w-4 h-4 flex-shrink-0', isPinned && 'fill-current')} />
             <span className="text-sm font-medium">Pin Sidebar</span>
           </Button>
         </div>

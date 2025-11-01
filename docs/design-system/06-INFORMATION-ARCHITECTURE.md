@@ -399,7 +399,7 @@ interface PageMeta {
   description: string; // Max 160 chars
   ogImage?: string;
   canonical?: string;
-  robots?: "index,follow" | "noindex,nofollow";
+  robots?: 'index,follow' | 'noindex,nofollow';
 }
 ```
 
@@ -590,8 +590,8 @@ const AgentDetail = lazy(() => import('./pages/AgentDetail'))
 
 ```tsx
 trackPageView({
-  path: "/agents/[id]",
-  title: "Agent Detail - Sales Agent",
+  path: '/agents/[id]',
+  title: 'Agent Detail - Sales Agent',
   userId: user.id,
 });
 ```
@@ -600,9 +600,9 @@ trackPageView({
 
 ```tsx
 trackNavigation({
-  from: "/agents",
-  to: "/agents/[id]",
-  method: "click" | "keyboard" | "back-button",
+  from: '/agents',
+  to: '/agents/[id]',
+  method: 'click' | 'keyboard' | 'back-button',
 });
 ```
 

@@ -1020,16 +1020,7 @@
     "public.agent_type": {
       "name": "agent_type",
       "schema": "public",
-      "values": [
-        "scope",
-        "call",
-        "email",
-        "note",
-        "task",
-        "roadmap",
-        "content",
-        "custom"
-      ]
+      "values": ["scope", "call", "email", "note", "task", "roadmap", "content", "custom"]
     },
     "public.execution_status": {
       "name": "execution_status",

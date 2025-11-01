@@ -28,15 +28,15 @@
 ### Setup (vite.config.ts)
 
 ```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/tests/setup.ts",
+    environment: 'jsdom',
+    setupFiles: './src/tests/setup.ts',
   },
 });
 ```
@@ -44,9 +44,9 @@ export default defineConfig({
 ### Test Setup (src/tests/setup.ts)
 
 ```typescript
-import "@testing-library/jest-dom";
-import { expect, afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
+import '@testing-library/jest-dom';
+import { expect, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
 // Cleanup after each test
 afterEach(() => {
@@ -102,21 +102,21 @@ describe('Button', () => {
 
 ```typescript
 // useAuth.test.ts
-import { renderHook, act, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
-import { useAuth } from "./useAuth";
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { useAuth } from './useAuth';
 
-describe("useAuth", () => {
-  it("initializes with null user", () => {
+describe('useAuth', () => {
+  it('initializes with null user', () => {
     const { result } = renderHook(() => useAuth());
     expect(result.current.user).toBeNull();
   });
 
-  it("logs in user", async () => {
+  it('logs in user', async () => {
     const { result } = renderHook(() => useAuth());
 
     await act(async () => {
-      await result.current.login("test@example.com", "password");
+      await result.current.login('test@example.com', 'password');
     });
 
     await waitFor(() => {
@@ -178,44 +178,44 @@ describe('LoginForm integration', () => {
 ### Playwright Config (playwright.config.ts)
 
 ```typescript
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests/e2e",
+  testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: 'html',
 
   use: {
-    baseURL: "http://localhost:5173",
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
+    baseURL: 'http://localhost:5173',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
   },
 
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
     },
     {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
     },
     {
-      name: "mobile-chrome",
-      use: { ...devices["Pixel 5"] },
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
     },
   ],
 
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:5173",
+    command: 'npm run dev',
+    url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },
 });
@@ -227,28 +227,28 @@ export default defineConfig({
 
 ```typescript
 // tests/e2e/auth.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Authentication", () => {
-  test("user can log in", async ({ page }) => {
-    await page.goto("/login");
+test.describe('Authentication', () => {
+  test('user can log in', async ({ page }) => {
+    await page.goto('/login');
 
-    await page.fill('input[name="email"]', "test@example.com");
-    await page.fill('input[name="password"]', "password123");
+    await page.fill('input[name="email"]', 'test@example.com');
+    await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
 
-    await expect(page).toHaveURL("/dashboard");
-    await expect(page.locator("text=Welcome back")).toBeVisible();
+    await expect(page).toHaveURL('/dashboard');
+    await expect(page.locator('text=Welcome back')).toBeVisible();
   });
 
-  test("shows error on invalid credentials", async ({ page }) => {
-    await page.goto("/login");
+  test('shows error on invalid credentials', async ({ page }) => {
+    await page.goto('/login');
 
-    await page.fill('input[name="email"]', "wrong@example.com");
-    await page.fill('input[name="password"]', "wrongpass");
+    await page.fill('input[name="email"]', 'wrong@example.com');
+    await page.fill('input[name="password"]', 'wrongpass');
     await page.click('button[type="submit"]');
 
-    await expect(page.locator("text=Invalid credentials")).toBeVisible();
+    await expect(page.locator('text=Invalid credentials')).toBeVisible();
   });
 });
 ```
@@ -259,48 +259,46 @@ test.describe("Authentication", () => {
 
 ```typescript
 // tests/e2e/agent-creation.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Agent Creation Flow", () => {
+test.describe('Agent Creation Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Login first
-    await page.goto("/login");
-    await page.fill('input[name="email"]', "test@example.com");
-    await page.fill('input[name="password"]', "password123");
+    await page.goto('/login');
+    await page.fill('input[name="email"]', 'test@example.com');
+    await page.fill('input[name="password"]', 'password123');
     await page.click('button[type="submit"]');
-    await expect(page).toHaveURL("/dashboard");
+    await expect(page).toHaveURL('/dashboard');
   });
 
-  test("creates new agent from template", async ({ page }) => {
+  test('creates new agent from template', async ({ page }) => {
     // Navigate to agents
-    await page.click("text=Agents");
-    await expect(page).toHaveURL("/agents");
+    await page.click('text=Agents');
+    await expect(page).toHaveURL('/agents');
 
     // Click "New Agent"
     await page.click('button:has-text("New Agent")');
-    await expect(page).toHaveURL("/agents/new");
+    await expect(page).toHaveURL('/agents/new');
 
     // Select template
-    await page.click("text=Sales Outreach");
+    await page.click('text=Sales Outreach');
     await page.click('button:has-text("Next")');
 
     // Configure agent
-    await page.fill('input[name="name"]', "My Sales Agent");
-    await page.fill('textarea[name="description"]', "Automates sales outreach");
+    await page.fill('input[name="name"]', 'My Sales Agent');
+    await page.fill('textarea[name="description"]', 'Automates sales outreach');
     await page.click('button:has-text("Next")');
 
     // Test agent
-    await page.fill('textarea[name="testInput"]', "Test data");
+    await page.fill('textarea[name="testInput"]', 'Test data');
     await page.click('button:has-text("Run Test")');
-    await expect(page.locator("text=Test completed")).toBeVisible({
+    await expect(page.locator('text=Test completed')).toBeVisible({
       timeout: 10000,
     });
 
     // Deploy
     await page.click('button:has-text("Deploy")');
-    await expect(
-      page.locator("text=Agent deployed successfully"),
-    ).toBeVisible();
+    await expect(page.locator('text=Agent deployed successfully')).toBeVisible();
     await expect(page).toHaveURL(/\/agents\/\w+/);
   });
 });
@@ -314,35 +312,31 @@ test.describe("Agent Creation Flow", () => {
 
 ```typescript
 // tests/a11y/accessibility.spec.ts
-import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
-test.describe("Accessibility", () => {
-  test("dashboard should not have accessibility violations", async ({
-    page,
-  }) => {
-    await page.goto("/dashboard");
+test.describe('Accessibility', () => {
+  test('dashboard should not have accessibility violations', async ({ page }) => {
+    await page.goto('/dashboard');
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test("agent creation flow should be keyboard accessible", async ({
-    page,
-  }) => {
-    await page.goto("/agents/new");
+  test('agent creation flow should be keyboard accessible', async ({ page }) => {
+    await page.goto('/agents/new');
 
     // Navigate with Tab key
-    await page.keyboard.press("Tab"); // Focus on first input
-    await page.keyboard.type("Test Agent");
-    await page.keyboard.press("Tab"); // Focus on description
-    await page.keyboard.type("Test description");
-    await page.keyboard.press("Tab"); // Focus on Next button
-    await page.keyboard.press("Enter");
+    await page.keyboard.press('Tab'); // Focus on first input
+    await page.keyboard.type('Test Agent');
+    await page.keyboard.press('Tab'); // Focus on description
+    await page.keyboard.type('Test description');
+    await page.keyboard.press('Tab'); // Focus on Next button
+    await page.keyboard.press('Enter');
 
     // Verify navigation worked
-    await expect(page.locator("text=Step 2")).toBeVisible();
+    await expect(page.locator('text=Step 2')).toBeVisible();
   });
 });
 ```
@@ -355,24 +349,24 @@ test.describe("Accessibility", () => {
 
 ```typescript
 // tests/visual/components.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Visual Regression", () => {
-  test("button variants match snapshots", async ({ page }) => {
-    await page.goto("/storybook?path=/story/button--variants");
+test.describe('Visual Regression', () => {
+  test('button variants match snapshots', async ({ page }) => {
+    await page.goto('/storybook?path=/story/button--variants');
 
-    await expect(page).toHaveScreenshot("button-variants.png", {
+    await expect(page).toHaveScreenshot('button-variants.png', {
       fullPage: true,
-      animations: "disabled",
+      animations: 'disabled',
     });
   });
 
-  test("dashboard layout matches snapshot", async ({ page }) => {
-    await page.goto("/dashboard");
+  test('dashboard layout matches snapshot', async ({ page }) => {
+    await page.goto('/dashboard');
 
-    await expect(page).toHaveScreenshot("dashboard.png", {
+    await expect(page).toHaveScreenshot('dashboard.png', {
       fullPage: true,
-      mask: [page.locator(".dynamic-content")], // Mask dynamic elements
+      mask: [page.locator('.dynamic-content')], // Mask dynamic elements
     });
   });
 });
@@ -464,7 +458,7 @@ test.describe("Visual Regression", () => {
 
 ```typescript
 // src/lib/webVitals.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
 
 export function reportWebVitals() {
   getCLS(console.log);
@@ -525,8 +519,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci

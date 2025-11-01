@@ -5,26 +5,18 @@
  * October 19, 2025
  */
 
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { Spinner } from "@/components/ui/spinner";
-import { WorkspaceGuard } from "@/components/workspace/workspace-guard";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import {
-  CheckCircle2,
-  Clock,
-  Mail,
-  Bell,
-  Calendar,
-  ChevronRight,
-  AlertCircle,
-} from "lucide-react";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { Spinner } from '@/components/ui/spinner';
+import { WorkspaceGuard } from '@/components/workspace/workspace-guard';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import { CheckCircle2, Clock, Mail, Bell, Calendar, ChevronRight, AlertCircle } from 'lucide-react';
 
 interface Task {
   id: string;
@@ -83,15 +75,12 @@ function MyWorkContent() {
         setIsLoading(true);
 
         // Fetch all data in parallel
-        const [tasksRes, eventsRes, messagesRes, notificationsRes] =
-          await Promise.all([
-            fetch(`/api/tasks?workspaceId=${currentWorkspace.id}&limit=5`),
-            fetch(`/api/calendar?workspaceId=${currentWorkspace.id}&limit=5`),
-            fetch(`/api/inbox?workspaceId=${currentWorkspace.id}&limit=5`),
-            fetch(
-              `/api/notifications?workspaceId=${currentWorkspace.id}&limit=5`,
-            ),
-          ]);
+        const [tasksRes, eventsRes, messagesRes, notificationsRes] = await Promise.all([
+          fetch(`/api/tasks?workspaceId=${currentWorkspace.id}&limit=5`),
+          fetch(`/api/calendar?workspaceId=${currentWorkspace.id}&limit=5`),
+          fetch(`/api/inbox?workspaceId=${currentWorkspace.id}&limit=5`),
+          fetch(`/api/notifications?workspaceId=${currentWorkspace.id}&limit=5`),
+        ]);
 
         if (tasksRes.ok) {
           const tasksData = await tasksRes.json();
@@ -110,13 +99,11 @@ function MyWorkContent() {
 
         if (notificationsRes.ok) {
           const notificationsData = await notificationsRes.json();
-          setNotifications(
-            notificationsData.notifications || notificationsData.data || [],
-          );
+          setNotifications(notificationsData.notifications || notificationsData.data || []);
         }
       } catch (error) {
-        console.error("Failed to fetch work data:", error);
-        toast.error("Failed to load your work dashboard");
+        console.error('Failed to fetch work data:', error);
+        toast.error('Failed to load your work dashboard');
       } finally {
         setIsLoading(false);
       }
@@ -133,10 +120,8 @@ function MyWorkContent() {
     );
   }
 
-  const pendingTasks = tasks.filter(
-    (t) => t.status === "todo" || t.status === "in_progress",
-  );
-  const unreadMessages = messages.filter((m) => m.status === "unread");
+  const pendingTasks = tasks.filter((t) => t.status === 'todo' || t.status === 'in_progress');
+  const unreadMessages = messages.filter((m) => m.status === 'unread');
   const todayEvents = events.filter((e) => {
     const eventDate = new Date(e.startTime);
     const today = new Date();
@@ -150,9 +135,7 @@ function MyWorkContent() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">My Work</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Your daily workflow at a glance
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">Your daily workflow at a glance</p>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-sm">
@@ -200,20 +183,18 @@ function MyWorkContent() {
                   >
                     <div
                       className={`w-2 h-2 rounded-full mt-2 ${
-                        task.priority === "high"
-                          ? "bg-destructive"
-                          : task.priority === "medium"
-                            ? "bg-warning"
-                            : "bg-muted"
+                        task.priority === 'high'
+                          ? 'bg-destructive'
+                          : task.priority === 'medium'
+                            ? 'bg-warning'
+                            : 'bg-muted'
                       }`}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {task.title}
-                      </p>
+                      <p className="text-sm font-medium text-foreground truncate">{task.title}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
-                          {task.status.replace("_", " ")}
+                          {task.status.replace('_', ' ')}
                         </Badge>
                         {task.dueDate && (
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -258,25 +239,23 @@ function MyWorkContent() {
                   >
                     <div className="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
                       <span className="text-xs font-medium">
-                        {new Date(event.startTime).toLocaleTimeString("en-US", {
-                          hour: "numeric",
+                        {new Date(event.startTime).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
                           hour12: true,
                         })}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {event.title}
-                      </p>
+                      <p className="text-sm font-medium text-foreground truncate">{event.title}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {new Date(event.startTime).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}{" "}
-                        -{" "}
-                        {new Date(event.endTime).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
+                        {new Date(event.startTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}{' '}
+                        -{' '}
+                        {new Date(event.endTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </p>
                     </div>
@@ -328,13 +307,11 @@ function MyWorkContent() {
                         <p className="text-sm font-medium text-foreground truncate">
                           {message.senderName}
                         </p>
-                        {message.status === "unread" && (
+                        {message.status === 'unread' && (
                           <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                         )}
                       </div>
-                      <p className="text-sm text-foreground truncate mt-1">
-                        {message.subject}
-                      </p>
+                      <p className="text-sm text-foreground truncate mt-1">{message.subject}</p>
                       <p className="text-xs text-muted-foreground truncate mt-1">
                         {message.preview}
                       </p>
@@ -373,20 +350,15 @@ function MyWorkContent() {
                     className="flex items-start gap-3 p-3 rounded-lg hover:bg-hover transition-colors"
                   >
                     <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
-                      {notification.type === "warning" ||
-                      notification.type === "error" ? (
+                      {notification.type === 'warning' || notification.type === 'error' ? (
                         <AlertCircle className="w-4 h-4" />
                       ) : (
                         <Bell className="w-4 h-4" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground">
-                        {notification.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {notification.message}
-                      </p>
+                      <p className="text-sm font-medium text-foreground">{notification.title}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{notification.message}</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {new Date(notification.createdAt).toLocaleString()}
                       </p>

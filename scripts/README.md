@@ -417,8 +417,8 @@ set -e  # Exit on error
 // Description: What this script does
 // Usage: node ./scripts/category/script-name.js [options]
 
-process.on("unhandledRejection", (error) => {
-  console.error("Error:", error);
+process.on('unhandledRejection', (error) => {
+  console.error('Error:', error);
   process.exit(1);
 });
 

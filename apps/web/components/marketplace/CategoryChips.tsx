@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { colors, radius } from "@/lib/constants/design-system";
-import { MARKETPLACE_CATEGORIES } from "@/lib/constants/marketplace-categories";
+import { useRouter } from 'next/navigation';
+import { colors, radius } from '@/lib/constants/design-system';
+import { MARKETPLACE_CATEGORIES } from '@/lib/constants/marketplace-categories';
 
 interface CategoryChipsProps {
   activeCategory?: string;
@@ -13,7 +13,7 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
 
   const handleCategoryClick = (slug: string | null) => {
     if (slug === null) {
-      router.push("/marketplace");
+      router.push('/marketplace');
     } else {
       router.push(`/marketplace/${slug}`);
     }
@@ -29,12 +29,12 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
   return (
     <div
       style={{
-        display: "flex",
-        gap: "0.5rem",
-        overflowX: "auto",
-        paddingBottom: "0.25rem",
-        scrollbarWidth: "none", // Firefox
-        msOverflowStyle: "none", // IE/Edge
+        display: 'flex',
+        gap: '0.5rem',
+        overflowX: 'auto',
+        paddingBottom: '0.25rem',
+        scrollbarWidth: 'none', // Firefox
+        msOverflowStyle: 'none', // IE/Edge
       }}
       className="hide-scrollbar"
     >
@@ -43,14 +43,12 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
         onClick={() => handleCategoryClick(null)}
         className="pill-compact" /* Use design token class */
         style={{
-          background: isActive(null)
-            ? colors.primary[500]
-            : colors.background.primary,
-          color: isActive(null) ? "white" : colors.text.primary,
-          border: `1px solid ${isActive(null) ? "transparent" : colors.border.default}`,
-          cursor: "pointer",
-          whiteSpace: "nowrap",
-          transition: "all 0.2s",
+          background: isActive(null) ? colors.primary[500] : colors.background.primary,
+          color: isActive(null) ? 'white' : colors.text.primary,
+          border: `1px solid ${isActive(null) ? 'transparent' : colors.border.default}`,
+          cursor: 'pointer',
+          whiteSpace: 'nowrap',
+          transition: 'all 0.2s',
           flexShrink: 0,
         }}
         onMouseEnter={(e) => {
@@ -77,14 +75,12 @@ export default function CategoryChips({ activeCategory }: CategoryChipsProps) {
           onClick={() => handleCategoryClick(category.slug)}
           className="pill-compact" /* Use design token class */
           style={{
-            background: isActive(category.slug)
-              ? colors.primary[500]
-              : colors.background.primary,
-            color: isActive(category.slug) ? "white" : colors.text.primary,
-            border: `1px solid ${isActive(category.slug) ? "transparent" : colors.border.default}`,
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-            transition: "all 0.2s",
+            background: isActive(category.slug) ? colors.primary[500] : colors.background.primary,
+            color: isActive(category.slug) ? 'white' : colors.text.primary,
+            border: `1px solid ${isActive(category.slug) ? 'transparent' : colors.border.default}`,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            transition: 'all 0.2s',
             flexShrink: 0,
           }}
           onMouseEnter={(e) => {

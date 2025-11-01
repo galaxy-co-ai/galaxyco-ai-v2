@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import React, { useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Upload, FileUp, CheckCircle2, XCircle } from "lucide-react";
+} from '@/components/ui/select';
+import { Upload, FileUp, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function ImportsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [importType, setImportType] = useState("agents");
+  const [importType, setImportType] = useState('agents');
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -28,7 +28,7 @@ export default function ImportsPage() {
     <PageShell
       title="Data Imports"
       subtitle="Import data from CSV or JSON files"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Imports" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Imports' }]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Upload Section */}
@@ -71,12 +71,8 @@ export default function ImportsPage() {
                     </div>
                   ) : (
                     <div>
-                      <p className="font-medium mb-1">
-                        Click to upload or drag and drop
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        CSV or JSON (MAX. 10MB)
-                      </p>
+                      <p className="font-medium mb-1">Click to upload or drag and drop</p>
+                      <p className="text-sm text-muted-foreground">CSV or JSON (MAX. 10MB)</p>
                     </div>
                   )}
                 </label>
@@ -133,13 +129,9 @@ export default function ImportsPage() {
             <table className="w-full text-sm">
               <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium">
-                    File Column
-                  </th>
+                  <th className="px-4 py-3 text-left font-medium">File Column</th>
                   <th className="px-4 py-3 text-left font-medium">Maps To</th>
-                  <th className="px-4 py-3 text-left font-medium">
-                    Sample Value
-                  </th>
+                  <th className="px-4 py-3 text-left font-medium">Sample Value</th>
                   <th className="px-4 py-3 text-center font-medium">Status</th>
                 </tr>
               </thead>
@@ -149,9 +141,7 @@ export default function ImportsPage() {
                   <td className="px-4 py-3">
                     <code className="text-xs">Agent Name</code>
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Lead Generator
-                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">Lead Generator</td>
                   <td className="px-4 py-3 text-center">
                     <CheckCircle2 className="h-4 w-4 text-green-600 mx-auto" />
                   </td>
@@ -161,9 +151,7 @@ export default function ImportsPage() {
                   <td className="px-4 py-3">
                     <code className="text-xs">Description</code>
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    Finds new leads...
-                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">Finds new leads...</td>
                   <td className="px-4 py-3 text-center">
                     <CheckCircle2 className="h-4 w-4 text-green-600 mx-auto" />
                   </td>
@@ -171,9 +159,7 @@ export default function ImportsPage() {
                 <tr>
                   <td className="px-4 py-3">invalid_field</td>
                   <td className="px-4 py-3">
-                    <code className="text-xs text-muted-foreground">
-                      Not Mapped
-                    </code>
+                    <code className="text-xs text-muted-foreground">Not Mapped</code>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">-</td>
                   <td className="px-4 py-3 text-center">

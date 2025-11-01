@@ -1,6 +1,6 @@
-const pdf = require("pdf-parse");
-import * as cheerio from "cheerio";
-import { logger } from "@/lib/utils/logger";
+const pdf = require('pdf-parse');
+import * as cheerio from 'cheerio';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * Document Processing Helper
@@ -27,7 +27,7 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{
       },
     };
   } catch (error: any) {
-    logger.error("PDF extraction failed", {
+    logger.error('PDF extraction failed', {
       error: error.message,
     });
     throw new Error(`Failed to extract PDF text: ${error.message}`);
@@ -37,13 +37,11 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<{
 /**
  * Extract text from plain text file
  */
-export async function extractTextFromPlainText(
-  buffer: Buffer,
-): Promise<string> {
+export async function extractTextFromPlainText(buffer: Buffer): Promise<string> {
   try {
-    return buffer.toString("utf-8");
+    return buffer.toString('utf-8');
   } catch (error: any) {
-    logger.error("Text extraction failed", {
+    logger.error('Text extraction failed', {
       error: error.message,
     });
     throw new Error(`Failed to extract text: ${error.message}`);
@@ -64,7 +62,7 @@ export async function scrapeURL(url: string): Promise<{
     // Fetch the URL
     const response = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; GalaxyCo-KnowledgeBase/1.0)",
+        'User-Agent': 'Mozilla/5.0 (compatible; GalaxyCo-KnowledgeBase/1.0)',
       },
     });
 
@@ -76,49 +74,47 @@ export async function scrapeURL(url: string): Promise<{
     const $ = cheerio.load(html);
 
     // Remove script and style tags
-    $("script, style, nav, footer, header, aside").remove();
+    $('script, style, nav, footer, header, aside').remove();
 
     // Extract title
     const title =
-      $('meta[property="og:title"]').attr("content") ||
-      $('meta[name="twitter:title"]').attr("content") ||
-      $("title").text() ||
-      "Untitled";
+      $('meta[property="og:title"]').attr('content') ||
+      $('meta[name="twitter:title"]').attr('content') ||
+      $('title').text() ||
+      'Untitled';
 
     // Extract description
     const description =
-      $('meta[property="og:description"]').attr("content") ||
-      $('meta[name="description"]').attr("content") ||
-      $('meta[name="twitter:description"]').attr("content");
+      $('meta[property="og:description"]').attr('content') ||
+      $('meta[name="description"]').attr('content') ||
+      $('meta[name="twitter:description"]').attr('content');
 
     // Extract main content
     // Try to find main content area
-    let text = "";
-    const mainContent = $(
-      'main, article, [role="main"], .content, .post-content',
-    );
+    let text = '';
+    const mainContent = $('main, article, [role="main"], .content, .post-content');
 
     if (mainContent.length > 0) {
       text = mainContent.text();
     } else {
       // Fallback to body
-      text = $("body").text();
+      text = $('body').text();
     }
 
     // Clean up text (remove extra whitespace)
-    text = text.replace(/\s+/g, " ").replace(/\n+/g, "\n").trim();
+    text = text.replace(/\s+/g, ' ').replace(/\n+/g, '\n').trim();
 
     // Extract author
     const author =
-      $('meta[name="author"]').attr("content") ||
-      $('meta[property="article:author"]').attr("content") ||
+      $('meta[name="author"]').attr('content') ||
+      $('meta[property="article:author"]').attr('content') ||
       $('.author, [rel="author"]').first().text().trim();
 
     // Extract publish date
     const publishDate =
-      $('meta[property="article:published_time"]').attr("content") ||
-      $('meta[name="publish_date"]').attr("content") ||
-      $("time[datetime]").attr("datetime");
+      $('meta[property="article:published_time"]').attr('content') ||
+      $('meta[name="publish_date"]').attr('content') ||
+      $('time[datetime]').attr('datetime');
 
     return {
       title: title.trim(),
@@ -128,7 +124,7 @@ export async function scrapeURL(url: string): Promise<{
       publishDate: publishDate || undefined,
     };
   } catch (error: any) {
-    logger.error("URL scraping failed", {
+    logger.error('URL scraping failed', {
       url,
       error: error.message,
     });
@@ -140,17 +136,14 @@ export async function scrapeURL(url: string): Promise<{
  * Generate a summary of text content (simple version)
  * TODO: Replace with AI-generated summary later
  */
-export function generateSimpleSummary(
-  text: string,
-  maxLength: number = 500,
-): string {
+export function generateSimpleSummary(text: string, maxLength: number = 500): string {
   if (text.length <= maxLength) {
     return text;
   }
 
   // Take first few sentences
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-  let summary = "";
+  let summary = '';
 
   for (const sentence of sentences) {
     if ((summary + sentence).length > maxLength) {
@@ -159,5 +152,5 @@ export function generateSimpleSummary(
     summary += sentence;
   }
 
-  return summary.trim() || text.substring(0, maxLength) + "...";
+  return summary.trim() || text.substring(0, maxLength) + '...';
 }

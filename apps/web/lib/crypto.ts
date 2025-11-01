@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 /**
  * Encryption key from environment variable
@@ -8,14 +8,14 @@ function getEncryptionKey(): Buffer {
   const key = process.env.ENCRYPTION_KEY;
 
   if (!key) {
-    throw new Error("ENCRYPTION_KEY environment variable is required");
+    throw new Error('ENCRYPTION_KEY environment variable is required');
   }
 
   // Convert hex string to buffer
-  const keyBuffer = Buffer.from(key, "hex");
+  const keyBuffer = Buffer.from(key, 'hex');
 
   if (keyBuffer.length !== 32) {
-    throw new Error("ENCRYPTION_KEY must be 32 bytes (64 hex characters)");
+    throw new Error('ENCRYPTION_KEY must be 32 bytes (64 hex characters)');
   }
 
   return keyBuffer;
@@ -27,7 +27,7 @@ function getEncryptionKey(): Buffer {
  */
 export function encryptApiKey(apiKey: string): string {
   if (!apiKey) {
-    throw new Error("API key cannot be empty");
+    throw new Error('API key cannot be empty');
   }
 
   const key = getEncryptionKey();
@@ -36,23 +36,19 @@ export function encryptApiKey(apiKey: string): string {
   const iv = crypto.randomBytes(12);
 
   // Create cipher
-  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
 
   // Encrypt the API key
-  let encrypted = cipher.update(apiKey, "utf8", "base64");
-  encrypted += cipher.final("base64");
+  let encrypted = cipher.update(apiKey, 'utf8', 'base64');
+  encrypted += cipher.final('base64');
 
   // Get authentication tag
   const authTag = cipher.getAuthTag();
 
   // Combine iv, authTag, and encrypted data
-  const combined = Buffer.concat([
-    iv,
-    authTag,
-    Buffer.from(encrypted, "base64"),
-  ]);
+  const combined = Buffer.concat([iv, authTag, Buffer.from(encrypted, 'base64')]);
 
-  return combined.toString("base64");
+  return combined.toString('base64');
 }
 
 /**
@@ -61,13 +57,13 @@ export function encryptApiKey(apiKey: string): string {
  */
 export function decryptApiKey(encryptedKey: string): string {
   if (!encryptedKey) {
-    throw new Error("Encrypted key cannot be empty");
+    throw new Error('Encrypted key cannot be empty');
   }
 
   const key = getEncryptionKey();
 
   // Decode the combined data
-  const combined = Buffer.from(encryptedKey, "base64");
+  const combined = Buffer.from(encryptedKey, 'base64');
 
   // Extract components
   const iv = combined.subarray(0, 12);
@@ -75,16 +71,12 @@ export function decryptApiKey(encryptedKey: string): string {
   const encrypted = combined.subarray(28);
 
   // Create decipher
-  const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+  const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(authTag);
 
   // Decrypt
-  let decrypted = decipher.update(
-    encrypted.toString("base64"),
-    "base64",
-    "utf8",
-  );
-  decrypted += decipher.final("utf8");
+  let decrypted = decipher.update(encrypted.toString('base64'), 'base64', 'utf8');
+  decrypted += decipher.final('utf8');
 
   return decrypted;
 }
@@ -94,7 +86,7 @@ export function decryptApiKey(encryptedKey: string): string {
  */
 export function maskApiKey(apiKey: string): string {
   if (!apiKey || apiKey.length < 4) {
-    return "****";
+    return '****';
   }
   return `••••${apiKey.slice(-4)}`;
 }
@@ -104,5 +96,5 @@ export function maskApiKey(apiKey: string): string {
  * Returns a 32-byte hex string
  */
 export function generateEncryptionKey(): string {
-  return crypto.randomBytes(32).toString("hex");
+  return crypto.randomBytes(32).toString('hex');
 }

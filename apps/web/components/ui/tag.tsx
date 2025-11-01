@@ -1,7 +1,7 @@
-import * as React from "react";
-import { X } from "lucide-react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { X } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Tag component using GalaxyCo.ai Design System tokens
@@ -14,38 +14,38 @@ import { cn } from "@/lib/utils";
  */
 const tagVariants = cva(
   [
-    "inline-flex items-center gap-1.5 rounded-full border font-medium transition-colors duration-fast",
-    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+    'inline-flex items-center gap-1.5 rounded-full border font-medium transition-colors duration-fast',
+    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
   ],
   {
     variants: {
       variant: {
         // Default - neutral styling
-        default: "bg-background-subtle text-foreground border-border",
+        default: 'bg-background-subtle text-foreground border-border',
         // Primary - brand color
-        primary: "bg-primary/10 text-primary border-primary/20",
+        primary: 'bg-primary/10 text-primary border-primary/20',
         // Success - positive states
-        success: "bg-success/10 text-success border-success/20",
+        success: 'bg-success/10 text-success border-success/20',
         // Warning - attention needed
-        warning: "bg-warning/10 text-warning border-warning/20",
+        warning: 'bg-warning/10 text-warning border-warning/20',
         // Destructive - negative states
-        destructive: "bg-destructive/10 text-destructive border-destructive/20",
+        destructive: 'bg-destructive/10 text-destructive border-destructive/20',
       },
       size: {
-        sm: "px-2 py-0.5 text-xs",
-        default: "px-2.5 py-1 text-xs", // md
-        lg: "px-3 py-1.5 text-sm",
+        sm: 'px-2 py-0.5 text-xs',
+        default: 'px-2.5 py-1 text-xs', // md
+        lg: 'px-3 py-1.5 text-sm',
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: 'default',
+      size: 'default',
     },
   },
 );
 
 export interface TagProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "size">,
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'size'>,
     VariantProps<typeof tagVariants> {
   /**
    * Optional icon to display before the text
@@ -66,35 +66,19 @@ export interface TagProps
 }
 
 const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      icon,
-      removable = false,
-      onRemove,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, variant, size, icon, removable = false, onRemove, children, ...props }, ref) => {
     return (
-      <span
-        ref={ref}
-        className={cn(tagVariants({ variant, size }), className)}
-        {...props}
-      >
+      <span ref={ref} className={cn(tagVariants({ variant, size }), className)} {...props}>
         {icon && <span className="flex-shrink-0 h-3.5 w-3.5">{icon}</span>}
         {children}
         {removable && (
           <button
             type="button"
             className={cn(
-              "ml-0.5 -mr-1 flex-shrink-0 rounded-full p-0.5",
-              "hover:bg-current/20 active:bg-current/30",
-              "transition-colors duration-fast",
-              "focus:outline-none focus:ring-1 focus:ring-current",
+              'ml-0.5 -mr-1 flex-shrink-0 rounded-full p-0.5',
+              'hover:bg-current/20 active:bg-current/30',
+              'transition-colors duration-fast',
+              'focus:outline-none focus:ring-1 focus:ring-current',
             )}
             onClick={(e) => {
               e.stopPropagation();
@@ -110,6 +94,6 @@ const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
   },
 );
 
-Tag.displayName = "Tag";
+Tag.displayName = 'Tag';
 
 export { Tag, tagVariants };

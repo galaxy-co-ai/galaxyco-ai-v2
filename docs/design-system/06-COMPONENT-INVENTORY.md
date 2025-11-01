@@ -36,8 +36,8 @@
 
 ```typescript
 interface ButtonProps {
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline";
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   isDisabled?: boolean;
   isLoading?: boolean;
   leftIcon?: ReactNode;
@@ -65,8 +65,8 @@ interface ButtonProps {
 
 ```typescript
 interface InputProps {
-  variant?: "default" | "error" | "success";
-  size?: "sm" | "md" | "lg";
+  variant?: 'default' | 'error' | 'success';
+  size?: 'sm' | 'md' | 'lg';
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -96,8 +96,8 @@ interface InputProps {
 
 ```typescript
 interface BadgeProps {
-  variant?: "default" | "success" | "warning" | "danger" | "info";
-  size?: "sm" | "md" | "lg";
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
+  size?: 'sm' | 'md' | 'lg';
   children: ReactNode;
   isDismissible?: boolean;
   onDismiss?: () => void;
@@ -118,9 +118,9 @@ interface AvatarProps {
   src?: string;
   alt: string;
   fallback?: string; // Initials
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-  variant?: "circle" | "square";
-  status?: "online" | "offline" | "away" | "busy"; // Shows indicator dot
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  variant?: 'circle' | 'square';
+  status?: 'online' | 'offline' | 'away' | 'busy'; // Shows indicator dot
 }
 ```
 
@@ -135,7 +135,7 @@ interface AvatarProps {
 ```typescript
 interface IconProps {
   name: string; // Lucide icon name
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string; // Tailwind color class
   className?: string;
 }
@@ -193,7 +193,7 @@ interface ToggleProps {
   isDisabled?: boolean;
   onChange?: (checked: boolean) => void;
   label?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 ```
 
@@ -224,8 +224,8 @@ interface LabelProps {
 
 ```typescript
 interface SpinnerProps {
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-  variant?: "circular" | "dots" | "bars";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'circular' | 'dots' | 'bars';
   label?: string; // For screen readers
 }
 ```
@@ -240,7 +240,7 @@ interface SpinnerProps {
 
 ```typescript
 interface SkeletonProps {
-  variant?: "text" | "circle" | "rectangle";
+  variant?: 'text' | 'circle' | 'rectangle';
   width?: string;
   height?: string;
   count?: number; // Multiple lines
@@ -257,7 +257,7 @@ interface SkeletonProps {
 
 ```typescript
 interface DividerProps {
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   label?: string; // Centered text on line
 }
 ```
@@ -274,7 +274,7 @@ interface DividerProps {
 ```typescript
 interface LinkProps {
   href: string;
-  variant?: "default" | "subtle" | "button";
+  variant?: 'default' | 'subtle' | 'button';
   isExternal?: boolean;
   children: ReactNode;
 }
@@ -291,9 +291,9 @@ interface LinkProps {
 
 ```typescript
 interface TextProps {
-  variant?: "display" | "heading" | "body" | "caption" | "code";
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
-  weight?: "normal" | "medium" | "semibold" | "bold";
+  variant?: 'display' | 'heading' | 'body' | 'caption' | 'code';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
   color?: string;
   children: ReactNode;
 }
@@ -310,7 +310,7 @@ interface TextProps {
 ```typescript
 interface TooltipProps {
   content: string;
-  placement?: "top" | "bottom" | "left" | "right";
+  placement?: 'top' | 'bottom' | 'left' | 'right';
   children: ReactNode;
   delay?: number;
 }
@@ -328,8 +328,8 @@ interface TooltipProps {
 interface ProgressProps {
   value: number; // 0-100
   max?: number;
-  variant?: "bar" | "circle" | "ring";
-  size?: "sm" | "md" | "lg";
+  variant?: 'bar' | 'circle' | 'ring';
+  size?: 'sm' | 'md' | 'lg';
   label?: string;
   showPercentage?: boolean;
 }
@@ -346,7 +346,7 @@ interface ProgressProps {
 ```typescript
 interface ChipProps {
   label: string;
-  variant?: "default" | "selected";
+  variant?: 'default' | 'selected';
   isRemovable?: boolean;
   onRemove?: () => void;
   onClick?: () => void;
@@ -364,7 +364,7 @@ interface ChipProps {
 ```typescript
 interface KbdProps {
   children: string; // e.g., "⌘K"
-  size?: "sm" | "md";
+  size?: 'sm' | 'md';
 }
 ```
 
@@ -393,7 +393,7 @@ interface CodeProps {
 
 ```typescript
 interface AlertProps {
-  variant: "info" | "success" | "warning" | "error";
+  variant: 'info' | 'success' | 'warning' | 'error';
   title?: string;
   description: string;
   isDismissible?: boolean;
@@ -428,7 +428,7 @@ interface EmptyStateProps {
 
 ```typescript
 interface CardProps {
-  variant?: "default" | "elevated" | "outlined";
+  variant?: 'default' | 'elevated' | 'outlined';
   isPressable?: boolean; // Hover effect
   onClick?: () => void;
   children: ReactNode;
@@ -574,7 +574,7 @@ interface TabsProps {
   tabs: Array<{ id: string; label: string; icon?: ReactNode; badge?: number }>;
   activeTab: string;
   onChange: (tabId: string) => void;
-  variant?: "line" | "pills";
+  variant?: 'line' | 'pills';
 }
 ```
 
@@ -602,7 +602,7 @@ interface AccordionProps {
 
 ```typescript
 interface ToastProps {
-  variant: "info" | "success" | "warning" | "error";
+  variant: 'info' | 'success' | 'warning' | 'error';
   title?: string;
   description: string;
   duration?: number; // Auto-dismiss in ms
@@ -628,7 +628,7 @@ interface DropdownMenuProps {
     isDivider?: boolean;
     isDestructive?: boolean;
   }>;
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
 }
 ```
 
@@ -643,7 +643,7 @@ interface DropdownMenuProps {
 interface AvatarGroupProps {
   avatars: Array<{ src?: string; alt: string; fallback?: string }>;
   max?: number; // Show +N after this
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 ```
 
@@ -734,7 +734,7 @@ interface FilterBarProps {
 interface FormFieldProps {
   label: string;
   name: string;
-  type?: "text" | "email" | "password" | "select" | "textarea";
+  type?: 'text' | 'email' | 'password' | 'select' | 'textarea';
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -773,7 +773,7 @@ interface RatingProps {
   value: number;
   onChange?: (value: number) => void;
   max?: number;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   isReadOnly?: boolean;
   icon?: ReactNode;
 }
@@ -868,7 +868,7 @@ interface ModalProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  size?: "sm" | "md" | "lg" | "xl" | "full";
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closeOnOverlayClick?: boolean;
 }
 ```
@@ -887,8 +887,8 @@ interface DrawerProps {
   title?: string;
   children: ReactNode;
   footer?: ReactNode;
-  placement?: "left" | "right" | "top" | "bottom";
-  size?: "sm" | "md" | "lg" | "full";
+  placement?: 'left' | 'right' | 'top' | 'bottom';
+  size?: 'sm' | 'md' | 'lg' | 'full';
 }
 ```
 
@@ -905,9 +905,9 @@ interface StepperProps {
     id: string;
     label: string;
     description?: string;
-    status: "complete" | "current" | "upcoming" | "error";
+    status: 'complete' | 'current' | 'upcoming' | 'error';
   }>;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 ```
 
@@ -964,7 +964,7 @@ interface CalendarProps {
 
 ```typescript
 interface ChartProps {
-  type: "line" | "bar" | "area" | "donut" | "pie";
+  type: 'line' | 'bar' | 'area' | 'donut' | 'pie';
   data: Array<Record<string, any>>;
   categories: string[];
   index: string;

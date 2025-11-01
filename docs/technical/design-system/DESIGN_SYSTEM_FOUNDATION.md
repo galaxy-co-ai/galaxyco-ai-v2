@@ -21,34 +21,34 @@
 const colors = {
   // Neutral base
   gray: {
-    50: "#F9FAFB",
-    100: "#F3F4F6",
-    200: "#E5E7EB",
-    300: "#D1D5DB",
-    500: "#6B7280",
-    700: "#374151",
-    900: "#111827",
+    50: '#F9FAFB',
+    100: '#F3F4F6',
+    200: '#E5E7EB',
+    300: '#D1D5DB',
+    500: '#6B7280',
+    700: '#374151',
+    900: '#111827',
   },
 
   // Brand accents (blue-purple-teal)
   primary: {
-    50: "#EEF2FF",
-    100: "#E0E7FF",
-    500: "#6366F1", // Indigo
-    600: "#4F46E5",
-    700: "#4338CA",
+    50: '#EEF2FF',
+    100: '#E0E7FF',
+    500: '#6366F1', // Indigo
+    600: '#4F46E5',
+    700: '#4338CA',
   },
 
   secondary: {
-    500: "#06B6D4", // Cyan
-    600: "#0891B2",
+    500: '#06B6D4', // Cyan
+    600: '#0891B2',
   },
 
   // Status colors
-  success: "#10B981",
-  warning: "#F59E0B",
-  error: "#EF4444",
-  info: "#3B82F6",
+  success: '#10B981',
+  warning: '#F59E0B',
+  error: '#EF4444',
+  info: '#3B82F6',
 };
 ```
 

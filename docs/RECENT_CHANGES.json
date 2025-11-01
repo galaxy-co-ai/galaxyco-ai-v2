@@ -114,10 +114,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T18:13:23.000Z",
         "timestamp": 1760897603,
-        "files": [
-          "docs/status/API_INTEGRATION_ROADMAP.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/status/API_INTEGRATION_ROADMAP.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "514fd2284d4e2fd283be85ad89a150b08cb3dc5d",
@@ -172,10 +169,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T15:14:39.000Z",
         "timestamp": 1760886879,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/2025-10-19.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-19.md"]
       },
       {
         "hash": "0738a7d745ff836d7403cd437e2233df65d10333",
@@ -259,10 +253,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T00:11:00.000Z",
         "timestamp": 1760832660,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "549eb9df7e3060fda0769f1cfb4901cdba3fe95c",
@@ -273,10 +264,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T23:51:28.000Z",
         "timestamp": 1760831488,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "150fa7ab5c3bb94995d86c02e0a4c39e278c3b4e",
@@ -287,10 +275,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T23:37:15.000Z",
         "timestamp": 1760830635,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "0997463da19eb3b3aa1870e6993170af6b78515a",
@@ -424,10 +409,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T03:23:01.000Z",
         "timestamp": 1760757781,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/SESSION_2025-10-17.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/SESSION_2025-10-17.md"]
       },
       {
         "hash": "6243542aa5e7fbdfe1a3861679f65c40044eb28a",
@@ -623,10 +605,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T17:51:21.000Z",
         "timestamp": 1760637081,
-        "files": [
-          "docs/handoff/DESIGN_SYSTEM_KICKOFF.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/handoff/DESIGN_SYSTEM_KICKOFF.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "53adf0c577ae1029088b3d0f26e096424369d41f",
@@ -661,10 +640,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T04:29:12.000Z",
         "timestamp": 1760588952,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/2025-10-15-session-5.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-15-session-5.md"]
       },
       {
         "hash": "27ff67e0c07d9cc0316586e8a58d340edd06c2ed",
@@ -773,10 +749,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-15T23:10:40.000Z",
         "timestamp": 1760569840,
-        "files": [
-          "docs/REORGANIZATION_PROPOSAL.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/REORGANIZATION_PROPOSAL.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "a56fd4bf7e777333a7703b41f1d8ea4e10b2af08",
@@ -1024,11 +997,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T01:18:36.000Z",
         "timestamp": 1760318316,
-        "files": [
-          "START_HERE_OCT_13.md",
-          "WARP.md",
-          "docs/status/SESSION_HANDOFF_2025-10-12.md"
-        ]
+        "files": ["START_HERE_OCT_13.md", "WARP.md", "docs/status/SESSION_HANDOFF_2025-10-12.md"]
       },
       {
         "hash": "f8ece854aff67454778d9ee85f39a5685a06b904",
@@ -1063,10 +1032,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T00:40:30.000Z",
         "timestamp": 1760316030,
-        "files": [
-          "apps/web/docs/DEPLOYMENT.md",
-          "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-        ]
+        "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
       },
       {
         "hash": "3fdb86d4065b5091bc8d719a4a755f8c52e10c77",
@@ -1078,10 +1044,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T00:39:07.000Z",
         "timestamp": 1760315947,
-        "files": [
-          "apps/web/docs/DEPLOYMENT.md",
-          "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-        ]
+        "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
       },
       {
         "hash": "422d83d47734adafc99d73da30f9fee6a2835ad4",
@@ -1654,10 +1617,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T19:26:50.000Z",
         "timestamp": 1759951610,
-        "files": [
-          "PHASE_7_TESTING_CHECKLIST.md",
-          "apps/web/PHASE_7_COMPLETE.md"
-        ]
+        "files": ["PHASE_7_TESTING_CHECKLIST.md", "apps/web/PHASE_7_COMPLETE.md"]
       },
       {
         "hash": "2343e82073ca1d2814d15f7be7f380171779b912",
@@ -2609,10 +2569,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T17:06:56.000Z",
         "timestamp": 1760634416,
-        "files": [
-          "apps/web/app/api/agents/route.ts",
-          "apps/web/app/api/workspaces/route.ts"
-        ]
+        "files": ["apps/web/app/api/agents/route.ts", "apps/web/app/api/workspaces/route.ts"]
       },
       {
         "hash": "9100c3dac5af05ad586dcd45793a5150585ab8fb",
@@ -2659,11 +2616,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-15T12:26:16.000Z",
         "timestamp": 1760531176,
-        "files": [
-          ".gitignore",
-          "apps/web/app/agents/[id]/page.tsx",
-          "apps/web/tsconfig.json"
-        ]
+        "files": [".gitignore", "apps/web/app/agents/[id]/page.tsx", "apps/web/tsconfig.json"]
       },
       {
         "hash": "3e473967dd57ced79b410b76b9074b673b570358",
@@ -3039,10 +2992,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-11T03:35:30.000Z",
         "timestamp": 1760153730,
-        "files": [
-          "UX_IMPROVEMENT_SUMMARY.md",
-          "apps/web/components/agents/TestPanelImproved.tsx"
-        ]
+        "files": ["UX_IMPROVEMENT_SUMMARY.md", "apps/web/components/agents/TestPanelImproved.tsx"]
       },
       {
         "hash": "a220df5b1d93f701e7934282e1373438aece24d3",
@@ -3298,10 +3248,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T08:22:58.000Z",
         "timestamp": 1759998178,
-        "files": [
-          "apps/web/app/api/workspace/current/route.ts",
-          "apps/web/hooks/useWorkspace.tsx"
-        ]
+        "files": ["apps/web/app/api/workspace/current/route.ts", "apps/web/hooks/useWorkspace.tsx"]
       },
       {
         "hash": "3fb356d35af648db7c78cc2dc7a6a05a5450b6b2",
@@ -3463,11 +3410,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T02:02:54.000Z",
         "timestamp": 1759975374,
-        "files": [
-          "apps/web/next.config.js",
-          "packages/database/src/client-safe.ts",
-          "vercel.json"
-        ]
+        "files": ["apps/web/next.config.js", "packages/database/src/client-safe.ts", "vercel.json"]
       },
       {
         "hash": "2eb99dcca3cf5aa8ea9f9dba61288d7530782df9",
@@ -3479,10 +3422,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T02:00:04.000Z",
         "timestamp": 1759975204,
-        "files": [
-          "apps/web/app/api/agents/[id]/execute/route.config.ts",
-          "apps/web/next.config.js"
-        ]
+        "files": ["apps/web/app/api/agents/[id]/execute/route.config.ts", "apps/web/next.config.js"]
       },
       {
         "hash": "552789c277a41faf3ac4b1b9e7ccce2e4d6c71ec",
@@ -3716,10 +3656,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T18:38:32.000Z",
         "timestamp": 1759948712,
-        "files": [
-          "apps/web/app/layout.tsx",
-          "apps/web/components/providers.tsx"
-        ]
+        "files": ["apps/web/app/layout.tsx", "apps/web/components/providers.tsx"]
       }
     ],
     "feat": [
@@ -4172,10 +4109,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T00:09:27.000Z",
         "timestamp": 1760832567,
-        "files": [
-          "apps/web/app/(app)/projects/page.tsx",
-          "apps/web/app/(app)/prospects/page.tsx"
-        ]
+        "files": ["apps/web/app/(app)/projects/page.tsx", "apps/web/app/(app)/prospects/page.tsx"]
       },
       {
         "hash": "741a80d0b063cae25ea28fc28f1c8a2a3afca984",
@@ -4288,10 +4222,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:17:19.000Z",
         "timestamp": 1760815039,
-        "files": [
-          "apps/web/app/api/chat/route.ts",
-          "apps/web/app/api/notifications/route.ts"
-        ]
+        "files": ["apps/web/app/api/chat/route.ts", "apps/web/app/api/notifications/route.ts"]
       },
       {
         "hash": "110a33a08e7774134907efa6154fe6ab3426c473",
@@ -4304,10 +4235,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:15:24.000Z",
         "timestamp": 1760814924,
-        "files": [
-          "apps/web/app/api/emails/route.ts",
-          "apps/web/app/api/inbox/route.ts"
-        ]
+        "files": ["apps/web/app/api/emails/route.ts", "apps/web/app/api/inbox/route.ts"]
       },
       {
         "hash": "b331322780cffdc7df4f38300d4de30abc9cfbec",
@@ -4320,10 +4248,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:12:58.000Z",
         "timestamp": 1760814778,
-        "files": [
-          "apps/web/app/api/audit-log/route.ts",
-          "apps/web/app/api/webhooks/route.ts"
-        ]
+        "files": ["apps/web/app/api/audit-log/route.ts", "apps/web/app/api/webhooks/route.ts"]
       },
       {
         "hash": "2bcef0423655115eae408affe0029df3f0a82172",
@@ -4711,10 +4636,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-17T20:48:55.000Z",
         "timestamp": 1760734135,
-        "files": [
-          "docs/QUALITY_CHECKLIST_UPDATED.md",
-          "docs/security/SQL_INJECTION_AUDIT.md"
-        ]
+        "files": ["docs/QUALITY_CHECKLIST_UPDATED.md", "docs/security/SQL_INJECTION_AUDIT.md"]
       },
       {
         "hash": "a25b11059ac943a37cbd10db46d62d72ac7c8817",
@@ -6452,10 +6374,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-11T17:37:18.000Z",
         "timestamp": 1760204238,
-        "files": [
-          "apps/web/app/dashboard/layout.tsx",
-          "apps/web/app/knowledge/page.tsx"
-        ]
+        "files": ["apps/web/app/dashboard/layout.tsx", "apps/web/app/knowledge/page.tsx"]
       },
       {
         "hash": "2c0d12730f4b0b4b0a645e3f863ed0601da1c2ed",
@@ -7096,10 +7015,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T20:41:26.000Z",
         "timestamp": 1759956086,
-        "files": [
-          "apps/web/hooks/use-workspace-auth.ts",
-          "apps/web/lib/actions/agent-actions.ts"
-        ]
+        "files": ["apps/web/hooks/use-workspace-auth.ts", "apps/web/lib/actions/agent-actions.ts"]
       },
       {
         "hash": "ba0462956167353ebcbd913d2b18cbae9037b2e6",
@@ -7421,10 +7337,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T02:56:03.000Z",
         "timestamp": 1760756163,
-        "files": [
-          "tests/e2e/agent-creation.spec.ts",
-          "tests/e2e/document-upload.spec.ts"
-        ]
+        "files": ["tests/e2e/agent-creation.spec.ts", "tests/e2e/document-upload.spec.ts"]
       },
       {
         "hash": "6217d24b82c048582a7097a16d7859068ad28777",
@@ -7804,10 +7717,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-14T14:10:16.000Z",
         "timestamp": 1760451016,
-        "files": [
-          "apps/web/app/onboarding/page.tsx",
-          "apps/web/lib/utils/logger.ts"
-        ]
+        "files": ["apps/web/app/onboarding/page.tsx", "apps/web/lib/utils/logger.ts"]
       },
       {
         "hash": "c745d2acdf4de7cb5a3eb22e2e5a1183cb95fa56",
@@ -8309,11 +8219,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-12T19:09:13.000Z",
         "timestamp": 1760296153,
-        "files": [
-          ".gitignore",
-          "add-optional-env.sh",
-          "apps/web/.env.local.backup"
-        ]
+        "files": [".gitignore", "add-optional-env.sh", "apps/web/.env.local.backup"]
       }
     ],
     "revert": [
@@ -8351,11 +8257,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T01:37:20.000Z",
         "timestamp": 1759973840,
-        "files": [
-          ".deployment-trigger",
-          "apps/web/vercel.json",
-          "vercel-web.json"
-        ]
+        "files": [".deployment-trigger", "apps/web/vercel.json", "vercel-web.json"]
       }
     ],
     "trigger": [
@@ -8479,10 +8381,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T18:13:23.000Z",
         "timestamp": 1760897603,
-        "files": [
-          "docs/status/API_INTEGRATION_ROADMAP.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/status/API_INTEGRATION_ROADMAP.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "514fd2284d4e2fd283be85ad89a150b08cb3dc5d",
@@ -8537,10 +8436,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T15:14:39.000Z",
         "timestamp": 1760886879,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/2025-10-19.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-19.md"]
       },
       {
         "hash": "0738a7d745ff836d7403cd437e2233df65d10333",
@@ -8624,10 +8520,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T00:11:00.000Z",
         "timestamp": 1760832660,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "549eb9df7e3060fda0769f1cfb4901cdba3fe95c",
@@ -8638,10 +8531,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T23:51:28.000Z",
         "timestamp": 1760831488,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "150fa7ab5c3bb94995d86c02e0a4c39e278c3b4e",
@@ -8652,10 +8542,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T23:37:15.000Z",
         "timestamp": 1760830635,
-        "files": [
-          "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "2813cffc5fccc91a0e64255115f2cc5833d8aaa7",
@@ -8761,10 +8648,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T03:23:01.000Z",
         "timestamp": 1760757781,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/SESSION_2025-10-17.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/SESSION_2025-10-17.md"]
       },
       {
         "hash": "6243542aa5e7fbdfe1a3861679f65c40044eb28a",
@@ -8989,10 +8873,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T17:51:21.000Z",
         "timestamp": 1760637081,
-        "files": [
-          "docs/handoff/DESIGN_SYSTEM_KICKOFF.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/handoff/DESIGN_SYSTEM_KICKOFF.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "9bd4acccfa02eb2e4ef0bf28b4aba8e5e3155dfc",
@@ -9083,10 +8964,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T04:29:12.000Z",
         "timestamp": 1760588952,
-        "files": [
-          "docs/status/CURRENT_SESSION.md",
-          "docs/status/sessions/2025-10-15-session-5.md"
-        ]
+        "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-15-session-5.md"]
       },
       {
         "hash": "27ff67e0c07d9cc0316586e8a58d340edd06c2ed",
@@ -9195,10 +9073,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-15T23:10:40.000Z",
         "timestamp": 1760569840,
-        "files": [
-          "docs/REORGANIZATION_PROPOSAL.md",
-          "docs/status/CURRENT_SESSION.md"
-        ]
+        "files": ["docs/REORGANIZATION_PROPOSAL.md", "docs/status/CURRENT_SESSION.md"]
       },
       {
         "hash": "a56fd4bf7e777333a7703b41f1d8ea4e10b2af08",
@@ -9329,11 +9204,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T01:18:36.000Z",
         "timestamp": 1760318316,
-        "files": [
-          "START_HERE_OCT_13.md",
-          "WARP.md",
-          "docs/status/SESSION_HANDOFF_2025-10-12.md"
-        ]
+        "files": ["START_HERE_OCT_13.md", "WARP.md", "docs/status/SESSION_HANDOFF_2025-10-12.md"]
       },
       {
         "hash": "f8ece854aff67454778d9ee85f39a5685a06b904",
@@ -9368,10 +9239,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T00:40:30.000Z",
         "timestamp": 1760316030,
-        "files": [
-          "apps/web/docs/DEPLOYMENT.md",
-          "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-        ]
+        "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
       },
       {
         "hash": "3fdb86d4065b5091bc8d719a4a755f8c52e10c77",
@@ -9383,10 +9251,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-13T00:39:07.000Z",
         "timestamp": 1760315947,
-        "files": [
-          "apps/web/docs/DEPLOYMENT.md",
-          "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-        ]
+        "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
       },
       {
         "hash": "0ab6fae59f0eb779d2a36bf81aa8eeefdd683cc1",
@@ -9398,11 +9263,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-12T19:09:13.000Z",
         "timestamp": 1760296153,
-        "files": [
-          ".gitignore",
-          "add-optional-env.sh",
-          "apps/web/.env.local.backup"
-        ]
+        "files": [".gitignore", "add-optional-env.sh", "apps/web/.env.local.backup"]
       },
       {
         "hash": "422d83d47734adafc99d73da30f9fee6a2835ad4",
@@ -9845,11 +9706,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T01:37:20.000Z",
         "timestamp": 1759973840,
-        "files": [
-          ".deployment-trigger",
-          "apps/web/vercel.json",
-          "vercel-web.json"
-        ]
+        "files": [".deployment-trigger", "apps/web/vercel.json", "vercel-web.json"]
       },
       {
         "hash": "9626deb2deabf046c84b9b694b22813901d34e66",
@@ -10019,10 +9876,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T19:26:50.000Z",
         "timestamp": 1759951610,
-        "files": [
-          "PHASE_7_TESTING_CHECKLIST.md",
-          "apps/web/PHASE_7_COMPLETE.md"
-        ]
+        "files": ["PHASE_7_TESTING_CHECKLIST.md", "apps/web/PHASE_7_COMPLETE.md"]
       },
       {
         "hash": "2343e82073ca1d2814d15f7be7f380171779b912",
@@ -10650,10 +10504,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-19T00:09:27.000Z",
         "timestamp": 1760832567,
-        "files": [
-          "apps/web/app/(app)/projects/page.tsx",
-          "apps/web/app/(app)/prospects/page.tsx"
-        ]
+        "files": ["apps/web/app/(app)/projects/page.tsx", "apps/web/app/(app)/prospects/page.tsx"]
       },
       {
         "hash": "741a80d0b063cae25ea28fc28f1c8a2a3afca984",
@@ -10861,10 +10712,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T02:56:03.000Z",
         "timestamp": 1760756163,
-        "files": [
-          "tests/e2e/agent-creation.spec.ts",
-          "tests/e2e/document-upload.spec.ts"
-        ]
+        "files": ["tests/e2e/agent-creation.spec.ts", "tests/e2e/document-upload.spec.ts"]
       },
       {
         "hash": "6217d24b82c048582a7097a16d7859068ad28777",
@@ -11769,11 +11617,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-15T12:26:16.000Z",
         "timestamp": 1760531176,
-        "files": [
-          ".gitignore",
-          "apps/web/app/agents/[id]/page.tsx",
-          "apps/web/tsconfig.json"
-        ]
+        "files": [".gitignore", "apps/web/app/agents/[id]/page.tsx", "apps/web/tsconfig.json"]
       },
       {
         "hash": "c951c6864de5b9f8d08f14b493fae3561895a05a",
@@ -12127,10 +11971,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-11T03:35:30.000Z",
         "timestamp": 1760153730,
-        "files": [
-          "UX_IMPROVEMENT_SUMMARY.md",
-          "apps/web/components/agents/TestPanelImproved.tsx"
-        ]
+        "files": ["UX_IMPROVEMENT_SUMMARY.md", "apps/web/components/agents/TestPanelImproved.tsx"]
       },
       {
         "hash": "c1188783ea82a6c5840b68cb8b4cc2428053f223",
@@ -12274,10 +12115,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T08:22:58.000Z",
         "timestamp": 1759998178,
-        "files": [
-          "apps/web/app/api/workspace/current/route.ts",
-          "apps/web/hooks/useWorkspace.tsx"
-        ]
+        "files": ["apps/web/app/api/workspace/current/route.ts", "apps/web/hooks/useWorkspace.tsx"]
       },
       {
         "hash": "1ed2674aede74fb68161d176c370f23277e93ea7",
@@ -12638,10 +12476,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:17:19.000Z",
         "timestamp": 1760815039,
-        "files": [
-          "apps/web/app/api/chat/route.ts",
-          "apps/web/app/api/notifications/route.ts"
-        ]
+        "files": ["apps/web/app/api/chat/route.ts", "apps/web/app/api/notifications/route.ts"]
       },
       {
         "hash": "110a33a08e7774134907efa6154fe6ab3426c473",
@@ -12654,10 +12489,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:15:24.000Z",
         "timestamp": 1760814924,
-        "files": [
-          "apps/web/app/api/emails/route.ts",
-          "apps/web/app/api/inbox/route.ts"
-        ]
+        "files": ["apps/web/app/api/emails/route.ts", "apps/web/app/api/inbox/route.ts"]
       },
       {
         "hash": "b331322780cffdc7df4f38300d4de30abc9cfbec",
@@ -12670,10 +12502,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-18T19:12:58.000Z",
         "timestamp": 1760814778,
-        "files": [
-          "apps/web/app/api/audit-log/route.ts",
-          "apps/web/app/api/webhooks/route.ts"
-        ]
+        "files": ["apps/web/app/api/audit-log/route.ts", "apps/web/app/api/webhooks/route.ts"]
       },
       {
         "hash": "2bcef0423655115eae408affe0029df3f0a82172",
@@ -12822,10 +12651,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-17T20:48:55.000Z",
         "timestamp": 1760734135,
-        "files": [
-          "docs/QUALITY_CHECKLIST_UPDATED.md",
-          "docs/security/SQL_INJECTION_AUDIT.md"
-        ]
+        "files": ["docs/QUALITY_CHECKLIST_UPDATED.md", "docs/security/SQL_INJECTION_AUDIT.md"]
       },
       {
         "hash": "a25b11059ac943a37cbd10db46d62d72ac7c8817",
@@ -12891,10 +12717,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-16T17:06:56.000Z",
         "timestamp": 1760634416,
-        "files": [
-          "apps/web/app/api/agents/route.ts",
-          "apps/web/app/api/workspaces/route.ts"
-        ]
+        "files": ["apps/web/app/api/agents/route.ts", "apps/web/app/api/workspaces/route.ts"]
       },
       {
         "hash": "131b35c8f8b9ee7fad34e574a27749f7ad3aaa9c",
@@ -14230,10 +14053,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T20:41:26.000Z",
         "timestamp": 1759956086,
-        "files": [
-          "apps/web/hooks/use-workspace-auth.ts",
-          "apps/web/lib/actions/agent-actions.ts"
-        ]
+        "files": ["apps/web/hooks/use-workspace-auth.ts", "apps/web/lib/actions/agent-actions.ts"]
       },
       {
         "hash": "dffbaa17cd573fb17c2261cec68b5e986cbf847b",
@@ -14246,10 +14066,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-08T18:38:32.000Z",
         "timestamp": 1759948712,
-        "files": [
-          "apps/web/app/layout.tsx",
-          "apps/web/components/providers.tsx"
-        ]
+        "files": ["apps/web/app/layout.tsx", "apps/web/components/providers.tsx"]
       },
       {
         "hash": "c15d7db62f898b21cfdfe9f380fa3da46255aa46",
@@ -14456,10 +14273,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-11T17:37:18.000Z",
         "timestamp": 1760204238,
-        "files": [
-          "apps/web/app/dashboard/layout.tsx",
-          "apps/web/app/knowledge/page.tsx"
-        ]
+        "files": ["apps/web/app/dashboard/layout.tsx", "apps/web/app/knowledge/page.tsx"]
       },
       {
         "hash": "3498d652ddfcff0392d3fef9cd39ad91e73f4e4f",
@@ -15636,10 +15450,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-14T14:10:16.000Z",
         "timestamp": 1760451016,
-        "files": [
-          "apps/web/app/onboarding/page.tsx",
-          "apps/web/lib/utils/logger.ts"
-        ]
+        "files": ["apps/web/app/onboarding/page.tsx", "apps/web/lib/utils/logger.ts"]
       }
     ],
     "lint": [
@@ -15828,11 +15639,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T02:02:54.000Z",
         "timestamp": 1759975374,
-        "files": [
-          "apps/web/next.config.js",
-          "packages/database/src/client-safe.ts",
-          "vercel.json"
-        ]
+        "files": ["apps/web/next.config.js", "packages/database/src/client-safe.ts", "vercel.json"]
       }
     ],
     "advanced-ui": [
@@ -16729,10 +16536,7 @@
         "author": "Dalton Cox",
         "date": "2025-10-09T02:00:04.000Z",
         "timestamp": 1759975204,
-        "files": [
-          "apps/web/app/api/agents/[id]/execute/route.config.ts",
-          "apps/web/next.config.js"
-        ]
+        "files": ["apps/web/app/api/agents/[id]/execute/route.config.ts", "apps/web/next.config.js"]
       }
     ],
     "turbo": [
@@ -17279,10 +17083,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-19T18:13:23.000Z",
       "timestamp": 1760897603,
-      "files": [
-        "docs/status/API_INTEGRATION_ROADMAP.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/status/API_INTEGRATION_ROADMAP.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "c1936728cce1f2076f536fe926f28453a74a6916",
@@ -17487,10 +17288,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-19T15:14:39.000Z",
       "timestamp": 1760886879,
-      "files": [
-        "docs/status/CURRENT_SESSION.md",
-        "docs/status/sessions/2025-10-19.md"
-      ]
+      "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-19.md"]
     },
     {
       "hash": "398fc65eb8e8ab650452c8eb2fd426eed8112446",
@@ -17760,10 +17558,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-19T00:11:00.000Z",
       "timestamp": 1760832660,
-      "files": [
-        "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "c0e226efbd2641b60712d663da1670efa2dc3fa7",
@@ -17775,10 +17570,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-19T00:09:27.000Z",
       "timestamp": 1760832567,
-      "files": [
-        "apps/web/app/(app)/projects/page.tsx",
-        "apps/web/app/(app)/prospects/page.tsx"
-      ]
+      "files": ["apps/web/app/(app)/projects/page.tsx", "apps/web/app/(app)/prospects/page.tsx"]
     },
     {
       "hash": "aedb6519e033a31f3c864250dc241426980b9ed2",
@@ -17801,10 +17593,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T23:51:28.000Z",
       "timestamp": 1760831488,
-      "files": [
-        "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "741a80d0b063cae25ea28fc28f1c8a2a3afca984",
@@ -17842,10 +17631,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T23:37:15.000Z",
       "timestamp": 1760830635,
-      "files": [
-        "docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/sprints/MASTER_CHECKLIST_IA_REFACTOR.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "677d8c1e4010cfea228cf2ae57081cff6468f30b",
@@ -18006,10 +17792,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T19:17:19.000Z",
       "timestamp": 1760815039,
-      "files": [
-        "apps/web/app/api/chat/route.ts",
-        "apps/web/app/api/notifications/route.ts"
-      ]
+      "files": ["apps/web/app/api/chat/route.ts", "apps/web/app/api/notifications/route.ts"]
     },
     {
       "hash": "110a33a08e7774134907efa6154fe6ab3426c473",
@@ -18022,10 +17805,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T19:15:24.000Z",
       "timestamp": 1760814924,
-      "files": [
-        "apps/web/app/api/emails/route.ts",
-        "apps/web/app/api/inbox/route.ts"
-      ]
+      "files": ["apps/web/app/api/emails/route.ts", "apps/web/app/api/inbox/route.ts"]
     },
     {
       "hash": "b331322780cffdc7df4f38300d4de30abc9cfbec",
@@ -18038,10 +17818,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T19:12:58.000Z",
       "timestamp": 1760814778,
-      "files": [
-        "apps/web/app/api/audit-log/route.ts",
-        "apps/web/app/api/webhooks/route.ts"
-      ]
+      "files": ["apps/web/app/api/audit-log/route.ts", "apps/web/app/api/webhooks/route.ts"]
     },
     {
       "hash": "2bcef0423655115eae408affe0029df3f0a82172",
@@ -18399,10 +18176,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T03:23:01.000Z",
       "timestamp": 1760757781,
-      "files": [
-        "docs/status/CURRENT_SESSION.md",
-        "docs/status/sessions/SESSION_2025-10-17.md"
-      ]
+      "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/SESSION_2025-10-17.md"]
     },
     {
       "hash": "7d5da3cc4e5d23e8528c4666a76584d2b1428832",
@@ -18415,10 +18189,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-18T02:56:03.000Z",
       "timestamp": 1760756163,
-      "files": [
-        "tests/e2e/agent-creation.spec.ts",
-        "tests/e2e/document-upload.spec.ts"
-      ]
+      "files": ["tests/e2e/agent-creation.spec.ts", "tests/e2e/document-upload.spec.ts"]
     },
     {
       "hash": "6217d24b82c048582a7097a16d7859068ad28777",
@@ -18868,10 +18639,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-17T20:48:55.000Z",
       "timestamp": 1760734135,
-      "files": [
-        "docs/QUALITY_CHECKLIST_UPDATED.md",
-        "docs/security/SQL_INJECTION_AUDIT.md"
-      ]
+      "files": ["docs/QUALITY_CHECKLIST_UPDATED.md", "docs/security/SQL_INJECTION_AUDIT.md"]
     },
     {
       "hash": "a25b11059ac943a37cbd10db46d62d72ac7c8817",
@@ -19025,10 +18793,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-17T19:45:28.000Z",
       "timestamp": 1760730328,
-      "files": [
-        "apps/web/lib/agents/ai-provider-wrapper.ts",
-        "apps/web/lib/agents/test-runner.ts"
-      ]
+      "files": ["apps/web/lib/agents/ai-provider-wrapper.ts", "apps/web/lib/agents/test-runner.ts"]
     },
     {
       "hash": "579ee34b93a127684936f97317977261575cf70a",
@@ -19164,10 +18929,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-17T18:29:26.000Z",
       "timestamp": 1760725766,
-      "files": [
-        "docs/08-status/CURRENT_SESSION.md",
-        "docs/design-system/IMPLEMENTATION_STATUS.md"
-      ]
+      "files": ["docs/08-status/CURRENT_SESSION.md", "docs/design-system/IMPLEMENTATION_STATUS.md"]
     },
     {
       "hash": "7effd8e99c2afe848615d913d72cc7a56be1eea5",
@@ -19179,10 +18941,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-17T17:41:03.000Z",
       "timestamp": 1760722863,
-      "files": [
-        "docs/08-status/CURRENT_SESSION.md",
-        "docs/design-system/IMPLEMENTATION_STATUS.md"
-      ]
+      "files": ["docs/08-status/CURRENT_SESSION.md", "docs/design-system/IMPLEMENTATION_STATUS.md"]
     },
     {
       "hash": "961c1ae714f2d9c9c8deea4004424242bc749a1a",
@@ -20332,10 +20091,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-16T17:51:21.000Z",
       "timestamp": 1760637081,
-      "files": [
-        "docs/handoff/DESIGN_SYSTEM_KICKOFF.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/handoff/DESIGN_SYSTEM_KICKOFF.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "9bd4acccfa02eb2e4ef0bf28b4aba8e5e3155dfc",
@@ -20416,10 +20172,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-16T17:06:56.000Z",
       "timestamp": 1760634416,
-      "files": [
-        "apps/web/app/api/agents/route.ts",
-        "apps/web/app/api/workspaces/route.ts"
-      ]
+      "files": ["apps/web/app/api/agents/route.ts", "apps/web/app/api/workspaces/route.ts"]
     },
     {
       "hash": "d28b1c283c83cbfa8475a56945e91a921453e716",
@@ -20464,10 +20217,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-16T04:29:12.000Z",
       "timestamp": 1760588952,
-      "files": [
-        "docs/status/CURRENT_SESSION.md",
-        "docs/status/sessions/2025-10-15-session-5.md"
-      ]
+      "files": ["docs/status/CURRENT_SESSION.md", "docs/status/sessions/2025-10-15-session-5.md"]
     },
     {
       "hash": "0165649e0d9e6dd0b51a3b12bfa425021474100f",
@@ -20480,10 +20230,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-16T04:27:18.000Z",
       "timestamp": 1760588838,
-      "files": [
-        "apps/web/app/(app)/agents/[id]/page.tsx",
-        "apps/web/app/api/agents/[id]/route.ts"
-      ]
+      "files": ["apps/web/app/(app)/agents/[id]/page.tsx", "apps/web/app/api/agents/[id]/route.ts"]
     },
     {
       "hash": "086aad76415cee65286a5c807250d0613e345380",
@@ -20800,10 +20547,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-15T23:10:40.000Z",
       "timestamp": 1760569840,
-      "files": [
-        "docs/REORGANIZATION_PROPOSAL.md",
-        "docs/status/CURRENT_SESSION.md"
-      ]
+      "files": ["docs/REORGANIZATION_PROPOSAL.md", "docs/status/CURRENT_SESSION.md"]
     },
     {
       "hash": "a56fd4bf7e777333a7703b41f1d8ea4e10b2af08",
@@ -20923,11 +20667,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-15T12:26:16.000Z",
       "timestamp": 1760531176,
-      "files": [
-        ".gitignore",
-        "apps/web/app/agents/[id]/page.tsx",
-        "apps/web/tsconfig.json"
-      ]
+      "files": [".gitignore", "apps/web/app/agents/[id]/page.tsx", "apps/web/tsconfig.json"]
     },
     {
       "hash": "3e473967dd57ced79b410b76b9074b673b570358",
@@ -21601,10 +21341,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-14T14:10:16.000Z",
       "timestamp": 1760451016,
-      "files": [
-        "apps/web/app/onboarding/page.tsx",
-        "apps/web/lib/utils/logger.ts"
-      ]
+      "files": ["apps/web/app/onboarding/page.tsx", "apps/web/lib/utils/logger.ts"]
     },
     {
       "hash": "6dce13c3e0442a675811e2a95d9ca6f29519c461",
@@ -21984,11 +21721,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-13T01:18:36.000Z",
       "timestamp": 1760318316,
-      "files": [
-        "START_HERE_OCT_13.md",
-        "WARP.md",
-        "docs/status/SESSION_HANDOFF_2025-10-12.md"
-      ]
+      "files": ["START_HERE_OCT_13.md", "WARP.md", "docs/status/SESSION_HANDOFF_2025-10-12.md"]
     },
     {
       "hash": "f8ece854aff67454778d9ee85f39a5685a06b904",
@@ -22059,10 +21792,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-13T00:40:30.000Z",
       "timestamp": 1760316030,
-      "files": [
-        "apps/web/docs/DEPLOYMENT.md",
-        "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-      ]
+      "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
     },
     {
       "hash": "3fdb86d4065b5091bc8d719a4a755f8c52e10c77",
@@ -22074,10 +21804,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-13T00:39:07.000Z",
       "timestamp": 1760315947,
-      "files": [
-        "apps/web/docs/DEPLOYMENT.md",
-        "apps/web/docs/ENVIRONMENT_VARIABLES.md"
-      ]
+      "files": ["apps/web/docs/DEPLOYMENT.md", "apps/web/docs/ENVIRONMENT_VARIABLES.md"]
     },
     {
       "hash": "b6aa7fa49f6333dcfecf6218548e30aefe497a4c",
@@ -22367,11 +22094,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-12T19:09:13.000Z",
       "timestamp": 1760296153,
-      "files": [
-        ".gitignore",
-        "add-optional-env.sh",
-        "apps/web/.env.local.backup"
-      ]
+      "files": [".gitignore", "add-optional-env.sh", "apps/web/.env.local.backup"]
     },
     {
       "hash": "422d83d47734adafc99d73da30f9fee6a2835ad4",
@@ -22786,10 +22509,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-11T17:37:18.000Z",
       "timestamp": 1760204238,
-      "files": [
-        "apps/web/app/dashboard/layout.tsx",
-        "apps/web/app/knowledge/page.tsx"
-      ]
+      "files": ["apps/web/app/dashboard/layout.tsx", "apps/web/app/knowledge/page.tsx"]
     },
     {
       "hash": "2c0d12730f4b0b4b0a645e3f863ed0601da1c2ed",
@@ -22802,10 +22522,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-11T17:34:35.000Z",
       "timestamp": 1760204075,
-      "files": [
-        "apps/web/app/api/knowledge/route.ts",
-        "apps/web/app/api/knowledge/upload/route.ts"
-      ]
+      "files": ["apps/web/app/api/knowledge/route.ts", "apps/web/app/api/knowledge/upload/route.ts"]
     },
     {
       "hash": "6b6b5637b6e1913a8d901b1683b72bb5a1df7745",
@@ -23087,10 +22804,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-11T03:35:30.000Z",
       "timestamp": 1760153730,
-      "files": [
-        "UX_IMPROVEMENT_SUMMARY.md",
-        "apps/web/components/agents/TestPanelImproved.tsx"
-      ]
+      "files": ["UX_IMPROVEMENT_SUMMARY.md", "apps/web/components/agents/TestPanelImproved.tsx"]
     },
     {
       "hash": "c1188783ea82a6c5840b68cb8b4cc2428053f223",
@@ -23134,10 +22848,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-11T03:17:17.000Z",
       "timestamp": 1760152637,
-      "files": [
-        "apps/web/app/agents/[id]/page.tsx",
-        "apps/web/components/agents/AgentListCard.tsx"
-      ]
+      "files": ["apps/web/app/agents/[id]/page.tsx", "apps/web/components/agents/AgentListCard.tsx"]
     },
     {
       "hash": "55ff3f450d8b4439a00101fd8c563b6473a5f2fa",
@@ -24042,10 +23753,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-09T08:22:58.000Z",
       "timestamp": 1759998178,
-      "files": [
-        "apps/web/app/api/workspace/current/route.ts",
-        "apps/web/hooks/useWorkspace.tsx"
-      ]
+      "files": ["apps/web/app/api/workspace/current/route.ts", "apps/web/hooks/useWorkspace.tsx"]
     },
     {
       "hash": "c347f4f05924bbbf77545c4318fedae24548adc7",
@@ -24258,11 +23966,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-09T02:02:54.000Z",
       "timestamp": 1759975374,
-      "files": [
-        "apps/web/next.config.js",
-        "packages/database/src/client-safe.ts",
-        "vercel.json"
-      ]
+      "files": ["apps/web/next.config.js", "packages/database/src/client-safe.ts", "vercel.json"]
     },
     {
       "hash": "2eb99dcca3cf5aa8ea9f9dba61288d7530782df9",
@@ -24274,10 +23978,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-09T02:00:04.000Z",
       "timestamp": 1759975204,
-      "files": [
-        "apps/web/app/api/agents/[id]/execute/route.config.ts",
-        "apps/web/next.config.js"
-      ]
+      "files": ["apps/web/app/api/agents/[id]/execute/route.config.ts", "apps/web/next.config.js"]
     },
     {
       "hash": "552789c277a41faf3ac4b1b9e7ccce2e4d6c71ec",
@@ -24357,11 +24058,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-09T01:37:20.000Z",
       "timestamp": 1759973840,
-      "files": [
-        ".deployment-trigger",
-        "apps/web/vercel.json",
-        "vercel-web.json"
-      ]
+      "files": [".deployment-trigger", "apps/web/vercel.json", "vercel-web.json"]
     },
     {
       "hash": "8ed93f2595f93046ff0dad279a16f6cc238c29b5",
@@ -24717,10 +24414,7 @@
       "author": "Dalton Cox",
       "date": "2025-10-08T20:41:26.000Z",
       "timestamp": 1759956086,
-      "files": [
-        "apps/web/hooks/use-workspace-auth.ts",
-        "apps/web/lib/actions/agent-actions.ts"
-      ]
+      "files": ["apps/web/hooks/use-workspace-auth.ts", "apps/web/lib/actions/agent-actions.ts"]
     },
     {
       "hash": "892047a8209d9514eadb2a165c79b9cd1161d449",

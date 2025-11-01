@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { COLORS, SPACING } from "@/lib/design-system";
+import { COLORS, SPACING } from '@/lib/design-system';
 
 interface SearchFilterBarProps {
   searchQuery: string;
@@ -14,23 +14,23 @@ interface SearchFilterBarProps {
 }
 
 const TYPE_OPTIONS = [
-  { value: "document", label: "📄 Documents", emoji: "📄" },
-  { value: "url", label: "🔗 URLs", emoji: "🔗" },
-  { value: "text", label: "📝 Text", emoji: "📝" },
-  { value: "image", label: "🖼️ Images", emoji: "🖼️" },
+  { value: 'document', label: '📄 Documents', emoji: '📄' },
+  { value: 'url', label: '🔗 URLs', emoji: '🔗' },
+  { value: 'text', label: '📝 Text', emoji: '📝' },
+  { value: 'image', label: '🖼️ Images', emoji: '🖼️' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: "ready", label: "Ready" },
-  { value: "processing", label: "Processing" },
-  { value: "error", label: "Error" },
+  { value: 'ready', label: 'Ready' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'error', label: 'Error' },
 ];
 
 const SORT_OPTIONS = [
-  { value: "created_desc", label: "Newest First" },
-  { value: "created_asc", label: "Oldest First" },
-  { value: "title_asc", label: "A → Z" },
-  { value: "title_desc", label: "Z → A" },
+  { value: 'created_desc', label: 'Newest First' },
+  { value: 'created_asc', label: 'Oldest First' },
+  { value: 'title_asc', label: 'A → Z' },
+  { value: 'title_desc', label: 'Z → A' },
 ];
 
 export default function SearchFilterBar({
@@ -46,8 +46,8 @@ export default function SearchFilterBar({
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         gap: SPACING.md,
         marginBottom: SPACING.lg,
       }}
@@ -55,29 +55,29 @@ export default function SearchFilterBar({
       {/* Search and Sort Row */}
       <div
         style={{
-          display: "flex",
+          display: 'flex',
           gap: SPACING.md,
-          alignItems: "center",
-          flexWrap: "wrap",
+          alignItems: 'center',
+          flexWrap: 'wrap',
         }}
       >
         {/* Search Input */}
-        <div style={{ flex: 1, minWidth: "300px" }}>
+        <div style={{ flex: 1, minWidth: '300px' }}>
           <input
             type="text"
             placeholder="Search knowledge base..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             style={{
-              width: "100%",
+              width: '100%',
               padding: `${SPACING.sm} ${SPACING.md}`,
-              fontSize: "14px",
+              fontSize: '14px',
               border: `1px solid ${COLORS.border.primary}`,
               borderRadius: SPACING.radius.md,
               backgroundColor: COLORS.background.secondary,
               color: COLORS.text.primary,
-              outline: "none",
-              transition: "border-color 0.2s ease",
+              outline: 'none',
+              transition: 'border-color 0.2s ease',
             }}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = COLORS.accent.primary;
@@ -94,13 +94,13 @@ export default function SearchFilterBar({
           onChange={(e) => onSortChange(e.target.value)}
           style={{
             padding: `${SPACING.sm} ${SPACING.md}`,
-            fontSize: "14px",
+            fontSize: '14px',
             border: `1px solid ${COLORS.border.primary}`,
             borderRadius: SPACING.radius.md,
             backgroundColor: COLORS.background.secondary,
             color: COLORS.text.primary,
-            cursor: "pointer",
-            outline: "none",
+            cursor: 'pointer',
+            outline: 'none',
           }}
         >
           {SORT_OPTIONS.map((option) => (
@@ -114,17 +114,17 @@ export default function SearchFilterBar({
       {/* Filter Chips Row */}
       <div
         style={{
-          display: "flex",
+          display: 'flex',
           gap: SPACING.sm,
-          alignItems: "center",
-          flexWrap: "wrap",
+          alignItems: 'center',
+          flexWrap: 'wrap',
         }}
       >
         {/* Type Filters Label */}
         <span
           style={{
-            fontSize: "13px",
-            fontWeight: "500",
+            fontSize: '13px',
+            fontWeight: '500',
             color: COLORS.text.secondary,
           }}
         >
@@ -136,20 +136,15 @@ export default function SearchFilterBar({
           onClick={() => onTypeChange(null)}
           style={{
             padding: `${SPACING.xs} ${SPACING.sm}`,
-            fontSize: "13px",
-            fontWeight: "500",
+            fontSize: '13px',
+            fontWeight: '500',
             border: `1px solid ${selectedType === null ? COLORS.accent.primary : COLORS.border.primary}`,
             borderRadius: SPACING.radius.full,
             backgroundColor:
-              selectedType === null
-                ? `${COLORS.accent.primary}15`
-                : COLORS.background.secondary,
-            color:
-              selectedType === null
-                ? COLORS.accent.primary
-                : COLORS.text.secondary,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
+              selectedType === null ? `${COLORS.accent.primary}15` : COLORS.background.secondary,
+            color: selectedType === null ? COLORS.accent.primary : COLORS.text.secondary,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
           }}
         >
           All
@@ -159,40 +154,35 @@ export default function SearchFilterBar({
         {TYPE_OPTIONS.map((type) => (
           <button
             key={type.value}
-            onClick={() =>
-              onTypeChange(selectedType === type.value ? null : type.value)
-            }
+            onClick={() => onTypeChange(selectedType === type.value ? null : type.value)}
             style={{
               padding: `${SPACING.xs} ${SPACING.sm}`,
-              fontSize: "13px",
-              fontWeight: "500",
+              fontSize: '13px',
+              fontWeight: '500',
               border: `1px solid ${selectedType === type.value ? COLORS.accent.primary : COLORS.border.primary}`,
               borderRadius: SPACING.radius.full,
               backgroundColor:
                 selectedType === type.value
                   ? `${COLORS.accent.primary}15`
                   : COLORS.background.secondary,
-              color:
-                selectedType === type.value
-                  ? COLORS.accent.primary
-                  : COLORS.text.secondary,
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              display: "flex",
-              alignItems: "center",
+              color: selectedType === type.value ? COLORS.accent.primary : COLORS.text.secondary,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
               gap: SPACING.xs,
             }}
           >
             <span>{type.emoji}</span>
-            <span>{type.label.split(" ")[1]}</span>
+            <span>{type.label.split(' ')[1]}</span>
           </button>
         ))}
 
         {/* Divider */}
         <div
           style={{
-            width: "1px",
-            height: "20px",
+            width: '1px',
+            height: '20px',
             backgroundColor: COLORS.border.primary,
             margin: `0 ${SPACING.xs}`,
           }}
@@ -201,8 +191,8 @@ export default function SearchFilterBar({
         {/* Status Filters Label */}
         <span
           style={{
-            fontSize: "13px",
-            fontWeight: "500",
+            fontSize: '13px',
+            fontWeight: '500',
             color: COLORS.text.secondary,
           }}
         >
@@ -214,20 +204,15 @@ export default function SearchFilterBar({
           onClick={() => onStatusChange(null)}
           style={{
             padding: `${SPACING.xs} ${SPACING.sm}`,
-            fontSize: "13px",
-            fontWeight: "500",
+            fontSize: '13px',
+            fontWeight: '500',
             border: `1px solid ${selectedStatus === null ? COLORS.accent.primary : COLORS.border.primary}`,
             borderRadius: SPACING.radius.full,
             backgroundColor:
-              selectedStatus === null
-                ? `${COLORS.accent.primary}15`
-                : COLORS.background.secondary,
-            color:
-              selectedStatus === null
-                ? COLORS.accent.primary
-                : COLORS.text.secondary,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
+              selectedStatus === null ? `${COLORS.accent.primary}15` : COLORS.background.secondary,
+            color: selectedStatus === null ? COLORS.accent.primary : COLORS.text.secondary,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
           }}
         >
           All
@@ -237,15 +222,11 @@ export default function SearchFilterBar({
         {STATUS_OPTIONS.map((status) => (
           <button
             key={status.value}
-            onClick={() =>
-              onStatusChange(
-                selectedStatus === status.value ? null : status.value,
-              )
-            }
+            onClick={() => onStatusChange(selectedStatus === status.value ? null : status.value)}
             style={{
               padding: `${SPACING.xs} ${SPACING.sm}`,
-              fontSize: "13px",
-              fontWeight: "500",
+              fontSize: '13px',
+              fontWeight: '500',
               border: `1px solid ${selectedStatus === status.value ? COLORS.accent.primary : COLORS.border.primary}`,
               borderRadius: SPACING.radius.full,
               backgroundColor:
@@ -253,11 +234,9 @@ export default function SearchFilterBar({
                   ? `${COLORS.accent.primary}15`
                   : COLORS.background.secondary,
               color:
-                selectedStatus === status.value
-                  ? COLORS.accent.primary
-                  : COLORS.text.secondary,
-              cursor: "pointer",
-              transition: "all 0.2s ease",
+                selectedStatus === status.value ? COLORS.accent.primary : COLORS.text.secondary,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
             }}
           >
             {status.label}

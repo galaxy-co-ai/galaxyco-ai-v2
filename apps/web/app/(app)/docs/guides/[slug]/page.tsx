@@ -4,15 +4,15 @@
  * Left TOC sidebar, main prose content, right "On this page" sidebar, prev/next navigation
  */
 
-import { ChevronRight, ChevronLeft, Book, FileText, Info } from "lucide-react";
-import Link from "next/link";
+import { ChevronRight, ChevronLeft, Book, FileText, Info } from 'lucide-react';
+import Link from 'next/link';
 
 // Mock data - in real app, fetch from CMS or markdown
 const article = {
-  title: "Building Your First AI Agent",
-  description: "Learn how to create, configure, and deploy AI agents",
-  lastUpdated: "2025-10-17",
-  readTime: "8 min read",
+  title: 'Building Your First AI Agent',
+  description: 'Learn how to create, configure, and deploy AI agents',
+  lastUpdated: '2025-10-17',
+  readTime: '8 min read',
   content: `
     <h2 id="overview">Overview</h2>
     <p>AI agents are autonomous programs that can perform tasks, make decisions, and interact with external systems. This guide will walk you through creating your first agent.</p>
@@ -80,28 +80,28 @@ const article = {
 };
 
 const tableOfContents = [
-  { id: "overview", title: "Overview", level: 2 },
-  { id: "prerequisites", title: "Prerequisites", level: 2 },
-  { id: "creating-agent", title: "Creating Your First Agent", level: 2 },
-  { id: "basic-info", title: "Basic Information", level: 3 },
-  { id: "trigger-config", title: "Trigger Configuration", level: 3 },
-  { id: "configuring-steps", title: "Configuring Workflow Steps", level: 2 },
-  { id: "testing", title: "Testing Your Agent", level: 2 },
-  { id: "deployment", title: "Deploying to Production", level: 2 },
-  { id: "best-practices", title: "Best Practices", level: 2 },
-  { id: "next-steps", title: "Next Steps", level: 2 },
+  { id: 'overview', title: 'Overview', level: 2 },
+  { id: 'prerequisites', title: 'Prerequisites', level: 2 },
+  { id: 'creating-agent', title: 'Creating Your First Agent', level: 2 },
+  { id: 'basic-info', title: 'Basic Information', level: 3 },
+  { id: 'trigger-config', title: 'Trigger Configuration', level: 3 },
+  { id: 'configuring-steps', title: 'Configuring Workflow Steps', level: 2 },
+  { id: 'testing', title: 'Testing Your Agent', level: 2 },
+  { id: 'deployment', title: 'Deploying to Production', level: 2 },
+  { id: 'best-practices', title: 'Best Practices', level: 2 },
+  { id: 'next-steps', title: 'Next Steps', level: 2 },
 ];
 
 const sidebarLinks = [
-  { title: "Getting Started", href: "/docs/getting-started", active: false },
-  { title: "Guides", href: "/docs/guides", active: true },
-  { title: "API Reference", href: "/docs/api-reference", active: false },
-  { title: "Examples", href: "/docs/examples", active: false },
+  { title: 'Getting Started', href: '/docs/getting-started', active: false },
+  { title: 'Guides', href: '/docs/guides', active: true },
+  { title: 'API Reference', href: '/docs/api-reference', active: false },
+  { title: 'Examples', href: '/docs/examples', active: false },
 ];
 
 const prevNext = {
-  prev: { title: "Installation", href: "/docs/installation" },
-  next: { title: "Advanced Configuration", href: "/docs/advanced-config" },
+  prev: { title: 'Installation', href: '/docs/installation' },
+  next: { title: 'Advanced Configuration', href: '/docs/advanced-config' },
 };
 
 export default function DocumentationArticlePage() {
@@ -125,8 +125,8 @@ export default function DocumentationArticlePage() {
                   href={link.href}
                   className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     link.active
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground-muted hover:bg-hover hover:text-foreground"
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-foreground-muted hover:bg-hover hover:text-foreground'
                   }`}
                 >
                   {link.title}
@@ -154,12 +154,8 @@ export default function DocumentationArticlePage() {
 
             {/* Article Header */}
             <header className="mb-8">
-              <h1 className="text-4xl font-bold text-foreground mb-4">
-                {article.title}
-              </h1>
-              <p className="text-lg text-foreground-muted mb-4">
-                {article.description}
-              </p>
+              <h1 className="text-4xl font-bold text-foreground mb-4">{article.title}</h1>
+              <p className="text-lg text-foreground-muted mb-4">{article.description}</p>
               <div className="flex items-center gap-4 text-sm text-foreground-muted">
                 <span>Updated {article.lastUpdated}</span>
                 <span>•</span>
@@ -172,9 +168,8 @@ export default function DocumentationArticlePage() {
               <div className="flex items-start gap-3">
                 <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-foreground">
-                  <strong className="font-medium">Note:</strong> This guide
-                  assumes you have already set up your workspace and configured
-                  your AI provider credentials.
+                  <strong className="font-medium">Note:</strong> This guide assumes you have already
+                  set up your workspace and configured your AI provider credentials.
                 </div>
               </div>
             </div>
@@ -204,12 +199,8 @@ export default function DocumentationArticlePage() {
                 >
                   <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                   <div>
-                    <div className="text-xs text-foreground-muted">
-                      Previous
-                    </div>
-                    <div className="font-medium text-foreground">
-                      {prevNext.prev.title}
-                    </div>
+                    <div className="text-xs text-foreground-muted">Previous</div>
+                    <div className="font-medium text-foreground">{prevNext.prev.title}</div>
                   </div>
                 </Link>
               ) : (
@@ -222,9 +213,7 @@ export default function DocumentationArticlePage() {
                 >
                   <div className="text-right">
                     <div className="text-xs text-foreground-muted">Next</div>
-                    <div className="font-medium text-foreground">
-                      {prevNext.next.title}
-                    </div>
+                    <div className="font-medium text-foreground">{prevNext.next.title}</div>
                   </div>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -236,16 +225,14 @@ export default function DocumentationArticlePage() {
         {/* Right Sidebar - On This Page */}
         <aside className="hidden xl:block w-64 flex-shrink-0 border-l border-border sticky top-0 h-screen overflow-y-auto">
           <div className="p-6">
-            <h4 className="text-sm font-semibold text-foreground mb-4">
-              On This Page
-            </h4>
+            <h4 className="text-sm font-semibold text-foreground mb-4">On This Page</h4>
             <nav className="space-y-2">
               {tableOfContents.map((item) => (
                 <a
                   key={item.id}
                   href={`#${item.id}`}
                   className={`block text-sm text-foreground-muted hover:text-foreground transition-colors ${
-                    item.level === 3 ? "pl-4" : ""
+                    item.level === 3 ? 'pl-4' : ''
                   }`}
                 >
                   {item.title}
@@ -254,9 +241,7 @@ export default function DocumentationArticlePage() {
             </nav>
 
             <div className="mt-8 pt-8 border-t border-border">
-              <h4 className="text-sm font-semibold text-foreground mb-4">
-                Related Links
-              </h4>
+              <h4 className="text-sm font-semibold text-foreground mb-4">Related Links</h4>
               <div className="space-y-2">
                 <Link
                   href="/docs/api-reference"

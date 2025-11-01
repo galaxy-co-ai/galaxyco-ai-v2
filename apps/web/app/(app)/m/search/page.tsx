@@ -1,72 +1,63 @@
-import { Metadata } from "next";
-import {
-  Search,
-  Clock,
-  TrendingUp,
-  FileText,
-  Users,
-  Calendar,
-  Bot,
-  X,
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
+import { Metadata } from 'next';
+import { Search, Clock, TrendingUp, FileText, Users, Calendar, Bot, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
 
 export const metadata: Metadata = {
-  title: "Search | GalaxyCo.ai",
-  description: "Global search",
+  title: 'Search | GalaxyCo.ai',
+  description: 'Global search',
 };
 
 // Mock recent searches
 const recentSearches = [
-  "Q4 marketing strategy",
-  "Sarah Johnson",
-  "API documentation",
-  "Team meeting notes",
+  'Q4 marketing strategy',
+  'Sarah Johnson',
+  'API documentation',
+  'Team meeting notes',
 ];
 
 // Mock trending
 const trending = [
-  { term: "Automation workflows", count: 234 },
-  { term: "Sales reports", count: 189 },
-  { term: "Contact management", count: 156 },
+  { term: 'Automation workflows', count: 234 },
+  { term: 'Sales reports', count: 189 },
+  { term: 'Contact management', count: 156 },
 ];
 
 // Mock search results
 const searchResults = [
   {
-    id: "1",
-    type: "agent",
-    title: "Marketing Automation Agent",
-    description: "Automated email campaigns and lead scoring",
+    id: '1',
+    type: 'agent',
+    title: 'Marketing Automation Agent',
+    description: 'Automated email campaigns and lead scoring',
     icon: Bot,
-    meta: "Agent · Last used 2h ago",
+    meta: 'Agent · Last used 2h ago',
   },
   {
-    id: "2",
-    type: "contact",
-    title: "Sarah Johnson",
-    description: "Marketing Director at Acme Corp",
+    id: '2',
+    type: 'contact',
+    title: 'Sarah Johnson',
+    description: 'Marketing Director at Acme Corp',
     icon: Users,
-    meta: "Contact · Acme Corporation",
-    avatar: "SJ",
+    meta: 'Contact · Acme Corporation',
+    avatar: 'SJ',
   },
   {
-    id: "3",
-    type: "document",
-    title: "Q4 Strategy Document.pdf",
-    description: "Marketing plan and budget allocation",
+    id: '3',
+    type: 'document',
+    title: 'Q4 Strategy Document.pdf',
+    description: 'Marketing plan and budget allocation',
     icon: FileText,
-    meta: "Document · Updated 3d ago",
+    meta: 'Document · Updated 3d ago',
   },
   {
-    id: "4",
-    type: "event",
-    title: "Team Standup Meeting",
-    description: "Daily team sync at 9:00 AM",
+    id: '4',
+    type: 'event',
+    title: 'Team Standup Meeting',
+    description: 'Daily team sync at 9:00 AM',
     icon: Calendar,
-    meta: "Event · Tomorrow at 9:00 AM",
+    meta: 'Event · Tomorrow at 9:00 AM',
   },
 ];
 
@@ -101,9 +92,7 @@ export default function MobileSearchPage() {
               <Clock className="h-4 w-4 text-foreground-muted" />
               <h2 className="font-semibold text-sm">Recent</h2>
             </div>
-            <button className="text-sm text-primary touch-manipulation">
-              Clear
-            </button>
+            <button className="text-sm text-primary touch-manipulation">Clear</button>
           </div>
           <div className="flex flex-wrap gap-2">
             {recentSearches.map((search, index) => (
@@ -130,9 +119,7 @@ export default function MobileSearchPage() {
                 className="flex items-center justify-between w-full py-2 active:bg-background-subtle rounded-md transition-colors touch-manipulation"
               >
                 <span className="text-sm">{item.term}</span>
-                <span className="text-xs text-foreground-muted">
-                  {item.count} searches
-                </span>
+                <span className="text-xs text-foreground-muted">{item.count} searches</span>
               </button>
             ))}
           </div>
@@ -140,9 +127,7 @@ export default function MobileSearchPage() {
 
         {/* Search Results */}
         <div className="px-4 py-4">
-          <h2 className="font-semibold text-sm mb-3 text-foreground-muted">
-            Results
-          </h2>
+          <h2 className="font-semibold text-sm mb-3 text-foreground-muted">Results</h2>
           <div className="space-y-3">
             {searchResults.map((result) => (
               <div
@@ -160,9 +145,7 @@ export default function MobileSearchPage() {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-sm mb-0.5 truncate">
-                    {result.title}
-                  </h3>
+                  <h3 className="font-semibold text-sm mb-0.5 truncate">{result.title}</h3>
                   <p className="text-sm text-foreground-muted line-clamp-2 mb-1">
                     {result.description}
                   </p>

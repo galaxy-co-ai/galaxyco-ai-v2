@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   FileText,
@@ -15,17 +15,17 @@ import {
   AlertCircle,
   CheckCircle,
   Loader2,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { logger } from "@/lib/utils/logger";
-import { toast } from "sonner";
-import { DeleteDialog } from "@/components/documents/delete-dialog";
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
+import { toast } from 'sonner';
+import { DeleteDialog } from '@/components/documents/delete-dialog';
 
 interface KnowledgeItem {
   id: string;
   title: string;
-  type: "document" | "url" | "image" | "text";
-  status: "processing" | "ready" | "failed";
+  type: 'document' | 'url' | 'image' | 'text';
+  status: 'processing' | 'ready' | 'failed';
   sourceUrl?: string;
   fileName?: string;
   fileSize?: number;
@@ -46,11 +46,7 @@ interface KnowledgeItem {
   updatedAt: string;
 }
 
-export default function DocumentDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function DocumentDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [document, setDocument] = useState<KnowledgeItem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,37 +63,37 @@ export default function DocumentDetailPage({
       const res = await fetch(`/api/documents/${params.id}`);
       if (!res.ok) {
         if (res.status === 404) {
-          toast.error("Document not found");
-          router.push("/collections");
+          toast.error('Document not found');
+          router.push('/collections');
           return;
         }
-        throw new Error("Failed to load document");
+        throw new Error('Failed to load document');
       }
       const data = await res.json();
       setDocument(data.document);
     } catch (err) {
-      logger.error("Failed to load document", {
+      logger.error('Failed to load document', {
         error: err instanceof Error ? err.message : String(err),
         documentId: params.id,
       });
-      toast.error("Failed to load document");
+      toast.error('Failed to load document');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteSuccess = () => {
-    router.push("/collections");
+    router.push('/collections');
   };
 
   const handleDownload = () => {
     if (document?.sourceUrl) {
-      window.open(document.sourceUrl, "_blank");
+      window.open(document.sourceUrl, '_blank');
     } else if (document?.content) {
       // Create blob and download
-      const blob = new Blob([document.content], { type: "text/plain" });
+      const blob = new Blob([document.content], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
-      const a = window.document.createElement("a");
+      const a = window.document.createElement('a');
       a.href = url;
       a.download = `${document.fileName || document.title}.txt`;
       a.click();
@@ -107,11 +103,11 @@ export default function DocumentDetailPage({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "image":
+      case 'image':
         return ImageIcon;
-      case "url":
+      case 'url':
         return FileCode;
-      case "text":
+      case 'text':
         return FileText;
       default:
         return File;
@@ -120,21 +116,21 @@ export default function DocumentDetailPage({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "ready":
+      case 'ready':
         return (
           <div className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
             <CheckCircle className="h-3 w-3" />
             Ready
           </div>
         );
-      case "processing":
+      case 'processing':
         return (
           <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/20 dark:text-blue-400">
             <Loader2 className="h-3 w-3 animate-spin" />
             Processing
           </div>
         );
-      case "failed":
+      case 'failed':
         return (
           <div className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-900/20 dark:text-red-400">
             <AlertCircle className="h-3 w-3" />
@@ -147,19 +143,19 @@ export default function DocumentDetailPage({
   };
 
   const formatFileSize = (bytes?: number) => {
-    if (!bytes) return "—";
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    if (!bytes) return '—';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -179,11 +175,10 @@ export default function DocumentDetailPage({
           Document not found
         </h3>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-          The document you&apos;re looking for doesn&apos;t exist or has been
-          deleted.
+          The document you&apos;re looking for doesn&apos;t exist or has been deleted.
         </p>
         <button
-          onClick={() => router.push("/collections")}
+          onClick={() => router.push('/collections')}
           className="mt-4 flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -201,7 +196,7 @@ export default function DocumentDetailPage({
       <div className="border-b bg-white px-6 py-4 dark:bg-neutral-900">
         <div className="mb-4">
           <button
-            onClick={() => router.push("/collections")}
+            onClick={() => router.push('/collections')}
             className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -221,8 +216,7 @@ export default function DocumentDetailPage({
               <div className="mt-2 flex items-center gap-2">
                 {getStatusBadge(document.status)}
                 <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                  {document.type.charAt(0).toUpperCase() +
-                    document.type.slice(1)}
+                  {document.type.charAt(0).toUpperCase() + document.type.slice(1)}
                 </span>
               </div>
             </div>
@@ -263,7 +257,7 @@ export default function DocumentDetailPage({
                   File Name
                 </dt>
                 <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {document.fileName || "—"}
+                  {document.fileName || '—'}
                 </dd>
               </div>
               <div>
@@ -275,9 +269,7 @@ export default function DocumentDetailPage({
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
-                  Type
-                </dt>
+                <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Type</dt>
                 <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
                   {document.mimeType || document.type}
                 </dd>
@@ -333,7 +325,7 @@ export default function DocumentDetailPage({
             )}
 
             {/* Processing Error */}
-            {document.status === "failed" && document.processingError && (
+            {document.status === 'failed' && document.processingError && (
               <div className="mt-6 rounded-md bg-red-50 p-4 dark:bg-red-900/10">
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -363,7 +355,7 @@ export default function DocumentDetailPage({
           )}
 
           {/* Content Preview */}
-          {document.content && document.status === "ready" && (
+          {document.content && document.status === 'ready' && (
             <div className="rounded-lg border bg-white p-6 shadow-sm dark:bg-neutral-900">
               <h2 className="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                 Content Preview

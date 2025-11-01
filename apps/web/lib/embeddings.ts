@@ -1,5 +1,5 @@
-import OpenAI from "openai";
-import { logger } from "@/lib/utils/logger";
+import OpenAI from 'openai';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * Embeddings Helper
@@ -11,7 +11,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const EMBEDDING_MODEL = "text-embedding-3-small";
+export const EMBEDDING_MODEL = 'text-embedding-3-small';
 export const EMBEDDING_DIMENSIONS = 1536; // Dimensions for text-embedding-3-small
 
 /**
@@ -19,25 +19,24 @@ export const EMBEDDING_DIMENSIONS = 1536; // Dimensions for text-embedding-3-sma
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
   if (!text || text.trim().length === 0) {
-    throw new Error("Text content is required for embedding generation");
+    throw new Error('Text content is required for embedding generation');
   }
 
   try {
     // Truncate text if too long (8191 tokens max for text-embedding-3-small)
     // Rough estimate: 1 token ≈ 4 characters
     const maxChars = 8191 * 4;
-    const truncatedText =
-      text.length > maxChars ? text.substring(0, maxChars) : text;
+    const truncatedText = text.length > maxChars ? text.substring(0, maxChars) : text;
 
     const response = await openai.embeddings.create({
       model: EMBEDDING_MODEL,
       input: truncatedText,
-      encoding_format: "float",
+      encoding_format: 'float',
     });
 
     return response.data[0].embedding;
   } catch (error: any) {
-    logger.error("Failed to generate embedding", {
+    logger.error('Failed to generate embedding', {
       error: error.message,
     });
     throw new Error(`Failed to generate embedding: ${error.message}`);
@@ -49,9 +48,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
   if (!texts || texts.length === 0) {
-    throw new Error(
-      "At least one text is required for batch embedding generation",
-    );
+    throw new Error('At least one text is required for batch embedding generation');
   }
 
   try {
@@ -64,12 +61,12 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
     const response = await openai.embeddings.create({
       model: EMBEDDING_MODEL,
       input: truncatedTexts,
-      encoding_format: "float",
+      encoding_format: 'float',
     });
 
     return response.data.map((item) => item.embedding);
   } catch (error: any) {
-    logger.error("Failed to generate embeddings", {
+    logger.error('Failed to generate embeddings', {
       error: error.message,
       textCount: texts.length,
     });
@@ -83,7 +80,7 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
  */
 export function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length) {
-    throw new Error("Vectors must have the same length");
+    throw new Error('Vectors must have the same length');
   }
 
   let dotProduct = 0;
@@ -128,10 +125,7 @@ export function findMostSimilar(
  * Prepare text for embedding generation
  * Combines title and content with proper formatting
  */
-export function prepareTextForEmbedding(
-  title: string,
-  content?: string | null,
-): string {
+export function prepareTextForEmbedding(title: string, content?: string | null): string {
   const parts: string[] = [];
 
   if (title) {
@@ -142,5 +136,5 @@ export function prepareTextForEmbedding(
     parts.push(`Content: ${content}`);
   }
 
-  return parts.join("\n\n");
+  return parts.join('\n\n');
 }

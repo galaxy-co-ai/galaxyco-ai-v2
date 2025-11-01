@@ -185,8 +185,8 @@ The app might be waiting forever for DB. Add a connection timeout.
 Check if there's a timeout configured. If not, add:
 
 ```typescript
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 
 const sql = neon(process.env.DATABASE_URL!, {
   fetchConnectionCache: true,
@@ -271,9 +271,9 @@ async function bootstrap() {
   setTimeout(async () => {
     try {
       await db.select().from(users).limit(1);
-      console.log("✅ Database connected");
+      console.log('✅ Database connected');
     } catch (error) {
-      console.error("❌ Database connection failed:", error.message);
+      console.error('❌ Database connection failed:', error.message);
     }
   }, 1000);
 }
@@ -284,19 +284,19 @@ async function bootstrap() {
 Add console.log statements in `main.ts` to see exactly where it hangs:
 
 ```typescript
-console.log("1. Creating NestFactory...");
+console.log('1. Creating NestFactory...');
 const app = await NestFactory.create(AppModule);
 
-console.log("2. Setting up global pipes...");
+console.log('2. Setting up global pipes...');
 app.useGlobalPipes(new ValidationPipe());
 
-console.log("3. Setting up CORS...");
+console.log('3. Setting up CORS...');
 app.enableCors();
 
-console.log("4. Starting to listen...");
+console.log('4. Starting to listen...');
 await app.listen(process.env.PORT || 4000);
 
-console.log("5. ✅ Application started successfully");
+console.log('5. ✅ Application started successfully');
 ```
 
 ### Option C: Use Vercel Database Connection

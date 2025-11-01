@@ -152,8 +152,8 @@ interface AgentBuilderState {
     tags: string[];
   };
   configuration: {
-    trigger: "webhook" | "schedule" | "manual" | "event";
-    aiProvider: "openai" | "anthropic" | "custom";
+    trigger: 'webhook' | 'schedule' | 'manual' | 'event';
+    aiProvider: 'openai' | 'anthropic' | 'custom';
     model: string;
     temperature: number;
     systemPrompt: string;

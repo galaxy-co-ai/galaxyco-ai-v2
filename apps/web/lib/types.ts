@@ -22,10 +22,10 @@ export interface User {
   updatedAt: Timestamp;
 }
 
-export type UserRole = "admin" | "user" | "viewer";
+export type UserRole = 'admin' | 'user' | 'viewer';
 
 export interface UserPreferences {
-  theme: "light" | "dark" | "system";
+  theme: 'light' | 'dark' | 'system';
   notifications: NotificationPreferences;
   timezone: string;
   language: string;
@@ -49,7 +49,7 @@ export interface Workspace {
   updatedAt: Timestamp;
 }
 
-export type WorkspacePlan = "free" | "pro" | "enterprise";
+export type WorkspacePlan = 'free' | 'pro' | 'enterprise';
 
 export interface WorkspaceSettings {
   allowedDomains: string[];
@@ -59,8 +59,8 @@ export interface WorkspaceSettings {
 }
 
 // Agent types
-export type AgentType = "research" | "email" | "crm" | "workflow";
-export type AgentStatus = "idle" | "running" | "paused" | "error" | "disabled";
+export type AgentType = 'research' | 'email' | 'crm' | 'workflow';
+export type AgentStatus = 'idle' | 'running' | 'paused' | 'error' | 'disabled';
 
 export interface Agent {
   id: ID;
@@ -93,14 +93,14 @@ export interface AgentConfig {
 }
 
 export interface AgentSchedule {
-  type: "manual" | "interval" | "cron";
+  type: 'manual' | 'interval' | 'cron';
   interval?: number; // minutes
   cron?: string;
 }
 
 export interface ResearchAgentConfig {
   sources: string[];
-  searchDepth: "shallow" | "deep";
+  searchDepth: 'shallow' | 'deep';
   confidenceThreshold: number;
   languages: string[];
   excludeTerms: string[];
@@ -108,7 +108,7 @@ export interface ResearchAgentConfig {
 
 export interface EmailAgentConfig {
   templates: EmailTemplate[];
-  tone: "professional" | "casual" | "friendly" | "formal";
+  tone: 'professional' | 'casual' | 'friendly' | 'formal';
   maxEmailsPerDay: number;
   waitBetweenEmails: number; // hours
   trackOpens: boolean;
@@ -116,8 +116,8 @@ export interface EmailAgentConfig {
 }
 
 export interface CRMAgentConfig {
-  crmProvider: "salesforce" | "hubspot" | "pipedrive" | "custom";
-  syncDirection: "import" | "export" | "bidirectional";
+  crmProvider: 'salesforce' | 'hubspot' | 'pipedrive' | 'custom';
+  syncDirection: 'import' | 'export' | 'bidirectional';
   fieldMappings: Record<string, string>;
   autoSync: boolean;
   syncInterval: number; // minutes
@@ -126,7 +126,7 @@ export interface CRMAgentConfig {
 export interface WorkflowAgentConfig {
   steps: WorkflowStep[];
   variables: Record<string, unknown>;
-  errorHandling: "stop" | "continue" | "retry";
+  errorHandling: 'stop' | 'continue' | 'retry';
 }
 
 export interface AgentMetrics {
@@ -146,14 +146,8 @@ export interface PerformanceMetrics {
 }
 
 // Workflow types
-export type WorkflowStatus = "draft" | "active" | "paused" | "archived";
-export type WorkflowStepType =
-  | "research"
-  | "email"
-  | "crm"
-  | "webhook"
-  | "condition"
-  | "delay";
+export type WorkflowStatus = 'draft' | 'active' | 'paused' | 'archived';
+export type WorkflowStepType = 'research' | 'email' | 'crm' | 'webhook' | 'condition' | 'delay';
 
 export interface Workflow {
   id: ID;
@@ -198,16 +192,16 @@ export interface WorkflowMetrics {
 
 // Email types
 export type EmailStatus =
-  | "draft"
-  | "pending_review"
-  | "approved"
-  | "sent"
-  | "delivered"
-  | "opened"
-  | "clicked"
-  | "replied"
-  | "bounced"
-  | "spam";
+  | 'draft'
+  | 'pending_review'
+  | 'approved'
+  | 'sent'
+  | 'delivered'
+  | 'opened'
+  | 'clicked'
+  | 'replied'
+  | 'bounced'
+  | 'spam';
 
 export interface Email {
   id: ID;
@@ -253,21 +247,17 @@ export interface EmailAttachment {
 
 // Prospect types
 export type ProspectStatus =
-  | "new"
-  | "researching"
-  | "enriched"
-  | "email_sent"
-  | "replied"
-  | "meeting_booked"
-  | "qualified"
-  | "lost"
-  | "archived";
+  | 'new'
+  | 'researching'
+  | 'enriched'
+  | 'email_sent'
+  | 'replied'
+  | 'meeting_booked'
+  | 'qualified'
+  | 'lost'
+  | 'archived';
 
-export type EnrichmentStatus =
-  | "pending"
-  | "in_progress"
-  | "completed"
-  | "failed";
+export type EnrichmentStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
 
 export interface Prospect {
   id: ID;
@@ -327,14 +317,14 @@ export interface CompanyInfo {
 }
 
 export type CompanySize =
-  | "1-10"
-  | "11-50"
-  | "51-200"
-  | "201-500"
-  | "501-1000"
-  | "1001-5000"
-  | "5001-10000"
-  | "10000+";
+  | '1-10'
+  | '11-50'
+  | '51-200'
+  | '201-500'
+  | '501-1000'
+  | '1001-5000'
+  | '5001-10000'
+  | '10000+';
 
 export interface SocialProfile {
   platform: string;
@@ -355,7 +345,7 @@ export interface NewsItem {
   url: string;
   publishedAt: Timestamp;
   source: string;
-  sentiment: "positive" | "neutral" | "negative";
+  sentiment: 'positive' | 'neutral' | 'negative';
 }
 
 export interface Education {
@@ -388,27 +378,27 @@ export interface ResearchInsight {
 }
 
 export type ResearchInsightType =
-  | "company_news"
-  | "person_news"
-  | "industry_trend"
-  | "technology_adoption"
-  | "funding_event"
-  | "job_posting"
-  | "social_activity"
-  | "competitor_activity";
+  | 'company_news'
+  | 'person_news'
+  | 'industry_trend'
+  | 'technology_adoption'
+  | 'funding_event'
+  | 'job_posting'
+  | 'social_activity'
+  | 'competitor_activity';
 
 // Notification types
 export type NotificationType =
-  | "agent_success"
-  | "agent_error"
-  | "workflow_complete"
-  | "workflow_error"
-  | "email_sent"
-  | "email_reply"
-  | "prospect_qualified"
-  | "system_alert";
+  | 'agent_success'
+  | 'agent_error'
+  | 'workflow_complete'
+  | 'workflow_error'
+  | 'email_sent'
+  | 'email_reply'
+  | 'prospect_qualified'
+  | 'system_alert';
 
-export type NotificationPriority = "low" | "normal" | "high" | "urgent";
+export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
 
 export interface Notification {
   id: ID;
@@ -466,18 +456,18 @@ export interface FormField {
 }
 
 export type FormFieldType =
-  | "text"
-  | "email"
-  | "password"
-  | "textarea"
-  | "select"
-  | "multiselect"
-  | "checkbox"
-  | "radio"
-  | "date"
-  | "number"
-  | "url"
-  | "file";
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'textarea'
+  | 'select'
+  | 'multiselect'
+  | 'checkbox'
+  | 'radio'
+  | 'date'
+  | 'number'
+  | 'url'
+  | 'file';
 
 export interface FormFieldOption {
   value: string;
@@ -486,7 +476,7 @@ export interface FormFieldOption {
 }
 
 export interface ValidationRule {
-  type: "required" | "email" | "url" | "min" | "max" | "pattern" | "custom";
+  type: 'required' | 'email' | 'url' | 'min' | 'max' | 'pattern' | 'custom';
   value?: number | string | RegExp;
   message: string;
 }
@@ -503,7 +493,7 @@ export interface MetricCard {
   title: string;
   value: string | number;
   change?: number;
-  changeType?: "increase" | "decrease";
+  changeType?: 'increase' | 'decrease';
   icon?: string;
   color?: string;
 }
@@ -522,7 +512,7 @@ export interface SearchFilters {
   dateRange?: DateRange;
   tags?: string[];
   sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface DateRange {
@@ -544,15 +534,9 @@ export interface Integration {
   updatedAt: Timestamp;
 }
 
-export type IntegrationType =
-  | "crm"
-  | "email"
-  | "calendar"
-  | "linkedin"
-  | "slack"
-  | "webhook";
+export type IntegrationType = 'crm' | 'email' | 'calendar' | 'linkedin' | 'slack' | 'webhook';
 
-export type IntegrationStatus = "connected" | "disconnected" | "error";
+export type IntegrationStatus = 'connected' | 'disconnected' | 'error';
 
 export interface IntegrationConfig {
   syncInterval?: number;
@@ -563,7 +547,7 @@ export interface IntegrationConfig {
 
 export interface IntegrationCredentials {
   // Never include actual credentials, only metadata
-  type: "oauth" | "api_key" | "basic_auth";
+  type: 'oauth' | 'api_key' | 'basic_auth';
   expiresAt?: Timestamp;
   scopes?: string[];
   [key: string]: unknown;
@@ -576,7 +560,7 @@ export interface BaseComponentProps {
 }
 
 export interface LoadingProps {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   text?: string;
   fullScreen?: boolean;
 }
@@ -593,7 +577,7 @@ export interface EmptyStateProps {
 
 export interface ConfidenceScoreProps {
   score: number;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
 }
 

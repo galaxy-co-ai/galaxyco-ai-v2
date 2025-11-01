@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@galaxyco/database";
-import { galaxyGrids, gridNodes, gridEdges } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@galaxyco/database';
+import { galaxyGrids, gridNodes, gridEdges } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/studio/grids/[gridId]
@@ -19,36 +19,26 @@ export async function GET(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const resolvedParams = await params;
     const { gridId } = resolvedParams;
 
     // Fetch grid
-    const [grid] = await db
-      .select()
-      .from(galaxyGrids)
-      .where(eq(galaxyGrids.id, gridId))
-      .limit(1);
+    const [grid] = await db.select().from(galaxyGrids).where(eq(galaxyGrids.id, gridId)).limit(1);
 
     if (!grid) {
-      return NextResponse.json({ error: "Grid not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Grid not found' }, { status: 404 });
     }
 
     // Fetch nodes
-    const nodes = await db
-      .select()
-      .from(gridNodes)
-      .where(eq(gridNodes.gridId, gridId));
+    const nodes = await db.select().from(gridNodes).where(eq(gridNodes.gridId, gridId));
 
     // Fetch edges
-    const edges = await db
-      .select()
-      .from(gridEdges)
-      .where(eq(gridEdges.gridId, gridId));
+    const edges = await db.select().from(gridEdges).where(eq(gridEdges.gridId, gridId));
 
-    logger.info("Fetched grid details", {
+    logger.info('Fetched grid details', {
       gridId,
       userId,
       nodeCount: nodes.length,
@@ -61,13 +51,13 @@ export async function GET(
       edges,
     });
   } catch (error) {
-    logger.error("Failed to fetch grid details", {
+    logger.error('Failed to fetch grid details', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to fetch grid details",
+        error: 'Failed to fetch grid details',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
@@ -86,7 +76,7 @@ export async function PATCH(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const resolvedParams = await params;
@@ -111,10 +101,10 @@ export async function PATCH(
       .returning();
 
     if (!updatedGrid) {
-      return NextResponse.json({ error: "Grid not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Grid not found' }, { status: 404 });
     }
 
-    logger.info("Updated grid", {
+    logger.info('Updated grid', {
       gridId,
       userId,
       updates: Object.keys(updates),
@@ -122,16 +112,16 @@ export async function PATCH(
 
     return NextResponse.json({
       grid: updatedGrid,
-      message: "Grid updated successfully",
+      message: 'Grid updated successfully',
     });
   } catch (error) {
-    logger.error("Failed to update grid", {
+    logger.error('Failed to update grid', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to update grid",
+        error: 'Failed to update grid',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },
@@ -150,7 +140,7 @@ export async function DELETE(
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const resolvedParams = await params;
@@ -159,22 +149,22 @@ export async function DELETE(
     // Delete grid (cascade will handle nodes and edges)
     await db.delete(galaxyGrids).where(eq(galaxyGrids.id, gridId));
 
-    logger.info("Deleted grid", {
+    logger.info('Deleted grid', {
       gridId,
       userId,
     });
 
     return NextResponse.json({
-      message: "Grid deleted successfully",
+      message: 'Grid deleted successfully',
     });
   } catch (error) {
-    logger.error("Failed to delete grid", {
+    logger.error('Failed to delete grid', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to delete grid",
+        error: 'Failed to delete grid',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },

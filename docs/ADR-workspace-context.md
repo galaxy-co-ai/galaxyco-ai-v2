@@ -46,8 +46,8 @@ export interface Workspace {
   id: string;
   name: string;
   slug: string;
-  plan: "free" | "starter" | "professional" | "enterprise";
-  role: "owner" | "admin" | "member" | "viewer";
+  plan: 'free' | 'starter' | 'professional' | 'enterprise';
+  role: 'owner' | 'admin' | 'member' | 'viewer';
 }
 
 export interface WorkspaceContextValue {
@@ -59,7 +59,7 @@ export interface WorkspaceContextValue {
 
 export interface WorkspaceResolution {
   id: string;
-  source: "cookie" | "localStorage" | "url" | "default" | "none";
+  source: 'cookie' | 'localStorage' | 'url' | 'default' | 'none';
 }
 ```
 
@@ -68,7 +68,7 @@ export interface WorkspaceResolution {
 #### 1. Server-Side Helper (`lib/workspace.ts`)
 
 ```typescript
-"use server";
+'use server';
 export async function getCurrentWorkspaceId(): Promise<WorkspaceResolution>;
 export async function setWorkspaceCookie(workspaceId: string): Promise<void>;
 ```
@@ -76,7 +76,7 @@ export async function setWorkspaceCookie(workspaceId: string): Promise<void>;
 #### 2. Client-Side Hook (`hooks/useWorkspace.ts`)
 
 ```typescript
-"use client";
+'use client';
 export function WorkspaceProvider({ children }): JSX.Element;
 export function useWorkspace(): WorkspaceContextValue;
 ```
@@ -103,13 +103,13 @@ All database queries **MUST** include workspace filtering:
 const agents = await db.query.agents.findMany({
   where: and(
     eq(agents.workspaceId, workspaceId), // REQUIRED
-    eq(agents.status, "active"),
+    eq(agents.status, 'active'),
   ),
 });
 
 // ❌ WRONG - Security violation
 const agents = await db.query.agents.findMany({
-  where: eq(agents.status, "active"),
+  where: eq(agents.status, 'active'),
 });
 ```
 

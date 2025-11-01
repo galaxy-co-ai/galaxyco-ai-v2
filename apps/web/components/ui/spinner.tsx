@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Spinner component using GalaxyCo.ai Design System tokens
@@ -11,36 +11,36 @@ import { cn } from "@/lib/utils";
  * <Spinner size="lg" variant="primary" />
  * <Spinner label="Loading data..." />
  */
-const spinnerVariants = cva("animate-spin rounded-full border-2", {
+const spinnerVariants = cva('animate-spin rounded-full border-2', {
   variants: {
     variant: {
       // Default - neutral
-      default: "border-border border-t-foreground",
+      default: 'border-border border-t-foreground',
       // Primary - brand color
-      primary: "border-primary/20 border-t-primary",
+      primary: 'border-primary/20 border-t-primary',
       // Success
-      success: "border-success/20 border-t-success",
+      success: 'border-success/20 border-t-success',
       // Warning
-      warning: "border-warning/20 border-t-warning",
+      warning: 'border-warning/20 border-t-warning',
       // Destructive
-      destructive: "border-destructive/20 border-t-destructive",
+      destructive: 'border-destructive/20 border-t-destructive',
     },
     size: {
-      xs: "h-3 w-3 border", // 12px, thinner border
-      sm: "h-4 w-4", // 16px
-      default: "h-5 w-5", // 20px (md)
-      lg: "h-6 w-6 border-[3px]", // 24px, thicker border
-      xl: "h-8 w-8 border-[3px]", // 32px, thicker border
+      xs: 'h-3 w-3 border', // 12px, thinner border
+      sm: 'h-4 w-4', // 16px
+      default: 'h-5 w-5', // 20px (md)
+      lg: 'h-6 w-6 border-[3px]', // 24px, thicker border
+      xl: 'h-8 w-8 border-[3px]', // 32px, thicker border
     },
   },
   defaultVariants: {
-    variant: "default",
-    size: "default",
+    variant: 'default',
+    size: 'default',
   },
 });
 
 export interface SpinnerProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "size">,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size'>,
     VariantProps<typeof spinnerVariants> {
   /**
    * Screen reader label for accessibility
@@ -50,7 +50,7 @@ export interface SpinnerProps
 }
 
 const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ className, variant, size, label = "Loading...", ...props }, ref) => {
+  ({ className, variant, size, label = 'Loading...', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -65,6 +65,6 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
   },
 );
 
-Spinner.displayName = "Spinner";
+Spinner.displayName = 'Spinner';
 
 export { Spinner, spinnerVariants };

@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import React, { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Download, FileText, CheckCircle2, Clock } from "lucide-react";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Download, FileText, CheckCircle2, Clock } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ExportRecord {
   id: string;
@@ -31,9 +31,9 @@ export default function ExportsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [exportConfig, setExportConfig] = useState({
-    entity: "agents",
-    format: "csv",
-    dateRange: "last-30-days",
+    entity: 'agents',
+    format: 'csv',
+    dateRange: 'last-30-days',
   });
 
   useEffect(() => {
@@ -41,15 +41,13 @@ export default function ExportsPage() {
       if (!currentWorkspace?.id) return;
       try {
         setIsLoading(true);
-        const res = await fetch(
-          `/api/exports?workspaceId=${currentWorkspace.id}&limit=20`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch exports");
+        const res = await fetch(`/api/exports?workspaceId=${currentWorkspace.id}&limit=20`);
+        if (!res.ok) throw new Error('Failed to fetch exports');
         const json = await res.json();
         setExportHistory(json.exports || []);
       } catch (e) {
-        console.error("Failed to load exports", e);
-        toast.error("Failed to load export history");
+        console.error('Failed to load exports', e);
+        toast.error('Failed to load export history');
       } finally {
         setIsLoading(false);
       }
@@ -61,9 +59,9 @@ export default function ExportsPage() {
     if (!currentWorkspace?.id) return;
     try {
       setIsCreating(true);
-      const res = await fetch("/api/exports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/exports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           workspaceId: currentWorkspace.id,
           name: `${exportConfig.entity}-export`,
@@ -72,21 +70,17 @@ export default function ExportsPage() {
           filters: { dateRange: exportConfig.dateRange },
         }),
       });
-      if (!res.ok) throw new Error("Failed to create export");
+      if (!res.ok) throw new Error('Failed to create export');
       const json = await res.json();
-      toast.success(
-        "Export created! Processing in background. Check back soon.",
-      );
+      toast.success('Export created! Processing in background. Check back soon.');
       // Refresh list
-      const listRes = await fetch(
-        `/api/exports?workspaceId=${currentWorkspace.id}&limit=20`,
-      );
+      const listRes = await fetch(`/api/exports?workspaceId=${currentWorkspace.id}&limit=20`);
       if (listRes.ok) {
         const listJson = await listRes.json();
         setExportHistory(listJson.exports || []);
       }
     } catch (e) {
-      toast.error("Failed to create export");
+      toast.error('Failed to create export');
     } finally {
       setIsCreating(false);
     }
@@ -96,7 +90,7 @@ export default function ExportsPage() {
     <PageShell
       title="Data Exports"
       subtitle="Export your data in multiple formats"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Exports" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Exports' }]}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Export Configuration */}
@@ -107,9 +101,7 @@ export default function ExportsPage() {
               <Label htmlFor="entity">Data Type</Label>
               <Select
                 value={exportConfig.entity}
-                onValueChange={(value) =>
-                  setExportConfig({ ...exportConfig, entity: value })
-                }
+                onValueChange={(value) => setExportConfig({ ...exportConfig, entity: value })}
               >
                 <SelectTrigger id="entity">
                   <SelectValue placeholder="Select data type" />
@@ -128,9 +120,7 @@ export default function ExportsPage() {
               <Label htmlFor="format">Export Format</Label>
               <Select
                 value={exportConfig.format}
-                onValueChange={(value) =>
-                  setExportConfig({ ...exportConfig, format: value })
-                }
+                onValueChange={(value) => setExportConfig({ ...exportConfig, format: value })}
               >
                 <SelectTrigger id="format">
                   <SelectValue placeholder="Select format" />
@@ -147,9 +137,7 @@ export default function ExportsPage() {
               <Label htmlFor="dateRange">Date Range</Label>
               <Select
                 value={exportConfig.dateRange}
-                onValueChange={(value) =>
-                  setExportConfig({ ...exportConfig, dateRange: value })
-                }
+                onValueChange={(value) => setExportConfig({ ...exportConfig, dateRange: value })}
               >
                 <SelectTrigger id="dateRange">
                   <SelectValue placeholder="Select date range" />
@@ -169,7 +157,7 @@ export default function ExportsPage() {
               disabled={isCreating || !currentWorkspace?.id}
             >
               <Download className="mr-2 h-4 w-4" />
-              {isCreating ? "Creating..." : "Create Export"}
+              {isCreating ? 'Creating...' : 'Create Export'}
             </Button>
           </div>
         </div>
@@ -181,9 +169,7 @@ export default function ExportsPage() {
             <div>
               <h4 className="font-medium mb-2">Available Formats</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  • CSV - Spreadsheet compatible, best for Excel/Google Sheets
-                </li>
+                <li>• CSV - Spreadsheet compatible, best for Excel/Google Sheets</li>
                 <li>• JSON - Structured data, best for APIs and imports</li>
                 <li>• Excel - Native Microsoft Excel format with formatting</li>
               </ul>
@@ -191,8 +177,8 @@ export default function ExportsPage() {
             <div>
               <h4 className="font-medium mb-2">Processing Time</h4>
               <p className="text-sm text-muted-foreground">
-                Exports are processed in the background. You&apos;ll receive a
-                download link once ready (usually under 5 minutes).
+                Exports are processed in the background. You&apos;ll receive a download link once
+                ready (usually under 5 minutes).
               </p>
             </div>
             <div>
@@ -209,9 +195,7 @@ export default function ExportsPage() {
       <div className="mt-6 rounded-lg border border-border bg-card p-6">
         <h3 className="text-lg font-semibold mb-4">Export History</h3>
         {isLoading ? (
-          <div className="text-center text-muted-foreground py-8">
-            Loading...
-          </div>
+          <div className="text-center text-muted-foreground py-8">Loading...</div>
         ) : exportHistory.length === 0 ? (
           <div className="text-center text-muted-foreground py-8">
             No exports yet. Create your first export above.
@@ -230,28 +214,26 @@ export default function ExportsPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium capitalize">
-                        {item.resourceType || "Export"}
+                        {item.resourceType || 'Export'}
                       </span>
                       <Badge variant="secondary" className="text-xs uppercase">
                         {item.format}
                       </Badge>
-                      {item.status === "completed" ? (
+                      {item.status === 'completed' ? (
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      ) : item.status === "processing" ? (
+                      ) : item.status === 'processing' ? (
                         <Clock className="h-4 w-4 text-yellow-600" />
                       ) : (
                         <Clock className="h-4 w-4 text-muted-foreground" />
                       )}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      {new Date(item.createdAt).toLocaleString()} •{" "}
-                      {item.fileSize
-                        ? `${(item.fileSize / 1024 / 1024).toFixed(2)} MB`
-                        : "—"}
+                      {new Date(item.createdAt).toLocaleString()} •{' '}
+                      {item.fileSize ? `${(item.fileSize / 1024 / 1024).toFixed(2)} MB` : '—'}
                     </div>
                   </div>
                 </div>
-                {item.status === "completed" && (
+                {item.status === 'completed' && (
                   <Button variant="outline" size="sm">
                     <Download className="mr-2 h-4 w-4" />
                     Download

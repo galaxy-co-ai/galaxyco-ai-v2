@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Star, Download, Zap, Clock } from "lucide-react";
-import { logger } from "@/lib/utils/logger";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Star, Download, Zap, Clock } from 'lucide-react';
+import { logger } from '@/lib/utils/logger';
 
 interface AgentTemplateCardProps {
   template: {
@@ -35,39 +35,35 @@ interface AgentTemplateCardProps {
  * - One-click deploy action
  * - Popularity and rarity signals
  */
-export default function AgentTemplateCardCompact({
-  template,
-  isFeatured,
-}: AgentTemplateCardProps) {
+export default function AgentTemplateCardCompact({ template, isFeatured }: AgentTemplateCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const ratingStars = (template.rating / 100).toFixed(1);
 
   // Generate avatar color based on category
   const getAvatarColor = (category: string) => {
     const colors = {
-      Productivity: "var(--primary-500)",
-      Knowledge: "var(--accent-500)",
-      Development: "var(--success)",
-      Data: "var(--info)",
-      Security: "var(--error)",
-      Analytics: "var(--warning)",
+      Productivity: 'var(--primary-500)',
+      Knowledge: 'var(--accent-500)',
+      Development: 'var(--success)',
+      Data: 'var(--info)',
+      Security: 'var(--error)',
+      Analytics: 'var(--warning)',
     };
-    return colors[category as keyof typeof colors] || "var(--primary-500)";
+    return colors[category as keyof typeof colors] || 'var(--primary-500)';
   };
 
   return (
     <Card
       className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-        isHovered ? "transform -translate-y-1" : ""
+        isHovered ? 'transform -translate-y-1' : ''
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        height:
-          "var(--card-height)" /* 260px - consistent height for all cards */,
-        minHeight: "var(--card-height)",
-        padding: "var(--card-padding)" /* 14px - compact padding */,
-        position: "relative",
+        height: 'var(--card-height)' /* 260px - consistent height for all cards */,
+        minHeight: 'var(--card-height)',
+        padding: 'var(--card-padding)' /* 14px - compact padding */,
+        position: 'relative',
       }}
     >
       {/* Badge */}
@@ -75,10 +71,10 @@ export default function AgentTemplateCardCompact({
         <div
           className="badge badge-primary"
           style={{
-            position: "absolute",
-            top: "var(--space-3)",
-            right: "var(--space-3)",
-            fontSize: "0.75rem",
+            position: 'absolute',
+            top: 'var(--space-3)',
+            right: 'var(--space-3)',
+            fontSize: '0.75rem',
             zIndex: 2,
           }}
         >
@@ -91,14 +87,14 @@ export default function AgentTemplateCardCompact({
         {/* Circular Avatar - No Emoji */}
         <div
           style={{
-            width: "32px" /* Reduced from 40px for density */,
-            height: "32px",
-            borderRadius: "50%",
+            width: '32px' /* Reduced from 40px for density */,
+            height: '32px',
+            borderRadius: '50%',
             background: `linear-gradient(135deg, ${getAvatarColor(template.category)}20, ${getAvatarColor(template.category)}40)`,
             border: `2px solid ${getAvatarColor(template.category)}30`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
           }}
         >
@@ -113,28 +109,28 @@ export default function AgentTemplateCardCompact({
         <div className="flex-1 min-w-0">
           <div
             style={{
-              fontSize: "var(--text-xs)" /* 11px - compact labels */,
-              fontWeight: "var(--font-medium)",
-              color: "var(--text-tertiary)",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              lineHeight: "var(--leading-tight)",
-              marginBottom: "var(--space-1)" /* 4px */,
+              fontSize: 'var(--text-xs)' /* 11px - compact labels */,
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--text-tertiary)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              lineHeight: 'var(--leading-tight)',
+              marginBottom: 'var(--space-1)' /* 4px */,
             }}
           >
             {template.category}
           </div>
           <h3
             style={{
-              fontSize: "var(--text-sm)" /* 13px - compact card titles */,
-              fontWeight: "var(--font-semibold)",
-              lineHeight: "var(--leading-tight)" /* 1.25 for tighter spacing */,
-              color: "var(--text-primary)",
-              display: "-webkit-box",
+              fontSize: 'var(--text-sm)' /* 13px - compact card titles */,
+              fontWeight: 'var(--font-semibold)',
+              lineHeight: 'var(--leading-tight)' /* 1.25 for tighter spacing */,
+              color: 'var(--text-primary)',
+              display: '-webkit-box',
               WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              marginBottom: "var(--space-2)" /* 8px */,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              marginBottom: 'var(--space-2)' /* 8px */,
             }}
           >
             {template.name}
@@ -146,14 +142,14 @@ export default function AgentTemplateCardCompact({
       {(isHovered || isFeatured) && (
         <p
           style={{
-            fontSize: "var(--text-xs)" /* 11px - compact description */,
-            lineHeight: "var(--leading-snug)" /* 1.375 - compact line height */,
-            color: "var(--text-secondary)",
-            display: "-webkit-box",
+            fontSize: 'var(--text-xs)' /* 11px - compact description */,
+            lineHeight: 'var(--leading-snug)' /* 1.375 - compact line height */,
+            color: 'var(--text-secondary)',
+            display: '-webkit-box',
             WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            marginBottom: "var(--space-2)" /* 8px */,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            marginBottom: 'var(--space-2)' /* 8px */,
           }}
         >
           {template.shortDescription}
@@ -163,34 +159,33 @@ export default function AgentTemplateCardCompact({
       {/* Stats Row - Compact */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "var(--space-2)" /* 8px - tighter spacing */,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 'var(--space-2)' /* 8px - tighter spacing */,
         }}
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--space-1)",
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-1)',
           }}
         >
-          <Star size={10} fill="var(--warning)" color="var(--warning)" />{" "}
-          {/* Smaller icon */}
+          <Star size={10} fill="var(--warning)" color="var(--warning)" /> {/* Smaller icon */}
           <span
             style={{
-              fontSize: "var(--text-xs)" /* 11px */,
-              fontWeight: "var(--font-semibold)",
-              color: "var(--text-primary)",
+              fontSize: 'var(--text-xs)' /* 11px */,
+              fontWeight: 'var(--font-semibold)',
+              color: 'var(--text-primary)',
             }}
           >
             {ratingStars}
           </span>
           <span
             style={{
-              fontSize: "var(--text-xs)",
-              color: "var(--text-tertiary)",
+              fontSize: 'var(--text-xs)',
+              color: 'var(--text-tertiary)',
             }}
           >
             ({template.reviewCount})
@@ -200,17 +195,16 @@ export default function AgentTemplateCardCompact({
         {/* Install Count */}
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--space-1)",
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-1)',
           }}
         >
-          <Download size={10} color="var(--text-tertiary)" />{" "}
-          {/* Smaller icon */}
+          <Download size={10} color="var(--text-tertiary)" /> {/* Smaller icon */}
           <span
             style={{
-              fontSize: "var(--text-xs)",
-              color: "var(--text-secondary)",
+              fontSize: 'var(--text-xs)',
+              color: 'var(--text-secondary)',
             }}
           >
             {template.installCount > 1000
@@ -222,29 +216,20 @@ export default function AgentTemplateCardCompact({
 
       {/* KPI Preview - Only on Hover */}
       {isHovered && template.kpis && (
-        <div
-          className="mb-3 p-2 rounded"
-          style={{ background: "var(--bg-secondary)" }}
-        >
+        <div className="mb-3 p-2 rounded" style={{ background: 'var(--bg-secondary)' }}>
           <div className="grid grid-2 gap-2 text-xs">
             {template.kpis.successRate && (
               <div>
-                <div style={{ color: "var(--text-tertiary)" }}>Success</div>
-                <div
-                  className="font-semibold"
-                  style={{ color: "var(--success)" }}
-                >
+                <div style={{ color: 'var(--text-tertiary)' }}>Success</div>
+                <div className="font-semibold" style={{ color: 'var(--success)' }}>
                   {template.kpis.successRate}%
                 </div>
               </div>
             )}
             {template.kpis.avgTimeSaved && (
               <div>
-                <div style={{ color: "var(--text-tertiary)" }}>Saves</div>
-                <div
-                  className="font-semibold"
-                  style={{ color: "var(--text-primary)" }}
-                >
+                <div style={{ color: 'var(--text-tertiary)' }}>Saves</div>
+                <div className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                   {template.kpis.avgTimeSaved}
                 </div>
               </div>
@@ -259,7 +244,7 @@ export default function AgentTemplateCardCompact({
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            logger.debug("Deploy agent clicked", { templateId: template.id });
+            logger.debug('Deploy agent clicked', { templateId: template.id });
           }}
           className="w-full"
         >
@@ -276,10 +261,10 @@ export default function AgentTemplateCardCompact({
               key={tag}
               className="badge"
               style={{
-                fontSize: "0.6875rem",
-                padding: "0.125rem 0.375rem",
-                background: "var(--bg-secondary)",
-                color: "var(--text-tertiary)",
+                fontSize: '0.6875rem',
+                padding: '0.125rem 0.375rem',
+                background: 'var(--bg-secondary)',
+                color: 'var(--text-tertiary)',
               }}
             >
               {tag}

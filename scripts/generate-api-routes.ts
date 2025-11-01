@@ -5,19 +5,14 @@
  * Ensures consistent security, validation, RLS, and logging across all routes
  */
 
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
 // Route specification interface
 interface RouteSpec {
   resource: string; // e.g., "customers", "projects"
   resourceSingular: string; // e.g., "customer", "project"
-  baseImportPath:
-    | "crm"
-    | "business"
-    | "communication"
-    | "analytics"
-    | "analytics"; // validation schema location
+  baseImportPath: 'crm' | 'business' | 'communication' | 'analytics' | 'analytics'; // validation schema location
   validationSchemaPrefix: string; // e.g., "Customer", "Project"
   rateLimit: string; // e.g., "CRM_CREATE", "INVOICE_CREATE"
   rateLimitRead: string; // e.g., "CRM_READ"
@@ -37,12 +32,12 @@ interface RouteSpec {
 const routeSpecs: RouteSpec[] = [
   // CRM Routes (5 remaining - customers already exists)
   {
-    resource: "projects",
-    resourceSingular: "project",
-    baseImportPath: "crm",
-    validationSchemaPrefix: "Project",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'projects',
+    resourceSingular: 'project',
+    baseImportPath: 'crm',
+    validationSchemaPrefix: 'Project',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -53,12 +48,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "contacts",
-    resourceSingular: "contact",
-    baseImportPath: "crm",
-    validationSchemaPrefix: "Contact",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'contacts',
+    resourceSingular: 'contact',
+    baseImportPath: 'crm',
+    validationSchemaPrefix: 'Contact',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -69,12 +64,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "tasks",
-    resourceSingular: "task",
-    baseImportPath: "crm",
-    validationSchemaPrefix: "Task",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'tasks',
+    resourceSingular: 'task',
+    baseImportPath: 'crm',
+    validationSchemaPrefix: 'Task',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -85,12 +80,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "calendar",
-    resourceSingular: "event",
-    baseImportPath: "crm",
-    validationSchemaPrefix: "CalendarEvent",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'calendar',
+    resourceSingular: 'event',
+    baseImportPath: 'crm',
+    validationSchemaPrefix: 'CalendarEvent',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -101,12 +96,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "prospects",
-    resourceSingular: "prospect",
-    baseImportPath: "crm",
-    validationSchemaPrefix: "Prospect",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'prospects',
+    resourceSingular: 'prospect',
+    baseImportPath: 'crm',
+    validationSchemaPrefix: 'Prospect',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -119,12 +114,12 @@ const routeSpecs: RouteSpec[] = [
 
   // Business Operations Routes (5)
   {
-    resource: "invoices",
-    resourceSingular: "invoice",
-    baseImportPath: "business",
-    validationSchemaPrefix: "Invoice",
-    rateLimit: "INVOICE_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'invoices',
+    resourceSingular: 'invoice',
+    baseImportPath: 'business',
+    validationSchemaPrefix: 'Invoice',
+    rateLimit: 'INVOICE_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -135,12 +130,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "campaigns",
-    resourceSingular: "campaign",
-    baseImportPath: "business",
-    validationSchemaPrefix: "Campaign",
-    rateLimit: "CAMPAIGN_OPS",
-    rateLimitRead: "CRM_READ",
+    resource: 'campaigns',
+    resourceSingular: 'campaign',
+    baseImportPath: 'business',
+    validationSchemaPrefix: 'Campaign',
+    rateLimit: 'CAMPAIGN_OPS',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -151,12 +146,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "segments",
-    resourceSingular: "segment",
-    baseImportPath: "business",
-    validationSchemaPrefix: "Segment",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'segments',
+    resourceSingular: 'segment',
+    baseImportPath: 'business',
+    validationSchemaPrefix: 'Segment',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -167,12 +162,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "exports",
-    resourceSingular: "export",
-    baseImportPath: "business",
-    validationSchemaPrefix: "Export",
-    rateLimit: "EXPORT_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'exports',
+    resourceSingular: 'export',
+    baseImportPath: 'business',
+    validationSchemaPrefix: 'Export',
+    rateLimit: 'EXPORT_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -183,12 +178,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "imports",
-    resourceSingular: "import",
-    baseImportPath: "business",
-    validationSchemaPrefix: "Import",
-    rateLimit: "IMPORT_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'imports',
+    resourceSingular: 'import',
+    baseImportPath: 'business',
+    validationSchemaPrefix: 'Import',
+    rateLimit: 'IMPORT_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -201,12 +196,12 @@ const routeSpecs: RouteSpec[] = [
 
   // Communication Routes (4)
   {
-    resource: "inbox",
-    resourceSingular: "message",
-    baseImportPath: "communication",
-    validationSchemaPrefix: "InboxMessage",
-    rateLimit: "CHAT_MESSAGE",
-    rateLimitRead: "CRM_READ",
+    resource: 'inbox',
+    resourceSingular: 'message',
+    baseImportPath: 'communication',
+    validationSchemaPrefix: 'InboxMessage',
+    rateLimit: 'CHAT_MESSAGE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -217,12 +212,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "emails",
-    resourceSingular: "email",
-    baseImportPath: "communication",
-    validationSchemaPrefix: "Email",
-    rateLimit: "EMAIL_SEND",
-    rateLimitRead: "CRM_READ",
+    resource: 'emails',
+    resourceSingular: 'email',
+    baseImportPath: 'communication',
+    validationSchemaPrefix: 'Email',
+    rateLimit: 'EMAIL_SEND',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -233,12 +228,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "chat",
-    resourceSingular: "message",
-    baseImportPath: "communication",
-    validationSchemaPrefix: "ChatMessage",
-    rateLimit: "CHAT_MESSAGE",
-    rateLimitRead: "CRM_READ",
+    resource: 'chat',
+    resourceSingular: 'message',
+    baseImportPath: 'communication',
+    validationSchemaPrefix: 'ChatMessage',
+    rateLimit: 'CHAT_MESSAGE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -249,12 +244,12 @@ const routeSpecs: RouteSpec[] = [
     },
   },
   {
-    resource: "notifications",
-    resourceSingular: "notification",
-    baseImportPath: "communication",
-    validationSchemaPrefix: "Notification",
-    rateLimit: "CRM_CREATE",
-    rateLimitRead: "CRM_READ",
+    resource: 'notifications',
+    resourceSingular: 'notification',
+    baseImportPath: 'communication',
+    validationSchemaPrefix: 'Notification',
+    rateLimit: 'CRM_CREATE',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -267,67 +262,67 @@ const routeSpecs: RouteSpec[] = [
 
   // Analytics Routes (6) - Read-only except reports
   {
-    resource: "analytics/sales",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ANALYTICS_QUERY",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'analytics/sales',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ANALYTICS_QUERY',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "analytics-read-only",
+    specialLogic: 'analytics-read-only',
   },
   {
-    resource: "analytics/marketing",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ANALYTICS_QUERY",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'analytics/marketing',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ANALYTICS_QUERY',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "analytics-read-only",
+    specialLogic: 'analytics-read-only',
   },
   {
-    resource: "analytics/outreach",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ANALYTICS_QUERY",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'analytics/outreach',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ANALYTICS_QUERY',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "analytics-read-only",
+    specialLogic: 'analytics-read-only',
   },
   {
-    resource: "analytics/time-usage",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ANALYTICS_QUERY",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'analytics/time-usage',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ANALYTICS_QUERY',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "analytics-read-only",
+    specialLogic: 'analytics-read-only',
   },
   {
-    resource: "analytics/usage",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ANALYTICS_QUERY",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'analytics/usage',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ANALYTICS_QUERY',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "analytics-read-only",
+    specialLogic: 'analytics-read-only',
   },
   {
-    resource: "reports",
-    resourceSingular: "report",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "Report",
-    rateLimit: "REPORT_GENERATE",
-    rateLimitRead: "ANALYTICS_QUERY",
+    resource: 'reports',
+    resourceSingular: 'report',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'Report',
+    rateLimit: 'REPORT_GENERATE',
+    rateLimitRead: 'ANALYTICS_QUERY',
     hasId: true,
     methods: {
       list: true,
@@ -340,12 +335,12 @@ const routeSpecs: RouteSpec[] = [
 
   // Developer Tools Routes (3) - Note: api-keys already exists
   {
-    resource: "webhooks",
-    resourceSingular: "webhook",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "Webhook",
-    rateLimit: "WEBHOOK_OPS",
-    rateLimitRead: "CRM_READ",
+    resource: 'webhooks',
+    resourceSingular: 'webhook',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'Webhook',
+    rateLimit: 'WEBHOOK_OPS',
+    rateLimitRead: 'CRM_READ',
     hasId: true,
     methods: {
       list: true,
@@ -354,83 +349,82 @@ const routeSpecs: RouteSpec[] = [
       update: true,
       delete: true,
     },
-    specialLogic: "webhook-validation",
+    specialLogic: 'webhook-validation',
   },
   {
-    resource: "audit-log",
-    resourceSingular: "log",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AuditLog",
-    rateLimit: "CRM_READ",
-    rateLimitRead: "CRM_READ",
+    resource: 'audit-log',
+    resourceSingular: 'log',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AuditLog',
+    rateLimit: 'CRM_READ',
+    rateLimitRead: 'CRM_READ',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "admin-only",
+    specialLogic: 'admin-only',
   },
   {
-    resource: "playground",
-    resourceSingular: "request",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "PlaygroundRequest",
-    rateLimit: "PLAYGROUND",
-    rateLimitRead: "PLAYGROUND",
+    resource: 'playground',
+    resourceSingular: 'request',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'PlaygroundRequest',
+    rateLimit: 'PLAYGROUND',
+    rateLimitRead: 'PLAYGROUND',
     hasId: false,
     methods: { create: true }, // POST only
-    specialLogic: "sandbox-mode",
+    specialLogic: 'sandbox-mode',
   },
 
   // Admin Routes (4) - All require admin role
   {
-    resource: "admin/users",
-    resourceSingular: "user",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AdminUserUpdate",
-    rateLimit: "ADMIN_OPS",
-    rateLimitRead: "ADMIN_OPS",
+    resource: 'admin/users',
+    resourceSingular: 'user',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AdminUserUpdate',
+    rateLimit: 'ADMIN_OPS',
+    rateLimitRead: 'ADMIN_OPS',
     hasId: true,
     methods: { list: true, get: true, update: true, delete: true },
-    specialLogic: "admin-role-required",
+    specialLogic: 'admin-role-required',
   },
   {
-    resource: "admin/workspaces",
-    resourceSingular: "workspace",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AdminWorkspaceUpdate",
-    rateLimit: "ADMIN_OPS",
-    rateLimitRead: "ADMIN_OPS",
+    resource: 'admin/workspaces',
+    resourceSingular: 'workspace',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AdminWorkspaceUpdate',
+    rateLimit: 'ADMIN_OPS',
+    rateLimitRead: 'ADMIN_OPS',
     hasId: true,
     methods: { list: true, get: true, update: true, delete: true },
-    specialLogic: "admin-role-required",
+    specialLogic: 'admin-role-required',
   },
   {
-    resource: "admin/analytics",
-    resourceSingular: "analytics",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AnalyticsQuery",
-    rateLimit: "ADMIN_OPS",
-    rateLimitRead: "ADMIN_OPS",
+    resource: 'admin/analytics',
+    resourceSingular: 'analytics',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AnalyticsQuery',
+    rateLimit: 'ADMIN_OPS',
+    rateLimitRead: 'ADMIN_OPS',
     hasId: false,
     methods: { list: true }, // GET only
-    specialLogic: "admin-role-required",
+    specialLogic: 'admin-role-required',
   },
   {
-    resource: "admin/settings",
-    resourceSingular: "settings",
-    baseImportPath: "analytics",
-    validationSchemaPrefix: "AdminSettings",
-    rateLimit: "ADMIN_OPS",
-    rateLimitRead: "ADMIN_OPS",
+    resource: 'admin/settings',
+    resourceSingular: 'settings',
+    baseImportPath: 'analytics',
+    validationSchemaPrefix: 'AdminSettings',
+    rateLimit: 'ADMIN_OPS',
+    rateLimitRead: 'ADMIN_OPS',
     hasId: false,
     methods: { list: true, update: true }, // GET, PUT only
-    specialLogic: "admin-role-required",
+    specialLogic: 'admin-role-required',
   },
 ];
 
 // Generate route.ts content
 function generateRouteFile(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   let imports = `import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
@@ -442,13 +436,11 @@ import { eq, and } from "drizzle-orm";`;
   // Add validation imports if needed
   if (spec.methods.create || spec.methods.update) {
     const schemaNames = [];
-    if (spec.methods.create)
-      schemaNames.push(`create${spec.validationSchemaPrefix}Schema`);
-    if (spec.methods.update)
-      schemaNames.push(`update${spec.validationSchemaPrefix}Schema`);
+    if (spec.methods.create) schemaNames.push(`create${spec.validationSchemaPrefix}Schema`);
+    if (spec.methods.update) schemaNames.push(`update${spec.validationSchemaPrefix}Schema`);
 
     imports += `
-import { ${schemaNames.join(", ")} } from "@/lib/validation/${spec.baseImportPath}";
+import { ${schemaNames.join(', ')} } from "@/lib/validation/${spec.baseImportPath}";
 import {
   safeValidateRequest,
   formatValidationError,
@@ -459,7 +451,7 @@ import {
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 `;
 
-  let content = imports + "\n";
+  let content = imports + '\n';
 
   // Generate POST method
   if (spec.methods.create) {
@@ -475,9 +467,8 @@ import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 }
 
 function generatePOSTMethod(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   return `
 /**
@@ -624,9 +615,8 @@ export async function POST(req: NextRequest) {
 }
 
 function generateGETListMethod(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   return `
 /**
@@ -695,7 +685,7 @@ export async function GET(req: NextRequest) {
     ].slice(offset, offset + limit);
 
     return NextResponse.json({
-      ${spec.resource.replace("/", "_")}: mock${resourceTitle},
+      ${spec.resource.replace('/', '_')}: mock${resourceTitle},
       total: mock${resourceTitle}.length,
       limit,
       offset,
@@ -716,9 +706,8 @@ export async function GET(req: NextRequest) {
 
 // Generate [id] route file
 function generateIdRouteFile(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   let imports = `import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
@@ -740,7 +729,7 @@ import {
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 `;
 
-  let content = imports + "\n";
+  let content = imports + '\n';
 
   // Generate GET method
   if (spec.methods.get) {
@@ -761,9 +750,8 @@ import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 }
 
 function generateGETMethod(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   return `
 /**
@@ -844,9 +832,8 @@ export async function GET(
 }
 
 function generatePUTMethod(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   return `
 /**
@@ -967,9 +954,8 @@ export async function PUT(
 }
 
 function generateDELETEMethod(spec: RouteSpec): string {
-  const resourceCap = spec.resource.split("/").pop()!;
-  const resourceTitle =
-    resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
+  const resourceCap = spec.resource.split('/').pop()!;
+  const resourceTitle = resourceCap.charAt(0).toUpperCase() + resourceCap.slice(1);
 
   return `
 /**
@@ -1072,9 +1058,9 @@ export async function DELETE(
 
 // Main generation function
 function generateAllRoutes() {
-  const baseDir = path.join(process.cwd(), "apps", "web", "app", "api");
+  const baseDir = path.join(process.cwd(), 'apps', 'web', 'app', 'api');
 
-  console.log("🚀 Generating API routes...\n");
+  console.log('🚀 Generating API routes...\n');
 
   let generated = 0;
 
@@ -1088,19 +1074,19 @@ function generateAllRoutes() {
 
     // Generate base route.ts
     const routeContent = generateRouteFile(spec);
-    fs.writeFileSync(path.join(routeDir, "route.ts"), routeContent);
+    fs.writeFileSync(path.join(routeDir, 'route.ts'), routeContent);
     console.log(`✅ Generated /api/${spec.resource}/route.ts`);
     generated++;
 
     // Generate [id] route if needed
     if (spec.hasId) {
-      const idDir = path.join(routeDir, "[id]");
+      const idDir = path.join(routeDir, '[id]');
       if (!fs.existsSync(idDir)) {
         fs.mkdirSync(idDir, { recursive: true });
       }
 
       const idRouteContent = generateIdRouteFile(spec);
-      fs.writeFileSync(path.join(idDir, "route.ts"), idRouteContent);
+      fs.writeFileSync(path.join(idDir, 'route.ts'), idRouteContent);
       console.log(`✅ Generated /api/${spec.resource}/[id]/route.ts`);
       generated++;
     }

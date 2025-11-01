@@ -3,32 +3,24 @@
  * Dropdown to switch between user's accessible workspaces
  */
 
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { logger } from "@/lib/utils/logger";
-import { useWorkspace, type Workspace } from "@/hooks/useWorkspace";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-  shadows,
-} from "@/lib/constants/design-system";
+import React, { useState, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+import { useWorkspace, type Workspace } from '@/hooks/useWorkspace';
+import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface WorkspaceSelectProps {
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
-  className = "",
-  size = "md",
+  className = '',
+  size = 'md',
 }) => {
   const { workspaceId, workspace, setWorkspaceId, isLoading } = useWorkspace();
-  const [availableWorkspaces, setAvailableWorkspaces] = useState<Workspace[]>(
-    [],
-  );
+  const [availableWorkspaces, setAvailableWorkspaces] = useState<Workspace[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoadingWorkspaces, setIsLoadingWorkspaces] = useState(false);
 
@@ -37,17 +29,17 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
     sm: {
       padding: `${spacing.xs} ${spacing.sm}`,
       fontSize: typography.sizes.sm,
-      height: "32px",
+      height: '32px',
     },
     md: {
       padding: `${spacing.sm} ${spacing.md}`,
       fontSize: typography.sizes.base,
-      height: "40px",
+      height: '40px',
     },
     lg: {
       padding: `${spacing.md} ${spacing.lg}`,
       fontSize: typography.sizes.lg,
-      height: "48px",
+      height: '48px',
     },
   };
 
@@ -60,16 +52,16 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
 
       try {
         setIsLoadingWorkspaces(true);
-        const response = await fetch("/api/workspace/list");
+        const response = await fetch('/api/workspace/list');
 
         if (!response.ok) {
-          throw new Error("Failed to fetch workspaces");
+          throw new Error('Failed to fetch workspaces');
         }
 
         const data = await response.json();
         setAvailableWorkspaces(data.workspaces || []);
       } catch (error) {
-        logger.error("Error fetching workspaces", error);
+        logger.error('Error fetching workspaces', error);
       } finally {
         setIsLoadingWorkspaces(false);
       }
@@ -92,7 +84,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
       await setWorkspaceId(selectedWorkspace.id);
       setIsDropdownOpen(false);
     } catch (error) {
-      logger.error("Error switching workspace", error);
+      logger.error('Error switching workspace', error);
     }
   };
 
@@ -102,15 +94,14 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Element;
-      if (!target.closest("[data-workspace-select]")) {
+      if (!target.closest('[data-workspace-select]')) {
         setIsDropdownOpen(false);
       }
     }
 
     if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isDropdownOpen]);
 
@@ -123,20 +114,20 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
           backgroundColor: colors.background.secondary,
           border: `1px solid ${colors.border.default}`,
           borderRadius: radius.md,
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
           gap: spacing.sm,
           color: colors.text.tertiary,
-          cursor: "not-allowed",
+          cursor: 'not-allowed',
         }}
       >
         <div
           style={{
-            width: "16px",
-            height: "16px",
+            width: '16px',
+            height: '16px',
             backgroundColor: colors.background.tertiary,
             borderRadius: radius.full,
-            animation: "pulse 2s infinite",
+            animation: 'pulse 2s infinite',
           }}
         />
         Loading...
@@ -148,7 +139,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
     <div
       data-workspace-select
       className={className}
-      style={{ position: "relative", display: "inline-block" }}
+      style={{ position: 'relative', display: 'inline-block' }}
     >
       {/* Current Workspace Button */}
       <button
@@ -157,16 +148,16 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
         disabled={isLoadingWorkspaces}
         style={{
           ...sizes[size],
-          width: "100%",
+          width: '100%',
           backgroundColor: colors.background.secondary,
           border: `1px solid ${colors.border.default}`,
           borderRadius: radius.md,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           gap: spacing.sm,
-          cursor: isLoadingWorkspaces ? "not-allowed" : "pointer",
-          transition: "all 200ms",
+          cursor: isLoadingWorkspaces ? 'not-allowed' : 'pointer',
+          transition: 'all 200ms',
           opacity: isLoadingWorkspaces ? 0.6 : 1,
         }}
         onMouseEnter={(e) => {
@@ -182,8 +173,8 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: spacing.sm,
             flex: 1,
           }}
@@ -191,15 +182,14 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
           {/* Workspace Icon/Avatar */}
           <div
             style={{
-              width: size === "sm" ? "20px" : size === "md" ? "24px" : "28px",
-              height: size === "sm" ? "20px" : size === "md" ? "24px" : "28px",
+              width: size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px',
+              height: size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px',
               backgroundColor: colors.primaryColor,
               borderRadius: radius.md,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize:
-                size === "sm" ? "10px" : size === "md" ? "12px" : "14px",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: size === 'sm' ? '10px' : size === 'md' ? '12px' : '14px',
               fontWeight: typography.weights.bold,
               color: colors.background.primary,
             }}
@@ -208,25 +198,25 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
           </div>
 
           {/* Workspace Name */}
-          <div style={{ textAlign: "left", flex: 1, minWidth: 0 }}>
+          <div style={{ textAlign: 'left', flex: 1, minWidth: 0 }}>
             <div
               style={{
                 fontSize: sizes[size].fontSize,
                 fontWeight: typography.weights.medium,
                 color: colors.text.primary,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               {workspace.name}
             </div>
-            {size !== "sm" && (
+            {size !== 'sm' && (
               <div
                 style={{
                   fontSize: typography.sizes.xs,
                   color: colors.text.tertiary,
-                  textTransform: "capitalize",
+                  textTransform: 'capitalize',
                 }}
               >
                 {workspace.plan} • {workspace.role}
@@ -238,10 +228,10 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
         {/* Dropdown Arrow */}
         <div
           style={{
-            fontSize: size === "sm" ? "12px" : "14px",
+            fontSize: size === 'sm' ? '12px' : '14px',
             color: colors.text.tertiary,
-            transform: isDropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 200ms",
+            transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 200ms',
           }}
         >
           ▼
@@ -252,8 +242,8 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
       {isDropdownOpen && (
         <div
           style={{
-            position: "absolute",
-            top: "100%",
+            position: 'absolute',
+            top: '100%',
             left: 0,
             right: 0,
             marginTop: spacing.xs,
@@ -262,8 +252,8 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
             borderRadius: radius.md,
             boxShadow: shadows.lg,
             zIndex: 50,
-            maxHeight: "300px",
-            overflowY: "auto",
+            maxHeight: '300px',
+            overflowY: 'auto',
           }}
         >
           {availableWorkspaces.length === 0 ? (
@@ -272,12 +262,10 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                 padding: spacing.md,
                 fontSize: typography.sizes.sm,
                 color: colors.text.tertiary,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
-              {isLoadingWorkspaces
-                ? "Loading workspaces..."
-                : "No workspaces found"}
+              {isLoadingWorkspaces ? 'Loading workspaces...' : 'No workspaces found'}
             </div>
           ) : (
             availableWorkspaces.map((ws) => (
@@ -286,52 +274,47 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                 type="button"
                 onClick={() => handleWorkspaceSelect(ws)}
                 style={{
-                  width: "100%",
+                  width: '100%',
                   padding: spacing.md,
-                  backgroundColor: "transparent",
-                  border: "none",
-                  display: "flex",
-                  alignItems: "center",
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
                   gap: spacing.sm,
-                  cursor: "pointer",
-                  transition: "all 200ms",
+                  cursor: 'pointer',
+                  transition: 'all 200ms',
                   borderRadius: 0,
                   fontSize: typography.sizes.sm,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = colors.background.secondary;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
                 {/* Workspace Icon */}
                 <div
                   style={{
-                    width: "24px",
-                    height: "24px",
+                    width: '24px',
+                    height: '24px',
                     backgroundColor:
-                      ws.id === workspaceId
-                        ? colors.primaryColor
-                        : colors.background.tertiary,
+                      ws.id === workspaceId ? colors.primaryColor : colors.background.tertiary,
                     borderRadius: radius.md,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
                     fontWeight: typography.weights.bold,
                     color:
-                      ws.id === workspaceId
-                        ? colors.background.primary
-                        : colors.text.secondary,
+                      ws.id === workspaceId ? colors.background.primary : colors.text.secondary,
                   }}
                 >
                   {ws.name.charAt(0).toUpperCase()}
                 </div>
 
                 {/* Workspace Info */}
-                <div style={{ textAlign: "left", flex: 1 }}>
+                <div style={{ textAlign: 'left', flex: 1 }}>
                   <div
                     style={{
                       fontSize: typography.sizes.sm,
@@ -348,7 +331,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                     style={{
                       fontSize: typography.sizes.xs,
                       color: colors.text.tertiary,
-                      textTransform: "capitalize",
+                      textTransform: 'capitalize',
                     }}
                   >
                     {ws.plan} • {ws.role}
@@ -359,7 +342,7 @@ export const WorkspaceSelect: React.FC<WorkspaceSelectProps> = ({
                 {ws.id === workspaceId && (
                   <div
                     style={{
-                      fontSize: "12px",
+                      fontSize: '12px',
                       color: colors.primaryColor,
                     }}
                   >

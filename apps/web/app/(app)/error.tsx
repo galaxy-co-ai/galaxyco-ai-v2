@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { AlertCircle, RefreshCw } from "lucide-react";
-import { logger } from "@/lib/utils/logger";
+import { useEffect } from 'react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
+import { logger } from '@/lib/utils/logger';
 
 export default function Error({
   error,
@@ -12,7 +12,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    logger.error("App error", error);
+    logger.error('App error', error);
   }, [error]);
 
   return (
@@ -24,7 +24,7 @@ export default function Error({
         Something went wrong
       </h2>
       <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-        {error.message || "An unexpected error occurred"}
+        {error.message || 'An unexpected error occurred'}
       </p>
       <button
         onClick={reset}

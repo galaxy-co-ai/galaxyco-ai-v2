@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { requireSession } from "@/lib/services/user-session";
-import { logger } from "@/lib/utils/logger";
-import { conversationService } from "@/lib/services/conversation-service";
+import { NextRequest, NextResponse } from 'next/server';
+import { requireSession } from '@/lib/services/user-session';
+import { logger } from '@/lib/utils/logger';
+import { conversationService } from '@/lib/services/conversation-service';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 /**
  * GET /api/ai/conversations
@@ -15,31 +15,20 @@ export async function GET(req: NextRequest) {
     const { userId, workspaceId } = session;
 
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get("limit") || "20");
-    const query = searchParams.get("query");
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const query = searchParams.get('query');
 
     let conversations;
     if (query) {
-      conversations = await conversationService.searchConversations(
-        userId,
-        workspaceId,
-        query,
-      );
+      conversations = await conversationService.searchConversations(userId, workspaceId, query);
     } else {
-      conversations = await conversationService.getUserConversations(
-        userId,
-        workspaceId,
-        limit,
-      );
+      conversations = await conversationService.getUserConversations(userId, workspaceId, limit);
     }
 
     return NextResponse.json({ conversations });
   } catch (error) {
-    logger.error("Get conversations error", error);
-    return NextResponse.json(
-      { error: "Failed to fetch conversations" },
-      { status: 500 },
-    );
+    logger.error('Get conversations error', error);
+    return NextResponse.json({ error: 'Failed to fetch conversations' }, { status: 500 });
   }
 }
 
@@ -64,10 +53,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ conversation }, { status: 201 });
   } catch (error) {
-    logger.error("Create conversation error", error);
-    return NextResponse.json(
-      { error: "Failed to create conversation" },
-      { status: 500 },
-    );
+    logger.error('Create conversation error', error);
+    return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
   }
 }

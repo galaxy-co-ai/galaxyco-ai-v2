@@ -1,13 +1,8 @@
-"use client";
+'use client';
 
-import * as Sentry from "@sentry/nextjs";
-import { useEffect } from "react";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-} from "@/lib/constants/design-system";
+import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
+import { colors, spacing, typography, radius } from '@/lib/constants/design-system';
 
 export default function ErrorBoundary({
   error,
@@ -24,27 +19,27 @@ export default function ErrorBoundary({
   return (
     <div
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         background: colors.background.tertiary,
-        padding: spacing["2xl"],
+        padding: spacing['2xl'],
       }}
     >
       <div
         style={{
-          maxWidth: "500px",
+          maxWidth: '500px',
           background: colors.background.primary,
-          padding: spacing["2xl"],
+          padding: spacing['2xl'],
           borderRadius: radius.lg,
-          textAlign: "center",
+          textAlign: 'center',
         }}
       >
-        <div style={{ fontSize: "48px", marginBottom: spacing.lg }}>⚠️</div>
+        <div style={{ fontSize: '48px', marginBottom: spacing.lg }}>⚠️</div>
         <h2
           style={{
-            fontSize: typography.sizes["2xl"],
+            fontSize: typography.sizes['2xl'],
             fontWeight: typography.weights.bold,
             color: colors.text.primary,
             marginBottom: spacing.md,
@@ -67,7 +62,7 @@ export default function ErrorBoundary({
               fontSize: typography.sizes.sm,
               color: colors.text.tertiary,
               marginBottom: spacing.lg,
-              fontFamily: "monospace",
+              fontFamily: 'monospace',
             }}
           >
             Error ID: {error.digest}
@@ -77,13 +72,13 @@ export default function ErrorBoundary({
           onClick={reset}
           style={{
             background: colors.primary[500],
-            color: "white",
+            color: 'white',
             padding: `${spacing.sm} ${spacing.xl}`,
             borderRadius: radius.md,
-            border: "none",
+            border: 'none',
             fontSize: typography.sizes.base,
             fontWeight: typography.weights.medium,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         >
           Try again

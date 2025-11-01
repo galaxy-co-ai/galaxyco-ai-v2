@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Plus,
   Search,
@@ -22,106 +22,101 @@ import {
   DollarSign,
   Calendar,
   MoreHorizontal,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
 interface Invoice {
   id: string;
   number: string;
   customer: string;
   amount: number;
-  status: "paid" | "pending" | "overdue" | "draft";
+  status: 'paid' | 'pending' | 'overdue' | 'draft';
   dueDate: string;
   issueDate: string;
 }
 
 const invoices: Invoice[] = [
   {
-    id: "1",
-    number: "INV-2025-001",
-    customer: "TechCorp Industries",
+    id: '1',
+    number: 'INV-2025-001',
+    customer: 'TechCorp Industries',
     amount: 12500,
-    status: "paid",
-    dueDate: "2025-10-15",
-    issueDate: "2025-09-15",
+    status: 'paid',
+    dueDate: '2025-10-15',
+    issueDate: '2025-09-15',
   },
   {
-    id: "2",
-    number: "INV-2025-002",
-    customer: "Global Solutions Inc",
+    id: '2',
+    number: 'INV-2025-002',
+    customer: 'Global Solutions Inc',
     amount: 8500,
-    status: "pending",
-    dueDate: "2025-10-25",
-    issueDate: "2025-09-25",
+    status: 'pending',
+    dueDate: '2025-10-25',
+    issueDate: '2025-09-25',
   },
   {
-    id: "3",
-    number: "INV-2025-003",
-    customer: "Startup Labs",
+    id: '3',
+    number: 'INV-2025-003',
+    customer: 'Startup Labs',
     amount: 3200,
-    status: "overdue",
-    dueDate: "2025-10-01",
-    issueDate: "2025-09-01",
+    status: 'overdue',
+    dueDate: '2025-10-01',
+    issueDate: '2025-09-01',
   },
   {
-    id: "4",
-    number: "INV-2025-004",
-    customer: "Enterprise Systems",
+    id: '4',
+    number: 'INV-2025-004',
+    customer: 'Enterprise Systems',
     amount: 21000,
-    status: "draft",
-    dueDate: "2025-11-10",
-    issueDate: "2025-10-10",
+    status: 'draft',
+    dueDate: '2025-11-10',
+    issueDate: '2025-10-10',
   },
 ];
 
 const statusConfig = {
   paid: {
-    label: "Paid",
+    label: 'Paid',
     icon: CheckCircle2,
-    className:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
   },
   pending: {
-    label: "Pending",
+    label: 'Pending',
     icon: Clock,
-    className:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
   },
   overdue: {
-    label: "Overdue",
+    label: 'Overdue',
     icon: XCircle,
-    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   },
   draft: {
-    label: "Draft",
+    label: 'Draft',
     icon: Calendar,
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
   },
 };
 
 export default function InvoicesPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   const filteredInvoices = invoices.filter((invoice) => {
     const matchesSearch =
       invoice.number.toLowerCase().includes(searchQuery.toLowerCase()) ||
       invoice.customer.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || invoice.status === statusFilter;
+    const matchesStatus = statusFilter === 'all' || invoice.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const stats = {
     total: invoices.reduce((sum, inv) => sum + inv.amount, 0),
-    paid: invoices
-      .filter((inv) => inv.status === "paid")
-      .reduce((sum, inv) => sum + inv.amount, 0),
+    paid: invoices.filter((inv) => inv.status === 'paid').reduce((sum, inv) => sum + inv.amount, 0),
     pending: invoices
-      .filter((inv) => inv.status === "pending")
+      .filter((inv) => inv.status === 'pending')
       .reduce((sum, inv) => sum + inv.amount, 0),
     overdue: invoices
-      .filter((inv) => inv.status === "overdue")
+      .filter((inv) => inv.status === 'overdue')
       .reduce((sum, inv) => sum + inv.amount, 0),
   };
 
@@ -129,7 +124,7 @@ export default function InvoicesPage() {
     <PageShell
       title="Invoices"
       subtitle="Manage your invoices and billing"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Invoices" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Invoices' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -141,9 +136,7 @@ export default function InvoicesPage() {
       <div className="grid gap-4 sm:grid-cols-4 mb-6">
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Total Revenue</p>
-          <p className="text-2xl font-bold">
-            ${(stats.total / 1000).toFixed(1)}K
-          </p>
+          <p className="text-2xl font-bold">${(stats.total / 1000).toFixed(1)}K</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Paid</p>
@@ -219,9 +212,7 @@ export default function InvoicesPage() {
                       </div>
                     </td>
                     <td className="p-4">{invoice.customer}</td>
-                    <td className="p-4 font-semibold">
-                      ${invoice.amount.toLocaleString()}
-                    </td>
+                    <td className="p-4 font-semibold">${invoice.amount.toLocaleString()}</td>
                     <td className="p-4">
                       <Badge className={statusConfig[invoice.status].className}>
                         {StatusIcon && <StatusIcon className="h-3 w-3 mr-1" />}
@@ -257,9 +248,7 @@ export default function InvoicesPage() {
         <div className="rounded-lg border border-border bg-card p-12 text-center">
           <DollarSign className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No invoices found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Create Invoice

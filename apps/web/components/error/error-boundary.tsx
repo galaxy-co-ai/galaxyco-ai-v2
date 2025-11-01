@@ -1,16 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { logger } from "@/lib/utils/logger";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/utils/logger';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -30,10 +24,7 @@ interface ErrorBoundaryProps {
  * Catches JavaScript errors anywhere in the React component tree,
  * logs those errors, and displays a fallback UI instead of crashing.
  */
-export class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -48,7 +39,7 @@ export class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error details
-    logger.error("ErrorBoundary caught an error", error, {
+    logger.error('ErrorBoundary caught an error', error, {
       componentStack: errorInfo.componentStack,
     });
 
@@ -58,7 +49,7 @@ export class ErrorBoundary extends React.Component<
     }
 
     // In production, send to error reporting service
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // Send to Sentry or other error monitoring service
       // Example: Sentry.captureException(error, { extra: errorInfo });
     }
@@ -78,21 +69,11 @@ export class ErrorBoundary extends React.Component<
       // Custom fallback component
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;
-        return (
-          <FallbackComponent
-            error={this.state.error}
-            resetError={this.handleReset}
-          />
-        );
+        return <FallbackComponent error={this.state.error} resetError={this.handleReset} />;
       }
 
       // Default fallback UI
-      return (
-        <DefaultErrorFallback
-          error={this.state.error}
-          resetError={this.handleReset}
-        />
-      );
+      return <DefaultErrorFallback error={this.state.error} resetError={this.handleReset} />;
     }
 
     return this.props.children;
@@ -102,13 +83,7 @@ export class ErrorBoundary extends React.Component<
 /**
  * Default Error Fallback Component
  */
-function DefaultErrorFallback({
-  error,
-  resetError,
-}: {
-  error?: Error;
-  resetError: () => void;
-}) {
+function DefaultErrorFallback({ error, resetError }: { error?: Error; resetError: () => void }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md">
@@ -118,12 +93,12 @@ function DefaultErrorFallback({
           </div>
           <CardTitle className="text-xl">Something went wrong</CardTitle>
           <CardDescription>
-            We encountered an unexpected error. Please try refreshing the page
-            or contact support if the problem persists.
+            We encountered an unexpected error. Please try refreshing the page or contact support if
+            the problem persists.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {process.env.NODE_ENV === "development" && error && (
+          {process.env.NODE_ENV === 'development' && error && (
             <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/50 dark:text-red-300">
               <details>
                 <summary className="cursor-pointer font-medium">
@@ -143,17 +118,12 @@ function DefaultErrorFallback({
           )}
 
           <div className="flex flex-col space-y-2">
-            <Button
-              onClick={resetError}
-              variant="default"
-              size="sm"
-              className="w-full"
-            >
+            <Button onClick={resetError} variant="default" size="sm" className="w-full">
               <RefreshCw className="mr-2 h-4 w-4" />
               Try Again
             </Button>
             <Button
-              onClick={() => (window.location.href = "/")}
+              onClick={() => (window.location.href = '/')}
               variant="outline"
               size="sm"
               className="w-full"

@@ -5,10 +5,10 @@
  * Handles user creation on first login via Clerk webhook.
  */
 
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { users, workspaceMembers, workspaces } from "@galaxyco/database/schema";
-import { eq, and } from "drizzle-orm";
+import { auth, currentUser } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { users, workspaceMembers, workspaces } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
 
 export interface UserSession {
   userId: string; // Database user ID
@@ -54,7 +54,7 @@ export class UserSessionService {
     });
 
     if (!membership) {
-      throw new Error("User has no workspace membership");
+      throw new Error('User has no workspace membership');
     }
 
     return {
@@ -75,7 +75,7 @@ export class UserSessionService {
   async createUserFromClerk(clerkUser: any): Promise<UserSession> {
     const email = clerkUser.emailAddresses[0]?.emailAddress;
     if (!email) {
-      throw new Error("No email address found for Clerk user");
+      throw new Error('No email address found for Clerk user');
     }
 
     // Check if user already exists
@@ -111,7 +111,7 @@ export class UserSessionService {
       // Create default workspace for user
       const workspaceName = clerkUser.firstName
         ? `${clerkUser.firstName}'s Workspace`
-        : "My Workspace";
+        : 'My Workspace';
 
       const [workspace] = await db
         .insert(workspaces)
@@ -126,7 +126,7 @@ export class UserSessionService {
       await db.insert(workspaceMembers).values({
         workspaceId: workspace.id,
         userId: dbUser.id,
-        role: "owner",
+        role: 'owner',
       });
 
       // Fetch membership
@@ -142,7 +142,7 @@ export class UserSessionService {
     }
 
     if (!membership) {
-      throw new Error("Failed to create workspace membership");
+      throw new Error('Failed to create workspace membership');
     }
 
     return {
@@ -189,7 +189,7 @@ export async function requireSession(): Promise<UserSession> {
   const session = await userSessionService.getCurrentSession();
 
   if (!session) {
-    throw new Error("Unauthorized - no valid session");
+    throw new Error('Unauthorized - no valid session');
   }
 
   return session;

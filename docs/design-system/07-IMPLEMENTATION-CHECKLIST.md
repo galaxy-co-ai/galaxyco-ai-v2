@@ -71,8 +71,8 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+      'rlig' 1,
+      'calt' 1;
   }
 }
 ```
@@ -90,8 +90,8 @@
 **File:** `src/lib/utils.ts`
 
 ```typescript
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -575,7 +575,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 **File:** `src/App.tsx`
 
 ```tsx
-import { Route, Switch } from "wouter";
+import { Route, Switch } from 'wouter';
 
 function App() {
   return (
@@ -633,18 +633,18 @@ function App() {
 **Example (UI Store):**
 
 ```typescript
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface UIStore {
   sidebarOpen: boolean;
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   toggleSidebar: () => void;
-  setTheme: (theme: "light" | "dark") => void;
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
   sidebarOpen: true,
-  theme: "dark",
+  theme: 'dark',
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setTheme: (theme) => set({ theme }),
 }));
@@ -663,7 +663,7 @@ export const useUIStore = create<UIStore>((set) => ({
 **File:** `src/lib/query-client.ts`
 
 ```typescript
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -693,14 +693,11 @@ export const queryClient = new QueryClient({
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function fetcher<T>(
-  endpoint: string,
-  options?: RequestInit,
-): Promise<T> {
+export async function fetcher<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...options?.headers,
     },
   });
@@ -732,19 +729,19 @@ export async function fetcher<T>(
 **Example:**
 
 ```typescript
-import { useQuery } from "@tanstack/react-query";
-import { fetcher } from "@/lib/api-client";
+import { useQuery } from '@tanstack/react-query';
+import { fetcher } from '@/lib/api-client';
 
 export function useAgents() {
   return useQuery({
-    queryKey: ["agents"],
-    queryFn: () => fetcher("/agents"),
+    queryKey: ['agents'],
+    queryFn: () => fetcher('/agents'),
   });
 }
 
 export function useAgent(id: string) {
   return useQuery({
-    queryKey: ["agents", id],
+    queryKey: ['agents', id],
     queryFn: () => fetcher(`/agents/${id}`),
   });
 }

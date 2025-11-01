@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { FormPage } from "@/components/templates/form-page";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { FormPage } from '@/components/templates/form-page';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Trash2, Upload } from "lucide-react";
+} from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle, Trash2, Upload } from 'lucide-react';
 
 export default function WorkspaceSettingsPage() {
   const { currentWorkspace } = useWorkspace();
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [workspaceName, setWorkspaceName] = useState("");
-  const [workspaceSlug, setWorkspaceSlug] = useState("");
-  const [description, setDescription] = useState("");
-  const [industry, setIndustry] = useState("technology");
-  const [size, setSize] = useState("11-50");
+  const [workspaceName, setWorkspaceName] = useState('');
+  const [workspaceSlug, setWorkspaceSlug] = useState('');
+  const [description, setDescription] = useState('');
+  const [industry, setIndustry] = useState('technology');
+  const [size, setSize] = useState('11-50');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -35,19 +35,17 @@ export default function WorkspaceSettingsPage() {
       if (!currentWorkspace?.id) return;
 
       try {
-        const res = await fetch(
-          `/api/workspaces/current?workspaceId=${currentWorkspace.id}`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch workspace");
+        const res = await fetch(`/api/workspaces/current?workspaceId=${currentWorkspace.id}`);
+        if (!res.ok) throw new Error('Failed to fetch workspace');
         const data = await res.json();
         const ws = data.workspace;
         setWorkspaceName(ws.name);
         setWorkspaceSlug(ws.slug);
-        setDescription(ws.settings?.description || "");
-        setIndustry(ws.settings?.industry || "technology");
-        setSize(ws.settings?.companySize || "11-50");
+        setDescription(ws.settings?.description || '');
+        setIndustry(ws.settings?.industry || 'technology');
+        setSize(ws.settings?.companySize || '11-50');
       } catch (error) {
-        toast.error("Failed to load workspace settings");
+        toast.error('Failed to load workspace settings');
       } finally {
         setIsPageLoading(false);
       }
@@ -61,9 +59,9 @@ export default function WorkspaceSettingsPage() {
 
     setIsLoading(true);
     try {
-      const res = await fetch("/api/workspaces/current", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/workspaces/current', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           workspaceId: currentWorkspace.id,
           name: workspaceName,
@@ -76,10 +74,10 @@ export default function WorkspaceSettingsPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to update workspace");
-      toast.success("Workspace updated successfully");
+      if (!res.ok) throw new Error('Failed to update workspace');
+      toast.success('Workspace updated successfully');
     } catch (error) {
-      toast.error("Failed to update workspace");
+      toast.error('Failed to update workspace');
     } finally {
       setIsLoading(false);
     }
@@ -102,9 +100,9 @@ export default function WorkspaceSettingsPage() {
       title="Workspace Settings"
       subtitle="Manage your workspace details and preferences"
       breadcrumbs={[
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Settings", href: "/settings" },
-        { label: "Workspace" },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Settings', href: '/settings' },
+        { label: 'Workspace' },
       ]}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
@@ -130,15 +128,11 @@ export default function WorkspaceSettingsPage() {
             <div className="space-y-2">
               <Label htmlFor="workspace-slug">Workspace URL</Label>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  galaxyco.ai/
-                </span>
+                <span className="text-sm text-muted-foreground">galaxyco.ai/</span>
                 <Input
                   id="workspace-slug"
                   value={workspaceSlug}
-                  onChange={(e) =>
-                    setWorkspaceSlug(e.target.value.toLowerCase())
-                  }
+                  onChange={(e) => setWorkspaceSlug(e.target.value.toLowerCase())}
                   placeholder="workspace-slug"
                   className="flex-1"
                 />
@@ -203,14 +197,11 @@ export default function WorkspaceSettingsPage() {
           <h3 className="mb-4 text-lg font-semibold">Workspace Logo</h3>
           <div className="flex items-start gap-6">
             <div className="flex h-24 w-24 items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted">
-              <span className="text-2xl font-bold text-muted-foreground">
-                GC
-              </span>
+              <span className="text-2xl font-bold text-muted-foreground">GC</span>
             </div>
             <div className="flex-1">
               <p className="mb-4 text-sm text-muted-foreground">
-                Upload a logo for your workspace. Recommended size: 256x256px,
-                PNG or JPG format.
+                Upload a logo for your workspace. Recommended size: 256x256px, PNG or JPG format.
               </p>
               <Button variant="outline">
                 <Upload className="mr-2 h-4 w-4" />
@@ -227,9 +218,7 @@ export default function WorkspaceSettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Current Plan</p>
-                <p className="text-sm text-muted-foreground">
-                  Professional Plan
-                </p>
+                <p className="text-sm text-muted-foreground">Professional Plan</p>
               </div>
               <Badge>Active</Badge>
             </div>
@@ -245,9 +234,7 @@ export default function WorkspaceSettingsPage() {
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div>
                 <p className="font-medium">Billing</p>
-                <p className="text-sm text-muted-foreground">
-                  View billing details and invoices
-                </p>
+                <p className="text-sm text-muted-foreground">View billing details and invoices</p>
               </div>
               <Button variant="outline" size="sm">
                 View Billing
@@ -267,8 +254,7 @@ export default function WorkspaceSettingsPage() {
               <div>
                 <p className="font-medium">Delete Workspace</p>
                 <p className="text-sm text-muted-foreground">
-                  Permanently delete this workspace and all its data. This
-                  action cannot be undone.
+                  Permanently delete this workspace and all its data. This action cannot be undone.
                 </p>
               </div>
               <Button variant="destructive" size="sm">

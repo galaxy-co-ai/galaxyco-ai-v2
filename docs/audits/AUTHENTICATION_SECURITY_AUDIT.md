@@ -35,7 +35,7 @@
 
 ```typescript
 // Middleware protects all non-public routes
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
@@ -106,10 +106,7 @@ export async function getCurrentTenantContext(): Promise<TenantContext> {
 
   // 2. Get active workspace membership
   const membership = await db.query.workspaceMembers.findFirst({
-    where: and(
-      eq(workspaceMembers.userId, user.id),
-      eq(workspaceMembers.isActive, true),
-    ),
+    where: and(eq(workspaceMembers.userId, user.id), eq(workspaceMembers.isActive, true)),
   });
 
   return {
@@ -290,7 +287,7 @@ export const createAgentSchema = z.object({
   name: z.string().min(1).max(100),
   description: z.string().max(500).optional(),
   workflow: z.array(z.any()),
-  variantType: z.enum(["basic", "advanced"]).optional(),
+  variantType: z.enum(['basic', 'advanced']).optional(),
   originalPrompt: z.string().optional(),
   enhancedPrompt: z.string().optional(),
   integrations: z.array(z.string()).optional(),
@@ -415,24 +412,24 @@ CLERK_WEBHOOK_SECRET=whsec_***
 
 ```typescript
 // Example test suite
-describe("Authentication Security", () => {
-  it("should block unauthenticated requests", async () => {
-    const response = await fetch("/api/agents");
+describe('Authentication Security', () => {
+  it('should block unauthenticated requests', async () => {
+    const response = await fetch('/api/agents');
     expect(response.status).toBe(401);
   });
 
-  it("should block cross-workspace access", async () => {
+  it('should block cross-workspace access', async () => {
     // User A tries to access Workspace B's data
-    const response = await fetch("/api/agents?workspaceId=workspace-b");
+    const response = await fetch('/api/agents?workspaceId=workspace-b');
     expect(response.status).toBe(403);
   });
 
-  it("should enforce rate limits", async () => {
+  it('should enforce rate limits', async () => {
     for (let i = 0; i < 101; i++) {
-      await fetch("/api/agents", { method: "POST", body: mockData });
+      await fetch('/api/agents', { method: 'POST', body: mockData });
     }
-    const response = await fetch("/api/agents", {
-      method: "POST",
+    const response = await fetch('/api/agents', {
+      method: 'POST',
       body: mockData,
     });
     expect(response.status).toBe(429);

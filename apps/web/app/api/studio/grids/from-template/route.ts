@@ -1,18 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@galaxyco/database";
-import {
-  galaxyGrids,
-  gridNodes,
-  gridEdges,
-  gridTemplates,
-} from "@galaxyco/database/schema";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { logger } from "@/lib/utils/logger";
-import { nanoid } from "nanoid";
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@galaxyco/database';
+import { galaxyGrids, gridNodes, gridEdges, gridTemplates } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/utils/logger';
+import { nanoid } from 'nanoid';
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 /**
  * POST /api/studio/grids/from-template
@@ -22,7 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -30,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (!templateId || !workspaceId) {
       return NextResponse.json(
-        { error: "Template ID and Workspace ID are required" },
+        { error: 'Template ID and Workspace ID are required' },
         { status: 400 },
       );
     }
@@ -43,10 +38,7 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (!template) {
-      return NextResponse.json(
-        { error: "Template not found" },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
 
     // Create the new grid
@@ -58,7 +50,7 @@ export async function POST(request: NextRequest) {
         workspaceId: workspaceId,
         name: `${template.name} (Copy)`,
         description: template.description,
-        status: "draft",
+        status: 'draft',
         version: 1,
         isTemplate: false,
         thumbnailUrl: null,
@@ -81,7 +73,7 @@ export async function POST(request: NextRequest) {
         position: node.position,
         config: node.config || {},
         agentId: null,
-        status: "idle" as const,
+        status: 'idle' as const,
       };
     });
 
@@ -100,7 +92,7 @@ export async function POST(request: NextRequest) {
       edgeType: edge.type,
       label: edge.label || null,
       condition: null,
-      animated: edge.type === "default",
+      animated: edge.type === 'default',
     }));
 
     if (newEdges.length > 0) {
@@ -115,7 +107,7 @@ export async function POST(request: NextRequest) {
       })
       .where(eq(gridTemplates.id, templateId));
 
-    logger.info("Created grid from template", {
+    logger.info('Created grid from template', {
       templateId,
       gridId,
       workspaceId,
@@ -127,16 +119,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       gridId,
       grid: newGrid,
-      message: "Grid created successfully from template",
+      message: 'Grid created successfully from template',
     });
   } catch (error) {
-    logger.error("Failed to create grid from template", {
+    logger.error('Failed to create grid from template', {
       error: error instanceof Error ? error.message : String(error),
     });
 
     return NextResponse.json(
       {
-        error: "Failed to create grid from template",
+        error: 'Failed to create grid from template',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 },

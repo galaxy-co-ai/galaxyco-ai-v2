@@ -1,16 +1,12 @@
-"use server";
+'use server';
 
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { db, workspaces, workspaceMembers, users } from "@galaxyco/database";
-import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import {
-  generateSlug,
-  validateWorkspaceName,
-  validateSlug,
-} from "../workspace-utils";
-import { logger } from "@/lib/utils/logger";
+import { auth, currentUser } from '@clerk/nextjs/server';
+import { db, workspaces, workspaceMembers, users } from '@galaxyco/database';
+import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { generateSlug, validateWorkspaceName, validateSlug } from '../workspace-utils';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * Create a new workspace for the authenticated user
@@ -21,7 +17,7 @@ export async function createWorkspace(formData: FormData) {
   if (!clerkUserId) {
     return {
       success: false,
-      error: "You must be signed in to create a workspace",
+      error: 'You must be signed in to create a workspace',
     };
   }
 
@@ -34,14 +30,14 @@ export async function createWorkspace(formData: FormData) {
   if (!user) {
     const clerkUser = await currentUser();
     if (!clerkUser) {
-      return { success: false, error: "Unable to fetch user information" };
+      return { success: false, error: 'Unable to fetch user information' };
     }
 
     const [newUser] = await db
       .insert(users)
       .values({
         clerkUserId: clerkUserId,
-        email: clerkUser.emailAddresses[0]?.emailAddress || "",
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
         firstName: clerkUser.firstName || null,
         lastName: clerkUser.lastName || null,
         avatarUrl: clerkUser.imageUrl || null,
@@ -53,7 +49,7 @@ export async function createWorkspace(formData: FormData) {
   }
 
   // 3. Validate workspace name
-  const name = formData.get("name") as string;
+  const name = formData.get('name') as string;
   const nameValidation = validateWorkspaceName(name);
   if (!nameValidation.valid) {
     return { success: false, error: nameValidation.error };
@@ -72,7 +68,7 @@ export async function createWorkspace(formData: FormData) {
   });
 
   if (!user) {
-    return { success: false, error: "User not found in database" };
+    return { success: false, error: 'User not found in database' };
   }
 
   if (existingWorkspace) {
@@ -87,11 +83,7 @@ export async function createWorkspace(formData: FormData) {
 /**
  * Helper function to create workspace with a specific slug
  */
-async function createWorkspaceWithSlug(
-  name: string,
-  slug: string,
-  userId: string,
-) {
+async function createWorkspaceWithSlug(name: string, slug: string, userId: string) {
   try {
     // Create workspace
     const [workspace] = await db
@@ -100,8 +92,8 @@ async function createWorkspaceWithSlug(
         name,
         slug,
         clerkOrganizationId: null, // For personal workspaces
-        subscriptionTier: "free",
-        subscriptionStatus: "active",
+        subscriptionTier: 'free',
+        subscriptionStatus: 'active',
         isActive: true,
       })
       .returning();
@@ -110,7 +102,7 @@ async function createWorkspaceWithSlug(
     await db.insert(workspaceMembers).values({
       workspaceId: workspace.id,
       userId: userId,
-      role: "owner",
+      role: 'owner',
       isActive: true,
       permissions: {
         agents: { create: true, edit: true, delete: true, execute: true },
@@ -120,22 +112,22 @@ async function createWorkspaceWithSlug(
       },
     });
 
-    logger.info("Workspace created successfully", {
+    logger.info('Workspace created successfully', {
       workspaceName: workspace.name,
       workspaceSlug: workspace.slug,
       workspaceId: workspace.id,
     });
 
     // Revalidate and redirect
-    revalidatePath("/dashboard");
+    revalidatePath('/dashboard');
     redirect(`/dashboard?workspace=${workspace.id}`);
   } catch (error) {
-    logger.error("Failed to create workspace", {
+    logger.error('Failed to create workspace', {
       error: error instanceof Error ? error.message : String(error),
     });
     return {
       success: false,
-      error: "Failed to create workspace. Please try again.",
+      error: 'Failed to create workspace. Please try again.',
     };
   }
 }

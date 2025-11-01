@@ -1,12 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import { toast } from "sonner";
-import {
-  logError as logErrorUtil,
-  getErrorMessage,
-  isRetryableError,
-} from "@/lib/errors";
+import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
+import { logError as logErrorUtil, getErrorMessage, isRetryableError } from '@/lib/errors';
 
 interface UseErrorOptions {
   showToast?: boolean;
@@ -21,11 +17,7 @@ interface UseErrorOptions {
  * with optional toast notifications and error logging.
  */
 export function useError(options: UseErrorOptions = {}) {
-  const {
-    showToast = true,
-    logError: shouldLogError = true,
-    onError,
-  } = options;
+  const { showToast = true, logError: shouldLogError = true, onError } = options;
 
   const [error, setError] = useState<unknown>(null);
   const [isRetrying, setIsRetrying] = useState(false);
@@ -104,8 +96,7 @@ export function useError(options: UseErrorOptions = {}) {
 export function useAsyncOperation<T = any>(options: UseErrorOptions = {}) {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { error, hasError, isRetrying, handleError, clearError, retry } =
-    useError(options);
+  const { error, hasError, isRetrying, handleError, clearError, retry } = useError(options);
 
   const execute = useCallback(
     async (operation: () => Promise<T>) => {
@@ -184,16 +175,16 @@ export function useFormError() {
   const handleFormError = useCallback(
     (error: unknown) => {
       // Handle validation errors with field-specific messages
-      if (error && typeof error === "object" && "details" in error) {
+      if (error && typeof error === 'object' && 'details' in error) {
         const details = (error as any).details;
 
-        if (details && typeof details === "object") {
+        if (details && typeof details === 'object') {
           // Clear existing field errors
           clearFieldErrors();
 
           // Set new field errors
           Object.entries(details).forEach(([field, message]) => {
-            if (typeof message === "string") {
+            if (typeof message === 'string') {
               setFieldError(field, message);
             }
           });

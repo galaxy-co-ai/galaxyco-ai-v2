@@ -1,14 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { executeAgent } from "@/lib/actions/agent-actions";
-import {
-  colors,
-  spacing,
-  typography,
-  radius,
-  shadows,
-} from "@/lib/constants/design-system";
+import React, { useState } from 'react';
+import { executeAgent } from '@/lib/actions/agent-actions';
+import { colors, spacing, typography, radius, shadows } from '@/lib/constants/design-system';
 
 interface TestPanelImprovedProps {
   agentId?: string;
@@ -22,92 +16,85 @@ interface TestPanelImprovedProps {
 // Define simple input templates based on agent type
 const getInputTemplate = (agentType: string) => {
   switch (agentType) {
-    case "scope":
-    case "email":
+    case 'scope':
+    case 'email':
       return {
         fields: [
           {
-            name: "subject",
-            label: "Email Subject",
-            type: "text",
-            placeholder: "Q1 Planning Meeting",
+            name: 'subject',
+            label: 'Email Subject',
+            type: 'text',
+            placeholder: 'Q1 Planning Meeting',
             required: false,
           },
           {
-            name: "email_content",
-            label: "Email Content",
-            type: "textarea",
-            placeholder:
-              "Hi team, let's schedule our Q1 planning meeting for next week...",
+            name: 'email_content',
+            label: 'Email Content',
+            type: 'textarea',
+            placeholder: "Hi team, let's schedule our Q1 planning meeting for next week...",
             required: true,
           },
         ],
       };
-    case "call":
+    case 'call':
       return {
         fields: [
           {
-            name: "transcript",
-            label: "Call Transcript",
-            type: "textarea",
+            name: 'transcript',
+            label: 'Call Transcript',
+            type: 'textarea',
             placeholder:
               "Customer: Hi, I'm interested in your enterprise plan...\nAgent: Great! Let me tell you about our features...",
             required: true,
           },
         ],
       };
-    case "note":
+    case 'note':
       return {
         fields: [
           {
-            name: "note_content",
-            label: "Note Content",
-            type: "textarea",
-            placeholder:
-              "Meeting with product team. Discussed new features for Q2...",
+            name: 'note_content',
+            label: 'Note Content',
+            type: 'textarea',
+            placeholder: 'Meeting with product team. Discussed new features for Q2...',
             required: true,
           },
         ],
       };
-    case "task":
+    case 'task':
       return {
         fields: [
           {
-            name: "task_description",
-            label: "Task Description",
-            type: "textarea",
-            placeholder:
-              "Review and approve the new homepage design by Friday...",
+            name: 'task_description',
+            label: 'Task Description',
+            type: 'textarea',
+            placeholder: 'Review and approve the new homepage design by Friday...',
             required: true,
           },
         ],
       };
-    case "content":
+    case 'content':
       return {
         fields: [
           {
-            name: "topic",
-            label: "Content Topic",
-            type: "text",
-            placeholder: "AI in Healthcare",
+            name: 'topic',
+            label: 'Content Topic',
+            type: 'text',
+            placeholder: 'AI in Healthcare',
             required: true,
           },
           {
-            name: "tone",
-            label: "Tone",
-            type: "select",
-            options: ["Professional", "Casual", "Technical", "Friendly"],
+            name: 'tone',
+            label: 'Tone',
+            type: 'select',
+            options: ['Professional', 'Casual', 'Technical', 'Friendly'],
             required: false,
           },
           {
-            name: "length",
-            label: "Target Length",
-            type: "select",
-            options: [
-              "Short (100 words)",
-              "Medium (300 words)",
-              "Long (500+ words)",
-            ],
+            name: 'length',
+            label: 'Target Length',
+            type: 'select',
+            options: ['Short (100 words)', 'Medium (300 words)', 'Long (500+ words)'],
             required: false,
           },
         ],
@@ -116,10 +103,10 @@ const getInputTemplate = (agentType: string) => {
       return {
         fields: [
           {
-            name: "input",
-            label: "Input Text",
-            type: "textarea",
-            placeholder: "Enter your input here...",
+            name: 'input',
+            label: 'Input Text',
+            type: 'textarea',
+            placeholder: 'Enter your input here...',
             required: true,
           },
         ],
@@ -140,7 +127,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
   // Initialize form state from template
   const initialFormState = template.fields.reduce(
     (acc, field) => {
-      acc[field.name] = "";
+      acc[field.name] = '';
       return acc;
     },
     {} as Record<string, string>,
@@ -161,7 +148,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
 
   const handleRunTest = async () => {
     if (!agentId) {
-      setError("Agent must be saved before testing");
+      setError('Agent must be saved before testing');
       return;
     }
 
@@ -171,7 +158,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
       .map((field) => field.label);
 
     if (missingFields.length > 0) {
-      setError(`Please fill in: ${missingFields.join(", ")}`);
+      setError(`Please fill in: ${missingFields.join(', ')}`);
       return;
     }
 
@@ -191,13 +178,13 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
       );
 
       // Execute agent via API (mock or live mode)
-      const mode = useLiveMode ? "live" : "mock";
+      const mode = useLiveMode ? 'live' : 'mock';
       const result = await executeAgent(agentId, inputs, mode);
 
       setTestResult(result);
       onTestComplete?.(result);
     } catch (err: any) {
-      setError(err.message || "Test execution failed");
+      setError(err.message || 'Test execution failed');
     } finally {
       setIsRunning(false);
     }
@@ -235,33 +222,33 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
       <div
         onClick={onClose}
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(4px)",
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
           zIndex: 40,
-          display: window.innerWidth <= 640 ? "block" : "none",
+          display: window.innerWidth <= 640 ? 'block' : 'none',
         }}
       />
 
       {/* Panel */}
       <div
         style={{
-          position: "fixed",
+          position: 'fixed',
           right: 0,
           top: 0,
           bottom: 0,
-          width: window.innerWidth <= 640 ? "100%" : "500px",
+          width: window.innerWidth <= 640 ? '100%' : '500px',
           backgroundColor: colors.background.primary,
           borderLeft: `1px solid ${colors.border.default}`,
           boxShadow: shadows.xl,
           zIndex: 50,
-          display: "flex",
-          flexDirection: "column",
-          animation: "slideInRight 300ms ease-out",
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'slideInRight 300ms ease-out',
         }}
       >
         {/* Header */}
@@ -269,9 +256,9 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
           style={{
             padding: spacing.lg,
             borderBottom: `1px solid ${colors.border.default}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <div>
@@ -300,25 +287,24 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
             type="button"
             onClick={onClose}
             style={{
-              width: "32px",
-              height: "32px",
-              backgroundColor: "transparent",
+              width: '32px',
+              height: '32px',
+              backgroundColor: 'transparent',
               border: `1px solid ${colors.border.default}`,
               borderRadius: radius.md,
-              cursor: "pointer",
+              cursor: 'pointer',
               fontSize: typography.sizes.lg,
               color: colors.text.tertiary,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 200ms",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 200ms',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                colors.background.secondary;
+              e.currentTarget.style.backgroundColor = colors.background.secondary;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
             ×
@@ -326,12 +312,12 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, overflow: "auto", padding: spacing.lg }}>
+        <div style={{ flex: 1, overflow: 'auto', padding: spacing.lg }}>
           {/* Execution Mode Toggle */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: spacing.md,
               marginBottom: spacing.lg,
               padding: spacing.md,
@@ -359,9 +345,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   color: colors.text.tertiary,
                 }}
               >
-                {useLiveMode
-                  ? "🚀 Live execution with real AI"
-                  : "🎭 Mock mode (instant response)"}
+                {useLiveMode ? '🚀 Live execution with real AI' : '🎭 Mock mode (instant response)'}
               </p>
             </div>
             <button
@@ -369,30 +353,28 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
               onClick={() => setUseLiveMode(!useLiveMode)}
               disabled={isRunning}
               style={{
-                position: "relative",
-                width: "56px",
-                height: "32px",
-                backgroundColor: useLiveMode
-                  ? colors.primaryColor
-                  : colors.background.tertiary,
+                position: 'relative',
+                width: '56px',
+                height: '32px',
+                backgroundColor: useLiveMode ? colors.primaryColor : colors.background.tertiary,
                 borderRadius: radius.full,
                 border: `1px solid ${colors.border.default}`,
-                cursor: isRunning ? "not-allowed" : "pointer",
-                transition: "all 200ms",
+                cursor: isRunning ? 'not-allowed' : 'pointer',
+                transition: 'all 200ms',
                 opacity: isRunning ? 0.6 : 1,
               }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  top: "3px",
-                  left: useLiveMode ? "26px" : "3px",
-                  width: "24px",
-                  height: "24px",
+                  position: 'absolute',
+                  top: '3px',
+                  left: useLiveMode ? '26px' : '3px',
+                  width: '24px',
+                  height: '24px',
                   backgroundColor: colors.background.primary,
                   borderRadius: radius.full,
                   boxShadow: shadows.sm,
-                  transition: "all 200ms",
+                  transition: 'all 200ms',
                 }}
               />
             </button>
@@ -402,9 +384,9 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
           <div style={{ marginBottom: spacing.xl }}>
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 marginBottom: spacing.sm,
               }}
             >
@@ -425,13 +407,13 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   fontSize: typography.sizes.xs,
                   fontWeight: typography.weights.medium,
                   color: colors.text.secondary,
-                  backgroundColor: "transparent",
+                  backgroundColor: 'transparent',
                   border: `1px solid ${colors.border.default}`,
                   borderRadius: radius.sm,
-                  cursor: "pointer",
+                  cursor: 'pointer',
                 }}
               >
-                {showJson ? "📝 Show Form" : "{ } Show JSON"}
+                {showJson ? '📝 Show Form' : '{ } Show JSON'}
               </button>
             </div>
 
@@ -441,24 +423,24 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                 value={generatedJson}
                 readOnly
                 style={{
-                  width: "100%",
-                  minHeight: "200px",
+                  width: '100%',
+                  minHeight: '200px',
                   padding: spacing.md,
                   fontSize: typography.sizes.sm,
-                  fontFamily: "monospace",
+                  fontFamily: 'monospace',
                   color: colors.text.primary,
                   backgroundColor: colors.background.secondary,
                   border: `1px solid ${colors.border.default}`,
                   borderRadius: radius.md,
-                  resize: "vertical",
+                  resize: 'vertical',
                 }}
               />
             ) : (
               // Form View
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: spacing.md,
                 }}
               >
@@ -466,29 +448,25 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   <div key={field.name}>
                     <label
                       style={{
-                        display: "block",
+                        display: 'block',
                         marginBottom: spacing.xs,
                         fontSize: typography.sizes.sm,
                         color: colors.text.secondary,
                       }}
                     >
                       {field.label}
-                      {field.required && (
-                        <span style={{ color: colors.danger }}> *</span>
-                      )}
+                      {field.required && <span style={{ color: colors.danger }}> *</span>}
                     </label>
 
-                    {field.type === "textarea" ? (
+                    {field.type === 'textarea' ? (
                       <textarea
-                        value={formData[field.name] || ""}
-                        onChange={(e) =>
-                          handleInputChange(field.name, e.target.value)
-                        }
+                        value={formData[field.name] || ''}
+                        onChange={(e) => handleInputChange(field.name, e.target.value)}
                         placeholder={field.placeholder}
                         disabled={isRunning}
                         style={{
-                          width: "100%",
-                          minHeight: "100px",
+                          width: '100%',
+                          minHeight: '100px',
                           padding: spacing.sm,
                           fontSize: typography.sizes.sm,
                           fontFamily: typography.fontFamily.sans,
@@ -496,20 +474,18 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                           backgroundColor: colors.background.secondary,
                           border: `1px solid ${colors.border.default}`,
                           borderRadius: radius.md,
-                          resize: "vertical",
-                          outline: "none",
+                          resize: 'vertical',
+                          outline: 'none',
                           opacity: isRunning ? 0.6 : 1,
                         }}
                       />
-                    ) : field.type === "select" ? (
+                    ) : field.type === 'select' ? (
                       <select
-                        value={formData[field.name] || ""}
-                        onChange={(e) =>
-                          handleInputChange(field.name, e.target.value)
-                        }
+                        value={formData[field.name] || ''}
+                        onChange={(e) => handleInputChange(field.name, e.target.value)}
                         disabled={isRunning}
                         style={{
-                          width: "100%",
+                          width: '100%',
                           padding: spacing.sm,
                           fontSize: typography.sizes.sm,
                           fontFamily: typography.fontFamily.sans,
@@ -517,7 +493,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                           backgroundColor: colors.background.secondary,
                           border: `1px solid ${colors.border.default}`,
                           borderRadius: radius.md,
-                          outline: "none",
+                          outline: 'none',
                           opacity: isRunning ? 0.6 : 1,
                         }}
                       >
@@ -531,14 +507,12 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                     ) : (
                       <input
                         type="text"
-                        value={formData[field.name] || ""}
-                        onChange={(e) =>
-                          handleInputChange(field.name, e.target.value)
-                        }
+                        value={formData[field.name] || ''}
+                        onChange={(e) => handleInputChange(field.name, e.target.value)}
                         placeholder={field.placeholder}
                         disabled={isRunning}
                         style={{
-                          width: "100%",
+                          width: '100%',
                           padding: spacing.sm,
                           fontSize: typography.sizes.sm,
                           fontFamily: typography.fontFamily.sans,
@@ -546,7 +520,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                           backgroundColor: colors.background.secondary,
                           border: `1px solid ${colors.border.default}`,
                           borderRadius: radius.md,
-                          outline: "none",
+                          outline: 'none',
                           opacity: isRunning ? 0.6 : 1,
                         }}
                       />
@@ -573,7 +547,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
           {/* Action Buttons */}
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               gap: spacing.sm,
               marginBottom: spacing.xl,
             }}
@@ -589,15 +563,15 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                 fontWeight: typography.weights.semibold,
                 color: colors.background.primary,
                 backgroundColor: colors.primaryColor,
-                border: "none",
+                border: 'none',
                 borderRadius: radius.md,
-                cursor: isRunning || !agentId ? "not-allowed" : "pointer",
+                cursor: isRunning || !agentId ? 'not-allowed' : 'pointer',
                 opacity: isRunning || !agentId ? 0.6 : 1,
-                transition: "all 200ms",
+                transition: 'all 200ms',
                 boxShadow: shadows.sm,
               }}
             >
-              {isRunning ? "⏳ Running..." : "▶️ Run Test"}
+              {isRunning ? '⏳ Running...' : '▶️ Run Test'}
             </button>
             <button
               type="button"
@@ -608,21 +582,20 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                 fontSize: typography.sizes.base,
                 fontWeight: typography.weights.medium,
                 color: colors.text.secondary,
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
                 border: `1px solid ${colors.border.default}`,
                 borderRadius: radius.md,
-                cursor: isRunning ? "not-allowed" : "pointer",
+                cursor: isRunning ? 'not-allowed' : 'pointer',
                 opacity: isRunning ? 0.6 : 1,
-                transition: "all 200ms",
+                transition: 'all 200ms',
               }}
               onMouseEnter={(e) => {
                 if (!isRunning) {
-                  e.currentTarget.style.backgroundColor =
-                    colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = colors.background.secondary;
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               Clear
@@ -634,9 +607,9 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
             <div>
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                   marginBottom: spacing.sm,
                 }}
               >
@@ -649,7 +622,7 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                 >
                   Output
                 </label>
-                <div style={{ display: "flex", gap: spacing.xs }}>
+                <div style={{ display: 'flex', gap: spacing.xs }}>
                   <button
                     type="button"
                     onClick={() => setShowRaw(!showRaw)}
@@ -658,14 +631,14 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                       fontSize: typography.sizes.xs,
                       fontWeight: typography.weights.medium,
                       color: colors.text.secondary,
-                      backgroundColor: "transparent",
+                      backgroundColor: 'transparent',
                       border: `1px solid ${colors.border.default}`,
                       borderRadius: radius.sm,
-                      cursor: "pointer",
-                      transition: "all 200ms",
+                      cursor: 'pointer',
+                      transition: 'all 200ms',
                     }}
                   >
-                    {showRaw ? "Pretty" : "Raw"}
+                    {showRaw ? 'Pretty' : 'Raw'}
                   </button>
                   <button
                     type="button"
@@ -675,11 +648,11 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                       fontSize: typography.sizes.xs,
                       fontWeight: typography.weights.medium,
                       color: colors.text.secondary,
-                      backgroundColor: "transparent",
+                      backgroundColor: 'transparent',
                       border: `1px solid ${colors.border.default}`,
                       borderRadius: radius.sm,
-                      cursor: "pointer",
-                      transition: "all 200ms",
+                      cursor: 'pointer',
+                      transition: 'all 200ms',
                     }}
                   >
                     📋 Copy
@@ -700,23 +673,19 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   style={{
                     margin: 0,
                     fontSize: typography.sizes.sm,
-                    fontFamily: "monospace",
+                    fontFamily: 'monospace',
                     color: colors.text.primary,
-                    whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
                   }}
                 >
-                  {showRaw
-                    ? JSON.stringify(testResult)
-                    : JSON.stringify(testResult, null, 2)}
+                  {showRaw ? JSON.stringify(testResult) : JSON.stringify(testResult, null, 2)}
                 </pre>
               </div>
 
               {/* Metrics */}
               {testResult.metrics && (
-                <div
-                  style={{ display: "flex", flexWrap: "wrap", gap: spacing.xs }}
-                >
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.xs }}>
                   {testResult.metrics.tokens && (
                     <div
                       style={{
@@ -776,15 +745,13 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   <div
                     style={{
                       padding: `${spacing.xs} ${spacing.sm}`,
-                      backgroundColor: testResult.success
-                        ? colors.successColor
-                        : colors.danger,
+                      backgroundColor: testResult.success ? colors.successColor : colors.danger,
                       borderRadius: radius.sm,
                       fontSize: typography.sizes.xs,
                       color: colors.background.primary,
                     }}
                   >
-                    {testResult.success ? "✓ Success" : "✗ Failed"}
+                    {testResult.success ? '✓ Success' : '✗ Failed'}
                   </div>
 
                   {testResult.mode && (
@@ -792,15 +759,13 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                       style={{
                         padding: `${spacing.xs} ${spacing.sm}`,
                         backgroundColor:
-                          testResult.mode === "mock"
-                            ? colors.warningColor
-                            : colors.primaryColor,
+                          testResult.mode === 'mock' ? colors.warningColor : colors.primaryColor,
                         borderRadius: radius.sm,
                         fontSize: typography.sizes.xs,
                         color: colors.background.primary,
                       }}
                     >
-                      {testResult.mode === "mock" ? "🎭 Mock" : "🚀 Live"}
+                      {testResult.mode === 'mock' ? '🎭 Mock' : '🚀 Live'}
                     </div>
                   )}
                 </div>
@@ -825,10 +790,9 @@ export const TestPanelImproved: React.FC<TestPanelImprovedProps> = ({
                   margin: 0,
                 }}
               >
-                💡 <strong>Tip:</strong> Fill in the form fields above and click
-                &quot;Run Test&quot;. Toggle Live Mode to test with real AI
-                (requires API keys in settings). Mock mode gives you instant
-                results without using API credits!
+                💡 <strong>Tip:</strong> Fill in the form fields above and click &quot;Run
+                Test&quot;. Toggle Live Mode to test with real AI (requires API keys in settings).
+                Mock mode gives you instant results without using API credits!
               </p>
             </div>
           )}

@@ -11,7 +11,7 @@ export interface Agent {
   icon: string;
   category: string;
   isActive: boolean;
-  status: "active" | "paused" | "error";
+  status: 'active' | 'paused' | 'error';
   stats: AgentStats;
 }
 
@@ -31,7 +31,7 @@ export interface ActivityItem {
   id: string;
   agentName: string;
   action: string;
-  status: "success" | "warning" | "error";
+  status: 'success' | 'warning' | 'error';
   timestamp: Date;
 }
 

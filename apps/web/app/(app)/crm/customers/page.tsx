@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { PageShell } from "@/components/templates/page-shell";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { toast } from "sonner";
+import { PageShell } from '@/components/templates/page-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { Spinner } from '@/components/ui/spinner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Search,
   Plus,
@@ -26,8 +26,8 @@ import {
   Users,
   DollarSign,
   MoreHorizontal,
-} from "lucide-react";
-import { useState, useEffect } from "react";
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface Customer {
   id: string;
@@ -48,26 +48,24 @@ interface Customer {
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   active: {
-    label: "Active",
-    className:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+    label: 'Active',
+    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
   },
   inactive: {
-    label: "Inactive",
-    className: "bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300",
+    label: 'Inactive',
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
   },
   lead: {
-    label: "Lead",
-    className: "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+    label: 'Lead',
+    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
   },
   churned: {
-    label: "Churned",
-    className: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    label: 'Churned',
+    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   },
   prospect: {
-    label: "Prospect",
-    className:
-      "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300",
+    label: 'Prospect',
+    className: 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
   },
 };
 
@@ -75,9 +73,9 @@ export default function CustomersPage() {
   const { currentWorkspace } = useWorkspace();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
     async function fetchCustomers() {
@@ -87,24 +85,24 @@ export default function CustomersPage() {
         setIsLoading(true);
         const params = new URLSearchParams({
           workspaceId: currentWorkspace.id,
-          limit: "100",
+          limit: '100',
         });
 
-        if (statusFilter !== "all") {
-          params.append("status", statusFilter);
+        if (statusFilter !== 'all') {
+          params.append('status', statusFilter);
         }
         if (searchQuery) {
-          params.append("search", searchQuery);
+          params.append('search', searchQuery);
         }
 
         const res = await fetch(`/api/customers?${params}`);
-        if (!res.ok) throw new Error("Failed to fetch customers");
+        if (!res.ok) throw new Error('Failed to fetch customers');
 
         const data = await res.json();
         setCustomers(data.customers);
       } catch (error) {
-        console.error("Failed to fetch customers:", error);
-        toast.error("Failed to load customers");
+        console.error('Failed to fetch customers:', error);
+        toast.error('Failed to load customers');
       } finally {
         setIsLoading(false);
       }
@@ -116,10 +114,10 @@ export default function CustomersPage() {
   const filteredCustomers = customers;
 
   const totalRevenue = customers
-    .filter((c) => c.status === "active" && c.revenue)
+    .filter((c) => c.status === 'active' && c.revenue)
     .reduce((sum, c) => sum + (c.revenue || 0), 0);
-  const activeCustomers = customers.filter((c) => c.status === "active").length;
-  const leads = customers.filter((c) => c.status === "lead").length;
+  const activeCustomers = customers.filter((c) => c.status === 'active').length;
+  const leads = customers.filter((c) => c.status === 'lead').length;
 
   if (isLoading) {
     return (
@@ -133,7 +131,7 @@ export default function CustomersPage() {
     <PageShell
       title="Customers"
       subtitle="Manage your customer relationships and accounts"
-      breadcrumbs={[{ label: "Dashboard", href: "/" }, { label: "Customers" }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/' }, { label: 'Customers' }]}
       actions={
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -146,9 +144,7 @@ export default function CustomersPage() {
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex items-center gap-2 mb-2">
             <Users className="h-4 w-4 text-primary" />
-            <span className="text-sm text-muted-foreground">
-              Active Customers
-            </span>
+            <span className="text-sm text-muted-foreground">Active Customers</span>
           </div>
           <p className="text-2xl font-bold">{activeCustomers}</p>
         </div>
@@ -164,9 +160,7 @@ export default function CustomersPage() {
             <DollarSign className="h-4 w-4 text-primary" />
             <span className="text-sm text-muted-foreground">Total Value</span>
           </div>
-          <p className="text-2xl font-bold">
-            ${(totalRevenue / 100000).toFixed(0)}K
-          </p>
+          <p className="text-2xl font-bold">${(totalRevenue / 100000).toFixed(0)}K</p>
         </div>
       </div>
 
@@ -194,16 +188,16 @@ export default function CustomersPage() {
         </Select>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
+            variant={viewMode === 'grid' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("grid")}
+            onClick={() => setViewMode('grid')}
           >
             Grid
           </Button>
           <Button
-            variant={viewMode === "list" ? "default" : "outline"}
+            variant={viewMode === 'list' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode("list")}
+            onClick={() => setViewMode('list')}
           >
             List
           </Button>
@@ -214,12 +208,12 @@ export default function CustomersPage() {
       <div className="mb-4">
         <p className="text-sm text-muted-foreground">
           {filteredCustomers.length} customer
-          {filteredCustomers.length !== 1 ? "s" : ""} found
+          {filteredCustomers.length !== 1 ? 's' : ''} found
         </p>
       </div>
 
       {/* Grid View */}
-      {viewMode === "grid" && (
+      {viewMode === 'grid' && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredCustomers.map((customer) => (
             <div
@@ -236,9 +230,7 @@ export default function CustomersPage() {
                   />
                   <div>
                     <h3 className="font-semibold">{customer.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {customer.company}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{customer.company}</p>
                   </div>
                 </div>
                 <Button variant="ghost" size="sm">
@@ -249,25 +241,19 @@ export default function CustomersPage() {
                 {customer.email && (
                   <div className="flex items-center gap-2 text-sm">
                     <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground truncate">
-                      {customer.email}
-                    </span>
+                    <span className="text-muted-foreground truncate">{customer.email}</span>
                   </div>
                 )}
                 {customer.phone && (
                   <div className="flex items-center gap-2 text-sm">
                     <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {customer.phone}
-                    </span>
+                    <span className="text-muted-foreground">{customer.phone}</span>
                   </div>
                 )}
                 {customer.website && (
                   <div className="flex items-center gap-2 text-sm">
                     <Globe className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {customer.website}
-                    </span>
+                    <span className="text-muted-foreground">{customer.website}</span>
                   </div>
                 )}
               </div>
@@ -275,7 +261,7 @@ export default function CustomersPage() {
                 <Badge className={statusConfig[customer.status].className}>
                   {statusConfig[customer.status].label}
                 </Badge>
-                {customer.status === "active" && customer.revenue && (
+                {customer.status === 'active' && customer.revenue && (
                   <span className="text-sm font-semibold">
                     ${(customer.revenue / 100000).toFixed(0)}K
                   </span>
@@ -287,24 +273,18 @@ export default function CustomersPage() {
       )}
 
       {/* List View */}
-      {viewMode === "list" && (
+      {viewMode === 'list' && (
         <div className="rounded-lg border border-border bg-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-background-subtle">
                 <tr>
-                  <th className="text-left p-4 font-medium text-sm">
-                    Customer
-                  </th>
+                  <th className="text-left p-4 font-medium text-sm">Customer</th>
                   <th className="text-left p-4 font-medium text-sm">Company</th>
                   <th className="text-left p-4 font-medium text-sm">Status</th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    Industry
-                  </th>
+                  <th className="text-left p-4 font-medium text-sm">Industry</th>
                   <th className="text-left p-4 font-medium text-sm">Value</th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    Last Contact
-                  </th>
+                  <th className="text-left p-4 font-medium text-sm">Last Contact</th>
                   <th className="text-left p-4 font-medium text-sm"></th>
                 </tr>
               </thead>
@@ -324,9 +304,7 @@ export default function CustomersPage() {
                         />
                         <div>
                           <p className="font-medium">{customer.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {customer.email}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{customer.email}</p>
                         </div>
                       </div>
                     </td>
@@ -337,26 +315,20 @@ export default function CustomersPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <Badge
-                        className={statusConfig[customer.status].className}
-                      >
+                      <Badge className={statusConfig[customer.status].className}>
                         {statusConfig[customer.status].label}
                       </Badge>
                     </td>
-                    <td className="p-4 text-muted-foreground">
-                      {customer.industry}
-                    </td>
+                    <td className="p-4 text-muted-foreground">{customer.industry}</td>
                     <td className="p-4 font-semibold">
-                      {customer.status === "active" && customer.revenue
+                      {customer.status === 'active' && customer.revenue
                         ? `$${(customer.revenue / 100000).toFixed(0)}K`
-                        : "-"}
+                        : '-'}
                     </td>
                     <td className="p-4 text-muted-foreground text-sm">
                       {customer.lastContactedAt
-                        ? new Date(
-                            customer.lastContactedAt,
-                          ).toLocaleDateString()
-                        : "Never"}
+                        ? new Date(customer.lastContactedAt).toLocaleDateString()
+                        : 'Never'}
                     </td>
                     <td className="p-4">
                       <Button variant="ghost" size="sm">
@@ -376,9 +348,7 @@ export default function CustomersPage() {
         <div className="rounded-lg border border-border bg-card p-12 text-center">
           <Users className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">No customers found</h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your search or filters
-          </p>
+          <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Add Your First Customer

@@ -225,10 +225,7 @@ function CustomersList({ customers: initial }) {
 
 ```typescript
 // apps/web/lib/api/client.ts
-export async function fetchAPI<T>(
-  endpoint: string,
-  options?: RequestInit,
-): Promise<T>;
+export async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T>;
 
 // apps/web/hooks/use-query.ts
 export function useQuery<T>(key: string, fetcher: () => Promise<T>);
@@ -287,13 +284,13 @@ import { toast } from '@/hooks/use-toast';
 
 ```typescript
 // Success actions
-toast.success("Customer created successfully");
+toast.success('Customer created successfully');
 
 // Error actions
-toast.error("Failed to save changes");
+toast.error('Failed to save changes');
 
 // Info messages
-toast.info("Changes saved locally, sync pending");
+toast.info('Changes saved locally, sync pending');
 ```
 
 ---
@@ -312,11 +309,11 @@ async function deleteCustomer(id: string) {
   // 2. API call
   try {
     await api.delete(`/customers/${id}`);
-    toast.success("Customer deleted");
+    toast.success('Customer deleted');
   } catch (error) {
     // 3. Rollback on error
     setCustomers((prev) => [...prev, deletedCustomer]);
-    toast.error("Failed to delete customer");
+    toast.error('Failed to delete customer');
   }
 }
 ```
@@ -348,9 +345,9 @@ async function deleteCustomer(id: string) {
 
 ```typescript
 // apps/api/tests/routes/customers.test.ts
-describe("GET /api/customers", () => {
-  it("returns customers for authenticated user", async () => {
-    const res = await request(app).get("/api/customers");
+describe('GET /api/customers', () => {
+  it('returns customers for authenticated user', async () => {
+    const res = await request(app).get('/api/customers');
     expect(res.status).toBe(200);
     expect(res.body).toHaveLength(5);
   });
@@ -361,12 +358,12 @@ describe("GET /api/customers", () => {
 
 ```typescript
 // apps/web/tests/e2e/customers.spec.ts
-test("create customer flow", async ({ page }) => {
-  await page.goto("/customers");
+test('create customer flow', async ({ page }) => {
+  await page.goto('/customers');
   await page.click('button:has-text("New Customer")');
-  await page.fill('[name="name"]', "Acme Corp");
+  await page.fill('[name="name"]', 'Acme Corp');
   await page.click('button:has-text("Save")');
-  await expect(page.locator("text=Acme Corp")).toBeVisible();
+  await expect(page.locator('text=Acme Corp')).toBeVisible();
 });
 ```
 

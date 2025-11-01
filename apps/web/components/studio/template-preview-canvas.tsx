@@ -1,26 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useMemo } from "react";
-import {
-  ReactFlow,
-  Background,
-  Controls,
-  MiniMap,
-  type Node,
-  type Edge,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import type { TemplatePreviewData } from "@/lib/studio/types";
+import { useEffect, useState, useMemo } from 'react';
+import { ReactFlow, Background, Controls, MiniMap, type Node, type Edge } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import type { TemplatePreviewData } from '@/lib/studio/types';
 
 interface TemplatePreviewCanvasProps {
   previewData: TemplatePreviewData;
   className?: string;
 }
 
-export function TemplatePreviewCanvas({
-  previewData,
-  className = "",
-}: TemplatePreviewCanvasProps) {
+export function TemplatePreviewCanvas({ previewData, className = '' }: TemplatePreviewCanvasProps) {
   const [isClient, setIsClient] = useState(false);
 
   // Only render on client to avoid hydration issues
@@ -33,20 +23,20 @@ export function TemplatePreviewCanvas({
     () =>
       previewData.nodes.map((node) => ({
         id: node.id,
-        type: "default",
+        type: 'default',
         position: node.position,
         data: {
           label: node.label,
           type: node.type,
         },
         style: {
-          background: "hsl(var(--card))",
-          border: "1px solid hsl(var(--border))",
-          borderRadius: "8px",
-          padding: "10px 16px",
-          fontSize: "12px",
+          background: 'hsl(var(--card))',
+          border: '1px solid hsl(var(--border))',
+          borderRadius: '8px',
+          padding: '10px 16px',
+          fontSize: '12px',
           fontWeight: 500,
-          color: "hsl(var(--foreground))",
+          color: 'hsl(var(--foreground))',
         },
       })),
     [previewData.nodes],
@@ -58,16 +48,16 @@ export function TemplatePreviewCanvas({
         id: edge.id,
         source: edge.source,
         target: edge.target,
-        type: edge.type === "conditional" ? "smoothstep" : "default",
-        animated: edge.type === "default",
+        type: edge.type === 'conditional' ? 'smoothstep' : 'default',
+        animated: edge.type === 'default',
         label: edge.label,
         style: {
-          stroke: "hsl(var(--primary))",
+          stroke: 'hsl(var(--primary))',
           strokeWidth: 2,
         },
         labelStyle: {
-          fontSize: "10px",
-          fill: "hsl(var(--muted-foreground))",
+          fontSize: '10px',
+          fill: 'hsl(var(--muted-foreground))',
         },
       })),
     [previewData.edges],
@@ -81,9 +71,7 @@ export function TemplatePreviewCanvas({
 
   if (!isClient) {
     return (
-      <div
-        className={`flex items-center justify-center bg-muted/30 rounded-lg ${className}`}
-      >
+      <div className={`flex items-center justify-center bg-muted/30 rounded-lg ${className}`}>
         <p className="text-sm text-muted-foreground">Loading preview...</p>
       </div>
     );
@@ -118,8 +106,8 @@ export function TemplatePreviewCanvas({
           nodeColor="hsl(var(--primary))"
           maskColor="hsl(var(--background) / 0.8)"
           style={{
-            background: "hsl(var(--card))",
-            border: "1px solid hsl(var(--border))",
+            background: 'hsl(var(--card))',
+            border: '1px solid hsl(var(--border))',
           }}
         />
       </ReactFlow>

@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { PageShell } from "@/components/templates/page-shell";
-import {
-  TrendingUp,
-  Users,
-  Activity,
-  DollarSign,
-  Download,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from 'react';
+import { PageShell } from '@/components/templates/page-shell';
+import { TrendingUp, Users, Activity, DollarSign, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface AnalyticsData {
   totalWorkspaces: number;
@@ -28,12 +22,12 @@ export default function AdminAnalyticsPage() {
     async function fetchAnalytics() {
       try {
         setIsLoading(true);
-        const res = await fetch("/api/admin/analytics?period=last-30-days");
-        if (!res.ok) throw new Error("Failed to fetch analytics");
+        const res = await fetch('/api/admin/analytics?period=last-30-days');
+        if (!res.ok) throw new Error('Failed to fetch analytics');
         const json = await res.json();
         setData(json.analytics?.data || null);
       } catch (e) {
-        console.error("Failed to load analytics", e);
+        console.error('Failed to load analytics', e);
       } finally {
         setIsLoading(false);
       }
@@ -51,27 +45,27 @@ export default function AdminAnalyticsPage() {
 
   const metrics = [
     {
-      label: "Total Users",
+      label: 'Total Users',
       value: data.totalUsers.toLocaleString(),
-      change: "+—%",
+      change: '+—%',
       icon: Users,
     },
     {
-      label: "Active Users (30d)",
+      label: 'Active Users (30d)',
       value: data.activeUsers.toLocaleString(),
-      change: "+—%",
+      change: '+—%',
       icon: Users,
     },
     {
-      label: "Executions (30d)",
+      label: 'Executions (30d)',
       value: data.recentExecutions.toLocaleString(),
-      change: "+—%",
+      change: '+—%',
       icon: Activity,
     },
     {
-      label: "Total Executions",
+      label: 'Total Executions',
       value: data.totalExecutions.toLocaleString(),
-      change: "+—%",
+      change: '+—%',
       icon: Activity,
     },
   ];
@@ -81,9 +75,9 @@ export default function AdminAnalyticsPage() {
       title="Platform Analytics"
       subtitle="Usage metrics and insights"
       breadcrumbs={[
-        { label: "Dashboard", href: "/" },
-        { label: "Admin", href: "/admin" },
-        { label: "Analytics" },
+        { label: 'Dashboard', href: '/' },
+        { label: 'Admin', href: '/admin' },
+        { label: 'Analytics' },
       ]}
       actions={
         <Button size="sm">
@@ -97,10 +91,7 @@ export default function AdminAnalyticsPage() {
           {metrics.map((metric) => {
             const Icon = metric.icon;
             return (
-              <div
-                key={metric.label}
-                className="rounded-lg border border-border bg-card p-6"
-              >
+              <div key={metric.label} className="rounded-lg border border-border bg-card p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                     <Icon className="h-5 w-5 text-primary" />
@@ -110,9 +101,7 @@ export default function AdminAnalyticsPage() {
                     <span>{metric.change}</span>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground mb-1">
-                  {metric.label}
-                </p>
+                <p className="text-sm text-muted-foreground mb-1">{metric.label}</p>
                 <p className="text-2xl font-bold">{metric.value}</p>
               </div>
             );
@@ -123,13 +112,13 @@ export default function AdminAnalyticsPage() {
           <h3 className="text-lg font-semibold mb-4">Overview</h3>
           <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
             <div>
-              Total Workspaces:{" "}
+              Total Workspaces:{' '}
               <span className="font-medium text-foreground">
                 {data.totalWorkspaces.toLocaleString()}
               </span>
             </div>
             <div>
-              Total Agents:{" "}
+              Total Agents:{' '}
               <span className="font-medium text-foreground">
                 {data.totalAgents.toLocaleString()}
               </span>

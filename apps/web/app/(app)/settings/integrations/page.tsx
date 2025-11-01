@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useWorkspace } from "@/contexts/workspace-context";
-import { PageHeader } from "@/components/layout/page-header";
-import { Spinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { Check, X, Settings, Loader2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { useWorkspace } from '@/contexts/workspace-context';
+import { PageHeader } from '@/components/layout/page-header';
+import { Spinner } from '@/components/ui/spinner';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { Check, X, Settings, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 export default function IntegrationsPage() {
   const { currentWorkspace } = useWorkspace();
@@ -18,21 +18,21 @@ export default function IntegrationsPage() {
 
   useEffect(() => {
     // Check for OAuth callback messages
-    const success = searchParams.get("success");
-    const error = searchParams.get("error");
+    const success = searchParams.get('success');
+    const error = searchParams.get('error');
 
     if (success) {
-      const integrationName = success.replace("_connected", "");
+      const integrationName = success.replace('_connected', '');
       toast.success(
         `${integrationName.charAt(0).toUpperCase() + integrationName.slice(1)} connected successfully!`,
       );
       // Clear query params
-      window.history.replaceState({}, "", "/settings/integrations");
+      window.history.replaceState({}, '', '/settings/integrations');
     }
 
     if (error) {
-      toast.error(`Failed to connect: ${error.replace(/_/g, " ")}`);
-      window.history.replaceState({}, "", "/settings/integrations");
+      toast.error(`Failed to connect: ${error.replace(/_/g, ' ')}`);
+      window.history.replaceState({}, '', '/settings/integrations');
     }
   }, [searchParams]);
 
@@ -41,14 +41,12 @@ export default function IntegrationsPage() {
       if (!currentWorkspace?.id) return;
 
       try {
-        const res = await fetch(
-          `/api/integrations?workspaceId=${currentWorkspace.id}`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch integrations");
+        const res = await fetch(`/api/integrations?workspaceId=${currentWorkspace.id}`);
+        if (!res.ok) throw new Error('Failed to fetch integrations');
         const data = await res.json();
         setIntegrations(data.integrations);
       } catch (error) {
-        toast.error("Failed to load integrations");
+        toast.error('Failed to load integrations');
       } finally {
         setIsLoading(false);
       }
@@ -64,24 +62,24 @@ export default function IntegrationsPage() {
       setConnectingId(integrationType);
 
       // Get OAuth URL from backend
-      const res = await fetch("/api/integrations/google/connect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/integrations/google/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           workspaceId: currentWorkspace.id,
           integrationType,
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to initiate OAuth");
+      if (!res.ok) throw new Error('Failed to initiate OAuth');
 
       const { authUrl } = await res.json();
 
       // Redirect to OAuth URL
       window.location.href = authUrl;
     } catch (error) {
-      console.error("Connect error:", error);
-      toast.error("Failed to connect integration");
+      console.error('Connect error:', error);
+      toast.error('Failed to connect integration');
       setConnectingId(null);
     }
   };
@@ -95,24 +93,22 @@ export default function IntegrationsPage() {
       setConnectingId(integrationId);
 
       const res = await fetch(`/api/integrations/${integrationId}/disconnect`, {
-        method: "POST",
+        method: 'POST',
       });
 
-      if (!res.ok) throw new Error("Failed to disconnect");
+      if (!res.ok) throw new Error('Failed to disconnect');
 
       toast.success(`${name} disconnected successfully`);
 
       // Refresh integrations list
-      const refreshRes = await fetch(
-        `/api/integrations?workspaceId=${currentWorkspace?.id}`,
-      );
+      const refreshRes = await fetch(`/api/integrations?workspaceId=${currentWorkspace?.id}`);
       if (refreshRes.ok) {
         const data = await refreshRes.json();
         setIntegrations(data.integrations);
       }
     } catch (error) {
-      console.error("Disconnect error:", error);
-      toast.error("Failed to disconnect integration");
+      console.error('Disconnect error:', error);
+      toast.error('Failed to disconnect integration');
     } finally {
       setConnectingId(null);
     }
@@ -128,10 +124,7 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Integrations"
-        description="Connect and manage third-party services"
-      />
+      <PageHeader title="Integrations" description="Connect and manage third-party services" />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {integrations.map((integration) => (
@@ -145,7 +138,7 @@ export default function IntegrationsPage() {
                   {integration.type}
                 </p>
               </div>
-              {integration.status === "active" ? (
+              {integration.status === 'active' ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                   <Check className="h-3 w-3" />
                   Active
@@ -158,22 +151,16 @@ export default function IntegrationsPage() {
               )}
             </div>
 
-            {integration.status === "active" && integration.connectedAt && (
+            {integration.status === 'active' && integration.connectedAt && (
               <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">
-                Connected:{" "}
-                {new Date(integration.connectedAt).toLocaleDateString()}
+                Connected: {new Date(integration.connectedAt).toLocaleDateString()}
               </p>
             )}
 
             <div className="mt-4 flex gap-2">
-              {integration.status === "active" ? (
+              {integration.status === 'active' ? (
                 <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    disabled
-                  >
+                  <Button variant="outline" size="sm" className="flex-1" disabled>
                     <Settings className="h-4 w-4 mr-2" />
                     Configure
                   </Button>
@@ -181,15 +168,13 @@ export default function IntegrationsPage() {
                     variant="destructive"
                     size="sm"
                     className="flex-1"
-                    onClick={() =>
-                      handleDisconnect(integration.id, integration.name)
-                    }
+                    onClick={() => handleDisconnect(integration.id, integration.name)}
                     disabled={connectingId === integration.id}
                   >
                     {connectingId === integration.id ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      "Disconnect"
+                      'Disconnect'
                     )}
                   </Button>
                 </>
@@ -205,7 +190,7 @@ export default function IntegrationsPage() {
                       Connecting...
                     </>
                   ) : (
-                    "Connect"
+                    'Connect'
                   )}
                 </Button>
               )}

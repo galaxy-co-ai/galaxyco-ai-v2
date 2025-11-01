@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@galaxyco/database";
-import { eq, desc } from "drizzle-orm";
-import { users, workspaces, workspaceMembers } from "@galaxyco/database/schema";
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { db } from '@galaxyco/database';
+import { eq, desc } from 'drizzle-orm';
+import { users, workspaces, workspaceMembers } from '@galaxyco/database/schema';
 
 // Force dynamic rendering
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 // Helper to check if user is system admin
 async function checkSystemAdmin(userId: string) {
@@ -19,11 +19,7 @@ async function checkSystemAdmin(userId: string) {
   });
   // Check if user has admin or owner role in any workspace
   // In a real system, you'd have a dedicated system admin flag
-  return (
-    user?.workspaceMembers?.some(
-      (m) => m.role === "admin" || m.role === "owner",
-    ) || false
-  );
+  return user?.workspaceMembers?.some((m) => m.role === 'admin' || m.role === 'owner') || false;
 }
 
 /**
@@ -35,16 +31,16 @@ export async function GET(req: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const isAdmin = await checkSystemAdmin(userId);
     if (!isAdmin) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
     // For now, generate synthetic activity from recent user logins and workspace creation
     // In the future, this should pull from a dedicated audit_log table
@@ -81,16 +77,16 @@ export async function GET(req: NextRequest) {
           id: `user-login-${u.id}`,
           userId: u.id,
           userEmail: u.email,
-          action: "User login",
+          action: 'User login',
           workspaceId: u.workspaceMembers[0]?.workspaceId || null,
           workspaceName: u.workspaceMembers[0]?.workspace?.name || null,
           createdAt: u.lastLoginAt!,
         })),
       ...recentWorkspaces.map((w) => ({
         id: `workspace-created-${w.id}`,
-        userId: w.members[0]?.user?.id || "system",
-        userEmail: w.members[0]?.user?.email || "system@galaxyco.ai",
-        action: "Created workspace",
+        userId: w.members[0]?.user?.id || 'system',
+        userEmail: w.members[0]?.user?.email || 'system@galaxyco.ai',
+        action: 'Created workspace',
         workspaceId: w.id,
         workspaceName: w.name,
         createdAt: w.createdAt,
@@ -98,10 +94,7 @@ export async function GET(req: NextRequest) {
     ];
 
     // Sort by createdAt desc and limit
-    activities.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    );
+    activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     const limitedActivities = activities.slice(0, limit);
 
     return NextResponse.json({
@@ -109,10 +102,7 @@ export async function GET(req: NextRequest) {
       total: activities.length,
     });
   } catch (error) {
-    console.error("Error fetching audit log:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
+    console.error('Error fetching audit log:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

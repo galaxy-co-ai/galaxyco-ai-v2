@@ -1,7 +1,7 @@
-import { task } from "@trigger.dev/sdk/v3";
-import OpenAI from "openai";
-import * as cheerio from "cheerio";
-import { logger } from "@/lib/utils/logger";
+import { task } from '@trigger.dev/sdk/v3';
+import OpenAI from 'openai';
+import * as cheerio from 'cheerio';
+import { logger } from '@/lib/utils/logger';
 
 /**
  * Lead Intel Agent - Production Implementation
@@ -47,7 +47,7 @@ interface EnrichedLead {
   outreachAngle: string;
   keyInsights: string[];
   icpFitScore: number;
-  confidenceLevel: "high" | "medium" | "low";
+  confidenceLevel: 'high' | 'medium' | 'low';
   dataCompleteness: number;
 }
 
@@ -58,7 +58,7 @@ function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
-        "OPENAI_API_KEY environment variable is not set. Please configure it in your Trigger.dev environment.",
+        'OPENAI_API_KEY environment variable is not set. Please configure it in your Trigger.dev environment.',
       );
     }
     openaiInstance = new OpenAI({
@@ -75,8 +75,7 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
   try {
     const response = await fetch(`https://${domain}`, {
       headers: {
-        "User-Agent":
-          "Mozilla/5.0 (compatible; GalaxyCo-Bot/1.0; +https://galaxyco.ai)",
+        'User-Agent': 'Mozilla/5.0 (compatible; GalaxyCo-Bot/1.0; +https://galaxyco.ai)',
       },
       signal: AbortSignal.timeout(10000), // 10 second timeout
     });
@@ -90,26 +89,24 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
 
     // Extract company name
     const companyName =
-      $("meta[property='og:site_name']").attr("content") ||
-      $("title").text().split("|")[0].trim() ||
+      $("meta[property='og:site_name']").attr('content') ||
+      $('title').text().split('|')[0].trim() ||
       domain;
 
     // Extract description
     const description =
-      $("meta[name='description']").attr("content") ||
-      $("meta[property='og:description']").attr("content") ||
-      "";
+      $("meta[name='description']").attr('content') ||
+      $("meta[property='og:description']").attr('content') ||
+      '';
 
     // Extract services (common patterns)
     const services: string[] = [];
-    $(".service, .services li, [class*='service'] h3, .offering").each(
-      (_, el) => {
-        const text = $(el).text().trim();
-        if (text && text.length < 100) {
-          services.push(text);
-        }
-      },
-    );
+    $(".service, .services li, [class*='service'] h3, .offering").each((_, el) => {
+      const text = $(el).text().trim();
+      if (text && text.length < 100) {
+        services.push(text);
+      }
+    });
 
     // Detect tech stack from visible elements and scripts
     const techStack: string[] = [];
@@ -123,7 +120,7 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
       Shopify: /shopify/,
       WordPress: /wp-content|wordpress/,
       Webflow: /webflow/,
-      "Google Analytics": /google-analytics|gtag/,
+      'Google Analytics': /google-analytics|gtag/,
     };
 
     Object.entries(techSignals).forEach(([tech, pattern]) => {
@@ -133,14 +130,11 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
     });
 
     // Extract team size mentions
-    const teamSizeMatch = html.match(
-      /(\d+)\+?\s*(employees?|team members?|people)/i,
-    );
+    const teamSizeMatch = html.match(/(\d+)\+?\s*(employees?|team members?|people)/i);
     const teamSize = teamSizeMatch ? teamSizeMatch[0] : undefined;
 
     // Extract about text
-    const aboutText =
-      $(".about, #about, [class*='about']").first().text().trim() || "";
+    const aboutText = $(".about, #about, [class*='about']").first().text().trim() || '';
 
     return {
       companyName,
@@ -154,10 +148,10 @@ async function scrapeCompanyWebsite(domain: string): Promise<WebsiteData> {
     logger.warn(`Failed to scrape ${domain}`, { error, domain });
     return {
       companyName: domain,
-      description: "",
+      description: '',
       services: [],
       techStack: [],
-      aboutText: "",
+      aboutText: '',
     };
   }
 }
@@ -169,20 +163,17 @@ async function searchCompanyNews(companyName: string): Promise<NewsItem[]> {
   try {
     // Only search if API key is configured
     if (!process.env.GOOGLE_CUSTOM_SEARCH_API_KEY) {
-      logger.warn("Google Custom Search API key not configured");
+      logger.warn('Google Custom Search API key not configured');
       return [];
     }
 
     const searchQuery = `"${companyName}" (funding OR hiring OR expansion OR launch)`;
-    const url = new URL("https://www.googleapis.com/customsearch/v1");
-    url.searchParams.set("key", process.env.GOOGLE_CUSTOM_SEARCH_API_KEY);
-    url.searchParams.set(
-      "cx",
-      process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || "",
-    );
-    url.searchParams.set("q", searchQuery);
-    url.searchParams.set("num", "5");
-    url.searchParams.set("dateRestrict", "m6"); // Last 6 months
+    const url = new URL('https://www.googleapis.com/customsearch/v1');
+    url.searchParams.set('key', process.env.GOOGLE_CUSTOM_SEARCH_API_KEY);
+    url.searchParams.set('cx', process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID || '');
+    url.searchParams.set('q', searchQuery);
+    url.searchParams.set('num', '5');
+    url.searchParams.set('dateRestrict', 'm6'); // Last 6 months
 
     const response = await fetch(url.toString());
 
@@ -201,7 +192,7 @@ async function searchCompanyNews(companyName: string): Promise<NewsItem[]> {
       })) || []
     );
   } catch (error) {
-    console.warn("Failed to search news:", error);
+    console.warn('Failed to search news:', error);
     return [];
   }
 }
@@ -227,14 +218,14 @@ async function generateInsights(
 COMPANY INFORMATION:
 - Domain: ${companyDomain}
 - Name: ${websiteData.companyName}
-- Description: ${websiteData.description || "N/A"}
-- Services: ${websiteData.services.join(", ") || "N/A"}
-- Tech Stack: ${websiteData.techStack.join(", ") || "N/A"}
-- Team Size: ${websiteData.teamSize || "N/A"}
-- About: ${websiteData.aboutText || "N/A"}
+- Description: ${websiteData.description || 'N/A'}
+- Services: ${websiteData.services.join(', ') || 'N/A'}
+- Tech Stack: ${websiteData.techStack.join(', ') || 'N/A'}
+- Team Size: ${websiteData.teamSize || 'N/A'}
+- About: ${websiteData.aboutText || 'N/A'}
 
 RECENT NEWS:
-${newsItems.map((n) => `- ${n.title}: ${n.snippet}`).join("\n") || "No recent news found"}
+${newsItems.map((n) => `- ${n.title}: ${n.snippet}`).join('\n') || 'No recent news found'}
 
 TARGET ICP (Ideal Customer Profile):
 - B2B Professional Services firms (agencies, consulting, fractional services)
@@ -253,55 +244,52 @@ Provide:
 
     const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
       response_format: {
-        type: "json_schema",
+        type: 'json_schema',
         json_schema: {
-          name: "lead_insights",
+          name: 'lead_insights',
           strict: true,
           schema: {
-            type: "object",
+            type: 'object',
             properties: {
               painPoints: {
-                type: "array",
-                items: { type: "string" },
-                description:
-                  "List of 2-4 inferred pain points this company likely faces",
+                type: 'array',
+                items: { type: 'string' },
+                description: 'List of 2-4 inferred pain points this company likely faces',
               },
               buyingSignals: {
-                type: "array",
-                items: { type: "string" },
-                description:
-                  "List of 1-3 signals that indicate they might be ready to buy",
+                type: 'array',
+                items: { type: 'string' },
+                description: 'List of 1-3 signals that indicate they might be ready to buy',
               },
               outreachAngle: {
-                type: "string",
-                description:
-                  "A 1-2 sentence compelling outreach angle for first email",
+                type: 'string',
+                description: 'A 1-2 sentence compelling outreach angle for first email',
               },
               keyInsights: {
-                type: "array",
-                items: { type: "string" },
-                description: "List of 2-3 key insights to personalize outreach",
+                type: 'array',
+                items: { type: 'string' },
+                description: 'List of 2-3 key insights to personalize outreach',
               },
               industry: {
-                type: "string",
-                description: "Primary industry classification",
+                type: 'string',
+                description: 'Primary industry classification',
               },
               icpFitScore: {
-                type: "number",
+                type: 'number',
                 description:
-                  "Score from 0-100 on how well they fit our ICP (B2B services, 10-50 employees)",
+                  'Score from 0-100 on how well they fit our ICP (B2B services, 10-50 employees)',
               },
             },
             required: [
-              "painPoints",
-              "buyingSignals",
-              "outreachAngle",
-              "keyInsights",
-              "industry",
-              "icpFitScore",
+              'painPoints',
+              'buyingSignals',
+              'outreachAngle',
+              'keyInsights',
+              'industry',
+              'icpFitScore',
             ],
             additionalProperties: false,
           },
@@ -312,20 +300,20 @@ Provide:
 
     const content = response.choices[0].message.content;
     if (!content) {
-      throw new Error("No response from OpenAI");
+      throw new Error('No response from OpenAI');
     }
 
     const insights = JSON.parse(content);
     return insights;
   } catch (error) {
-    logger.error("Failed to generate insights", { error });
+    logger.error('Failed to generate insights', { error });
     // Return fallback data
     return {
-      painPoints: ["Unable to analyze - enrichment data limited"],
+      painPoints: ['Unable to analyze - enrichment data limited'],
       buyingSignals: [],
-      outreachAngle: "Review this lead manually for personalized approach",
-      keyInsights: ["Enrichment incomplete - manual review recommended"],
-      industry: "Unknown",
+      outreachAngle: 'Review this lead manually for personalized approach',
+      keyInsights: ['Enrichment incomplete - manual review recommended'],
+      industry: 'Unknown',
       icpFitScore: 50, // Neutral score
     };
   }
@@ -336,35 +324,26 @@ Provide:
  */
 export async function enrichLeadCore(payload: EnrichLeadPayload) {
   const startTime = Date.now();
-  logger.info("🚀 Starting lead enrichment", {
+  logger.info('🚀 Starting lead enrichment', {
     domain: payload.companyDomain,
     workspace: payload.workspaceId,
   });
 
   try {
     // Step 1: Scrape website (parallel with news search)
-    logger.info("📡 Step 1: Scraping company website...");
+    logger.info('📡 Step 1: Scraping company website...');
     const websiteDataPromise = scrapeCompanyWebsite(payload.companyDomain);
 
     // Step 2: Search news (parallel with website scrape)
-    logger.info("📰 Step 2: Searching recent news...");
-    const newsPromise = searchCompanyNews(
-      payload.companyName || payload.companyDomain,
-    );
+    logger.info('📰 Step 2: Searching recent news...');
+    const newsPromise = searchCompanyNews(payload.companyName || payload.companyDomain);
 
     // Wait for both to complete
-    const [websiteData, newsItems] = await Promise.all([
-      websiteDataPromise,
-      newsPromise,
-    ]);
+    const [websiteData, newsItems] = await Promise.all([websiteDataPromise, newsPromise]);
 
     // Step 3: Generate AI insights
-    logger.info("🤖 Step 3: Generating AI insights...");
-    const insights = await generateInsights(
-      websiteData,
-      newsItems,
-      payload.companyDomain,
-    );
+    logger.info('🤖 Step 3: Generating AI insights...');
+    const insights = await generateInsights(websiteData, newsItems, payload.companyDomain);
 
     // Calculate data completeness
     let completenessScore = 0;
@@ -376,12 +355,8 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
     if (insights.buyingSignals.length > 0) completenessScore += 15;
 
     // Determine confidence level
-    const confidenceLevel: "high" | "medium" | "low" =
-      completenessScore >= 75
-        ? "high"
-        : completenessScore >= 50
-          ? "medium"
-          : "low";
+    const confidenceLevel: 'high' | 'medium' | 'low' =
+      completenessScore >= 75 ? 'high' : completenessScore >= 50 ? 'medium' : 'low';
 
     const enrichedLead: EnrichedLead = {
       leadId: `lead_${Date.now()}`, // Temporary ID until DB integration
@@ -402,7 +377,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
 
     const duration = Date.now() - startTime;
 
-    logger.info("✅ Enrichment complete", {
+    logger.info('✅ Enrichment complete', {
       leadId: enrichedLead.leadId,
       icpFitScore: enrichedLead.icpFitScore,
       confidence: enrichedLead.confidenceLevel,
@@ -426,10 +401,10 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
       },
     };
   } catch (error) {
-    logger.error("❌ Enrichment failed", { error });
+    logger.error('❌ Enrichment failed', { error });
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : 'Unknown error',
       metadata: {
         duration: Date.now() - startTime,
       },
@@ -441,7 +416,7 @@ export async function enrichLeadCore(payload: EnrichLeadPayload) {
  * Trigger.dev task wrapper
  */
 export const enrichLead = task({
-  id: "enrich-lead",
+  id: 'enrich-lead',
   maxDuration: 300, // 5 minutes
   run: async (payload: EnrichLeadPayload) => {
     return await enrichLeadCore(payload);

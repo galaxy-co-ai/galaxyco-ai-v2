@@ -1,31 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { TemplatePreviewCanvas } from "./template-preview-canvas";
-import {
-  Star,
-  Users,
-  Clock,
-  Sparkles,
-  Loader2,
-  User,
-  Calendar,
-} from "lucide-react";
-import { toast } from "sonner";
-import { useWorkspace } from "@/contexts/workspace-context";
-import type { GridTemplate } from "@/lib/studio/types";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { TemplatePreviewCanvas } from './template-preview-canvas';
+import { Star, Users, Clock, Sparkles, Loader2, User, Calendar } from 'lucide-react';
+import { toast } from 'sonner';
+import { useWorkspace } from '@/contexts/workspace-context';
+import type { GridTemplate } from '@/lib/studio/types';
 
 interface TemplateDetailModalProps {
   template: GridTemplate;
@@ -33,20 +25,16 @@ interface TemplateDetailModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function TemplateDetailModal({
-  template,
-  open,
-  onOpenChange,
-}: TemplateDetailModalProps) {
+export function TemplateDetailModal({ template, open, onOpenChange }: TemplateDetailModalProps) {
   const router = useRouter();
   const { currentWorkspace } = useWorkspace();
 
   // Use Template mutation
   const useTemplateMutation = useMutation({
     mutationFn: async (templateId: string) => {
-      const response = await fetch("/api/studio/grids/from-template", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/studio/grids/from-template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           templateId,
           workspaceId: currentWorkspace?.id,
@@ -55,9 +43,7 @@ export function TemplateDetailModal({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.error || "Failed to create grid from template",
-        );
+        throw new Error(errorData.error || 'Failed to create grid from template');
       }
 
       return response.json();
@@ -68,7 +54,7 @@ export function TemplateDetailModal({
       router.push(`/studio/lab/${data.gridId}`);
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to use template");
+      toast.error(error.message || 'Failed to use template');
     },
   });
 
@@ -76,13 +62,11 @@ export function TemplateDetailModal({
     useTemplateMutation.mutate(template.id);
   };
 
-  const complexity = template.complexity || "beginner";
+  const complexity = template.complexity || 'beginner';
   const complexityColors = {
-    beginner:
-      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-    intermediate:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
-    advanced: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
+    beginner: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+    intermediate: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    advanced: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
   };
 
   return (
@@ -95,11 +79,9 @@ export function TemplateDetailModal({
                 <Sparkles className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <DialogTitle className="text-2xl mb-1">
-                  {template.name}
-                </DialogTitle>
+                <DialogTitle className="text-2xl mb-1">{template.name}</DialogTitle>
                 <DialogDescription className="text-base">
-                  {template.category.replace(/-/g, " ")}
+                  {template.category.replace(/-/g, ' ')}
                 </DialogDescription>
               </div>
             </div>
@@ -115,9 +97,7 @@ export function TemplateDetailModal({
             <Users className="h-4 w-4 text-muted-foreground" />
             <div>
               <p className="text-xs text-muted-foreground">Uses</p>
-              <p className="text-sm font-semibold">
-                {template.uses.toLocaleString()}
-              </p>
+              <p className="text-sm font-semibold">{template.uses.toLocaleString()}</p>
             </div>
           </div>
           {template.rating !== null && (
@@ -125,9 +105,7 @@ export function TemplateDetailModal({
               <Star className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-xs text-muted-foreground">Rating</p>
-                <p className="text-sm font-semibold">
-                  {template.rating.toFixed(1)} / 5.0
-                </p>
+                <p className="text-sm font-semibold">{template.rating.toFixed(1)} / 5.0</p>
               </div>
             </div>
           )}
@@ -136,9 +114,7 @@ export function TemplateDetailModal({
               <Clock className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-xs text-muted-foreground">Est. Time</p>
-                <p className="text-sm font-semibold">
-                  {template.estimated_time} min
-                </p>
+                <p className="text-sm font-semibold">{template.estimated_time} min</p>
               </div>
             </div>
           )}
@@ -157,7 +133,7 @@ export function TemplateDetailModal({
         <div className="py-4">
           <h3 className="text-sm font-semibold mb-2">Description</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {template.description || "No description available"}
+            {template.description || 'No description available'}
           </p>
         </div>
 
@@ -180,10 +156,7 @@ export function TemplateDetailModal({
         {/* Preview Canvas */}
         <div className="py-4">
           <h3 className="text-sm font-semibold mb-3">Workflow Preview</h3>
-          <TemplatePreviewCanvas
-            previewData={template.preview_data}
-            className="h-[400px] w-full"
-          />
+          <TemplatePreviewCanvas previewData={template.preview_data} className="h-[400px] w-full" />
         </div>
 
         <Separator />
@@ -226,11 +199,7 @@ export function TemplateDetailModal({
               </>
             )}
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            size="lg"
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)} size="lg">
             Cancel
           </Button>
         </div>

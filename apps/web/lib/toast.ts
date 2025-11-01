@@ -5,7 +5,7 @@
  * throughout the app using the shadcn toast system
  */
 
-import { toast as sonnerToast } from "sonner";
+import { toast as sonnerToast } from 'sonner';
 
 type ToastOptions = {
   title?: string;
@@ -21,7 +21,7 @@ type ToastOptions = {
  * Show a success toast notification
  */
 export function toastSuccess(message: string, options?: ToastOptions) {
-  return sonnerToast.success(options?.title || "Success", {
+  return sonnerToast.success(options?.title || 'Success', {
     description: options?.description || message,
     duration: options?.duration || 4000,
   });
@@ -31,7 +31,7 @@ export function toastSuccess(message: string, options?: ToastOptions) {
  * Show an error toast notification
  */
 export function toastError(message: string, options?: ToastOptions) {
-  return sonnerToast.error(options?.title || "Error", {
+  return sonnerToast.error(options?.title || 'Error', {
     description: options?.description || message,
     duration: options?.duration || 5000,
   });
@@ -41,7 +41,7 @@ export function toastError(message: string, options?: ToastOptions) {
  * Show an info toast notification
  */
 export function toastInfo(message: string, options?: ToastOptions) {
-  return sonnerToast.info(options?.title || "Info", {
+  return sonnerToast.info(options?.title || 'Info', {
     description: options?.description || message,
     duration: options?.duration || 4000,
   });
@@ -51,7 +51,7 @@ export function toastInfo(message: string, options?: ToastOptions) {
  * Show a warning toast notification
  */
 export function toastWarning(message: string, options?: ToastOptions) {
-  return sonnerToast.warning(options?.title || "Warning", {
+  return sonnerToast.warning(options?.title || 'Warning', {
     description: options?.description || message,
     duration: options?.duration || 4500,
   });
@@ -62,7 +62,7 @@ export function toastWarning(message: string, options?: ToastOptions) {
  * Returns a dismiss function
  */
 export function toastLoading(message: string, options?: ToastOptions) {
-  return sonnerToast.loading(options?.title || "Loading", {
+  return sonnerToast.loading(options?.title || 'Loading', {
     description: options?.description || message,
   });
 }
@@ -101,23 +101,22 @@ export function toastDismiss(toastId?: string | number) {
  */
 export const commonToasts = {
   // Agent operations
-  agentCreated: () => toastSuccess("Agent created successfully!"),
-  agentUpdated: () => toastSuccess("Agent updated successfully!"),
-  agentDeleted: () => toastSuccess("Agent deleted successfully!"),
-  agentDeployed: () => toastSuccess("Agent deployed successfully!"),
+  agentCreated: () => toastSuccess('Agent created successfully!'),
+  agentUpdated: () => toastSuccess('Agent updated successfully!'),
+  agentDeleted: () => toastSuccess('Agent deleted successfully!'),
+  agentDeployed: () => toastSuccess('Agent deployed successfully!'),
 
   // Knowledge operations
-  fileUploaded: () => toastSuccess("File uploaded successfully!"),
+  fileUploaded: () => toastSuccess('File uploaded successfully!'),
   filesUploading: (count: number) =>
-    toastLoading(`Uploading ${count} file${count > 1 ? "s" : ""}...`),
+    toastLoading(`Uploading ${count} file${count > 1 ? 's' : ''}...`),
 
   // Generic operations
-  saved: () => toastSuccess("Changes saved!"),
-  copied: () => toastSuccess("Copied to clipboard!"),
+  saved: () => toastSuccess('Changes saved!'),
+  copied: () => toastSuccess('Copied to clipboard!'),
 
   // Errors
-  networkError: () =>
-    toastError("Network error. Please check your connection."),
+  networkError: () => toastError('Network error. Please check your connection.'),
   unauthorized: () => toastError("You don't have permission to do that."),
-  genericError: () => toastError("Something went wrong. Please try again."),
+  genericError: () => toastError('Something went wrong. Please try again.'),
 };

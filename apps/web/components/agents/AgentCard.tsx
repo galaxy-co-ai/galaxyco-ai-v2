@@ -1,18 +1,13 @@
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
-import {
-  colors,
-  typography,
-  spacing,
-  radius,
-} from "@/lib/constants/design-system";
+import { Card } from '../ui/card';
+import { Button } from '../ui/button';
+import { colors, typography, spacing, radius } from '@/lib/constants/design-system';
 
 interface Agent {
   id: string;
   name: string;
   description: string;
   icon?: string;
-  status?: "active" | "draft" | "paused";
+  status?: 'active' | 'draft' | 'paused';
   stats?: {
     successRate?: number;
     timeSaved?: string;
@@ -28,44 +23,35 @@ interface AgentCardProps {
   isInstalled?: boolean;
 }
 
-export function AgentCard({
-  agent,
-  onView,
-  onToggle,
-  isInstalled = false,
-}: AgentCardProps) {
+export function AgentCard({ agent, onView, onToggle, isInstalled = false }: AgentCardProps) {
   return (
     <Card
       className="hover:shadow-lg transition-shadow cursor-pointer"
       onClick={() => onView?.(agent)}
     >
-      <div
-        style={{ display: "flex", flexDirection: "column", gap: spacing.lg }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
         {/* Header */}
-        <div
-          style={{ display: "flex", alignItems: "flex-start", gap: spacing.md }}
-        >
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md }}>
           <div
             style={{
-              fontSize: "2.5rem",
-              width: "60px",
-              height: "60px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              fontSize: '2.5rem',
+              width: '60px',
+              height: '60px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               background: colors.primaryLight,
               borderRadius: radius.lg,
             }}
           >
-            {agent.icon || "🤖"}
+            {agent.icon || '🤖'}
           </div>
           <div style={{ flex: 1 }}>
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 marginBottom: spacing.xs,
               }}
             >
@@ -86,15 +72,10 @@ export function AgentCard({
                     fontWeight: typography.fontWeight.medium,
                     padding: `${spacing.xs} ${spacing.sm}`,
                     background:
-                      agent.status === "active"
-                        ? colors.successLight
-                        : colors.neutral[100],
-                    color:
-                      agent.status === "active"
-                        ? colors.successColor
-                        : colors.neutral[600],
+                      agent.status === 'active' ? colors.successLight : colors.neutral[100],
+                    color: agent.status === 'active' ? colors.successColor : colors.neutral[600],
                     borderRadius: radius.full,
-                    textTransform: "uppercase",
+                    textTransform: 'uppercase',
                   }}
                 >
                   {agent.status}
@@ -118,8 +99,8 @@ export function AgentCard({
         {agent.stats && (
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
               gap: spacing.md,
               padding: spacing.md,
               background: colors.neutral[50],
@@ -207,7 +188,7 @@ export function AgentCard({
             >
               Integrations
             </div>
-            <div style={{ display: "flex", gap: spacing.xs, flexWrap: "wrap" }}>
+            <div style={{ display: 'flex', gap: spacing.xs, flexWrap: 'wrap' }}>
               {agent.integrations.map((integration) => (
                 <span
                   key={integration}
@@ -230,7 +211,7 @@ export function AgentCard({
         {onToggle && (
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               gap: spacing.md,
               paddingTop: spacing.md,
               borderTop: `1px solid ${colors.neutral[200]}`,
@@ -238,14 +219,14 @@ export function AgentCard({
           >
             <Button
               size="sm"
-              variant={isInstalled ? "secondary" : "default"}
+              variant={isInstalled ? 'secondary' : 'default'}
               className="w-full"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggle(agent);
               }}
             >
-              {isInstalled ? "Disable" : "Enable"}
+              {isInstalled ? 'Disable' : 'Enable'}
             </Button>
             <Button
               size="sm"

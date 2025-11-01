@@ -1,6 +1,6 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 /**
  * Dot Indicator component using GalaxyCo.ai Design System tokens
@@ -11,34 +11,34 @@ import { cn } from "@/lib/utils";
  * <Dot variant="warning" pulse />
  * <Dot size="lg" variant="primary" />
  */
-const dotVariants = cva("rounded-full", {
+const dotVariants = cva('rounded-full', {
   variants: {
     variant: {
-      default: "bg-foreground-muted",
-      primary: "bg-primary",
-      success: "bg-success",
-      warning: "bg-warning",
-      destructive: "bg-destructive",
+      default: 'bg-foreground-muted',
+      primary: 'bg-primary',
+      success: 'bg-success',
+      warning: 'bg-warning',
+      destructive: 'bg-destructive',
     },
     size: {
-      xs: "h-1.5 w-1.5", // 6px
-      sm: "h-2 w-2", // 8px
-      default: "h-2.5 w-2.5", // 10px (md)
-      lg: "h-3 w-3", // 12px
+      xs: 'h-1.5 w-1.5', // 6px
+      sm: 'h-2 w-2', // 8px
+      default: 'h-2.5 w-2.5', // 10px (md)
+      lg: 'h-3 w-3', // 12px
     },
     pulse: {
-      true: "animate-pulse",
+      true: 'animate-pulse',
     },
   },
   defaultVariants: {
-    variant: "default",
-    size: "default",
+    variant: 'default',
+    size: 'default',
     pulse: false,
   },
 });
 
 export interface DotProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "size">,
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'size'>,
     VariantProps<typeof dotVariants> {
   /**
    * Accessible label for the dot (required if dot has semantic meaning)
@@ -51,7 +51,7 @@ const Dot = React.forwardRef<HTMLSpanElement, DotProps>(
     return (
       <span
         ref={ref}
-        role={label ? "status" : undefined}
+        role={label ? 'status' : undefined}
         aria-label={label}
         aria-hidden={!label}
         className={cn(dotVariants({ variant, size, pulse }), className)}
@@ -61,6 +61,6 @@ const Dot = React.forwardRef<HTMLSpanElement, DotProps>(
   },
 );
 
-Dot.displayName = "Dot";
+Dot.displayName = 'Dot';
 
 export { Dot, dotVariants };

@@ -1,4 +1,4 @@
-import { Card } from "../ui/card";
+import { Card } from '../ui/card';
 
 interface Step {
   id: string;
@@ -22,9 +22,7 @@ export function ProgressTracker({ steps, onStepClick }: ProgressTrackerProps) {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold m-0">Setup Progress</h3>
-          <span className="text-sm font-semibold text-blue-600">
-            {percentage}% Complete
-          </span>
+          <span className="text-sm font-semibold text-blue-600">{percentage}% Complete</span>
         </div>
 
         {/* Progress Bar */}
@@ -43,29 +41,21 @@ export function ProgressTracker({ steps, onStepClick }: ProgressTrackerProps) {
             key={step.id}
             onClick={() => !step.completed && onStepClick?.(step.id)}
             className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-              step.completed
-                ? "bg-green-50 border-green-500"
-                : "bg-gray-50 border-gray-200"
+              step.completed ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-200'
             } ${
-              !step.completed && onStepClick
-                ? "cursor-pointer hover:bg-gray-100"
-                : "cursor-default"
+              !step.completed && onStepClick ? 'cursor-pointer hover:bg-gray-100' : 'cursor-default'
             }`}
           >
             <div
               className={`w-9 h-9 flex items-center justify-center rounded-full text-lg font-semibold shrink-0 ${
-                step.completed
-                  ? "bg-green-500 text-white"
-                  : "bg-white text-gray-600"
+                step.completed ? 'bg-green-500 text-white' : 'bg-white text-gray-600'
               }`}
             >
-              {step.completed ? "✓" : step.icon}
+              {step.completed ? '✓' : step.icon}
             </div>
             <span
               className={`${
-                step.completed
-                  ? "text-green-800 font-medium line-through"
-                  : "text-gray-700"
+                step.completed ? 'text-green-800 font-medium line-through' : 'text-gray-700'
               }`}
             >
               {step.label}
@@ -98,28 +88,28 @@ export function useWorkspaceProgress(workspace: any) {
 
   const steps = [
     {
-      id: "profile",
-      label: "Complete your profile",
+      id: 'profile',
+      label: 'Complete your profile',
       completed: !!onboardingProfile,
-      icon: "👤",
+      icon: '👤',
     },
     {
-      id: "agent",
-      label: "Enable your first agent",
+      id: 'agent',
+      label: 'Enable your first agent',
       completed: hasAgents,
-      icon: "🤖",
+      icon: '🤖',
     },
     {
-      id: "tools",
-      label: "Connect your tools",
+      id: 'tools',
+      label: 'Connect your tools',
       completed: hasConnectedTools,
-      icon: "🔗",
+      icon: '🔗',
     },
     {
-      id: "marketplace",
-      label: "Explore the marketplace",
+      id: 'marketplace',
+      label: 'Explore the marketplace',
       completed: false,
-      icon: "🛍️",
+      icon: '🛍️',
     },
   ];
 
@@ -127,8 +117,6 @@ export function useWorkspaceProgress(workspace: any) {
     steps,
     completedCount: steps.filter((s) => s.completed).length,
     totalCount: steps.length,
-    percentage: Math.round(
-      (steps.filter((s) => s.completed).length / steps.length) * 100,
-    ),
+    percentage: Math.round((steps.filter((s) => s.completed).length / steps.length) * 100),
   };
 }

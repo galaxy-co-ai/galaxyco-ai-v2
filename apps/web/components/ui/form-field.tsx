@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Label } from "./label";
-import { Input } from "./input";
-import { Textarea } from "./textarea";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+import { Label } from './label';
+import { Input } from './input';
+import { Textarea } from './textarea';
 
 /**
  * FormField molecule component using GalaxyCo.ai Design System tokens
  * Combines Label, Input/Textarea, and error messaging
  * Implements form patterns from 05-COMPONENT-INVENTORY.md
  */
-const formFieldVariants = cva(["space-y-2"], {
+const formFieldVariants = cva(['space-y-2'], {
   variants: {
     variant: {
-      default: "",
-      inline: "flex items-center space-y-0 space-x-3",
+      default: '',
+      inline: 'flex items-center space-y-0 space-x-3',
     },
   },
   defaultVariants: {
-    variant: "default",
+    variant: 'default',
   },
 });
 
 export interface FormFieldProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     VariantProps<typeof formFieldVariants> {
   /** Label text */
   label?: string;
@@ -36,15 +36,7 @@ export interface FormFieldProps
   /** Help text */
   description?: string;
   /** Input type - determines whether to render Input or Textarea */
-  type?:
-    | "text"
-    | "email"
-    | "password"
-    | "number"
-    | "search"
-    | "tel"
-    | "url"
-    | "textarea";
+  type?: 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url' | 'textarea';
   /** Input value */
   value?: string;
   /** Input change handler */
@@ -62,7 +54,7 @@ export interface FormFieldProps
   /** Auto complete attribute */
   autoComplete?: string;
   /** Input size */
-  size?: "sm" | "default" | "lg";
+  size?: 'sm' | 'default' | 'lg';
 }
 
 const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
@@ -74,7 +66,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
       required,
       error,
       description,
-      type = "text",
+      type = 'text',
       value,
       onChange,
       placeholder,
@@ -93,29 +85,19 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
     const errorId = `${fieldId}-error`;
     const descriptionId = `${fieldId}-description`;
 
-    const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       onChange?.(e.target.value);
     };
 
     return (
-      <div
-        ref={ref}
-        className={cn(formFieldVariants({ variant }), className)}
-        {...props}
-      >
+      <div ref={ref} className={cn(formFieldVariants({ variant }), className)} {...props}>
         {label && (
-          <Label
-            htmlFor={fieldId}
-            required={required}
-            variant={error ? "default" : "default"}
-          >
+          <Label htmlFor={fieldId} required={required} variant={error ? 'default' : 'default'}>
             {label}
           </Label>
         )}
 
-        {type === "textarea" ? (
+        {type === 'textarea' ? (
           <Textarea
             id={fieldId}
             name={name}
@@ -126,11 +108,8 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             readOnly={readOnly}
             error={error}
             size={size}
-            aria-invalid={error ? "true" : undefined}
-            aria-describedby={cn(
-              error && errorId,
-              description && descriptionId,
-            )}
+            aria-invalid={error ? 'true' : undefined}
+            aria-describedby={cn(error && errorId, description && descriptionId)}
           />
         ) : (
           <Input
@@ -145,11 +124,8 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             autoComplete={autoComplete}
             error={error}
             size={size}
-            aria-invalid={error ? "true" : undefined}
-            aria-describedby={cn(
-              error && errorId,
-              description && descriptionId,
-            )}
+            aria-invalid={error ? 'true' : undefined}
+            aria-describedby={cn(error && errorId, description && descriptionId)}
           />
         )}
 
@@ -168,6 +144,6 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
     );
   },
 );
-FormField.displayName = "FormField";
+FormField.displayName = 'FormField';
 
 export { FormField, formFieldVariants };

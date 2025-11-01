@@ -32,7 +32,7 @@ Content here with:
 
 ```typescript
 // Example code
-const example = "with proper syntax highlighting";
+const example = 'with proper syntax highlighting';
 ```
 
 ### Section 2: [Topic]

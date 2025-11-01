@@ -38,18 +38,18 @@ These were skipped to maintain momentum. Complete them NOW for 100% Phase 1.
 
 ```typescript
 export const metadata: Metadata = {
-  metadataBase: new URL("https://app.galaxyco.ai"),
+  metadataBase: new URL('https://app.galaxyco.ai'),
   title: {
-    default: "GalaxyCo.ai",
-    template: "%s | GalaxyCo.ai",
+    default: 'GalaxyCo.ai',
+    template: '%s | GalaxyCo.ai',
   },
-  description: "Make multi-agent AI useful in minutes",
+  description: 'Make multi-agent AI useful in minutes',
   openGraph: {
-    title: "GalaxyCo.ai",
-    description: "Make multi-agent AI useful in minutes",
-    url: "https://app.galaxyco.ai",
-    siteName: "GalaxyCo.ai",
-    type: "website",
+    title: 'GalaxyCo.ai',
+    description: 'Make multi-agent AI useful in minutes',
+    url: 'https://app.galaxyco.ai',
+    siteName: 'GalaxyCo.ai',
+    type: 'website',
   },
 };
 ```
@@ -89,22 +89,22 @@ fix(web): add metadata configuration and remove unsupported metadata
 
 ```typescript
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    await import("./sentry.server.config");
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await import('./sentry.server.config');
   }
 
-  if (process.env.NEXT_RUNTIME === "edge") {
-    await import("./sentry.edge.config");
+  if (process.env.NEXT_RUNTIME === 'edge') {
+    await import('./sentry.edge.config');
   }
 }
 
 export const onRequestError = async (
   err: Error,
   request: Request,
-  context: { routeType: "app" | "pages" },
+  context: { routeType: 'app' | 'pages' },
 ) => {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    const Sentry = await import("@sentry/nextjs");
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const Sentry = await import('@sentry/nextjs');
     Sentry.captureException(err, {
       contexts: {
         request: {
@@ -219,11 +219,7 @@ Complete these in order for full Phase 3 completion.
 **Component Structure**:
 
 ```typescript
-export default async function DocumentDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function DocumentDetailPage({ params }: { params: { id: string } }) {
   // Fetch document
   // Display metadata
   // Show content preview

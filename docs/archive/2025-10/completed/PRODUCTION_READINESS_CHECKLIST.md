@@ -41,12 +41,12 @@ pnpm --filter web build
 
 ```typescript
 export const metadata: Metadata = {
-  metadataBase: new URL("https://app.galaxyco.ai"),
+  metadataBase: new URL('https://app.galaxyco.ai'),
   title: {
-    default: "GalaxyCo.ai",
-    template: "%s | GalaxyCo.ai",
+    default: 'GalaxyCo.ai',
+    template: '%s | GalaxyCo.ai',
   },
-  description: "Make multi-agent AI useful in minutes",
+  description: 'Make multi-agent AI useful in minutes',
 };
 ```
 

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Sparkles, Mic, FileText, Loader2 } from "lucide-react";
-import { useAgentBuilder } from "@/lib/stores/agent-builder-store";
+import { useState } from 'react';
+import { Sparkles, Mic, FileText, Loader2 } from 'lucide-react';
+import { useAgentBuilder } from '@/lib/stores/agent-builder-store';
 
 interface PromptInputProps {
   onEnhance: () => Promise<void>;
@@ -10,14 +10,8 @@ interface PromptInputProps {
 }
 
 export function PromptInput({ onEnhance, onGenerate }: PromptInputProps) {
-  const {
-    promptText,
-    enhancedPrompt,
-    isEnhancing,
-    isGenerating,
-    setPrompt,
-    setEnhancedPrompt,
-  } = useAgentBuilder();
+  const { promptText, enhancedPrompt, isEnhancing, isGenerating, setPrompt, setEnhancedPrompt } =
+    useAgentBuilder();
 
   const [showEnhanced, setShowEnhanced] = useState(false);
 
@@ -134,7 +128,7 @@ export function PromptInput({ onEnhance, onGenerate }: PromptInputProps) {
           ) : (
             <Sparkles className="h-4 w-4" />
           )}
-          {isEnhancing ? "Enhancing..." : "Enhance Prompt"}
+          {isEnhancing ? 'Enhancing...' : 'Enhance Prompt'}
         </button>
 
         <button
@@ -149,7 +143,7 @@ export function PromptInput({ onEnhance, onGenerate }: PromptInputProps) {
               Generating...
             </>
           ) : (
-            "Generate Agents →"
+            'Generate Agents →'
           )}
         </button>
       </div>

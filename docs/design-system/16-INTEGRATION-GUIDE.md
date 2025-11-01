@@ -107,8 +107,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 ```typescript
 // src/lib/utils.ts
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -491,12 +491,12 @@ function App() {
 
 ```typescript
 // src/hooks/useAgents.ts
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAgents, createAgent } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchAgents, createAgent } from '@/lib/api';
 
 export const useAgents = () => {
   return useQuery({
-    queryKey: ["agents"],
+    queryKey: ['agents'],
     queryFn: fetchAgents,
   });
 };
@@ -507,7 +507,7 @@ export const useCreateAgent = () => {
   return useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["agents"] });
+      queryClient.invalidateQueries({ queryKey: ['agents'] });
     },
   });
 };
@@ -519,8 +519,8 @@ export const useCreateAgent = () => {
 
 ```typescript
 // src/store/authStore.ts
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface User {
   id: string;
@@ -544,7 +544,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ user: null, isAuthenticated: false }),
     }),
     {
-      name: "auth-storage",
+      name: 'auth-storage',
     },
   ),
 );
@@ -626,16 +626,16 @@ npx storybook@latest init
 
 ```typescript
 // src/components/atoms/Button/Button.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "./Button";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: "Atoms/Button",
+  title: 'Atoms/Button',
   component: Button,
   argTypes: {
     variant: {
-      control: "select",
-      options: ["primary", "secondary", "ghost", "danger", "outline"],
+      control: 'select',
+      options: ['primary', 'secondary', 'ghost', 'danger', 'outline'],
     },
   },
 };
@@ -645,14 +645,14 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    children: "Button",
-    variant: "primary",
+    children: 'Button',
+    variant: 'primary',
   },
 };
 
 export const Loading: Story = {
   args: {
-    children: "Loading",
+    children: 'Loading',
     isLoading: true,
   },
 };

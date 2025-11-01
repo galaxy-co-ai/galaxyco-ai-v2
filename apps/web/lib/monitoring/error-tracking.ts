@@ -5,8 +5,8 @@
  * custom context, and performance monitoring.
  */
 
-import * as Sentry from "@sentry/nextjs";
-import { logger } from "@/lib/utils/logger";
+import * as Sentry from '@sentry/nextjs';
+import { logger } from '@/lib/utils/logger';
 
 export interface ErrorContext {
   userId?: string;
@@ -17,11 +17,11 @@ export interface ErrorContext {
 }
 
 export enum ErrorSeverity {
-  DEBUG = "debug",
-  INFO = "info",
-  WARNING = "warning",
-  ERROR = "error",
-  FATAL = "fatal",
+  DEBUG = 'debug',
+  INFO = 'info',
+  WARNING = 'warning',
+  ERROR = 'error',
+  FATAL = 'fatal',
 }
 
 /**
@@ -34,7 +34,7 @@ export function captureException(
 ): string | undefined {
   try {
     // Log to console for development visibility
-    logger.error("Exception captured", {
+    logger.error('Exception captured', {
       error: error.message,
       stack: error.stack,
       context,
@@ -49,7 +49,7 @@ export function captureException(
     }
 
     // Set additional context
-    Sentry.setContext("error_context", {
+    Sentry.setContext('error_context', {
       component: context?.component,
       action: context?.action,
       ...context?.metadata,
@@ -57,10 +57,10 @@ export function captureException(
 
     // Set tags for filtering
     if (context?.component) {
-      Sentry.setTag("component", context.component);
+      Sentry.setTag('component', context.component);
     }
     if (context?.workspaceId) {
-      Sentry.setTag("workspace_id", context.workspaceId);
+      Sentry.setTag('workspace_id', context.workspaceId);
     }
 
     // Capture with severity
@@ -69,7 +69,7 @@ export function captureException(
     });
   } catch (captureError) {
     // Failsafe: log to console if Sentry fails
-    console.error("Failed to capture exception in Sentry:", captureError);
+    console.error('Failed to capture exception in Sentry:', captureError);
     return undefined;
   }
 }
@@ -93,7 +93,7 @@ export function captureMessage(
 
     // Set additional context
     if (context?.component || context?.action || context?.metadata) {
-      Sentry.setContext("message_context", {
+      Sentry.setContext('message_context', {
         component: context?.component,
         action: context?.action,
         ...context?.metadata,
@@ -102,7 +102,7 @@ export function captureMessage(
 
     return Sentry.captureMessage(message, severity);
   } catch (captureError) {
-    console.error("Failed to capture message in Sentry:", captureError);
+    console.error('Failed to capture message in Sentry:', captureError);
     return undefined;
   }
 }
@@ -114,7 +114,7 @@ export function addBreadcrumb(
   message: string,
   category: string,
   data?: Record<string, any>,
-  level: Sentry.SeverityLevel = "info",
+  level: Sentry.SeverityLevel = 'info',
 ): void {
   Sentry.addBreadcrumb({
     message,
@@ -128,11 +128,7 @@ export function addBreadcrumb(
 /**
  * Set user context for all future events
  */
-export function setUserContext(
-  userId: string,
-  workspaceId?: string,
-  email?: string,
-): void {
+export function setUserContext(userId: string, workspaceId?: string, email?: string): void {
   Sentry.setUser({
     id: userId,
     email,
@@ -154,7 +150,7 @@ export function clearUserContext(): void {
 export function startPerformanceSpan<T>(
   name: string,
   operation: () => T,
-  op: string = "function",
+  op: string = 'function',
 ): T {
   return Sentry.startSpan({ name, op }, operation);
 }
@@ -170,19 +166,16 @@ export async function measurePerformance<T>(
   const startTime = Date.now();
 
   try {
-    const result = await Sentry.startSpan(
-      { name, op: "function" },
-      async () => {
-        return await operation();
-      },
-    );
+    const result = await Sentry.startSpan({ name, op: 'function' }, async () => {
+      return await operation();
+    });
     return result;
   } catch (error) {
     captureException(error as Error, context, ErrorSeverity.ERROR);
     throw error;
   } finally {
     const duration = Date.now() - startTime;
-    trackMetric(name, duration, "milliseconds");
+    trackMetric(name, duration, 'milliseconds');
   }
 }
 
@@ -199,7 +192,7 @@ export function trackApiCall(
   // Add breadcrumb for API call
   addBreadcrumb(
     `API ${method} ${endpoint}`,
-    "http",
+    'http',
     {
       method,
       endpoint,
@@ -207,7 +200,7 @@ export function trackApiCall(
       duration_ms: duration,
       ...context?.metadata,
     },
-    statusCode >= 400 ? "error" : "info",
+    statusCode >= 400 ? 'error' : 'info',
   );
 
   // Capture as message if it's an error
@@ -231,22 +224,18 @@ export function trackDatabaseQuery(
 ): void {
   addBreadcrumb(
     `Database Query: ${query.substring(0, 100)}...`,
-    "query",
+    'query',
     {
       duration_ms: duration,
       success,
       workspace_id: context?.workspaceId,
     },
-    success ? "info" : "error",
+    success ? 'info' : 'error',
   );
 
   // Alert on slow queries (>1s)
   if (duration > 1000 && success) {
-    captureMessage(
-      `Slow database query detected: ${duration}ms`,
-      context,
-      ErrorSeverity.WARNING,
-    );
+    captureMessage(`Slow database query detected: ${duration}ms`, context, ErrorSeverity.WARNING);
   }
 }
 
@@ -256,7 +245,7 @@ export function trackDatabaseQuery(
 export function trackMetric(
   name: string,
   value: number,
-  unit: string = "milliseconds",
+  unit: string = 'milliseconds',
   tags?: Record<string, string>,
 ): void {
   try {
@@ -265,14 +254,9 @@ export function trackMetric(
       Sentry.metrics.distribution(name, value, { unit });
     }
     // Log as breadcrumb as fallback
-    addBreadcrumb(
-      `Metric: ${name}`,
-      "metric",
-      { value, unit, ...tags },
-      "info",
-    );
+    addBreadcrumb(`Metric: ${name}`, 'metric', { value, unit, ...tags }, 'info');
   } catch (error) {
-    console.error("Failed to track metric:", error);
+    console.error('Failed to track metric:', error);
   }
 }
 
@@ -280,22 +264,17 @@ export function trackMetric(
  * Check if monitoring is enabled
  */
 export function isMonitoringEnabled(): boolean {
-  return (
-    process.env.NODE_ENV === "production" &&
-    !!process.env.NEXT_PUBLIC_SENTRY_DSN
-  );
+  return process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN;
 }
 
 /**
  * Flush pending events (useful before process exit)
  */
-export async function flushMonitoring(
-  timeout: number = 2000,
-): Promise<boolean> {
+export async function flushMonitoring(timeout: number = 2000): Promise<boolean> {
   try {
     return await Sentry.flush(timeout);
   } catch (error) {
-    console.error("Failed to flush Sentry events:", error);
+    console.error('Failed to flush Sentry events:', error);
     return false;
   }
 }
@@ -318,7 +297,7 @@ export function withErrorTracking<T extends (...args: any[]) => Promise<any>>(
           metadata: {
             ...context?.metadata,
             arguments: args.map((arg) =>
-              typeof arg === "object" ? JSON.stringify(arg) : String(arg),
+              typeof arg === 'object' ? JSON.stringify(arg) : String(arg),
             ),
           },
         },
@@ -338,9 +317,9 @@ export function initializeMonitoring(
   workspaceId?: string,
 ): void {
   // Set page context
-  Sentry.setContext("page", {
+  Sentry.setContext('page', {
     name: pageName,
-    url: typeof window !== "undefined" ? window.location.href : undefined,
+    url: typeof window !== 'undefined' ? window.location.href : undefined,
   });
 
   // Set user if available
@@ -349,7 +328,7 @@ export function initializeMonitoring(
   }
 
   // Add breadcrumb for page load
-  addBreadcrumb(`Page loaded: ${pageName}`, "navigation", {
+  addBreadcrumb(`Page loaded: ${pageName}`, 'navigation', {
     workspace_id: workspaceId,
   });
 }

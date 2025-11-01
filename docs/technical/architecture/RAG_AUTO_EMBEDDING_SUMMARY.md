@@ -105,12 +105,12 @@ I reviewed your comprehensive OpenAI documentation folder. Here are the key insi
 
 ```javascript
 const agent = new Agent({
-  name: "Data agent",
-  instructions: "You are a data agent",
+  name: 'Data agent',
+  instructions: 'You are a data agent',
   tools: [getWeatherTool],
 });
 
-const result = await run(agent, "What is the weather in Tokyo?");
+const result = await run(agent, 'What is the weather in Tokyo?');
 ```
 
 #### 2. **Retrieval API & Vector Stores**
@@ -126,19 +126,19 @@ const result = await run(agent, "What is the weather in Tokyo?");
 ```javascript
 // Create vector store
 const vector_store = await client.vectorStores.create({
-  name: "Support FAQ",
+  name: 'Support FAQ',
 });
 
 // Upload and index file
 await client.vector_stores.files.upload_and_poll({
   vector_store_id: vector_store.id,
-  file: fs.createReadStream("customer_policies.txt"),
+  file: fs.createReadStream('customer_policies.txt'),
 });
 
 // Perform semantic search
 const results = await client.vectorStores.search({
   vector_store_id: vector_store.id,
-  query: "What is the return policy?",
+  query: 'What is the return policy?',
 });
 ```
 
@@ -154,12 +154,12 @@ const results = await client.vectorStores.search({
 
 ```javascript
 const response = await client.responses.create({
-  model: "gpt-4.1",
-  input: "What is deep research by OpenAI?",
+  model: 'gpt-4.1',
+  input: 'What is deep research by OpenAI?',
   tools: [
     {
-      type: "file_search",
-      vector_store_ids: ["<vector_store_id>"],
+      type: 'file_search',
+      vector_store_ids: ['<vector_store_id>'],
       max_num_results: 2, // Optional optimization
     },
   ],

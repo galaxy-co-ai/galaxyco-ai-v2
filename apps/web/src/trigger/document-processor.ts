@@ -8,11 +8,11 @@
  * - Status updates
  */
 
-import { logger, task } from "@trigger.dev/sdk/v3";
-import { documentProcessor } from "@/lib/services/document-processor";
-import { ragService } from "@/lib/services/rag-service";
-import { db } from "@galaxyco/database";
-import { eq } from "drizzle-orm";
+import { logger, task } from '@trigger.dev/sdk/v3';
+import { documentProcessor } from '@/lib/services/document-processor';
+import { ragService } from '@/lib/services/rag-service';
+import { db } from '@galaxyco/database';
+import { eq } from 'drizzle-orm';
 
 // Note: Direct table operations commented out - use DocumentService instead
 // import { documents, documentChunks } from "@galaxyco/database/schema";
@@ -28,25 +28,17 @@ interface ProcessDocumentPayload {
 }
 
 export const processDocumentTask = task({
-  id: "process-document",
+  id: 'process-document',
   maxDuration: 600, // 10 minutes
   run: async (payload: ProcessDocumentPayload, { ctx }) => {
-    const {
-      documentId,
-      userId,
-      workspaceId,
-      fileUrl,
-      fileName,
-      fileSize,
-      mimeType,
-    } = payload;
+    const { documentId, userId, workspaceId, fileUrl, fileName, fileSize, mimeType } = payload;
 
     logger.info(`Starting document processing for ${fileName}`);
 
     try {
       // Step 1: Update status to processing
       // TODO: Use DocumentService.updateDocument instead
-      logger.info("Updating document status to processing");
+      logger.info('Updating document status to processing');
 
       // Step 2: Download and extract text
       const response = await fetch(fileUrl);
@@ -58,12 +50,8 @@ export const processDocumentTask = task({
       logger.info(`Extracted ${extractedText.length} characters from document`);
 
       // Step 3: Generate summary and tags
-      const summaryPromise = (documentProcessor as any).generateSummary(
-        extractedText,
-      );
-      const tagsPromise = (documentProcessor as any).generateTags(
-        extractedText,
-      );
+      const summaryPromise = (documentProcessor as any).generateSummary(extractedText);
+      const tagsPromise = (documentProcessor as any).generateTags(extractedText);
 
       const [summary, tags] = await Promise.all([summaryPromise, tagsPromise]);
 
@@ -89,7 +77,7 @@ export const processDocumentTask = task({
 
       // Step 8: Update document with results
       // TODO: Use DocumentService.updateDocument
-      logger.info("Updating document with processing results");
+      logger.info('Updating document with processing results');
 
       logger.info(`✓ Document processing completed successfully`);
 
@@ -105,7 +93,7 @@ export const processDocumentTask = task({
 
       // Update status to failed
       // TODO: Use DocumentService.updateDocument
-      logger.error("Marking document as failed");
+      logger.error('Marking document as failed');
 
       throw error;
     }
