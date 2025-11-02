@@ -448,6 +448,11 @@ export default function AssistantPage() {
                                 <span className="font-semibold text-sm">
                                   {getToolDisplayName(toolResult.tool)}
                                 </span>
+                                {toolResult.pending && (
+                                  <span className="text-xs text-muted-foreground">
+                                    (Executing...)
+                                  </span>
+                                )}
                               </div>
 
                               {/* Workflow Preview */}
