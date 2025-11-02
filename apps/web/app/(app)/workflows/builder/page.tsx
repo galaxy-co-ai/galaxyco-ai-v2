@@ -7,7 +7,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useWorkspace } from '@/contexts/workspace-context';
 import { FlowBuilder } from '@/components/galaxy/flows/FlowBuilder';
 import { toast } from 'sonner';
@@ -17,8 +17,11 @@ import { executeWorkflow } from '@/components/galaxy/flows/FlowExecutor';
 export default function WorkflowBuilderPage() {
   const { currentWorkspace } = useWorkspace();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSaving, setIsSaving] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
+
+  const templateId = searchParams.get('templateId') || undefined;
 
   if (!currentWorkspace) {
     return (
@@ -135,6 +138,7 @@ export default function WorkflowBuilderPage() {
       <div className="flex-1">
         <FlowBuilder
           workspaceId={currentWorkspace.id}
+          templateId={templateId}
           onSave={handleSave}
           onExecute={handleExecute}
         />

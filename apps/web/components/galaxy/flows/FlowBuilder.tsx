@@ -39,14 +39,59 @@ interface FlowBuilderProps {
     nodes: FlowNode[];
     edges: FlowEdge[];
   };
+  templateId?: string;
   onSave?: (flow: { nodes: FlowNode[]; edges: FlowEdge[]; name: string }) => void;
   onExecute?: (flow: { nodes: FlowNode[]; edges: FlowEdge[] }) => void;
 }
 
-export function FlowBuilder({ workspaceId, initialFlow, onSave, onExecute }: FlowBuilderProps) {
+export function FlowBuilder({
+  workspaceId,
+  initialFlow,
+  templateId,
+  onSave,
+  onExecute,
+}: FlowBuilderProps) {
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [workflowName, setWorkflowName] = useState('');
+
+  // Load template if templateId is provided
+  useEffect(() => {
+    if (templateId && !initialFlow) {
+      loadTemplate(templateId);
+    }
+  }, [templateId]);
+
+  async function loadTemplate(id: string) {
+    try {
+      setIsGenerating(true);
+      const response = await fetch(`/api/templates/${id}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to load template');
+      }
+
+      const data = await response.json();
+      const template = data.template;
+
+      // Set workflow name from template
+      setWorkflowName(template.name);
+
+      // Load template nodes and edges
+      const flowNodes = template.previewData.nodes as FlowNode[];
+      const flowEdges = template.previewData.edges as FlowEdge[];
+
+      setNodes(transformToReactFlowNodes(flowNodes));
+      setEdges(transformToReactFlowEdges(flowEdges));
+
+      toast.success(`Template "${template.name}" loaded!`);
+    } catch (error) {
+      console.error('Error loading template:', error);
+      toast.error('Failed to load template');
+    } finally {
+      setIsGenerating(false);
+    }
+  }
 
   // Transform FlowNode to React Flow Node
   const transformToReactFlowNodes = (flowNodes: FlowNode[]): Node[] => {

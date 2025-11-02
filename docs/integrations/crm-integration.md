@@ -1,7 +1,7 @@
 # CRM Integrations - Complete Guide
 
-**Providers:** HubSpot, Pipedrive  
-**Status:** ✅ Production Ready  
+**Providers:** HubSpot, Pipedrive
+**Status:** ✅ Production Ready
 **Last Updated:** November 2, 2025
 
 ---
@@ -525,7 +525,7 @@ Body: {
 
 ---
 
-**Status:** ✅ Production Ready  
-**Tests:** 14+ comprehensive tests  
-**Coverage:** OAuth, Contacts, Deals, Search, Errors  
+**Status:** ✅ Production Ready
+**Tests:** 14+ comprehensive tests
+**Coverage:** OAuth, Contacts, Deals, Search, Errors
 **Providers:** HubSpot, Pipedrive
