@@ -1,27 +1,28 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Spinner as KiboSpinner } from '@/src/components/kibo-ui/spinner';
 import { cn } from '@/lib/utils';
 
 interface SpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  variant?: 'default' | 'throbber' | 'pinwheel' | 'ring' | 'bars';
 }
 
 /**
- * Loading Spinner Component
+ * Loading Spinner Component (Kibo UI)
  *
- * Animated spinner for loading states
+ * Animated spinner for loading states using Kibo UI Spinner
  */
-export function Spinner({ size = 'md', className }: SpinnerProps) {
-  const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-6 w-6',
-    lg: 'h-8 w-8',
-    xl: 'h-12 w-12',
+export function Spinner({ size = 'md', className, variant = 'default' }: SpinnerProps) {
+  const sizeMap = {
+    sm: 16,
+    md: 24,
+    lg: 32,
+    xl: 48,
   };
 
-  return <Loader2 className={cn('animate-spin', sizeClasses[size], className)} />;
+  return <KiboSpinner variant={variant} size={sizeMap[size]} className={cn(className)} />;
 }
 
 /**

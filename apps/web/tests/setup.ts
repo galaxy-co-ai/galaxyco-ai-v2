@@ -1,11 +1,22 @@
-import '@testing-library/jest-dom';
+/**
+ * Vitest Test Setup
+ */
+
 import { expect, afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 
 // Cleanup after each test
 afterEach(() => {
   cleanup();
 });
+
+// Polyfill ResizeObserver for React Flow
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
@@ -14,55 +25,19 @@ vi.mock('next/navigation', () => ({
     replace: vi.fn(),
     prefetch: vi.fn(),
     back: vi.fn(),
-    pathname: '/',
-    query: {},
   }),
   usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(),
 }));
 
-// Mock Clerk auth
-vi.mock('@clerk/nextjs', () => ({
-  auth: () => ({
-    userId: 'test-user-id',
-    sessionId: 'test-session-id',
-  }),
-  useAuth: () => ({
-    userId: 'test-user-id',
-    sessionId: 'test-session-id',
-    isLoaded: true,
-    isSignedIn: true,
-  }),
-  useUser: () => ({
-    user: {
-      id: 'test-user-id',
-      firstName: 'Test',
-      lastName: 'User',
-      emailAddresses: [{ emailAddress: 'test@example.com' }],
+// Mock workspace context
+vi.mock('@/contexts/workspace-context', () => ({
+  useWorkspace: () => ({
+    currentWorkspace: {
+      id: 'test-workspace',
+      name: 'Test Workspace',
     },
-    isLoaded: true,
-    isSignedIn: true,
+    workspaces: [],
+    isLoading: false,
   }),
-  ClerkProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
-
-// Mock environment variables
-process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = 'test-clerk-key';
-process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
-
-// Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-// Mock scrollIntoView
-Element.prototype.scrollIntoView = vi.fn();
-
-// Suppress console errors in tests (optional)
-global.console = {
-  ...console,
-  error: vi.fn(),
-  warn: vi.fn(),
-};

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ListPage } from '@/components/templates/list-page';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,6 +34,7 @@ interface Workflow {
 }
 
 export default function WorkflowsPage() {
+  const router = useRouter();
   const { currentWorkspace } = useWorkspace();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -129,7 +131,7 @@ export default function WorkflowsPage() {
       onFilterChange={handleFilterChange}
       onClearFilters={handleClearFilters}
       actions={
-        <Button size="sm">
+        <Button size="sm" onClick={() => router.push('/workflows/builder')}>
           <Plus className="mr-2 h-4 w-4" />
           Create Workflow
         </Button>
@@ -137,7 +139,7 @@ export default function WorkflowsPage() {
       isEmpty={workflows.length === 0}
       emptyMessage="No workflows yet. Create your first workflow to chain multiple agents together."
       emptyAction={
-        <Button>
+        <Button onClick={() => router.push('/workflows/builder')}>
           <Plus className="mr-2 h-4 w-4" />
           Create Workflow
         </Button>

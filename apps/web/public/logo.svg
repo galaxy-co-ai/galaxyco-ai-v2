@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Framer-style gradient -->
+    <linearGradient id="framerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0099FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0055FF;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Subtle shadow gradient -->
+    <linearGradient id="shadowGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.15" />
+    </linearGradient>
+
+    <!-- Subtle highlight -->
+    <radialGradient id="highlightGradient" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Rounded square background with Framer gradient -->
+  <rect x="32" y="32" width="448" height="448" rx="90" fill="url(#framerGradient)"/>
+
+  <!-- Subtle highlight overlay -->
+  <rect x="32" y="32" width="448" height="448" rx="90" fill="url(#highlightGradient)"/>
+
+  <!-- "G" Symbol - Modern, geometric design inspired by Framer's clean aesthetic -->
+  <g transform="translate(256, 256)">
+    <!-- Outer ring segment -->
+    <path d="M -80 -120 L 80 -120 L 80 -60 L -20 -60 L -20 60 L 80 60 L 80 0 L 20 0 L 20 40 L 40 40 L 40 20 L 20 20 L 20 100 L -80 100 L -80 -120 Z"
+          fill="white"
+          opacity="0.98"/>
+
+    <!-- Subtle inner shadow for depth -->
+    <path d="M -80 -120 L 80 -120 L 80 -60 L -20 -60 L -20 60 L 80 60 L 80 0 L 20 0 L 20 40 L 40 40 L 40 20 L 20 20 L 20 100 L -80 100 L -80 -120 Z"
+          fill="url(#shadowGradient)"
+          opacity="0.1"/>
+  </g>
+</svg>
+
