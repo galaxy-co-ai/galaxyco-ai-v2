@@ -147,16 +147,8 @@ export default function DashboardPage() {
             value={stats?.agents.active || 0}
             total={stats?.agents.total || 0}
           />
-          <MetricCard
-            icon={Users}
-            label="Customers"
-            value={stats?.customers.total || 0}
-          />
-          <MetricCard
-            icon={Activity}
-            label="Projects"
-            value={stats?.projects.total || 0}
-          />
+          <MetricCard icon={Users} label="Customers" value={stats?.customers.total || 0} />
+          <MetricCard icon={Activity} label="Projects" value={stats?.projects.total || 0} />
           <MetricCard
             icon={DollarSign}
             label="Revenue (30d)"
@@ -215,7 +207,9 @@ function MetricCard({ icon: Icon, label, value, total }: MetricCardProps) {
       <div className="text-sm text-muted-foreground mb-1">{label}</div>
       <div className="text-3xl font-semibold">
         {value}
-        {total ? <span className="text-sm text-muted-foreground font-normal"> / {total}</span> : null}
+        {total ? (
+          <span className="text-sm text-muted-foreground font-normal"> / {total}</span>
+        ) : null}
       </div>
     </div>
   );
@@ -306,7 +300,9 @@ function DashboardFooter() {
     <div className="space-y-6 pt-8 border-t">
       <div>
         <h2 className="text-2xl font-semibold mb-2">Resources</h2>
-        <p className="text-muted-foreground">Essential tools and guides for power users and executives</p>
+        <p className="text-muted-foreground">
+          Essential tools and guides for power users and executives
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

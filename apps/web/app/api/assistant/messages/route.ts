@@ -36,16 +36,13 @@ export async function GET(req: Request) {
 
     // Verify user owns this conversation
     const conversation = await db.query.aiConversations.findFirst({
-      where: and(
-        eq(aiConversations.id, conversationId),
-        eq(aiConversations.userId, user.id)
-      ),
+      where: and(eq(aiConversations.id, conversationId), eq(aiConversations.userId, user.id)),
     });
 
     if (!conversation) {
       return NextResponse.json(
         { error: 'Conversation not found or unauthorized' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -59,10 +56,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ messages: conversationMessages });
   } catch (error) {
     console.error('Load messages error:', error);
-    return NextResponse.json(
-      { error: 'Failed to load messages' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to load messages' }, { status: 500 });
   }
 }
 
@@ -95,16 +89,13 @@ export async function POST(req: Request) {
 
     // Verify user owns this conversation
     const conversation = await db.query.aiConversations.findFirst({
-      where: and(
-        eq(aiConversations.id, conversationId),
-        eq(aiConversations.userId, user.id)
-      ),
+      where: and(eq(aiConversations.id, conversationId), eq(aiConversations.userId, user.id)),
     });
 
     if (!conversation) {
       return NextResponse.json(
         { error: 'Conversation not found or unauthorized' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -117,7 +108,7 @@ export async function POST(req: Request) {
           role: msg.role,
           content: msg.content,
           metadata: msg.metadata || {},
-        }))
+        })),
       )
       .returning();
 
@@ -134,9 +125,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ messages: saved });
   } catch (error) {
     console.error('Save messages error:', error);
-    return NextResponse.json(
-      { error: 'Failed to save messages' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to save messages' }, { status: 500 });
   }
 }

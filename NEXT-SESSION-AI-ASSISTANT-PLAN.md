@@ -9,6 +9,7 @@
 ## 🎯 What We're Building
 
 **A production-ready AI Assistant that:**
+
 - Feels as smooth as ChatGPT/Claude
 - Integrates with our Grid canvas for tool visualization
 - Handles files, voice, and complex tool execution
@@ -16,6 +17,7 @@
 - Uses our Linear minimal design language
 
 **Reference products:**
+
 - ChatGPT (conversation flow, file handling)
 - Claude (artifacts/canvas integration)
 - Perplexity (citations, sources)
@@ -26,9 +28,11 @@
 ## 📊 Session Breakdown (6 hours)
 
 ### **Hour 1: Foundation & Page Setup**
+
 **Goal:** Create the `/assistant` page with ChatGPT-style layout
 
 **Tasks:**
+
 1. Create `apps/web/app/(app)/assistant/page.tsx`
 2. Implement layout:
    - Center-aligned chat area (max-width 800px)
@@ -39,26 +43,22 @@
 4. Test routing
 
 **Key Design Elements:**
+
 ```tsx
 <div className="flex h-screen">
   {/* Collapsible History Sidebar */}
-  <aside className="w-[280px] border-r">
-    {/* Conversation list */}
-  </aside>
+  <aside className="w-[280px] border-r">{/* Conversation list */}</aside>
 
   {/* Main Chat Area */}
   <main className="flex-1 flex flex-col">
-    <div className="flex-1 overflow-y-auto">
-      {/* Messages */}
-    </div>
-    <div className="border-t p-4">
-      {/* Input area */}
-    </div>
+    <div className="flex-1 overflow-y-auto">{/* Messages */}</div>
+    <div className="border-t p-4">{/* Input area */}</div>
   </main>
 </div>
 ```
 
 **Success criteria:**
+
 - Page renders without errors
 - Layout matches ChatGPT structure
 - Responsive (collapses sidebar on mobile)
@@ -66,6 +66,7 @@
 ---
 
 ### **Hour 2: Chat Components**
+
 **Goal:** Build reusable chat UI components
 
 **Create these files:**
@@ -95,6 +96,7 @@
    - Keyboard shortcuts (Enter to send, Shift+Enter for newline)
 
 **Component structure:**
+
 ```tsx
 // MessageBubble.tsx
 interface MessageBubbleProps {
@@ -116,6 +118,7 @@ interface InputAreaProps {
 ```
 
 **Success criteria:**
+
 - Messages display correctly
 - Input handles multi-line text
 - Linear design applied (minimal, spacious)
@@ -124,6 +127,7 @@ interface InputAreaProps {
 ---
 
 ### **Hour 3: API Routes - Streaming Chat**
+
 **Goal:** Implement OpenAI streaming chat API
 
 **Create these files:**
@@ -152,9 +156,9 @@ export async function POST(req: Request) {
     messages: [
       {
         role: 'system',
-        content: 'You are GalaxyCo AI Assistant, helping users build and manage AI agents...'
+        content: 'You are GalaxyCo AI Assistant, helping users build and manage AI agents...',
       },
-      ...messages
+      ...messages,
     ],
   });
 
@@ -170,6 +174,7 @@ export async function POST(req: Request) {
    - DELETE: Delete conversation
 
 **Success criteria:**
+
 - Streaming responses work
 - Conversations persist in database
 - Error handling is user-friendly
@@ -178,6 +183,7 @@ export async function POST(req: Request) {
 ---
 
 ### **Hour 4: Tool Execution & Grid Integration**
+
 **Goal:** AI can execute tools and visualize in Grid canvas
 
 **Create these files:**
@@ -198,6 +204,7 @@ export async function POST(req: Request) {
    - Results display
 
 **Tool execution flow:**
+
 ```typescript
 // AI detects user wants to create workflow
 // 1. AI generates workflow structure
@@ -208,18 +215,17 @@ export async function POST(req: Request) {
 ```
 
 **Integration with Grid:**
+
 ```tsx
 <ExecutionPanel>
   {executingTool === 'create_workflow' && (
-    <GridView
-      workflows={[previewWorkflow]}
-      isPreview={true}
-    />
+    <GridView workflows={[previewWorkflow]} isPreview={true} />
   )}
 </ExecutionPanel>
 ```
 
 **Success criteria:**
+
 - AI can create agents/workflows via chat
 - Grid canvas shows live preview
 - User can approve/reject actions
@@ -228,6 +234,7 @@ export async function POST(req: Request) {
 ---
 
 ### **Hour 5: File Upload & Advanced Features**
+
 **Goal:** Handle file uploads, voice input, conversation history
 
 **Create these files:**
@@ -257,6 +264,7 @@ export async function POST(req: Request) {
    - New conversation button
 
 **File handling flow:**
+
 ```typescript
 // User uploads CSV
 // 1. File sent to /api/assistant/upload
@@ -268,6 +276,7 @@ export async function POST(req: Request) {
 ```
 
 **Success criteria:**
+
 - Files upload successfully
 - AI can read and analyze files
 - Voice input works (Chrome/Edge)
@@ -276,6 +285,7 @@ export async function POST(req: Request) {
 ---
 
 ### **Hour 6: Polish, Testing & Edge Cases**
+
 **Goal:** Production-ready quality
 
 **Tasks:**
@@ -309,6 +319,7 @@ export async function POST(req: Request) {
      - History → conversations persist
 
 **Success criteria:**
+
 - Feels as smooth as ChatGPT
 - All features work end-to-end
 - No TypeScript/linter errors
@@ -347,19 +358,15 @@ apps/web/
 ## 🎨 Design Standards (Linear Minimal)
 
 ### Colors
+
 ```css
 /* Use existing design tokens */
---background: white
---foreground: black
---muted: #F5F5F5 (subtle fills)
---primary: #0055FF (CTAs only)
-
-/* Message bubbles */
-User: bg-primary text-white
-AI: bg-muted/30 text-foreground
+--background: white --foreground: black --muted: #f5f5f5 (subtle fills) --primary: #0055ff
+  (CTAs only) /* Message bubbles */ User: bg-primary text-white AI: bg-muted/30 text-foreground;
 ```
 
 ### Spacing
+
 ```css
 /* Generous Linear spacing */
 Message padding: 24px
@@ -369,6 +376,7 @@ Gap between messages: 24px
 ```
 
 ### Typography
+
 ```css
 /* Inter font (already loaded) */
 Messages: 16px, line-height 1.6
@@ -377,6 +385,7 @@ Input: 16px
 ```
 
 ### Components
+
 - Use shadcn/ui Button, Input, Dialog
 - Use Kibo UI Spinner for loading
 - Use GridView for workflow previews
@@ -387,6 +396,7 @@ Input: 16px
 ## 🔧 Technical Implementation Details
 
 ### 1. Streaming Setup
+
 ```bash
 # Install AI SDK
 cd apps/web
@@ -395,6 +405,7 @@ pnpm add openai
 ```
 
 ### 2. Database Schema
+
 ```sql
 -- Add to existing schema
 CREATE TABLE conversations (
@@ -420,12 +431,14 @@ CREATE INDEX idx_messages_conversation ON messages(conversation_id);
 ```
 
 ### 3. Environment Variables
+
 ```bash
 # Add to .env.local (already have OPENAI_API_KEY)
 OPENAI_API_KEY=sk-...
 ```
 
 ### 4. State Management
+
 ```typescript
 // Use React hooks + React Query
 import { useChat } from 'ai/react';
@@ -444,6 +457,7 @@ const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat(
 Before considering complete:
 
 **Functionality:**
+
 - [ ] Chat sends messages
 - [ ] Streaming responses work
 - [ ] Conversations save to database
@@ -456,6 +470,7 @@ Before considering complete:
 - [ ] Message actions work (copy, regenerate)
 
 **Design:**
+
 - [ ] Linear minimal aesthetic throughout
 - [ ] Generous spacing (24px+)
 - [ ] Subtle shadows (linear-shadow class)
@@ -465,6 +480,7 @@ Before considering complete:
 - [ ] Loading states use Kibo Spinner
 
 **Code Quality:**
+
 - [ ] TypeScript: 0 errors
 - [ ] Linter: Clean
 - [ ] No console.logs
@@ -473,6 +489,7 @@ Before considering complete:
 - [ ] Try-catch on all async functions
 
 **Performance:**
+
 - [ ] Streaming feels instant
 - [ ] Long conversations virtualized
 - [ ] File uploads show progress
@@ -483,17 +500,20 @@ Before considering complete:
 ## 🚀 Execution Strategy
 
 ### Start of Session:
+
 1. Read this document (5 min)
 2. Review ChatGPT for UX reference (5 min)
 3. Start building hour 1
 
 ### During Session:
+
 - Build → Test → Fix → Move on
 - Commit after each hour
 - Test streaming immediately (don't wait)
 - Use existing Grid components (already built!)
 
 ### End of Session:
+
 - Full quality check (checklist above)
 - TypeScript clean
 - Linter clean
@@ -505,6 +525,7 @@ Before considering complete:
 ## 💡 Pro Tips
 
 **Speed Hacks:**
+
 1. Copy ChatGPT's keyboard shortcuts exactly
 2. Use `useChat` hook from Vercel AI SDK (handles streaming)
 3. Reuse our GridView component (already perfect)
@@ -512,12 +533,14 @@ Before considering complete:
 5. Browser Speech API for voice (no backend needed)
 
 **Common Pitfalls to Avoid:**
+
 - ❌ Don't build custom streaming (use Vercel AI SDK)
 - ❌ Don't over-engineer tool system (start with 3-4 tools)
 - ❌ Don't add authentication logic (use existing Clerk)
 - ❌ Don't rebuild Grid (import existing GridView)
 
 **Quality Shortcuts:**
+
 - Copy exact spacing from Linear screenshots
 - Use existing design tokens (don't invent new)
 - Test streaming on first message (catches issues early)
@@ -528,6 +551,7 @@ Before considering complete:
 ## 🎯 Success Criteria
 
 **MVP (Must Have):**
+
 - ✅ Chat with streaming GPT-4 responses
 - ✅ Conversation history
 - ✅ File upload + AI reads files
@@ -536,6 +560,7 @@ Before considering complete:
 - ✅ All quality gates pass
 
 **Nice to Have (if time):**
+
 - Voice input
 - Message editing
 - Conversation search
@@ -547,12 +572,14 @@ Before considering complete:
 ## 📚 References
 
 **Review Before Starting:**
+
 1. `LINEAR-DESIGN-SYSTEM-ANALYSIS.md` - Design standards
 2. `DESIGN-SYSTEM.md` - Our design tokens
 3. ChatGPT - Live reference for UX
 4. `components/galaxy/flows/GridView.tsx` - Use this for previews
 
 **Code Examples:**
+
 - Streaming: https://sdk.vercel.ai/docs/ai-sdk-ui/chatbot
 - File upload: Use existing `/api/workflows` patterns
 - Grid integration: Import GridView component
@@ -582,6 +609,7 @@ pnpm typecheck && pnpm lint
 ## 🎉 Expected Outcome
 
 **After 6 hours, you'll have:**
+
 - Production-ready AI Assistant
 - ChatGPT-quality UX
 - Full integration with Grid canvas
@@ -597,6 +625,7 @@ pnpm typecheck && pnpm lint
 ## 📝 Notes from Current Session
 
 **What's Already Built (Can Reuse):**
+
 - ✅ GridView component (isometric workflow cards)
 - ✅ NodeSidebar component (context panel)
 - ✅ 3D FlowNodes (Make.com style)
@@ -605,11 +634,13 @@ pnpm typecheck && pnpm lint
 - ✅ Utility classes (linear-shadow, perspective-1000)
 
 **Database Connection:**
+
 - Already configured (Neon Postgres)
 - Use existing Drizzle ORM patterns
 - Multi-tenant (workspace_id filter)
 
 **Authentication:**
+
 - Clerk already integrated
 - Get user from `auth()` in Server Components
 - Get workspaceId from context
@@ -621,4 +652,3 @@ pnpm typecheck && pnpm lint
 **Impact:** HIGH - Major feature completion
 
 **LET'S BUILD THE BEST AI ASSISTANT! 🤖✨**
-

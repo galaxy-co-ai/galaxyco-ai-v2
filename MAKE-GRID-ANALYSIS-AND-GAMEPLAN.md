@@ -9,16 +9,20 @@
 ## 🔬 What Makes Make.com Grid EXCEPTIONAL
 
 ### 1. Visual Language (Brilliant Marketing)
+
 **Their Message:**
+
 > "So your workflows don't just run...they adapt"
 
 **Visual Metaphor:**
+
 - Workflows flow like water (animated dots)
 - Branches show decision points
 - Colors indicate status/type
 - Icons = instant recognition
 
 **Copy for GalaxyCo:**
+
 > "Build AI agents visually. See them work in real-time."
 
 ---
@@ -26,6 +30,7 @@
 ### 2. The Grid View (Overview Mode)
 
 **What I See:**
+
 ```
 ┌─────────────────────────────────────────────┐
 │  Grid View - All Scenarios                  │
@@ -46,6 +51,7 @@
 ```
 
 **Why it's brilliant:**
+
 - See ALL workflows at once
 - Spot issues instantly (red dots)
 - Beautiful isometric perspective
@@ -58,12 +64,14 @@
 **Node Types I See:**
 
 **Purple Cylinders (Scenarios/Core):**
+
 - 3D cylindrical shape
 - White "M" logo
 - Central hub nodes
 - Connect to multiple services
 
 **Service Nodes (Hexagons/Shapes):**
+
 - Blue cubes (databases)
 - Green hexagons (webhooks)
 - Dark purple hexagons (Slack)
@@ -71,6 +79,7 @@
 - Yellow (Google services)
 
 **Connections:**
+
 - Solid lines = active flow
 - Dashed lines = dependencies
 - Arrows = direction
@@ -81,6 +90,7 @@
 ### 4. The Sidebar (Context Panel)
 
 **Slides in from right:**
+
 ```
 ┌─────────────────────────────┐
 │ Selected Node Details       │
@@ -103,6 +113,7 @@
 ```
 
 **Why it works:**
+
 - Context without changing view
 - Shows inputs/outputs clearly
 - Properties editable inline
@@ -113,18 +124,21 @@
 ### 5. Visual Indicators
 
 **Purple Circles (Highlights):**
+
 - Show related nodes
 - Indicate dependencies
 - Visual grouping
 - Hover effect
 
 **Error States:**
+
 - Red exclamation marks
 - Clear visual alert
 - "Need your attention" banner
 - Count of issues
 
 **Operations Counter:**
+
 - Shows usage (2,881 operations)
 - Cost tracking
 - Performance metrics
@@ -136,12 +150,14 @@
 ### We Already Have React Flow! ✅
 
 **Current State:**
+
 - ✅ Visual Flow Builder working
 - ✅ Node types defined
 - ✅ Connections working
 - ✅ Auto-layout with elkjs
 
 **Need to Add:**
+
 1. Make.com style 3D nodes
 2. Grid overview mode
 3. Sidebar detail panel
@@ -154,14 +170,14 @@
 ## 🚀 Phase 1: Upgrade Nodes to Make.com Style (2 hours)
 
 ### Current Nodes (Basic)
+
 ```tsx
 // Simple rounded rectangles with gradients
-<div className="rounded-lg p-4 bg-gradient-to-br from-purple-500 to-purple-600">
-  {label}
-</div>
+<div className="rounded-lg p-4 bg-gradient-to-br from-purple-500 to-purple-600">{label}</div>
 ```
 
 ### Upgrade to Make.com 3D Style
+
 ```tsx
 // 3D isometric nodes like Make.com
 <div className="relative perspective-1000">
@@ -169,10 +185,13 @@
   <div className="absolute bottom-0 w-full h-2 bg-black/20 blur-md" />
 
   {/* Main node - isometric effect */}
-  <div className="relative transform-gpu" style={{
-    transform: 'rotateX(60deg) rotateZ(45deg)',
-    transformStyle: 'preserve-3d'
-  }}>
+  <div
+    className="relative transform-gpu"
+    style={{
+      transform: 'rotateX(60deg) rotateZ(45deg)',
+      transformStyle: 'preserve-3d',
+    }}
+  >
     {/* Top face */}
     <div className="bg-gradient-to-br from-purple-400 to-purple-600 rounded-t-lg p-6">
       <ServiceIcon />
@@ -188,6 +207,7 @@
 ```
 
 **Visual Features:**
+
 - ✅ 3D isometric perspective
 - ✅ Shadows for depth
 - ✅ Service-specific colors
@@ -199,6 +219,7 @@
 ## 🚀 Phase 2: Add Grid Overview Mode (3 hours)
 
 ### Toggle Views
+
 ```tsx
 // View switcher
 <Tabs>
@@ -218,16 +239,13 @@
 ```
 
 ### Grid Overview Component
+
 ```tsx
 function GridOverview() {
   return (
     <div className="grid grid-cols-3 gap-6 p-8">
-      {workflows.map(workflow => (
-        <WorkflowCard
-          key={workflow.id}
-          workflow={workflow}
-          view="isometric"
-        />
+      {workflows.map((workflow) => (
+        <WorkflowCard key={workflow.id} workflow={workflow} view="isometric" />
       ))}
     </div>
   );
@@ -244,9 +262,7 @@ function WorkflowCard({ workflow }) {
 
           {/* Stats */}
           <div className="mt-4 flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">
-              {workflow.executionCount} runs
-            </span>
+            <span className="text-sm text-muted-foreground">{workflow.executionCount} runs</span>
             {workflow.hasErrors && (
               <span className="text-red-500">
                 <AlertCircle className="size-4" />
@@ -271,11 +287,10 @@ function WorkflowCard({ workflow }) {
 ## 🚀 Phase 3: Context Sidebar Panel (2 hours)
 
 ### Slide-in Panel (Linear/Make.com Style)
+
 ```tsx
 <Sheet>
-  <SheetTrigger>
-    {/* Click on any node */}
-  </SheetTrigger>
+  <SheetTrigger>{/* Click on any node */}</SheetTrigger>
 
   <SheetContent side="right" className="w-[400px]">
     <SheetHeader>
@@ -300,7 +315,7 @@ function WorkflowCard({ workflow }) {
       {/* Links (Inputs/Outputs) */}
       <div>
         <h3 className="font-semibold mb-2">Links ({node.connections.length})</h3>
-        {node.connections.map(conn => (
+        {node.connections.map((conn) => (
           <div key={conn.id} className="flex items-center gap-2 p-2 rounded hover:bg-accent">
             <NodeIcon type={conn.sourceType} />
             <Arrow direction={conn.direction} />
@@ -334,6 +349,7 @@ function WorkflowCard({ workflow }) {
 ## 🚀 Phase 4: Advanced Visual Features (2 hours)
 
 ### 1. Dependency Visualization (Purple Circles)
+
 ```tsx
 // When node is selected
 function HighlightDependencies({ selectedNode }) {
@@ -341,7 +357,7 @@ function HighlightDependencies({ selectedNode }) {
 
   return (
     <>
-      {dependencies.map(dep => (
+      {dependencies.map((dep) => (
         <motion.circle
           key={dep.id}
           cx={dep.x}
@@ -361,6 +377,7 @@ function HighlightDependencies({ selectedNode }) {
 ```
 
 ### 2. Animated Connections
+
 ```tsx
 // Dotted lines with flow animation
 <svg>
@@ -383,6 +400,7 @@ function HighlightDependencies({ selectedNode }) {
 ```
 
 ### 3. Service Integration Icons
+
 ```tsx
 // Use actual service logos
 const SERVICE_ICONS = {
@@ -397,11 +415,7 @@ function ServiceNode({ service }) {
   return (
     <CreditCard className="relative">
       {/* Service icon */}
-      <img
-        src={SERVICE_ICONS[service]}
-        className="size-12"
-        alt={service}
-      />
+      <img src={SERVICE_ICONS[service]} className="size-12" alt={service} />
       {/* Node status */}
       <Status variant={node.status} />
     </CreditCard>
@@ -416,30 +430,35 @@ function ServiceNode({ service }) {
 ### Node Types
 
 **1. Start Node (Light Blue Hexagon)**
+
 - Color: #60A5FA (light blue)
 - Icon: Play or trigger symbol
 - Shape: Hexagon
 - Purpose: Workflow trigger
 
 **2. AI Agent Node (Purple Cylinder)**
+
 - Color: #8B5CF6 (purple)
 - Icon: Robot or brain
 - Shape: 3D cylinder
 - Purpose: AI processing step
 
 **3. Integration Node (Service-Specific)**
+
 - Color: Brand colors (Slack purple, Google colors, etc.)
 - Icon: Service logo
 - Shape: Hexagon or cube
 - Purpose: External service call
 
 **4. Decision Node (Green Diamond)**
+
 - Color: #10B981 (green)
 - Icon: Fork/branch symbol
 - Shape: Diamond
 - Purpose: Conditional logic
 
 **5. End Node (Red/Green)**
+
 - Color: Green (#10B981) for success, Red (#EF4444) for error
 - Icon: Check or X
 - Shape: Shield or octagon
@@ -450,18 +469,21 @@ function ServiceNode({ service }) {
 ### Connection Types
 
 **Solid Lines:**
+
 - Active, direct flow
 - Purple color (#8B5CF6)
 - Animated dots flowing along path
 - Arrow indicates direction
 
 **Dashed Lines:**
+
 - Dependencies
 - Configuration links
 - Tool connections
 - Lighter purple
 
 **Highlighted Paths:**
+
 - When node selected
 - Show full dependency chain
 - Purple glow effect
@@ -479,6 +501,7 @@ function ServiceNode({ service }) {
 **File:** `apps/web/components/galaxy/flows/FlowNodes.tsx`
 
 **Changes:**
+
 ```tsx
 // Add 3D perspective transforms
 const Node3D = ({ type, data }) => {
@@ -489,15 +512,13 @@ const Node3D = ({ type, data }) => {
       transition={{ type: 'spring', stiffness: 300 }}
     >
       {/* Main node with isometric effect */}
-      <div className={cn(
-        "relative transform-gpu",
-        "rounded-lg shadow-xl",
-        NODE_STYLES[type]
-      )}
-      style={{
-        transform: 'rotateX(5deg)',
-        transformStyle: 'preserve-3d',
-      }}>
+      <div
+        className={cn('relative transform-gpu', 'rounded-lg shadow-xl', NODE_STYLES[type])}
+        style={{
+          transform: 'rotateX(5deg)',
+          transformStyle: 'preserve-3d',
+        }}
+      >
         {/* Top face */}
         <div className="p-6 rounded-t-lg bg-gradient-to-br from-current via-current to-current/80">
           <ServiceIcon icon={data.icon} />
@@ -508,9 +529,7 @@ const Node3D = ({ type, data }) => {
       </div>
 
       {/* Label */}
-      <div className="mt-3 text-center text-sm font-medium">
-        {data.label}
-      </div>
+      <div className="mt-3 text-center text-sm font-medium">{data.label}</div>
     </motion.div>
   );
 };
@@ -533,11 +552,7 @@ export function GridView({ workflows }) {
     <div className="p-8 bg-gradient-to-br from-background via-purple-50/20 to-background dark:from-background dark:via-purple-950/20 dark:to-background">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {workflows.map((workflow, index) => (
-          <WorkflowGridCard
-            key={workflow.id}
-            workflow={workflow}
-            delay={index * 0.1}
-          />
+          <WorkflowGridCard key={workflow.id} workflow={workflow} delay={index * 0.1} />
         ))}
       </div>
     </div>
@@ -555,10 +570,7 @@ function WorkflowGridCard({ workflow, delay }) {
       <CreditCard className="relative bg-white dark:bg-neutral-900 shadow-lg hover:shadow-2xl transition-shadow">
         {/* Mini node network visualization */}
         <div className="h-48 p-4">
-          <MiniNodeNetwork
-            nodes={workflow.nodes}
-            edges={workflow.edges}
-          />
+          <MiniNodeNetwork nodes={workflow.nodes} edges={workflow.edges} />
         </div>
 
         {/* Workflow info */}
@@ -600,7 +612,7 @@ function MiniNodeNetwork({ nodes, edges }) {
   return (
     <svg viewBox="0 0 200 150" className="w-full h-full">
       {/* Connections */}
-      {edges.map(edge => (
+      {edges.map((edge) => (
         <line
           key={edge.id}
           x1={edge.x1 / 10}
@@ -614,7 +626,7 @@ function MiniNodeNetwork({ nodes, edges }) {
       ))}
 
       {/* Nodes */}
-      {nodes.map(node => (
+      {nodes.map((node) => (
         <circle
           key={node.id}
           cx={node.x / 10}
@@ -653,15 +665,12 @@ function MiniNodeNetwork({ nodes, edges }) {
     <div className="mt-6 space-y-6">
       {/* Integration */}
       <Section title="Integration">
-        <IntegrationBadge
-          service={selectedNode.integration}
-          icon={selectedNode.integration.icon}
-        />
+        <IntegrationBadge service={selectedNode.integration} icon={selectedNode.integration.icon} />
       </Section>
 
       {/* Links */}
       <Section title={`Links (${selectedNode.connections.length})`}>
-        {selectedNode.connections.map(conn => (
+        {selectedNode.connections.map((conn) => (
           <ConnectionRow
             key={conn.id}
             connection={conn}
@@ -677,7 +686,9 @@ function MiniNodeNetwork({ nodes, edges }) {
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button variant="outline" size="sm">Configure</Button>
+        <Button variant="outline" size="sm">
+          Configure
+        </Button>
         <Button size="sm">Test Run</Button>
       </div>
     </div>
@@ -690,6 +701,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ### Phase 4: Visual Polish (Tonight - 2 hours)
 
 **1. Purple Highlight Circles**
+
 ```tsx
 // When node selected, show dependency circles
 <motion.div
@@ -706,6 +718,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ```
 
 **2. Animated Data Flow**
+
 ```tsx
 // Dots flowing along connections
 <motion.circle
@@ -725,16 +738,20 @@ function MiniNodeNetwork({ nodes, edges }) {
 ```
 
 **3. Error States**
+
 ```tsx
 // Red exclamation marks for errors
-{node.hasError && (
-  <div className="absolute -top-2 -right-2 size-6 rounded-full bg-red-500 flex items-center justify-center shadow-lg">
-    <AlertCircle className="size-4 text-white" />
-  </div>
-)}
+{
+  node.hasError && (
+    <div className="absolute -top-2 -right-2 size-6 rounded-full bg-red-500 flex items-center justify-center shadow-lg">
+      <AlertCircle className="size-4 text-white" />
+    </div>
+  );
+}
 ```
 
 **4. Operation Counters**
+
 ```tsx
 // Show run count on nodes
 <Badge className="absolute bottom-2 right-2 bg-white/90 text-foreground">
@@ -748,12 +765,14 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 🎯 Complete Feature List
 
 ### ✅ We Have Now
+
 1. React Flow canvas
 2. Basic node types
 3. Connections
 4. Auto-layout
 
 ### 🚧 Add Tonight
+
 5. 3D isometric nodes (Make.com style)
 6. Grid overview mode
 7. Context sidebar panel
@@ -764,6 +783,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 12. Service integration icons
 
 ### 🚀 Tomorrow
+
 13. Real integration testing
 14. Performance optimization
 15. Keyboard shortcuts
@@ -774,6 +794,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 📊 Quality Comparison
 
 ### Make.com Grid Features
+
 - ✅ Isometric 3D nodes
 - ✅ Grid overview mode
 - ✅ Context sidebar
@@ -784,6 +805,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - ✅ Animated connections
 
 ### GalaxyCo Grid (After Tonight)
+
 - ✅ Isometric 3D nodes (implementing)
 - ✅ Grid overview mode (implementing)
 - ✅ Context sidebar (implementing)
@@ -800,6 +822,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 🚀 Autonomous Execution Plan (Tonight)
 
 ### Hour 1-2: Upgrade Nodes to 3D Isometric
+
 - Modify FlowNodes.tsx
 - Add perspective transforms
 - Implement shadows
@@ -807,6 +830,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - Test thoroughly
 
 ### Hour 3-5: Build Grid Overview Mode
+
 - Create GridView.tsx component
 - Implement isometric cards
 - Mini node network visualization
@@ -815,6 +839,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - Responsive grid
 
 ### Hour 6-7: Add Context Sidebar
+
 - Implement Sheet panel
 - Node details display
 - Links/connections view
@@ -822,6 +847,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - Actions (configure, test)
 
 ### Hour 8-9: Visual Polish
+
 - Purple dependency circles
 - Animated data flow
 - Error states
@@ -829,6 +855,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - Smooth transitions
 
 ### Hour 10: Test & Document
+
 - All tests passing
 - TypeScript clean
 - Documentation complete
@@ -840,12 +867,14 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 📋 Tomorrow's Execution Plan
 
 ### Morning (Review - 1 hour)
+
 - You review overnight work
 - Approve Grid implementation
 - Give feedback
 - Make quick adjustments
 
 ### Afternoon (Build - 6-8 hours)
+
 **With Make.com Grid-quality canvas ready, build:**
 
 1. **AI Assistant** (3-4 hours)
@@ -864,6 +893,7 @@ function MiniNodeNetwork({ nodes, edges }) {
    - Visual connection builder
 
 ### Evening (Polish - 2-4 hours)
+
 - Final visual polish
 - Performance optimization
 - Deploy to production
@@ -874,6 +904,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 🎯 Success Criteria
 
 **Grid Canvas Quality:**
+
 - ✅ Looks as good as Make.com Grid
 - ✅ Smooth 60fps animations
 - ✅ Intuitive node connections
@@ -883,6 +914,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 - ✅ Mobile responsive
 
 **Overall App Quality:**
+
 - ✅ Every page polished
 - ✅ Consistent Framer brand
 - ✅ Professional throughout
@@ -920,6 +952,7 @@ function MiniNodeNetwork({ nodes, edges }) {
 ## 🚀 EXECUTING NOW
 
 **Starting implementation:**
+
 1. Upgrade FlowNodes to 3D isometric
 2. Build Grid overview mode
 3. Add context sidebar
@@ -933,4 +966,3 @@ function MiniNodeNetwork({ nodes, edges }) {
 ---
 
 **Sweet dreams Dalton! When you wake up, we're shipping at 100x speed with Make.com-level UI! 😴🚀✨**
-

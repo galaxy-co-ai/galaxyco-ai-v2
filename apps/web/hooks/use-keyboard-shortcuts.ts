@@ -39,10 +39,7 @@ export function useKeyboardShortcuts(shortcuts: Partial<KeyboardShortcuts>) {
       // Arrow Up: Edit last message (only if input is empty and focused)
       if (e.key === 'ArrowUp') {
         const target = e.target as HTMLElement;
-        if (
-          target.tagName === 'TEXTAREA' &&
-          (target as HTMLTextAreaElement).value === ''
-        ) {
+        if (target.tagName === 'TEXTAREA' && (target as HTMLTextAreaElement).value === '') {
           e.preventDefault();
           shortcuts.ArrowUp?.();
         }
@@ -56,4 +53,3 @@ export function useKeyboardShortcuts(shortcuts: Partial<KeyboardShortcuts>) {
     };
   }, [shortcuts]);
 }
-

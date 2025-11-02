@@ -9,9 +9,11 @@
 ## 🎯 What Makes Linear's UI Exceptional
 
 ### 1. **Visual Hierarchy** ⭐⭐⭐⭐⭐
+
 **Perfect information density without clutter**
 
 **Headline Pattern:**
+
 ```
 Main headline: Large, bold, clear
 "Linear is a purpose-built tool for planning and building products"
@@ -27,24 +29,26 @@ Body: 16px, regular
 ```
 
 ### 2. **Color Palette** ⭐⭐⭐⭐⭐
+
 **Minimal, professional, purple accent**
 
 **Colors:**
+
 ```css
 /* Primary Purple */
---linear-purple: #5E6AD2;
---linear-purple-hover: #4E5AC2;
+--linear-purple: #5e6ad2;
+--linear-purple-hover: #4e5ac2;
 
 /* Neutrals */
---background: #FFFFFF;
+--background: #ffffff;
 --foreground: #000000;
---muted: #F5F5F5;
+--muted: #f5f5f5;
 --muted-foreground: #666666;
 
 /* Accents (minimal use) */
---success: #10B981;
---warning: #F59E0B;
---error: #EF4444;
+--success: #10b981;
+--warning: #f59e0b;
+--error: #ef4444;
 ```
 
 **Rule:** 90% black/white/gray, 10% purple accent
@@ -52,6 +56,7 @@ Body: 16px, regular
 ---
 
 ### 3. **Typography** ⭐⭐⭐⭐⭐
+
 **Inter font, perfect spacing**
 
 ```css
@@ -77,6 +82,7 @@ Body: 0 (normal)
 ---
 
 ### 4. **Spacing System** ⭐⭐⭐⭐⭐
+
 **Generous, breathing room**
 
 ```css
@@ -100,6 +106,7 @@ Between paragraphs: 16px
 ### 5. **Component Patterns** ⭐⭐⭐⭐⭐
 
 #### Navigation
+
 ```
 Clean, minimal top nav:
 - Logo (left)
@@ -110,6 +117,7 @@ Clean, minimal top nav:
 ```
 
 #### Hero Section
+
 ```
 Large headline (center-aligned)
 Supporting text (max-width constrained)
@@ -119,6 +127,7 @@ Clean, no distractions
 ```
 
 #### Feature Cards
+
 ```
 Grid layout (2-3 columns)
 Each card:
@@ -134,7 +143,9 @@ Each card:
 ## 🎨 Linear-Specific UI Patterns
 
 ### Pattern 1: Minimal Borders
+
 **They barely use borders!**
+
 ```css
 /* Instead of borders, they use: */
 background-color: #FAFAFA (subtle fill)
@@ -146,19 +157,23 @@ Dividers: 1px solid #F0F0F0
 ```
 
 ### Pattern 2: Hover States
+
 **Subtle, fast, purposeful**
+
 ```css
 transition: all 150ms ease;
 
 /* On hover: */
 transform: translateY(-2px);
-box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 ```
 
 ### Pattern 3: Button Styles
+
 **Two clear variants**
 
 **Primary (Purple):**
+
 ```css
 background: #5E6AD2;
 color: white;
@@ -171,6 +186,7 @@ hover: background: #4E5AC2;
 ```
 
 **Secondary (Ghost):**
+
 ```css
 background: transparent;
 color: #000000;
@@ -187,6 +203,7 @@ hover: background: #FAFAFA;
 ### Phase 1: Update Design Tokens (30 min)
 
 **Modify `apps/web/app/globals.css`:**
+
 ```css
 :root {
   /* Linear-inspired palette */
@@ -209,17 +226,27 @@ hover: background: #FAFAFA;
 ### Phase 2: Typography System (15 min)
 
 **Add to globals.css:**
+
 ```css
 @import url('https://rsms.me/inter/inter.css');
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Tighter letter spacing for headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   letter-spacing: -0.02em;
 }
 ```
@@ -277,6 +304,7 @@ h1, h2, h3, h4, h5, h6 {
 ```
 
 **Key differences:**
+
 - ❌ Remove: Colorful gradients on cards
 - ✅ Add: Clean white/gray backgrounds
 - ✅ Add: More vertical spacing
@@ -288,6 +316,7 @@ h1, h2, h3, h4, h5, h6 {
 ### Phase 4: Dashboard - Linear Style (2 hours)
 
 **Linear's dashboard has:**
+
 1. Clean stats cards (no heavy borders)
 2. Table view (no card wrappers)
 3. Lots of white space
@@ -295,6 +324,7 @@ h1, h2, h3, h4, h5, h6 {
 5. Fast, snappy feel
 
 **Apply to our dashboard:**
+
 ```tsx
 // Stats - Clean and minimal
 <div className="grid grid-cols-4 gap-6 mb-8">
@@ -335,30 +365,35 @@ h1, h2, h3, h4, h5, h6 {
 ## 🎯 Complete Transformation Checklist
 
 ### Colors
+
 - [ ] Keep Framer blue (#0055FF) OR switch to Linear purple (#5E6AD2)
 - [ ] Use 90% neutrals, 10% accent
 - [ ] Remove colorful gradients from feature cards
 - [ ] Minimal use of color (only for CTAs and status)
 
 ### Typography
+
 - [ ] Add Inter font
 - [ ] Tighter letter-spacing on headings (-0.02em)
 - [ ] Generous line-height on body (1.6)
 - [ ] Clear size hierarchy
 
 ### Spacing
+
 - [ ] Increase vertical spacing (80-120px between sections)
 - [ ] More padding in cards (24-32px)
 - [ ] Generous gaps between elements
 - [ ] Breathing room everywhere
 
 ### Components
+
 - [ ] Remove heavy borders (use subtle fills instead)
 - [ ] Minimal shadows (0 1px 3px rgba(0,0,0,0.05))
 - [ ] Clean hover states (subtle lift + shadow)
 - [ ] Fast transitions (150ms)
 
 ### Layout
+
 - [ ] Max-width containers (1280px)
 - [ ] Center-aligned hero content
 - [ ] Grid layouts for features
@@ -373,11 +408,13 @@ h1, h2, h3, h4, h5, h6 {
 **Color Strategy - Pick One:**
 
 **Option A: Keep Framer Blue (#0055FF)**
+
 - Pros: Already applied, modern, bold
 - Cons: More colorful than Linear
 - Result: Framer-Linear hybrid
 
 **Option B: Switch to Linear Purple (#5E6AD2)**
+
 - Pros: True Linear aesthetic
 - Cons: 30 min to change colors
 - Result: Pure Linear clone
@@ -389,18 +426,21 @@ h1, h2, h3, h4, h5, h6 {
 ### Implementation (4 hours)
 
 **Hour 1: Design Tokens**
+
 - Add Inter font
 - Update spacing scale
 - Refine shadows
 - Adjust border styles
 
 **Hour 2-3: Landing Page**
+
 - Rebuild hero (Linear style)
 - Minimal feature cards
 - Clean CTAs
 - Generous spacing
 
 **Hour 3-4: Dashboard + Pages**
+
 - Linear-style stats
 - Table views
 - Minimal borders
@@ -413,6 +453,7 @@ h1, h2, h3, h4, h5, h6 {
 ## 💡 Quick Reference
 
 ### What to Copy from Linear:
+
 ✅ Minimal borders
 ✅ Generous spacing
 ✅ Inter font
@@ -423,20 +464,22 @@ h1, h2, h3, h4, h5, h6 {
 ✅ Center-aligned content
 
 ### What to Keep from Our Work:
+
 ✅ Framer blue color
 ✅ Kibo UI components
 ✅ Grid canvas (Make.com style)
 ✅ Smooth animations
 
 ### Result:
+
 **Linear's minimal aesthetic + Framer's blue + Make.com's Grid = Professional perfection!** ✨
 
 ---
 
 **Ready to execute! Should I:**
+
 1. Keep Framer blue + adopt Linear minimal style? ⭐ RECOMMENDED
 2. Full Linear clone (including purple)?
 3. Something else?
 
 **Just say go and I'll transform the UI to Linear-quality in 4 hours!** 🚀
-

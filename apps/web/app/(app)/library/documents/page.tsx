@@ -155,20 +155,14 @@ export default function DocumentsPage() {
   const getFileTypeColor = (type: string) => {
     switch (type) {
       case 'pdf':
-        return 'text-red-500';
+      case 'document':
       case 'spreadsheet':
       case 'csv':
-        return 'text-green-500';
       case 'image':
-        return 'text-blue-500';
-      case 'document':
-        return 'text-blue-600';
       case 'presentation':
-        return 'text-orange-500';
       case 'video':
-        return 'text-purple-500';
       default:
-        return 'text-gray-500';
+        return 'text-muted-foreground';
     }
   };
 

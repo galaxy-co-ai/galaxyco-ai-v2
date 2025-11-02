@@ -146,7 +146,7 @@ export function MainSidebar({ className }: SidebarProps) {
                   'hover:bg-hover',
                   'transition-colors duration-200',
                   // Active state
-                  isActive && 'bg-primary/10 text-primary',
+                  isActive && 'bg-muted text-primary',
                   // Default text color
                   !isActive && 'text-muted-foreground',
                   // Layout

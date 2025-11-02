@@ -38,10 +38,7 @@ export async function GET() {
     return NextResponse.json({ conversations: userConversations });
   } catch (error) {
     console.error('List conversations error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch conversations' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch conversations' }, { status: 500 });
   }
 }
 
@@ -54,13 +51,9 @@ function generateTitleFromContext(context?: any): string {
   // Generate title based on page
   if (context.page) {
     if (context.page.includes('/agents')) {
-      return context.selectedItems?.agentId
-        ? 'Agent Discussion'
-        : 'Agent Assistance';
+      return context.selectedItems?.agentId ? 'Agent Discussion' : 'Agent Assistance';
     } else if (context.page.includes('/workflows') || context.page.includes('/studio')) {
-      return context.selectedItems?.workflowId
-        ? 'Workflow Optimization'
-        : 'Workflow Creation';
+      return context.selectedItems?.workflowId ? 'Workflow Optimization' : 'Workflow Creation';
     } else if (context.page.includes('/crm/customers')) {
       return 'Customer Insights';
     } else if (context.page.includes('/crm/prospects')) {
@@ -109,10 +102,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ conversation: newConversation[0] }, { status: 201 });
   } catch (error) {
     console.error('Create conversation error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create conversation' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
   }
 }
-

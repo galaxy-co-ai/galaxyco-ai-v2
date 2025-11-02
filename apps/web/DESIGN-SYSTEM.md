@@ -41,29 +41,34 @@
 **Always use components in this order:**
 
 ### 1. Kibo UI (Advanced Components)
+
 ```tsx
 import { CreditCard } from '@/components/kibo/credit-card';
 import { Spinner } from '@/components/kibo/spinner';
 ```
 
 **Use for:**
+
 - Agent/workflow cards → CreditCard
 - Loading states → Spinner
 - Advanced interactions → 1,101 patterns available via MCP
 
 ### 2. shadcn/ui (Base Components)
+
 ```tsx
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 ```
 
 **Use for:**
+
 - Buttons, inputs, forms
 - Dialogs, sheets, popovers
 - Tables, tabs, accordions
 - 41 components available
 
 ### 3. Custom (Last Resort)
+
 Only create custom components when neither Kibo nor shadcn provides the pattern.
 
 **Always ask:** "Can Kibo or shadcn do this?"
@@ -76,33 +81,35 @@ Only create custom components when neither Kibo nor shadcn provides the pattern.
 
 ```css
 /* Primary (Framer Blue) */
---primary: #0055FF;
---primary-hover: #0044DD;
---primary-light: #0099FF;
+--primary: #0055ff;
+--primary-hover: #0044dd;
+--primary-light: #0099ff;
 
 /* Neutrals (90% of UI) */
---background: #FFFFFF;
+--background: #ffffff;
 --foreground: #000000;
---muted: #F5F5F5;
+--muted: #f5f5f5;
 --muted-foreground: #666666;
---border: #ECECEC;
+--border: #ececec;
 
 /* Semantic Colors */
---success: #10B981;
---warning: #F59E0B;
---error: #EF4444;
---info: #3B82F6;
+--success: #10b981;
+--warning: #f59e0b;
+--error: #ef4444;
+--info: #3b82f6;
 ```
 
 ### Usage Rules
 
 ✅ **DO:**
+
 - Use Framer blue for CTAs only
 - Use neutrals for 90% of interface
 - Use semantic colors for status
 - Keep backgrounds clean (white/subtle gray)
 
 ❌ **DON'T:**
+
 - Add color everywhere
 - Use heavy gradients on cards (minimal style!)
 - Use bright colors for decoration
@@ -115,10 +122,16 @@ Only create custom components when neither Kibo nor shadcn provides the pattern.
 ### Font Family
 
 ```css
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+font-family:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  sans-serif;
 ```
 
 **Why Inter:**
+
 - Used by Linear, Notion, Vercel
 - Professional, highly readable
 - Excellent at all sizes
@@ -132,27 +145,33 @@ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 --text-5xl: 48px;
 
 /* Headings */
---text-4xl: 36px;  /* H1 */
---text-3xl: 30px;  /* H2 */
---text-2xl: 24px;  /* H3 */
---text-xl: 20px;   /* H4 */
+--text-4xl: 36px; /* H1 */
+--text-3xl: 30px; /* H2 */
+--text-2xl: 24px; /* H3 */
+--text-xl: 20px; /* H4 */
 
 /* Body */
---text-base: 16px;  /* Default */
---text-sm: 14px;    /* Small */
---text-xs: 12px;    /* Tiny */
+--text-base: 16px; /* Default */
+--text-sm: 14px; /* Small */
+--text-xs: 12px; /* Tiny */
 ```
 
 ### Letter Spacing
 
 ```css
 /* Headings: Tight */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   letter-spacing: -0.02em;
 }
 
 /* Body: Normal */
-p, span {
+p,
+span {
   letter-spacing: 0;
 }
 ```
@@ -160,9 +179,9 @@ p, span {
 ### Line Height
 
 ```css
---leading-tight: 1.1;   /* Hero headlines */
---leading-snug: 1.2;    /* Headings */
---leading-normal: 1.5;  /* UI text */
+--leading-tight: 1.1; /* Hero headlines */
+--leading-snug: 1.2; /* Headings */
+--leading-normal: 1.5; /* UI text */
 --leading-relaxed: 1.6; /* Body copy */
 ```
 
@@ -190,18 +209,21 @@ p, span {
 ### Usage Patterns
 
 **Sections (Vertical):**
+
 ```tsx
 <section className="py-24">  {/* 96px top/bottom */}
   <div className="space-y-16">  {/* 64px between blocks */}
 ```
 
 **Cards:**
+
 ```tsx
 <div className="p-6">  {/* 24px all around */}
   <div className="space-y-4">  {/* 16px between elements */}
 ```
 
 **Elements:**
+
 ```tsx
 <div className="flex gap-4">  {/* 16px gap */}
 <div className="mb-6">  {/* 24px margin bottom */}
@@ -233,10 +255,10 @@ p, span {
 
 ```css
 /* Default - Very light */
-border: 1px solid #ECECEC;
+border: 1px solid #ececec;
 
 /* Muted - Even lighter */
-border: 1px solid #F5F5F5;
+border: 1px solid #f5f5f5;
 ```
 
 **Rule:** Use subtle fills instead of borders when possible!
@@ -244,11 +266,11 @@ border: 1px solid #F5F5F5;
 ### Border Radius
 
 ```css
---radius-sm: 4px;   /* Small elements */
---radius: 6px;      /* Default (Linear style) */
---radius-md: 8px;   /* Cards */
---radius-lg: 12px;  /* Large cards */
---radius-xl: 16px;  /* Hero elements */
+--radius-sm: 4px; /* Small elements */
+--radius: 6px; /* Default (Linear style) */
+--radius-md: 8px; /* Cards */
+--radius-lg: 12px; /* Large cards */
+--radius-xl: 16px; /* Hero elements */
 ```
 
 ### Transitions (Fast)
@@ -258,7 +280,9 @@ border: 1px solid #F5F5F5;
 transition: all 150ms ease;
 
 /* Hover lift */
-transition: transform 150ms ease, box-shadow 150ms ease;
+transition:
+  transform 150ms ease,
+  box-shadow 150ms ease;
 ```
 
 **Rule:** Keep animations fast and purposeful, never sluggish.
@@ -270,29 +294,27 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ### Buttons
 
 **Primary (Framer Blue):**
+
 ```tsx
-<Button className="bg-primary hover:bg-primary-hover">
-  Get Started
-</Button>
+<Button className="bg-primary hover:bg-primary-hover">Get Started</Button>
 ```
 
 **Secondary (Outline):**
+
 ```tsx
-<Button variant="outline">
-  Learn More
-</Button>
+<Button variant="outline">Learn More</Button>
 ```
 
 **Ghost (Minimal):**
+
 ```tsx
-<Button variant="ghost">
-  Cancel
-</Button>
+<Button variant="ghost">Cancel</Button>
 ```
 
 ### Cards
 
 **Use Kibo UI CreditCard:**
+
 ```tsx
 <CreditCard className="p-6">
   <h3 className="text-xl font-semibold mb-2">Title</h3>
@@ -301,6 +323,7 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ```
 
 **Or Minimal div:**
+
 ```tsx
 <div className="rounded-lg bg-muted/30 p-6 hover:bg-muted/50 transition-colors">
   {/* Content */}
@@ -310,6 +333,7 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ### Tables
 
 **Clean, Linear style:**
+
 ```tsx
 <div className="rounded-lg border overflow-hidden">
   <table className="w-full">
@@ -330,6 +354,7 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ### Stats Cards
 
 **Minimal, no heavy borders:**
+
 ```tsx
 <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
   <div className="text-sm text-muted-foreground mb-1">Label</div>
@@ -345,12 +370,14 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ### Never Use:
 
 ❌ **Inline Styles**
+
 ```tsx
 // BAD
 <div style={{ color: 'blue', padding: '20px' }}>
 ```
 
 ✅ **Use Tailwind Classes**
+
 ```tsx
 // GOOD
 <div className="text-blue-500 p-5">
@@ -359,12 +386,14 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ---
 
 ❌ **Heavy Borders**
+
 ```tsx
 // BAD
 <div className="border-2 border-gray-400">
 ```
 
 ✅ **Subtle Fills Instead**
+
 ```tsx
 // GOOD
 <div className="bg-muted/30 border border-border">
@@ -373,12 +402,14 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ---
 
 ❌ **Hardcoded Colors**
+
 ```tsx
 // BAD
 <div className="bg-[#FF5733]">
 ```
 
 ✅ **Use Design Tokens**
+
 ```tsx
 // GOOD
 <div className="bg-primary">
@@ -387,12 +418,14 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ---
 
 ❌ **Colorful Gradients Everywhere**
+
 ```tsx
 // BAD (too much color)
 <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
 ```
 
 ✅ **Minimal, Subtle Backgrounds**
+
 ```tsx
 // GOOD
 <div className="bg-muted/30">
@@ -401,12 +434,14 @@ transition: transform 150ms ease, box-shadow 150ms ease;
 ---
 
 ❌ **Custom Card Components**
+
 ```tsx
 // BAD
 const MyCard = () => <div className="...custom...">
 ```
 
 ✅ **Use Kibo UI CreditCard**
+
 ```tsx
 // GOOD
 import { CreditCard } from '@/components/kibo/credit-card';
@@ -419,30 +454,37 @@ import { CreditCard } from '@/components/kibo/credit-card';
 ### Must Have:
 
 ✅ **Inter Font**
+
 - All text uses Inter
 - Load from Google Fonts or rsms.me/inter
 
 ✅ **8px Spacing Grid**
+
 - Everything aligns to 4px/8px
 - Generous spacing throughout
 
 ✅ **Framer Blue for CTAs Only**
+
 - Primary actions use #0055FF
 - Everything else is neutral
 
 ✅ **90% Neutrals, 10% Accent**
+
 - Most of UI is black/white/gray
 - Color used sparingly
 
 ✅ **Subtle Shadows**
+
 - 0 1px 3px rgba(0,0,0,0.05)
 - Never heavy drop shadows
 
 ✅ **Fast Transitions**
+
 - 150ms default
 - Snappy, responsive feel
 
 ✅ **Minimal Borders**
+
 - 1px #ECECEC max
 - Prefer subtle fills
 
@@ -591,4 +633,3 @@ pnpm lint       # Clean
 **Last Updated:** November 2, 2025
 **Maintained By:** AI Development Agent
 **Status:** ✅ Active - Follow religiously
-

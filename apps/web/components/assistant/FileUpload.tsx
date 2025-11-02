@@ -49,7 +49,7 @@ export function FileUpload({ onFilesUploaded, maxFiles = 5 }: FileUploadProps) {
       const files = Array.from(e.dataTransfer.files);
       await uploadFiles(files);
     },
-    [uploadedFiles, maxFiles]
+    [uploadedFiles, maxFiles],
   );
 
   const handleFileSelect = useCallback(
@@ -57,7 +57,7 @@ export function FileUpload({ onFilesUploaded, maxFiles = 5 }: FileUploadProps) {
       const files = Array.from(e.target.files || []);
       await uploadFiles(files);
     },
-    [uploadedFiles, maxFiles]
+    [uploadedFiles, maxFiles],
   );
 
   const uploadFiles = async (files: File[]) => {
@@ -122,9 +122,7 @@ export function FileUpload({ onFilesUploaded, maxFiles = 5 }: FileUploadProps) {
         onDrop={handleDrop}
         className={cn(
           'relative border-2 border-dashed rounded-lg p-8 transition-colors',
-          isDragging
-            ? 'border-primary bg-primary/5'
-            : 'border-border hover:border-primary/50',
+          isDragging ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50',
         )}
       >
         <input
@@ -140,12 +138,10 @@ export function FileUpload({ onFilesUploaded, maxFiles = 5 }: FileUploadProps) {
           htmlFor="file-upload"
           className="flex flex-col items-center justify-center cursor-pointer"
         >
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Upload className="h-6 w-6 text-primary" />
+          <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-4">
+            <Upload className="size-6 text-foreground" />
           </div>
-          <p className="text-sm font-medium mb-1">
-            Drop files here or click to upload
-          </p>
+          <p className="text-sm font-medium mb-1">Drop files here or click to upload</p>
           <p className="text-xs text-muted-foreground">
             PDF, CSV, TXT, DOCX, XLSX, Images (Max 10MB)
           </p>
@@ -163,16 +159,14 @@ export function FileUpload({ onFilesUploaded, maxFiles = 5 }: FileUploadProps) {
                 className="flex items-center justify-between p-3 rounded-lg border border-border bg-card"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="flex-shrink-0 w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
-                    <File className="h-4 w-4 text-primary" />
+                  <div className="flex-shrink-0 size-8 rounded bg-muted flex items-center justify-center">
+                    <File className="size-4 text-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{file.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(file.size)}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                   </div>
-                  <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+                  <Check className="size-4 text-primary flex-shrink-0" />
                 </div>
                 <Button
                   variant="ghost"
@@ -214,4 +208,3 @@ function formatFileSize(bytes: number): string {
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
-

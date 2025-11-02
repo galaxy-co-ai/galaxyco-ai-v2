@@ -72,14 +72,11 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid parameters', details: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    return NextResponse.json(
-      { error: 'Failed to execute tool' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to execute tool' }, { status: 500 });
   }
 }
 
@@ -188,4 +185,3 @@ async function analyzeMetrics(userId: string, params: any) {
     message: `Analyzed ${metric} metrics`,
   };
 }
-

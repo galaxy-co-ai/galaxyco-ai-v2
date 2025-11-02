@@ -10,16 +10,21 @@
 ## ⚡ QUICK START (Do This First)
 
 ### Step 1: Read the Plan (5 min)
+
 The plan is in the Cursor plan panel. It has 3 major phases with 18 todos.
 
 ### Step 2: Read Key Research (25 min)
+
 **IN THIS ORDER:**
+
 1. `LINEAR-DESIGN-SYSTEM-ANALYSIS.md` (10 min) - What Linear does right
 2. `MAKE-GRID-ANALYSIS-AND-GAMEPLAN.md` (10 min) - Grid canvas specs
 3. `HANDOFF-TO-NEXT-AGENT.md` (5 min) - Complete instructions
 
 ### Step 3: Start Executing (NOW!)
+
 **Follow the plan todos in order:**
+
 1. Delete legacy backup files
 2. Create design system docs
 3. Build Linear UI
@@ -33,6 +38,7 @@ The plan is in the Cursor plan panel. It has 3 major phases with 18 todos.
 ## 🎨 Design Reference Summary
 
 ### Linear Style (PRIMARY)
+
 - **Minimal:** 90% neutrals, 10% Framer blue accent
 - **Spacious:** 96px between sections, 24px card padding
 - **Clean:** Almost no borders, subtle shadows only
@@ -42,6 +48,7 @@ The plan is in the Cursor plan panel. It has 3 major phases with 18 todos.
 **See screenshots in:** `research/linear-*.png`
 
 ### Make.com Grid (SECONDARY)
+
 - **3D Nodes:** Isometric perspective transforms
 - **Grid View:** Isometric cards showing mini networks
 - **Sidebar:** Context panel for node details
@@ -50,6 +57,7 @@ The plan is in the Cursor plan panel. It has 3 major phases with 18 todos.
 **Dalton provided screenshots - they're your reference**
 
 ### ChatGPT (TERTIARY)
+
 - **Clean Chat:** Center-aligned messages
 - **Simple Input:** Bottom bar with attachments
 - **History:** Collapsible sidebar
@@ -60,6 +68,7 @@ The plan is in the Cursor plan panel. It has 3 major phases with 18 todos.
 ## ✅ Quality Standards
 
 ### Must Pass Before Deploy:
+
 ```bash
 # Run these after each phase
 pnpm test:run tests/unit tests/component  # Must be 21/21 passing
@@ -68,6 +77,7 @@ pnpm lint --fix                            # Must be clean
 ```
 
 ### Visual Quality Check:
+
 - Does landing page look as good as Linear? ✅
 - Does Grid look as good as Make.com? ✅
 - Does Assistant work like ChatGPT? ✅
@@ -78,12 +88,14 @@ pnpm lint --fix                            # Must be clean
 ## 🚨 Important Context
 
 ### Dalton's Decisions:
+
 1. ✅ **Cleanup first** - Remove clutter before building
 2. ✅ **Keep Framer blue** - Don't switch to Linear purple
 3. ✅ **All three features** - Ambitious but achievable
 4. ✅ **Linear aesthetic** - Minimal, spacious, professional
 
 ### What's Already Done:
+
 - Kibo UI integrated (22 components)
 - Framer brand applied
 - Tests passing (21/21)
@@ -91,6 +103,7 @@ pnpm lint --fix                            # Must be clean
 - Comprehensive research complete
 
 ### What You're Building:
+
 - Linear-quality minimal UI (cleanup + transformation)
 - Make.com Grid canvas (3D isometric nodes)
 - ChatGPT-level AI Assistant
@@ -100,6 +113,7 @@ pnpm lint --fix                            # Must be clean
 ## 🎯 Success = All Three Complete
 
 **By end of session:**
+
 - [ ] GalaxyCo UI matches Linear's quality
 - [ ] Grid canvas matches Make.com's quality
 - [ ] AI Assistant works like ChatGPT
@@ -130,6 +144,7 @@ pnpm lint --fix                            # Must be clean
 ## 🚀 YOU'VE GOT THIS!
 
 **Everything is prepared:**
+
 - ✅ Research done
 - ✅ References captured
 - ✅ Plan detailed
@@ -143,4 +158,3 @@ pnpm lint --fix                            # Must be clean
 ---
 
 **GO TIME! 🚀**
-

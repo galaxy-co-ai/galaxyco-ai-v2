@@ -26,7 +26,12 @@ import {
 import { useChat } from 'ai/react';
 import { usePageContext } from '@/hooks/use-page-context';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
-import { ConversationHistory, FileUpload, VoiceInput, ExecutionPanel } from '@/components/assistant';
+import {
+  ConversationHistory,
+  FileUpload,
+  VoiceInput,
+  ExecutionPanel,
+} from '@/components/assistant';
 import { parseToolResult, getToolDisplayName } from '@/components/assistant/tool-utils';
 import { toast } from 'sonner';
 import {
@@ -71,53 +76,54 @@ export default function AssistantPage() {
   const pageContext = usePageContext();
 
   // Streaming chat hook from Vercel AI SDK
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
-    api: '/api/assistant/chat',
-    id: activeConversationId, // Link to active conversation
-    body: {
-      context: pageContext, // Send context with every message
-      conversationId: activeConversationId,
-    },
-    onFinish: async (message: { role: string; content: string }) => {
-      // Log message completion (only in development)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Assistant] Message finished:', {
-          role: message.role,
-          contentLength: message.content?.length,
-          hasToolInvocations: (message as any).toolInvocations?.length > 0,
-        });
-      }
-
-      // Save message to database
-      if (activeConversationId) {
-        try {
-          await fetch('/api/assistant/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              conversationId: activeConversationId,
-              messages: [
-                {
-                  role: message.role,
-                  content: message.content,
-                  metadata: {},
-                },
-              ],
-            }),
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } =
+    useChat({
+      api: '/api/assistant/chat',
+      id: activeConversationId, // Link to active conversation
+      body: {
+        context: pageContext, // Send context with every message
+        conversationId: activeConversationId,
+      },
+      onFinish: async (message: { role: string; content: string }) => {
+        // Log message completion (only in development)
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Assistant] Message finished:', {
+            role: message.role,
+            contentLength: message.content?.length,
+            hasToolInvocations: (message as any).toolInvocations?.length > 0,
           });
-        } catch (error) {
-          console.error('Failed to save message:', error);
         }
-      }
 
-      // Refresh conversations list
-      fetchConversations();
-    },
-    onError: (error: Error) => {
-      console.error('Chat error:', error);
-      toast.error('Failed to send message. Please try again.');
-    },
-  });
+        // Save message to database
+        if (activeConversationId) {
+          try {
+            await fetch('/api/assistant/messages', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                conversationId: activeConversationId,
+                messages: [
+                  {
+                    role: message.role,
+                    content: message.content,
+                    metadata: {},
+                  },
+                ],
+              }),
+            });
+          } catch (error) {
+            console.error('Failed to save message:', error);
+          }
+        }
+
+        // Refresh conversations list
+        fetchConversations();
+      },
+      onError: (error: Error) => {
+        console.error('Chat error:', error);
+        toast.error('Failed to send message. Please try again.');
+      },
+    });
 
   // Fetch conversations on mount
   useEffect(() => {
@@ -133,7 +139,7 @@ export default function AssistantPage() {
         data.conversations.map((conv: any) => ({
           ...conv,
           updatedAt: new Date(conv.updatedAt),
-        }))
+        })),
       );
     } catch (error) {
       console.error('Failed to fetch conversations:', error);
@@ -233,7 +239,15 @@ export default function AssistantPage() {
         handleSubmit(e as any);
       }
     },
-    [input, uploadedFiles, isLoading, activeConversationId, handleNewConversation, handleSubmit, append]
+    [
+      input,
+      uploadedFiles,
+      isLoading,
+      activeConversationId,
+      handleNewConversation,
+      handleSubmit,
+      append,
+    ],
   );
 
   // Handle conversation selection
@@ -264,50 +278,56 @@ export default function AssistantPage() {
         toast.error('Failed to load conversation');
       }
     },
-    [setMessages]
+    [setMessages],
   );
 
   // Handle rename conversation
-  const handleRenameConversation = useCallback(async (id: string) => {
-    const newTitle = prompt('Enter new title:');
-    if (!newTitle) return;
+  const handleRenameConversation = useCallback(
+    async (id: string) => {
+      const newTitle = prompt('Enter new title:');
+      if (!newTitle) return;
 
-    try {
-      await fetch(`/api/assistant/conversations/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: newTitle }),
-      });
-      await fetchConversations();
-      toast.success('Conversation renamed');
-    } catch (error) {
-      console.error('Failed to rename:', error);
-      toast.error('Failed to rename conversation');
-    }
-  }, [fetchConversations]);
+      try {
+        await fetch(`/api/assistant/conversations/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: newTitle }),
+        });
+        await fetchConversations();
+        toast.success('Conversation renamed');
+      } catch (error) {
+        console.error('Failed to rename:', error);
+        toast.error('Failed to rename conversation');
+      }
+    },
+    [fetchConversations],
+  );
 
   // Handle delete conversation
-  const handleDeleteConversation = useCallback(async (id: string) => {
-    if (!confirm('Delete this conversation? This cannot be undone.')) return;
+  const handleDeleteConversation = useCallback(
+    async (id: string) => {
+      if (!confirm('Delete this conversation? This cannot be undone.')) return;
 
-    try {
-      await fetch(`/api/assistant/conversations/${id}`, {
-        method: 'DELETE',
-      });
+      try {
+        await fetch(`/api/assistant/conversations/${id}`, {
+          method: 'DELETE',
+        });
 
-      if (activeConversationId === id) {
-        setActiveConversationId(undefined);
-        setMessages([]);
-        setHasMessages(false);
+        if (activeConversationId === id) {
+          setActiveConversationId(undefined);
+          setMessages([]);
+          setHasMessages(false);
+        }
+
+        await fetchConversations();
+        toast.success('Conversation deleted');
+      } catch (error) {
+        console.error('Failed to delete:', error);
+        toast.error('Failed to delete conversation');
       }
-
-      await fetchConversations();
-      toast.success('Conversation deleted');
-    } catch (error) {
-      console.error('Failed to delete:', error);
-      toast.error('Failed to delete conversation');
-    }
-  }, [activeConversationId, setMessages, fetchConversations]);
+    },
+    [activeConversationId, setMessages, fetchConversations],
+  );
 
   // Handle archive conversation (stub for now)
   const handleArchiveConversation = useCallback(async (id: string) => {
@@ -327,9 +347,7 @@ export default function AssistantPage() {
     },
     ArrowUp: () => {
       // Edit last user message (hook handles the empty check)
-      const lastUserMessage = messages
-        .filter((m: any) => m.role === 'user')
-        .pop();
+      const lastUserMessage = messages.filter((m: any) => m.role === 'user').pop();
       if (lastUserMessage) {
         handleInputChange({
           target: { value: lastUserMessage.content },
@@ -385,11 +403,7 @@ export default function AssistantPage() {
         {/* Top Bar */}
         <div className="h-14 border-b border-border flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            >
+            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
               <PanelLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-2">
@@ -406,12 +420,10 @@ export default function AssistantPage() {
             <div className="max-w-3xl mx-auto px-4 py-12">
               {/* Welcome Message */}
               <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                <div className="inline-flex items-center justify-center size-16 rounded-full bg-muted mb-4">
+                  <Sparkles className="size-8 text-foreground" />
                 </div>
-                <h2 className="text-3xl font-bold mb-2">
-                  How can I help you today?
-                </h2>
+                <h2 className="text-3xl font-bold mb-2">How can I help you today?</h2>
                 <p className="text-muted-foreground text-lg">
                   Ask me anything, upload files, or describe what you want to build
                 </p>
@@ -442,17 +454,15 @@ export default function AssistantPage() {
                     >
                       <div className="flex items-start gap-4">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Icon className="h-5 w-5 text-primary" />
+                          <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+                            <Icon className="size-5 text-foreground" />
                           </div>
                         </div>
                         <div>
                           <h3 className="font-semibold mb-1 group-hover:text-primary transition-colors">
                             {prompt.title}
                           </h3>
-                          <p className="text-sm text-muted-foreground">
-                            {prompt.description}
-                          </p>
+                          <p className="text-sm text-muted-foreground">{prompt.description}</p>
                         </div>
                       </div>
                     </button>
@@ -504,8 +514,8 @@ export default function AssistantPage() {
                       >
                         {/* Avatar */}
                         {message.role === 'assistant' && (
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <Sparkles className="h-4 w-4 text-primary" />
+                          <div className="flex-shrink-0 size-8 rounded-full bg-muted flex items-center justify-center">
+                            <Sparkles className="size-4 text-foreground" />
                           </div>
                         )}
 
@@ -543,38 +553,39 @@ export default function AssistantPage() {
                               </div>
 
                               {/* Workflow Preview */}
-                              {toolResult.tool === 'create_workflow' && toolResult.result.workflow && (
-                                <div className="space-y-3">
-                                  <div className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border">
-                                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                      <Zap className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <div className="flex-1">
-                                      <h4 className="font-semibold mb-1">
-                                        {toolResult.result.workflow.name}
-                                      </h4>
-                                      <p className="text-sm text-muted-foreground mb-2">
-                                        {toolResult.result.nodes?.length || 0} nodes
-                                      </p>
-                                      {toolResult.result.previewUrl && (
-                                        <Button asChild size="sm" variant="outline">
-                                          <Link href={toolResult.result.previewUrl}>
-                                            <ExternalLink className="h-4 w-4 mr-2" />
-                                            Open in Studio
-                                          </Link>
-                                        </Button>
-                                      )}
+                              {toolResult.tool === 'create_workflow' &&
+                                toolResult.result.workflow && (
+                                  <div className="space-y-3">
+                                    <div className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border">
+                                      <div className="size-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                                        <Zap className="size-5 text-foreground" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h4 className="font-semibold mb-1">
+                                          {toolResult.result.workflow.name}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground mb-2">
+                                          {toolResult.result.nodes?.length || 0} nodes
+                                        </p>
+                                        {toolResult.result.previewUrl && (
+                                          <Button asChild size="sm" variant="outline">
+                                            <Link href={toolResult.result.previewUrl}>
+                                              <ExternalLink className="h-4 w-4 mr-2" />
+                                              Open in Studio
+                                            </Link>
+                                          </Button>
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              )}
+                                )}
 
                               {/* Agent Preview */}
                               {toolResult.tool === 'create_agent' && toolResult.result.agent && (
                                 <div className="space-y-3">
                                   <div className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border">
-                                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                      <Sparkles className="h-5 w-5 text-primary" />
+                                    <div className="size-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                                      <Sparkles className="size-5 text-foreground" />
                                     </div>
                                     <div className="flex-1">
                                       <h4 className="font-semibold mb-1">
@@ -604,45 +615,54 @@ export default function AssistantPage() {
                               {/* Search Results */}
                               {toolResult.tool === 'search_data' && toolResult.result.results && (
                                 <div className="space-y-2">
-                                  {toolResult.result.results.slice(0, 3).map((result: any, i: number) => (
-                                    <div
-                                      key={i}
-                                      className="p-2 bg-background rounded border border-border"
-                                    >
-                                      <p className="text-sm font-medium">{result.title}</p>
-                                      <p className="text-xs text-muted-foreground">{result.snippet}</p>
-                                    </div>
-                                  ))}
+                                  {toolResult.result.results
+                                    .slice(0, 3)
+                                    .map((result: any, i: number) => (
+                                      <div
+                                        key={i}
+                                        className="p-2 bg-background rounded border border-border"
+                                      >
+                                        <p className="text-sm font-medium">{result.title}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          {result.snippet}
+                                        </p>
+                                      </div>
+                                    ))}
                                 </div>
                               )}
 
                               {/* Metrics Analysis */}
-                              {toolResult.tool === 'analyze_metrics' && toolResult.result.insights && (
-                                <div className="space-y-3">
-                                  <div className="grid grid-cols-2 gap-2">
-                                    <div className="p-2 bg-background rounded border border-border">
-                                      <p className="text-xs text-muted-foreground">Value</p>
-                                      <p className="text-lg font-bold">{toolResult.result.value}</p>
+                              {toolResult.tool === 'analyze_metrics' &&
+                                toolResult.result.insights && (
+                                  <div className="space-y-3">
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <div className="p-2 bg-background rounded border border-border">
+                                        <p className="text-xs text-muted-foreground">Value</p>
+                                        <p className="text-lg font-bold">
+                                          {toolResult.result.value}
+                                        </p>
+                                      </div>
+                                      <div className="p-2 bg-background rounded border border-border">
+                                        <p className="text-xs text-muted-foreground">Change</p>
+                                        <p className="text-lg font-bold text-muted-foreground">
+                                          {toolResult.result.change}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div className="p-2 bg-background rounded border border-border">
-                                      <p className="text-xs text-muted-foreground">Change</p>
-                                      <p className="text-lg font-bold text-green-600">
-                                        {toolResult.result.change}
-                                      </p>
+                                    <div>
+                                      <p className="text-xs font-medium mb-1">Key Insights:</p>
+                                      <ul className="text-sm space-y-1">
+                                        {toolResult.result.insights.map(
+                                          (insight: string, i: number) => (
+                                            <li key={i} className="text-muted-foreground">
+                                              • {insight}
+                                            </li>
+                                          ),
+                                        )}
+                                      </ul>
                                     </div>
                                   </div>
-                                  <div>
-                                    <p className="text-xs font-medium mb-1">Key Insights:</p>
-                                    <ul className="text-sm space-y-1">
-                                      {toolResult.result.insights.map((insight: string, i: number) => (
-                                        <li key={i} className="text-muted-foreground">
-                                          • {insight}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </div>
-                              )}
+                                )}
                             </div>
                           )}
                         </div>
@@ -650,9 +670,7 @@ export default function AssistantPage() {
                         {/* Avatar (user) */}
                         {message.role === 'user' && (
                           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                            <span className="text-sm text-primary-foreground font-semibold">
-                              U
-                            </span>
+                            <span className="text-sm text-primary-foreground font-semibold">U</span>
                           </div>
                         )}
                       </div>
@@ -666,15 +684,11 @@ export default function AssistantPage() {
                       execution={execution}
                       onApprove={() => {
                         toast.success('Tool execution approved');
-                        setToolExecutions((prev) =>
-                          prev.filter((e) => e.id !== execution.id)
-                        );
+                        setToolExecutions((prev) => prev.filter((e) => e.id !== execution.id));
                       }}
                       onReject={() => {
                         toast.info('Tool execution cancelled');
-                        setToolExecutions((prev) =>
-                          prev.filter((e) => e.id !== execution.id)
-                        );
+                        setToolExecutions((prev) => prev.filter((e) => e.id !== execution.id));
                       }}
                     />
                   ))}
@@ -802,9 +816,8 @@ export default function AssistantPage() {
                   </div>
                   <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                     <span>
-                      Press <kbd className="px-1.5 py-0.5 rounded bg-muted">Enter</kbd> to
-                      send, <kbd className="px-1.5 py-0.5 rounded bg-muted">Shift+Enter</kbd>{' '}
-                      for new line
+                      Press <kbd className="px-1.5 py-0.5 rounded bg-muted">Enter</kbd> to send,{' '}
+                      <kbd className="px-1.5 py-0.5 rounded bg-muted">Shift+Enter</kbd> for new line
                     </span>
                   </div>
                 </form>
@@ -827,4 +840,3 @@ function generateTitleFromContext(context: any): string {
   if (context.page?.includes('/dashboard')) return 'Dashboard Review';
   return 'New Conversation';
 }
-

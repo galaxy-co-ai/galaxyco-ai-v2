@@ -64,28 +64,23 @@ export function MessageBubble({
   const isUser = role === 'user';
 
   return (
-    <div
-      className={cn(
-        'group flex gap-4',
-        isUser ? 'justify-end' : 'justify-start',
-      )}
-    >
+    <div className={cn('group flex gap-4', isUser ? 'justify-end' : 'justify-start')}>
       {/* Avatar */}
       {!isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-          <Sparkles className="h-4 w-4 text-primary" />
+        <div className="flex-shrink-0 size-8 rounded-full bg-muted flex items-center justify-center">
+          <Sparkles className="size-4 text-foreground" />
         </div>
       )}
 
       {/* Message Content */}
-      <div className={cn('flex flex-col gap-2', isUser ? 'items-end' : 'items-start', 'max-w-[80%]')}>
+      <div
+        className={cn('flex flex-col gap-2', isUser ? 'items-end' : 'items-start', 'max-w-[80%]')}
+      >
         {/* Message Bubble */}
         <div
           className={cn(
             'rounded-2xl px-6 py-3',
-            isUser
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted/30 text-foreground',
+            isUser ? 'bg-primary text-primary-foreground' : 'bg-muted/30 text-foreground',
             'shadow-sm',
           )}
         >
@@ -132,8 +127,8 @@ export function MessageBubble({
               {toolResult.tool === 'create_workflow' && toolResult.result.workflow && (
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Zap className="h-5 w-5 text-primary" />
+                    <div className="size-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                      <Zap className="size-5 text-foreground" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold mb-1">{toolResult.result.workflow.name}</h4>
@@ -157,8 +152,8 @@ export function MessageBubble({
               {toolResult.tool === 'create_agent' && toolResult.result.agent && (
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 bg-background rounded-lg border border-border">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="h-5 w-5 text-primary" />
+                    <div className="size-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="size-5 text-foreground" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold mb-1">{toolResult.result.agent.name}</h4>
@@ -205,7 +200,7 @@ export function MessageBubble({
                     </div>
                     <div className="p-2 bg-background rounded border border-border">
                       <p className="text-xs text-muted-foreground">Change</p>
-                      <p className="text-lg font-bold text-green-600">
+                      <p className="text-lg font-bold text-muted-foreground">
                         {toolResult.result.change}
                       </p>
                     </div>
@@ -214,7 +209,9 @@ export function MessageBubble({
                     <p className="text-xs font-medium mb-1">Key Insights:</p>
                     <ul className="text-sm space-y-1">
                       {toolResult.result.insights.map((insight: string, i: number) => (
-                        <li key={i} className="text-muted-foreground">• {insight}</li>
+                        <li key={i} className="text-muted-foreground">
+                          • {insight}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -237,39 +234,20 @@ export function MessageBubble({
           {/* Actions (visible on hover) */}
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             {/* Copy */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={handleCopy}
-            >
-              {copied ? (
-                <Check className="h-3 w-3" />
-              ) : (
-                <Copy className="h-3 w-3" />
-              )}
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCopy}>
+              {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
             </Button>
 
             {/* Regenerate (assistant only) */}
             {!isUser && onRegenerate && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onRegenerate}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onRegenerate}>
                 <RotateCw className="h-3 w-3" />
               </Button>
             )}
 
             {/* Edit (user only) */}
             {isUser && onEdit && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onEdit}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
                 <Edit className="h-3 w-3" />
               </Button>
             )}
@@ -286,4 +264,3 @@ export function MessageBubble({
     </div>
   );
 }
-

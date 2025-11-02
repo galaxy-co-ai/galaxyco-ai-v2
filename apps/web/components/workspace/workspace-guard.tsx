@@ -101,8 +101,8 @@ export function WorkspaceGuard({ children, fallback }: WorkspaceGuardProps) {
       <>
         <div className="flex h-full items-center justify-center p-8">
           <Card className="max-w-md p-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <HelpCircle className="h-8 w-8 text-primary" />
+            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted">
+              <HelpCircle className="size-8 text-foreground" />
             </div>
             <h2 className="mb-2 text-xl font-semibold">Welcome to GalaxyCo!</h2>
             <p className="mb-6 text-sm text-muted-foreground">

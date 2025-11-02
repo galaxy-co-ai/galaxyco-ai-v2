@@ -26,26 +26,22 @@ interface EmailThread {
   updatedAt: string;
 }
 
-const folderConfig: Record<string, { label: string; icon: typeof Inbox; color: string }> = {
+const folderConfig: Record<string, { label: string; icon: typeof Inbox }> = {
   inbox: {
     label: 'Inbox',
     icon: Inbox,
-    color: 'text-blue-600 dark:text-blue-400',
   },
   sent: {
     label: 'Sent',
     icon: Send,
-    color: 'text-green-600 dark:text-green-400',
   },
   drafts: {
     label: 'Drafts',
     icon: FilePlus,
-    color: 'text-yellow-600 dark:text-yellow-400',
   },
   trash: {
     label: 'Trash',
     icon: Trash2,
-    color: 'text-red-600 dark:text-red-400',
   },
 };
 
@@ -218,7 +214,7 @@ export default function EmailsPage() {
                   <div
                     key={thread.id}
                     className={`rounded-lg border border-border bg-card p-4 hover:border-primary hover:shadow-sm transition-all cursor-pointer ${
-                      !thread.isRead ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''
+                      !thread.isRead ? 'bg-muted/30' : ''
                     }`}
                   >
                     <div className="flex items-start gap-4">
@@ -226,7 +222,7 @@ export default function EmailsPage() {
                         {thread.isRead ? (
                           <MailOpen className="h-5 w-5 text-muted-foreground" />
                         ) : (
-                          <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                          <Mail className="h-5 w-5 text-foreground" />
                         )}
                       </div>
 

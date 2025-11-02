@@ -255,8 +255,8 @@ export default function SettingsTeamPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
-                        <div className="flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-primary">
-                          <User className="h-5 w-5" />
+                        <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
+                          <User className="h-5 w-5 text-foreground" />
                         </div>
                       </Avatar>
                       <div>

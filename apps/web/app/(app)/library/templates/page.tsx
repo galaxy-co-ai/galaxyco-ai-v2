@@ -115,7 +115,7 @@ export default function TemplatesPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 dark:text-red-400 mb-2">Failed to load templates</p>
+          <p className="text-destructive mb-2">Failed to load templates</p>
           <p className="text-sm text-muted-foreground">Please try again later</p>
         </div>
       </div>
@@ -181,11 +181,11 @@ export default function TemplatesPage() {
           {filteredTemplates.map((template) => (
             <Card key={template.id} className="p-6">
               <div className="mb-4 flex items-start justify-between">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <div className="size-12 shrink-0 rounded-lg bg-muted flex items-center justify-center">
                   {template.category === 'workflow' ? (
-                    <GitBranch className="h-6 w-6 text-primary" />
+                    <GitBranch className="size-6 text-foreground" />
                   ) : (
-                    <Code2 className="h-6 w-6 text-primary" />
+                    <Code2 className="size-6 text-foreground" />
                   )}
                 </div>
                 <Badge variant={getDifficultyColor(template.difficulty)}>
@@ -239,11 +239,11 @@ export default function TemplatesPage() {
                 className="flex items-center justify-between p-4 hover:bg-muted/50"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <div className="size-12 shrink-0 rounded-lg bg-muted flex items-center justify-center">
                     {template.category === 'workflow' ? (
-                      <GitBranch className="h-6 w-6 text-primary" />
+                      <GitBranch className="size-6 text-foreground" />
                     ) : (
-                      <Code2 className="h-6 w-6 text-primary" />
+                      <Code2 className="size-6 text-foreground" />
                     )}
                   </div>
                   <div className="flex-1">

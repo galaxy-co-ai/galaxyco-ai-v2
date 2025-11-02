@@ -29,7 +29,7 @@ import {
   ArrowLeft,
   Settings,
   Trash2,
-  Copy
+  Copy,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FlowNodeData } from './FlowNodes';
@@ -87,8 +87,8 @@ export function NodeSidebar({
   if (!nodeData) return null;
 
   const Icon = NODE_ICONS[nodeData.type];
-  const inputConnections = connections.filter(c => c.direction === 'input');
-  const outputConnections = connections.filter(c => c.direction === 'output');
+  const inputConnections = connections.filter((c) => c.direction === 'input');
+  const outputConnections = connections.filter((c) => c.direction === 'output');
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -105,9 +105,7 @@ export function NodeSidebar({
               </div>
             </div>
           </SheetTitle>
-          <SheetDescription>
-            Configure and manage this node
-          </SheetDescription>
+          <SheetDescription>Configure and manage this node</SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
@@ -126,12 +124,17 @@ export function NodeSidebar({
           {nodeData.status && (
             <div className="space-y-2">
               <h3 className="text-sm font-semibold">Status</h3>
-              <Badge variant={
-                nodeData.status === 'running' ? 'default' :
-                nodeData.status === 'success' ? 'success' :
-                nodeData.status === 'error' ? 'destructive' :
-                'secondary'
-              }>
+              <Badge
+                variant={
+                  nodeData.status === 'running'
+                    ? 'default'
+                    : nodeData.status === 'success'
+                      ? 'success'
+                      : nodeData.status === 'error'
+                        ? 'destructive'
+                        : 'secondary'
+                }
+              >
                 {nodeData.status}
               </Badge>
             </div>
@@ -182,7 +185,9 @@ export function NodeSidebar({
 
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label htmlFor="node-label" className="text-xs">Label</Label>
+                <Label htmlFor="node-label" className="text-xs">
+                  Label
+                </Label>
                 <Input
                   id="node-label"
                   value={nodeData.label}
@@ -193,7 +198,9 @@ export function NodeSidebar({
 
               {nodeData.description !== undefined && (
                 <div className="space-y-2">
-                  <Label htmlFor="node-description" className="text-xs">Description</Label>
+                  <Label htmlFor="node-description" className="text-xs">
+                    Description
+                  </Label>
                   <Input
                     id="node-description"
                     value={nodeData.description || ''}
@@ -246,11 +253,7 @@ export function NodeSidebar({
               </Button>
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full gap-2"
-            >
+            <Button variant="outline" size="sm" className="w-full gap-2">
               <Settings className="size-4" />
               Advanced Settings
             </Button>
@@ -314,4 +317,3 @@ function ConnectionRow({ connection, onClick }: ConnectionRowProps) {
     </motion.button>
   );
 }
-

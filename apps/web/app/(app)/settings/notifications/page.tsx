@@ -170,8 +170,8 @@ export default function NotificationsSettingsPage() {
         {/* Email Notifications */}
         <Card className="p-6">
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Mail className="h-5 w-5 text-primary" />
+            <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+              <Mail className="size-5 text-foreground" />
             </div>
             <div>
               <h3 className="text-lg font-semibold">Email Notifications</h3>
@@ -234,8 +234,8 @@ export default function NotificationsSettingsPage() {
         {/* Push Notifications */}
         <Card className="p-6">
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Smartphone className="h-5 w-5 text-primary" />
+            <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+              <Smartphone className="size-5 text-foreground" />
             </div>
             <div>
               <h3 className="text-lg font-semibold">Push Notifications</h3>
@@ -283,8 +283,8 @@ export default function NotificationsSettingsPage() {
         {/* In-App Notifications */}
         <Card className="p-6">
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Bell className="h-5 w-5 text-primary" />
+            <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+              <Bell className="size-5 text-foreground" />
             </div>
             <div>
               <h3 className="text-lg font-semibold">In-App Notifications</h3>
@@ -343,8 +343,8 @@ export default function NotificationsSettingsPage() {
         {/* Notification Schedule */}
         <Card className="p-6">
           <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Monitor className="h-5 w-5 text-primary" />
+            <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+              <Monitor className="size-5 text-foreground" />
             </div>
             <div>
               <h3 className="text-lg font-semibold">Notification Schedule</h3>

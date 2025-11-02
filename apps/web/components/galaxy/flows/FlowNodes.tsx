@@ -170,7 +170,7 @@ export function CustomFlowNode({ data, selected }: NodeProps) {
             type: 'spring',
             stiffness: 400,
             damping: 10,
-          }
+          },
         }}
         whileTap={{ scale: 0.95 }}
         className="preserve-3d relative"
@@ -214,7 +214,7 @@ export function CustomFlowNode({ data, selected }: NodeProps) {
           <div
             className={cn(
               'absolute -bottom-1 left-0 right-0 h-1 rounded-b-xl opacity-60',
-              config.gradient
+              config.gradient,
             )}
             style={{
               transform: 'translateZ(-2px)',

@@ -17,30 +17,25 @@ export default function BusinessHub() {
       href: '/business/invoices',
       icon: Receipt,
       description: 'Invoice management and billing',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
     },
     {
       title: 'Campaigns',
       href: '/business/campaigns',
       icon: Megaphone,
       description: 'Marketing campaigns and tracking',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
     },
     {
       title: 'Emails',
       href: '/business/emails',
       icon: Mail,
       description: 'Email threads and communications',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
     },
   ];
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <div className="border-b border-border bg-card px-6 py-4">
+      {/* Page Header - Linear Style */}
+      <div className="border-b px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Business Operations</h1>
@@ -58,12 +53,10 @@ export default function BusinessHub() {
             const Icon = section.icon;
             return (
               <Link key={section.href} href={section.href}>
-                <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full">
                   <div className="flex items-start justify-between mb-4">
-                    <div
-                      className={`w-12 h-12 rounded-lg ${section.bgColor} flex items-center justify-center`}
-                    >
-                      <Icon className={`w-6 h-6 ${section.color}`} />
+                    <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                      <Icon className="size-6 text-foreground" />
                     </div>
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>

@@ -75,5 +75,3 @@ export function parseToolResult(message: any): any {
 
   return null;
 }
-
-

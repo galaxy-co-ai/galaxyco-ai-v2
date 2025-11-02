@@ -45,11 +45,11 @@ interface GridViewProps {
 }
 
 const NODE_COLORS = {
-  start: '#8B5CF6', // Purple
-  action: '#3B82F6', // Blue
-  condition: '#F59E0B', // Amber
-  integration: '#10B981', // Green
-  end: '#10B981', // Emerald
+  start: '#8B5CF6', // Purple (keep for visual distinction)
+  action: '#0055FF', // Framer Blue
+  condition: '#F59E0B', // Amber (keep for visual distinction)
+  integration: '#10B981', // Green (keep for visual distinction)
+  end: '#666666', // Muted gray (Linear style)
 };
 
 const containerVariants = {
@@ -79,12 +79,12 @@ const cardVariants = {
 export function GridView({ workflows, onWorkflowClick }: GridViewProps) {
   return (
     <motion.div
-      className="p-8 bg-gradient-to-br from-background via-muted/20 to-background"
+      className="p-6 bg-background"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {workflows.map((workflow, index) => (
           <WorkflowGridCard
             key={workflow.id}
@@ -111,23 +111,19 @@ function WorkflowGridCard({ workflow, delay, onClick }: WorkflowGridCardProps) {
       className="group perspective-1000 cursor-pointer"
       onClick={onClick}
     >
-      <CreditCard className="relative bg-background dark:bg-neutral-900 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+      <CreditCard className="relative bg-card border border-border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all duration-150 overflow-hidden">
         {/* Mini node network visualization */}
-        <div className="h-48 p-4 bg-muted/30 relative">
-          <MiniNodeNetwork
-            nodes={workflow.nodes}
-            edges={workflow.edges}
-            status={workflow.status}
-          />
+        <div className="h-48 p-4 bg-muted/30 border-b border-border relative">
+          <MiniNodeNetwork nodes={workflow.nodes} edges={workflow.edges} status={workflow.status} />
 
           {/* Error indicator overlay */}
           {workflow.hasErrors && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="absolute top-4 right-4 size-10 rounded-full bg-red-500 flex items-center justify-center shadow-lg"
+              className="absolute top-3 right-3 size-8 rounded-full bg-destructive flex items-center justify-center shadow-sm"
             >
-              <AlertCircle className="size-6 text-white" />
+              <AlertCircle className="size-4 text-destructive-foreground" />
             </motion.div>
           )}
         </div>
@@ -143,13 +139,15 @@ function WorkflowGridCard({ workflow, delay, onClick }: WorkflowGridCardProps) {
             </div>
 
             {/* Status indicator */}
-            <div className={cn(
-              "size-3 rounded-full shrink-0 ml-2",
-              workflow.status === 'running' && 'bg-blue-500 animate-pulse',
-              workflow.status === 'success' && 'bg-green-500',
-              workflow.status === 'error' && 'bg-red-500',
-              workflow.status === 'idle' && 'bg-gray-400'
-            )} />
+            <div
+              className={cn(
+                'size-2 rounded-full shrink-0 ml-2',
+                workflow.status === 'running' && 'bg-primary animate-pulse',
+                workflow.status === 'success' && 'bg-green-500',
+                workflow.status === 'error' && 'bg-destructive',
+                workflow.status === 'idle' && 'bg-muted-foreground/40',
+              )}
+            />
           </div>
 
           {/* Stats */}
@@ -167,7 +165,7 @@ function WorkflowGridCard({ workflow, delay, onClick }: WorkflowGridCardProps) {
           </div>
 
           {/* Hover action */}
-          <div className="mt-3 pt-3 border-t opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="mt-3 pt-3 border-t border-border opacity-0 group-hover:opacity-100 transition-opacity duration-150">
             <div className="flex items-center gap-2 text-xs text-primary">
               <Play className="size-3" />
               <span>Open workflow</span>
@@ -199,19 +197,17 @@ function MiniNodeNetwork({ nodes, edges, status }: MiniNodeNetworkProps) {
           y1={edge.y1 * scale}
           x2={edge.x2 * scale}
           y2={edge.y2 * scale}
-          stroke="rgba(139, 92, 246, 0.3)"
-          strokeWidth={1.5}
+          stroke="rgba(0, 0, 0, 0.1)"
+          strokeWidth={1}
           strokeDasharray="2,2"
           initial={{ pathLength: 0 }}
           animate={{
             pathLength: 1,
-            stroke: status === 'running'
-              ? 'rgba(59, 130, 246, 0.5)'
-              : 'rgba(139, 92, 246, 0.3)',
+            stroke: status === 'running' ? 'rgba(0, 85, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)',
           }}
           transition={{
             pathLength: { duration: 1, delay: 0.2 },
-            stroke: { duration: 0.3 }
+            stroke: { duration: 0.3 },
           }}
         />
       ))}
@@ -353,4 +349,3 @@ export function generateMockWorkflows(): Workflow[] {
     },
   ];
 }
-

@@ -8,6 +8,7 @@
 ## ✅ EXISTING PAGES (42 Complete)
 
 ### Core Product (8 pages)
+
 1. ✅ `/` - Landing page (Framer + Kibo UI)
 2. ✅ `/dashboard` - Main dashboard
 3. ✅ `/agents` - Agents list & management
@@ -18,6 +19,7 @@
 8. ✅ `/marketplace` - Agent marketplace
 
 ### CRM Suite (6 pages)
+
 9. ✅ `/crm` - CRM dashboard
 10. ✅ `/crm/contacts` - Contact management
 11. ✅ `/crm/prospects` - Prospect tracking
@@ -26,6 +28,7 @@
 14. ✅ `/crm/segments` - Customer segmentation
 
 ### Analytics Suite (8 pages)
+
 15. ✅ `/analytics` - Analytics hub
 16. ✅ `/analytics/sales` - Sales metrics
 17. ✅ `/analytics/marketing` - Marketing ROI
@@ -36,18 +39,21 @@
 22. ✅ `/analytics/usage` - Platform usage
 
 ### Business Tools (3 pages)
+
 23. ✅ `/business` - Business hub
 24. ✅ `/business/campaigns` - Campaign management
 25. ✅ `/business/emails` - Email threads
 26. ✅ `/business/invoices` - Invoice tracking
 
 ### Content & Knowledge (4 pages)
+
 27. ✅ `/library` - Document library
 28. ✅ `/library/documents` - Document browser
 29. ✅ `/library/resources` - Resource library
 30. ✅ `/library/templates` - Template library
 
 ### Productivity (5 pages)
+
 31. ✅ `/calendar` - Calendar view
 32. ✅ `/inbox` - Unified inbox
 33. ✅ `/tasks` - Task management
@@ -55,6 +61,7 @@
 35. ✅ `/notifications` - Notifications
 
 ### Settings & Config (10 pages)
+
 36. ✅ `/settings` - Settings hub
 37. ✅ `/settings/profile` - User profile
 38. ✅ `/settings/workspace` - Workspace config
@@ -67,6 +74,7 @@
 45. ✅ `/settings/team/invite` - Invite team members
 
 ### Admin & Developer (6 pages)
+
 46. ✅ `/admin` - Admin dashboard
 47. ✅ `/admin/users` - User administration
 48. ✅ `/admin/workspaces` - Workspace admin
@@ -75,6 +83,7 @@
 51. ✅ `/developer/webhooks` - Webhook management
 
 ### Other (6 pages)
+
 52. ✅ `/search` - Global search
 53. ✅ `/help` - Help center
 54. ✅ `/docs` - Documentation
@@ -89,9 +98,11 @@
 ## ❌ MISSING CRITICAL PAGES (12 High-Impact)
 
 ### 1. AI Assistant Page (`/assistant`) ⭐⭐⭐
+
 **Purpose:** User-facing AI companion (your-level intelligence)
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  🤖 AI Assistant                   [×]  │
@@ -118,6 +129,7 @@
 ```
 
 **Key Features:**
+
 - Multi-turn conversation
 - Tool execution visualization
 - Progress tracking
@@ -127,6 +139,7 @@
 - Context management
 
 **Research From:**
+
 - ChatGPT interface
 - Claude's conversation UI
 - Cursor's chat panel
@@ -135,9 +148,11 @@
 ---
 
 ### 2. Workflow Templates (`/workflows/templates`) ⭐⭐⭐
+
 **Purpose:** Pre-built workflow library for instant setup
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Workflow Templates                     │
@@ -159,6 +174,7 @@
 ```
 
 **Research From:**
+
 - Zapier template library
 - Make.com scenarios
 - n8n workflows
@@ -167,9 +183,11 @@
 ---
 
 ### 3. Integration Hub (`/integrations/hub`) ⭐⭐⭐
+
 **Purpose:** Browse & connect 200+ integrations
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Integration Hub                        │
@@ -188,6 +206,7 @@
 ```
 
 **Research From:**
+
 - Zapier integrations
 - Nango integration hub
 - Notion integrations
@@ -196,9 +215,11 @@
 ---
 
 ### 4. Knowledge Base (`/knowledge`) ⭐⭐
+
 **Purpose:** AI-powered smart documents (Gamma-style)
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Knowledge Base                         │
@@ -220,6 +241,7 @@
 ```
 
 **Research From:**
+
 - Gamma.app
 - Notion pages
 - Google Docs
@@ -228,9 +250,11 @@
 ---
 
 ### 5. Insights Dashboard (`/insights`) ⭐⭐
+
 **Purpose:** AI-generated business insights
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  AI Insights                            │
@@ -251,6 +275,7 @@
 ```
 
 **Research From:**
+
 - Gong insights
 - HubSpot AI
 - Salesforce Einstein
@@ -259,9 +284,11 @@
 ---
 
 ### 6. Team Collaboration (`/collaborate`) ⭐⭐
+
 **Purpose:** Real-time team workspace
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Team Workspace                         │
@@ -282,6 +309,7 @@
 ```
 
 **Research From:**
+
 - Figma collaboration
 - Notion teamspaces
 - Linear teams
@@ -290,9 +318,11 @@
 ---
 
 ### 7. Agent Pack Detail (`/marketplace/packs/[id]`) ⭐⭐
+
 **Purpose:** Detailed pack showcase with install
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  ← Back                                 │
@@ -316,9 +346,11 @@
 ---
 
 ### 8. AI Training (`/train`) ⭐
+
 **Purpose:** Teach your AI custom behaviors
 
 **Wireframe:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  Train Your AI                          │
@@ -338,15 +370,19 @@
 ---
 
 ### 9. Activity Feed (`/activity`) ⭐
+
 **Purpose:** Real-time activity across platform
 
 ### 10. Insights AI (`/insights/ai`) ⭐
+
 **Purpose:** AI-powered recommendations
 
 ### 11. Template Builder (`/templates/builder`) ⭐
+
 **Purpose:** Create custom templates
 
 ### 12. API Playground (`/developer/playground`) ⭐
+
 **Purpose:** Test API calls interactively
 
 ---
@@ -354,16 +390,19 @@
 ## 🎯 Missing Pages - Priority Matrix
 
 ### Priority 1 (Build This Week) ⭐⭐⭐
+
 1. **AI Assistant** (`/assistant`) - THE differentiator
 2. **Workflow Templates** (`/workflows/templates`) - Instant value
 3. **Integration Hub** (`/integrations/hub`) - Unlock power
 
 ### Priority 2 (Build Next Week) ⭐⭐
+
 4. **Knowledge Base** (`/knowledge`) - Smart documents
 5. **Insights Dashboard** (`/insights`) - AI recommendations
 6. **Agent Pack Detail** (`/marketplace/packs/[id]`) - Marketplace depth
 
 ### Priority 3 (Build Later) ⭐
+
 7. **Team Collaboration** (`/collaborate`) - Multi-user
 8. **AI Training** (`/train`) - Customization
 9. **Activity Feed** (already exists at `/activity`)
@@ -375,7 +414,9 @@
 ## 🔬 Research Insights - Best AI Products
 
 ### Linear (Project Management Excellence)
+
 **What They Do Well:**
+
 - ⚡ Keyboard shortcuts everywhere (Cmd+K)
 - 🎯 Command palette (instant action)
 - 🚀 Fast, responsive UI
@@ -383,6 +424,7 @@
 - 🎨 Minimal, focused design
 
 **Apply to GalaxyCo:**
+
 - Global command palette (Cmd+K to do anything)
 - Keyboard shortcuts for common actions
 - Fast page transitions
@@ -391,7 +433,9 @@
 ---
 
 ### Notion AI (Seamless AI Integration)
+
 **What They Do Well:**
+
 - ✨ Inline AI (appears where you need it)
 - 🎯 Context-aware suggestions
 - 🔄 Iterative refinement
@@ -399,6 +443,7 @@
 - 🎨 Beautiful outputs
 
 **Apply to GalaxyCo:**
+
 - AI button in every input field
 - Context-aware AI suggestions
 - Inline editing with AI
@@ -407,7 +452,9 @@
 ---
 
 ### Cursor (AI Code Editor)
+
 **What They Do Well:**
+
 - 🤖 AI understands full codebase context
 - 💬 Multi-file editing
 - 🎯 Precise suggestions
@@ -415,6 +462,7 @@
 - 🔄 Cmd+K for AI chat
 
 **Apply to GalaxyCo:**
+
 - AI understands full business context
 - Multi-entity operations
 - Precise, contextual suggestions
@@ -424,7 +472,9 @@
 ---
 
 ### v0 by Vercel (AI Generation)
+
 **What They Do Well:**
+
 - 👁️ Instant preview
 - 🔄 Rapid iteration
 - 🎨 Multiple variants
@@ -432,6 +482,7 @@
 - ⚡ Fast generation
 
 **Apply to GalaxyCo:**
+
 - Instant workflow preview
 - Multiple AI suggestions
 - Easy export/copy
@@ -440,7 +491,9 @@
 ---
 
 ### Perplexity (Trust Through Citations)
+
 **What They Do Well:**
+
 - 📚 Source citations
 - ✅ Confidence indicators
 - 🔍 Related questions
@@ -448,6 +501,7 @@
 - 🎯 Concise answers
 
 **Apply to GalaxyCo:**
+
 - Show AI reasoning
 - Confidence scores
 - Data source citations
@@ -457,7 +511,9 @@
 ---
 
 ### Claude Artifacts (Interactive Results)
+
 **What They Do Well:**
+
 - 🎨 Interactive canvas
 - 🔄 Live editing
 - 📱 Shareable artifacts
@@ -465,6 +521,7 @@
 - ⚡ Instant updates
 
 **Apply to GalaxyCo:**
+
 - Workflow canvas (already have!)
 - Live preview mode
 - Shareable workflows
@@ -480,4 +537,3 @@
 **Format:** Detailed ASCII + functional specs
 
 **Starting wireframe creation...**
-

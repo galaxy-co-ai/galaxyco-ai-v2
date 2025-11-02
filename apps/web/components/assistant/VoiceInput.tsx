@@ -107,17 +107,12 @@ export function VoiceInput({ onTranscript, className }: VoiceInputProps) {
       className={cn(
         'h-8 w-8',
         isListening && 'animate-pulse bg-red-500 hover:bg-red-600',
-        className
+        className,
       )}
       onClick={toggleListening}
       title={isListening ? 'Stop listening' : 'Start voice input'}
     >
-      {isListening ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Mic className="h-4 w-4" />
-      )}
+      {isListening ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mic className="h-4 w-4" />}
     </Button>
   );
 }
-

@@ -35,30 +35,33 @@ interface Campaign {
   updatedAt: string;
 }
 
-const statusConfig: Record<string, { label: string; className: string }> = {
+const statusConfig: Record<
+  string,
+  { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }
+> = {
   active: {
     label: 'Active',
-    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+    variant: 'default',
   },
   paused: {
     label: 'Paused',
-    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    variant: 'secondary',
   },
   completed: {
     label: 'Completed',
-    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
+    variant: 'default',
   },
   draft: {
     label: 'Draft',
-    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
+    variant: 'outline',
   },
   scheduled: {
     label: 'Scheduled',
-    className: 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
+    variant: 'secondary',
   },
   archived: {
     label: 'Archived',
-    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
+    variant: 'outline',
   },
 };
 
@@ -131,7 +134,7 @@ export default function CampaignsPage() {
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Active</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{activeCampaigns}</p>
+          <p className="text-2xl font-bold">{activeCampaigns}</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Total Conversions</p>
@@ -186,10 +189,10 @@ export default function CampaignsPage() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold mb-1 truncate">{campaign.name}</h3>
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="outline" className={statusConfig[campaign.status]?.className}>
+                      <Badge variant={statusConfig[campaign.status]?.variant || 'outline'}>
                         {statusConfig[campaign.status]?.label}
                       </Badge>
-                      <TypeIcon className="h-4 w-4 text-muted-foreground" />
+                      <TypeIcon className="size-4 text-muted-foreground" />
                     </div>
                   </div>
                 </div>

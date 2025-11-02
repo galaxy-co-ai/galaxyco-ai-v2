@@ -28,7 +28,7 @@ const mockSegments: Segment[] = [
     count: 234,
     growth: 12,
     lastUpdated: '2 hours ago',
-    color: 'bg-blue-500',
+    color: 'bg-muted',
   },
   {
     id: '2',
@@ -38,7 +38,7 @@ const mockSegments: Segment[] = [
     count: 567,
     growth: 24,
     lastUpdated: '1 hour ago',
-    color: 'bg-green-500',
+    color: 'bg-muted',
   },
   {
     id: '3',
@@ -48,7 +48,7 @@ const mockSegments: Segment[] = [
     count: 89,
     growth: -5,
     lastUpdated: '30 min ago',
-    color: 'bg-red-500',
+    color: 'bg-muted',
   },
   {
     id: '4',
@@ -58,7 +58,7 @@ const mockSegments: Segment[] = [
     count: 342,
     growth: 8,
     lastUpdated: '15 min ago',
-    color: 'bg-purple-500',
+    color: 'bg-muted',
   },
 ];
 
@@ -92,7 +92,7 @@ export default function SegmentsPage() {
           count: s.memberCount || 0,
           growth: 0, // TODO: Calculate from historical data
           lastUpdated: new Date(s.updatedAt || s.createdAt).toLocaleTimeString(),
-          color: 'bg-blue-500', // TODO: Use segment color from DB
+          color: 'bg-muted',
         }));
         setSegments(apiSegments.length > 0 ? apiSegments : mockSegments);
       } catch (error) {
@@ -148,7 +148,7 @@ export default function SegmentsPage() {
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Avg Growth</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+          <p className="text-2xl font-bold">
             +{Math.round(segments.reduce((sum, s) => sum + s.growth, 0) / segments.length)}%
           </p>
         </div>
@@ -176,8 +176,8 @@ export default function SegmentsPage() {
             key={segment.id}
             className="rounded-lg border border-border bg-card overflow-hidden hover:border-primary hover:shadow-md transition-all"
           >
-            {/* Color Bar */}
-            <div className={`h-2 ${segment.color}`} />
+            {/* Subtle Border */}
+            <div className={`h-1 ${segment.color} opacity-30`} />
 
             <div className="p-6">
               <div className="flex items-start justify-between mb-3">
@@ -207,13 +207,7 @@ export default function SegmentsPage() {
                   <Users className="h-4 w-4 text-muted-foreground" />
                   <span className="text-2xl font-bold">{segment.count.toLocaleString()}</span>
                 </div>
-                <div
-                  className={`flex items-center gap-1 text-sm font-semibold ${
-                    segment.growth >= 0
-                      ? 'text-green-600 dark:text-green-400'
-                      : 'text-red-600 dark:text-red-400'
-                  }`}
-                >
+                <div className="flex items-center gap-1 text-sm font-semibold text-muted-foreground">
                   <TrendingUp className={`h-4 w-4 ${segment.growth < 0 ? 'rotate-180' : ''}`} />
                   {segment.growth > 0 ? '+' : ''}
                   {segment.growth}%

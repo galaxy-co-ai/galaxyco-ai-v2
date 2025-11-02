@@ -25,17 +25,11 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative">
-                {/* Framer-style gradient glow effect */}
-                <div className="absolute inset-0 gradient-framer-blue rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-                {/* Logo container */}
-                <div className="relative size-10 gradient-framer-blue rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">G</span>
-                </div>
+              {/* Logo container - Linear minimal style */}
+              <div className="size-10 bg-foreground rounded-lg flex items-center justify-center">
+                <span className="text-background font-bold text-xl">G</span>
               </div>
-              <span className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                GalaxyCo.ai
-              </span>
+              <span className="text-lg font-semibold">GalaxyCo.ai</span>
             </Link>
 
             <div className="flex items-center gap-2">
@@ -55,7 +49,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero Section - Linear Style */}
-      <main className="container mx-auto px-4 py-32">
+      <main className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 className="text-6xl lg:text-7xl font-bold">
             Build AI agents in
@@ -64,8 +58,8 @@ export default async function HomePage() {
           </h1>
 
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            GalaxyCo is THE AI operating system for businesses.
-            Plan, build, and deploy multi-agent systems in minutes.
+            GalaxyCo is THE AI operating system for businesses. Plan, build, and deploy multi-agent
+            systems in minutes.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -85,7 +79,7 @@ export default async function HomePage() {
       </main>
 
       {/* Features Section - Linear Minimal Style */}
-      <section className="container mx-auto px-4 py-24 bg-muted/30">
+      <section className="container mx-auto px-4 py-24">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-4">
             <h2 className="text-4xl font-semibold">Everything you need</h2>
@@ -172,9 +166,7 @@ export default async function HomePage() {
               <div className="size-8 bg-foreground rounded-md flex items-center justify-center">
                 <span className="text-background font-bold text-sm">G</span>
               </div>
-              <p className="text-sm text-muted-foreground">
-                © 2025 GalaxyCo.ai
-              </p>
+              <p className="text-sm text-muted-foreground">© 2025 GalaxyCo.ai</p>
             </div>
             <div className="flex items-center gap-8 text-sm text-muted-foreground">
               <Link href="/privacy" className="hover:text-foreground transition-colors">

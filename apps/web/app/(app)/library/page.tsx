@@ -73,17 +73,17 @@ export default function KnowledgeBasePage() {
       {
         id: '1',
         name: 'All Documents',
-        color: 'bg-blue-500',
+        color: 'bg-muted',
         documentCount: documents.length,
       },
       {
         id: '2',
         name: 'Company Docs',
-        color: 'bg-green-500',
+        color: 'bg-muted',
         documentCount: 5,
       },
-      { id: '3', name: 'Research', color: 'bg-purple-500', documentCount: 3 },
-      { id: '4', name: 'Templates', color: 'bg-orange-500', documentCount: 2 },
+      { id: '3', name: 'Research', color: 'bg-muted', documentCount: 3 },
+      { id: '4', name: 'Templates', color: 'bg-muted', documentCount: 2 },
     ]);
   };
 
@@ -120,13 +120,13 @@ export default function KnowledgeBasePage() {
   const getStatusColor = (status: Document['status']) => {
     switch (status) {
       case 'ready':
-        return 'bg-green-100 text-green-800';
+        return 'bg-muted/50 text-foreground';
       case 'processing':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-muted/50 text-foreground';
       case 'failed':
-        return 'bg-red-100 text-red-800';
+        return 'bg-destructive/10 text-destructive';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted/50 text-muted-foreground';
     }
   };
 
@@ -180,7 +180,7 @@ export default function KnowledgeBasePage() {
               onClick={() => setSelectedCollection(collection.id)}
               className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors ${
                 selectedCollection === collection.id
-                  ? 'bg-primary/10 text-primary'
+                  ? 'bg-muted text-foreground'
                   : 'hover:bg-muted/50'
               }`}
             >

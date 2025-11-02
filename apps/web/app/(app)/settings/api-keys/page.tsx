@@ -46,7 +46,7 @@ export default function APIKeysPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">API Keys</h1>
-        <p className="text-foreground-muted">
+        <p className="text-muted-foreground">
           Manage API keys to access GalaxyCo.ai programmatically
         </p>
       </div>
@@ -57,7 +57,7 @@ export default function APIKeysPage() {
           <Shield className="h-5 w-5 text-warning shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-sm mb-1">Keep your API keys secure</p>
-            <p className="text-sm text-foreground-muted">
+            <p className="text-sm text-muted-foreground">
               Never share your API keys publicly or commit them to version control. Anyone with your
               API key can access your account.
             </p>
@@ -70,7 +70,7 @@ export default function APIKeysPage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold mb-1">Create New API Key</h2>
-            <p className="text-sm text-foreground-muted">
+            <p className="text-sm text-muted-foreground">
               Generate a new key for programmatic access
             </p>
           </div>
@@ -85,15 +85,15 @@ export default function APIKeysPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Your API Keys</h2>
-          <span className="text-sm text-foreground-muted">{apiKeys.length} keys</span>
+          <span className="text-sm text-muted-foreground">{apiKeys.length} keys</span>
         </div>
 
         {apiKeys.map((apiKey) => (
           <Card key={apiKey.id} className="p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <Key className="h-5 w-5 text-primary" />
+                <div className="size-10 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                  <Key className="size-5 text-foreground" />
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">{apiKey.name}</h3>
@@ -115,28 +115,28 @@ export default function APIKeysPage() {
             </div>
 
             {/* API Key */}
-            <div className="mb-4 p-3 bg-background-subtle rounded-lg border border-border">
+            <div className="mb-4 p-3 bg-muted/30 rounded-lg border border-border">
               <div className="flex items-center justify-between">
                 <code className="text-sm font-mono">{apiKey.key}</code>
                 <div className="flex items-center gap-2">
                   <button
-                    className="p-2 hover:bg-background rounded-md transition-colors"
+                    className="p-2 hover:bg-muted rounded-md transition-colors"
                     aria-label="Show API key"
                   >
-                    <Eye className="h-4 w-4 text-foreground-muted" />
+                    <Eye className="size-4 text-muted-foreground" />
                   </button>
                   <button
-                    className="p-2 hover:bg-background rounded-md transition-colors"
+                    className="p-2 hover:bg-muted rounded-md transition-colors"
                     aria-label="Copy API key"
                   >
-                    <Copy className="h-4 w-4 text-foreground-muted" />
+                    <Copy className="size-4 text-muted-foreground" />
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Metadata */}
-            <div className="flex items-center gap-6 text-sm text-foreground-muted">
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>Created {apiKey.created}</span>
@@ -150,23 +150,23 @@ export default function APIKeysPage() {
       {/* Documentation */}
       <Card className="p-6 mt-6">
         <h3 className="font-semibold mb-3">API Documentation</h3>
-        <p className="text-sm text-foreground-muted mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Learn how to use API keys to authenticate requests to the GalaxyCo.ai API.
         </p>
         <div className="space-y-3">
           <a
             href="/docs/api-reference"
-            className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+            className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-primary/50 hover:bg-muted/30 transition-colors"
           >
             <span className="text-sm font-medium">API Reference</span>
-            <span className="text-xs text-foreground-muted">→</span>
+            <span className="text-xs text-muted-foreground">→</span>
           </a>
           <a
             href="/docs/getting-started"
-            className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+            className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-primary/50 hover:bg-muted/30 transition-colors"
           >
             <span className="text-sm font-medium">Authentication Guide</span>
-            <span className="text-xs text-foreground-muted">→</span>
+            <span className="text-xs text-muted-foreground">→</span>
           </a>
         </div>
       </Card>

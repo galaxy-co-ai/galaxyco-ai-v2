@@ -94,8 +94,6 @@ function CRMContent() {
       description: 'Manage customer accounts and relationships',
       count: metrics?.totalCustomers || 0,
       activeCount: metrics?.activeCustomers || 0,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
     },
     {
       title: 'Contacts',
@@ -103,8 +101,6 @@ function CRMContent() {
       icon: UserCircle,
       description: 'Individual contacts and decision makers',
       count: metrics?.totalContacts || 0,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
     },
     {
       title: 'Projects',
@@ -113,8 +109,6 @@ function CRMContent() {
       description: 'Active projects and engagements',
       count: metrics?.totalProjects || 0,
       activeCount: metrics?.activeProjects || 0,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
     },
     {
       title: 'Prospects',
@@ -122,8 +116,6 @@ function CRMContent() {
       icon: Target,
       description: 'Potential customers and leads',
       count: metrics?.totalProspects || 0,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
     },
     {
       title: 'Segments',
@@ -131,15 +123,13 @@ function CRMContent() {
       icon: TrendingUp,
       description: 'Customer segmentation and targeting',
       count: 0,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-50',
     },
   ];
 
   return (
     <div className="h-full flex flex-col bg-background">
-      {/* Page Header */}
-      <div className="border-b border-border bg-card px-6 py-4">
+      {/* Page Header - Linear Style */}
+      <div className="border-b px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">CRM</h1>
@@ -163,12 +153,10 @@ function CRMContent() {
             const Icon = section.icon;
             return (
               <Link key={section.href} href={section.href}>
-                <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full">
                   <div className="flex items-start justify-between mb-4">
-                    <div
-                      className={`w-12 h-12 rounded-lg ${section.bgColor} flex items-center justify-center`}
-                    >
-                      <Icon className={`w-6 h-6 ${section.color}`} />
+                    <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                      <Icon className="size-6 text-foreground" />
                     </div>
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>

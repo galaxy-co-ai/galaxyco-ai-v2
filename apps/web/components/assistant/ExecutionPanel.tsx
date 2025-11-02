@@ -10,6 +10,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Check, X, Loader2, ExternalLink, Zap } from 'lucide-react';
 import { GridView } from '@/components/galaxy/flows/GridView';
 
@@ -33,11 +34,7 @@ interface ExecutionPanelProps {
   onReject?: () => void;
 }
 
-export function ExecutionPanel({
-  execution,
-  onApprove,
-  onReject,
-}: ExecutionPanelProps) {
+export function ExecutionPanel({ execution, onApprove, onReject }: ExecutionPanelProps) {
   const isWorkflowTool = execution.tool === 'create_workflow';
   const isAgentTool = execution.tool === 'create_agent';
 
@@ -46,34 +43,33 @@ export function ExecutionPanel({
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Zap className="h-5 w-5 text-primary" />
+          <div className="size-10 rounded-lg bg-muted flex items-center justify-center">
+            <Zap className="size-5 text-foreground" />
           </div>
           <div>
             <h3 className="font-semibold text-lg">Tool Execution</h3>
-            <p className="text-sm text-muted-foreground">
-              {getToolDisplayName(execution.tool)}
-            </p>
+            <p className="text-sm text-muted-foreground">{getToolDisplayName(execution.tool)}</p>
           </div>
         </div>
 
         {/* Status Badge */}
-        <div
-          className={cn(
-            'px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2',
-            execution.status === 'pending' && 'bg-gray-100 text-gray-700',
-            execution.status === 'running' && 'bg-blue-100 text-blue-700',
-            execution.status === 'completed' && 'bg-green-100 text-green-700',
-            execution.status === 'failed' && 'bg-red-100 text-red-700',
-          )}
+        <Badge
+          variant={
+            execution.status === 'completed'
+              ? 'default'
+              : execution.status === 'failed'
+                ? 'destructive'
+                : execution.status === 'running'
+                  ? 'secondary'
+                  : 'outline'
+          }
+          className="flex items-center gap-2"
         >
-          {execution.status === 'running' && (
-            <Loader2 className="h-3 w-3 animate-spin" />
-          )}
-          {execution.status === 'completed' && <Check className="h-3 w-3" />}
-          {execution.status === 'failed' && <X className="h-3 w-3" />}
+          {execution.status === 'running' && <Loader2 className="size-3 animate-spin" />}
+          {execution.status === 'completed' && <Check className="size-3" />}
+          {execution.status === 'failed' && <X className="size-3" />}
           {execution.status.charAt(0).toUpperCase() + execution.status.slice(1)}
-        </div>
+        </Badge>
       </div>
 
       {/* Content Based on Tool Type */}
@@ -84,9 +80,7 @@ export function ExecutionPanel({
             <div className="rounded-lg border border-border overflow-hidden">
               <div className="bg-muted p-3 border-b border-border">
                 <h4 className="font-medium text-sm">Workflow Preview</h4>
-                <p className="text-xs text-muted-foreground">
-                  {execution.result.workflow.name}
-                </p>
+                <p className="text-xs text-muted-foreground">{execution.result.workflow.name}</p>
               </div>
               <div className="h-[300px] bg-background">
                 <GridView
@@ -108,13 +102,11 @@ export function ExecutionPanel({
           {isAgentTool && execution.result.agent && (
             <div className="rounded-lg border border-border p-4">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Zap className="h-6 w-6 text-primary" />
+                <div className="size-12 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                  <Zap className="size-6 text-foreground" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold mb-1">
-                    {execution.result.agent.name}
-                  </h4>
+                  <h4 className="font-semibold mb-1">{execution.result.agent.name}</h4>
                   <p className="text-sm text-muted-foreground mb-3">
                     {execution.result.agent.description || 'No description provided'}
                   </p>
@@ -133,9 +125,7 @@ export function ExecutionPanel({
 
           {/* Result Message */}
           {execution.result.message && (
-            <p className="text-sm text-muted-foreground">
-              {execution.result.message}
-            </p>
+            <p className="text-sm text-muted-foreground">{execution.result.message}</p>
           )}
 
           {/* Action Buttons */}
@@ -172,7 +162,7 @@ export function ExecutionPanel({
 
       {/* Error Message */}
       {execution.status === 'failed' && execution.error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-sm text-destructive">
           {execution.error}
         </div>
       )}
@@ -201,4 +191,3 @@ function getToolDisplayName(tool: string): string {
 
   return toolNames[tool] || tool;
 }
-

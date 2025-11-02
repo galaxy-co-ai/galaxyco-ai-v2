@@ -173,4 +173,3 @@ export function InputArea({
     </div>
   );
 }
-

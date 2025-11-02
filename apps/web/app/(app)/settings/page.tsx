@@ -1,6 +1,7 @@
 'use client';
 
 import { PageHeader } from '@/components/layout/page-header';
+import { Card } from '@/components/ui/card';
 import { User, Link2, Bell, Shield, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 
@@ -42,26 +43,20 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <PageHeader title="Settings" description="Manage your account settings and preferences" />
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {settingsPages.map((page) => (
-          <Link
-            key={page.href}
-            href={page.href}
-            className="card p-6 transition-shadow hover:shadow-md"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                <page.icon className="h-6 w-6 text-primary" />
+          <Link key={page.href} href={page.href}>
+            <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full">
+              <div className="flex items-start gap-4">
+                <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                  <page.icon className="size-6 text-foreground" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">{page.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{page.description}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-                  {page.name}
-                </h3>
-                <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                  {page.description}
-                </p>
-              </div>
-            </div>
+            </Card>
           </Link>
         ))}
       </div>

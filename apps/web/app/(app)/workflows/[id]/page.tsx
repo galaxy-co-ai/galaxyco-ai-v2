@@ -223,11 +223,11 @@ function OverviewTab() {
             >
               <div className="flex items-center gap-3">
                 {execution.status === 'success' ? (
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="size-5 text-muted-foreground" />
                 ) : execution.status === 'failed' ? (
-                  <XCircle className="h-5 w-5 text-red-500" />
+                  <XCircle className="size-5 text-destructive" />
                 ) : (
-                  <Clock className="h-5 w-5 text-yellow-500" />
+                  <Clock className="size-5 text-muted-foreground" />
                 )}
                 <div>
                   <p className="text-sm font-medium">Execution {execution.id.split('_')[1]}</p>

@@ -8,26 +8,35 @@
 ## 🤖 Essential MCP Servers
 
 ### ✅ Already Configured
+
 1. **GitKraken** - Git operations, GitHub API
 2. **Kibo UI** - Component library (fixed tonight)
 
 ### 🚧 To Add Tonight
 
 ### 3. **Filesystem MCP Server**
+
 **Purpose:** Better file operations, search, watching
+
 ```json
 {
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0"
+      ]
     }
   }
 }
 ```
 
 ### 4. **GitHub MCP Server**
+
 **Purpose:** Issues, PRs, repo management
+
 ```json
 {
   "mcpServers": {
@@ -43,7 +52,9 @@
 ```
 
 ### 5. **PostgreSQL MCP Server**
+
 **Purpose:** Direct database queries, schema inspection
+
 ```json
 {
   "mcpServers": {
@@ -59,7 +70,9 @@
 ```
 
 ### 6. **Brave Search MCP Server**
+
 **Purpose:** Real-time web research
+
 ```json
 {
   "mcpServers": {
@@ -75,7 +88,9 @@
 ```
 
 ### 7. **Memory MCP Server**
+
 **Purpose:** Persistent knowledge across sessions
+
 ```json
 {
   "mcpServers": {
@@ -88,7 +103,9 @@
 ```
 
 ### 8. **Sequential Thinking MCP**
+
 **Purpose:** Enhanced reasoning for complex problems
+
 ```json
 {
   "mcpServers": {
@@ -105,67 +122,70 @@
 ## 📋 Essential Project Commands
 
 ### Development Commands
+
 ```yaml
 # Start dev server
 dev:
-  command: "cd apps/web && pnpm dev"
-  description: "Start Next.js dev server"
+  command: 'cd apps/web && pnpm dev'
+  description: 'Start Next.js dev server'
 
 # Run all tests
 test:
-  command: "cd apps/web && pnpm test:run tests/unit tests/component"
-  description: "Run unit and component tests"
+  command: 'cd apps/web && pnpm test:run tests/unit tests/component'
+  description: 'Run unit and component tests'
 
 # Type check everything
 typecheck:
-  command: "turbo run typecheck"
-  description: "Type check all packages"
+  command: 'turbo run typecheck'
+  description: 'Type check all packages'
 
 # Lint and fix
 lint:
-  command: "turbo run lint -- --fix"
-  description: "Lint all packages and auto-fix"
+  command: 'turbo run lint -- --fix'
+  description: 'Lint all packages and auto-fix'
 
 # Format code
 format:
-  command: "prettier --write ."
-  description: "Format all code with Prettier"
+  command: 'prettier --write .'
+  description: 'Format all code with Prettier'
 
 # Full quality check
 quality:
-  command: "turbo run typecheck && turbo run lint && prettier --check ."
-  description: "Run all quality checks"
+  command: 'turbo run typecheck && turbo run lint && prettier --check .'
+  description: 'Run all quality checks'
 ```
 
 ### Database Commands
+
 ```yaml
 # Push schema changes
 db:push:
-  command: "cd packages/database && pnpm db:push"
-  description: "Push schema changes to database"
+  command: 'cd packages/database && pnpm db:push'
+  description: 'Push schema changes to database'
 
 # Generate migrations
 db:generate:
-  command: "cd packages/database && pnpm db:generate"
-  description: "Generate database migrations"
+  command: 'cd packages/database && pnpm db:generate'
+  description: 'Generate database migrations'
 
 # Open studio
 db:studio:
-  command: "cd packages/database && pnpm db:studio"
-  description: "Open Drizzle Studio"
+  command: 'cd packages/database && pnpm db:studio'
+  description: 'Open Drizzle Studio'
 ```
 
 ### Deployment Commands
+
 ```yaml
 # Build for production
 build:
-  command: "turbo run build"
-  description: "Build all packages for production"
+  command: 'turbo run build'
+  description: 'Build all packages for production'
 
 # Deploy web
 deploy:web:
-  command: "cd apps/web && vercel --prod"
-  description: "Deploy web app to Vercel"
+  command: 'cd apps/web && vercel --prod'
+  description: 'Deploy web app to Vercel'
 ```
 
 ---
@@ -178,6 +198,7 @@ deploy:web:
 ## 🎨 UI/UX Excellence Standards
 
 ### Visual Design
+
 - All new pages must match Make.com Grid quality level
 - Use 3D isometric nodes for workflow visualization
 - Apply Framer brand colors (#0055FF, #0099FF) exclusively
@@ -185,12 +206,14 @@ deploy:web:
 - Reference v0.dev templates for professional layouts
 
 ### Component Standards
+
 - Every card uses Kibo UI CreditCard component
 - All loading states use Kibo UI Spinner
 - Status indicators use Kibo UI Status component
 - No custom UI components without approval
 
 ### Animation Standards
+
 - Use Framer Motion for all animations
 - Spring physics (stiffness: 300, damping: 25)
 - 60fps minimum
@@ -198,12 +221,14 @@ deploy:web:
 - Purposeful, not gratuitous
 
 ### Spacing System (8px Grid)
+
 - xs: 4px, sm: 8px, md: 16px, lg: 24px, xl: 32px, 2xl: 48px
 - Card padding: 24px (p-6)
 - Section spacing: 48-64px
 - Container max-width: 1280px
 
 ### Typography Hierarchy
+
 - H1: text-5xl lg:text-7xl font-bold
 - H2: text-3xl lg:text-4xl font-semibold
 - H3: text-xl lg:text-2xl font-semibold
@@ -213,6 +238,7 @@ deploy:web:
 ## 🤖 AI Assistant Integration
 
 ### Inline AI Requirements
+
 - Every input field gets AI suggestions button
 - Context-aware AI prompts
 - Show AI confidence scores
@@ -220,6 +246,7 @@ deploy:web:
 - One-click accept/reject
 
 ### Grid Canvas Requirements
+
 - 3D isometric nodes (Make.com style)
 - Grid overview mode
 - Context sidebar panel
@@ -231,12 +258,14 @@ deploy:web:
 ## 🧪 Testing Requirements
 
 ### Must Test After Every Change
+
 - Run: pnpm test:run tests/unit tests/component
 - All tests must pass before commit
 - Add tests for new features
 - No decreasing coverage
 
 ### Quality Gates
+
 - TypeScript: 0 errors (strict mode)
 - Linter: 0 errors, warnings acceptable
 - Tests: 100% passing
@@ -245,6 +274,7 @@ deploy:web:
 ## 📚 Documentation Requirements
 
 ### Every Feature Needs
+
 - Component-level JSDoc comments
 - README in feature directory
 - Usage examples
@@ -252,6 +282,7 @@ deploy:web:
 - Migration notes (if applicable)
 
 ### Session Handoffs
+
 - Update `.cursor/current-sprint.md`
 - Document decisions made
 - Note patterns learned
@@ -322,11 +353,7 @@ deploy:web:
   "mcpServers": {
     "kibo-ui": {
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://www.kibo-ui.com/api/mcp/mcp"
-      ]
+      "args": ["-y", "mcp-remote", "https://www.kibo-ui.com/api/mcp/mcp"]
     },
     "gitkraken": {
       "command": "gk",
@@ -393,6 +420,7 @@ deploy:web:
 ## 🚀 Execution Plan (Tonight)
 
 ### Phase 1: MCP Server Research & Config (1 hour)
+
 - ✅ Research complete
 - 🚧 Update .cursor/mcp.json
 - 🚧 Add filesystem server
@@ -402,12 +430,14 @@ deploy:web:
 - 🚧 Test all connections
 
 ### Phase 2: Project Commands (30 min)
+
 - Create .cursor/commands.json
 - Add 8 essential commands
 - Test each command
 - Document usage
 
 ### Phase 3: Enhanced Rules (30 min)
+
 - Update .cursorrules
 - Add UI/UX standards
 - Add Grid canvas requirements
@@ -415,6 +445,7 @@ deploy:web:
 - Add documentation standards
 
 ### Phase 4: Documentation (30 min)
+
 - Complete MCP server guide
 - Command reference
 - Best practices doc
@@ -425,6 +456,7 @@ deploy:web:
 ## ✅ Benefits
 
 ### With Complete MCP Setup:
+
 - 🚀 **Filesystem:** Faster file operations
 - 🐙 **GitHub:** Direct issue/PR management
 - 🗄️ **PostgreSQL:** Query database directly
@@ -432,12 +464,14 @@ deploy:web:
 - 🎨 **Kibo UI:** Component documentation
 
 ### With Project Commands:
+
 - ⚡ Quick access to common tasks
 - 🎯 One-click testing
 - 🔄 Easy quality checks
 - 📦 Simplified workflows
 
 ### With Enhanced Rules:
+
 - 🎨 Consistent UI quality (Make.com level)
 - 📐 Enforced standards
 - 🧪 Required testing
@@ -448,12 +482,14 @@ deploy:web:
 ## 🎯 Expected Outcomes
 
 **Tonight I'll configure:**
+
 - ✅ 6 MCP servers (filesystem, github, postgres, memory + existing 2)
 - ✅ 8 project commands
 - ✅ Enhanced project rules
 - ✅ Complete documentation
 
 **Tomorrow you'll have:**
+
 - ⚡ Faster AI assistance (more context)
 - 🎯 One-click commands
 - 📐 Enforced quality standards
@@ -462,4 +498,3 @@ deploy:web:
 ---
 
 **Adding to overnight mission... Executing now! 🚀**
-

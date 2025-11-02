@@ -10,15 +10,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Search,
-  Plus,
-  MessageSquare,
-  MoreVertical,
-  Trash2,
-  Edit2,
-  Archive,
-} from 'lucide-react';
+import { Search, Plus, MessageSquare, MoreVertical, Trash2, Edit2, Archive } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,7 +49,7 @@ export function ConversationHistory({
 
   // Filter conversations by search query
   const filteredConversations = conversations.filter((conv) =>
-    conv.title.toLowerCase().includes(searchQuery.toLowerCase())
+    conv.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -93,9 +85,7 @@ export function ConversationHistory({
           <div className="flex flex-col items-center justify-center h-full text-center p-8">
             <MessageSquare className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
             <p className="text-sm text-muted-foreground">
-              {searchQuery
-                ? 'No conversations found'
-                : 'No conversations yet. Start chatting!'}
+              {searchQuery ? 'No conversations found' : 'No conversations yet. Start chatting!'}
             </p>
           </div>
         ) : (
@@ -204,4 +194,3 @@ function formatDate(date: Date): string {
 
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
-

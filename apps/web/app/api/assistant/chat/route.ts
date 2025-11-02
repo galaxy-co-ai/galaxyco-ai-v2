@@ -293,7 +293,12 @@ export async function POST(req: Request) {
           const { name, description, steps } = params;
 
           // Log tool execution
-          console.log('[Chat API] Tool: create_workflow', { name, description, steps, workspaceId });
+          console.log('[Chat API] Tool: create_workflow', {
+            name,
+            description,
+            steps,
+            workspaceId,
+          });
 
           // Convert steps to nodes and edges
           const nodes = steps.map((step, i) => ({

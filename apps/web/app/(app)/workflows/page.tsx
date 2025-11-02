@@ -155,7 +155,10 @@ export default function WorkflowsPage() {
       ) : (
         <div className="space-y-6">
           {filteredWorkflows.map((workflow) => (
-            <div key={workflow.id} className="rounded-lg bg-muted/30 hover:bg-muted/50 p-6 transition-colors linear-shadow hover:linear-shadow-hover">
+            <div
+              key={workflow.id}
+              className="rounded-lg bg-muted/30 hover:bg-muted/50 p-6 transition-colors linear-shadow hover:linear-shadow-hover"
+            >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold">{workflow.name}</h3>

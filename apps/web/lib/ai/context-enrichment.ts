@@ -60,10 +60,7 @@ export interface EnrichedContext {
 /**
  * Enrich page context with actual resource data from database
  */
-export async function enrichContext(
-  context: any,
-  userId: string
-): Promise<EnrichedContext> {
+export async function enrichContext(context: any, userId: string): Promise<EnrichedContext> {
   const enriched: EnrichedContext = {
     page: context.page,
     selectedItems: context.selectedItems,
@@ -229,4 +226,3 @@ export async function enrichContext(
 
   return enriched;
 }
-

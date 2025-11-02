@@ -190,7 +190,7 @@ export default function ResourcesPage() {
         renderCard={(resource) => (
           <div className="group">
             <div className="flex items-start gap-4">
-              <div className="rounded-lg bg-primary/10 p-3 text-primary">{resource.icon}</div>
+              <div className="rounded-lg bg-muted p-3 text-foreground">{resource.icon}</div>
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                   {resource.title}

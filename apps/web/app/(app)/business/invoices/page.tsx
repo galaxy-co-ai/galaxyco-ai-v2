@@ -41,37 +41,41 @@ interface Invoice {
 
 const statusConfig: Record<
   string,
-  { label: string; icon: typeof CheckCircle2; className: string }
+  {
+    label: string;
+    icon: typeof CheckCircle2;
+    variant: 'default' | 'secondary' | 'destructive' | 'outline';
+  }
 > = {
   paid: {
     label: 'Paid',
     icon: CheckCircle2,
-    className: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+    variant: 'default',
   },
   pending: {
     label: 'Pending',
     icon: Clock,
-    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+    variant: 'secondary',
   },
   sent: {
     label: 'Sent',
     icon: FileText,
-    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
+    variant: 'secondary',
   },
   overdue: {
     label: 'Overdue',
     icon: XCircle,
-    className: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+    variant: 'destructive',
   },
   draft: {
     label: 'Draft',
     icon: FileText,
-    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
+    variant: 'outline',
   },
   cancelled: {
     label: 'Cancelled',
     icon: XCircle,
-    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300',
+    variant: 'outline',
   },
 };
 
@@ -151,21 +155,15 @@ export default function InvoicesPage() {
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Paid</p>
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-            ${(stats.paid / 100 / 1000).toFixed(1)}K
-          </p>
+          <p className="text-2xl font-bold">${(stats.paid / 100 / 1000).toFixed(1)}K</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Pending</p>
-          <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-            ${(stats.pending / 100 / 1000).toFixed(1)}K
-          </p>
+          <p className="text-2xl font-bold">${(stats.pending / 100 / 1000).toFixed(1)}K</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-sm text-muted-foreground mb-1">Overdue</p>
-          <p className="text-2xl font-bold text-red-600 dark:text-red-400">
-            ${(stats.overdue / 100 / 1000).toFixed(1)}K
-          </p>
+          <p className="text-2xl font-bold">${(stats.overdue / 100 / 1000).toFixed(1)}K</p>
         </div>
       </div>
 
@@ -227,11 +225,8 @@ export default function InvoicesPage() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <Badge
-                          variant="outline"
-                          className={statusConfig[invoice.status]?.className}
-                        >
-                          <StatusIcon className="mr-1 h-3 w-3" />
+                        <Badge variant={statusConfig[invoice.status]?.variant || 'outline'}>
+                          <StatusIcon className="mr-1 size-3" />
                           {statusConfig[invoice.status]?.label || invoice.status}
                         </Badge>
                       </td>

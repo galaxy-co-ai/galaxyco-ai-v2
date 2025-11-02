@@ -11,4 +11,3 @@ export {
   type NewAiConversation as NewConversation,
   type NewAiMessage as NewMessage,
 } from '@galaxyco/database';
-

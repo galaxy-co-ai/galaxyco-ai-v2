@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useWorkspace } from '@/contexts/workspace-context';
 import { PageHeader } from '@/components/layout/page-header';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -128,31 +130,30 @@ export default function IntegrationsPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {integrations.map((integration) => (
-          <div key={integration.id} className="card p-6">
+          <Card
+            key={integration.id}
+            className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+          >
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-                  {integration.name}
-                </h3>
-                <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                  {integration.type}
-                </p>
+                <h3 className="font-semibold text-foreground">{integration.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{integration.type}</p>
               </div>
               {integration.status === 'active' ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                  <Check className="h-3 w-3" />
+                <Badge variant="secondary" className="text-xs">
+                  <Check className="size-3 mr-1" />
                   Active
-                </span>
+                </Badge>
               ) : (
-                <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                  <X className="h-3 w-3" />
+                <Badge variant="destructive" className="text-xs">
+                  <X className="size-3 mr-1" />
                   {integration.status}
-                </span>
+                </Badge>
               )}
             </div>
 
             {integration.status === 'active' && integration.connectedAt && (
-              <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">
+              <p className="mt-4 text-xs text-muted-foreground">
                 Connected: {new Date(integration.connectedAt).toLocaleDateString()}
               </p>
             )}
@@ -195,7 +196,7 @@ export default function IntegrationsPage() {
                 </Button>
               )}
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>

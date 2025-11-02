@@ -46,8 +46,10 @@ async function testConnection() {
       LIMIT 5
     `;
     console.log('✅ Schema query successful!');
-    console.log('📋 Tables found:', tablesResult.map((r: any) => r.table_name));
-
+    console.log(
+      '📋 Tables found:',
+      tablesResult.map((r: any) => r.table_name),
+    );
   } catch (error: any) {
     console.error('\n❌ Connection failed!');
     console.error('Error type:', error.constructor.name);
@@ -93,4 +95,3 @@ testConnection()
     console.error('\n❌ Unexpected error:', error);
     process.exit(1);
   });
-
