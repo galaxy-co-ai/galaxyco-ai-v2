@@ -111,7 +111,7 @@ export default function APIExplorerPage() {
         <div className="lg:col-span-2 space-y-4">
           <div className="rounded-lg border border-border bg-card p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Badge variant="secondary" className={methodColors[selectedEndpoint.method]}>
+              <Badge variant={methodVariants[selectedEndpoint.method] || 'secondary'}>
                 {selectedEndpoint.method}
               </Badge>
               <code className="text-sm font-mono">{selectedEndpoint.path}</code>
