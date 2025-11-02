@@ -87,7 +87,7 @@ export default function AssistantPage() {
           hasToolInvocations: (message as any).toolInvocations?.length > 0,
         });
       }
-      
+
       // Save message to database
       if (activeConversationId) {
         try {
@@ -171,7 +171,7 @@ export default function AssistantPage() {
   const handleFormSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      
+
       if (!input.trim() && uploadedFiles.length === 0) return;
       if (isLoading) return;
 
@@ -200,6 +200,17 @@ export default function AssistantPage() {
           }
 
           const uploadData = await uploadRes.json();
+          
+          // Check for upload errors
+          if (uploadData.errors && uploadData.errors.length > 0) {
+            toast.error(`Some files failed: ${uploadData.errors.join(', ')}`);
+          }
+          
+          // Only proceed if at least one file uploaded successfully
+          if (!uploadData.success || uploadData.files.length === 0) {
+            return;
+          }
+          
           // Add file info to message context
           const fileContext = `[Files uploaded: ${uploadedFiles.map((f) => f.name).join(', ')}]`;
           const messageWithFiles = `${input}\n\n${fileContext}`;
@@ -473,7 +484,7 @@ export default function AssistantPage() {
                 <div className="space-y-6">
                   {messages.map((message: any) => {
                     const toolResult = parseToolResult(message);
-                    
+
                     // Log tool invocations for debugging (only in development)
                     if (process.env.NODE_ENV === 'development' && message.toolInvocations) {
                       console.log('[Assistant] Tool invocations found:', {

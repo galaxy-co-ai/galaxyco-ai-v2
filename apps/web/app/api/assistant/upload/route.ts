@@ -43,57 +43,62 @@ export async function POST(req: Request) {
     const errors: string[] = [];
     
     for (const file of files) {
-      // Validate file size
-      if (file.size > MAX_FILE_SIZE) {
-        errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
-        continue;
+      try {
+        // Validate file size
+        if (file.size > MAX_FILE_SIZE) {
+          errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+          continue;
+        }
+
+        // Validate file type
+        if (!ALLOWED_TYPES.includes(file.type)) {
+          errors.push(`${file.name}: Unsupported file type (${file.type})`);
+          continue;
+        }
+
+        // Upload to Vercel Blob storage
+        const fileId = nanoid();
+        const filename = `${userId}/${fileId}-${file.name}`;
+
+        const blob = await put(filename, file, {
+          access: 'public',
+        });
+
+        // Extract text content based on file type
+        let extractedText = '';
+        let metadata: Record<string, any> = {
+          originalName: file.name,
+          mimeType: file.type,
+          size: file.size,
+          uploadedAt: new Date().toISOString(),
+        };
+
+        // For text files, extract content immediately
+        if (file.type.startsWith('text/')) {
+          extractedText = await file.text();
+          metadata.wordCount = extractedText.split(/\s+/).length;
+        }
+
+        // For PDFs, images, etc., we'd need additional processing
+        // (implement later with appropriate libraries)
+        if (file.type === 'application/pdf') {
+          metadata.requiresProcessing = true;
+          metadata.processingStatus = 'pending';
+        }
+
+        uploadedFiles.push({
+          id: fileId,
+          name: file.name,
+          url: blob.url,
+          type: file.type,
+          size: file.size,
+          extractedText,
+          metadata,
+        });
+      } catch (fileError: any) {
+        console.error(`[Upload API] Error processing file ${file.name}:`, fileError);
+        errors.push(`${file.name}: ${fileError.message || 'Upload failed'}`);
       }
-
-      // Validate file type
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        errors.push(`${file.name}: Unsupported file type (${file.type})`);
-        continue;
-      }
-
-    // Upload to Vercel Blob storage
-    const fileId = nanoid();
-    const filename = `${userId}/${fileId}-${file.name}`;
-
-    const blob = await put(filename, file, {
-      access: 'public',
-    });
-
-    // Extract text content based on file type
-    let extractedText = '';
-    let metadata: Record<string, any> = {
-      originalName: file.name,
-      mimeType: file.type,
-      size: file.size,
-      uploadedAt: new Date().toISOString(),
-    };
-
-    // For text files, extract content immediately
-    if (file.type.startsWith('text/')) {
-      extractedText = await file.text();
-      metadata.wordCount = extractedText.split(/\s+/).length;
-    }
-
-    // For PDFs, images, etc., we'd need additional processing
-    // (implement later with appropriate libraries)
-    if (file.type === 'application/pdf') {
-      metadata.requiresProcessing = true;
-      metadata.processingStatus = 'pending';
-    }
-
-      uploadedFiles.push({
-        id: fileId,
-        name: file.name,
-        url: blob.url,
-        type: file.type,
-        size: file.size,
-        extractedText,
-        metadata,
-      });
     }
 
     // Return results - include both successes and errors

@@ -149,7 +149,7 @@ export async function POST(req: Request) {
 
     // Enrich context with actual resource data
     const enrichedContext = context ? await enrichContext(context, userId) : undefined;
-    
+
     // Log context for debugging (only in development)
     if (process.env.NODE_ENV === 'development') {
       console.log('[Chat API] Context received:', {
@@ -227,10 +227,10 @@ export async function POST(req: Request) {
         // @ts-expect-error - AI SDK tool type inference issue
         execute: async (params: z.infer<typeof createAgentSchema>) => {
           const { name, description, type } = params;
-          
+
           // Log tool execution
           console.log('[Chat API] Tool: create_agent', { name, description, type, workspaceId });
-          
+
           // Create agent in database
           const newAgent = await db
             .insert(agents)
@@ -278,7 +278,7 @@ export async function POST(req: Request) {
             message: `Successfully created agent: ${newAgent[0].name}`,
             previewUrl: `/agents/${newAgent[0].id}`,
           };
-          
+
           console.log('[Chat API] Tool result: create_agent', result);
           return result;
         },
@@ -291,10 +291,10 @@ export async function POST(req: Request) {
         // @ts-expect-error - AI SDK tool type inference issue
         execute: async (params: z.infer<typeof createWorkflowSchema>) => {
           const { name, description, steps } = params;
-          
+
           // Log tool execution
           console.log('[Chat API] Tool: create_workflow', { name, description, steps, workspaceId });
-          
+
           // Convert steps to nodes and edges
           const nodes = steps.map((step, i) => ({
             id: `node-${i}`,
@@ -337,7 +337,7 @@ export async function POST(req: Request) {
             message: `Successfully created workflow: ${newWorkflow[0].name}`,
             previewUrl: `/studio/lab/${newWorkflow[0].id}`,
           };
-          
+
           console.log('[Chat API] Tool result: create_workflow', result);
           return result;
         },

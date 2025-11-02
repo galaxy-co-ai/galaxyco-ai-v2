@@ -77,7 +77,7 @@ export async function enrichContext(
 
   try {
     const items = context.selectedItems;
-    
+
     // Log context enrichment start (only in development)
     if (process.env.NODE_ENV === 'development') {
       console.log('[Context Enrichment] Starting enrichment for:', {
@@ -217,7 +217,7 @@ export async function enrichContext(
     // Don't fail the whole request if enrichment fails
     // Just return basic context
   }
-  
+
   // Log enrichment result (only in development)
   if (process.env.NODE_ENV === 'development') {
     console.log('[Context Enrichment] Enriched context:', {
