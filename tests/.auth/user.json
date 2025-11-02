@@ -1,0 +1,89 @@
+{
+  "cookies": [
+    {
+      "name": "__clerk_db_jwt",
+      "value": "dvb_34uTP5grd8MCQXiTwNyChiL2ZuT",
+      "domain": "app.galaxyco.ai",
+      "path": "/",
+      "expires": 1793602115,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__clerk_db_jwt_fEgtn8zq",
+      "value": "dvb_34uTP5grd8MCQXiTwNyChiL2ZuT",
+      "domain": "app.galaxyco.ai",
+      "path": "/",
+      "expires": 1793602115,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__client_uat_fEgtn8zq",
+      "value": "1762062469",
+      "domain": "galaxyco.ai",
+      "path": "/",
+      "expires": 1793602125,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "__client_uat",
+      "value": "1762062469",
+      "domain": "galaxyco.ai",
+      "path": "/",
+      "expires": 1793602125,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "clerk_active_context",
+      "value": "sess_34uTU3blXripOMbfsJ0bgMiepzF:",
+      "domain": "app.galaxyco.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zM25BVzhrYTBtMFB6Rk9VN3paM1V3R29TREIiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5nYWxheHljby5haSIsImV4cCI6MTc2MjA2MjU3NywiZnZhIjpbMCwtMV0sImlhdCI6MTc2MjA2MjUxNywiaXNzIjoiaHR0cHM6Ly9hY2N1cmF0ZS1naG9zdC01MS5jbGVyay5hY2NvdW50cy5kZXYiLCJuYmYiOjE3NjIwNjI1MDcsInNpZCI6InNlc3NfMzR1VFUzYmxYcmlwT01iZnNKMGJnTWllcHpGIiwic3RzIjoiYWN0aXZlIiwic3ViIjoidXNlcl8zM3AzUW9OZ3Y2YzVaV2xvdG1PdUtxVGVuck0iLCJ2IjoyfQ.dba0visnOtRmfHcqw3x79LkHlxkVEmfZGrmmyS6D9GVAq2AaZEGu_m9a_Khl-AQcWATwTyQL39Cr-lSt1G6f6e7n5dOBJ9jEtY4ah-TpR9x_A1n1ZjcfEPYBaxgkWCTmaxOeHAFLN1w25WP3sshXFaROhM3SQUwbKiWTo5Vj3gZQzdb6MZeVDaohZVT0Mo-wIF171hPHHNnqbXc6bDCHQFGkzpzCdqlNH0oFlIr3-Agjsd9D6o1n5a79kf7XZ6cspN6sAvtgORK6SOk2QQJKdMNU9CHcWYqavpG2i9hg89h78xBqEbyVUuFUl6G1uJYVvMm50yjBr2CN7RRBtCTABw",
+      "domain": "app.galaxyco.ai",
+      "path": "/",
+      "expires": 1793602125,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session_fEgtn8zq",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zM25BVzhrYTBtMFB6Rk9VN3paM1V3R29TREIiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2FwcC5nYWxheHljby5haSIsImV4cCI6MTc2MjA2MjU3NywiZnZhIjpbMCwtMV0sImlhdCI6MTc2MjA2MjUxNywiaXNzIjoiaHR0cHM6Ly9hY2N1cmF0ZS1naG9zdC01MS5jbGVyay5hY2NvdW50cy5kZXYiLCJuYmYiOjE3NjIwNjI1MDcsInNpZCI6InNlc3NfMzR1VFUzYmxYcmlwT01iZnNKMGJnTWllcHpGIiwic3RzIjoiYWN0aXZlIiwic3ViIjoidXNlcl8zM3AzUW9OZ3Y2YzVaV2xvdG1PdUtxVGVuck0iLCJ2IjoyfQ.dba0visnOtRmfHcqw3x79LkHlxkVEmfZGrmmyS6D9GVAq2AaZEGu_m9a_Khl-AQcWATwTyQL39Cr-lSt1G6f6e7n5dOBJ9jEtY4ah-TpR9x_A1n1ZjcfEPYBaxgkWCTmaxOeHAFLN1w25WP3sshXFaROhM3SQUwbKiWTo5Vj3gZQzdb6MZeVDaohZVT0Mo-wIF171hPHHNnqbXc6bDCHQFGkzpzCdqlNH0oFlIr3-Agjsd9D6o1n5a79kf7XZ6cspN6sAvtgORK6SOk2QQJKdMNU9CHcWYqavpG2i9hg89h78xBqEbyVUuFUl6G1uJYVvMm50yjBr2CN7RRBtCTABw",
+      "domain": "app.galaxyco.ai",
+      "path": "/",
+      "expires": 1793602125,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://app.galaxyco.ai",
+      "localStorage": [
+        {
+          "name": "__clerk_environment",
+          "value": "{\"value\":{\"object\":\"environment\",\"auth_config\":{\"claimed_at\":null,\"id\":\"\",\"object\":\"auth_config\",\"reverification\":true,\"single_session_mode\":true},\"display_config\":{\"object\":\"display_config\",\"after_create_organization_url\":\"https://app.galaxyco.ai\",\"after_join_waitlist_url\":\"https://app.galaxyco.ai\",\"after_leave_organization_url\":\"https://app.galaxyco.ai\",\"after_sign_in_url\":\"https://app.galaxyco.ai\",\"after_sign_out_all_url\":\"https://accurate-ghost-51.accounts.dev/sign-in\",\"after_sign_out_one_url\":\"https://accurate-ghost-51.accounts.dev/sign-in/choose\",\"after_sign_up_url\":\"https://app.galaxyco.ai\",\"after_switch_session_url\":\"https://app.galaxyco.ai\",\"application_name\":\"GalaxyCo.ai\",\"branded\":true,\"captcha_heartbeat\":false,\"captcha_oauth_bypass\":[],\"captcha_provider\":\"turnstile\",\"captcha_public_key_invisible\":\"0x4AAAAAAAFV93qQdS0ycilX\",\"captcha_public_key\":\"0x4AAAAAAAWXJGBD7bONzLBd\",\"captcha_widget_type\":\"smart\",\"clerk_js_version\":\"5\",\"create_organization_url\":\"https://accurate-ghost-51.accounts.dev/create-organization\",\"favicon_image_url\":\"\",\"home_url\":\"https://app.galaxyco.ai\",\"id\":\"display_config_33nAW2Wid6qIQpP2CcS9T2UFhWH\",\"instance_environment_type\":\"development\",\"logo_image_url\":\"\",\"organization_profile_url\":\"https://accurate-ghost-51.accounts.dev/organization\",\"preferred_sign_in_strategy\":\"password\",\"privacy_policy_url\":\"\",\"show_devmode_warning\":true,\"sign_in_url\":\"https://accurate-ghost-51.accounts.dev/sign-in\",\"sign_up_url\":\"https://accurate-ghost-51.accounts.dev/sign-up\",\"support_email\":\"\",\"terms_url\":\"\",\"theme\":{\"buttons\":{\"font_color\":\"#ffffff\",\"font_family\":\"\\\"Source Sans Pro\\\", sans-serif\",\"font_weight\":\"600\"},\"general\":{\"color\":\"#6c47ff\",\"padding\":\"1em\",\"box_shadow\":\"0 2px 8px rgba(0, 0, 0, 0.2)\",\"font_color\":\"#151515\",\"font_family\":\"\\\"Source Sans Pro\\\", sans-serif\",\"border_radius\":\"0.5em\",\"background_color\":\"#ffffff\",\"label_font_weight\":\"600\"},\"accounts\":{\"background_color\":\"#ffffff\"}},\"user_profile_url\":\"https://accurate-ghost-51.accounts.dev/user\",\"waitlist_url\":\"https://accurate-ghost-51.accounts.dev/waitlist\"},\"id\":\"\",\"maintenance_mode\":false,\"client_debug_mode\":false,\"organization_settings\":{\"actions\":{\"admin_delete\":true},\"domains\":{\"enabled\":false,\"enrollment_modes\":[],\"default_role\":\"\"},\"enabled\":false,\"max_allowed_memberships\":5},\"user_settings\":{\"actions\":{\"delete_self\":true,\"create_organization\":true,\"create_organizations_limit\":null},\"attributes\":{\"email_address\":{\"enabled\":true,\"required\":true,\"used_for_first_factor\":true,\"first_factors\":[\"email_code\"],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[\"email_code\"],\"verify_at_sign_up\":true,\"name\":\"email_address\"},\"phone_number\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"phone_number\"},\"username\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"username\"},\"web3_wallet\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"web3_wallet\"},\"first_name\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"first_name\"},\"last_name\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"last_name\"},\"password\":{\"enabled\":true,\"required\":true,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"password\"},\"authenticator_app\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"authenticator_app\"},\"ticket\":{\"enabled\":true,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"ticket\"},\"backup_code\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"backup_code\"},\"passkey\":{\"enabled\":false,\"required\":false,\"used_for_first_factor\":false,\"first_factors\":[],\"used_for_second_factor\":false,\"second_factors\":[],\"verifications\":[],\"verify_at_sign_up\":false,\"name\":\"passkey\"}},\"passkey_settings\":{\"allow_autofill\":true,\"show_sign_in_button\":true},\"password_settings\":{\"disable_hibp\":false,\"min_length\":8,\"max_length\":72,\"require_special_char\":false,\"require_numbers\":false,\"require_uppercase\":false,\"require_lowercase\":false,\"show_zxcvbn\":false,\"min_zxcvbn_strength\":0,\"enforce_hibp_on_sign_in\":true,\"allowed_special_characters\":\"!\\\"#$%&'()*+,-./:;<=>?@[]^_`{|}~\"},\"saml\":{\"enabled\":false},\"sign_in\":{\"second_factor\":{\"required\":false}},\"sign_up\":{\"captcha_enabled\":true,\"captcha_widget_type\":\"smart\",\"custom_action_required\":false,\"progressive\":true,\"mode\":\"public\",\"legal_consent_enabled\":false},\"social\":{\"oauth_google\":{\"enabled\":true,\"required\":false,\"authenticatable\":true,\"block_email_subaddresses\":true,\"strategy\":\"oauth_google\",\"not_selectable\":false,\"deprecated\":false,\"name\":\"Google\",\"logo_url\":\"https://img.clerk.com/static/google.png\"}}},\"commerce_settings\":{\"billing\":{\"stripe_publishable_key\":\"\",\"organization\":{\"enabled\":false,\"has_paid_plans\":false},\"user\":{\"enabled\":false,\"has_paid_plans\":false}}},\"api_keys_settings\":{\"enabled\":false}},\"exp\":1762148829363}"
+        },
+        {
+          "name": "clerk_telemetry_throttler",
+          "value": "{\"[\\\"5.103.1\\\",\\\"THEME_USAGE\\\",\\\"development\\\",\\\"@clerk/nextjs\\\",\\\"5.7.5\\\"]\":1762062429189,\"[true,false,\\\"SignIn\\\",\\\"5.103.1\\\",true,\\\"COMPONENT_MOUNTED\\\",\\\"development\\\",\\\"@clerk/nextjs\\\",\\\"5.7.5\\\",false,false]\":1762062450023,\"[\\\"5.103.1\\\",\\\"METHOD_CALLED\\\",\\\"development\\\",\\\"useUser\\\",\\\"@clerk/nextjs\\\",\\\"5.7.5\\\"]\":1762062450030}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,20 +1,82 @@
-# GalaxyCo Standards (Monorepo)
-- TypeScript strict; avoid 'any' unless justified.
-- Validate external input with Zod.
-- apps/web: Next.js App Router; Server Components by default; Server Actions for mutations.
-- Styling: Tailwind + shadcn/ui; keep design system consistent.
-- Tests: Vitest; test behavior, not implementation.
-- Monorepo: run via turbo; shared code in packages/*.
-- Pre-commit: code must format & lint; no stray console.log (warn-only allowed during dev).
+# GalaxyCo.ai Development Standards
 
-## GitKraken CLI Integration
-- Use `gk ai commit --add-description` for AI-generated Conventional Commits
-- Use `gk work start "<feature>"` to create feature branches with work item tracking
+## 📖 Context Files (READ FIRST)
+
+**Universal Context:**
+- `../devops-hq/.cursor/master-context.md` - Partnership protocol, AI philosophy, your preferences
+- `../devops-hq/.cursor/universal-patterns.md` - Cross-project learnings
+
+**Project Context:**
+- `.cursor/context.md` - GalaxyCo vision and current state
+- `.cursor/galaxyco-rules.md` - Detailed development standards
+- `.cursor/component-guide.md` - Component implementations
+- `.cursor/current-sprint.md` - Active work this sprint
+
+---
+
+## 🎯 Quick Reference (GalaxyCo Standards)
+
+### Core Principles
+- TypeScript strict; avoid 'any' unless justified
+- Validate external input with Zod
+- Natural language should drive everything
+- Visual feedback mandatory for all actions
+- Simple UI/UX without sacrificing power
+
+### Architecture
+- apps/web: Next.js 15 App Router; Server Components by default; Server Actions for mutations
+- apps/api: NestJS backend
+- Styling: Tailwind + shadcn/ui + Kibo UI (advanced components)
+- Tests: Vitest; test behavior, not implementation
+- Monorepo: run via turbo; shared code in packages/*
+- Database: Neon Postgres (NOT Supabase) + Pinecone for vectors
+- Auth: Clerk
+
+### Component Structure
+- Import from @/components/ui for shadcn
+- Import from @/components/kibo for Kibo UI
+- Custom Galaxy components in @/components/galaxy
+- All components must have loading states
+- Use React Hook Form + Zod for forms
+
+### AI Integration
+- OpenAI GPT-4 for main reasoning
+- Claude for complex analysis
+- OpenAI Embeddings (text-embedding-3-small)
+- Pinecone for vector storage (org namespaces)
+
+### State Management
+- Zustand for global client state
+- React Query for server state
+- Local state with useState
+- No Redux
+
+### Quality
+- Pre-commit: code must format & lint; no stray console.log (warn-only allowed during dev)
+- Every async function needs try-catch
+- User-friendly error messages (never show technical errors)
+- Multi-tenant isolation (ALWAYS filter by orgId)
+
+### Git Conventions
+- Conventional commits: `feat(scope): message`
+- Scopes: api, web, db, infra, agents, flows, companion
+- Branch naming: `feature/[task-name]`
+
+---
+
+## 🔧 GitKraken CLI Integration
+- Use `gk ai commit --add-description` for AI-generated commits
+- Use `gk work start "<feature>"` to create feature branches
 - Use `gk work pr create` for AI-generated PR descriptions
-- Commit scopes: api, web, db, infra, scope-agent, call-agent, email-agent, note-agent, task-agent, roadmap-agent, content-agent
 
-## MCP Server
-- GitKraken MCP server installed for Cursor
-- Provides git operations, GitHub API, and AI tools
-- See docs/devtools/gitkraken-cli.md for details
+---
+
+## 🤖 MCP Servers
+- **GitKraken** - Git operations, GitHub API (see docs/devtools/gitkraken-cli.md)
+- **Kibo UI** - 1,101 component patterns (see .cursor/mcp.json)
+
+---
+
+**For detailed standards, read `.cursor/galaxyco-rules.md`**
+**For partnership protocol, read `../devops-hq/.cursor/master-context.md`**
 
