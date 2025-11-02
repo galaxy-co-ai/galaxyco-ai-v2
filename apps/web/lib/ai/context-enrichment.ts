@@ -77,6 +77,14 @@ export async function enrichContext(
 
   try {
     const items = context.selectedItems;
+    
+    // Log context enrichment start (only in development)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Context Enrichment] Starting enrichment for:', {
+        page: context.page,
+        selectedItems: items,
+      });
+    }
 
     // Fetch Agent details
     if (items.agentId) {
@@ -205,9 +213,18 @@ export async function enrichContext(
       }
     }
   } catch (error) {
-    console.error('Context enrichment error:', error);
+    console.error('[Context Enrichment] Error:', error);
     // Don't fail the whole request if enrichment fails
     // Just return basic context
+  }
+  
+  // Log enrichment result (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[Context Enrichment] Enriched context:', {
+      page: enriched.page,
+      hasResources: !!enriched.resources && Object.keys(enriched.resources).length > 0,
+      resourceTypes: enriched.resources ? Object.keys(enriched.resources) : [],
+    });
   }
 
   return enriched;

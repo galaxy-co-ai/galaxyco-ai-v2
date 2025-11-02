@@ -7,10 +7,10 @@
 import { useEffect } from 'react';
 
 interface KeyboardShortcuts {
-  'Cmd+K': () => void; // New conversation
-  'Cmd+/': () => void; // Focus input
-  Escape: () => void; // Close modals
-  'ArrowUp': () => void; // Edit last message
+  'Cmd+K'?: () => void; // New conversation
+  'Cmd+/'?: () => void; // Focus input
+  Escape?: () => void; // Close modals
+  ArrowUp?: () => void; // Edit last message
 }
 
 export function useKeyboardShortcuts(shortcuts: Partial<KeyboardShortcuts>) {

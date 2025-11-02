@@ -32,27 +32,28 @@ export async function POST(req: Request) {
     }
 
     const formData = await req.formData();
-    const file = formData.get('file') as File;
+    const files = formData.getAll('files') as File[];
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    if (!files || files.length === 0) {
+      return NextResponse.json({ error: 'No files provided' }, { status: 400 });
     }
 
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { error: 'File too large. Maximum size is 10MB.' },
-        { status: 400 }
-      );
-    }
+    // Process all files
+    const uploadedFiles = [];
+    const errors: string[] = [];
+    
+    for (const file of files) {
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        errors.push(`${file.name}: File too large. Maximum size is 10MB.`);
+        continue;
+      }
 
-    // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json(
-        { error: 'Unsupported file type' },
-        { status: 400 }
-      );
-    }
+      // Validate file type
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        errors.push(`${file.name}: Unsupported file type (${file.type})`);
+        continue;
+      }
 
     // Upload to Vercel Blob storage
     const fileId = nanoid();
@@ -84,9 +85,7 @@ export async function POST(req: Request) {
       metadata.processingStatus = 'pending';
     }
 
-    return NextResponse.json({
-      success: true,
-      file: {
+      uploadedFiles.push({
         id: fileId,
         name: file.name,
         url: blob.url,
@@ -94,7 +93,15 @@ export async function POST(req: Request) {
         size: file.size,
         extractedText,
         metadata,
-      },
+      });
+    }
+
+    // Return results - include both successes and errors
+    return NextResponse.json({
+      success: uploadedFiles.length > 0,
+      files: uploadedFiles,
+      count: uploadedFiles.length,
+      errors: errors.length > 0 ? errors : undefined,
     });
   } catch (error) {
     console.error('File upload error:', error);

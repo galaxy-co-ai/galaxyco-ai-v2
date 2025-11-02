@@ -79,6 +79,15 @@ export default function AssistantPage() {
       conversationId: activeConversationId,
     },
     onFinish: async (message: { role: string; content: string }) => {
+      // Log message completion (only in development)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Assistant] Message finished:', {
+          role: message.role,
+          contentLength: message.content?.length,
+          hasToolInvocations: (message as any).toolInvocations?.length > 0,
+        });
+      }
+      
       // Save message to database
       if (activeConversationId) {
         try {
@@ -156,7 +165,65 @@ export default function AssistantPage() {
       console.error('Failed to create conversation:', error);
       toast.error('Failed to create conversation');
     }
-  }, [pageContext, setMessages]);
+  }, [pageContext, setMessages, fetchConversations]);
+
+  // Custom submit handler that includes files (must be after useChat hook)
+  const handleFormSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      
+      if (!input.trim() && uploadedFiles.length === 0) return;
+      if (isLoading) return;
+
+      // Create new conversation if none exists
+      if (!activeConversationId) {
+        await handleNewConversation();
+        // Wait a bit for conversation to be created
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
+      // Handle file uploads if any
+      if (uploadedFiles.length > 0) {
+        try {
+          const formData = new FormData();
+          uploadedFiles.forEach((file) => {
+            formData.append('files', file);
+          });
+
+          const uploadRes = await fetch('/api/assistant/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!uploadRes.ok) {
+            throw new Error('File upload failed');
+          }
+
+          const uploadData = await uploadRes.json();
+          // Add file info to message context
+          const fileContext = `[Files uploaded: ${uploadedFiles.map((f) => f.name).join(', ')}]`;
+          const messageWithFiles = `${input}\n\n${fileContext}`;
+          
+          // Clear files after upload
+          setUploadedFiles([]);
+          
+          // Submit message with file context
+          append({
+            role: 'user',
+            content: messageWithFiles,
+          });
+        } catch (error) {
+          console.error('File upload error:', error);
+          toast.error('Failed to upload files');
+          return;
+        }
+      } else {
+        // Submit message normally
+        handleSubmit(e as any);
+      }
+    },
+    [input, uploadedFiles, isLoading, activeConversationId, handleNewConversation, handleSubmit, append]
+  );
 
   // Handle conversation selection
   const handleSelectConversation = useCallback(
@@ -248,7 +315,7 @@ export default function AssistantPage() {
       setShowFileUpload(false);
     },
     ArrowUp: () => {
-      // Edit last user message
+      // Edit last user message (hook handles the empty check)
       const lastUserMessage = messages
         .filter((m: any) => m.role === 'user')
         .pop();
@@ -406,6 +473,15 @@ export default function AssistantPage() {
                 <div className="space-y-6">
                   {messages.map((message: any) => {
                     const toolResult = parseToolResult(message);
+                    
+                    // Log tool invocations for debugging (only in development)
+                    if (process.env.NODE_ENV === 'development' && message.toolInvocations) {
+                      console.log('[Assistant] Tool invocations found:', {
+                        messageId: message.id,
+                        toolInvocations: message.toolInvocations,
+                        parsedResult: toolResult,
+                      });
+                    }
 
                     return (
                       <div
@@ -629,7 +705,7 @@ export default function AssistantPage() {
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleFormSubmit}>
                   <div className="relative">
                     <textarea
                       ref={inputRef}
@@ -650,7 +726,11 @@ export default function AssistantPage() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();
-                          handleSubmit(e as any);
+                          // Trigger form submit which will use handleFormSubmit
+                          const form = e.currentTarget.closest('form');
+                          if (form) {
+                            form.requestSubmit();
+                          }
                         }
                       }}
                     />
