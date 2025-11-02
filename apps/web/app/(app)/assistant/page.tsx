@@ -200,24 +200,24 @@ export default function AssistantPage() {
           }
 
           const uploadData = await uploadRes.json();
-          
+
           // Check for upload errors
           if (uploadData.errors && uploadData.errors.length > 0) {
             toast.error(`Some files failed: ${uploadData.errors.join(', ')}`);
           }
-          
+
           // Only proceed if at least one file uploaded successfully
           if (!uploadData.success || uploadData.files.length === 0) {
             return;
           }
-          
+
           // Add file info to message context
           const fileContext = `[Files uploaded: ${uploadedFiles.map((f) => f.name).join(', ')}]`;
           const messageWithFiles = `${input}\n\n${fileContext}`;
-          
+
           // Clear files after upload
           setUploadedFiles([]);
-          
+
           // Submit message with file context
           append({
             role: 'user',

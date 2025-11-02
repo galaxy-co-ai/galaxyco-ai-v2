@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     // Process all files
     const uploadedFiles = [];
     const errors: string[] = [];
-    
+
     for (const file of files) {
       try {
         // Validate file size
