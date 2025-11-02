@@ -35,9 +35,11 @@ const getDatabaseUrl = () => {
   return url;
 };
 
+// Enhanced connection configuration for better reliability
 const sql = neon(getDatabaseUrl(), {
   fetchOptions: {
-    signal: AbortSignal.timeout(10000), // 10 second timeout
+    // Increased timeout to 15 seconds for cold starts and slow networks
+    signal: AbortSignal.timeout(15000),
   },
 });
 

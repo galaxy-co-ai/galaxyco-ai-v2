@@ -113,17 +113,25 @@ export default function AgentsPage() {
 
   return (
     <>
-      {/* Metrics Row */}
+      {/* Metrics Row - Linear Style */}
       {!isLoading && agents.length > 0 && (
-        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <MetricCard label="Total Agents" value={metrics.total} icon={Bot} />
-          <MetricCard label="Active" value={metrics.active} icon={Activity} />
-          <MetricCard
-            label="Total Runs"
-            value={metrics.totalRuns.toLocaleString()}
-            icon={TrendingUp}
-          />
-          <MetricCard label="Success Rate" value={`${metrics.successRate}%`} icon={CheckCircle2} />
+        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+            <div className="text-sm text-muted-foreground mb-1">Total Agents</div>
+            <div className="text-3xl font-semibold">{metrics.total}</div>
+          </div>
+          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+            <div className="text-sm text-muted-foreground mb-1">Active</div>
+            <div className="text-3xl font-semibold">{metrics.active}</div>
+          </div>
+          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+            <div className="text-sm text-muted-foreground mb-1">Total Runs</div>
+            <div className="text-3xl font-semibold">{metrics.totalRuns.toLocaleString()}</div>
+          </div>
+          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+            <div className="text-sm text-muted-foreground mb-1">Success Rate</div>
+            <div className="text-3xl font-semibold">{metrics.successRate}%</div>
+          </div>
         </div>
       )}
 
@@ -181,34 +189,34 @@ export default function AgentsPage() {
             </Button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredAgents.map((agent) => (
               <Link
                 key={agent.id}
                 href={`/agents/${agent.id}`}
-                className="group rounded-lg border border-border bg-card p-5 transition-all hover:shadow-md hover:border-primary/50"
+                className="group rounded-lg bg-muted/30 hover:bg-muted/50 p-6 transition-all linear-shadow hover:linear-shadow-hover"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                      <Bot className="h-5 w-5 text-primary" />
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-background">
+                      <Bot className="h-5 w-5 text-foreground" />
                     </div>
-                    <div>
-                      <h3 className="font-semibold group-hover:text-primary transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold group-hover:text-primary transition-colors truncate">
                         {agent.name}
                       </h3>
                       <p className="text-sm text-muted-foreground capitalize">{agent.type}</p>
                     </div>
                   </div>
                   <span
-                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                    className={`shrink-0 ml-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
                       agent.status === 'active'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                        ? 'bg-green-500/10 text-green-700 dark:text-green-400'
                         : agent.status === 'draft'
-                          ? 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
+                          ? 'bg-muted text-muted-foreground'
                           : agent.status === 'paused'
-                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                            : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
+                            ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                            : 'bg-muted text-muted-foreground'
                     }`}
                   >
                     {agent.status}
@@ -219,7 +227,7 @@ export default function AgentsPage() {
                   {agent.description || 'No description'}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border">
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                   <div>
                     <p className="text-xs text-muted-foreground">Runs</p>
                     <p className="text-lg font-semibold">{agent.executionCount || 0}</p>

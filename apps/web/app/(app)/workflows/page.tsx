@@ -153,17 +153,17 @@ export default function WorkflowsPage() {
           </Button>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredWorkflows.map((workflow) => (
-            <div key={workflow.id} className="rounded-lg border border-border bg-card p-6">
-              <div className="flex items-start justify-between">
-                <div>
+            <div key={workflow.id} className="rounded-lg bg-muted/30 hover:bg-muted/50 p-6 transition-colors linear-shadow hover:linear-shadow-hover">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold">{workflow.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{workflow.description}</p>
                 </div>
                 <Badge
                   variant={workflow.status === 'active' ? 'default' : 'secondary'}
-                  className="gap-1.5"
+                  className="gap-1.5 shrink-0 ml-4"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-current" />
                   <span className="capitalize">{workflow.status}</span>
@@ -171,10 +171,10 @@ export default function WorkflowsPage() {
               </div>
 
               {/* Steps */}
-              <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 {workflow.steps.map((step, index) => (
                   <div key={step.id} className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 rounded-md border border-border bg-muted/30 px-3 py-2">
+                    <div className="flex items-center gap-2 rounded-md bg-background px-3 py-2">
                       <div className="text-xs font-medium">{step.name}</div>
                       <div className="text-xs capitalize text-muted-foreground">{step.type}</div>
                     </div>
@@ -186,7 +186,7 @@ export default function WorkflowsPage() {
               </div>
 
               {/* Metrics */}
-              <div className="mt-4 grid grid-cols-3 gap-4 border-t border-border pt-4">
+              <div className="grid grid-cols-3 gap-6 pt-4 border-t">
                 <div>
                   <p className="text-xs text-muted-foreground">Total Runs</p>
                   <p className="mt-1 text-lg font-semibold">{workflow.metrics.totalExecutions}</p>

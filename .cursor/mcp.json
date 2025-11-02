@@ -3,6 +3,19 @@
     "kibo-ui": {
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://www.kibo-ui.com/api/mcp/mcp"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }
+

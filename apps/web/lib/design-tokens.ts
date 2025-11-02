@@ -1,23 +1,29 @@
 /**
  * GalaxyCo.ai Design Tokens
- * Complete design system for the nuclear rebuild
- * October 15, 2025
+ * Linear-inspired minimal design + Framer blue accent
+ * November 2, 2025
  */
 
-// Brand Colors
+// Brand Colors (Framer Blue + Linear Minimal)
 export const colors = {
-  // Primary brand
+  // Primary brand (Framer Blue)
   primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6', // Main blue
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
+    50: '#e6f0ff',
+    100: '#cce0ff',
+    200: '#99c2ff',
+    300: '#66a3ff',
+    400: '#3385ff',
+    500: '#0055FF', // Main Framer blue
+    600: '#0044dd',
+    700: '#0033bb',
+    800: '#002299',
+    900: '#001177',
+  },
+
+  // Secondary (Lighter Framer Blue)
+  secondary: {
+    500: '#0099FF',
+    hover: '#0088ee',
   },
 
   // Agent colors (space themed)
@@ -28,12 +34,12 @@ export const colors = {
     workflow: '#f59e0b', // Orange - automation
   },
 
-  // Semantic colors
+  // Semantic colors (Linear-inspired)
   semantic: {
-    success: '#22c55e',
-    warning: '#d97706', // Fixed: was #f59e0b (2.15:1 FAIL), now #d97706 (4.5:1 PASS)
-    error: '#dc2626', // Fixed: was #ef4444 (4.01:1 FAIL), now #dc2626 (4.5:1 PASS)
-    info: '#3b82f6',
+    success: '#10B981',
+    warning: '#F59E0B',
+    error: '#EF4444',
+    info: '#0055FF', // Use our Framer blue
   },
 
   // Confidence score colors
@@ -43,20 +49,30 @@ export const colors = {
     low: '#dc2626', // Fixed: was #ef4444 (4.01:1 FAIL), now 4.5:1 PASS
   },
 
-  // Neutral grayscale
+  // Neutral grayscale (Linear-inspired)
   neutral: {
-    0: '#ffffff',
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
+    0: '#FFFFFF',
+    50: '#F9FAFB',
+    100: '#F5F5F5', // Muted backgrounds
+    200: '#ECECEC', // Borders
+    300: '#D1D5DB',
+    400: '#9CA3AF',
+    500: '#666666', // Muted foreground
+    600: '#4B5563',
     700: '#374151',
-    800: '#1f2937', // Dark sidebar
-    900: '#111827', // Darkest
-    950: '#030712', // Almost black
+    800: '#1F2937',
+    900: '#000000', // Pure black for text
+    950: '#000000',
+  },
+
+  // Linear-specific tokens
+  linear: {
+    background: '#FFFFFF',
+    foreground: '#000000',
+    muted: '#F5F5F5',
+    mutedForeground: '#666666',
+    border: '#ECECEC',
+    borderLight: '#F0F0F0',
   },
 } as const;
 
@@ -75,8 +91,9 @@ export const typography = {
     xl: '1.25rem', // 20px
     '2xl': '1.5rem', // 24px
     '3xl': '1.875rem', // 30px
-    '4xl': '2.25rem', // 36px
+    '4xl': '2.25rem', // 36px (Linear H2)
     '5xl': '3rem', // 48px
+    '6xl': '3.75rem', // 60px (Linear hero headlines)
   },
 
   fontWeight: {
@@ -87,9 +104,15 @@ export const typography = {
   },
 
   lineHeight: {
-    tight: '1.25',
+    tight: '1.1', // Linear hero headlines
+    snug: '1.2', // Linear headings
     normal: '1.5',
-    relaxed: '1.625',
+    relaxed: '1.6', // Linear body copy
+  },
+
+  letterSpacing: {
+    tighter: '-0.02em', // Linear headings
+    normal: '0',
   },
 } as const;
 
@@ -132,11 +155,11 @@ export const spacing = {
   96: '24rem', // 384px
 } as const;
 
-// Border radius
+// Border radius (Linear uses 6px default)
 export const borderRadius = {
   none: '0',
   sm: '0.25rem', // 4px
-  md: '0.375rem', // 6px
+  md: '0.375rem', // 6px (Linear default)
   lg: '0.5rem', // 8px
   xl: '0.75rem', // 12px
   '2xl': '1rem', // 16px
@@ -144,13 +167,18 @@ export const borderRadius = {
   full: '9999px',
 } as const;
 
-// Shadows
+// Shadows (Linear-inspired - subtle)
 export const boxShadow = {
-  xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  sm: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  // Linear uses very subtle shadows
+  subtle: '0 1px 3px rgba(0, 0, 0, 0.05)',
+  hover: '0 4px 12px rgba(0, 0, 0, 0.08)',
+
+  // Standard shadows
+  xs: '0 1px 2px 0 rgb(0 0 0 / 0.03)',
+  sm: '0 1px 3px 0 rgb(0 0 0 / 0.05)',
+  md: '0 4px 6px -1px rgb(0 0 0 / 0.08)',
+  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+  xl: '0 20px 25px -5px rgb(0 0 0 / 0.12)',
   '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
   inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
 } as const;
@@ -165,15 +193,16 @@ export const breakpoints = {
   '2xl': '1536px',
 } as const;
 
-// Animation durations
+// Animation durations (Linear uses fast 150ms)
 export const animation = {
   duration: {
-    fast: '150ms',
+    fast: '150ms', // Linear default - snappy!
     normal: '300ms',
     slow: '500ms',
   },
   easing: {
     linear: 'linear',
+    ease: 'ease', // Linear default
     out: 'cubic-bezier(0, 0, 0.2, 1)',
     in: 'cubic-bezier(0.4, 0, 1, 1)',
     'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',

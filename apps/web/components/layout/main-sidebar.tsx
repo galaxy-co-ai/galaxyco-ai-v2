@@ -26,6 +26,7 @@ import {
   HelpCircle,
   LogOut,
   Zap,
+  MessageSquare,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -45,6 +46,12 @@ const navigationItems = [
     href: '/dashboard',
     icon: TrendingUp,
     description: 'Platform overview',
+  },
+  {
+    title: 'Assistant',
+    href: '/assistant',
+    icon: MessageSquare,
+    description: 'AI chat assistant',
   },
   {
     title: 'Agents',

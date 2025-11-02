@@ -1,0 +1,65 @@
+{
+  "commands": [
+    {
+      "name": "dev",
+      "command": "cd apps/web && pnpm dev",
+      "description": "🚀 Start Next.js dev server"
+    },
+    {
+      "name": "test",
+      "command": "cd apps/web && pnpm test:run tests/unit tests/component",
+      "description": "🧪 Run unit and component tests"
+    },
+    {
+      "name": "test:watch",
+      "command": "cd apps/web && pnpm test tests/unit tests/component",
+      "description": "🧪 Run tests in watch mode"
+    },
+    {
+      "name": "quality",
+      "command": "turbo run typecheck && turbo run lint && prettier --check .",
+      "description": "✅ Run all quality checks"
+    },
+    {
+      "name": "fix",
+      "command": "turbo run lint -- --fix && prettier --write .",
+      "description": "🔧 Auto-fix linting and formatting"
+    },
+    {
+      "name": "typecheck",
+      "command": "turbo run typecheck",
+      "description": "📝 Type check all packages"
+    },
+    {
+      "name": "build",
+      "command": "turbo run build",
+      "description": "📦 Build all packages for production"
+    },
+    {
+      "name": "db:push",
+      "command": "cd packages/database && pnpm db:push",
+      "description": "🗄️ Push database schema changes"
+    },
+    {
+      "name": "db:studio",
+      "command": "cd packages/database && pnpm db:studio",
+      "description": "🗄️ Open Drizzle Studio"
+    },
+    {
+      "name": "db:generate",
+      "command": "cd packages/database && pnpm db:generate",
+      "description": "🗄️ Generate database migrations"
+    },
+    {
+      "name": "clean",
+      "command": "turbo run clean && rm -rf node_modules apps/web/node_modules apps/api/node_modules && pnpm install",
+      "description": "🧹 Clean and reinstall all dependencies"
+    },
+    {
+      "name": "deploy:web",
+      "command": "cd apps/web && vercel --prod",
+      "description": "🚀 Deploy web app to Vercel production"
+    }
+  ]
+}
+

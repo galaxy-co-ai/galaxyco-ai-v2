@@ -1,6 +1,6 @@
 /**
  * GalaxyCo.ai Landing Page
- * Built with strict Kibo UI patterns
+ * Linear-inspired minimal design + Framer blue accent
  */
 
 import Link from 'next/link';
@@ -9,8 +9,6 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ArrowRight, Bot, Workflow, BarChart3, Sparkles, Zap, TrendingUp } from 'lucide-react';
 import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { CreditCard } from '@/src/components/kibo-ui/credit-card';
-import { Spinner } from '@/src/components/kibo-ui/spinner';
 
 export default async function HomePage() {
   const user = await currentUser();
@@ -56,162 +54,136 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="container mx-auto px-4 py-24">
+      {/* Hero Section - Linear Style */}
+      <main className="container mx-auto px-4 py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-5xl lg:text-7xl font-bold tracking-tight">
-            Make Multi-Agent AI
+          <h1 className="text-6xl lg:text-7xl font-bold">
+            Build AI agents in
             <br />
-            <span className="gradient-framer-blue bg-clip-text text-transparent">
-              Useful in Minutes
-            </span>
+            natural language
           </h1>
 
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Get personalized dashboards with AI agent &ldquo;Packs&rdquo; that deliver measurable
-            outcomes from Day 1. No setup. No waiting. Just results.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            GalaxyCo is THE AI operating system for businesses.
+            Plan, build, and deploy multi-agent systems in minutes.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link href="/sign-up">
               <Button size="lg" className="gap-2">
-                Start Free Trial
+                Get started
                 <ArrowRight className="size-4" />
               </Button>
             </Link>
             <Link href="/sign-in">
               <Button size="lg" variant="outline">
-                View Demo
+                View demo
               </Button>
             </Link>
           </div>
         </div>
       </main>
 
-      {/* Features Section - Using Kibo UI CreditCard */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-6xl mx-auto space-y-12">
+      {/* Features Section - Linear Minimal Style */}
+      <section className="container mx-auto px-4 py-24 bg-muted/30">
+        <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl lg:text-4xl font-bold">Everything you need to scale with AI</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-4xl font-semibold">Everything you need</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Production-ready AI tools that integrate seamlessly with your existing workflow
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 @container">
-            {/* AI Agents Card - Framer Primary Blue */}
-            <CreditCard className="gradient-framer-blue border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Bot className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">AI Agents</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    Research, email, and CRM agents working 24/7 to grow your business
-                  </p>
-                </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {/* AI Agents - Minimal style */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <Bot className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">AI Agents</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Research, email, and CRM agents working 24/7 to grow your business
+              </p>
+            </div>
 
-            {/* Smart Workflows Card - Framer Secondary Blue */}
-            <CreditCard className="bg-gradient-to-br from-[#0099FF] to-[#0077DD] border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Workflow className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Smart Workflows</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    End-to-end automation pipelines that adapt to your business needs
-                  </p>
-                </div>
+            {/* Smart Workflows */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <Workflow className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">Smart Workflows</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                End-to-end automation pipelines that adapt to your business needs
+              </p>
+            </div>
 
-            {/* Real Analytics Card - Framer Primary Blue */}
-            <CreditCard className="gradient-framer-blue border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <BarChart3 className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Real Analytics</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    Track measurable outcomes and ROI from every AI action
-                  </p>
-                </div>
+            {/* Real Analytics */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <BarChart3 className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">Real Analytics</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Track measurable outcomes and ROI from every AI action
+              </p>
+            </div>
 
-            {/* Instant Setup Card - Framer Secondary Blue */}
-            <CreditCard className="bg-gradient-to-br from-[#0099FF] to-[#0077DD] border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Zap className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Instant Setup</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    Get started in under 60 seconds with pre-built agent templates
-                  </p>
-                </div>
+            {/* Instant Setup */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <Zap className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">Instant Setup</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Get started in under 60 seconds with pre-built agent templates
+              </p>
+            </div>
 
-            {/* Continuous Learning Card - Framer Primary Blue */}
-            <CreditCard className="gradient-framer-blue border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <TrendingUp className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Continuous Learning</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    AI that learns from your business and gets smarter over time
-                  </p>
-                </div>
+            {/* Continuous Learning */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <TrendingUp className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">Continuous Learning</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                AI that learns from your business and gets smarter over time
+              </p>
+            </div>
 
-            {/* Natural Language Card - Framer Secondary Blue */}
-            <CreditCard className="bg-gradient-to-br from-[#0099FF] to-[#0077DD] border-0">
-              <div className="p-6 h-full flex flex-col gap-4">
-                <div className="size-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                  <Sparkles className="size-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Natural Language</h3>
-                  <p className="text-white/95 text-sm leading-relaxed">
-                    Build complex workflows by simply describing what you want
-                  </p>
-                </div>
+            {/* Natural Language */}
+            <div className="space-y-3">
+              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
+                <Sparkles className="size-6 text-foreground" />
               </div>
-            </CreditCard>
+              <h3 className="text-xl font-semibold">Natural Language</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Build complex workflows by simply describing what you want
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-12 mt-24">
+      {/* Footer - Linear Minimal */}
+      <footer className="border-t py-16 mt-24">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <div className="size-8 gradient-framer-blue rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-sm">G</span>
+              <div className="size-8 bg-foreground rounded-md flex items-center justify-center">
+                <span className="text-background font-bold text-sm">G</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                © 2025 GalaxyCo.ai — AI tools that get sh*t done.
+                © 2025 GalaxyCo.ai
               </p>
             </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link href="/privacy" className="hover:text-primary transition-colors">
+            <div className="flex items-center gap-8 text-sm text-muted-foreground">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
                 Privacy
               </Link>
-              <Link href="/terms" className="hover:text-primary transition-colors">
+              <Link href="/terms" className="hover:text-foreground transition-colors">
                 Terms
               </Link>
-              <Link href="/docs" className="hover:text-primary transition-colors">
+              <Link href="/docs" className="hover:text-foreground transition-colors">
                 Docs
               </Link>
             </div>

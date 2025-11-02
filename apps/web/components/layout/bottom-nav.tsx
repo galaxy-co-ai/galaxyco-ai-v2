@@ -10,7 +10,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Command, Users, Bot, Mail, Settings, FolderOpen } from 'lucide-react';
+import { Command, Users, Bot, Mail, Settings, FolderOpen, MessageSquare } from 'lucide-react';
 
 interface BottomNavProps {
   className?: string;
@@ -24,20 +24,20 @@ const mobileNavItems = [
     icon: Command,
   },
   {
+    title: 'Assistant',
+    href: '/assistant',
+    icon: MessageSquare,
+  },
+  {
     title: 'Agents',
     href: '/agents',
     icon: Bot,
     badge: '3',
   },
   {
-    title: 'Collections',
-    href: '/collections',
+    title: 'Library',
+    href: '/library',
     icon: FolderOpen,
-  },
-  {
-    title: 'Emails',
-    href: '/emails',
-    icon: Mail,
   },
   {
     title: 'Settings',

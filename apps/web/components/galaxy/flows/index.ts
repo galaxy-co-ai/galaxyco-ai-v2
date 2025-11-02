@@ -4,6 +4,9 @@
 
 export { FlowBuilder } from './FlowBuilder';
 export { CustomFlowNode, nodeTypes } from './FlowNodes';
+export type { FlowNodeData } from './FlowNodes';
+export { GridView, generateMockWorkflows } from './GridView';
+export { NodeSidebar } from './NodeSidebar';
 export {
   parseNaturalLanguageToFlow,
   autoLayoutNodes,

@@ -129,81 +129,44 @@ export default function DashboardPage() {
   const activeAgentsList = agents.filter((a) => a.status === 'active').slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Dashboard Hero */}
-        <div className="bg-white rounded-2xl border-2 border-gray-300 p-8 mb-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">GalaxyCo.ai</h1>
-              <p className="text-gray-600">
-                Welcome back! Here&apos;s what&apos;s happening today.
-              </p>
-            </div>
-            <div className="flex items-center gap-8">
-              {/* Time and Date */}
-              <div className="text-right">
-                <div className="text-sm text-gray-600">Time | Date</div>
-                <div className="text-lg font-semibold text-gray-900">
-                  {currentTime} | {currentDate}
-                </div>
-              </div>
-
-              {/* Active Agents */}
-              <div className="flex flex-col items-end">
-                <div className="text-sm text-gray-600 mb-2">Active Agents</div>
-                <div className="flex gap-2">
-                  {activeAgentsList.length > 0 ? (
-                    activeAgentsList.map((agent) => (
-                      <div
-                        key={agent.id}
-                        className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-900 text-white text-sm font-medium"
-                        title={agent.name}
-                      >
-                        {agent.name.substring(0, 2).toUpperCase()}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-sm text-gray-500">No active agents</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Dashboard Header - Linear Style */}
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back! Here&apos;s what&apos;s happening today.
+          </p>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {/* Key Metrics - Linear Style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
             icon={Bot}
             label="Active Agents"
             value={stats?.agents.active || 0}
             total={stats?.agents.total || 0}
-            color="blue"
           />
           <MetricCard
             icon={Users}
             label="Customers"
             value={stats?.customers.total || 0}
-            color="green"
           />
           <MetricCard
             icon={Activity}
             label="Projects"
             value={stats?.projects.total || 0}
-            color="purple"
           />
           <MetricCard
             icon={DollarSign}
             label="Revenue (30d)"
             value={`$${Math.floor(parseInt(stats?.revenue.total || '0') / 100).toLocaleString()}`}
-            color="emerald"
           />
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white rounded-2xl border-2 border-gray-300 p-8 mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+        {/* Quick Actions - Linear Style */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <ActionCard
               icon={Bot}
@@ -244,30 +207,15 @@ interface MetricCardProps {
   label: string;
   value: number | string;
   total?: number;
-  color?: 'blue' | 'green' | 'purple' | 'emerald';
 }
 
-function MetricCard({ icon: Icon, label, value, total, color = 'blue' }: MetricCardProps) {
-  const colorClasses = {
-    blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
-    purple: 'bg-purple-50 text-purple-600',
-    emerald: 'bg-emerald-50 text-emerald-600',
-  };
-
+function MetricCard({ icon: Icon, label, value, total }: MetricCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-4">
-        <div className={cn('p-3 rounded-lg', colorClasses[color])}>
-          <Icon className="w-6 h-6" />
-        </div>
-        <div className="flex-1">
-          <p className="text-sm text-gray-600">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">
-            {value}
-            {total ? <span className="text-sm text-gray-500 font-normal"> / {total}</span> : null}
-          </p>
-        </div>
+    <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+      <div className="text-sm text-muted-foreground mb-1">{label}</div>
+      <div className="text-3xl font-semibold">
+        {value}
+        {total ? <span className="text-sm text-muted-foreground font-normal"> / {total}</span> : null}
       </div>
     </div>
   );
@@ -283,14 +231,14 @@ interface ActionCardProps {
 function ActionCard({ icon: Icon, label, href, description }: ActionCardProps) {
   return (
     <Link href={href}>
-      <div className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200">
+      <div className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer group">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-white rounded-lg">
-            <Icon className="w-5 h-5 text-gray-700" />
+          <div className="p-2 bg-background rounded-md">
+            <Icon className="w-5 h-5 text-foreground" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900 mb-1">{label}</h3>
-            <p className="text-sm text-gray-600">{description}</p>
+            <h3 className="font-semibold mb-1">{label}</h3>
+            <p className="text-sm text-muted-foreground">{description}</p>
           </div>
         </div>
       </div>
@@ -355,38 +303,34 @@ function DashboardFooter() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-gray-300 p-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Resources</h2>
-        <p className="text-gray-600">Essential tools and guides for power users and executives</p>
+    <div className="space-y-6 pt-8 border-t">
+      <div>
+        <h2 className="text-2xl font-semibold mb-2">Resources</h2>
+        <p className="text-muted-foreground">Essential tools and guides for power users and executives</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {resourceSections.map((section) => {
           const Icon = section.icon;
           return (
-            <div key={section.title} className="flex flex-col">
+            <div key={section.title} className="flex flex-col space-y-3">
               {/* Section Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-primary-50 rounded-lg">
-                  <Icon className="w-5 h-5 text-primary-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 text-base">{section.title}</h3>
-                </div>
+              <div className="flex items-center gap-2">
+                <Icon className="w-5 h-5 text-foreground" />
+                <h3 className="font-semibold text-base">{section.title}</h3>
               </div>
 
-              <p className="text-sm text-gray-500 mb-3">{section.description}</p>
+              <p className="text-sm text-muted-foreground">{section.description}</p>
 
               {/* Links */}
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
                       target={link.external ? '_blank' : undefined}
                       rel={link.external ? 'noopener noreferrer' : undefined}
-                      className="text-sm text-gray-700 hover:text-primary-600 transition-colors flex items-center gap-1.5 group"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 group"
                     >
                       <span>{link.label}</span>
                       {link.external && (
