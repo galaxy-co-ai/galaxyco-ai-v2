@@ -61,7 +61,7 @@ export default function AdminDashboardPage() {
               change: '+—%',
               trend: 'up',
               icon: Users,
-              color: 'text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400',
+              color: 'bg-muted text-foreground',
             },
             {
               label: 'Total Workspaces',
@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
               change: '+—%',
               trend: 'up',
               icon: Building2,
-              color: 'text-purple-600 bg-purple-50 dark:bg-purple-950 dark:text-purple-400',
+              color: 'bg-muted text-foreground',
             },
             {
               label: 'Executions (30d)',
@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
               change: '+—%',
               trend: 'up',
               icon: Activity,
-              color: 'text-cyan-600 bg-cyan-50 dark:bg-cyan-950 dark:text-cyan-400',
+              color: 'bg-muted text-foreground',
             },
             {
               label: 'Total Executions',
@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
               change: '+—%',
               trend: 'up',
               icon: DollarSign,
-              color: 'text-green-600 bg-green-50 dark:bg-green-950 dark:text-green-400',
+              color: 'bg-muted text-foreground',
             },
           ]);
         }
@@ -171,7 +171,7 @@ export default function AdminDashboardPage() {
                   >
                     <Icon className="h-6 w-6" />
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <TrendingUp className="h-4 w-4" />
                     <span>{metric.change}</span>
                   </div>
@@ -244,8 +244,8 @@ export default function AdminDashboardPage() {
                   className={cn(
                     'rounded-lg p-4',
                     alert.type === 'warning'
-                      ? 'bg-yellow-50 dark:bg-yellow-950'
-                      : 'bg-blue-50 dark:bg-blue-950',
+                      ? 'bg-muted/30 border border-border'
+                      : 'bg-muted/30 border border-border',
                   )}
                 >
                   <div className="flex items-start gap-3">
@@ -253,8 +253,8 @@ export default function AdminDashboardPage() {
                       className={cn(
                         'h-5 w-5 mt-0.5',
                         alert.type === 'warning'
-                          ? 'text-yellow-600 dark:text-yellow-400'
-                          : 'text-blue-600 dark:text-blue-400',
+                          ? 'text-muted-foreground'
+                          : 'text-muted-foreground',
                       )}
                     />
                     <div className="flex-1 min-w-0">

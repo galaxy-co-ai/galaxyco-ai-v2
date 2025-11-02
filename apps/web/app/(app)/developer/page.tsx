@@ -17,24 +17,24 @@ export default function DeveloperHub() {
       href: '/developer/api',
       icon: Code,
       description: 'Explore and test API endpoints',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
     {
       title: 'Webhooks',
       href: '/developer/webhooks',
       icon: Webhook,
       description: 'Manage webhook integrations',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
     {
       title: 'Playground',
       href: '/developer/playground',
       icon: Terminal,
       description: 'Test and experiment with APIs',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
   ];
 
@@ -58,7 +58,7 @@ export default function DeveloperHub() {
             const Icon = section.icon;
             return (
               <Link key={section.href} href={section.href}>
-                <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full border border-border">
                   <div className="flex items-start justify-between mb-4">
                     <div
                       className={`w-12 h-12 rounded-lg ${section.bgColor} flex items-center justify-center`}

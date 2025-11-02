@@ -64,11 +64,11 @@ const apiEndpoints = [
   },
 ];
 
-const methodColors: Record<string, string> = {
-  GET: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
-  POST: 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
-  PUT: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
-  DELETE: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+const methodVariants: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
+  GET: 'default',
+  POST: 'secondary',
+  PUT: 'outline',
+  DELETE: 'destructive',
 };
 
 export default function APIExplorerPage() {
@@ -94,7 +94,7 @@ export default function APIExplorerPage() {
                     className="w-full text-left rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-muted"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <Badge variant="secondary" className={methodColors[endpoint.method]}>
+                      <Badge variant={methodVariants[endpoint.method] || 'secondary'}>
                         {endpoint.method}
                       </Badge>
                       <code className="text-xs">{endpoint.path}</code>

@@ -130,8 +130,8 @@ export default function WebhooksPage() {
                   <tr key={webhook.id} className="hover:bg-muted/50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                          <Webhook className="h-4 w-4 text-primary" />
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+                          <Webhook className="h-4 w-4 text-foreground" />
                         </div>
                         <span className="font-medium">{webhook.name}</span>
                       </div>

@@ -213,8 +213,8 @@ export default function AdminWorkspacesPage() {
           <div key={workspace.id} className="rounded-lg border border-border bg-card p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-6 w-6 text-primary" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+                  <Building2 className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
                   <h3 className="font-semibold">{workspace.name}</h3>
@@ -260,26 +260,8 @@ export default function AdminWorkspacesPage() {
             </div>
 
             <div className="flex gap-2 mb-4">
-              <Badge
-                variant="secondary"
-                className={
-                  workspace.plan === 'enterprise'
-                    ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
-                    : workspace.plan === 'pro'
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                      : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
-                }
-              >
-                {workspace.plan}
-              </Badge>
-              <Badge
-                variant="secondary"
-                className={
-                  workspace.status === 'active'
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-                }
-              >
+              <Badge variant="outline">{workspace.plan}</Badge>
+              <Badge variant={workspace.status === 'active' ? 'default' : 'destructive'}>
                 {workspace.status}
               </Badge>
             </div>
@@ -332,8 +314,8 @@ export default function AdminWorkspacesPage() {
           {selectedWorkspace && (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-6 w-6 text-primary" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+                  <Building2 className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
                   <h3 className="font-semibold">{selectedWorkspace.name}</h3>
@@ -473,8 +455,8 @@ export default function AdminWorkspacesPage() {
           {deleteWorkspace && (
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-6 w-6 text-primary" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+                  <Building2 className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
                   <h3 className="font-semibold">{deleteWorkspace.name}</h3>

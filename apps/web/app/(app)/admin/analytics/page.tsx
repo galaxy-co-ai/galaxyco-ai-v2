@@ -93,10 +93,10 @@ export default function AdminAnalyticsPage() {
             return (
               <div key={metric.label} className="rounded-lg border border-border bg-card p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                    <Icon className="h-5 w-5 text-foreground" />
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <TrendingUp className="h-4 w-4" />
                     <span>{metric.change}</span>
                   </div>
