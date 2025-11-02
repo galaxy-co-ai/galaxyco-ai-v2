@@ -8,6 +8,21 @@ import { z } from 'zod';
 import { db } from '@galaxyco/database';
 import { sendGmailMessage, receiveGmailMessages, GmailCredentials } from '@/lib/integrations/gmail';
 import { sendSlackMessage, readSlackMessages, SlackCredentials } from '@/lib/integrations/slack';
+import { CRMCredentials, Contact, Deal } from '@/lib/integrations/crm/types';
+import {
+  createHubSpotContact,
+  updateHubSpotContact,
+  getHubSpotContact,
+  createHubSpotDeal,
+  searchHubSpotContacts,
+} from '@/lib/integrations/crm/hubspot/api';
+import {
+  createPipedrivePerson,
+  updatePipedrivePerson,
+  getPipedrivePerson,
+  createPipedriveDeal,
+  searchPipedrivePersons,
+} from '@/lib/integrations/crm/pipedrive/api';
 
 const ExecuteIntegrationRequestSchema = z.object({
   nodeId: z.string(),
@@ -43,6 +58,14 @@ export async function POST(req: NextRequest) {
 
       case 'slack':
         result = await executeSlackIntegration(userId, config, variables, previousResults);
+        break;
+
+      case 'hubspot':
+        result = await executeHubSpotIntegration(userId, config, variables, previousResults);
+        break;
+
+      case 'pipedrive':
+        result = await executePipedriveIntegration(userId, config, variables, previousResults);
         break;
 
       default:
@@ -298,6 +321,196 @@ async function executeSlackIntegration(
 
     default:
       throw new Error(`Unknown Slack action: ${config.action}`);
+  }
+}
+
+/**
+ * Execute HubSpot CRM integration
+ */
+async function executeHubSpotIntegration(
+  userId: string,
+  config: Record<string, any> | undefined,
+  variables: Record<string, any> | undefined,
+  previousResults: Record<string, any> | undefined,
+) {
+  // Get HubSpot integration from database
+  const integration = await db.query.integrations.findFirst({
+    where: (integrations, { and, eq }) =>
+      and(eq(integrations.userId, userId), eq(integrations.provider, 'hubspot')),
+  });
+
+  if (!integration || integration.status !== 'active') {
+    throw new Error('HubSpot integration not connected. Please connect HubSpot first.');
+  }
+
+  const tokens = await db.query.oauthTokens.findFirst({
+    where: (oauthTokens, { eq }) => eq(oauthTokens.integrationId, integration.id),
+  });
+
+  if (!tokens) {
+    throw new Error('HubSpot credentials not found. Please reconnect HubSpot.');
+  }
+
+  const credentials: CRMCredentials = {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken || undefined,
+    expiresAt: tokens.expiresAt ? tokens.expiresAt.getTime() : undefined,
+  };
+
+  if (!config?.action) {
+    throw new Error('HubSpot action is required');
+  }
+
+  switch (config.action) {
+    case 'create_contact': {
+      const contactData = config.contactData as Contact;
+      const contact = await createHubSpotContact(credentials, contactData);
+      return {
+        action: 'create_contact',
+        contactId: contact.id,
+        contact,
+      };
+    }
+
+    case 'update_contact': {
+      if (!config.contactId) throw new Error('contactId is required');
+      const contactData = config.contactData as Partial<Contact>;
+      const contact = await updateHubSpotContact(credentials, config.contactId, contactData);
+      return {
+        action: 'update_contact',
+        contactId: contact.id,
+        contact,
+      };
+    }
+
+    case 'get_contact': {
+      if (!config.contactId) throw new Error('contactId is required');
+      const contact = await getHubSpotContact(credentials, config.contactId);
+      return {
+        action: 'get_contact',
+        contact,
+      };
+    }
+
+    case 'create_deal': {
+      const dealData = config.dealData as Deal;
+      const deal = await createHubSpotDeal(credentials, dealData);
+      return {
+        action: 'create_deal',
+        dealId: deal.id,
+        deal,
+      };
+    }
+
+    case 'search_contacts': {
+      if (!config.searchQuery) throw new Error('searchQuery is required');
+      const contacts = await searchHubSpotContacts(credentials, config.searchQuery);
+      return {
+        action: 'search_contacts',
+        count: contacts.length,
+        contacts,
+      };
+    }
+
+    default:
+      throw new Error(`Unknown HubSpot action: ${config.action}`);
+  }
+}
+
+/**
+ * Execute Pipedrive CRM integration
+ */
+async function executePipedriveIntegration(
+  userId: string,
+  config: Record<string, any> | undefined,
+  variables: Record<string, any> | undefined,
+  previousResults: Record<string, any> | undefined,
+) {
+  // Get Pipedrive integration from database
+  const integration = await db.query.integrations.findFirst({
+    where: (integrations, { and, eq }) =>
+      and(
+        eq(integrations.userId, userId),
+        eq(integrations.provider, 'salesforce'), // Using salesforce enum for Pipedrive
+        eq(integrations.type, 'pipedrive'),
+      ),
+  });
+
+  if (!integration || integration.status !== 'active') {
+    throw new Error('Pipedrive integration not connected. Please connect Pipedrive first.');
+  }
+
+  const tokens = await db.query.oauthTokens.findFirst({
+    where: (oauthTokens, { eq }) => eq(oauthTokens.integrationId, integration.id),
+  });
+
+  if (!tokens) {
+    throw new Error('Pipedrive credentials not found. Please reconnect Pipedrive.');
+  }
+
+  const credentials: CRMCredentials = {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken || undefined,
+    expiresAt: tokens.expiresAt ? tokens.expiresAt.getTime() : undefined,
+  };
+
+  if (!config?.action) {
+    throw new Error('Pipedrive action is required');
+  }
+
+  switch (config.action) {
+    case 'create_contact': {
+      const contactData = config.contactData as Contact;
+      const person = await createPipedrivePerson(credentials, contactData);
+      return {
+        action: 'create_contact',
+        personId: person.id,
+        person,
+      };
+    }
+
+    case 'update_contact': {
+      if (!config.contactId) throw new Error('contactId is required');
+      const contactData = config.contactData as Partial<Contact>;
+      const person = await updatePipedrivePerson(credentials, config.contactId, contactData);
+      return {
+        action: 'update_contact',
+        personId: person.id,
+        person,
+      };
+    }
+
+    case 'get_contact': {
+      if (!config.contactId) throw new Error('contactId is required');
+      const person = await getPipedrivePerson(credentials, config.contactId);
+      return {
+        action: 'get_contact',
+        person,
+      };
+    }
+
+    case 'create_deal': {
+      const dealData = config.dealData as Deal;
+      const deal = await createPipedriveDeal(credentials, dealData);
+      return {
+        action: 'create_deal',
+        dealId: deal.id,
+        deal,
+      };
+    }
+
+    case 'search_contacts': {
+      if (!config.searchQuery) throw new Error('searchQuery is required');
+      const persons = await searchPipedrivePersons(credentials, config.searchQuery);
+      return {
+        action: 'search_contacts',
+        count: persons.length,
+        persons,
+      };
+    }
+
+    default:
+      throw new Error(`Unknown Pipedrive action: ${config.action}`);
   }
 }
 

@@ -9,6 +9,9 @@ export * as Gmail from './gmail';
 // Slack integration
 export * as Slack from './slack';
 
+// CRM integrations
+export * as CRM from './crm';
+
 // Integration registry
 export const AVAILABLE_INTEGRATIONS = ['gmail', 'slack', 'hubspot', 'pipedrive'] as const;
 
