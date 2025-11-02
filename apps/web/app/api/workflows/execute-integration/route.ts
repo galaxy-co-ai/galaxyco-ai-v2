@@ -7,6 +7,7 @@ import { auth } from '@clerk/nextjs/server';
 import { z } from 'zod';
 import { db } from '@galaxyco/database';
 import { sendGmailMessage, receiveGmailMessages, GmailCredentials } from '@/lib/integrations/gmail';
+import { sendSlackMessage, readSlackMessages, SlackCredentials } from '@/lib/integrations/slack';
 
 const ExecuteIntegrationRequestSchema = z.object({
   nodeId: z.string(),
@@ -202,7 +203,7 @@ async function executeGmailIntegration(
 }
 
 /**
- * Execute Slack integration (placeholder)
+ * Execute Slack integration
  */
 async function executeSlackIntegration(
   userId: string,
@@ -210,10 +211,94 @@ async function executeSlackIntegration(
   variables: Record<string, any> | undefined,
   previousResults: Record<string, any> | undefined,
 ) {
-  // TODO: Implement Slack integration
-  return {
-    message: 'Slack integration not yet implemented',
+  // Get Slack integration from database
+  const integration = await db.query.integrations.findFirst({
+    where: (integrations, { and, eq }) =>
+      and(
+        eq(integrations.userId, userId),
+        eq(integrations.provider, 'slack'),
+        eq(integrations.type, 'messaging'),
+      ),
+  });
+
+  if (!integration || integration.status !== 'active') {
+    throw new Error('Slack integration not connected. Please connect Slack first.');
+  }
+
+  // Get OAuth tokens
+  const tokens = await db.query.oauthTokens.findFirst({
+    where: (oauthTokens, { eq }) => eq(oauthTokens.integrationId, integration.id),
+  });
+
+  if (!tokens) {
+    throw new Error('Slack credentials not found. Please reconnect Slack.');
+  }
+
+  const credentials: SlackCredentials = {
+    accessToken: tokens.accessToken,
+    tokenType: tokens.tokenType || 'Bearer',
+    scope: tokens.scope || '',
+    botUserId: integration.config?.botUserId,
+    appId: integration.config?.appId,
+    teamId: integration.providerAccountId,
+    teamName: integration.displayName || undefined,
   };
+
+  if (!config?.action) {
+    throw new Error('Slack action is required (send_message, read_messages, etc.)');
+  }
+
+  switch (config.action) {
+    case 'send_message': {
+      if (!config.channel || !config.text) {
+        throw new Error('Slack send_message requires: channel and text');
+      }
+
+      // Replace variables in message content
+      const replacedText = replaceVariables(config.text, variables, previousResults);
+
+      const result = await sendSlackMessage(credentials, {
+        channel: config.channel,
+        text: replacedText,
+        threadTs: config.threadTs,
+      });
+
+      return {
+        action: 'send_message',
+        ts: result.ts,
+        channel: result.channel,
+        text: replacedText,
+      };
+    }
+
+    case 'read_messages': {
+      if (!config.channel) {
+        throw new Error('Slack read_messages requires: channel');
+      }
+
+      const limit = config.limit || 10;
+      const messages = await readSlackMessages(credentials, {
+        channel: config.channel,
+        limit,
+        oldest: config.oldest,
+        latest: config.latest,
+      });
+
+      return {
+        action: 'read_messages',
+        channel: config.channel,
+        count: messages.length,
+        messages: messages.map((msg) => ({
+          user: msg.user,
+          text: msg.text,
+          ts: msg.ts,
+        })),
+      };
+    }
+
+    default:
+      throw new Error(`Unknown Slack action: ${config.action}`);
+  }
 }
 
 /**

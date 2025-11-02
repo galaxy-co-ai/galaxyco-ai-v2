@@ -6,6 +6,9 @@
 // Gmail integration
 export * as Gmail from './gmail';
 
+// Slack integration
+export * as Slack from './slack';
+
 // Integration registry
 export const AVAILABLE_INTEGRATIONS = ['gmail', 'slack', 'hubspot', 'pipedrive'] as const;
 
