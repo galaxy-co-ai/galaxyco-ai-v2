@@ -1,0 +1,102 @@
+{
+  "$schema": "https://cursor.sh/schemas/commands.json",
+  "commands": [
+    {
+      "name": "generate-component",
+      "description": "🎨 Generate a new GalaxyCo component with all patterns",
+      "prompt": "Create a new React component following GalaxyCo patterns:\n\n1. Ask for component name and type (Server or Client)\n2. Create component file in correct location:\n   - UI components → apps/web/components/ui/\n   - Kibo components → apps/web/components/kibo/\n   - Galaxy components → apps/web/components/galaxy/\n3. Follow these patterns:\n   - Server Component by default (no 'use client')\n   - Include proper TypeScript types\n   - Add loading state if needed\n   - Include accessibility attributes\n   - Use Tailwind + shadcn/ui styling\n   - Add Framer Motion for animations if Client Component\n4. Create corresponding test file in __tests__/\n5. Add to component index if needed\n\nComponent patterns reference: .cursor/rules/component-patterns.md",
+      "tags": ["component", "generation", "galaxy"]
+    },
+    {
+      "name": "generate-server-action",
+      "description": "⚡ Generate a Server Action with validation",
+      "prompt": "Create a new Server Action following GalaxyCo patterns:\n\n1. Ask for action name and purpose\n2. Create file in apps/web/lib/actions/\n3. Include:\n   - 'use server' directive\n   - Zod schema for input validation\n   - Auth check with Clerk\n   - orgId filtering (MANDATORY)\n   - Try-catch error handling\n   - User-friendly error messages\n   - revalidatePath() or revalidateTag() for cache\n   - Return type with success/error structure\n4. Create corresponding test file\n5. Add JSDoc comments\n\nServer Action patterns reference: .cursor/rules/api-conventions.md\nDatabase safety: .cursor/rules/database-rules.md",
+      "tags": ["server-action", "api", "generation"]
+    },
+    {
+      "name": "generate-database-query",
+      "description": "🗄️ Generate a safe database query with orgId filtering",
+      "prompt": "Create a new database query following GalaxyCo patterns:\n\n1. Ask for query purpose and table name\n2. Create file in apps/web/lib/queries/\n3. MANDATORY patterns:\n   - Import db from '@/lib/db'\n   - ALWAYS filter by orgId (multi-tenant safety)\n   - Use Drizzle ORM typed queries\n   - Add try-catch error handling\n   - Return typed results\n   - Add JSDoc comments with security notes\n4. Include example usage\n5. Add test file with mock data\n\nCRITICAL: Every query MUST include orgId filter!\n\nDatabase patterns reference: .cursor/rules/database-rules.md",
+      "tags": ["database", "query", "security"]
+    },
+    {
+      "name": "generate-migration",
+      "description": "📊 Generate a Drizzle database migration",
+      "prompt": "Create a new database migration:\n\n1. Ask for migration purpose\n2. Check current schema in packages/database/src/schema/\n3. Generate migration:\n   ```bash\n   cd packages/database && pnpm db:generate\n   ```\n4. Review migration file in packages/database/migrations/\n5. Ask if user wants to push to database:\n   ```bash\n   cd packages/database && pnpm db:push\n   ```\n6. Verify migration succeeded\n\nDatabase rules reference: .cursor/rules/database-rules.md",
+      "tags": ["database", "migration", "drizzle"]
+    },
+    {
+      "name": "generate-form",
+      "description": "📝 Generate a form with React Hook Form + Zod",
+      "prompt": "Create a new form following GalaxyCo patterns:\n\n1. Ask for form purpose and fields\n2. Create component in apps/web/components/galaxy/forms/\n3. Include:\n   - 'use client' directive (forms are always client)\n   - Zod schema for validation\n   - React Hook Form setup\n   - shadcn/ui form components\n   - Loading state during submission\n   - Success/error toast notifications\n   - Accessibility attributes\n   - Proper error messages\n4. Create corresponding Server Action for submission\n5. Add test file with validation tests\n\nForm patterns reference: .cursor/rules/component-patterns.md (Form Pattern section)",
+      "tags": ["form", "validation", "component"]
+    },
+    {
+      "name": "generate-test",
+      "description": "🧪 Generate tests for existing component/function",
+      "prompt": "Create comprehensive tests:\n\n1. Ask for file to test\n2. Read the file and understand its purpose\n3. Create test file in __tests__/ directory:\n   - Unit tests → __tests__/unit/\n   - Component tests → __tests__/component/\n   - Integration tests → __tests__/integration/\n4. Include:\n   - Vitest + Testing Library setup\n   - Test behavior, not implementation\n   - Mock external dependencies\n   - Accessibility tests (if component)\n   - Edge cases and error handling\n   - Clear test descriptions\n5. Aim for 80%+ coverage\n\nTesting patterns reference: .cursor/rules/testing-standards.md",
+      "tags": ["testing", "vitest", "quality"]
+    },
+    {
+      "name": "audit-security",
+      "description": "🔒 Audit file/feature for security issues",
+      "prompt": "Perform comprehensive security audit:\n\n1. Ask for file or feature to audit\n2. Check for:\n   - ❌ Missing orgId filtering in queries\n   - ❌ Unvalidated user input (missing Zod schemas)\n   - ❌ Missing auth checks\n   - ❌ Technical error messages shown to users\n   - ❌ Missing try-catch blocks\n   - ❌ SQL injection risks\n   - ❌ XSS vulnerabilities\n   - ❌ Exposed secrets or API keys\n3. Create report with findings and fixes\n4. Offer to fix issues automatically\n\nSecurity patterns:\n- Database rules: .cursor/rules/database-rules.md\n- API conventions: .cursor/rules/api-conventions.md",
+      "tags": ["security", "audit", "quality"]
+    },
+    {
+      "name": "audit-accessibility",
+      "description": "♿ Audit component for WCAG compliance",
+      "prompt": "Perform accessibility audit:\n\n1. Ask for component to audit\n2. Check for:\n   - ❌ Missing aria-labels\n   - ❌ Missing keyboard navigation\n   - ❌ Poor focus indicators\n   - ❌ Low color contrast\n   - ❌ Missing semantic HTML\n   - ❌ Missing alt text on images\n   - ❌ Inaccessible forms\n3. Test with screen reader simulation\n4. Create report with WCAG violations\n5. Offer to fix issues\n\nTarget: WCAG AA compliance minimum\n\nAccessibility patterns: .cursor/rules/component-patterns.md",
+      "tags": ["accessibility", "wcag", "audit"]
+    },
+    {
+      "name": "refactor-to-server-component",
+      "description": "🔄 Refactor Client Component to Server Component",
+      "prompt": "Refactor component to Server Component:\n\n1. Ask for component file\n2. Analyze if it can be a Server Component:\n   - ✅ No useState, useEffect\n   - ✅ No event handlers\n   - ✅ No browser APIs\n   - ✅ Data fetching only\n3. If eligible, refactor:\n   - Remove 'use client' directive\n   - Convert to async function\n   - Move data fetching to component level\n   - Add Suspense boundaries\n   - Update imports\n4. Update tests\n5. Verify functionality\n\nServer Component patterns: .cursor/rules/component-patterns.md",
+      "tags": ["refactor", "performance", "component"]
+    },
+    {
+      "name": "optimize-performance",
+      "description": "⚡ Optimize component/page performance",
+      "prompt": "Optimize performance:\n\n1. Ask for file to optimize\n2. Analyze performance issues:\n   - Unnecessary Client Components\n   - Missing React.memo/useMemo\n   - Inefficient re-renders\n   - Large bundle size\n   - Missing code splitting\n   - Unoptimized images\n   - Missing caching\n3. Apply optimizations:\n   - Convert to Server Components where possible\n   - Add memoization\n   - Implement code splitting\n   - Optimize images with next/image\n   - Add caching strategies\n4. Measure improvements\n5. Update documentation\n\nPerformance patterns: .cursor/rules/component-patterns.md",
+      "tags": ["performance", "optimization"]
+    },
+    {
+      "name": "create-feature",
+      "description": "🚀 Create complete feature (component + action + test + migration)",
+      "prompt": "Create a complete feature following GalaxyCo patterns:\n\n1. Ask for feature name and requirements\n2. Plan architecture:\n   - Database schema changes (if needed)\n   - Server Actions needed\n   - Components needed\n   - API integrations\n3. Execute in order:\n   a. Create migration (if needed)\n   b. Create database queries with orgId filtering\n   c. Create Server Actions with validation\n   d. Create React components\n   e. Create tests for all layers\n   f. Update routes\n4. Verify:\n   - Multi-tenant isolation (orgId everywhere)\n   - Error handling\n   - Loading states\n   - Accessibility\n   - Type safety\n5. Create feature documentation\n\nReferences:\n- Project structure: .cursor/rules/project-structure.md\n- All patterns: .cursor/rules/*.md",
+      "tags": ["feature", "full-stack", "generation"]
+    },
+    {
+      "name": "debug-issue",
+      "description": "🐛 Debug runtime or build issue",
+      "prompt": "Debug issue systematically:\n\n1. Ask for error message and context\n2. Analyze error:\n   - Read error message carefully\n   - Check file and line number\n   - Review recent changes\n   - Check related files\n3. Common GalaxyCo issues:\n   - Missing orgId filter → Add to query\n   - Hydration error → Check Server/Client boundary\n   - Auth error → Verify Clerk setup\n   - Type error → Check schema definitions\n   - Build error → Check imports and exports\n4. Propose fix with explanation\n5. Implement fix\n6. Verify resolution\n7. Document fix if it's a common issue\n\nCommon gotchas: .cursor/rules/component-patterns.md",
+      "tags": ["debug", "troubleshooting", "fix"]
+    },
+    {
+      "name": "deploy-preview",
+      "description": "🌐 Create Vercel preview deployment",
+      "prompt": "Create preview deployment:\n\n1. Check current git branch\n2. Verify all changes are committed:\n   ```bash\n   git status\n   ```\n3. Push to remote:\n   ```bash\n   git push origin [branch-name]\n   ```\n4. Vercel will auto-deploy preview\n5. Get preview URL from Vercel dashboard\n6. Share preview link\n7. Suggest testing checklist:\n   - Visual regression\n   - Functionality\n   - Mobile responsiveness\n   - Performance\n\nDeployment info: docs/deployment/",
+      "tags": ["deployment", "preview", "vercel"]
+    },
+    {
+      "name": "update-dependencies",
+      "description": "📦 Update project dependencies safely",
+      "prompt": "Update dependencies:\n\n1. Check outdated packages:\n   ```bash\n   pnpm outdated\n   ```\n2. Review updates:\n   - Patch updates: Safe to update\n   - Minor updates: Review changelog\n   - Major updates: Careful review needed\n3. Update strategy:\n   - Update patches first\n   - Test thoroughly\n   - Update minors in batches\n   - Major updates: one at a time\n4. Run tests after each update:\n   ```bash\n   turbo run test\n   turbo run typecheck\n   turbo run lint\n   ```\n5. Document breaking changes\n\nDependencies info: package.json, apps/*/package.json",
+      "tags": ["dependencies", "maintenance", "updates"]
+    },
+    {
+      "name": "analyze-bundle",
+      "description": "📊 Analyze bundle size and optimize",
+      "prompt": "Analyze bundle size:\n\n1. Build production bundle:\n   ```bash\n   cd apps/web && pnpm build\n   ```\n2. Analyze with @next/bundle-analyzer\n3. Identify large dependencies\n4. Suggest optimizations:\n   - Tree-shaking opportunities\n   - Code splitting improvements\n   - Dynamic imports\n   - Replace heavy libraries\n5. Implement optimizations\n6. Measure improvement\n7. Document changes\n\nPerformance targets:\n- First Load JS: < 100KB\n- Total Size: < 500KB",
+      "tags": ["performance", "bundle", "optimization"]
+    },
+    {
+      "name": "create-documentation",
+      "description": "📚 Create documentation for feature/component",
+      "prompt": "Create comprehensive documentation:\n\n1. Ask what to document\n2. Create documentation with:\n   - Overview and purpose\n   - Usage examples\n   - Props/parameters (if component/function)\n   - Code examples\n   - Common use cases\n   - Troubleshooting\n   - Related components/functions\n3. Place in appropriate location:\n   - Component docs → apps/web/components/README.md\n   - Feature docs → docs/features/\n   - API docs → docs/api/\n4. Include:\n   - TypeScript examples\n   - Best practices\n   - Security considerations\n   - Performance tips\n\nDocumentation standards: docs/",
+      "tags": ["documentation", "markdown", "guides"]
+    }
+  ]
+}
+

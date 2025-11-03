@@ -1,0 +1,145 @@
+=== COPY-PASTE FORMAT ===
+Each block is one command. Copy entire block including blank lines.
+First line = Name, Second line = Command, Third line = Description
+=============================
+
+
+Start Dev Server
+
+pnpm dev
+
+Start all apps in parallel using Turbo
+
+
+Build Project
+
+pnpm build
+
+Build all apps and packages
+
+
+Run Tests
+
+pnpm test
+
+Run all tests with Vitest
+
+
+Run E2E Tests
+
+pnpm e2e
+
+Run Playwright E2E tests
+
+
+Run E2E with UI
+
+pnpm e2e:ui
+
+Run Playwright tests with interactive UI
+
+
+Type Check
+
+pnpm typecheck
+
+Run TypeScript type checking across all apps
+
+
+Lint Code
+
+pnpm lint
+
+Run ESLint on all apps
+
+
+Lint & Fix
+
+pnpm lint:fix
+
+Run ESLint and auto-fix issues
+
+
+Health Check
+
+pnpm health-check
+
+Run typecheck, lint, and format checks
+
+
+Seed Database
+
+pnpm db:seed
+
+Seed database with sample data
+
+
+Link User to Org
+
+pnpm db:link-user
+
+Link current user to organization
+
+
+Setup Production DB
+
+pnpm db:setup
+
+Setup production database
+
+
+Clean Build Artifacts
+
+pnpm clean
+
+Remove all build artifacts and node_modules
+
+
+Verify Deployment
+
+pnpm verify:deployment
+
+Verify deployment is working correctly
+
+
+Generate Changelog
+
+pnpm changelog
+
+Generate changelog from git commits
+
+
+AI Commit (GitKraken)
+
+gk ai commit --add-description
+
+Create AI-generated commit message
+
+
+Start Feature Branch (GitKraken)
+
+gk work start
+
+Create feature branch with GitKraken
+
+
+Create PR (GitKraken)
+
+gk work pr create
+
+Create PR with AI-generated description
+
+
+Check Agent Coordination
+
+node scripts/agents/coordination-status.mjs
+
+Check multi-agent coordination status and file locks
+
+
+Screenshot App
+
+node scripts/screenshot-app.mjs
+
+Take screenshot of running app for testing
+

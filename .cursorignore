@@ -1,0 +1,62 @@
+# .cursorignore - Files to exclude from Cursor's linting and analysis
+
+# GitHub Actions workflows - suppress false positive warnings
+# These warnings are about secret access but secrets ARE properly configured
+# IMPORTANT: Restart Cursor after changes to .cursorignore for them to take effect
+.github/workflows/*.yml
+.github/workflows/*.yaml
+.github/workflows/**
+**/.github/workflows/*.yml
+**/.github/workflows/*.yaml
+**/.github/workflows/**
+.github/**
+**/.github/**
+
+# Build outputs
+.next
+dist
+build
+out
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Test outputs
+coverage
+.nyc_output
+test-results
+playwright-report
+playwright/.cache
+
+# Environment files
+.env.local
+.env*.local
+.env.production
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Turbo
+.turbo
+
+# Misc
+*.tsbuildinfo
+next-env.d.ts

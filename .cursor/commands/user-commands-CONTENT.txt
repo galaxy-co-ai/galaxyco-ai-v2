@@ -1,0 +1,110 @@
+=== COPY-PASTE FORMAT ===
+Each block is one command. Copy entire block including blank lines.
+First line = Name, Second line = Command, Third line = Description
+=============================
+
+
+Git Status Short
+
+git status -s
+
+Show git status in short format
+
+
+Git Pull Rebase
+
+git pull --rebase
+
+Pull latest changes and rebase current branch
+
+
+Git Branch List
+
+git branch -a
+
+List all branches (local and remote)
+
+
+Git Log Graph
+
+git log --oneline --graph --all --decorate
+
+Show git commit graph
+
+
+Find in Files
+
+grep -r
+
+Search for text in files recursively
+
+
+Check Port Usage
+
+netstat -ano | findstr
+
+Check what's using a specific port (Windows)
+
+
+Clear Terminal
+
+clear
+
+Clear terminal screen
+
+
+List Processes
+
+tasklist
+
+List all running processes (Windows)
+
+
+Kill Process by PID
+
+taskkill /F /PID
+
+Kill process by ID (Windows)
+
+
+Show Environment Variables
+
+Get-ChildItem Env:
+
+Show all environment variables (PowerShell)
+
+
+Quick npm Update
+
+pnpm update --latest
+
+Update all dependencies to latest versions
+
+
+Check Outdated Packages
+
+pnpm outdated
+
+Check for outdated npm packages
+
+
+Install Package
+
+pnpm add
+
+Install a new package
+
+
+Remove Package
+
+pnpm remove
+
+Remove a package
+
+
+Clear pnpm Cache
+
+pnpm store prune
+
+Clear pnpm cache and remove unreferenced packages
+

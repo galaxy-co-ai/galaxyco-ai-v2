@@ -1,0 +1,95 @@
+{
+  "userCommands": [
+    {
+      "name": "Git Status Short",
+      "command": "git status -s",
+      "description": "Show git status in short format",
+      "category": "Git"
+    },
+    {
+      "name": "Git Pull Rebase",
+      "command": "git pull --rebase",
+      "description": "Pull latest changes and rebase current branch",
+      "category": "Git"
+    },
+    {
+      "name": "Git Branch List",
+      "command": "git branch -a",
+      "description": "List all branches (local and remote)",
+      "category": "Git"
+    },
+    {
+      "name": "Git Log Graph",
+      "command": "git log --oneline --graph --all --decorate",
+      "description": "Show git commit graph",
+      "category": "Git"
+    },
+    {
+      "name": "Find in Files",
+      "command": "grep -r",
+      "description": "Search for text in files recursively",
+      "category": "Utilities"
+    },
+    {
+      "name": "Check Port Usage",
+      "command": "netstat -ano | findstr",
+      "description": "Check what's using a specific port (Windows)",
+      "category": "Utilities"
+    },
+    {
+      "name": "Clear Terminal",
+      "command": "clear",
+      "description": "Clear terminal screen",
+      "category": "Utilities"
+    },
+    {
+      "name": "List Processes",
+      "command": "tasklist",
+      "description": "List all running processes (Windows)",
+      "category": "Utilities"
+    },
+    {
+      "name": "Kill Process by PID",
+      "command": "taskkill /F /PID",
+      "description": "Kill process by ID (Windows)",
+      "category": "Utilities"
+    },
+    {
+      "name": "Show Environment Variables",
+      "command": "Get-ChildItem Env:",
+      "description": "Show all environment variables (PowerShell)",
+      "category": "Utilities"
+    },
+    {
+      "name": "Quick npm Update",
+      "command": "pnpm update --latest",
+      "description": "Update all dependencies to latest versions",
+      "category": "Package Management"
+    },
+    {
+      "name": "Check Outdated Packages",
+      "command": "pnpm outdated",
+      "description": "Check for outdated npm packages",
+      "category": "Package Management"
+    },
+    {
+      "name": "Install Package",
+      "command": "pnpm add",
+      "description": "Install a new package",
+      "category": "Package Management"
+    },
+    {
+      "name": "Remove Package",
+      "command": "pnpm remove",
+      "description": "Remove a package",
+      "category": "Package Management"
+    },
+    {
+      "name": "Clear pnpm Cache",
+      "command": "pnpm store prune",
+      "description": "Clear pnpm cache and remove unreferenced packages",
+      "category": "Package Management"
+    }
+  ]
+}
+

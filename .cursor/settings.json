@@ -1,0 +1,59 @@
+{
+  "cursor.ai.model": "cursor-2.0",
+  "cursor.ai.agent.enabled": true,
+  "cursor.ai.agent.contextWindow": 200000,
+  "cursor.ai.tab.enabled": true,
+  "cursor.ai.tab.delay": 50,
+  "cursor.ai.bugbot.enabled": true,
+  "cursor.ai.bugbot.autofix": false,
+  
+  "cursor.codebase.embedding": {
+    "enabled": true,
+    "incremental": true,
+    "exclude": [
+      "node_modules/**",
+      ".next/**",
+      "dist/**",
+      "build/**",
+      ".turbo/**",
+      "coverage/**",
+      "test-results/**",
+      "playwright-report/**",
+      ".pnpm-store/**",
+      ".github/**"
+    ]
+  },
+  
+  "cursor.performance": {
+    "maxMemoryMB": 8192,
+    "indexingThreads": 4,
+    "cacheSize": "2GB"
+  },
+  
+  "cursor.features": {
+    "inlineEdit": true,
+    "scopedChanges": true,
+    "terminalIntegration": true
+  },
+  
+  "cursor.context": {
+    "alwaysInclude": [
+      ".cursor/context.md",
+      ".cursor/galaxyco-rules.md",
+      ".cursorrules"
+    ],
+    "maxFileSize": "100KB"
+  },
+  
+  "cursor.linting": {
+    "exclude": [
+      ".github/**",
+      "**/.github/**",
+      ".github/workflows/**",
+      "**/.github/workflows/**"
+    ]
+  },
+  
+  "github-actions.workflows.enableWorkflowValidation": false,
+  "github-actions.workflows.enableWorkflowLinting": false
+}

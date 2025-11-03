@@ -1,0 +1,126 @@
+{
+  "projectCommands": [
+    {
+      "name": "Start Dev Server",
+      "command": "pnpm dev",
+      "description": "Start all apps in parallel using Turbo",
+      "category": "Development",
+      "shortcut": "Ctrl+Shift+D"
+    },
+    {
+      "name": "Build Project",
+      "command": "pnpm build",
+      "description": "Build all apps and packages",
+      "category": "Build"
+    },
+    {
+      "name": "Run Tests",
+      "command": "pnpm test",
+      "description": "Run all tests with Vitest",
+      "category": "Testing"
+    },
+    {
+      "name": "Run E2E Tests",
+      "command": "pnpm e2e",
+      "description": "Run Playwright E2E tests",
+      "category": "Testing"
+    },
+    {
+      "name": "Run E2E with UI",
+      "command": "pnpm e2e:ui",
+      "description": "Run Playwright tests with interactive UI",
+      "category": "Testing"
+    },
+    {
+      "name": "Type Check",
+      "command": "pnpm typecheck",
+      "description": "Run TypeScript type checking across all apps",
+      "category": "Quality"
+    },
+    {
+      "name": "Lint Code",
+      "command": "pnpm lint",
+      "description": "Run ESLint on all apps",
+      "category": "Quality"
+    },
+    {
+      "name": "Lint & Fix",
+      "command": "pnpm lint:fix",
+      "description": "Run ESLint and auto-fix issues",
+      "category": "Quality"
+    },
+    {
+      "name": "Health Check",
+      "command": "pnpm health-check",
+      "description": "Run typecheck, lint, and format checks",
+      "category": "Quality"
+    },
+    {
+      "name": "Seed Database",
+      "command": "pnpm db:seed",
+      "description": "Seed database with sample data",
+      "category": "Database"
+    },
+    {
+      "name": "Link User to Org",
+      "command": "pnpm db:link-user",
+      "description": "Link current user to organization",
+      "category": "Database"
+    },
+    {
+      "name": "Setup Production DB",
+      "command": "pnpm db:setup",
+      "description": "Setup production database",
+      "category": "Database"
+    },
+    {
+      "name": "Clean Build Artifacts",
+      "command": "pnpm clean",
+      "description": "Remove all build artifacts and node_modules",
+      "category": "Maintenance"
+    },
+    {
+      "name": "Verify Deployment",
+      "command": "pnpm verify:deployment",
+      "description": "Verify deployment is working correctly",
+      "category": "Deployment"
+    },
+    {
+      "name": "Generate Changelog",
+      "command": "pnpm changelog",
+      "description": "Generate changelog from git commits",
+      "category": "Documentation"
+    },
+    {
+      "name": "AI Commit (GitKraken)",
+      "command": "gk ai commit --add-description",
+      "description": "Create AI-generated commit message",
+      "category": "Git"
+    },
+    {
+      "name": "Start Feature Branch (GitKraken)",
+      "command": "gk work start",
+      "description": "Create feature branch with GitKraken",
+      "category": "Git"
+    },
+    {
+      "name": "Create PR (GitKraken)",
+      "command": "gk work pr create",
+      "description": "Create PR with AI-generated description",
+      "category": "Git"
+    },
+    {
+      "name": "Check Agent Coordination",
+      "command": "node scripts/agents/coordination-status.mjs",
+      "description": "Check multi-agent coordination status and file locks",
+      "category": "Workflow"
+    },
+    {
+      "name": "Screenshot App",
+      "command": "node scripts/screenshot-app.mjs",
+      "description": "Take screenshot of running app for testing",
+      "category": "Testing"
+    }
+  ]
+}
+
