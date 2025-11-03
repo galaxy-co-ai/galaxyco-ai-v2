@@ -12,6 +12,7 @@
     "test": "turbo run test",
     "test:integration": "turbo run test:integration",
     "test:smoke": "playwright test tests/smoke",
+    "verify:deployment": "node scripts/deployment/verify-deployment.js",
     "e2e": "playwright test tests/e2e",
     "e2e:ci": "playwright test tests/e2e --reporter=line",
     "e2e:ui": "playwright test tests/e2e --ui",

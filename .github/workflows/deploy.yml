@@ -191,21 +191,122 @@ jobs:
           vercel-args: '--prod'
           alias-domains: galaxyco.ai,www.galaxyco.ai
 
-      - name: Wait for deployment propagation
-        run: sleep 15
-
-      - name: Run production smoke tests
+      - name: Wait for Vercel deployment to complete
+        id: wait-deploy
         run: |
-          echo "Running production smoke tests..."
+          echo "⏳ Waiting for Vercel deployment to complete..."
+          echo "Deployment URL: ${{ steps.deploy.outputs.preview-url }}"
 
-          # Health check
-          curl -f https://galaxyco.ai/api/health || { echo "❌ Health check failed"; exit 1; }
+          # Extract deployment ID from URL
+          DEPLOYMENT_URL="${{ steps.deploy.outputs.preview-url }}"
+          DEPLOYMENT_ID=$(echo "$DEPLOYMENT_URL" | sed 's|https://||' | cut -d'.' -f1)
 
-          # Check critical pages
-          curl -f https://galaxyco.ai || { echo "❌ Home page failed"; exit 1; }
-          curl -f https://galaxyco.ai/marketplace || { echo "❌ Marketplace failed"; exit 1; }
+          echo "Deployment ID: $DEPLOYMENT_ID"
 
-          echo "✅ Production smoke tests passed"
+          MAX_WAIT=600  # 10 minutes
+          WAIT_INTERVAL=10
+          ELAPSED=0
+
+          while [ $ELAPSED -lt $MAX_WAIT ]; do
+            # Get deployment status
+            RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              "https://api.vercel.com/v13/deployments/$DEPLOYMENT_ID?teamId=${{ secrets.VERCEL_ORG_ID }}" || echo "{}")
+
+            STATUS=$(echo "$RESPONSE" | jq -r '.readyState // .state // "UNKNOWN"' || echo "UNKNOWN")
+
+            echo "Deployment status: $STATUS (${ELAPSED}s elapsed)"
+
+            if [ "$STATUS" == "READY" ]; then
+              echo "✅ Deployment ready!"
+              echo "deployment_url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+            if [ "$STATUS" == "ERROR" ] || [ "$STATUS" == "CANCELED" ]; then
+              echo "❌ Deployment failed with status: $STATUS"
+
+              # Get build error if available
+              BUILD_ERROR=$(echo "$RESPONSE" | jq -r '.buildError // "No error message"' || echo "Unknown error")
+              echo "Build error: $BUILD_ERROR"
+
+              # Get build logs
+              echo "Fetching build logs..."
+              curl -s -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+                "https://api.vercel.com/v2/deployments/$DEPLOYMENT_ID/events?teamId=${{ secrets.VERCEL_ORG_ID }}" \
+                | jq -r '.events[] | select(.type == "command") | .payload.text' | tail -50 || echo "Could not fetch logs"
+
+              exit 1
+            fi
+
+            sleep $WAIT_INTERVAL
+            ELAPSED=$((ELAPSED + WAIT_INTERVAL))
+          done
+
+          echo "❌ Deployment timeout after ${MAX_WAIT} seconds"
+          exit 1
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Install dependencies for verification
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter web add -D playwright
+
+      - name: Install Playwright browsers
+        run: |
+          cd apps/web
+          npx playwright install --with-deps chromium
+
+      - name: Run comprehensive deployment verification
+        run: |
+          echo "🧪 Running comprehensive deployment verification..."
+
+          # Run verification script
+          node scripts/deployment/verify-deployment.js
+
+          # Also run Playwright smoke tests
+          echo "Running Playwright smoke tests..."
+          cd apps/web
+          PLAYWRIGHT_TEST_BASE_URL=https://app.galaxyco.ai pnpm test:smoke || {
+            echo "❌ Playwright tests failed"
+            exit 1
+          }
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          PRODUCTION_URL: https://app.galaxyco.ai
+        continue-on-error: false
+
+      - name: Verify critical endpoints
+        run: |
+          echo "🔍 Verifying critical endpoints..."
+
+          ENDPOINTS=(
+            "https://app.galaxyco.ai/api/health"
+            "https://app.galaxyco.ai"
+            "https://app.galaxyco.ai/workflows/templates"
+            "https://app.galaxyco.ai/integrations"
+          )
+
+          FAILED=0
+          for endpoint in "${ENDPOINTS[@]}"; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$endpoint" || echo "000")
+            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; then
+              echo "✅ $endpoint: $STATUS"
+            else
+              echo "❌ $endpoint: $STATUS"
+              FAILED=1
+            fi
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo "❌ Some endpoints failed verification"
+            exit 1
+          fi
+
+          echo "✅ All endpoints verified"
 
       - name: Create production deployment summary
         run: |
@@ -253,13 +354,13 @@ jobs:
 
           for i in {1..12}; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" $URL/api/health)
-            
+
             if [ "$STATUS" == "200" ]; then
               echo "✅ Health check $i/12: OK"
             else
               echo "⚠️ Health check $i/12: Failed (Status: $STATUS)"
             fi
-            
+
             sleep 10
           done
 
