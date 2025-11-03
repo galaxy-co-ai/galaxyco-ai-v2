@@ -113,7 +113,7 @@ export function TopBar({ className }: TopBarProps) {
             onClick={() => setShowSetupWizard(true)}
             className={cn(
               'h-9 w-9 hover:bg-hover relative',
-              'bg-gradient-to-r from-primary/10 to-purple-500/10',
+              'bg-gradient-to-r from-primary/10 to-primary/20',
               'border border-primary/20',
             )}
           >

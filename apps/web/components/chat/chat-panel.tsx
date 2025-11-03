@@ -187,9 +187,9 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
           {/* Main Chat Area */}
           <div className="flex-1 flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between border-b bg-gradient-to-r from-primary/10 to-purple-500/10 px-4 py-3">
+            <div className="flex items-center justify-between border-b bg-gradient-to-r from-primary/10 to-primary/20 px-4 py-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 text-white shadow-lg">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-white shadow-lg">
                   <Bot className="h-5 w-5" />
                 </div>
                 <div>
@@ -230,7 +230,7 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
               {messages.length === 0 && (
                 <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                   <div className="relative">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 blur-xl" />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 blur-xl" />
                     <Bot className="relative h-16 w-16 text-primary" />
                   </div>
                   <h4 className="mt-6 text-xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -243,7 +243,7 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
                     <div className="rounded-lg bg-primary/10 px-3 py-2 text-primary font-medium">
                       🤖 Creating agents
                     </div>
-                    <div className="rounded-lg bg-purple-500/10 px-3 py-2 text-purple-600 font-medium">
+                    <div className="rounded-lg bg-primary/10 px-3 py-2 text-primary font-medium">
                       🔄 Building workflows
                     </div>
                     <div className="rounded-lg bg-green-500/10 px-3 py-2 text-green-600 font-medium">

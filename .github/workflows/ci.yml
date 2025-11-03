@@ -31,6 +31,14 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Cache turbo build
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -38,16 +46,19 @@ jobs:
         run: pnpm turbo build --filter="!web" --filter="!api"
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
 
       - name: TypeScript check
         run: pnpm turbo typecheck
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
 
       - name: Lint check
         run: pnpm turbo lint
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
 
       - name: Format check
         run: pnpm prettier --check .
@@ -56,6 +67,7 @@ jobs:
         run: pnpm turbo build
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
@@ -80,6 +92,15 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Cache turbo build
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-test-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-test-
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -87,12 +108,22 @@ jobs:
         run: pnpm turbo test
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
 
       - name: Run integration tests
         run: pnpm turbo test:integration
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
           DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-coverage
+          path: coverage/
+          retention-days: 7
 
   security-check:
     name: Security Check

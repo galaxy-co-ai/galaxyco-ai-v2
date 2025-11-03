@@ -1,7 +1,8 @@
 /**
  * GalaxyCo.ai Design System - Global Styles
- * Complete implementation matching 01-DESIGN-TOKENS.md
- * Updated: October 16, 2025
+ * Linear-inspired minimalism + Framer blue accent
+ * Updated: November 3, 2025
+ * Primary Color: #0055FF (Framer blue)
  */
 
 @tailwind base;
@@ -39,14 +40,14 @@
 
     --border: 226 232 240;
     --border-hover: 203 213 225;
-    --border-focus: 139 92 246;
+    --border-focus: 0 85 255; /* Framer blue #0055FF */
 
     --input: 226 232 240;
 
-    --primary: 139 92 246;
+    --primary: 0 85 255; /* Framer blue #0055FF */
     --primary-foreground: 255 255 255;
-    --primary-hover: 124 58 237;
-    --primary-active: 109 40 217;
+    --primary-hover: 0 68 221; /* #0044dd */
+    --primary-active: 0 51 187; /* #0033bb */
 
     --secondary: 52 64 80;
     --secondary-foreground: 248 250 252;
@@ -65,7 +66,7 @@
     --active: 241 245 249;
     --selected: 245 243 255;
 
-    --ring: 139 92 246;
+    --ring: 0 85 255; /* Framer blue #0055FF */
 
     /* Border radius */
     --radius: 0.5rem;
@@ -92,14 +93,14 @@
 
     --border: 51 65 85;
     --border-hover: 71 85 105;
-    --border-focus: 96 165 250;
+    --border-focus: 0 85 255; /* Framer blue #0055FF */
 
     --input: 51 65 85;
 
-    --primary: 96 165 250;
-    --primary-foreground: 15 23 42;
-    --primary-hover: 59 130 246;
-    --primary-active: 37 99 235;
+    --primary: 0 85 255; /* Framer blue #0055FF */
+    --primary-foreground: 255 255 255; /* White text for contrast */
+    --primary-hover: 0 68 221; /* #0044dd */
+    --primary-active: 0 51 187; /* #0033bb */
 
     --secondary: 71 85 105;
     --secondary-foreground: 248 250 252;
@@ -118,7 +119,7 @@
     --active: 30 41 59;
     --selected: 30 27 75;
 
-    --ring: 96 165 250;
+    --ring: 0 85 255; /* Framer blue #0055FF */
   }
 
   /* Base HTML elements */

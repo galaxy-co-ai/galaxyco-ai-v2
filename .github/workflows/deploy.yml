@@ -68,6 +68,15 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: Cache turbo build
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-deploy-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-deploy-
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -86,6 +95,8 @@ jobs:
 
           echo "✅ All pre-deployment checks passed"
         env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_ONLY: true
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
@@ -319,6 +330,69 @@ jobs:
           echo "**Time:** $(date -u +%Y-%m-%d\ %H:%M:%S\ UTC)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Deployment URL:** ${{ steps.deploy.outputs.preview-url }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Send Discord/Slack notification
+        if: always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            COLOR=3447003  # Green
+            STATUS_EMOJI="✅"
+            STATUS_TEXT="Production Deployed Successfully"
+            SLACK_COLOR="good"
+          else
+            COLOR=15158332  # Red
+            STATUS_EMOJI="❌"
+            STATUS_TEXT="Production Deployment Failed"
+            SLACK_COLOR="danger"
+          fi
+
+          COMMIT_MSG="$(git log -1 --pretty=%s 2>/dev/null || echo 'Unknown commit')"
+          AUTHOR="${{ github.actor }}"
+          COMMIT_SHA="${{ github.sha }}"
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+
+          # Discord notification
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            curl -X POST "$DISCORD_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"content\": \"🚀 **Production Deployment**\",
+                \"embeds\": [{
+                  \"title\": \"$STATUS_EMOJI $STATUS_TEXT\",
+                  \"description\": \"$COMMIT_MSG\",
+                  \"color\": $COLOR,
+                  \"fields\": [
+                    {\"name\": \"Author\", \"value\": \"@$AUTHOR\", \"inline\": true},
+                    {\"name\": \"Commit\", \"value\": \"[\`$SHORT_SHA\`](https://github.com/${{ github.repository }}/commit/$COMMIT_SHA)\", \"inline\": true},
+                    {\"name\": \"Production URL\", \"value\": \"[galaxyco.ai](https://galaxyco.ai)\", \"inline\": false}
+                  ],
+                  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+                }]
+              }"
+          fi
+
+          # Slack notification
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST "$SLACK_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"text\": \"🚀 Production Deployment\",
+                \"attachments\": [{
+                  \"color\": \"$SLACK_COLOR\",
+                  \"title\": \"$STATUS_TEXT\",
+                  \"text\": \"$COMMIT_MSG\",
+                  \"fields\": [
+                    {\"title\": \"Author\", \"value\": \"$AUTHOR\", \"short\": true},
+                    {\"title\": \"Commit\", \"value\": \"$SHORT_SHA\", \"short\": true}
+                  ],
+                  \"footer\": \"GalaxyCo.ai Deployment System\",
+                  \"ts\": $(date +%s)
+                }]
+              }"
+          fi
 
       - name: Tag release
         run: |

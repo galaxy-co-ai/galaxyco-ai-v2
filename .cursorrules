@@ -74,9 +74,98 @@
 ## 🤖 MCP Servers
 - **GitKraken** - Git operations, GitHub API (see docs/devtools/gitkraken-cli.md)
 - **Kibo UI** - 1,101 component patterns (see .cursor/mcp.json)
+- **Filesystem** - Enhanced file operations
+- **Memory** - Persistent knowledge across sessions
+
+---
+
+## 🎯 Cursor 2.0 Features
+
+### Agent Interface
+- **Use Agent for:** Complex multi-file tasks, new feature creation, refactoring
+- **Delegate to Agent:** Test creation, documentation, repetitive tasks
+- **Always provide:** Clear context, specific requirements, GalaxyCo patterns to follow
+- **Review before accepting:** All Agent suggestions, especially for critical code
+
+### Tab Autocomplete
+- **Trust Tab for:** Common patterns, boilerplate, import statements, component structures
+- **Tab learns from:** Your codebase, established patterns, frequent code structures
+- **Press Tab confidently** when suggestion matches intent
+- **Press Esc** to dismiss unwanted suggestions
+
+### Inline Edit (Cmd+K / Ctrl+K)
+- **Use for:** Quick refactoring, adding error handling, type additions, renaming in scope
+- **Best for:** Single-file changes, small modifications, code improvements
+- **Provide clear instructions** in natural language
+- **Review changes** before accepting
+
+### Bugbot
+- **Automatically detects:** TypeScript errors, linting issues, common bugs, performance problems
+- **One-click fixes** for common issues
+- **Review before applying** automated fixes
+- **Use Bugbot** before committing code
+
+### Scoped Changes
+- **Use for:** Large refactoring, multi-file updates, architecture changes
+- **Specify scope boundaries** clearly (files, directories, patterns)
+- **Review all changes** before applying
+- **Test thoroughly** after scoped changes
+
+---
+
+## 🧠 Project Memories (Cursor AI Context)
+
+### GalaxyCo Architecture Patterns
+- **Server Components by default** - Use Client Components only when needed (useState, useEffect, event handlers)
+- **Server Actions for mutations** - NOT API routes (use Server Actions for form submissions, data updates)
+- **Multi-tenant isolation** - ALWAYS filter by orgId in database queries (NO exceptions)
+- **Try-catch everywhere** - Every async function needs error handling
+- **User-friendly errors** - Never show technical errors to users (transform to friendly messages)
+
+### Component Patterns
+- **Loading states mandatory** - Every component must show loading state during async operations
+- **Form validation** - Always use React Hook Form + Zod (never manual validation)
+- **Styling hierarchy** - Tailwind (utility) → shadcn/ui (base) → Kibo UI (advanced) → Galaxy components (custom)
+- **Import paths** - @/components/ui (shadcn), @/components/kibo (Kibo UI), @/components/galaxy (custom)
+
+### State Management Rules
+- **Global client state** - Use Zustand (never Redux)
+- **Server state** - Use React Query (for data fetching, caching)
+- **Local state** - Use useState (for simple component state)
+- **Form state** - Use React Hook Form (never manual form state)
+
+### Database Patterns
+- **ORM** - Drizzle ORM (strongly typed queries)
+- **Database** - Neon Postgres (NOT Supabase)
+- **Migrations** - Always generate migrations (never manual schema changes)
+- **Queries** - ALWAYS include orgId filter (multi-tenant isolation)
+- **Vector storage** - Pinecone with org namespaces
+
+### AI Integration Patterns
+- **Main reasoning** - OpenAI GPT-4 (for chat, assistance, generation)
+- **Complex analysis** - Claude (for deep analysis, reasoning)
+- **Embeddings** - OpenAI text-embedding-3-small (for vector search)
+- **Vector storage** - Pinecone with org-based namespaces
+
+### Common Gotchas to Avoid
+- ❌ **Forgetting orgId filter** in database queries (causes data leakage)
+- ❌ **Using API routes** instead of Server Actions (increases complexity)
+- ❌ **Missing loading states** (poor UX)
+- ❌ **Showing technical errors** to users (breaks trust)
+- ❌ **Using 'any' type** without justification (reduces type safety)
+- ❌ **Mixing Client and Server Components** incorrectly (causes hydration errors)
+- ❌ **Manual form validation** instead of Zod (maintenance burden)
+
+### UI/UX Principles
+- **Natural language first** - Everything should be describable in natural language
+- **Visual feedback mandatory** - No silent failures, show all actions visually
+- **Simple without sacrificing power** - Clean UI that hides complexity but keeps power accessible
+- **Non-technical users succeed** - 95% success rate for non-technical users
+- **Linear aesthetic** - Minimal, clean, professional (like Linear app)
 
 ---
 
 **For detailed standards, read `.cursor/galaxyco-rules.md`**
 **For partnership protocol, read `../devops-hq/.cursor/master-context.md`**
+**For Cursor 2.0 features, read `.cursor/docs/CURSOR-2.0-QUICK-START.md`**
 

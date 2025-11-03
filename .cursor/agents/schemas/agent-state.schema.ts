@@ -14,6 +14,8 @@ export const AgentIdSchema = z.enum([
   'backend-systems',
   'devops-infrastructure',
   'quality-testing',
+  'ui-ux-design',
+  'cursor-engineer',
 ]);
 
 export type AgentId = z.infer<typeof AgentIdSchema>;
@@ -119,7 +121,7 @@ export const AgentMetricsSchema = z.object({
   filesModified: z.number().default(0),
   linesAdded: z.number().default(0),
   linesDeleted: z.number().default(0),
-  decisionsMatе: z.number().default(0),
+  decisionsMade: z.number().default(0),
   knowledgeItems: z.number().default(0),
   sessionDuration: z.number().default(0), // minutes
   tokensUsed: z.number().default(0),

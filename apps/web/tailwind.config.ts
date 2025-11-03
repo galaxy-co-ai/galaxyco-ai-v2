@@ -2,8 +2,9 @@ import type { Config } from 'tailwindcss';
 
 /**
  * GalaxyCo.ai Design System - Tailwind Configuration
- * Complete implementation of design tokens from 01-DESIGN-TOKENS.md
- * Updated: October 16, 2025
+ * Linear-inspired minimalism + Framer blue accent
+ * Updated: November 3, 2025
+ * Primary Color: #0055FF (Framer blue)
  */
 
 const config: Config = {
@@ -36,7 +37,7 @@ const config: Config = {
         active: 'rgb(var(--active) / <alpha-value>)',
         selected: 'rgb(var(--selected) / <alpha-value>)',
 
-        // Brand colors (Primary purple)
+        // Brand colors (Primary Framer blue)
         primary: {
           DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
           foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
