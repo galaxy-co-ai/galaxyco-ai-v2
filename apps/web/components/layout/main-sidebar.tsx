@@ -140,6 +140,7 @@ export function MainSidebar({ className }: SidebarProps) {
             <Link key={item.href} href={item.href}>
               <Button
                 variant="ghost"
+                aria-label={isExpanded ? undefined : `${item.title} - ${item.description}`}
                 className={cn(
                   // Base styles
                   'w-full h-12 rounded-lg',
@@ -191,6 +192,8 @@ export function MainSidebar({ className }: SidebarProps) {
           <Button
             variant="ghost"
             onClick={togglePin}
+            aria-label={isPinned ? 'Unpin sidebar' : 'Pin sidebar open'}
+            aria-pressed={isPinned}
             className={cn(
               'w-full h-10 rounded-lg',
               'hover:bg-hover',

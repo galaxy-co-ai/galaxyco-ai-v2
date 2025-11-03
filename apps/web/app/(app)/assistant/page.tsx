@@ -401,7 +401,13 @@ export default function AssistantPage() {
         {/* Top Bar */}
         <div className="h-14 border-b border-border flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              aria-label={isSidebarOpen ? 'Hide conversation history' : 'Show conversation history'}
+              aria-expanded={isSidebarOpen}
+            >
               <PanelLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-2">
@@ -415,20 +421,20 @@ export default function AssistantPage() {
         {!hasMessages ? (
           <div className="flex-1 overflow-y-auto">
             {/* Empty State */}
-            <div className="max-w-3xl mx-auto px-4 py-12">
+            <div className="max-w-3xl mx-auto px-4 py-16">
               {/* Welcome Message */}
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center size-16 rounded-full bg-muted mb-4">
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center justify-center size-16 rounded-full bg-muted mb-6">
                   <Sparkles className="size-8 text-foreground" />
                 </div>
-                <h2 className="text-3xl font-bold mb-2">How can I help you today?</h2>
+                <h2 className="text-3xl font-bold mb-3">How can I help you today?</h2>
                 <p className="text-muted-foreground text-lg">
                   Ask me anything, upload files, or describe what you want to build
                 </p>
               </div>
 
               {/* Example Prompts Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {examplePrompts.map((prompt, index) => {
                   const Icon = prompt.icon;
                   return (
@@ -475,6 +481,7 @@ export default function AssistantPage() {
                   <input
                     type="text"
                     placeholder="Ask anything..."
+                    aria-label="Start a conversation"
                     className="w-full rounded-xl bg-card border border-border px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     onFocus={() => setHasMessages(true)}
                   />
@@ -487,8 +494,8 @@ export default function AssistantPage() {
           <div className="flex-1 flex flex-col">
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto">
-              <div className="max-w-3xl mx-auto px-4 py-6">
-                <div className="space-y-6">
+              <div className="max-w-3xl mx-auto px-4 py-8">
+                <div className="space-y-8">
                   {messages.map((message: any) => {
                     const toolResult = parseToolResult(message);
 
@@ -718,6 +725,7 @@ export default function AssistantPage() {
                           onClick={() => {
                             setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
                           }}
+                          aria-label={`Remove ${file.name}`}
                           className="text-muted-foreground hover:text-foreground"
                         >
                           <X className="h-3 w-3" />
@@ -734,6 +742,7 @@ export default function AssistantPage() {
                       value={input}
                       onChange={handleInputChange}
                       placeholder="Ask anything... (Shift+Enter for new line)"
+                      aria-label="Message input"
                       disabled={isLoading}
                       rows={1}
                       className={cn(
@@ -765,6 +774,7 @@ export default function AssistantPage() {
                           <Button
                             variant="ghost"
                             size="icon"
+                            aria-label="Upload files"
                             className="h-8 w-8"
                             type="button"
                             disabled={isLoading}
@@ -804,6 +814,7 @@ export default function AssistantPage() {
                       <Button
                         type="submit"
                         size="icon"
+                        aria-label="Send message"
                         className="h-8 w-8"
                         disabled={isLoading || (!input.trim() && uploadedFiles.length === 0)}
                       >

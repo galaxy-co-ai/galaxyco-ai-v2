@@ -88,6 +88,7 @@ export function TopBar({ className }: TopBarProps) {
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search GalaxyCo"
               className="w-full pl-10 pr-4 h-10 bg-background border-border"
             />
           </div>
@@ -100,6 +101,7 @@ export function TopBar({ className }: TopBarProps) {
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Settings"
               className="h-9 w-9 hover:bg-hover text-muted-foreground"
             >
               <Settings className="w-5 h-5" />
@@ -111,6 +113,7 @@ export function TopBar({ className }: TopBarProps) {
             variant="ghost"
             size="icon"
             onClick={() => setShowSetupWizard(true)}
+            aria-label="Complete AI setup wizard"
             className={cn(
               'h-9 w-9 hover:bg-hover relative',
               'bg-gradient-to-r from-primary/10 to-primary/20',
@@ -119,7 +122,7 @@ export function TopBar({ className }: TopBarProps) {
           >
             <Zap className="w-5 h-5 text-primary" />
             {/* Pulse indicator */}
-            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+            <span className="absolute -top-1 -right-1 flex h-2 w-2" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
@@ -129,6 +132,7 @@ export function TopBar({ className }: TopBarProps) {
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Help center"
             className="h-9 w-9 hover:bg-hover text-muted-foreground"
           >
             <HelpCircle className="w-5 h-5" />
@@ -140,11 +144,12 @@ export function TopBar({ className }: TopBarProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Notifications (3 unread)"
                 className="h-9 w-9 hover:bg-hover text-muted-foreground relative"
               >
                 <Bell className="w-5 h-5" />
                 {/* Notification dot */}
-                <div className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
+                <div className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80" sideOffset={8}>
