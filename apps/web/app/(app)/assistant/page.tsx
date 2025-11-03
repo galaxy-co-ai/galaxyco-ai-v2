@@ -22,8 +22,7 @@ import {
   X,
   ExternalLink,
 } from 'lucide-react';
-// @ts-ignore - AI SDK types
-import { useChat } from 'ai/react';
+import { useAssistantChat } from '@/hooks/use-assistant-chat';
 import { usePageContext } from '@/hooks/use-page-context';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import {
@@ -75,22 +74,21 @@ export default function AssistantPage() {
   // Capture page context for AI awareness
   const pageContext = usePageContext();
 
-  // Streaming chat hook from Vercel AI SDK
+  // Streaming chat hook
   const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } =
-    useChat({
+    useAssistantChat({
       api: '/api/assistant/chat',
-      id: activeConversationId, // Link to active conversation
+      conversationId: activeConversationId,
       body: {
-        context: pageContext, // Send context with every message
+        context: pageContext,
         conversationId: activeConversationId,
       },
-      onFinish: async (message: { role: string; content: string }) => {
+      onFinish: async (message) => {
         // Log message completion (only in development)
         if (process.env.NODE_ENV === 'development') {
           console.log('[Assistant] Message finished:', {
             role: message.role,
             contentLength: message.content?.length,
-            hasToolInvocations: (message as any).toolInvocations?.length > 0,
           });
         }
 
@@ -436,13 +434,12 @@ export default function AssistantPage() {
                   return (
                     <button
                       key={index}
-                      onClick={() => {
+                      onClick={async () => {
                         setHasMessages(true);
                         // Send example prompt
-                        handleSubmit(undefined, {
-                          data: {
-                            content: `Help me ${prompt.title.toLowerCase()}`,
-                          },
+                        await append({
+                          role: 'user',
+                          content: `Help me ${prompt.title.toLowerCase()}`,
                         });
                       }}
                       className={cn(

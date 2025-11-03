@@ -21,6 +21,7 @@
     "@ai-sdk/anthropic": "^2.0.25",
     "@ai-sdk/google": "^2.0.18",
     "@ai-sdk/openai": "^2.0.46",
+    "@ai-sdk/react": "^2.0.86",
     "@anthropic-ai/sdk": "^0.65.0",
     "@clerk/nextjs": "^5.7.5",
     "@dnd-kit/core": "^6.3.1",
