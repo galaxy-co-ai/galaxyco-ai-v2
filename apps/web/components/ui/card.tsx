@@ -6,18 +6,18 @@ import { cn } from '@/lib/utils';
  * Card component using GalaxyCo.ai Design System tokens
  * Implements card patterns from 02-WIREFRAMES-DASHBOARDS.md
  */
-const cardVariants = cva(['rounded-lg border transition-colors duration-fast'], {
+const cardVariants = cva(['rounded-xl border transition-all duration-200'], {
   variants: {
     variant: {
-      // Default - elevated card
-      default: ['bg-background-elevated border-border shadow'],
-      // Interactive - hover effects for clickable cards
+      // Default - elevated card (Framer-style)
+      default: ['bg-background-elevated border-border shadow-sm'],
+      // Interactive - Framer-style hover effects for clickable cards
       interactive: [
-        'bg-background-elevated border-border shadow',
-        'hover:border-border-hover hover:shadow-md cursor-pointer',
+        'bg-background-elevated border-border shadow-sm',
+        'hover:border-foreground/20 hover:shadow-md hover:scale-[1.01] cursor-pointer',
       ],
       // Outline - minimal styling
-      outline: ['bg-background border-border'],
+      outline: ['bg-background border-border hover:border-foreground/20'],
       // Ghost - no border or background
       ghost: ['bg-transparent border-transparent'],
     },
@@ -69,7 +69,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('text-lg font-semibold text-foreground leading-none tracking-tight', className)}
+      className={cn('text-xl font-bold text-foreground leading-none tracking-tight', className)}
       {...props}
     />
   ),

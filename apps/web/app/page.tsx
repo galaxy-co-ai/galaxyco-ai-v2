@@ -48,21 +48,21 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section - Linear Style */}
-      <main className="container mx-auto px-4 py-24">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-6xl lg:text-7xl font-bold">
+      {/* Hero Section - Framer/Linear Inspired */}
+      <main className="container mx-auto px-4 py-32 lg:py-40">
+        <div className="max-w-5xl mx-auto text-center space-y-12">
+          <h1 className="text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight">
             Build AI agents in
             <br />
             natural language
           </h1>
 
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             GalaxyCo is THE AI operating system for businesses. Plan, build, and deploy multi-agent
             systems in minutes.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
             <Link href="/sign-up">
               <Button size="lg" className="gap-2">
                 Get started
@@ -78,79 +78,79 @@ export default async function HomePage() {
         </div>
       </main>
 
-      {/* Features Section - Linear Minimal Style */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="max-w-6xl mx-auto space-y-16">
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl font-semibold">Everything you need</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+      {/* Features Section - Framer/Linear Minimal Style */}
+      <section className="container mx-auto px-4 py-32 lg:py-40">
+        <div className="max-w-6xl mx-auto space-y-20">
+          <div className="text-center space-y-6">
+            <h2 className="text-5xl lg:text-6xl font-bold tracking-tight">Everything you need</h2>
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Production-ready AI tools that integrate seamlessly with your existing workflow
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-20">
             {/* AI Agents - Minimal style */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <Bot className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <Bot className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">AI Agents</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">AI Agents</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 Research, email, and CRM agents working 24/7 to grow your business
               </p>
             </div>
 
             {/* Smart Workflows */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <Workflow className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <Workflow className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Smart Workflows</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">Smart Workflows</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 End-to-end automation pipelines that adapt to your business needs
               </p>
             </div>
 
             {/* Real Analytics */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <BarChart3 className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <BarChart3 className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Real Analytics</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">Real Analytics</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 Track measurable outcomes and ROI from every AI action
               </p>
             </div>
 
             {/* Instant Setup */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <Zap className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <Zap className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Instant Setup</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">Instant Setup</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 Get started in under 60 seconds with pre-built agent templates
               </p>
             </div>
 
             {/* Continuous Learning */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <TrendingUp className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <TrendingUp className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Continuous Learning</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">Continuous Learning</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 AI that learns from your business and gets smarter over time
               </p>
             </div>
 
             {/* Natural Language */}
-            <div className="space-y-3">
-              <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                <Sparkles className="size-6 text-foreground" />
+            <div className="space-y-4 group">
+              <div className="size-14 rounded-xl bg-muted flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105">
+                <Sparkles className="size-7 text-foreground transition-colors group-hover:text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Natural Language</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold tracking-tight">Natural Language</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 Build complex workflows by simply describing what you want
               </p>
             </div>
@@ -159,7 +159,7 @@ export default async function HomePage() {
       </section>
 
       {/* Footer - Linear Minimal */}
-      <footer className="border-t py-16 mt-24">
+      <footer className="border-t py-20 mt-32">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">

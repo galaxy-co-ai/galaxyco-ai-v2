@@ -114,8 +114,12 @@ const config: Config = {
         xl: ['1.25rem', '1.75rem'], // 20px / 28px - Card titles
         '2xl': ['1.5rem', '2rem'], // 24px / 32px - Section titles
         '3xl': ['1.875rem', '2.25rem'], // 30px / 36px - Page titles
-        '4xl': ['2.25rem', '2.5rem'], // 36px / 40px - Hero headlines
-        '5xl': ['3rem', '1'], // 48px / 48px - Display (rare)
+        '4xl': ['2.25rem', '2.5rem'], // 36px / 40px - Large headings
+        '5xl': ['3rem', '1.1'], // 48px - Section headings
+        '6xl': ['3.75rem', '1.1'], // 60px - Large hero
+        '7xl': ['4.5rem', '1.1'], // 72px - Hero text
+        '8xl': ['6rem', '1.05'], // 96px - Massive hero (Framer style)
+        '9xl': ['8rem', '1'], // 128px - Ultra display (rare)
       },
 
       fontWeight: {

@@ -8,20 +8,20 @@ import { cn } from '@/lib/utils';
  */
 const inputVariants = cva(
   [
-    'flex w-full rounded border transition-colors duration-fast',
+    'flex w-full rounded-lg border-2 transition-all duration-200',
     'file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
     'placeholder:text-foreground-subtle',
-    'focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary',
+    'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:scale-[1.01]',
     'disabled:cursor-not-allowed disabled:opacity-50',
     'read-only:bg-background-subtle read-only:cursor-default',
   ],
   {
     variants: {
       variant: {
-        // Default input styling
+        // Default input styling (Framer-inspired)
         default: [
           'border-border bg-background-subtle text-foreground',
-          'hover:border-border-hover',
+          'hover:border-foreground/30 hover:shadow-sm',
         ],
         // Error state
         destructive: [

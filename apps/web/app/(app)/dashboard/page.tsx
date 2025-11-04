@@ -129,18 +129,18 @@ export default function DashboardPage() {
   const activeAgentsList = agents.filter((a) => a.status === 'active').slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Dashboard Header - Linear Style */}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Dashboard Header - Framer/Linear Inspired */}
+        <div className="space-y-3">
+          <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-lg lg:text-xl text-muted-foreground">
             Welcome back! Here&apos;s what&apos;s happening today.
           </p>
         </div>
 
-        {/* Key Metrics - Linear Style */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Key Metrics - Framer/Linear Inspired */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <MetricCard
             icon={Bot}
             label="Active Agents"
@@ -156,10 +156,10 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Quick Actions - Linear Style */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Quick Actions - Framer/Linear Inspired */}
+        <div className="space-y-8">
+          <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ActionCard
               icon={Bot}
               label="Create Agent"
@@ -203,12 +203,12 @@ interface MetricCardProps {
 
 function MetricCard({ icon: Icon, label, value, total }: MetricCardProps) {
   return (
-    <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-      <div className="text-sm text-muted-foreground mb-1">{label}</div>
-      <div className="text-3xl font-semibold">
+    <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02] group">
+      <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">{label}</div>
+      <div className="text-4xl lg:text-5xl font-bold tracking-tight">
         {value}
         {total ? (
-          <span className="text-sm text-muted-foreground font-normal"> / {total}</span>
+          <span className="text-base text-muted-foreground font-normal"> / {total}</span>
         ) : null}
       </div>
     </div>
@@ -225,14 +225,14 @@ interface ActionCardProps {
 function ActionCard({ icon: Icon, label, href, description }: ActionCardProps) {
   return (
     <Link href={href}>
-      <div className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer group">
-        <div className="flex items-start gap-3">
-          <div className="p-2 bg-background rounded-md">
-            <Icon className="w-5 h-5 text-foreground" />
+      <div className="p-6 rounded-xl bg-muted/30 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.02] hover:shadow-md cursor-pointer group">
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-background rounded-xl group-hover:bg-primary/10 transition-all duration-300">
+            <Icon className="w-6 h-6 text-foreground group-hover:text-primary transition-colors" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold mb-1">{label}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <h3 className="font-bold text-lg mb-1">{label}</h3>
+            <p className="text-sm lg:text-base text-muted-foreground">{description}</p>
           </div>
         </div>
       </div>
@@ -297,40 +297,40 @@ function DashboardFooter() {
   ];
 
   return (
-    <div className="space-y-6 pt-8 border-t">
-      <div>
-        <h2 className="text-2xl font-semibold mb-2">Resources</h2>
-        <p className="text-muted-foreground">
+    <div className="space-y-10 pt-12 border-t mt-16">
+      <div className="space-y-3">
+        <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Resources</h2>
+        <p className="text-lg text-muted-foreground">
           Essential tools and guides for power users and executives
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {resourceSections.map((section) => {
           const Icon = section.icon;
           return (
-            <div key={section.title} className="flex flex-col space-y-3">
+            <div key={section.title} className="flex flex-col space-y-4">
               {/* Section Header */}
-              <div className="flex items-center gap-2">
-                <Icon className="w-5 h-5 text-foreground" />
-                <h3 className="font-semibold text-base">{section.title}</h3>
+              <div className="flex items-center gap-3">
+                <Icon className="w-6 h-6 text-foreground" />
+                <h3 className="font-bold text-lg">{section.title}</h3>
               </div>
 
-              <p className="text-sm text-muted-foreground">{section.description}</p>
+              <p className="text-base text-muted-foreground">{section.description}</p>
 
               {/* Links */}
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
                       target={link.external ? '_blank' : undefined}
                       rel={link.external ? 'noopener noreferrer' : undefined}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 group"
+                      className="text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                     >
                       <span>{link.label}</span>
                       {link.external && (
-                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       )}
                     </a>
                   </li>

@@ -113,24 +113,36 @@ export default function AgentsPage() {
 
   return (
     <>
-      {/* Metrics Row - Linear Style */}
+      {/* Metrics Row - Framer/Linear Inspired */}
       {!isLoading && agents.length > 0 && (
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-            <div className="text-sm text-muted-foreground mb-1">Total Agents</div>
-            <div className="text-3xl font-semibold">{metrics.total}</div>
+        <div className="mb-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02]">
+            <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">
+              Total Agents
+            </div>
+            <div className="text-4xl lg:text-5xl font-bold tracking-tight">{metrics.total}</div>
           </div>
-          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-            <div className="text-sm text-muted-foreground mb-1">Active</div>
-            <div className="text-3xl font-semibold">{metrics.active}</div>
+          <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02]">
+            <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">
+              Active
+            </div>
+            <div className="text-4xl lg:text-5xl font-bold tracking-tight">{metrics.active}</div>
           </div>
-          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-            <div className="text-sm text-muted-foreground mb-1">Total Runs</div>
-            <div className="text-3xl font-semibold">{metrics.totalRuns.toLocaleString()}</div>
+          <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02]">
+            <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">
+              Total Runs
+            </div>
+            <div className="text-4xl lg:text-5xl font-bold tracking-tight">
+              {metrics.totalRuns.toLocaleString()}
+            </div>
           </div>
-          <div className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-            <div className="text-sm text-muted-foreground mb-1">Success Rate</div>
-            <div className="text-3xl font-semibold">{metrics.successRate}%</div>
+          <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02]">
+            <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">
+              Success Rate
+            </div>
+            <div className="text-4xl lg:text-5xl font-bold tracking-tight">
+              {metrics.successRate}%
+            </div>
           </div>
         </div>
       )}

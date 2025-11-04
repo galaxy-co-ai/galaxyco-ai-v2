@@ -43,17 +43,19 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <PageHeader title="Settings" description="Manage your account settings and preferences" />
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2">
         {settingsPages.map((page) => (
           <Link key={page.href} href={page.href}>
-            <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full">
-              <div className="flex items-start gap-4">
-                <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                  <page.icon className="size-6 text-foreground" />
+            <Card className="p-8 rounded-xl bg-muted/30 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.02] hover:shadow-md cursor-pointer h-full group">
+              <div className="flex items-start gap-5">
+                <div className="size-14 rounded-xl bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-all duration-300">
+                  <page.icon className="size-7 text-foreground group-hover:text-primary transition-colors" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">{page.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{page.description}</p>
+                  <h3 className="font-bold text-lg text-foreground">{page.name}</h3>
+                  <p className="mt-2 text-sm lg:text-base text-muted-foreground">
+                    {page.description}
+                  </p>
                 </div>
               </div>
             </Card>

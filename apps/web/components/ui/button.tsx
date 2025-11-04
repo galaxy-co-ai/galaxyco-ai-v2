@@ -8,13 +8,14 @@ import { cn } from '@/lib/utils';
  * Implements all variants from 01-DESIGN-TOKENS.md
  */
 const buttonVariants = cva(
-  // Base styles using design tokens
+  // Base styles using design tokens + Framer-style interactions
   [
     'inline-flex items-center justify-center gap-2 rounded font-medium',
-    'transition-colors duration-fast',
+    'transition-all duration-200',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
     'whitespace-nowrap',
+    'active:scale-[0.98]', // Framer-style press feedback
   ],
   {
     variants: {
@@ -22,14 +23,16 @@ const buttonVariants = cva(
         // Default - balanced primary action (alias for primary)
         default: [
           'bg-primary text-primary-foreground',
-          'hover:bg-primary-hover active:bg-primary-active',
-          'shadow',
+          'hover:bg-primary-hover hover:scale-[1.02] hover:shadow-lg',
+          'active:bg-primary-active',
+          'shadow-md',
         ],
         // Primary - main brand actions
         primary: [
           'bg-primary text-primary-foreground',
-          'hover:bg-primary-hover active:bg-primary-active',
-          'shadow',
+          'hover:bg-primary-hover hover:scale-[1.02] hover:shadow-lg',
+          'active:bg-primary-active',
+          'shadow-md',
         ],
         // Secondary - alternative actions
         secondary: [
@@ -45,8 +48,8 @@ const buttonVariants = cva(
         ],
         // Outline - bordered buttons
         outline: [
-          'border border-border bg-background text-foreground',
-          'hover:bg-hover hover:border-border-hover',
+          'border-2 border-border bg-background text-foreground',
+          'hover:bg-hover hover:border-foreground/20 hover:shadow-sm',
           'active:bg-active',
         ],
         // Ghost - minimal styling

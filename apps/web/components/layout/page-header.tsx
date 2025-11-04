@@ -17,18 +17,18 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, children, className }: PageHeaderProps) {
   return (
-    <div className={cn('mb-6', className)}>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Title and Description */}
-        <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{title}</h1>
+    <div className={cn('mb-8', className)}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        {/* Title and Description - Framer/Linear Inspired */}
+        <div className="min-w-0 space-y-2">
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-foreground">{title}</h1>
           {description && (
-            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
+            <p className="text-base lg:text-lg text-muted-foreground">{description}</p>
           )}
         </div>
 
         {/* Actions */}
-        {children && <div className="flex items-center gap-2">{children}</div>}
+        {children && <div className="flex items-center gap-3">{children}</div>}
       </div>
     </div>
   );
