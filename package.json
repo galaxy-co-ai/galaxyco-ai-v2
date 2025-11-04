@@ -13,12 +13,9 @@
     "test": "turbo run test",
     "test:integration": "turbo run test:integration",
     "test:smoke": "playwright test tests/smoke",
-<<<<<<< Updated upstream
-=======
     "test:visual": "playwright test tests/e2e/visual-regression.spec.ts",
     "test:coverage": "turbo run test:coverage",
     "test:tdd": "node scripts/tdd-workflow.mjs",
->>>>>>> Stashed changes
     "verify:deployment": "node scripts/deployment/verify-deployment.js",
     "e2e": "playwright test tests/e2e",
     "e2e:ci": "playwright test tests/e2e --reporter=line",
