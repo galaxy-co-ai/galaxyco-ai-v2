@@ -23,12 +23,13 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Loader2, Play, Save, RotateCcw } from 'lucide-react';
+import { Sparkles, Loader2, Play, Save, RotateCcw, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
+import { TemplateSelector } from '@/components/workflows/template-selector';
 import { nodeTypes } from './FlowNodes';
 import { parseNaturalLanguageToFlow, autoLayoutNodes, FlowNode, FlowEdge } from './FlowParser';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,7 @@ export function FlowBuilder({
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [workflowName, setWorkflowName] = useState('');
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
 
   // Load template if templateId is provided
   useEffect(() => {
@@ -289,12 +291,25 @@ export function FlowBuilder({
                 />
 
                 <div className="flex items-center justify-between">
+<<<<<<< Updated upstream
                   <p className="text-xs text-muted-foreground">
+=======
+                  <p id="workflow-description-hint" className="text-xs text-muted-foreground">
+>>>>>>> Stashed changes
                     Press <kbd className="px-1.5 py-0.5 rounded bg-muted">⌘</kbd> +{' '}
                     <kbd className="px-1.5 py-0.5 rounded bg-muted">Enter</kbd> to generate
                   </p>
 
+<<<<<<< Updated upstream
                   <Button onClick={handleGenerate} disabled={isGenerating || !input.trim()}>
+=======
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={isGenerating || !input.trim()}
+                    aria-label="Generate workflow from description"
+                    aria-busy={isGenerating}
+                  >
+>>>>>>> Stashed changes
                     {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -306,6 +321,16 @@ export function FlowBuilder({
                         Generate Workflow
                       </>
                     )}
+                  </Button>
+
+                  <Button
+                    onClick={() => setShowTemplateSelector(true)}
+                    disabled={isGenerating}
+                    variant="outline"
+                    aria-label="Start from a pre-built template"
+                  >
+                    <FileText className="mr-2 h-4 w-4" aria-hidden="true" />
+                    Start from Template
                   </Button>
                 </div>
               </div>
@@ -344,6 +369,7 @@ export function FlowBuilder({
                 animate={{ opacity: 1, y: 0 }}
                 className="flex gap-2"
               >
+<<<<<<< Updated upstream
                 <Button size="sm" variant="outline" onClick={handleReset}>
                   <RotateCcw className="mr-2 h-4 w-4" />
                   Reset
@@ -351,6 +377,25 @@ export function FlowBuilder({
 
                 <Button size="sm" variant="outline" onClick={handleSave}>
                   <Save className="mr-2 h-4 w-4" />
+=======
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleReset}
+                  aria-label="Reset workflow and start over"
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Reset
+                </Button>
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleSave}
+                  aria-label="Save workflow for later use"
+                >
+                  <Save className="mr-2 h-4 w-4" aria-hidden="true" />
+>>>>>>> Stashed changes
                   Save
                 </Button>
 
@@ -376,6 +421,18 @@ export function FlowBuilder({
           )}
         </ReactFlow>
       </div>
+
+      {/* Template Selector Modal */}
+      <TemplateSelector
+        open={showTemplateSelector}
+        onOpenChange={setShowTemplateSelector}
+        onSelectTemplate={(template) => {
+          // Convert template to FlowNodes
+          // For now, we'll trigger AI generation with template name as seed
+          setInput(`Create a workflow like: ${template.name} - ${template.description}`);
+          toast.success(`Template selected: ${template.name}`);
+        }}
+      />
     </div>
   );
 }

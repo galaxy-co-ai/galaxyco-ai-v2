@@ -149,7 +149,10 @@ export function TopBar({ className }: TopBarProps) {
               >
                 <Bell className="w-5 h-5" />
                 {/* Notification dot */}
-                <div className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" aria-hidden="true" />
+                <div
+                  className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"
+                  aria-hidden="true"
+                />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80" sideOffset={8}>

@@ -150,10 +150,15 @@ export function AgentCardKibo({ agent, onView, onToggle, onConfigure }: AgentCar
                   <div className="flex items-center justify-center gap-1 text-purple-600 dark:text-purple-400 mb-1">
                     <Clock className="h-3 w-3" />
                   </div>
+<<<<<<< Updated upstream
                   <div className="text-lg font-bold text-purple-700 dark:text-purple-300">
                     {agent.stats.timeSaved}
                   </div>
                   <div className="text-xs text-purple-600 dark:text-purple-500">Saved</div>
+=======
+                  <div className="text-lg font-bold text-primary">{agent.stats.timeSaved}</div>
+                  <div className="text-xs text-primary/80">Saved</div>
+>>>>>>> Stashed changes
                 </div>
               )}
             </div>

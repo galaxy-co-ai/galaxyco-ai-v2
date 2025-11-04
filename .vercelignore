@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Testing
+**/__tests__
+**/tests
+**/*.test.*
+**/*.spec.*
+coverage
+.nyc_output
+
+# Build outputs
+.next
+.turbo
+dist
+build
+out
+
+# Cache
+.cache
+.vercel
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files
+.env*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp
+temp
+

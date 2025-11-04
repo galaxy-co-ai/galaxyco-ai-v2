@@ -8,6 +8,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FlowBuilder } from '@/components/galaxy/flows/FlowBuilder';
 
 // Mock fetch
@@ -22,13 +23,28 @@ vi.mock('sonner', () => ({
   },
 }));
 
+// Create test query client
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
 describe('FlowBuilder Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render input panel initially', () => {
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     expect(screen.getByText('Describe Your Workflow')).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Example:/i)).toBeInTheDocument();
@@ -37,7 +53,12 @@ describe('FlowBuilder Component', () => {
 
   it('should accept text input', async () => {
     const user = userEvent.setup();
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const textarea = screen.getByPlaceholderText(/Example:/i);
     await user.type(textarea, 'Email new leads every Monday');
@@ -46,7 +67,12 @@ describe('FlowBuilder Component', () => {
   });
 
   it('should disable generate button when input is empty', () => {
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const button = screen.getByText('Generate Workflow');
     expect(button).toBeDisabled();
@@ -54,7 +80,12 @@ describe('FlowBuilder Component', () => {
 
   it('should enable generate button when input has text', async () => {
     const user = userEvent.setup();
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const textarea = screen.getByPlaceholderText(/Example:/i);
     await user.type(textarea, 'Test workflow');
@@ -91,7 +122,12 @@ describe('FlowBuilder Component', () => {
         ),
     );
 
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const textarea = screen.getByPlaceholderText(/Example:/i);
     await user.type(textarea, 'Test workflow');
@@ -123,7 +159,12 @@ describe('FlowBuilder Component', () => {
       }),
     });
 
-    render(<FlowBuilder workspaceId="test-workspace" onSave={onSave} />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" onSave={onSave} />
+      </QueryClientProvider>,
+    );
 
     // Generate workflow
     const textarea = screen.getByPlaceholderText(/Example:/i);
@@ -170,7 +211,12 @@ describe('FlowBuilder Component', () => {
       }),
     });
 
-    render(<FlowBuilder workspaceId="test-workspace" onExecute={onExecute} />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" onExecute={onExecute} />
+      </QueryClientProvider>,
+    );
 
     // Generate workflow
     const textarea = screen.getByPlaceholderText(/Example:/i);
@@ -215,7 +261,12 @@ describe('FlowBuilder Component', () => {
       }),
     });
 
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     // Generate workflow
     const textarea = screen.getByPlaceholderText(/Example:/i);
@@ -240,7 +291,12 @@ describe('FlowBuilder Component', () => {
     // Mock API error
     (global.fetch as any).mockRejectedValue(new Error('API Error'));
 
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const textarea = screen.getByPlaceholderText(/Example:/i);
     await user.type(textarea, 'Test workflow');
@@ -268,7 +324,12 @@ describe('FlowBuilder Component', () => {
       }),
     });
 
-    render(<FlowBuilder workspaceId="test-workspace" />);
+    const queryClient = createTestQueryClient();
+    render(
+      <QueryClientProvider client={queryClient}>
+        <FlowBuilder workspaceId="test-workspace" />
+      </QueryClientProvider>,
+    );
 
     const textarea = screen.getByPlaceholderText(/Example:/i);
     await user.type(textarea, 'Test workflow');

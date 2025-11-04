@@ -48,8 +48,12 @@ export function AgentsList({ agents }: AgentsListProps) {
               <div
                 className={cn(
                   'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
+<<<<<<< Updated upstream
                   agent.type === 'research' &&
                     'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
+=======
+                  agent.type === 'research' && 'bg-primary/10 text-primary dark:bg-primary/20',
+>>>>>>> Stashed changes
                   agent.type === 'email' &&
                     'bg-pink-100 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400',
                   agent.type === 'crm' &&

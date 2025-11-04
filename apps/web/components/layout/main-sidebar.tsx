@@ -27,6 +27,7 @@ import {
   LogOut,
   Zap,
   MessageSquare,
+  Store,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -59,6 +60,12 @@ const navigationItems = [
     icon: Bot,
     badge: '3',
     description: 'AI agent management',
+  },
+  {
+    title: 'Marketplace',
+    href: '/marketplace',
+    icon: Store,
+    description: 'Browse pre-built agents',
   },
   {
     title: 'CRM',
@@ -131,7 +138,15 @@ export function MainSidebar({ className }: SidebarProps) {
       )}
     >
       {/* Navigation Section */}
+<<<<<<< Updated upstream
       <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+=======
+      <nav
+        className="flex-1 px-2 py-4 space-y-1 overflow-y-auto"
+        aria-label="Main navigation"
+        role="navigation"
+      >
+>>>>>>> Stashed changes
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname.startsWith(item.href);

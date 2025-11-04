@@ -1,12 +1,39 @@
 # GalaxyCo.ai Multi-Agent System
 
 **Framework:** Custom implementation inspired by AutoGen + LangGraph patterns
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Last Updated:** November 3, 2025
+**Total Agents:** 6 specialized agents + 1 Cursor AI Agents Director
+**Coordination Model:** Orchestrated by Cursor AI Agents Director
 
 ---
 
-## 🤖 Agent Definitions
+## 🎯 COORDINATION STRUCTURE
+
+### Cursor AI Agents Director
+**Role:** Communication Hub, Task Management, Quality Control  
+**Agent ID:** `cursor-ai-agents-director`  
+**Primary Color:** 🟡 Gold
+
+#### Core Responsibilities
+- **Task Management:** Create and structure agent TODOs with Dalton
+- **Communication Hub:** Primary point of contact for all 7 agents
+- **Quality Control:** Ensure communication clarity and completion verification
+- **Workflow Orchestration:** Coordinate agent sequencing and dependencies
+- **Strategic Planning:** Analyze performance, recommend optimizations
+
+#### Scope & Authority
+- ✅ Plans agent missions and objectives
+- ✅ Creates handoff messages between agents
+- ✅ Verifies agent completion criteria met
+- ✅ Coordinates parallel vs sequential execution
+- ✅ Provides strategic business recommendations
+- ❌ Does NOT execute technical work (agents do this)
+- ❌ Does NOT make final business decisions (Dalton does)
+
+---
+
+## 🤖 Specialized Agent Definitions
 
 ### 1. Frontend Architect Agent
 
@@ -110,7 +137,58 @@
 
 ---
 
-### 3. DevOps & Infrastructure Agent
+### 3. Cursor Engineer Agent
+
+**Role:** Developer Experience & Tooling Specialist
+**Agent ID:** `cursor-engineer`
+**Primary Color:** 🔧 Gray
+
+#### Scope & Responsibilities
+
+- **Core Focus:**
+  - Cursor.ai optimization and configuration
+  - Custom commands and workflows
+  - Code snippets and templates
+  - MCP server integration
+  - Developer productivity tools
+  - VS Code settings and extensions
+
+- **File Scope:**
+
+  ```
+  .cursor/                   # Cursor configuration
+  .vscode/                   # VS Code settings
+  scripts/productivity/      # Developer scripts
+  .cursor/commands/          # Custom commands
+  .cursor/workflows/         # Workflow templates
+  .cursor/snippets/          # Code snippets
+  ```
+
+- **Key Expertise:**
+  - Cursor 2.0 features optimization
+  - Custom command creation
+  - Code snippet design
+  - MCP server configuration
+  - Developer experience enhancement
+  - Productivity automation
+
+#### Handoff Protocol
+
+- **Context Persistence:**
+  - Active tool development
+  - Command/workflow testing status
+  - MCP server configurations
+  - Developer feedback integration
+
+- **Knowledge Base:**
+  - Productivity patterns
+  - Tool effectiveness metrics
+  - Developer pain points solved
+  - Optimization opportunities
+
+---
+
+### 4. DevOps & Infrastructure Agent
 
 **Role:** Deployment, CI/CD & Infrastructure Specialist
 **Agent ID:** `devops-infrastructure`
@@ -164,7 +242,65 @@
 
 ---
 
-### 5. UI/UX Design Agent
+### 5. Quality & Testing Agent
+
+**Role:** Testing, QA & Code Quality Specialist
+**Agent ID:** `quality-testing`
+**Primary Color:** 🟣 Purple
+
+#### Scope & Responsibilities
+
+- **Core Focus:**
+  - Unit testing (Vitest)
+  - Integration testing
+  - E2E testing (Playwright)
+  - Code quality and linting
+  - Test coverage monitoring
+  - Performance testing
+  - Accessibility testing
+  - Security auditing
+
+- **File Scope:**
+
+  ```
+  tests/                     # Test suites
+  **/*.test.ts               # Unit tests
+  **/*.spec.ts               # Integration tests
+  playwright.config.ts       # E2E config
+  vitest.config.ts          # Test config
+  .eslintrc.js              # Linting rules
+  ```
+
+- **Key Expertise:**
+  - Vitest testing patterns
+  - Playwright E2E scenarios
+  - Test coverage strategies
+  - Mock data and fixtures
+  - Performance benchmarking
+  - Accessibility audits (WCAG compliance)
+  - Security vulnerability scanning
+  - Bug hunting and root cause analysis
+
+#### Handoff Protocol
+
+- **Context Persistence:**
+  - Active test suites being developed
+  - Coverage goals and progress
+  - Failed tests and debugging status
+  - Performance baselines
+  - Quality issues identified
+  - Bugs found and severity ratings
+
+- **Knowledge Base:**
+  - Testing patterns and best practices
+  - Common failure scenarios
+  - Performance benchmarks
+  - Quality standards applied
+  - Security vulnerabilities found
+
+---
+
+### 6. UI/UX Design Agent
 
 **Role:** Design Thinking, User Experience & Design Systems Specialist
 **Agent ID:** `ui-ux-design`
@@ -244,60 +380,6 @@
 - UI/UX Agent reviews implementation → Provides feedback
 - Both agents coordinate on design system evolution
 - UI/UX Agent handles design decisions → Frontend Agent handles code
-
----
-
-### 4. Quality & Testing Agent
-
-**Role:** Testing, QA & Code Quality Specialist
-**Agent ID:** `quality-testing`
-**Primary Color:** 🟣 Purple
-
-#### Scope & Responsibilities
-
-- **Core Focus:**
-  - Unit testing (Vitest)
-  - Integration testing
-  - E2E testing (Playwright)
-  - Code quality and linting
-  - Test coverage monitoring
-  - Performance testing
-  - Accessibility testing
-
-- **File Scope:**
-
-  ```
-  tests/                     # Test suites
-  **/*.test.ts               # Unit tests
-  **/*.spec.ts               # Integration tests
-  playwright.config.ts       # E2E config
-  vitest.config.ts          # Test config
-  .eslintrc.js              # Linting rules
-  ```
-
-- **Key Expertise:**
-  - Vitest testing patterns
-  - Playwright E2E scenarios
-  - Test coverage strategies
-  - Mock data and fixtures
-  - Performance benchmarking
-  - Accessibility audits (WCAG compliance)
-  - Code quality metrics
-
-#### Handoff Protocol
-
-- **Context Persistence:**
-  - Active test suites being developed
-  - Coverage goals and progress
-  - Failed tests and debugging status
-  - Performance baselines
-  - Quality issues identified
-
-- **Knowledge Base:**
-  - Testing patterns and best practices
-  - Common failure scenarios
-  - Performance benchmarks
-  - Quality standards applied
 
 ---
 

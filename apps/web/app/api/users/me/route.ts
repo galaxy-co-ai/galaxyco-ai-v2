@@ -107,7 +107,22 @@ export async function PATCH(req: NextRequest) {
       },
     });
   } catch (error) {
+<<<<<<< Updated upstream
     console.error('Update user profile error:', error);
+=======
+    console.error('[User Update Error]', error);
+
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: 'Invalid input',
+          details: error.errors[0]?.message || 'Validation failed',
+        },
+        { status: 400 },
+      );
+    }
+
+>>>>>>> Stashed changes
     return NextResponse.json(
       {
         error: 'Failed to update user profile',

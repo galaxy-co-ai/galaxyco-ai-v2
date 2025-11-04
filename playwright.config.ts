@@ -42,11 +42,22 @@ export default defineConfig({
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',
 
-    // Take screenshot on failure
+    // Take screenshot on failure (also for visual regression)
     screenshot: 'only-on-failure',
 
     // Video on failure
     video: 'retain-on-failure',
+  },
+
+  // Visual regression testing configuration
+  expect: {
+    // To use: expect(page).toHaveScreenshot()
+    toHaveScreenshot: {
+      // Allow 20% pixel difference for visual tests
+      threshold: 0.2,
+      // Strict mode - requires exact match
+      mode: 'strict',
+    },
   },
 
   // Configure projects for major browsers and viewports

@@ -3,9 +3,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { z } from 'zod';
 import { db } from '@galaxyco/database';
+import { integrations, oauthTokens } from '@galaxyco/database/schema';
+import { eq, and } from 'drizzle-orm';
+import { decryptTokens } from '@/lib/encryption';
 import { sendGmailMessage, receiveGmailMessages, GmailCredentials } from '@/lib/integrations/gmail';
 import { sendSlackMessage, readSlackMessages, SlackCredentials } from '@/lib/integrations/slack';
 import { CRMCredentials, Contact, Deal } from '@/lib/integrations/crm/types';
@@ -35,14 +38,39 @@ const ExecuteIntegrationRequestSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    // Authentication with fallback
+    let userId: string | null = null;
+    let orgId: string | null = null;
+
+    try {
+      const authResult = await auth();
+      userId = authResult.userId;
+      orgId = authResult.orgId || null;
+    } catch (authError) {
+      console.error('[WORKFLOW_EXECUTE] auth() failed, trying currentUser():', authError);
+      const user = await currentUser();
+      if (user) {
+        userId = user.id;
+        orgId = (user.publicMetadata?.orgId as string | undefined) || null;
+      }
+    }
+
+    if (!userId || !orgId) {
+      console.error('[WORKFLOW_EXECUTE] No userId or orgId found', { userId, orgId });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    console.log('[WORKFLOW_EXECUTE] Authenticated user', { userId, orgId });
 
     const body = await req.json();
     const { nodeId, integration, config, workspaceId, variables, previousResults } =
       ExecuteIntegrationRequestSchema.parse(body);
+
+    // Verify workspaceId matches orgId (multi-tenant security)
+    if (workspaceId !== orgId) {
+      console.error('[WORKFLOW_EXECUTE] Workspace mismatch', { workspaceId, orgId });
+      return NextResponse.json({ error: 'Workspace mismatch' }, { status: 403 });
+    }
 
     if (!integration) {
       return NextResponse.json({ error: 'Integration type is required' }, { status: 400 });
@@ -53,7 +81,13 @@ export async function POST(req: NextRequest) {
 
     switch (integration.toLowerCase()) {
       case 'gmail':
-        result = await executeGmailIntegration(userId, config, variables, previousResults);
+        result = await executeGmailIntegration(
+          userId,
+          config,
+          variables,
+          previousResults,
+          workspaceId,
+        );
         break;
 
       case 'slack':
@@ -110,23 +144,28 @@ async function executeGmailIntegration(
   config: Record<string, any> | undefined,
   variables: Record<string, any> | undefined,
   previousResults: Record<string, any> | undefined,
+  workspaceId: string,
 ) {
-  // Get Gmail integration from database
+  console.log('[WORKFLOW_EXECUTE] Executing Gmail integration', { userId, workspaceId });
+
+  // Get Gmail integration from database (CRITICAL: Filter by workspaceId for multi-tenant security)
   const integration = await db.query.integrations.findFirst({
     where: (integrations, { and, eq }) =>
       and(
+        eq(integrations.workspaceId, workspaceId), // CRITICAL: Multi-tenant isolation
         eq(integrations.userId, userId),
         eq(integrations.provider, 'google'),
         eq(integrations.type, 'gmail'),
+        eq(integrations.status, 'active'),
       ),
-    with: {
-      oauthTokens: true,
-    },
   });
 
-  if (!integration || integration.status !== 'active') {
+  if (!integration) {
+    console.error('[WORKFLOW_EXECUTE] Gmail integration not found', { userId, workspaceId });
     throw new Error('Gmail integration not connected. Please connect Gmail first.');
   }
+
+  console.log('[WORKFLOW_EXECUTE] Integration found', { integrationId: integration.id });
 
   // Get OAuth tokens
   const tokens = await db.query.oauthTokens.findFirst({
@@ -134,12 +173,28 @@ async function executeGmailIntegration(
   });
 
   if (!tokens) {
+    console.error('[WORKFLOW_EXECUTE] OAuth tokens not found', { integrationId: integration.id });
     throw new Error('Gmail credentials not found. Please reconnect Gmail.');
   }
 
+  // Decrypt tokens (tokens are stored encrypted)
+  console.log('[WORKFLOW_EXECUTE] Decrypting tokens...');
+  let decryptedTokens;
+  try {
+    decryptedTokens = decryptTokens({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken || undefined,
+      idToken: tokens.idToken || undefined,
+    });
+    console.log('[WORKFLOW_EXECUTE] Tokens decrypted successfully');
+  } catch (decryptError) {
+    console.error('[WORKFLOW_EXECUTE] Failed to decrypt tokens', decryptError);
+    throw new Error('Failed to decrypt Gmail credentials. Please reconnect Gmail.');
+  }
+
   const credentials: GmailCredentials = {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken || '',
+    accessToken: decryptedTokens.access_token,
+    refreshToken: decryptedTokens.refresh_token || '',
     expiresAt: tokens.expiresAt ? tokens.expiresAt.getTime() : Date.now() + 3600000,
     email: integration.email || '',
   };

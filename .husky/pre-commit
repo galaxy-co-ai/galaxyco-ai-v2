@@ -10,4 +10,158 @@ pnpm health-check
 echo "🧹 Running lint-staged..."
 pnpm lint-staged
 
+<<<<<<< Updated upstream
 echo "✅ Pre-commit checks passed!"
+=======
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Track failures
+FAILURES=0
+
+# Function to run check
+run_check() {
+  local check_name=$1
+  local check_command=$2
+  
+  echo -e "\n${YELLOW}→${NC} Running $check_name..."
+  
+  if eval "$check_command"; then
+    echo -e "${GREEN}✓${NC} $check_name passed"
+  else
+    echo -e "${RED}✗${NC} $check_name failed"
+    ((FAILURES++))
+  fi
+}
+
+# 1. Type Checking (Enhanced with strict verification)
+run_check "TypeScript Type Check" "turbo run typecheck --filter=!./apps/api"
+
+# 2. Linting
+run_check "ESLint" "turbo run lint"
+
+# 3. Formatting Check
+run_check "Prettier Format Check" "prettier --check '**/*.{ts,tsx,js,jsx,md,json}'"
+
+# 4. Security Audit - Check for console.log in production code
+echo -e "\n${YELLOW}→${NC} Checking for console.log..."
+CONSOLE_LOGS=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' | xargs grep -n "console\.log" || true)
+
+if [ -n "$CONSOLE_LOGS" ]; then
+  echo -e "${RED}✗${NC} Found console.log statements:"
+  echo "$CONSOLE_LOGS"
+  echo -e "${YELLOW}⚠${NC}  Remove console.log or use logger.debug() instead"
+  ((FAILURES++))
+else
+  echo -e "${GREEN}✓${NC} No console.log found"
+fi
+
+# 5. Security Audit - Check for missing orgId filtering
+echo -e "\n${YELLOW}→${NC} Checking for orgId filtering in queries..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E 'queries/.*\.(ts|tsx)$' || true)
+
+if [ -n "$STAGED_FILES" ]; then
+  for file in $STAGED_FILES; do
+    if grep -q "db\.\(select\|query\|insert\|update\|delete\)" "$file"; then
+      if ! grep -q "orgId" "$file"; then
+        echo -e "${RED}✗${NC} Missing orgId filter in: $file"
+        echo -e "${YELLOW}⚠${NC}  SECURITY: All queries MUST filter by orgId"
+        ((FAILURES++))
+      fi
+    fi
+  done
+  
+  if [ $FAILURES -eq 0 ]; then
+    echo -e "${GREEN}✓${NC} All queries have orgId filtering"
+  fi
+else
+  echo -e "${GREEN}✓${NC} No query files modified"
+fi
+
+# 6. Security Audit - Check for unvalidated Server Actions
+echo -e "\n${YELLOW}→${NC} Checking Server Actions for Zod validation..."
+STAGED_ACTIONS=$(git diff --cached --name-only --diff-filter=ACM | grep -E 'actions/.*\.(ts|tsx)$' || true)
+
+if [ -n "$STAGED_ACTIONS" ]; then
+  for file in $STAGED_ACTIONS; do
+    if grep -q "'use server'" "$file"; then
+      if ! grep -q "z\.\(object\|string\|number\)" "$file"; then
+        echo -e "${RED}✗${NC} Missing Zod validation in: $file"
+        echo -e "${YELLOW}⚠${NC}  SECURITY: All Server Actions MUST use Zod validation"
+        ((FAILURES++))
+      fi
+    fi
+  done
+  
+  if [ $FAILURES -eq 0 ]; then
+    echo -e "${GREEN}✓${NC} All Server Actions have Zod validation"
+  fi
+else
+  echo -e "${GREEN}✓${NC} No Server Action files modified"
+fi
+
+# 7. Test Coverage for Modified Files
+echo -e "\n${YELLOW}→${NC} Checking test coverage for modified files..."
+MODIFIED_TS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E 'components/.*\.(tsx)$' | grep -v '\.test\.' || true)
+
+if [ -n "$MODIFIED_TS_FILES" ]; then
+  MISSING_TESTS=0
+  
+  for file in $MODIFIED_TS_FILES; do
+    # Check if corresponding test file exists
+    test_file="${file//.tsx/.test.tsx}"
+    test_file="${test_file//components/__tests__/component}"
+    
+    if [ ! -f "$test_file" ]; then
+      echo -e "${YELLOW}⚠${NC}  Missing test file for: $file"
+      echo -e "    Expected: $test_file"
+      ((MISSING_TESTS++))
+    fi
+  done
+  
+  if [ $MISSING_TESTS -gt 0 ]; then
+    echo -e "${YELLOW}⚠${NC}  $MISSING_TESTS file(s) without tests (not blocking commit)"
+  else
+    echo -e "${GREEN}✓${NC} All modified components have tests"
+  fi
+fi
+
+# 8. Validate Cursor Commands (if commands.json exists)
+if [ -f ".cursor/commands.json" ]; then
+  echo -e "\n${YELLOW}→${NC} Validating Cursor Commands..."
+  if pnpm validate:commands > /dev/null 2>&1; then
+    echo -e "${GREEN}✓${NC} Commands validated"
+  else
+    echo -e "${RED}✗${NC} Command validation failed"
+    echo -e "${YELLOW}⚠${NC}  Run 'pnpm validate:commands' for details"
+    ((FAILURES++))
+  fi
+fi
+
+# 9. Check for TODOs in committed code
+echo -e "\n${YELLOW}→${NC} Checking for TODO comments..."
+TODOS=$(git diff --cached | grep -E "^\+.*TODO:" || true)
+
+if [ -n "$TODOS" ]; then
+  echo -e "${YELLOW}⚠${NC}  Found TODO comments (not blocking):"
+  echo "$TODOS"
+else
+  echo -e "${GREEN}✓${NC} No TODO comments"
+fi
+
+# Final result
+echo -e "\n======================================"
+
+if [ $FAILURES -gt 0 ]; then
+  echo -e "${RED}✗ Pre-commit checks failed with $FAILURES error(s)${NC}"
+  echo -e "\n${YELLOW}Fix the issues above and try again.${NC}"
+  exit 1
+else
+  echo -e "${GREEN}✓ All pre-commit checks passed!${NC}"
+  echo -e "${GREEN}✓ Ready to commit${NC}"
+  exit 0
+fi
+>>>>>>> Stashed changes

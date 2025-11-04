@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "kibo-ui": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.kibo-ui.com/api/mcp/mcp"
+      ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Owner\\workspace\\galaxyco-ai-2.0"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "gitkraken": {
+      "command": "C:\\Users\\Owner\\AppData\\Local\\GitKrakenCLI\\gk.exe",
+      "args": [
+        "mcp",
+        "--host=cursor"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT_HERE"
+      }
+    },
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://neondb_owner:npg_XexJt1VYKYaP@ep-holy-brook-a5xm8wxb.us-east-2.aws.neon.tech/neondb?sslmode=require"
+      ]
+    }
+  }
+}

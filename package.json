@@ -13,6 +13,12 @@
     "test": "turbo run test",
     "test:integration": "turbo run test:integration",
     "test:smoke": "playwright test tests/smoke",
+<<<<<<< Updated upstream
+=======
+    "test:visual": "playwright test tests/e2e/visual-regression.spec.ts",
+    "test:coverage": "turbo run test:coverage",
+    "test:tdd": "node scripts/tdd-workflow.mjs",
+>>>>>>> Stashed changes
     "verify:deployment": "node scripts/deployment/verify-deployment.js",
     "e2e": "playwright test tests/e2e",
     "e2e:ci": "playwright test tests/e2e --reporter=line",
@@ -21,6 +27,11 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "precommit": "turbo run typecheck && turbo run lint && prettier --check .",
     "health-check": "pnpm precommit",
+    "typecheck:verify": "turbo run typecheck --filter=!./apps/api",
+    "a11y:audit": "tsx scripts/a11y-audit.ts",
+    "a11y:ci": "tsx scripts/a11y-audit.ts --ci",
+    "validate:commands": "tsx scripts/validate-commands.ts",
+    "deploy:health": "tsx scripts/deployment/health-check.ts",
     "db:seed": "tsx scripts/database/simple-seed.ts",
     "db:link-user": "tsx scripts/database/link-current-user.ts",
     "db:setup": "tsx scripts/database/setup-production.ts",
@@ -34,6 +45,7 @@
     "postinstall": "git config commit.template .gitmessage || true"
   },
   "devDependencies": {
+    "@axe-core/cli": "^4.11.0",
     "@axe-core/playwright": "^4.10.2",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
@@ -41,6 +53,8 @@
     "@stoplight/spectral-cli": "^6.13.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^2.1.1",
     "axe-core": "^4.11.0",
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.0.0",

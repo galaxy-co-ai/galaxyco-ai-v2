@@ -5,11 +5,21 @@ import { useWorkspace } from '@/contexts/workspace-context';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+<<<<<<< Updated upstream
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Check, X, Settings, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+=======
+import { IntegrationStatusCard } from '@/components/integrations/integration-status-card';
+import { IntegrationPicker } from '@/components/integrations/integration-picker';
+import {
+  getAllIntegrations,
+  getIntegrationsByCategory,
+} from '@/lib/integrations/integration-config';
+import { Plug, Mail, MessageCircle, Briefcase } from 'lucide-react';
+>>>>>>> Stashed changes
 
 export default function IntegrationsPage() {
   const { currentWorkspace } = useWorkspace();

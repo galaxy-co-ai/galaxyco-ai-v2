@@ -2,6 +2,13 @@
 
 **Project-specific rules and conventions**
 
+**⚠️ IMPORTANT: Universal patterns and partnership protocol are in `devops-hq`**
+- Universal patterns: `C:\Users\Owner\workspace\devops-hq\.cursor\universal-patterns.md`
+- Partnership protocol: `C:\Users\Owner\workspace\devops-hq\.cursor\master-context.md`
+- Usage guidelines: `C:\Users\Owner\workspace\devops-hq\.cursor\DEVOPS-HQ-USAGE-GUIDELINES.md`
+
+**This file contains GalaxyCo-specific rules only.** Universal patterns stay in devops-hq.
+
 ---
 
 ## 🎯 Core Principles

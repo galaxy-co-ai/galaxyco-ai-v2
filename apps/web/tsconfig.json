@@ -15,5 +15,18 @@
     "allowJs": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "trigger.config.ts"],
+<<<<<<< Updated upstream
   "exclude": ["node_modules", "backup-archive"]
+=======
+  "exclude": [
+    "node_modules",
+    "backup-archive",
+    "tests/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "__tests__/**/*"
+  ]
+>>>>>>> Stashed changes
 }

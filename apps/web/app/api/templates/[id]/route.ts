@@ -54,8 +54,45 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+<<<<<<< Updated upstream
     // Increment uses count
     await db
+=======
+    const templateId = z.string().uuid().parse(params.id);
+    const body = await req.json();
+
+    const UpdateTemplateSchema = z.object({
+      name: z.string().min(1).max(255).optional(),
+      description: z.string().max(1000).optional(),
+      category: z.string().min(1).max(100).optional(),
+      tags: z.array(z.string()).optional(),
+      thumbnailUrl: z.string().url().optional(),
+      complexity: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+      estimatedTime: z.number().min(1).optional(),
+      featured: z.boolean().optional(),
+    });
+
+    const validated = UpdateTemplateSchema.parse(body);
+
+    // Check ownership
+    const [existing] = await db
+      .select()
+      .from(gridTemplates)
+      .where(eq(gridTemplates.id, templateId));
+
+    if (!existing) {
+      return NextResponse.json({ error: 'Template not found' }, { status: 404 });
+    }
+
+    if (existing.authorId !== clerkUserId) {
+      return NextResponse.json(
+        { error: 'You can only update your own templates' },
+        { status: 403 },
+      );
+    }
+
+    const [template] = await db
+>>>>>>> Stashed changes
       .update(gridTemplates)
       .set({
         uses: sql`${gridTemplates.uses} + 1`,
@@ -66,7 +103,22 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       success: true,
     });
   } catch (error) {
+<<<<<<< Updated upstream
     console.error('Error incrementing template usage:', error);
+=======
+    console.error('[Template Update Error]', error);
+
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          error: 'Invalid input',
+          details: error.errors[0]?.message || 'Validation failed',
+        },
+        { status: 400 },
+      );
+    }
+
+>>>>>>> Stashed changes
     return NextResponse.json(
       {
         error: 'Failed to update template usage',
@@ -97,8 +149,16 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
 
+<<<<<<< Updated upstream
     if (template.authorId !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+=======
+    if (existing.authorId !== clerkUserId) {
+      return NextResponse.json(
+        { error: 'You can only delete your own templates' },
+        { status: 403 },
+      );
+>>>>>>> Stashed changes
     }
 
     // Delete template

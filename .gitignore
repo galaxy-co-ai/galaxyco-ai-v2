@@ -51,6 +51,11 @@ playwright-report/
 test-results/
 *.spec.ts.snap
 *.log
+# Visual regression test artifacts
+tests/e2e/visual-regression/**/*-actual.png
+tests/e2e/visual-regression/**/*-diff.png
+tests/e2e/**/*-actual.png
+tests/e2e/**/*-diff.png
 
 # Terraform
 .terraform/
