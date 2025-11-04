@@ -9,6 +9,7 @@
 ## ✅ **What We Accomplished**
 
 ### **1. UI Upgraded to Framer/Linear Quality** 🎨
+
 - ✅ **Massive typography** - Hero text 72-128px, headings 48-72px
 - ✅ **Generous spacing** - 96-160px gaps, breathable whitespace everywhere
 - ✅ **Micro-interactions** - Hover scale (1.02x), shadow lifts, smooth transitions
@@ -37,7 +38,9 @@ Created comprehensive rebuild blueprint in `docs/assistant-v2/`:
 ## 🎯 **Next Session: BUILD Assistant V2**
 
 ### **What to Build:**
+
 A **world-class AI assistant** that rivals ChatGPT/Claude with:
+
 - **Vercel AI SDK** - Battle-tested streaming (not custom implementation)
 - **Tool calling** - AI can create agents, search CRM, analyze workflows
 - **RAG integration** - AI knows workspace (agents, customers, docs)
@@ -47,6 +50,7 @@ A **world-class AI assistant** that rivals ChatGPT/Claude with:
 - **Conversation memory** - Save, search, export
 
 ### **Tech Stack:**
+
 ```bash
 # Install these first
 pnpm add ai @ai-sdk/openai @ai-sdk/anthropic
@@ -56,6 +60,7 @@ pnpm add @types/react-syntax-highlighter -D
 ```
 
 ### **Build at:** `/assistant-v2` (parallel to current `/assistant`)
+
 - No risk - old assistant keeps working
 - Test thoroughly
 - Feature flag rollout
@@ -66,6 +71,7 @@ pnpm add @types/react-syntax-highlighter -D
 ## 🔑 **Key Files Modified This Session**
 
 ### **UI Upgrade:**
+
 - `apps/web/app/page.tsx` - Landing page (massive hero)
 - `apps/web/app/(app)/dashboard/page.tsx` - Dashboard (bold metrics)
 - `apps/web/components/ui/button.tsx` - Framer-style hover
@@ -77,6 +83,7 @@ pnpm add @types/react-syntax-highlighter -D
 - Plus 20+ component files (replaced `text-neutral-900` with `text-foreground`)
 
 ### **Documentation Created:**
+
 - `UI-UPGRADE-COMPLETE.md` - Full UI upgrade summary
 - `UI-UX-AUDIT-FINDINGS.md` - Issues found + improvements
 - `docs/assistant-v2/*.md` - 5 comprehensive planning docs
@@ -86,6 +93,7 @@ pnpm add @types/react-syntax-highlighter -D
 ## ⚠️ **Critical Context**
 
 ### **Brown Text Fix:**
+
 - **Root cause:** `apps/web/styles/globals.css` had `--foreground: 15 23 42` (brown)
 - **Fix:** Changed to `--foreground: 224 14% 9%` (clean near-black with blue tint)
 - **Also fixed:** `--card-foreground`, `--popover-foreground`, `--accent-foreground`
@@ -93,6 +101,7 @@ pnpm add @types/react-syntax-highlighter -D
 - **Result:** ✅ NO MORE BROWN TEXT (verified on production)
 
 ### **Two globals.css Files:**
+
 - `apps/web/app/globals.css` - NOT used (I edited this first by mistake)
 - `apps/web/styles/globals.css` - **ACTUAL FILE** being imported by `app/layout.tsx`
 
@@ -101,6 +110,7 @@ pnpm add @types/react-syntax-highlighter -D
 ## 🚀 **Immediate Next Steps**
 
 ### **Option 1: Start Assistant V2 Build** (Recommended)
+
 Read `docs/assistant-v2/QUICK-START.md` and scaffold the structure:
 
 ```bash
@@ -115,13 +125,17 @@ pnpm add ai @ai-sdk/openai react-markdown remark-gfm
 ```
 
 ### **Option 2: Clean Up Technical Debt**
+
 Before building assistant, fix the issues I found:
+
 - Replace 45+ `console.log` with `logger`
 - Replace `<img>` with `<Image />` for optimization
 - Fix React Hook dependency warnings
 
 ### **Option 3: Continue UI Polish**
+
 Add more Framer/Linear features:
+
 - Page transition animations (Framer Motion)
 - Gradient accents on CTAs
 - Enhanced empty states
@@ -162,4 +176,3 @@ Let's build a world-class assistant that rivals ChatGPT and Claude! 🚀
 ---
 
 **You're ready to build an incredible AI assistant! Let's do this.** 🔥
-

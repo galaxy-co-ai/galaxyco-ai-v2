@@ -10,6 +10,7 @@
 ### **Phase 1: Foundation** (Week 1)
 
 #### **Day 1: Setup & Dependencies**
+
 - [ ] Install Vercel AI SDK (`pnpm add ai @ai-sdk/openai @ai-sdk/anthropic`)
 - [ ] Install markdown deps (`pnpm add react-markdown remark-gfm rehype-highlight`)
 - [ ] Install UI deps (`pnpm add react-textarea-autosize framer-motion`)
@@ -27,6 +28,7 @@ pnpm add prism-react-renderer
 ```
 
 #### **Day 2: Basic Chat UI** (No AI yet)
+
 - [ ] Create `ChatContainer.tsx` (layout only)
 - [ ] Create `MessageBubble.tsx` (static messages)
 - [ ] Create `ChatInput.tsx` (no submission)
@@ -35,6 +37,7 @@ pnpm add prism-react-renderer
 - [ ] Add Framer Motion animations
 
 #### **Day 3: Streaming API Route**
+
 - [ ] Create `/api/assistant-v2/chat/route.ts`
 - [ ] Set up Vercel AI SDK `streamText`
 - [ ] Test with basic GPT-4 responses
@@ -51,19 +54,20 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const { messages, workspaceId } = await req.json();
-  
+
   const result = await streamText({
     model: openai('gpt-4-turbo'),
     messages,
     maxTokens: 4000,
     temperature: 0.7,
   });
-  
+
   return result.toAIStreamResponse();
 }
 ```
 
 #### **Day 4: Wire UI to API**
+
 - [ ] Connect `ChatContainer` to API with `useChat`
 - [ ] Test streaming in browser
 - [ ] Add loading states
@@ -71,6 +75,7 @@ export async function POST(req: Request) {
 - [ ] Test character-by-character streaming
 
 #### **Day 5: Conversation Persistence**
+
 - [ ] Create database schema (conversations, messages tables)
 - [ ] Create Server Actions for CRUD
 - [ ] Add save on message finish
@@ -108,6 +113,7 @@ CREATE INDEX idx_messages_conversation ON assistant_messages(conversation_id, cr
 ### **Phase 2: Intelligence** (Week 2)
 
 #### **Day 6-7: RAG Integration**
+
 - [ ] Create `getWorkspaceContext()` function
 - [ ] Generate embeddings for user query
 - [ ] Search Pinecone for relevant docs
@@ -120,15 +126,15 @@ import { openai } from '@/lib/ai/openai-client';
 import { pinecone } from '@/lib/pinecone';
 
 export async function getWorkspaceContext(
-  workspaceId: string, 
-  userQuery: string
+  workspaceId: string,
+  userQuery: string,
 ): Promise<RAGContext> {
   // Generate embedding
   const embedding = await openai.embeddings.create({
     model: 'text-embedding-3-small',
     input: userQuery,
   });
-  
+
   // Search vectors
   const namespace = pinecone.namespace(`workspace-${workspaceId}`);
   const searchResults = await namespace.query({
@@ -136,28 +142,29 @@ export async function getWorkspaceContext(
     topK: 5,
     includeMetadata: true,
   });
-  
+
   // Get structured data
   const [agents, customers, workflows] = await Promise.all([
     db.select().from(agents).where(eq(agents.workspaceId, workspaceId)).limit(5),
     db.select().from(customers).where(eq(customers.workspaceId, workspaceId)).limit(5),
     db.select().from(workflows).where(eq(workflows.workspaceId, workspaceId)).limit(5),
   ]);
-  
+
   return {
-    relevantDocs: searchResults.matches.map(m => ({
+    relevantDocs: searchResults.matches.map((m) => ({
       content: m.metadata.content,
       title: m.metadata.title,
       score: m.score,
     })),
-    recentAgents: agents.map(a => ({ id: a.id, name: a.name, description: a.description })),
-    recentCustomers: customers.map(c => ({ id: c.id, name: c.name, email: c.email })),
-    recentWorkflows: workflows.map(w => ({ id: w.id, name: w.name, status: w.status })),
+    recentAgents: agents.map((a) => ({ id: a.id, name: a.name, description: a.description })),
+    recentCustomers: customers.map((c) => ({ id: c.id, name: c.name, email: c.email })),
+    recentWorkflows: workflows.map((w) => ({ id: w.id, name: w.name, status: w.status })),
   };
 }
 ```
 
 #### **Day 8-9: Tool Calling**
+
 - [ ] Create tool registry
 - [ ] Implement 5 core tools
 - [ ] Wire tools to API route
@@ -185,7 +192,7 @@ export const assistantTools = {
         workspaceId,
         status: 'draft',
       });
-      
+
       return {
         success: true,
         agentId: agent.id,
@@ -193,17 +200,19 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 2. Search CRM
   searchCustomers: tool({
     description: 'Search for customers in the CRM',
     parameters: z.object({
       query: z.string().describe('Search query'),
       limit: z.number().default(10).describe('Max results'),
-      filters: z.object({
-        status: z.enum(['active', 'inactive', 'all']).optional(),
-        tags: z.array(z.string()).optional(),
-      }).optional(),
+      filters: z
+        .object({
+          status: z.enum(['active', 'inactive', 'all']).optional(),
+          tags: z.array(z.string()).optional(),
+        })
+        .optional(),
     }),
     execute: async ({ query, limit, filters }, { workspaceId }) => {
       const customers = await searchCustomersAction(workspaceId, {
@@ -211,9 +220,9 @@ export const assistantTools = {
         limit,
         ...filters,
       });
-      
+
       return {
-        results: customers.map(c => ({
+        results: customers.map((c) => ({
           id: c.id,
           name: c.name,
           email: c.email,
@@ -224,7 +233,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 3. Analyze Workflow
   analyzeWorkflow: tool({
     description: 'Get analytics and insights for a workflow',
@@ -234,7 +243,7 @@ export const assistantTools = {
     }),
     execute: async ({ workflowId, timeRange }, { workspaceId }) => {
       const analytics = await getWorkflowAnalyticsAction(workflowId, workspaceId, timeRange);
-      
+
       return {
         totalRuns: analytics.totalRuns,
         successRate: analytics.successRate,
@@ -244,7 +253,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 4. Create Workflow
   createWorkflow: tool({
     description: 'Create a new automation workflow',
@@ -255,10 +264,12 @@ export const assistantTools = {
         type: z.enum(['schedule', 'webhook', 'event']),
         config: z.record(z.any()),
       }),
-      steps: z.array(z.object({
-        action: z.string(),
-        parameters: z.record(z.any()),
-      })),
+      steps: z.array(
+        z.object({
+          action: z.string(),
+          parameters: z.record(z.any()),
+        }),
+      ),
     }),
     execute: async (params, { workspaceId }) => {
       const workflow = await createWorkflowAction({
@@ -266,7 +277,7 @@ export const assistantTools = {
         workspaceId,
         status: 'draft',
       });
-      
+
       return {
         success: true,
         workflowId: workflow.id,
@@ -274,7 +285,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 5. Send Email Campaign
   sendCampaign: tool({
     description: 'Send an email campaign to customers',
@@ -292,7 +303,7 @@ export const assistantTools = {
         ...params,
         workspaceId,
       });
-      
+
       return {
         success: true,
         campaignId: campaign.id,
@@ -301,7 +312,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 6. Get Agent Status
   getAgentStatus: tool({
     description: 'Check the status and performance of an AI agent',
@@ -311,7 +322,7 @@ export const assistantTools = {
     execute: async ({ agentId }, { workspaceId }) => {
       const agent = await getAgentAction(agentId, workspaceId);
       const stats = await getAgentStatsAction(agentId);
-      
+
       return {
         name: agent.name,
         status: agent.status,
@@ -321,7 +332,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 7. Upload Document
   uploadDocument: tool({
     description: 'Upload a document to the workspace library',
@@ -336,10 +347,10 @@ export const assistantTools = {
         ...params,
         workspaceId,
       });
-      
+
       // Generate and store embedding
       await embedDocumentAction(doc.id);
-      
+
       return {
         success: true,
         documentId: doc.id,
@@ -347,7 +358,7 @@ export const assistantTools = {
       };
     },
   }),
-  
+
   // 8. Schedule Meeting
   scheduleMeeting: tool({
     description: 'Schedule a meeting with calendar integration',
@@ -360,7 +371,7 @@ export const assistantTools = {
     execute: async (params) => {
       // Integrate with Google Calendar
       const meeting = await scheduleCalendarEventAction(params);
-      
+
       return {
         success: true,
         meetingId: meeting.id,
@@ -381,13 +392,9 @@ export const assistantTools = {
 ```typescript
 // apps/web/lib/ai/assistant/system-prompt.ts
 
-export function generateSystemPrompt(
-  workspaceId: string,
-  context: RAGContext,
-  user: User
-): string {
+export function generateSystemPrompt(workspaceId: string, context: RAGContext, user: User): string {
   const timestamp = new Date().toLocaleString();
-  
+
   return `
 # You are GalaxyCo AI Assistant
 
@@ -397,29 +404,45 @@ You have deep knowledge of their agents, customers, workflows, and data.
 Current time: ${timestamp}
 
 ## Capabilities
-${context.recentAgents?.length > 0 ? `
+${
+  context.recentAgents?.length > 0
+    ? `
 ### AI Agents (${context.recentAgents.length} active)
 You can create, manage, and analyze AI agents. Recent agents:
-${context.recentAgents.map(a => `- **${a.name}**: ${a.description} (Status: ${a.status})`).join('\n')}
-` : ''}
+${context.recentAgents.map((a) => `- **${a.name}**: ${a.description} (Status: ${a.status})`).join('\n')}
+`
+    : ''
+}
 
-${context.recentCustomers?.length > 0 ? `
+${
+  context.recentCustomers?.length > 0
+    ? `
 ### CRM Data (${context.recentCustomers.length} recent customers)
 You have access to customer data and can search, analyze, and create segments:
-${context.recentCustomers.map(c => `- ${c.name} (${c.email}) - ${c.company || 'No company'}`).join('\n')}
-` : ''}
+${context.recentCustomers.map((c) => `- ${c.name} (${c.email}) - ${c.company || 'No company'}`).join('\n')}
+`
+    : ''
+}
 
-${context.recentWorkflows?.length > 0 ? `
+${
+  context.recentWorkflows?.length > 0
+    ? `
 ### Workflows (${context.recentWorkflows.length} active)
 You can create and manage automation workflows:
-${context.recentWorkflows.map(w => `- **${w.name}**: ${w.description} (Runs: ${w.executionCount})`).join('\n')}
-` : ''}
+${context.recentWorkflows.map((w) => `- **${w.name}**: ${w.description} (Runs: ${w.executionCount})`).join('\n')}
+`
+    : ''
+}
 
-${context.relevantDocs?.length > 0 ? `
+${
+  context.relevantDocs?.length > 0
+    ? `
 ### Relevant Knowledge
 Based on the conversation, here are relevant workspace documents:
-${context.relevantDocs.map(d => `- **${d.title}**: ${d.content.substring(0, 200)}... (Relevance: ${(d.score * 100).toFixed(0)}%)`).join('\n')}
-` : ''}
+${context.relevantDocs.map((d) => `- **${d.title}**: ${d.content.substring(0, 200)}... (Relevance: ${(d.score * 100).toFixed(0)}%)`).join('\n')}
+`
+    : ''
+}
 
 ## Tools Available
 You have access to powerful tools:
@@ -494,35 +517,32 @@ import { getWorkspaceContext } from '@/lib/ai/assistant/rag-service';
 
 export async function POST(req: Request) {
   const { messages, workspaceId, model = 'gpt-4-turbo' } = await req.json();
-  
+
   // Get user
   const user = await currentUser();
   if (!user) return new Response('Unauthorized', { status: 401 });
-  
+
   // Get RAG context
   const lastUserMessage = messages.findLast((m: any) => m.role === 'user');
   const context = await getWorkspaceContext(workspaceId, lastUserMessage.content);
-  
+
   // Generate dynamic system prompt
   const systemPrompt = generateSystemPrompt(workspaceId, context, user);
-  
+
   // Stream with tools
   const result = await streamText({
     model: openai(model),
-    messages: [
-      { role: 'system', content: systemPrompt },
-      ...messages,
-    ],
+    messages: [{ role: 'system', content: systemPrompt }, ...messages],
     tools: assistantTools,
     maxTokens: 4000,
     temperature: 0.7,
-    
+
     // Tool execution context
     toolContext: {
       workspaceId,
       userId: user.id,
     },
-    
+
     // Callbacks
     onFinish: async ({ text, toolCalls }) => {
       // Log for analytics
@@ -535,7 +555,7 @@ export async function POST(req: Request) {
       });
     },
   });
-  
+
   return result.toAIStreamResponse();
 }
 ```
@@ -556,14 +576,12 @@ export function ChatEmptyState({ onSelectPrompt }: { onSelectPrompt: (prompt: st
           <div className="size-20 rounded-2xl bg-primary/10 mx-auto flex items-center justify-center">
             <Sparkles className="size-10 text-primary" />
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
-            What can I help with?
-          </h1>
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">What can I help with?</h1>
           <p className="text-lg text-muted-foreground">
             I can create agents, analyze data, search your CRM, and more
           </p>
         </div>
-        
+
         {/* Quick prompts */}
         <div className="grid md:grid-cols-2 gap-4">
           {[
@@ -597,14 +615,12 @@ export function ChatEmptyState({ onSelectPrompt }: { onSelectPrompt: (prompt: st
               <item.icon className="size-6 mr-4 text-primary shrink-0" />
               <div>
                 <div className="font-semibold mb-1">{item.title}</div>
-                <div className="text-xs text-muted-foreground">
-                  {item.prompt}
-                </div>
+                <div className="text-xs text-muted-foreground">{item.prompt}</div>
               </div>
             </Button>
           ))}
         </div>
-        
+
         {/* Features */}
         <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
@@ -642,7 +658,7 @@ export function StreamingIndicator() {
         <AvatarImage src="/ai-avatar.png" />
         <AvatarFallback>AI</AvatarFallback>
       </Avatar>
-      
+
       <Card className="p-4 rounded-2xl bg-card">
         <div className="flex items-center gap-2">
           {/* Animated dots */}
@@ -661,9 +677,7 @@ export function StreamingIndicator() {
               }}
             />
           ))}
-          <span className="text-sm text-muted-foreground ml-2">
-            Thinking...
-          </span>
+          <span className="text-sm text-muted-foreground ml-2">Thinking...</span>
         </div>
       </Card>
     </motion.div>
@@ -677,7 +691,7 @@ export function StreamingIndicator() {
 
 ### **Unit Tests** (Vitest)
 
-```typescript
+````typescript
 // __tests__/assistant/MessageBubble.test.tsx
 import { render, screen } from '@testing-library/react';
 import { MessageBubble } from '@/components/assistant-v2/MessageBubble';
@@ -690,11 +704,11 @@ describe('MessageBubble', () => {
       content: 'Hello AI',
       createdAt: new Date(),
     };
-    
+
     render(<MessageBubble message={message} />);
     expect(screen.getByText('Hello AI')).toBeInTheDocument();
   });
-  
+
   it('renders markdown with code blocks', () => {
     const message = {
       id: '2',
@@ -702,24 +716,24 @@ describe('MessageBubble', () => {
       content: '```typescript\nconst x = 1;\n```',
       createdAt: new Date(),
     };
-    
+
     render(<MessageBubble message={message} />);
     expect(screen.getByText('typescript')).toBeInTheDocument();
     expect(screen.getByText('const x = 1;')).toBeInTheDocument();
   });
-  
+
   it('shows copy button on hover', async () => {
     const message = { id: '3', role: 'assistant', content: 'Test' };
     const { container } = render(<MessageBubble message={message} />);
-    
+
     // Hover trigger
     const bubble = container.querySelector('.group');
     fireEvent.mouseEnter(bubble);
-    
+
     expect(screen.getByText('Copy')).toBeInTheDocument();
   });
 });
-```
+````
 
 ### **Integration Tests**
 
@@ -728,32 +742,32 @@ describe('MessageBubble', () => {
 describe('Chat Flow', () => {
   it('sends message and receives streaming response', async () => {
     const { user } = renderWithProviders(<ChatContainer />);
-    
+
     const input = screen.getByPlaceholderText('Ask me anything...');
     await user.type(input, 'Hello AI');
     await user.click(screen.getByRole('button', { name: /send/i }));
-    
+
     // Wait for streaming response
     await waitFor(() => {
       expect(screen.getByText(/Hello/i)).toBeInTheDocument();
     });
-    
+
     // Verify message saved
     const messages = await db.select().from(assistantMessages);
     expect(messages).toHaveLength(2); // User + AI
   });
-  
+
   it('executes tool calls', async () => {
     const { user } = renderWithProviders(<ChatContainer />);
-    
+
     await user.type(input, 'Create an agent called "Test Agent"');
     await user.click(sendButton);
-    
+
     // Wait for tool execution
     await waitFor(() => {
       expect(screen.getByText(/Creating agent/i)).toBeInTheDocument();
     });
-    
+
     // Verify agent created
     const agents = await db.select().from(agents);
     expect(agents[0].name).toBe('Test Agent');
@@ -772,14 +786,14 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 export function MessageList({ messages }: { messages: Message[] }) {
   const parentRef = useRef<HTMLDivElement>(null);
-  
+
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 150, // Estimated message height
     overscan: 5,
   });
-  
+
   return (
     <div ref={parentRef} className="flex-1 overflow-y-auto">
       <div
@@ -826,7 +840,7 @@ export async function cacheConversation(conversationId: string, messages: Messag
   await redis.setex(
     `conversation:${conversationId}`,
     3600, // 1 hour TTL
-    JSON.stringify(messages)
+    JSON.stringify(messages),
   );
 }
 ```
@@ -839,7 +853,7 @@ const debouncedSave = useMemo(
     debounce(async (conversationId: string, messages: Message[]) => {
       await saveConversationAction(conversationId, messages);
     }, 2000),
-  []
+  [],
 );
 
 useEffect(() => {
@@ -875,7 +889,7 @@ export async function isAssistantV2Enabled(userId: string): Promise<boolean> {
     .where(eq(featureFlags.key, 'assistant-v2'))
     .where(eq(featureFlags.userId, userId))
     .limit(1);
-  
+
   return flag[0]?.enabled || false;
 }
 
@@ -896,7 +910,9 @@ import { pgTable, uuid, text, timestamp, boolean, jsonb, integer } from 'drizzle
 
 export const assistantConversations = pgTable('assistant_conversations', {
   id: uuid('id').primaryKey().defaultRandom(),
-  workspaceId: uuid('workspace_id').notNull().references(() => workspaces.id),
+  workspaceId: uuid('workspace_id')
+    .notNull()
+    .references(() => workspaces.id),
   userId: text('user_id').notNull(), // Clerk user ID
   title: text('title').notNull(),
   model: text('model').default('gpt-4-turbo'),
@@ -910,7 +926,9 @@ export const assistantConversations = pgTable('assistant_conversations', {
 
 export const assistantMessages = pgTable('assistant_messages', {
   id: uuid('id').primaryKey().defaultRandom(),
-  conversationId: uuid('conversation_id').notNull().references(() => assistantConversations.id, { onDelete: 'cascade' }),
+  conversationId: uuid('conversation_id')
+    .notNull()
+    .references(() => assistantConversations.id, { onDelete: 'cascade' }),
   role: text('role').notNull(), // 'user' | 'assistant' | 'system' | 'tool'
   content: text('content').notNull(),
   toolInvocations: jsonb('tool_invocations'), // Vercel AI SDK tool calls
@@ -921,12 +939,12 @@ export const assistantMessages = pgTable('assistant_messages', {
 // Indexes for performance
 export const conversationWorkspaceIdx = index('idx_conversations_workspace').on(
   assistantConversations.workspaceId,
-  assistantConversations.updatedAt
+  assistantConversations.updatedAt,
 );
 
 export const messageConversationIdx = index('idx_messages_conversation').on(
   assistantMessages.conversationId,
-  assistantMessages.createdAt
+  assistantMessages.createdAt,
 );
 ```
 
@@ -935,31 +953,38 @@ export const messageConversationIdx = index('idx_messages_conversation').on(
 ## 🔒 Security Considerations
 
 ### **1. Multi-Tenant Isolation**
+
 ```typescript
 // ALWAYS filter by workspaceId
 const messages = await db
   .select()
   .from(assistantMessages)
-  .where(and(
-    eq(assistantMessages.conversationId, id),
-    eq(assistantConversations.workspaceId, workspaceId) // CRITICAL
-  ));
+  .where(
+    and(
+      eq(assistantMessages.conversationId, id),
+      eq(assistantConversations.workspaceId, workspaceId), // CRITICAL
+    ),
+  );
 ```
 
 ### **2. Input Validation**
+
 ```typescript
 // Validate all inputs with Zod
 const ChatRequestSchema = z.object({
-  messages: z.array(z.object({
-    role: z.enum(['user', 'assistant', 'system']),
-    content: z.string().max(10000), // Prevent abuse
-  })),
+  messages: z.array(
+    z.object({
+      role: z.enum(['user', 'assistant', 'system']),
+      content: z.string().max(10000), // Prevent abuse
+    }),
+  ),
   workspaceId: z.string().uuid(),
   model: z.enum(['gpt-4-turbo', 'claude-3-opus', 'gemini-1.5-pro']),
 });
 ```
 
 ### **3. Rate Limiting**
+
 ```typescript
 // Limit requests per user
 const rateLimit = rateLimit({
@@ -995,18 +1020,21 @@ if (!success) {
 ## 📈 Success Metrics
 
 ### **Performance**
+
 - First token: < 200ms
 - Full response (1K tokens): < 10s
 - Message load: < 100ms
 - Tool execution: < 2s
 
 ### **Quality**
+
 - User satisfaction: 90%+
 - Tool success rate: 95%+
 - RAG relevance: 80%+
 - Error rate: < 1%
 
 ### **Usage**
+
 - Daily active users: Track
 - Messages per session: Track
 - Tool usage rate: Track
@@ -1015,4 +1043,3 @@ if (!success) {
 ---
 
 **This is how we build a world-class AI assistant.** 🚀
-

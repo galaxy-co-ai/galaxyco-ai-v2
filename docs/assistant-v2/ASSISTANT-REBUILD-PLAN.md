@@ -9,6 +9,7 @@
 ## 🎯 Vision
 
 Create an **AI assistant that rivals ChatGPT, Claude, and Cursor** with:
+
 - **Streaming responses** with real-time typing
 - **Multi-model support** (GPT-4, Claude, Gemini)
 - **RAG integration** for workspace knowledge
@@ -24,11 +25,11 @@ Create an **AI assistant that rivals ChatGPT, Claude, and Cursor** with:
 ## 🔧 Tech Stack (Best-in-Class)
 
 ### **AI/LLM Layer**
+
 - **Vercel AI SDK** - Streaming, tool calling, multi-model support
   - `ai` package for unified streaming API
   - Built-in support for OpenAI, Anthropic, Google, etc.
   - Native React hooks (`useChat`, `useCompletion`)
-  
 - **LangChain.js** (optional) - Advanced agent workflows
   - Tool calling and function execution
   - Memory management
@@ -37,28 +38,29 @@ Create an **AI assistant that rivals ChatGPT, Claude, and Cursor** with:
 - **OpenAI GPT-4** - Main conversational AI
   - Function calling for actions
   - Vision for image analysis
-  
 - **Anthropic Claude** - Deep reasoning and analysis
   - Extended context (200K tokens)
   - Better at complex multi-step tasks
 
 ### **RAG/Knowledge**
+
 - **Pinecone** - Vector search (already integrated)
 - **OpenAI Embeddings** - text-embedding-3-small
 - **Upstash Redis** - Conversation caching
 - **Neon Postgres** - Conversation persistence
 
 ### **UI Components**
+
 - **Kibo UI** - Advanced chat components
   - `markdown` component with syntax highlighting
   - `code-block` with copy button
   - `avatar-stack` for multi-user conversations
-  
 - **React Markdown** - Message rendering
 - **Prism/Shiki** - Code syntax highlighting
 - **Framer Motion** - Smooth animations
 
 ### **State Management**
+
 - **Zustand** - Chat state (messages, streaming status)
 - **React Query** - Server state (conversation history)
 - **Vercel AI SDK hooks** - Streaming state
@@ -68,6 +70,7 @@ Create an **AI assistant that rivals ChatGPT, Claude, and Cursor** with:
 ## 🏗️ Architecture
 
 ### **File Structure**
+
 ```
 apps/web/app/(app)/assistant/
 ├── page.tsx                 # Main chat page (Server Component)
@@ -101,6 +104,7 @@ apps/web/lib/ai/
 ```
 
 ### **Data Flow**
+
 ```
 User Input → ChatInput
     ↓
@@ -120,6 +124,7 @@ Save to Database (Neon) + Cache (Redis)
 ## 🎨 UI/UX Design (Framer/Linear Quality)
 
 ### **Layout**
+
 ```
 ┌─────────────────────────────────────────────┐
 │  Conversation Sidebar  │   Main Chat Area   │
@@ -142,6 +147,7 @@ Save to Database (Neon) + Cache (Redis)
 ```
 
 ### **Message Bubbles**
+
 - **User messages:** Right-aligned, blue background
 - **AI messages:** Left-aligned, white card with shadow
 - **Tool calls:** Special card with icon + status
@@ -149,6 +155,7 @@ Save to Database (Neon) + Cache (Redis)
 - **Streaming:** Character-by-character animation
 
 ### **Interactions**
+
 - **Hover:** Message actions appear (copy, edit, regenerate)
 - **Click code:** Auto-copy with feedback
 - **File upload:** Drag-and-drop with preview
@@ -159,6 +166,7 @@ Save to Database (Neon) + Cache (Redis)
 ## 🛠️ Key Features
 
 ### **Phase 1: Core Chat** (MVP)
+
 - [ ] Vercel AI SDK integration with streaming
 - [ ] GPT-4 as primary model
 - [ ] Message persistence (save/load conversations)
@@ -168,6 +176,7 @@ Save to Database (Neon) + Cache (Redis)
 - [ ] Error handling + retry logic
 
 ### **Phase 2: Advanced Features**
+
 - [ ] RAG integration (search workspace knowledge)
 - [ ] Tool calling (create agents, search CRM, etc.)
 - [ ] Multi-model support (Claude, Gemini)
@@ -177,6 +186,7 @@ Save to Database (Neon) + Cache (Redis)
 - [ ] Prompt templates library
 
 ### **Phase 3: Power Features**
+
 - [ ] Multi-turn function calling (complex workflows)
 - [ ] Canvas mode (artifact editing like Claude)
 - [ ] Conversation branching (explore alternate responses)
@@ -190,17 +200,17 @@ Save to Database (Neon) + Cache (Redis)
 
 ```json
 {
-  "ai": "^3.0.0",                    // Vercel AI SDK
-  "openai": "^4.20.0",               // OpenAI official SDK
-  "@anthropic-ai/sdk": "^0.10.0",    // Claude official SDK
-  "langchain": "^0.1.0",             // Advanced agent workflows (optional)
-  "react-markdown": "^9.0.0",        // Markdown rendering
-  "remark-gfm": "^4.0.0",            // GitHub Flavored Markdown
-  "rehype-highlight": "^7.0.0",      // Code syntax highlighting
-  "rehype-raw": "^7.0.0",            // Raw HTML in markdown
-  "prism-react-renderer": "^2.3.0",  // Better code highlighting
+  "ai": "^3.0.0", // Vercel AI SDK
+  "openai": "^4.20.0", // OpenAI official SDK
+  "@anthropic-ai/sdk": "^0.10.0", // Claude official SDK
+  "langchain": "^0.1.0", // Advanced agent workflows (optional)
+  "react-markdown": "^9.0.0", // Markdown rendering
+  "remark-gfm": "^4.0.0", // GitHub Flavored Markdown
+  "rehype-highlight": "^7.0.0", // Code syntax highlighting
+  "rehype-raw": "^7.0.0", // Raw HTML in markdown
+  "prism-react-renderer": "^2.3.0", // Better code highlighting
   "react-textarea-autosize": "^8.5.3", // Auto-growing input
-  "use-sound": "^4.0.1"              // Sound effects (optional)
+  "use-sound": "^4.0.1" // Sound effects (optional)
 }
 ```
 
@@ -209,6 +219,7 @@ Save to Database (Neon) + Cache (Redis)
 ## 🎨 Component Breakdown
 
 ### **ChatContainer** (Main orchestrator)
+
 ```tsx
 'use client';
 
@@ -225,7 +236,7 @@ export function ChatContainer({ initialConversationId }) {
       <div className="flex-1 flex flex-col">
         <ChatHeader model={currentModel} onModelChange={setModel} />
         <MessageList messages={messages} isLoading={isLoading} />
-        <ChatInput 
+        <ChatInput
           value={input}
           onChange={handleInputChange}
           onSubmit={handleSubmit}
@@ -238,46 +249,44 @@ export function ChatContainer({ initialConversationId }) {
 ```
 
 ### **MessageBubble** (Beautiful message rendering)
+
 ```tsx
 export function MessageBubble({ message }: { message: Message }) {
   const isUser = message.role === 'user';
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={cn(
-        'flex gap-4 group',
-        isUser ? 'justify-end' : 'justify-start'
-      )}
+      className={cn('flex gap-4 group', isUser ? 'justify-end' : 'justify-start')}
     >
       {!isUser && <Avatar src="/ai-avatar.png" />}
-      
-      <Card className={cn(
-        'max-w-2xl p-6 rounded-2xl',
-        isUser 
-          ? 'bg-primary text-primary-foreground' 
-          : 'bg-card hover:shadow-lg transition-all'
-      )}>
-        <ReactMarkdown 
+
+      <Card
+        className={cn(
+          'max-w-2xl p-6 rounded-2xl',
+          isUser ? 'bg-primary text-primary-foreground' : 'bg-card hover:shadow-lg transition-all',
+        )}
+      >
+        <ReactMarkdown
           components={{
-            code: CodeBlock,  // Custom code block with copy
+            code: CodeBlock, // Custom code block with copy
             pre: PreBlock,
             // ... other components
           }}
         >
           {message.content}
         </ReactMarkdown>
-        
+
         {/* Tool calls */}
-        {message.toolInvocations?.map(tool => (
+        {message.toolInvocations?.map((tool) => (
           <ToolCallDisplay key={tool.id} tool={tool} />
         ))}
-        
+
         {/* Message actions (on hover) */}
         <MessageActions message={message} className="opacity-0 group-hover:opacity-100" />
       </Card>
-      
+
       {isUser && <Avatar src={user.imageUrl} />}
     </motion.div>
   );
@@ -285,16 +294,17 @@ export function MessageBubble({ message }: { message: Message }) {
 ```
 
 ### **ChatInput** (Powerful input field)
+
 ```tsx
 export function ChatInput({ value, onChange, onSubmit, disabled }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [files, setFiles] = useState<File[]>([]);
-  
+
   return (
     <div className="border-t p-6">
       {/* File previews */}
       {files.length > 0 && <FilePreviewList files={files} onRemove={...} />}
-      
+
       <form onSubmit={onSubmit} className="relative">
         <TextareaAutosize
           ref={textareaRef}
@@ -310,7 +320,7 @@ export function ChatInput({ value, onChange, onSubmit, disabled }) {
             }
           }}
         />
-        
+
         <div className="absolute right-3 bottom-3 flex gap-2">
           <FileUploadButton onUpload={setFiles} />
           <VoiceInputButton onTranscript={append} />
@@ -319,7 +329,7 @@ export function ChatInput({ value, onChange, onSubmit, disabled }) {
           </Button>
         </div>
       </form>
-      
+
       <div className="mt-2 text-xs text-muted-foreground">
         Press Enter to send, Shift+Enter for new line
       </div>
@@ -342,10 +352,10 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { messages, conversationId, workspaceId } = await req.json();
-  
+
   // Load RAG context
   const context = await getWorkspaceContext(workspaceId, messages);
-  
+
   // Define tools
   const tools = {
     createAgent: tool({
@@ -360,7 +370,7 @@ export async function POST(req: Request) {
         return await createAgentAction(params, workspaceId);
       },
     }),
-    
+
     searchCustomers: tool({
       description: 'Search CRM customers',
       parameters: z.object({
@@ -371,7 +381,7 @@ export async function POST(req: Request) {
         return await searchCRMAction(query, workspaceId, limit);
       },
     }),
-    
+
     analyzeWorkflow: tool({
       description: 'Analyze a workflow performance',
       parameters: z.object({
@@ -382,7 +392,7 @@ export async function POST(req: Request) {
       },
     }),
   };
-  
+
   const result = await streamText({
     model: openai('gpt-4-turbo'),
     messages: [
@@ -396,7 +406,7 @@ export async function POST(req: Request) {
     maxTokens: 4000,
     temperature: 0.7,
   });
-  
+
   return result.toAIStreamResponse();
 }
 ```
@@ -406,18 +416,20 @@ export async function POST(req: Request) {
 ## 🎨 UI Components (Framer/Linear Quality)
 
 ### **Color Palette**
+
 ```typescript
 // Assistant-specific colors
 const assistantColors = {
-  userBubble: 'hsl(var(--primary))',         // Blue
-  aiBubble: 'hsl(var(--card))',              // White card
-  toolCall: 'hsl(var(--accent))',            // Light blue
-  streaming: 'hsl(var(--muted))',            // Gray
-  codeBackground: 'hsl(222 47% 11%)',        // VS Code dark
+  userBubble: 'hsl(var(--primary))', // Blue
+  aiBubble: 'hsl(var(--card))', // White card
+  toolCall: 'hsl(var(--accent))', // Light blue
+  streaming: 'hsl(var(--muted))', // Gray
+  codeBackground: 'hsl(222 47% 11%)', // VS Code dark
 };
 ```
 
 ### **Typography**
+
 ```typescript
 // Message text
 h1: 'text-2xl font-bold tracking-tight',
@@ -428,6 +440,7 @@ code: 'font-mono text-sm bg-muted px-1.5 py-0.5 rounded',
 ```
 
 ### **Animations**
+
 ```typescript
 // Message entrance
 initial={{ opacity: 0, y: 20 }}
@@ -448,6 +461,7 @@ transition={{ duration: 0.3, ease: 'easeOut' }}
 ## 📝 System Prompt Strategy
 
 ### **Dynamic Context Injection**
+
 ```typescript
 function generateSystemPrompt(workspaceId: string, context: RAGContext) {
   return `
@@ -461,15 +475,23 @@ You are GalaxyCo AI Assistant, an expert AI operating system companion.
 - Execute multi-step business tasks
 
 ## Workspace Context
-${context.recentAgents ? `
+${
+  context.recentAgents
+    ? `
 Recent Agents:
-${context.recentAgents.map(a => `- ${a.name}: ${a.description}`).join('\n')}
-` : ''}
+${context.recentAgents.map((a) => `- ${a.name}: ${a.description}`).join('\n')}
+`
+    : ''
+}
 
-${context.recentCustomers ? `
+${
+  context.recentCustomers
+    ? `
 Recent Customers:
-${context.recentCustomers.map(c => `- ${c.name} (${c.email})`).join('\n')}
-` : ''}
+${context.recentCustomers.map((c) => `- ${c.name} (${c.email})`).join('\n')}
+`
+    : ''
+}
 
 ## Guidelines
 - Be concise but helpful
@@ -490,23 +512,24 @@ Use them proactively to help the user accomplish their goals.
 ## 🔥 Advanced Features
 
 ### **1. RAG-Powered Responses**
+
 ```typescript
 async function getWorkspaceContext(workspaceId: string, messages: Message[]) {
-  const lastUserMessage = messages.findLast(m => m.role === 'user');
-  
+  const lastUserMessage = messages.findLast((m) => m.role === 'user');
+
   // Generate embedding for search
   const embedding = await openai.embeddings.create({
     model: 'text-embedding-3-small',
     input: lastUserMessage.content,
   });
-  
+
   // Search Pinecone
   const results = await pinecone.query({
     vector: embedding.data[0].embedding,
     topK: 5,
     filter: { workspaceId },
   });
-  
+
   return {
     relevantDocs: results.matches,
     recentAgents: await getRecentAgents(workspaceId),
@@ -516,6 +539,7 @@ async function getWorkspaceContext(workspaceId: string, messages: Message[]) {
 ```
 
 ### **2. Conversation Branching**
+
 ```typescript
 // Allow users to explore alternate responses
 interface ConversationBranch {
@@ -532,6 +556,7 @@ interface ConversationBranch {
 ```
 
 ### **3. Prompt Templates**
+
 ```typescript
 const templates = [
   {
@@ -557,18 +582,21 @@ const templates = [
 ## 🧪 Testing Strategy
 
 ### **Unit Tests**
+
 - Message rendering (markdown, code blocks)
 - Input validation
 - File upload handling
 - Tool call execution
 
 ### **Integration Tests**
+
 - End-to-end chat flow
 - RAG context retrieval
 - Tool execution + response
 - Conversation persistence
 
 ### **E2E Tests** (Playwright)
+
 - Full conversation flow
 - Model switching
 - File upload
@@ -579,18 +607,21 @@ const templates = [
 ## 📊 Success Metrics
 
 ### **Performance**
+
 - **First response:** < 500ms
 - **Streaming start:** < 200ms
 - **Message load:** < 100ms
 - **Search:** < 300ms
 
 ### **UX**
+
 - **Mobile-responsive:** 100% functional on mobile
 - **Keyboard shortcuts:** Full keyboard navigation
 - **Accessibility:** WCAG 2.1 AA compliant
 - **Error recovery:** Graceful fallbacks
 
 ### **AI Quality**
+
 - **Relevance:** RAG improves accuracy by 40%+
 - **Tool usage:** Proactive, not reactive
 - **Context retention:** Remember full conversation
@@ -601,24 +632,28 @@ const templates = [
 ## 🚀 Implementation Phases
 
 ### **Week 1: Foundation**
+
 - Set up Vercel AI SDK
 - Build basic chat UI
 - Implement streaming
 - Add conversation persistence
 
 ### **Week 2: Intelligence**
+
 - Integrate RAG
 - Add tool calling
 - Multi-model support
 - Prompt engineering
 
 ### **Week 3: Polish**
+
 - File attachments
 - Voice input
 - Animations
 - Mobile optimization
 
 ### **Week 4: Advanced**
+
 - Conversation branching
 - Prompt templates
 - Team features
@@ -628,18 +663,18 @@ const templates = [
 
 ## 💡 Differentiators (vs current implementation)
 
-| Current | New V2 |
-|---------|--------|
-| Custom streaming implementation | Vercel AI SDK (battle-tested) |
-| Basic markdown | Full markdown + code highlighting |
-| No tool calling | Rich tool calling with 10+ actions |
-| No RAG | Full workspace knowledge integration |
-| Single model | Multi-model (GPT-4, Claude, Gemini) |
-| Static system prompt | Dynamic context-aware prompts |
-| Basic UI | Framer/Linear-quality polish |
-| No file uploads | Full file + vision support |
-| Conversation list only | Search, branch, share, export |
-| No mobile optimization | Fully responsive |
+| Current                         | New V2                               |
+| ------------------------------- | ------------------------------------ |
+| Custom streaming implementation | Vercel AI SDK (battle-tested)        |
+| Basic markdown                  | Full markdown + code highlighting    |
+| No tool calling                 | Rich tool calling with 10+ actions   |
+| No RAG                          | Full workspace knowledge integration |
+| Single model                    | Multi-model (GPT-4, Claude, Gemini)  |
+| Static system prompt            | Dynamic context-aware prompts        |
+| Basic UI                        | Framer/Linear-quality polish         |
+| No file uploads                 | Full file + vision support           |
+| Conversation list only          | Search, branch, share, export        |
+| No mobile optimization          | Fully responsive                     |
 
 ---
 
@@ -659,4 +694,3 @@ const templates = [
 ---
 
 **Ready to build the best AI assistant in the industry?** 🚀
-

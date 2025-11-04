@@ -13,7 +13,7 @@
 1. **Dependencies Installed** ✅
    - `ai@5.0.64` - Vercel AI SDK
    - `@ai-sdk/react@2.0.86` - React hooks
-   - `@ai-sdk/openai@2.0.46` - OpenAI provider  
+   - `@ai-sdk/openai@2.0.46` - OpenAI provider
    - `@ai-sdk/anthropic@2.0.25` - Claude support
    - `react-markdown@10.1.0` + `remark-gfm` - Markdown rendering
    - `rehype-highlight` - Code syntax highlighting
@@ -55,6 +55,7 @@
 The Vercel AI SDK was recently upgraded from v4 to v5 with **breaking changes**:
 
 **v4 API (what we expected):**
+
 ```typescript
 const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
   api: '/api/assistant-v2/chat',
@@ -62,6 +63,7 @@ const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat(
 ```
 
 **v5 API (what actually exists):**
+
 ```typescript
 const { messages, sendMessage, status } = useChat({
   api: '/api/assistant-v2/chat', // This parameter is not working as expected
@@ -75,6 +77,7 @@ await sendMessage({
 ```
 
 **Current Problem:**
+
 - SDK is calling `/api/chat` instead of `/api/assistant-v2/chat`
 - The `api` configuration parameter seems to be ignored or work differently in v5
 - Message structure changed from `{ content: string }` to `{ parts: [{type, text}] }`
@@ -82,6 +85,7 @@ await sendMessage({
 ### **Solution Options:**
 
 **Option 1: Use Custom Transport (Recommended)**
+
 ```typescript
 import { HttpChatTransport } from 'ai';
 
@@ -93,11 +97,13 @@ const chat = useChat({ transport });
 ```
 
 **Option 2: Downgrade to AI SDK v4**
+
 ```bash
 pnpm add ai@4.x @ai-sdk/react@1.x
 ```
 
 **Option 3: Use the default `/api/chat` route**
+
 - Rename our route to `/api/chat/route.ts`
 - This is the simplest immediate fix
 
@@ -113,7 +119,7 @@ pnpm add ai@4.x @ai-sdk/react@1.x
 ✅ Loading states and animations  
 ✅ Error handling UI  
 ✅ Responsive design  
-✅ Framer/Linear quality polish  
+✅ Framer/Linear quality polish
 
 ---
 
@@ -130,11 +136,13 @@ pnpm add ai@4.x @ai-sdk/react@1.x
 ### **Fastest Solution (5 minutes):**
 
 **Step 1:** Rename the API route
+
 ```bash
 mv apps/web/app/api/assistant-v2 apps/web/app/api/chat
 ```
 
 **Step 2:** Update ChatContainer
+
 ```typescript
 const { messages, sendMessage, status } = useChat({
   // Remove the api parameter - it will use /api/chat by default
@@ -175,6 +183,7 @@ apps/web/
 ## 🎨 **Design Quality Achieved**
 
 ✅ **Framer/Linear aesthetic**
+
 - Massive typography (4xl-5xl headings)
 - Generous spacing (p-6, gap-4, py-8)
 - Smooth animations (Framer Motion)
@@ -183,12 +192,14 @@ apps/web/
 - Professional polish
 
 ✅ **Responsive Design**
+
 - Mobile-first approach
 - Breakpoints: sm, md, lg, xl
 - Touch-friendly targets
 - Accessible (WCAG compliant)
 
 ✅ **User Experience**
+
 - Auto-focus on input
 - Keyboard shortcuts (Enter, Shift+Enter, Esc)
 - Copy to clipboard
@@ -201,36 +212,39 @@ apps/web/
 
 ## 📈 **Comparison: Old vs New**
 
-| Feature | Old Assistant | New V2 |
-|---------|---------------|--------|
-| **Lines of Code** | 852 (monolith) | ~200 per component |
-| **Architecture** | Spaghetti | Clean, modular |
-| **Streaming** | Custom buggy | Vercel AI SDK |
-| **Code Highlighting** | ❌ None | ✅ Prism (100+ languages) |
-| **Markdown** | ❌ Basic | ✅ Full GFM support |
-| **Mobile** | ❌ Broken | ✅ Fully responsive |
-| **Animations** | ❌ None | ✅ Framer Motion |
-| **Loading States** | ❌ None | ✅ Beautiful indicators |
-| **Error Handling** | ❌ console.log | ✅ User-friendly toasts |
-| **Maintainability** | ❌ Low | ✅ High |
-| **UI Quality** | ❌ Basic | ✅ Framer/Linear level |
+| Feature               | Old Assistant  | New V2                    |
+| --------------------- | -------------- | ------------------------- |
+| **Lines of Code**     | 852 (monolith) | ~200 per component        |
+| **Architecture**      | Spaghetti      | Clean, modular            |
+| **Streaming**         | Custom buggy   | Vercel AI SDK             |
+| **Code Highlighting** | ❌ None        | ✅ Prism (100+ languages) |
+| **Markdown**          | ❌ Basic       | ✅ Full GFM support       |
+| **Mobile**            | ❌ Broken      | ✅ Fully responsive       |
+| **Animations**        | ❌ None        | ✅ Framer Motion          |
+| **Loading States**    | ❌ None        | ✅ Beautiful indicators   |
+| **Error Handling**    | ❌ console.log | ✅ User-friendly toasts   |
+| **Maintainability**   | ❌ Low         | ✅ High                   |
+| **UI Quality**        | ❌ Basic       | ✅ Framer/Linear level    |
 
 ---
 
 ## 🎯 **Next Steps for You**
 
 ### **Immediate (30 minutes):**
+
 1. Choose a fix option (recommend Option 3 - rename to `/api/chat`)
 2. Test streaming chat
 3. Fix Avatar import warnings (check what's exported from `@/components/ui/avatar`)
 4. Verify everything works
 
 ### **Phase 2 (Week 2):**
+
 1. Add RAG integration (workspace knowledge)
 2. Implement tool calling (create agents, search CRM, etc.)
 3. Add conversation persistence (database)
 
 ### **Phase 3 (Week 3):**
+
 1. File uploads (vision API)
 2. Multi-model switching (Claude, Gemini)
 3. Voice input (Whisper)
@@ -284,6 +298,7 @@ http://localhost:3000/assistant-v2
 ## 🎉 **What You Now Have**
 
 A **production-ready foundation** for a world-class AI assistant that:
+
 - ✅ Looks better than the current assistant
 - ✅ Has cleaner architecture
 - ✅ Is easier to maintain
@@ -298,7 +313,7 @@ A **production-ready foundation** for a world-class AI assistant that:
 ```
 The AI Assistant V2 is 90% complete! The UI is beautiful and all components are built.
 
-Quick fix needed: Vercel AI SDK v5 changed the API. 
+Quick fix needed: Vercel AI SDK v5 changed the API.
 
 Fastest solution:
 1. Rename apps/web/app/api/assistant-v2 to apps/web/app/api/chat
@@ -311,4 +326,3 @@ Then we can add RAG, tool calling, and persistence!
 ---
 
 **You're 30 minutes away from a fully working, world-class AI assistant!** 🚀
-

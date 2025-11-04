@@ -11,11 +11,13 @@ The dev server needs to be restarted to pick up the new environment variables fr
    - Or kill the process on port 3000
 
 2. Navigate to web app directory:
+
    ```
    cd apps/web
    ```
 
 3. Start dev server fresh:
+
    ```
    pnpm dev
    ```
@@ -31,4 +33,3 @@ The dev server needs to be restarted to pick up the new environment variables fr
 **REASON:** The server was running before .env.local was created, so DATABASE_URL wasn't loaded into the process environment.
 
 **START NOW.**
-

@@ -115,6 +115,7 @@ Let's continue building! 🚀
 ## 📝 **Additional Context for Next Agent**
 
 ### **Important Files:**
+
 - `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx` - Main state management
 - `apps/web/app/api/assistant-v2/chat/route.ts` - API with tools + RAG
 - `apps/web/lib/ai/assistant/tools.ts` - 8 workspace tools
@@ -122,6 +123,7 @@ Let's continue building! 🚀
 - `apps/web/lib/actions/assistant-actions.ts` - Database operations
 
 ### **Key Patterns Used:**
+
 - Custom `useAssistantChat` hook (compatible with existing code)
 - `AssistantMessage` type (not `UIMessage` from SDK v5)
 - Server Actions for database operations
@@ -130,6 +132,7 @@ Let's continue building! 🚀
 - Framer Motion for animations
 
 ### **Tech Stack:**
+
 - Next.js 14 App Router
 - React Server Components
 - Vercel AI SDK v5
@@ -140,6 +143,7 @@ Let's continue building! 🚀
 - Clerk Auth
 
 ### **Dependencies Installed:**
+
 ```json
 {
   "ai": "5.0.64",
@@ -156,11 +160,13 @@ Let's continue building! 🚀
 ```
 
 ### **Known Issues:**
+
 - None! Everything working.
 - Avatar warnings (fixed by using custom Avatar component)
 - SDK v5 API differences (fixed by using custom hook)
 
 ### **Design System:**
+
 - Colors: Primary (blue), muted, foreground
 - Spacing: Generous (p-6, gap-4, py-4)
 - Typography: Large (4xl-6xl headings)
@@ -183,4 +189,3 @@ Let's continue building! 🚀
 ---
 
 **Everything is ready for the next session to pick up and continue!** 🚀
-

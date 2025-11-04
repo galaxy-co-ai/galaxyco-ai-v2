@@ -9,6 +9,7 @@
 ## 🎯 **Features**
 
 ### **Core Chat**
+
 - ✅ GPT-4 Turbo streaming
 - ✅ Markdown + code highlighting
 - ✅ Copy to clipboard
@@ -16,12 +17,14 @@
 - ✅ Keyboard shortcuts
 
 ### **Intelligence**
+
 - ✅ 8 AI tools (create, search, analyze)
 - ✅ RAG workspace context
 - ✅ Tool result previews
 - ✅ Multi-step execution
 
 ### **Models**
+
 - ✅ GPT-4 Turbo (OpenAI)
 - ✅ GPT-4 (OpenAI)
 - ✅ Claude 3.5 Sonnet (Anthropic)
@@ -29,6 +32,7 @@
 - ✅ Gemini 1.5 Pro (Google)
 
 ### **Conversations**
+
 - ✅ Auto-save messages
 - ✅ Conversation sidebar
 - ✅ Search history
@@ -36,6 +40,7 @@
 - ✅ Delete conversations
 
 ### **Files**
+
 - ✅ Drag & drop
 - ✅ Image previews
 - ✅ PDF support
@@ -46,6 +51,7 @@
 ## 📝 **Quick Examples**
 
 **Create an Agent:**
+
 ```
 > "Create an email agent that handles support requests"
 
@@ -56,6 +62,7 @@ AI uses createAgent tool →
 ```
 
 **Search Customers:**
+
 ```
 > "Find customers in the tech industry"
 
@@ -66,6 +73,7 @@ AI uses searchCustomers tool →
 ```
 
 **Analyze Workflows:**
+
 ```
 > "How is my lead nurture workflow performing?"
 
@@ -166,12 +174,14 @@ https://your-domain.vercel.app/assistant-v2
 ## 🔑 **Key Files**
 
 **Most Important:**
+
 - `tools.ts` - Add new tools here
 - `route.ts` - API logic
 - `ChatContainer.tsx` - Main orchestration
 - `assistant-actions.ts` - Database operations
 
 **To Modify:**
+
 - Add tool → `tools.ts`
 - Change system prompt → `route.ts`
 - Add UI component → `components/`
@@ -182,6 +192,7 @@ https://your-domain.vercel.app/assistant-v2
 ## 💬 **Support**
 
 All code is:
+
 - ✅ Documented with comments
 - ✅ Type-safe (TypeScript strict)
 - ✅ Error handled
@@ -191,5 +202,3 @@ All code is:
 ---
 
 **Now go build amazing things with your AI assistant!** 🚀
-
-

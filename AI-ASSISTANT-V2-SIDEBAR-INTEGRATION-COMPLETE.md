@@ -50,9 +50,11 @@ Successfully integrated **ConversationSidebar** with full conversation managemen
 ## 📁 Files Modified
 
 ### 1. ChatContainer.tsx
+
 **Location:** `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx`
 
 **Changes:**
+
 - Added sidebar state management (isOpen, conversations, currentConversationId)
 - Implemented auto-save with useEffect (triggers after AI responses)
 - Added conversation CRUD handlers (create, load, delete, pin)
@@ -62,27 +64,32 @@ Successfully integrated **ConversationSidebar** with full conversation managemen
 - Message persistence tracking (prevMessagesCount ref)
 
 **Key Functions:**
+
 ```typescript
-- loadConversations() // Fetch all conversations from DB
-- saveMessagesToConversation() // Auto-save new messages
-- handleNewConversation() // Create new conversation
-- handleSelectConversation() // Load conversation with messages
-- handleDeleteConversation() // Delete with cleanup
-- handlePinConversation() // Toggle pin status
+-loadConversations() - // Fetch all conversations from DB
+  saveMessagesToConversation() - // Auto-save new messages
+  handleNewConversation() - // Create new conversation
+  handleSelectConversation() - // Load conversation with messages
+  handleDeleteConversation() - // Delete with cleanup
+  handlePinConversation(); // Toggle pin status
 ```
 
 ### 2. ChatHeader.tsx
+
 **Location:** `apps/web/app/(app)/assistant-v2/components/ChatHeader.tsx`
 
 **Changes:**
+
 - Added `leftAction` prop (React.ReactNode)
 - Renders hamburger menu button on mobile
 - Updated layout to accommodate left action
 
 ### 3. ConversationSidebar.tsx
+
 **Location:** `apps/web/app/(app)/assistant-v2/components/ConversationSidebar.tsx`
 
 **Changes:**
+
 - Removed AnimatePresence (switched to CSS transitions)
 - Added responsive behavior (fixed on mobile, relative on desktop)
 - Added mobile overlay (black backdrop)
@@ -95,6 +102,7 @@ Successfully integrated **ConversationSidebar** with full conversation managemen
 ## 🎯 How It Works
 
 ### Auto-Save Flow
+
 ```
 User sends message
   ↓
@@ -114,6 +122,7 @@ Title auto-generated from first user message
 ```
 
 ### Conversation Selection Flow
+
 ```
 User clicks conversation in sidebar
   ↓
@@ -131,6 +140,7 @@ Sidebar closes on mobile
 ```
 
 ### Responsive Behavior
+
 ```
 Desktop (lg+):
 - Sidebar always visible (relative positioning)
@@ -177,6 +187,7 @@ Mobile (<lg):
 ## 🧪 Testing Instructions
 
 ### Test 1: Create New Conversation
+
 1. Navigate to `/assistant-v2`
 2. Type: "Hello, create a new agent called Test Bot"
 3. Send message
@@ -184,12 +195,14 @@ Mobile (<lg):
 5. Check sidebar: Conversation appears in "Today" group
 
 ### Test 2: Load Conversation
+
 1. Click on a past conversation in sidebar
 2. **Expected:** Messages load from database
 3. **Expected:** Chat history displays correctly
 4. **Expected:** Sidebar closes on mobile
 
 ### Test 3: Pin Conversation
+
 1. Hover over conversation in sidebar
 2. Click three dots menu
 3. Click "Pin"
@@ -197,17 +210,20 @@ Mobile (<lg):
 5. **Expected:** Pin icon appears
 
 ### Test 4: Delete Conversation
+
 1. Click three dots on any conversation
 2. Click "Delete"
 3. **Expected:** Conversation removed from sidebar
 4. **Expected:** If current conversation, messages cleared
 
 ### Test 5: Search Conversations
+
 1. Type in search box in sidebar
 2. **Expected:** Conversations filter by title
 3. **Expected:** Groups update dynamically
 
 ### Test 6: Mobile Sidebar
+
 1. Resize browser to mobile (<1024px)
 2. **Expected:** Sidebar hidden by default
 3. Click hamburger menu
@@ -217,6 +233,7 @@ Mobile (<lg):
 7. **Expected:** Sidebar slides out
 
 ### Test 7: Auto-Save
+
 1. Send a message
 2. Wait for AI response to complete
 3. Check browser network tab (or DB)
@@ -229,6 +246,7 @@ Mobile (<lg):
 ## 🔧 Technical Details
 
 ### Server Actions Used
+
 - `createConversation()` - Create new conversation
 - `listConversations(limit, offset)` - Fetch all conversations
 - `getConversation(id)` - Fetch single conversation with messages
@@ -237,6 +255,7 @@ Mobile (<lg):
 - `deleteConversation(id)` - Delete conversation
 
 ### State Management
+
 ```typescript
 // ChatContainer state
 const [selectedModel, setSelectedModel] = useState('gpt-4-turbo');
@@ -247,16 +266,15 @@ const [isLoadingConversations, setIsLoadingConversations] = useState(true);
 const prevMessagesCount = useRef(0);
 
 // From useAssistantChat hook
-messages, input, handleInputChange, handleSubmit, isLoading, append, stop, setMessages
+(messages, input, handleInputChange, handleSubmit, isLoading, append, stop, setMessages);
 ```
 
 ### Auto-Save Logic
+
 ```typescript
 useEffect(() => {
-  const shouldSave = 
-    messages.length > 0 && 
-    messages.length > prevMessagesCount.current &&
-    !isLoading;
+  const shouldSave =
+    messages.length > 0 && messages.length > prevMessagesCount.current && !isLoading;
 
   if (shouldSave && currentConversationId) {
     const newMessages = messages.slice(prevMessagesCount.current);
@@ -274,6 +292,7 @@ useEffect(() => {
 ## 🎨 UI Components
 
 ### Sidebar Groups
+
 - **Pinned** - Always at top
 - **Today** - Last 24 hours
 - **Yesterday** - Previous day
@@ -281,6 +300,7 @@ useEffect(() => {
 - **Older** - Everything else
 
 ### Conversation Item UI
+
 - Title (truncated)
 - Message count
 - Last message date
@@ -295,21 +315,25 @@ useEffect(() => {
 The sidebar integration is **COMPLETE** and **PRODUCTION-READY**. You can now:
 
 ### Option A: Add Vision API (1 hour)
+
 - Integrate OpenAI Vision for image uploads
 - Handle image attachments in messages
 - Display images in conversation
 
 ### Option B: Add Claude/Gemini API Keys (15 min)
+
 - Add ANTHROPIC_API_KEY to .env.local
 - Add GOOGLE_API_KEY to .env.local
 - Test multi-model switching
 
 ### Option C: Add Voice Input (2 hours)
+
 - Integrate Whisper API
 - Add microphone button to ChatInput
 - Transcribe voice to text
 
 ### Option D: Deploy to Production (5 min)
+
 - Push to GitHub
 - Deploy to Vercel
 - Test in production
@@ -339,6 +363,7 @@ The sidebar integration is **COMPLETE** and **PRODUCTION-READY**. You can now:
 ## 🎯 Ready for Production
 
 AI Assistant V2 now has **complete conversation management**:
+
 - ✅ Chat streaming
 - ✅ Tool calling (8 tools)
 - ✅ RAG integration
@@ -350,4 +375,3 @@ AI Assistant V2 now has **complete conversation management**:
 - ✅ Responsive design
 
 **SHIP IT!** 🚀
-

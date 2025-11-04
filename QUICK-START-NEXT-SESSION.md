@@ -1,27 +1,30 @@
 # ⚡ QUICK START: Next Session
 
 **Goal:** Complete AI Assistant V2 (2-2.5 hours remaining)  
-**Status:** 85% Done - Sidebar ✅ | Streaming ⚠️ | UI Polish Needed  
+**Status:** 85% Done - Sidebar ✅ | Streaming ⚠️ | UI Polish Needed
 
 ---
 
 ## 🎯 TWO TASKS TO COMPLETE
 
 ### **TASK 1: Fix AI Streaming** (30 min) 🔴 CRITICAL
+
 **Problem:** AI responses not displaying (SDK v5 compatibility issue)  
 **Solution:** Copy working `/assistant` chat implementation  
-**Files:** `ChatContainer.tsx` + possibly `route.ts`  
+**Files:** `ChatContainer.tsx` + possibly `route.ts`
 
-### **TASK 2: Fix UI/Layout** (1-2 hours) 🟡 HIGH  
+### **TASK 2: Fix UI/Layout** (1-2 hours) 🟡 HIGH
+
 **Problem:** User reports "sloppy layout errors"  
 **Solution:** Audit all components, fix alignment/spacing issues  
-**Files:** All components in `assistant-v2/components/`  
+**Files:** All components in `assistant-v2/components/`
 
 ---
 
 ## 🚀 TASK 1: Detailed Steps
 
 ### 1. Read Working Assistant (5 min)
+
 ```bash
 # Open and understand:
 apps/web/app/(app)/assistant/page.tsx
@@ -35,6 +38,7 @@ apps/web/app/api/assistant/chat/route.ts
 ```
 
 ### 2. Copy Pattern to Assistant-V2 (10 min)
+
 ```bash
 # Update:
 apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx
@@ -45,6 +49,7 @@ apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx
 ```
 
 ### 3. Test (5 min)
+
 ```bash
 # Clear caches:
 cd apps/web && rm -rf .next && rm -rf node_modules/.cache
@@ -59,6 +64,7 @@ pnpm dev
 ```
 
 ### 4. Test Sidebar (10 min)
+
 ```bash
 # Test all features:
 ✅ Auto-save (message count updates in sidebar)
@@ -76,13 +82,16 @@ pnpm dev
 ## 🎨 TASK 2: Fix UI/Layout
 
 ### 1. Audit (15 min)
+
 - Open http://localhost:3000/assistant-v2
 - Take screenshots of every state
 - List ALL layout issues (spacing, alignment, overflow, etc.)
 - Document what looks "sloppy"
 
 ### 2. Fix Layout Issues (30-60 min)
+
 **Common fixes needed:**
+
 - Fix spacing/padding inconsistencies
 - Fix alignment issues
 - Fix responsive breakpoints
@@ -90,6 +99,7 @@ pnpm dev
 - Fix z-index conflicts
 
 **Files to check:**
+
 - `ChatContainer.tsx` - Main layout
 - `ConversationSidebar.tsx` - Sidebar layout
 - `ChatHeader.tsx` - Header positioning
@@ -97,6 +107,7 @@ pnpm dev
 - `MessageBubble.tsx` - Message styling
 
 ### 3. Match Design System (30 min)
+
 - Check `/dashboard`, `/agents` for design patterns
 - Match color palette
 - Match spacing scale
@@ -105,12 +116,14 @@ pnpm dev
 - Linear-inspired design (minimal, clean)
 
 ### 4. Test Responsive (20 min)
+
 - Test desktop (>1024px)
-- Test tablet (768-1024px)  
+- Test tablet (768-1024px)
 - Test mobile (<768px)
 - Fix any breakpoint issues
 
 ### 5. Get User Approval (Required!)
+
 - Take final screenshots
 - Show to user
 - Get explicit approval
@@ -123,16 +136,20 @@ pnpm dev
 ## 📁 KEY FILES
 
 **Will Modify (Task 1):**
+
 - `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx`
 - Maybe: `apps/web/app/api/assistant-v2/chat/route.ts`
 
 **Will Modify (Task 2):**
+
 - All files in `apps/web/app/(app)/assistant-v2/components/`
 
 **Reference (Copy From):**
+
 - `apps/web/app/(app)/assistant/*` (WORKING chat code)
 
 **Don't Touch:**
+
 - `apps/web/lib/actions/assistant-actions.ts` (perfect!)
 - Database schema (working!)
 - Authentication (working!)
@@ -144,7 +161,7 @@ pnpm dev
 ```bash
 # 30 min - Task 1:
 1. Read /assistant code (10 min)
-2. Copy to /assistant-v2 (10 min)  
+2. Copy to /assistant-v2 (10 min)
 3. Test (10 min)
 ✅ AI streaming works!
 
@@ -167,6 +184,7 @@ git commit && git push
 ## 🎉 You're 85% Done!
 
 **What's Ready:**
+
 - ✅ Excellent sidebar integration (9.5/10)
 - ✅ Database working perfectly
 - ✅ Beautiful components created
@@ -174,6 +192,7 @@ git commit && git push
 - ✅ Comprehensive documentation (12+ docs)
 
 **What's Left:**
+
 - ⚠️ 30 min: Fix AI streaming (copy /assistant)
 - ⚠️ 1-2 hours: Polish UI/layout
 
@@ -192,6 +211,7 @@ git commit && git push
 ## ✅ READY TO FINISH THIS!
 
 **The finish line is close! You've got excellent code, just need:**
+
 1. Working AI streaming (30 min)
 2. UI polish (1-2 hours)
 
@@ -200,4 +220,3 @@ git commit && git push
 ---
 
 **Good luck! You've got this!** 💪🎯
-

@@ -199,9 +199,6 @@ importers:
       '@opentelemetry/sdk-trace-web':
         specifier: 1.28.0
         version: 1.28.0(@opentelemetry/api@1.9.0)
-      '@picocss/pico':
-        specifier: ^2.1.1
-        version: 2.1.1
       '@pinecone-database/pinecone':
         specifier: ^6.1.2
         version: 6.1.2
@@ -553,7 +550,7 @@ importers:
         version: 5.1.4(typescript@5.9.3)(vite@7.1.10(@types/node@20.19.19)(jiti@1.21.7)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^2.1.0
-        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
+        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
 
   packages/agents-core:
     dependencies:
@@ -584,7 +581,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^2.1.0
-        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
+        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
 
   packages/database:
     dependencies:
@@ -2564,9 +2561,6 @@ packages:
 
   '@paulirish/trace_engine@0.0.59':
     resolution: {integrity: sha512-439NUzQGmH+9Y017/xCchBP9571J4bzhpcNhrxorf7r37wcyJZkgUfrUsRL3xl+JDcZ6ORhoFCzCw98c6S3YHw==}
-
-  '@picocss/pico@2.1.1':
-    resolution: {integrity: sha512-kIDugA7Ps4U+2BHxiNHmvgPIQDWPDU4IeU6TNRdvXQM1uZX+FibqDQT2xUOnnO2yq/LUHcwnGlu1hvf4KfXnMg==}
 
   '@pinecone-database/pinecone@6.1.2':
     resolution: {integrity: sha512-ydIlbtgIIHFgBL08sPzua5ckmOgtjgDz8xg21CnP1fqnnEgDmOlnfd10MRKU+fvFRhDlh4Md37SwZDr0d4cBqg==}
@@ -11799,8 +11793,6 @@ snapshots:
       legacy-javascript: 0.0.1
       third-party-web: 0.27.0
 
-  '@picocss/pico@2.1.1': {}
-
   '@pinecone-database/pinecone@6.1.2': {}
 
   '@pixi/colord@2.9.6': {}
@@ -13949,7 +13941,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
+      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -14000,7 +13992,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 2.0.0
-      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
+      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
 
   '@vitest/utils@2.1.9':
     dependencies:
@@ -19916,7 +19908,7 @@ snapshots:
       tsx: 4.20.6
       yaml: 2.8.1
 
-  vitest@2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0):
+  vitest@2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0):
     dependencies:
       '@vitest/expect': 2.1.9
       '@vitest/mocker': 2.1.9(vite@5.4.20(@types/node@20.19.19)(terser@5.44.0))

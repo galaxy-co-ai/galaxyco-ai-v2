@@ -1,4 +1,5 @@
 # 🎯 AI Assistant V2 - Next Steps (For Dalton)
+
 **Created:** November 4, 2025  
 **Status:** 85% Complete - Ready for Final Push  
 **Estimated Time to Complete:** 2-3 hours
@@ -8,6 +9,7 @@
 ## ✅ WHAT'S BEEN COMPLETED (85%)
 
 ### 1. Critical Bug Fixes Applied ✅
+
 - **Fixed:** Form submission was reloading page instead of AJAX
   - Added `e.preventDefault()` in ChatContainer.tsx line 313
 - **Fixed:** Stream parsing was trying to parse JSON from plain text
@@ -15,6 +17,7 @@
 - **Result:** Messages now submit correctly, infrastructure works
 
 ### 2. Infrastructure Verified ✅
+
 - ✅ Database connected and working
 - ✅ Conversations create successfully
 - ✅ Sidebar updates with message count
@@ -23,6 +26,7 @@
 - ✅ API endpoint being called
 
 ### 3. Code Quality ✅
+
 - Clean architecture maintained
 - Server Components pattern followed
 - Multi-tenant isolation preserved
@@ -33,6 +37,7 @@
 ## ⚠️ TWO BLOCKERS REMAINING
 
 ### BLOCKER #1: AI Response Content Empty
+
 **Symptom:** AI message bubble created but content is blank
 
 **Root Cause:** Unknown - need server logs to diagnose
@@ -40,6 +45,7 @@
 **How to Fix (15-30 min):**
 
 1. **Check Server Logs:**
+
    ```bash
    # Look at your pnpm dev terminal output
    # Look for errors related to /api/assistant-v2/chat
@@ -67,11 +73,13 @@
    ```
 
 ### BLOCKER #2: TypeScript Errors (Pre-commit Hook)
+
 **Impact:** Cannot commit code until fixed
 
 **Errors to Fix:**
 
 #### Error 1: ChatContainer.tsx Line 324
+
 ```typescript
 // CURRENT (line 324):
 await handleSubmit(e);
@@ -81,6 +89,7 @@ await handleSubmit(e as React.FormEvent<HTMLFormElement>);
 ```
 
 #### Error 2: MessageBubble.tsx Line 92
+
 ```typescript
 // ISSUE: 'inline' prop doesn't exist
 // NEED TO: Check ReactMarkdown v9 documentation
@@ -91,12 +100,13 @@ code({ className, children, ...props }) {
   const match = /language-(\w+)/.exec(className || '');
   const code = String(children).replace(/\n$/, '');
   const inline = !match;
-  
+
   return !inline && match ? (
     // ... rest of code
 ```
 
 #### Error 3: API Route - maxSteps parameter (route.ts line 120)
+
 ```typescript
 // CURRENT:
 maxSteps: 5,
@@ -106,22 +116,23 @@ maxSteps: 5,
 ```
 
 #### Error 4: RAG Service - db.fn doesn't exist (lines 87, 92, 97)
+
 ```typescript
 // CURRENT:
-const [agentCount] = await db
-  .select({ count: db.fn.count() })
-  
+const [agentCount] = await db.select({ count: db.fn.count() });
+
 // FIX TO:
 import { count } from 'drizzle-orm';
 
-const [agentCount] = await db
-  .select({ count: count() })
+const [agentCount] = await db.select({ count: count() });
 ```
 
 #### Error 5: Tools.ts - Multiple type errors
+
 **These are more complex - recommend fixing AFTER streaming works**
 
 Two options:
+
 1. **Quick:** Disable tools temporarily to test streaming
 2. **Proper:** Fix all type definitions (1-2 hours)
 
@@ -130,6 +141,7 @@ Two options:
 ## 🚀 RECOMMENDED WORKFLOW
 
 ### STEP 1: Check Server Logs (15 min)
+
 ```bash
 1. Start dev server if not running:
    cd apps/web && pnpm dev
@@ -148,6 +160,7 @@ Two options:
 ```
 
 ### STEP 2: Fix TypeScript Errors (30-60 min)
+
 ```bash
 # Fix the 4 critical errors above
 # Run typecheck to verify:
@@ -160,6 +173,7 @@ pnpm typecheck
 ```
 
 ### STEP 3: Test AI Streaming (15 min)
+
 ```bash
 1. Clear cache: rm -rf apps/web/.next
 2. Restart: pnpm dev
@@ -168,6 +182,7 @@ pnpm typecheck
 ```
 
 ### STEP 4: UI Audit (1-2 hours)
+
 ```bash
 # Once streaming works:
 1. Screenshot every view
@@ -177,6 +192,7 @@ pnpm typecheck
 ```
 
 ### STEP 5: Commit & Deploy (15 min)
+
 ```bash
 git add .
 git commit -m "feat(web): complete AI Assistant V2 with streaming"
@@ -189,10 +205,12 @@ git push
 ## 📁 FILES MODIFIED (Reference)
 
 ### Core Fixes:
+
 1. `apps/web/hooks/use-assistant-chat.ts` - Stream parsing simplified
 2. `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx` - Form fix
 
 ### Need TypeScript Fixes:
+
 1. `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx` - Line 324
 2. `apps/web/app/(app)/assistant-v2/components/MessageBubble.tsx` - Line 92
 3. `apps/web/app/api/assistant-v2/chat/route.ts` - Line 120
@@ -206,6 +224,7 @@ git push
 ### If Streaming Still Doesn't Work:
 
 **Option A: Simplify API (30 min)**
+
 ```typescript
 // In apps/web/app/api/assistant-v2/chat/route.ts
 // Comment out:
@@ -215,6 +234,7 @@ git push
 ```
 
 **Option B: Use Test Endpoint (15 min)**
+
 ```typescript
 // Point ChatContainer to /api/test-stream temporarily
 // This tests if streaming infrastructure works
@@ -222,6 +242,7 @@ git push
 ```
 
 **Option C: Copy /assistant Pattern (45 min)**
+
 ```typescript
 // The /assistant page works perfectly
 // Can copy its exact API endpoint and adapt
@@ -232,6 +253,7 @@ git push
 ## 💡 QUICK WINS
 
 ### If Short on Time:
+
 1. **Fix Critical TypeScript Errors** (3 errors, 30 min)
    - ChatContainer type cast
    - MessageBubble inline prop
@@ -257,6 +279,7 @@ git push
 Before deploying, verify:
 
 ### Functionality:
+
 - [ ] AI responds to messages
 - [ ] Response streams in real-time
 - [ ] Conversations save to database
@@ -267,6 +290,7 @@ Before deploying, verify:
 - [ ] Model selector works
 
 ### Code Quality:
+
 - [ ] Zero TypeScript errors
 - [ ] Zero linting errors
 - [ ] No console.log in production code
@@ -274,6 +298,7 @@ Before deploying, verify:
 - [ ] Multi-tenant isolation maintained
 
 ### UI/UX:
+
 - [ ] No layout/spacing issues
 - [ ] Responsive design working
 - [ ] Matches GalaxyCo design system
@@ -299,17 +324,21 @@ You'll know it's done when:
 ## 📞 NEED HELP?
 
 ### If Stuck on Streaming:
+
 Share these from terminal:
+
 1. Any error messages
 2. API response status codes
 3. Console errors from browser
 
 ### If Stuck on TypeScript:
+
 1. Run: `pnpm typecheck` in apps/web
 2. Share the specific error
 3. I can provide exact fixes
 
 ### If Stuck on UI:
+
 1. Take screenshots
 2. Point out specific issues
 3. I can provide Tailwind fixes
@@ -320,9 +349,10 @@ Share these from terminal:
 
 **Current Progress:** 85%  
 **Remaining Work:** 15%  
-**Estimated Time:** 2-3 hours  
+**Estimated Time:** 2-3 hours
 
 **The hard work is done:**
+
 - ✅ Sidebar integration (excellent quality)
 - ✅ Database working perfectly
 - ✅ Form submission fixed
@@ -330,6 +360,7 @@ Share these from terminal:
 - ✅ Architecture solid
 
 **Just need:**
+
 1. Fix 3-4 TypeScript errors (30 min)
 2. Debug why AI response is empty (30 min with logs)
 3. UI polish (1-2 hours)
@@ -341,6 +372,7 @@ Share these from terminal:
 ## 📚 REFERENCE DOCS
 
 Created during this session:
+
 - `AI-ASSISTANT-V2-PROGRESS-REPORT.md` - Detailed technical progress
 - `START-FRESH-SESSION-HANDOFF.md` - Original handoff doc
 - `COMPREHENSIVE-TESTING-FINAL-REPORT.md` - Testing findings
@@ -350,4 +382,3 @@ Created during this session:
 **Next Agent/Session:** Start with server logs from `pnpm dev` terminal when testing `/assistant-v2`
 
 **Good luck finishing this! The finish line is in sight! 🎯**
-

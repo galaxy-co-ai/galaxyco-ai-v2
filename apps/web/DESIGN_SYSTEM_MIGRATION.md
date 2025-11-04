@@ -1,9 +1,14 @@
-# Design System Migration Documentation
+# [DEPRECATED] Design System Migration Documentation
 
-**Migration Date:** October 14, 2025  
+**⚠️ STATUS: DEPRECATED - This migration was rolled back**  
+**Active Design System:** See `DESIGN-SYSTEM.md` (Linear + Framer approach)
+
+---
+
+**Original Migration Date:** October 14, 2025  
 **Rollback Commit:** `f5a7bcc` (pre-migration checkpoint)  
-**Current Commit:** `c169565` (+ UI simplifications)  
-**Strategy:** Pico CSS for automatic styling + Tailwind for layout only
+**Original Strategy:** Pico CSS for automatic styling + Tailwind for layout only  
+**Why Deprecated:** Project moved to comprehensive Tailwind + shadcn/ui + Kibo UI approach
 
 ---
 

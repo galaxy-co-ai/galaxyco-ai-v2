@@ -1,12 +1,13 @@
 # 🎯 AI ASSISTANT V2 - FINISH LINE
 
-**Status:** 85% Complete | 2 Tasks Remaining | 2-2.5 Hours to Ship  
+**Status:** 85% Complete | 2 Tasks Remaining | 2-2.5 Hours to Ship
 
 ---
 
 ## ⚡ QUICK CONTEXT
 
 **What's Done:**
+
 - ✅ Sidebar integration complete (9.5/10 quality)
 - ✅ Database connected (Neon PostgreSQL)
 - ✅ Conversation management ready (create/load/pin/delete/search)
@@ -16,6 +17,7 @@
 - ✅ Server actions working
 
 **What's Broken:**
+
 - ❌ AI streaming not displaying responses (SDK v5 compatibility)
 - ❌ UI has layout issues user unhappy with
 
@@ -73,7 +75,7 @@ Files to polish:
 - ChatContainer.tsx - Main layout
 - ConversationSidebar.tsx - Sidebar spacing
 - ChatHeader.tsx - Header alignment
-- ChatInput.tsx - Input positioning  
+- ChatInput.tsx - Input positioning
 - MessageBubble.tsx - Message styling
 - All other components as needed
 
@@ -100,11 +102,13 @@ Match GalaxyCo design system:
 ## 📁 CRITICAL FILES
 
 **Task 1 (Streaming):**
+
 - COPY FROM: `apps/web/app/(app)/assistant/*`
 - MODIFY: `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx`
 - MAYBE: `apps/web/app/api/assistant-v2/chat/route.ts`
 
 **Task 2 (UI):**
+
 - AUDIT: All components in `apps/web/app/(app)/assistant-v2/components/`
 - FIX: Spacing, alignment, responsive design
 - MATCH: GalaxyCo design system from other pages
@@ -114,6 +118,7 @@ Match GalaxyCo design system:
 ## ✅ COMPLETION CHECKLIST
 
 ### Task 1: AI Streaming
+
 - [ ] AI responses stream in real-time
 - [ ] Messages display correctly
 - [ ] Auto-save triggers
@@ -122,6 +127,7 @@ Match GalaxyCo design system:
 - [ ] All sidebar features work (pin/delete/search/load)
 
 ### Task 2: UI Polish
+
 - [ ] No layout/alignment issues
 - [ ] No spacing inconsistencies
 - [ ] Responsive design working
@@ -130,6 +136,7 @@ Match GalaxyCo design system:
 - [ ] **USER APPROVES VISUAL QUALITY** ✅ (REQUIRED!)
 
 ### Deploy
+
 - [ ] Git commit
 - [ ] Push to main
 - [ ] Vercel deploys
@@ -167,10 +174,10 @@ Match GalaxyCo design system:
 ## 🎉 FINISH LINE IN SIGHT!
 
 **You're 85% done. Just need:**
+
 1. ⚡ 30 min: Working AI streaming
 2. 🎨 1-2 hours: UI polish
 
 **Then:** 🚀 **SHIP IT!**
 
 **LET'S FINISH THIS!** 💪✨
-

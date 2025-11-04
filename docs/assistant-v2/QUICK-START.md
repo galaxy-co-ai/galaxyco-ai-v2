@@ -49,11 +49,12 @@ touch apps/web/app/\(app\)/assistant-v2/components/ChatInput.tsx
 ```
 
 **Minimal `page.tsx`:**
+
 ```tsx
 export default async function AssistantV2Page() {
   const user = await currentUser();
   const workspace = await getCurrentWorkspace();
-  
+
   return <ChatContainer workspaceId={workspace.id} />;
 }
 ```
@@ -61,6 +62,7 @@ export default async function AssistantV2Page() {
 ### **Step 3: Wire Streaming API** (20 min)
 
 **Create `/api/assistant-v2/chat/route.ts`:**
+
 ```typescript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
@@ -69,12 +71,12 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
-  
+
   const result = await streamText({
     model: openai('gpt-4-turbo'),
     messages,
   });
-  
+
   return result.toAIStreamResponse();
 }
 ```
@@ -82,6 +84,7 @@ export async function POST(req: Request) {
 ### **Step 4: Connect UI** (15 min)
 
 **In `ChatContainer.tsx`:**
+
 ```tsx
 'use client';
 import { useChat } from 'ai/react';
@@ -90,15 +93,17 @@ export function ChatContainer({ workspaceId }: { workspaceId: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: '/api/assistant-v2/chat',
   });
-  
+
   return (
     <div className="flex flex-col h-screen p-6">
       <div className="flex-1 overflow-y-auto space-y-4">
-        {messages.map(m => (
-          <div key={m.id}>{m.role}: {m.content}</div>
+        {messages.map((m) => (
+          <div key={m.id}>
+            {m.role}: {m.content}
+          </div>
         ))}
       </div>
-      
+
       <form onSubmit={handleSubmit}>
         <input value={input} onChange={handleInputChange} />
         <button type="submit">Send</button>
@@ -158,6 +163,7 @@ I've created 3 comprehensive guides:
 ## 💡 My Recommendations
 
 ### **Approach 1: Big Bang (Recommended)**
+
 - Build complete V2 at `/assistant-v2`
 - Polish to perfection
 - Feature flag rollout
@@ -166,6 +172,7 @@ I've created 3 comprehensive guides:
 - **Risk:** Low (parallel development)
 
 ### **Approach 2: Incremental**
+
 - Fix current assistant piece by piece
 - **Time:** 6+ weeks
 - **Risk:** High (breaking changes)
@@ -176,18 +183,21 @@ I've created 3 comprehensive guides:
 ## 🎯 What Makes This Better
 
 ### **Architecture**
+
 - ✅ Vercel AI SDK = Battle-tested, maintained by Vercel
 - ✅ Small focused components = Easy to maintain
 - ✅ Proper state management = No bugs
 - ✅ Server Actions = Type-safe, secure
 
 ### **Features**
+
 - ✅ Tool calling = AI can actually DO things
 - ✅ RAG = AI knows your workspace
 - ✅ Multi-model = Choose best AI for task
 - ✅ File upload = Vision, PDFs, docs
 
 ### **UX**
+
 - ✅ Streaming = Feel like ChatGPT
 - ✅ Code highlighting = Developer-friendly
 - ✅ Animations = Delightful interactions
@@ -202,7 +212,7 @@ I've created 3 comprehensive guides:
 **Day 1-2:** Get basic streaming working (follow Quick Start above)  
 **Day 3:** Polish UI to Framer/Linear quality  
 **Day 4:** Add conversation persistence  
-**Day 5:** Add first 3 tools (createAgent, searchCustomers, analyzeWorkflow)  
+**Day 5:** Add first 3 tools (createAgent, searchCustomers, analyzeWorkflow)
 
 **By end of Week 1:** You'll have a working assistant that's already better than current version.
 
@@ -211,4 +221,3 @@ Then we iterate from there! 🚀
 ---
 
 **Want me to start building this?** Just say the word and I'll scaffold the entire structure with working code.
-

@@ -9,14 +9,17 @@
 ## 📖 READ THESE IN ORDER:
 
 ### 1️⃣ **DALTON-NEXT-STEPS-ASSISTANT-V2.md** (10 min)
+
 **What:** Complete step-by-step guide to finish  
 **Why:** This has everything you need
 
-### 2️⃣ **TYPESCRIPT-FIXES-QUICK-REFERENCE.md** (5 min)  
+### 2️⃣ **TYPESCRIPT-FIXES-QUICK-REFERENCE.md** (5 min)
+
 **What:** Copy-paste fixes for pre-commit errors  
 **Why:** Can't commit until these are fixed
 
 ### 3️⃣ **AI-ASSISTANT-V2-PROGRESS-REPORT.md** (optional)
+
 **What:** Detailed technical progress report  
 **Why:** Context on what was attempted
 
@@ -63,7 +66,7 @@ git push
 ✅ User messages display correctly  
 ✅ Conversations save/load  
 ✅ Infrastructure solid  
-✅ Architecture clean  
+✅ Architecture clean
 
 ---
 
@@ -113,11 +116,13 @@ Error: Database query failed
 ## 💡 PRO TIPS
 
 ### If TypeScript Errors Are Overwhelming:
+
 - Just fix #1-3 from the quick reference
 - Skip tools.ts (#5) - disable tools temporarily
 - Get streaming working first
 
 ### If Streaming Still Empty After Fixes:
+
 ```typescript
 // Quick test - disable tools temporarily
 // In: apps/web/app/api/assistant-v2/chat/route.ts
@@ -134,6 +139,7 @@ const result = await streamText({
 ```
 
 ### If UI Seems Daunting:
+
 - Deploy with working streaming first
 - Polish UI in next session
 - "Good enough" > "Perfect but delayed"
@@ -144,16 +150,18 @@ const result = await streamText({
 
 **Progress:** 95% complete  
 **Time Remaining:** 2-3 hours  
-**Confidence:** 99% - everything's in place  
+**Confidence:** 99% - everything's in place
 
 **The hard work is done:**
+
 - Infrastructure ✅
-- Database ✅  
+- Database ✅
 - Sidebar ✅
 - Form handling ✅
 - Stream parsing ✅
 
 **Just need:**
+
 - TypeScript fixes (mechanical)
 - Debug one streaming issue (with logs: easy)
 - UI polish (straightforward)
@@ -163,6 +171,7 @@ const result = await streamText({
 ## 📞 NEED HELP?
 
 **If you get stuck:**
+
 1. Share server logs from terminal
 2. Share specific error messages
 3. I can provide exact fixes
@@ -176,4 +185,3 @@ const result = await streamText({
 When you see AI responding in /assistant-v2, you'll know you're done. Everything else is polish.
 
 **Good luck! Let's ship this! 🚀**
-

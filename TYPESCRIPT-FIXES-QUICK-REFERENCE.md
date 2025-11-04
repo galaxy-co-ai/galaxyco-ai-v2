@@ -3,6 +3,7 @@
 ## Copy-Paste Fixes for Pre-Commit Errors
 
 ### FIX #1: ChatContainer.tsx Line 324
+
 **File:** `apps/web/app/(app)/assistant-v2/components/ChatContainer.tsx`
 
 ```typescript
@@ -15,7 +16,8 @@ await handleSubmit(e as React.FormEvent<HTMLFormElement>);
 
 ---
 
-### FIX #2: MessageBubble.tsx Line 92  
+### FIX #2: MessageBubble.tsx Line 92
+
 **File:** `apps/web/app/(app)/assistant-v2/components/MessageBubble.tsx`
 
 ```typescript
@@ -38,6 +40,7 @@ code({ node, className, children, ...props }) {
 ---
 
 ### FIX #3: API Route maxSteps
+
 **File:** `apps/web/app/api/assistant-v2/chat/route.ts`
 
 ```typescript
@@ -65,6 +68,7 @@ const result = await streamText({
 ---
 
 ### FIX #4: RAG Service db.fn
+
 **File:** `apps/web/lib/ai/assistant/rag-service.ts`
 
 ```typescript
@@ -115,6 +119,7 @@ const workflowCount = workflowCountResult[0];
 ---
 
 ### FIX #5: Tools.ts (OPTIONAL - Can defer)
+
 **File:** `apps/web/lib/ai/assistant/tools.ts`
 
 **Quick Fix:** Temporarily disable tools to test streaming
@@ -148,7 +153,7 @@ git add .
 git commit -m "fix(web): resolve TypeScript errors in assistant-v2
 
 - Fixed form event type in ChatContainer
-- Fixed ReactMarkdown inline prop in MessageBubble  
+- Fixed ReactMarkdown inline prop in MessageBubble
 - Removed maxSteps parameter (AI SDK v5 compatibility)
 - Updated RAG service to use drizzle-orm count function
 - Tools temporarily disabled pending type fixes"
@@ -160,4 +165,3 @@ git push
 
 **Time to complete:** 15-30 minutes  
 **Priority:** Fix #1-4, skip #5 if short on time
-

@@ -27,6 +27,7 @@
 **File:** `apps/web/app/api/assistant-v2/chat/route.ts`
 
 **Features:**
+
 - ✅ Edge runtime for fast streaming
 - ✅ Vercel AI SDK `streamText` integration
 - ✅ Input validation with Zod
@@ -39,6 +40,7 @@
 ### **3. Core Components** ✅
 
 #### **ChatContainer** (`components/ChatContainer.tsx`)
+
 - ✅ Main orchestrator using `useChat` from Vercel AI SDK
 - ✅ Model selection (GPT-4 Turbo, GPT-4, GPT-3.5)
 - ✅ Message state management
@@ -47,6 +49,7 @@
 - ✅ Responsive layout
 
 #### **MessageBubble** (`components/MessageBubble.tsx`)
+
 - ✅ UIMessage support (new Vercel AI SDK v5 format)
 - ✅ Markdown rendering with ReactMarkdown
 - ✅ Code block syntax highlighting
@@ -57,6 +60,7 @@
 - ✅ Hover actions
 
 #### **CodeBlock** (`components/CodeBlock.tsx`)
+
 - ✅ Syntax highlighting with Prism
 - ✅ Language badge
 - ✅ Copy button with feedback
@@ -64,6 +68,7 @@
 - ✅ Dark theme (VS Code style)
 
 #### **ChatInput** (`components/ChatInput.tsx`)
+
 - ✅ Auto-resizing textarea
 - ✅ Keyboard shortcuts (Enter to send, Shift+Enter for new line)
 - ✅ Send/Stop button with loading state
@@ -72,16 +77,19 @@
 - ✅ Disabled state during streaming
 
 #### **ChatHeader** (`components/ChatHeader.tsx`)
+
 - ✅ Model selector with descriptions
 - ✅ Workspace branding
 - ✅ Clean, modern design
 
 #### **StreamingIndicator** (`components/StreamingIndicator.tsx`)
+
 - ✅ Animated typing dots
 - ✅ "Thinking..." message
 - ✅ Smooth fade-in animation
 
 #### **ChatEmptyState** (`components/ChatEmptyState.tsx`)
+
 - ✅ Large hero section
 - ✅ Quick prompt templates (4 categories)
 - ✅ Click-to-use prompts
@@ -183,11 +191,13 @@ return result.toDataStreamResponse();
 ## ⚠️ **Current Issue: Dev Server Caching**
 
 **Problem:**
+
 - Next.js dev server stuck on "Loading..." for all pages
 - 404 errors for `_next/static/chunks/` files
 - Likely due to new packages installed while server was running
 
 **Solution:**
+
 1. Stop the dev server (Ctrl+C)
 2. Clear Next.js cache: `rm -rf apps/web/.next`
 3. Restart: `cd apps/web && pnpm dev`
@@ -238,6 +248,7 @@ return result.toDataStreamResponse();
 ## 🚀 **Next Steps (After Testing)**
 
 ### **Phase 1: Core Features** (Current)
+
 - ✅ Basic streaming chat
 - ✅ Model selection
 - ✅ Markdown + code rendering
@@ -300,41 +311,41 @@ return result.toDataStreamResponse();
 
 ## 📊 **Progress**
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Dependencies | ✅ Complete | All packages installed |
-| API Route | ✅ Complete | Streaming working |
-| ChatContainer | ✅ Complete | useChat integrated |
-| MessageBubble | ✅ Complete | UIMessage compatible |
-| CodeBlock | ✅ Complete | Syntax highlighting |
-| ChatInput | ✅ Complete | Auto-resize, shortcuts |
-| ChatHeader | ✅ Complete | Model selector |
-| StreamingIndicator | ✅ Complete | Animated dots |
-| ChatEmptyState | ✅ Complete | Quick prompts |
-| Main Page | ✅ Complete | Server Component |
-| **Testing** | ⏸️ Blocked | Dev server issue |
-| **RAG** | ⏳ Pending | Phase 2 |
-| **Tools** | ⏳ Pending | Phase 2 |
-| **Persistence** | ⏳ Pending | Phase 3 |
-| **File Upload** | ⏳ Pending | Phase 4 |
+| Task               | Status      | Notes                  |
+| ------------------ | ----------- | ---------------------- |
+| Dependencies       | ✅ Complete | All packages installed |
+| API Route          | ✅ Complete | Streaming working      |
+| ChatContainer      | ✅ Complete | useChat integrated     |
+| MessageBubble      | ✅ Complete | UIMessage compatible   |
+| CodeBlock          | ✅ Complete | Syntax highlighting    |
+| ChatInput          | ✅ Complete | Auto-resize, shortcuts |
+| ChatHeader         | ✅ Complete | Model selector         |
+| StreamingIndicator | ✅ Complete | Animated dots          |
+| ChatEmptyState     | ✅ Complete | Quick prompts          |
+| Main Page          | ✅ Complete | Server Component       |
+| **Testing**        | ⏸️ Blocked  | Dev server issue       |
+| **RAG**            | ⏳ Pending  | Phase 2                |
+| **Tools**          | ⏳ Pending  | Phase 2                |
+| **Persistence**    | ⏳ Pending  | Phase 3                |
+| **File Upload**    | ⏳ Pending  | Phase 4                |
 
 ---
 
 ## 🎯 **Key Improvements Over Old Assistant**
 
-| Feature | Old | New V2 |
-|---------|-----|--------|
-| **Streaming** | Custom buggy implementation | Vercel AI SDK (battle-tested) |
-| **Components** | 852-line monolith | 8 focused components (100-200 lines each) |
-| **Code Highlighting** | None | Prism with 100+ languages |
-| **Tool Calling** | None | Ready for 10+ workspace tools |
-| **RAG** | None | Designed for Pinecone integration |
-| **Mobile** | Broken layout | Fully responsive |
-| **Animations** | None | Framer Motion throughout |
-| **State** | 10+ useState hooks | Vercel AI SDK + clean hooks |
-| **Error Handling** | console.log | Toast + user-friendly messages |
-| **Testing** | None | Ready for comprehensive tests |
-| **Maintainability** | Low (spaghetti) | High (clean architecture) |
+| Feature               | Old                         | New V2                                    |
+| --------------------- | --------------------------- | ----------------------------------------- |
+| **Streaming**         | Custom buggy implementation | Vercel AI SDK (battle-tested)             |
+| **Components**        | 852-line monolith           | 8 focused components (100-200 lines each) |
+| **Code Highlighting** | None                        | Prism with 100+ languages                 |
+| **Tool Calling**      | None                        | Ready for 10+ workspace tools             |
+| **RAG**               | None                        | Designed for Pinecone integration         |
+| **Mobile**            | Broken layout               | Fully responsive                          |
+| **Animations**        | None                        | Framer Motion throughout                  |
+| **State**             | 10+ useState hooks          | Vercel AI SDK + clean hooks               |
+| **Error Handling**    | console.log                 | Toast + user-friendly messages            |
+| **Testing**           | None                        | Ready for comprehensive tests             |
+| **Maintainability**   | Low (spaghetti)             | High (clean architecture)                 |
 
 ---
 
@@ -364,12 +375,14 @@ PINECONE_API_KEY=...    # For RAG
 ## 🎨 **UI/UX Highlights**
 
 ### **Empty State**
+
 - 🎯 Large, bold "What can I help with?" heading (5xl font)
 - ✨ Beautiful prompt cards with icons
 - 🖱️ Hover effects (scale 1.02x, border glow)
 - 📱 Responsive grid (1 col mobile, 2 col desktop)
 
 ### **Messages**
+
 - 💬 User messages (right, primary color bubble)
 - 🤖 AI messages (left, card with hover shadow)
 - 📝 Perfect markdown rendering
@@ -377,6 +390,7 @@ PINECONE_API_KEY=...    # For RAG
 - 🎭 Smooth animations (fade-in, scale)
 
 ### **Input**
+
 - 📏 Auto-resizing (1-10 rows)
 - ⌨️ Keyboard shortcuts
 - 🎯 Character count
@@ -388,6 +402,7 @@ PINECONE_API_KEY=...    # For RAG
 ## 🏁 **Immediate Next Steps**
 
 1. **Restart Dev Server**
+
    ```bash
    # Kill current dev server (Ctrl+C)
    cd apps/web
@@ -428,4 +443,3 @@ If there are issues, we'll debug and polish the core flow first.
 ---
 
 **We've built a world-class foundation. Ready to make it intelligent!** 🚀
-
