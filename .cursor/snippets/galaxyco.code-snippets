@@ -18,9 +18,9 @@
       "      </Suspense>",
       "    </div>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "GalaxyCo Server Component with Suspense"
+    "description": "GalaxyCo Server Component with Suspense",
   },
 
   "galaxyco-client-component": {
@@ -50,9 +50,9 @@
       "      </Card>",
       "    </motion.div>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "GalaxyCo Client Component with Framer Motion"
+    "description": "GalaxyCo Client Component with Framer Motion",
   },
 
   "galaxyco-server-action": {
@@ -122,9 +122,9 @@
       "    };",
       "  }",
       "}",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo Server Action with validation and error handling"
+    "description": "GalaxyCo Server Action with validation and error handling",
   },
 
   "galaxyco-database-query": {
@@ -163,9 +163,9 @@
       "    throw new Error('Failed to fetch ${4:EntityName}');",
       "  }",
       "}",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo database query with orgId filtering"
+    "description": "GalaxyCo database query with orgId filtering",
   },
 
   "galaxyco-form": {
@@ -248,9 +248,9 @@
       "    </Form>",
       "  );",
       "}",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo form with React Hook Form + Zod validation"
+    "description": "GalaxyCo form with React Hook Form + Zod validation",
   },
 
   "galaxyco-test-component": {
@@ -285,9 +285,9 @@
       "    expect(screen.getByLabelText('${8:label}')).toBeInTheDocument();",
       "  });",
       "});",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo component test with Vitest + Testing Library"
+    "description": "GalaxyCo component test with Vitest + Testing Library",
   },
 
   "galaxyco-test-action": {
@@ -345,9 +345,9 @@
       "    expect(result.error).toContain('logged in');",
       "  });",
       "});",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo Server Action test"
+    "description": "GalaxyCo Server Action test",
   },
 
   "galaxyco-page": {
@@ -381,9 +381,9 @@
       "    </div>",
       "  );",
       "}",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo page with authentication and Suspense"
+    "description": "GalaxyCo page with authentication and Suspense",
   },
 
   "galaxyco-error-handler": {
@@ -400,9 +400,9 @@
       "    error: '${3:User-friendly error message}',",
       "  };",
       "}",
-      "$0"
+      "$0",
     ],
-    "description": "GalaxyCo error handler pattern"
+    "description": "GalaxyCo error handler pattern",
   },
 
   "galaxyco-zod-schema": {
@@ -417,19 +417,15 @@
       "  $0",
       "});",
       "",
-      "export type ${1/(.*)/${1:/capitalize}/} = z.infer<typeof ${1:schemaName}Schema>;"
+      "export type ${1/(.*)/${1:/capitalize}/} = z.infer<typeof ${1:schemaName}Schema>;",
     ],
-    "description": "GalaxyCo Zod validation schema"
+    "description": "GalaxyCo Zod validation schema",
   },
 
   "galaxyco-suspense-boundary": {
     "prefix": "gsb",
-    "body": [
-      "<Suspense fallback={<${1:LoadingComponent} />}>",
-      "  $0",
-      "</Suspense>"
-    ],
-    "description": "GalaxyCo Suspense boundary"
+    "body": ["<Suspense fallback={<${1:LoadingComponent} />}>", "  $0", "</Suspense>"],
+    "description": "GalaxyCo Suspense boundary",
   },
 
   "galaxyco-loading-skeleton": {
@@ -443,25 +439,20 @@
       "      $0",
       "    </div>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "GalaxyCo loading skeleton component"
+    "description": "GalaxyCo loading skeleton component",
   },
 
   "galaxyco-toast-success": {
     "prefix": "gts",
-    "body": [
-      "toast.success('${1:Success message}');"
-    ],
-    "description": "GalaxyCo success toast"
+    "body": ["toast.success('${1:Success message}');"],
+    "description": "GalaxyCo success toast",
   },
 
   "galaxyco-toast-error": {
     "prefix": "gte",
-    "body": [
-      "toast.error('${1:Error message}');"
-    ],
-    "description": "GalaxyCo error toast"
-  }
+    "body": ["toast.error('${1:Error message}');"],
+    "description": "GalaxyCo error toast",
+  },
 }
-

@@ -20,6 +20,7 @@
 ### Installation
 
 All custom commands, workflows, and snippets are already configured in:
+
 - **Commands:** `.cursor/commands/galaxyco-commands.json`
 - **Workflows:** `.cursor/workflows/*.md`
 - **Snippets:** `.cursor/snippets/galaxyco.code-snippets`
@@ -27,16 +28,19 @@ All custom commands, workflows, and snippets are already configured in:
 ### How to Use
 
 **Commands:**
+
 1. Open Cursor Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
 2. Type the command name
 3. Press Enter
 
 **Workflows:**
+
 1. Open Cursor Agent
 2. Reference workflow: "Use the feature-creation-workflow"
 3. Agent will guide you through steps
 
 **Snippets:**
+
 1. Type the snippet prefix (e.g., `gsc`)
 2. Press Tab
 3. Fill in the placeholders
@@ -46,10 +50,12 @@ All custom commands, workflows, and snippets are already configured in:
 ## 🛠️ Custom Commands
 
 ### 1. generate-component
+
 **Prefix:** N/A (Command)  
 **Description:** Generate a new GalaxyCo component with all patterns
 
 **What it does:**
+
 - Creates component file in correct location
 - Follows Server/Client Component patterns
 - Includes TypeScript types
@@ -58,11 +64,13 @@ All custom commands, workflows, and snippets are already configured in:
 - Creates test file
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-component"
 ```
 
 **Example:**
+
 ```
 AI: What type of component? (Server/Client)
 You: Server Component
@@ -75,15 +83,18 @@ You: apps/web/components/galaxy/agents/
 ```
 
 **Result:**
+
 - `apps/web/components/galaxy/agents/agent-statistics.tsx`
 - `apps/web/__tests__/component/agent-statistics.test.tsx`
 
 ---
 
 ### 2. generate-server-action
+
 **Description:** Generate a Server Action with validation
 
 **What it does:**
+
 - Creates Server Action file
 - Includes `'use server'` directive
 - Adds Zod schema validation
@@ -94,11 +105,13 @@ You: apps/web/components/galaxy/agents/
 - Cache revalidation
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-server-action"
 ```
 
 **Example:**
+
 ```
 AI: What's the action name?
 You: createAgent
@@ -108,15 +121,18 @@ You: Creates a new agent in the database
 ```
 
 **Result:**
+
 - `apps/web/lib/actions/create-agent.ts`
 - `apps/web/__tests__/actions/create-agent.test.ts`
 
 ---
 
 ### 3. generate-database-query
+
 **Description:** Generate a safe database query with orgId filtering
 
 **What it does:**
+
 - Creates query file with orgId filtering (MANDATORY)
 - Uses Drizzle ORM
 - Includes auth check
@@ -125,6 +141,7 @@ You: Creates a new agent in the database
 - JSDoc comments
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-database-query"
 ```
@@ -134,15 +151,18 @@ Cmd+Shift+P → "generate-database-query"
 ---
 
 ### 4. generate-migration
+
 **Description:** Generate a Drizzle database migration
 
 **What it does:**
+
 - Generates migration from schema changes
 - Reviews migration SQL
 - Optionally pushes to database
 - Verifies success
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-migration"
 ```
@@ -150,9 +170,11 @@ Cmd+Shift+P → "generate-migration"
 ---
 
 ### 5. generate-form
+
 **Description:** Generate a form with React Hook Form + Zod
 
 **What it does:**
+
 - Creates form component with `'use client'`
 - Includes Zod validation schema
 - Uses React Hook Form
@@ -162,6 +184,7 @@ Cmd+Shift+P → "generate-migration"
 - Accessibility attributes
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-form"
 ```
@@ -169,9 +192,11 @@ Cmd+Shift+P → "generate-form"
 ---
 
 ### 6. generate-test
+
 **Description:** Generate tests for existing component/function
 
 **What it does:**
+
 - Creates comprehensive test file
 - Uses Vitest + Testing Library
 - Tests behavior, not implementation
@@ -180,6 +205,7 @@ Cmd+Shift+P → "generate-form"
 - Edge cases and error handling
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "generate-test"
 ```
@@ -187,9 +213,11 @@ Cmd+Shift+P → "generate-test"
 ---
 
 ### 7. audit-security
+
 **Description:** Audit file/feature for security issues
 
 **What it checks:**
+
 - ❌ Missing orgId filtering
 - ❌ Unvalidated input
 - ❌ Missing auth checks
@@ -200,6 +228,7 @@ Cmd+Shift+P → "generate-test"
 - ❌ Exposed secrets
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "audit-security"
 ```
@@ -209,9 +238,11 @@ Cmd+Shift+P → "audit-security"
 ---
 
 ### 8. audit-accessibility
+
 **Description:** Audit component for WCAG compliance
 
 **What it checks:**
+
 - ❌ Missing aria-labels
 - ❌ Missing keyboard navigation
 - ❌ Poor focus indicators
@@ -225,15 +256,18 @@ Cmd+Shift+P → "audit-security"
 ---
 
 ### 9. refactor-to-server-component
+
 **Description:** Refactor Client Component to Server Component
 
 **When to use:**
+
 - Component doesn't use state
 - No event handlers
 - Only displays data
 - No browser APIs
 
 **Benefits:**
+
 - ✅ Faster initial load
 - ✅ Better SEO
 - ✅ Direct database access
@@ -242,9 +276,11 @@ Cmd+Shift+P → "audit-security"
 ---
 
 ### 10. optimize-performance
+
 **Description:** Optimize component/page performance
 
 **What it does:**
+
 - Analyzes performance issues
 - Converts to Server Components where possible
 - Adds memoization
@@ -255,9 +291,11 @@ Cmd+Shift+P → "audit-security"
 ---
 
 ### 11. create-feature
+
 **Description:** Create complete feature (end-to-end)
 
 **What it creates:**
+
 - Database schema and migration
 - Server Actions with validation
 - React components (Server and Client)
@@ -265,6 +303,7 @@ Cmd+Shift+P → "audit-security"
 - Documentation
 
 **Usage:**
+
 ```bash
 Cmd+Shift+P → "create-feature"
 ```
@@ -274,9 +313,11 @@ Cmd+Shift+P → "create-feature"
 ---
 
 ### 12. debug-issue
+
 **Description:** Debug runtime or build issue systematically
 
 **What it does:**
+
 - Analyzes error message
 - Checks related files
 - Identifies common GalaxyCo issues
@@ -287,9 +328,11 @@ Cmd+Shift+P → "create-feature"
 ---
 
 ### 13. deploy-preview
+
 **Description:** Create Vercel preview deployment
 
 **What it does:**
+
 - Checks git status
 - Pushes to remote
 - Gets preview URL
@@ -298,9 +341,11 @@ Cmd+Shift+P → "create-feature"
 ---
 
 ### 14. update-dependencies
+
 **Description:** Update project dependencies safely
 
 **Strategy:**
+
 1. Check outdated packages
 2. Update patches first
 3. Test thoroughly
@@ -310,18 +355,22 @@ Cmd+Shift+P → "create-feature"
 ---
 
 ### 15. analyze-bundle
+
 **Description:** Analyze bundle size and optimize
 
 **Performance targets:**
+
 - First Load JS: < 100KB
 - Total Size: < 500KB
 
 ---
 
 ### 16. create-documentation
+
 **Description:** Create documentation for feature/component
 
 **What it includes:**
+
 - Overview and purpose
 - Usage examples
 - Props/parameters
@@ -341,6 +390,7 @@ Cmd+Shift+P → "create-feature"
 **Use when:** Creating a new feature from scratch
 
 **Steps:**
+
 1. Feature Planning
 2. Database Schema
 3. Database Queries
@@ -352,6 +402,7 @@ Cmd+Shift+P → "create-feature"
 9. Documentation
 
 **Checklist:**
+
 - [ ] Database schema with orgId
 - [ ] Migration generated
 - [ ] Queries filter by orgId
@@ -362,6 +413,7 @@ Cmd+Shift+P → "create-feature"
 - [ ] Documentation
 
 **Usage:**
+
 ```
 Open Cursor Agent:
 "Create a new feature for [feature name] using the feature-creation-workflow"
@@ -376,6 +428,7 @@ Open Cursor Agent:
 **Use when:** Auditing code for security vulnerabilities
 
 **What it checks:**
+
 1. Database Query Audit
 2. Server Action Audit
 3. Component Security Audit
@@ -385,6 +438,7 @@ Open Cursor Agent:
 7. XSS Prevention
 
 **Critical requirements:**
+
 - ✅ Multi-tenant isolation (orgId everywhere)
 - ✅ Input validation (Zod everywhere)
 - ✅ Authentication & Authorization
@@ -392,6 +446,7 @@ Open Cursor Agent:
 - ✅ Data exposure prevention
 
 **Usage:**
+
 ```
 Open Cursor Agent:
 "Audit [file/feature] for security issues using the security-audit-workflow"
@@ -406,6 +461,7 @@ Open Cursor Agent:
 **Use when:** Improving code structure
 
 **Common patterns:**
+
 1. Client Component → Server Component
 2. API Route → Server Action
 3. Prop Drilling → Context/Zustand
@@ -413,6 +469,7 @@ Open Cursor Agent:
 5. Untyped → Fully Typed
 
 **Process:**
+
 1. Identify Code Smell
 2. Write Tests (If Missing)
 3. Plan Refactoring
@@ -421,6 +478,7 @@ Open Cursor Agent:
 6. Update Documentation
 
 **Usage:**
+
 ```
 Open Cursor Agent:
 "Refactor [component] using the refactoring-workflow"
@@ -434,6 +492,7 @@ Open Cursor Agent:
 
 **Prefix:** `gsc`  
 **Expands to:**
+
 ```typescript
 // ✅ Server Component
 import { Suspense } from 'react';
@@ -459,6 +518,7 @@ export async function ComponentName() {
 
 **Prefix:** `gcc`  
 **Expands to:**
+
 ```typescript
 'use client';
 
@@ -493,6 +553,7 @@ export function ComponentName({ data }: ComponentNameProps) {
 
 **Prefix:** `gsa`  
 **Expands to:** Full Server Action template with:
+
 - `'use server'` directive
 - Zod validation schema
 - Auth check
@@ -507,6 +568,7 @@ export function ComponentName({ data }: ComponentNameProps) {
 
 **Prefix:** `gq`  
 **Expands to:** Safe database query with:
+
 - orgId filtering (MANDATORY)
 - Auth check
 - Try-catch error handling
@@ -519,6 +581,7 @@ export function ComponentName({ data }: ComponentNameProps) {
 
 **Prefix:** `gf`  
 **Expands to:** Complete form with:
+
 - React Hook Form
 - Zod validation
 - shadcn/ui components
@@ -534,6 +597,7 @@ export function ComponentName({ data }: ComponentNameProps) {
 **Action Test:** `gta`
 
 Both include:
+
 - Vitest setup
 - Mock dependencies
 - Behavior tests
@@ -543,15 +607,15 @@ Both include:
 
 ### Utility Snippets
 
-| Prefix | Description |
-|--------|-------------|
-| `gp` | Page with auth and Suspense |
-| `geh` | Error handler pattern |
-| `gzs` | Zod schema |
-| `gsb` | Suspense boundary |
-| `gls` | Loading skeleton |
-| `gts` | Success toast |
-| `gte` | Error toast |
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| `gp`   | Page with auth and Suspense |
+| `geh`  | Error handler pattern       |
+| `gzs`  | Zod schema                  |
+| `gsb`  | Suspense boundary           |
+| `gls`  | Loading skeleton            |
+| `gts`  | Success toast               |
+| `gte`  | Error toast                 |
 
 ---
 
@@ -735,21 +799,25 @@ Cmd+Shift+P → "audit-accessibility"
 ## 🎓 Learning Path
 
 ### Week 1: Learn Commands
+
 - Practice `generate-component`
 - Practice `generate-server-action`
 - Practice `generate-test`
 
 ### Week 2: Learn Workflows
+
 - Use feature-creation-workflow
 - Use security-audit-workflow
 - Use refactoring-workflow
 
 ### Week 3: Master Snippets
+
 - Memorize snippet prefixes
 - Use snippets daily
 - Create custom snippets
 
 ### Week 4: Full Integration
+
 - Combine commands + workflows + snippets
 - Optimize personal workflow
 - Share learnings with team
@@ -759,12 +827,14 @@ Cmd+Shift+P → "audit-accessibility"
 ## 🔗 Resources
 
 ### Internal Documentation
+
 - Rules: `.cursor/rules/*.md`
 - Workflows: `.cursor/workflows/*.md`
 - Snippets: `.cursor/snippets/galaxyco.code-snippets`
 - Commands: `.cursor/commands/galaxyco-commands.json`
 
 ### GalaxyCo Standards
+
 - Project structure: `.cursor/rules/project-structure.md`
 - Component patterns: `.cursor/rules/component-patterns.md`
 - Database rules: `.cursor/rules/database-rules.md`
@@ -780,6 +850,7 @@ Cmd+Shift+P → "audit-accessibility"
 **Problem:** Commands don't appear in palette
 
 **Solution:**
+
 1. Check `.cursor/commands/galaxyco-commands.json` exists
 2. Restart Cursor
 3. Reload window (`Cmd+Shift+P` → "Reload Window")
@@ -789,6 +860,7 @@ Cmd+Shift+P → "audit-accessibility"
 **Problem:** Snippets don't expand
 
 **Solution:**
+
 1. Check `.cursor/snippets/galaxyco.code-snippets` exists
 2. Verify file type (TypeScript/TSX)
 3. Press Tab (not Enter) after prefix
@@ -798,6 +870,7 @@ Cmd+Shift+P → "audit-accessibility"
 **Problem:** Agent can't find workflow
 
 **Solution:**
+
 1. Reference full path: `.cursor/workflows/feature-creation-workflow.md`
 2. Spell workflow name correctly
 3. Check file exists
@@ -808,41 +881,41 @@ Cmd+Shift+P → "audit-accessibility"
 
 ### Command Cheat Sheet
 
-| Command | Use When |
-|---------|----------|
-| `generate-component` | Need new component |
-| `generate-server-action` | Need new Server Action |
-| `generate-database-query` | Need new query |
-| `generate-form` | Need new form |
-| `generate-test` | Need tests |
-| `audit-security` | Before committing |
-| `audit-accessibility` | Before deploying |
-| `create-feature` | New feature from scratch |
-| `debug-issue` | Something's broken |
-| `deploy-preview` | Ready to test |
+| Command                   | Use When                 |
+| ------------------------- | ------------------------ |
+| `generate-component`      | Need new component       |
+| `generate-server-action`  | Need new Server Action   |
+| `generate-database-query` | Need new query           |
+| `generate-form`           | Need new form            |
+| `generate-test`           | Need tests               |
+| `audit-security`          | Before committing        |
+| `audit-accessibility`     | Before deploying         |
+| `create-feature`          | New feature from scratch |
+| `debug-issue`             | Something's broken       |
+| `deploy-preview`          | Ready to test            |
 
 ### Snippet Cheat Sheet
 
-| Prefix | Expands To |
-|--------|------------|
-| `gsc` | Server Component |
-| `gcc` | Client Component |
-| `gsa` | Server Action |
-| `gq` | Database Query |
-| `gf` | Form |
-| `gtc` | Component Test |
-| `gta` | Action Test |
-| `gp` | Page |
-| `gts` | Success Toast |
-| `gte` | Error Toast |
+| Prefix | Expands To       |
+| ------ | ---------------- |
+| `gsc`  | Server Component |
+| `gcc`  | Client Component |
+| `gsa`  | Server Action    |
+| `gq`   | Database Query   |
+| `gf`   | Form             |
+| `gtc`  | Component Test   |
+| `gta`  | Action Test      |
+| `gp`   | Page             |
+| `gts`  | Success Toast    |
+| `gte`  | Error Toast      |
 
 ### Workflow Cheat Sheet
 
-| Workflow | Use When |
-|----------|----------|
-| Feature Creation | New feature |
-| Security Audit | Security review |
-| Refactoring | Code improvement |
+| Workflow         | Use When         |
+| ---------------- | ---------------- |
+| Feature Creation | New feature      |
+| Security Audit   | Security review  |
+| Refactoring      | Code improvement |
 
 ---
 
@@ -853,4 +926,3 @@ Cmd+Shift+P → "audit-accessibility"
 **Last Updated:** November 3, 2025  
 **Version:** 1.0.0  
 **Maintained By:** Cursor Engineer Agent
-

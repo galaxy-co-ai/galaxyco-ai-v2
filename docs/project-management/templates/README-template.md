@@ -63,16 +63,19 @@ pnpm build
 ## 🗺️ Roadmap
 
 ### Phase 1: MVP
+
 - [ ] Core feature 1
 - [ ] Core feature 2
 - [ ] Basic UI
 
 ### Phase 2: Enhancement
+
 - [ ] Additional feature 1
 - [ ] Additional feature 2
 - [ ] Improved UX
 
 ### Phase 3: Polish
+
 - [ ] Performance optimization
 - [ ] Comprehensive testing
 - [ ] Documentation
@@ -119,6 +122,7 @@ pnpm start      # Start production server
 ---
 
 **Status Legend:**
+
 - 🟢 Active - Actively working on this
 - 🟡 Paused - Temporarily on hold
 - ✅ Complete - Shipped and done
@@ -127,4 +131,3 @@ pnpm start      # Start production server
 ---
 
 **Part of Side Projects collection** | [All Projects](../../README.md)
-

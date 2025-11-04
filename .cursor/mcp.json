@@ -2,11 +2,7 @@
   "mcpServers": {
     "kibo-ui": {
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://www.kibo-ui.com/api/mcp/mcp"
-      ]
+      "args": ["-y", "mcp-remote", "https://www.kibo-ui.com/api/mcp/mcp"]
     },
     "filesystem": {
       "command": "npx",
@@ -18,24 +14,15 @@
     },
     "memory": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     },
     "gitkraken": {
       "command": "C:\\Users\\Owner\\AppData\\Local\\GitKrakenCLI\\gk.exe",
-      "args": [
-        "mcp",
-        "--host=cursor"
-      ]
+      "args": ["mcp", "--host=cursor"]
     },
     "github": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT_HERE"
       }

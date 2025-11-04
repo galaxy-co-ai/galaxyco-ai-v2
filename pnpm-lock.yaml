@@ -187,6 +187,12 @@ importers:
       '@langchain/textsplitters':
         specifier: ^0.1.0
         version: 0.1.0(@langchain/core@0.3.78(@opentelemetry/api@1.9.0)(@opentelemetry/sdk-trace-base@2.1.0(@opentelemetry/api@1.9.0))(openai@6.2.0(ws@8.18.3)(zod@3.25.76)))
+      '@nangohq/frontend':
+        specifier: ^0.69.7
+        version: 0.69.7
+      '@nangohq/node':
+        specifier: ^0.69.7
+        version: 0.69.7
       '@opentelemetry/api':
         specifier: 1.9.0
         version: 1.9.0
@@ -532,7 +538,7 @@ importers:
         version: 5.1.4(typescript@5.9.3)(vite@7.1.10(@types/node@20.19.19)(jiti@1.21.7)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^2.1.0
-        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
+        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
 
   packages/agents-core:
     dependencies:
@@ -563,7 +569,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^2.1.0
-        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
+        version: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
 
   packages/database:
     dependencies:
@@ -1839,6 +1845,16 @@ packages:
   '@lukeed/csprng@1.1.0':
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
     engines: {node: '>=8'}
+
+  '@nangohq/frontend@0.69.7':
+    resolution: {integrity: sha512-0UqKZKNNdYzXgoopkMyxEWhFwzR31TGn6RZ34ImvqVhljU6b7e/arwXiBtdm04/mvFTLhyDNKA2ikH/FIVJ2VA==}
+
+  '@nangohq/node@0.69.7':
+    resolution: {integrity: sha512-hnen+IVAwQB9DxXearC9SIFcEM2bWU+Fx6L3syviHVOk/3103tgDPNlTWkgBQZJZvJwG/0kLuUYxgmSaZPoAWQ==}
+    engines: {node: '>=20.0'}
+
+  '@nangohq/types@0.69.7':
+    resolution: {integrity: sha512-MRtKifa7y3/rTlZr5lWP5TbDkNCLFPivR2zi6w+hnBdFc7Be/Q3f0oqga/xF7fdX/Uv8g8QCxFgxL+L96gj4Uw==}
 
   '@napi-rs/canvas-android-arm64@0.1.80':
     resolution: {integrity: sha512-sk7xhN/MoXeuExlggf91pNziBxLPVUqF2CAVnB57KLG/pz7+U5TKG8eXdc3pm0d7Od0WreB6ZKLj37sX9muGOQ==}
@@ -4718,6 +4734,9 @@ packages:
   axe-core@4.11.0:
     resolution: {integrity: sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==}
     engines: {node: '>=4'}
+
+  axios@1.12.0:
+    resolution: {integrity: sha512-oXTDccv8PcfjZmPGlWsPSwtOJCZ/b6W5jAMCNcfwJbCzDckwG0jrYJFaWH1yvivfCXjVzV/SPDEhMB3Q+DSurg==}
 
   axios@1.13.1:
     resolution: {integrity: sha512-hU4EGxxt+j7TQijx1oYdAjw4xuIp1wRQSsbMFwSthCWeBQur1eF+qJ5iQ5sN3Tw8YRzQNKb8jszgBdMDVqwJcw==}
@@ -10803,6 +10822,27 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
+  '@nangohq/frontend@0.69.7':
+    dependencies:
+      '@nangohq/types': 0.69.7
+    transitivePeerDependencies:
+      - debug
+
+  '@nangohq/node@0.69.7':
+    dependencies:
+      '@nangohq/types': 0.69.7
+      axios: 1.12.0
+    transitivePeerDependencies:
+      - debug
+
+  '@nangohq/types@0.69.7':
+    dependencies:
+      axios: 1.12.0
+      json-schema: 0.4.0
+      type-fest: 4.41.0
+    transitivePeerDependencies:
+      - debug
+
   '@napi-rs/canvas-android-arm64@0.1.80':
     optional: true
 
@@ -13756,7 +13796,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
+      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -13807,7 +13847,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 2.0.0
-      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0)
+      vitest: 2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0)
 
   '@vitest/utils@2.1.9':
     dependencies:
@@ -14222,6 +14262,14 @@ snapshots:
   axe-core@4.10.3: {}
 
   axe-core@4.11.0: {}
+
+  axios@1.12.0:
+    dependencies:
+      follow-redirects: 1.15.11
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   axios@1.13.1:
     dependencies:
@@ -19480,7 +19528,7 @@ snapshots:
       tsx: 4.20.6
       yaml: 2.8.1
 
-  vitest@2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0(postcss@8.5.6))(terser@5.44.0):
+  vitest@2.1.9(@types/node@20.19.19)(@vitest/ui@3.2.4)(jsdom@27.0.0)(terser@5.44.0):
     dependencies:
       '@vitest/expect': 2.1.9
       '@vitest/mocker': 2.1.9(vite@5.4.20(@types/node@20.19.19)(terser@5.44.0))

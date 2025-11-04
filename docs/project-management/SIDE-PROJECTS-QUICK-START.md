@@ -12,6 +12,7 @@ Your side projects system is now set up and ready to use!
 **Location:** `C:\Users\Owner\workspace\Side_Projects\`
 
 **Structure:**
+
 ```
 Side_Projects\
 ├── active\      # Your 2-4 current projects
@@ -85,12 +86,14 @@ cursor .
 **Format:** `YYYY-MM-project-name`
 
 ✅ **GOOD:**
+
 - `2025-11-ai-resume-builder`
 - `2025-11-crypto-tracker`
 - `2025-12-saas-starter-kit`
 - `2025-11-notion-clone`
 
 ❌ **BAD:**
+
 - `my-project` (missing date)
 - `2025_11_project` (wrong separator)
 - `2025-11-My Project` (spaces, uppercase)
@@ -153,12 +156,15 @@ All projects reference universal patterns:
 **Location:** `C:\Users\Owner\workspace\devops-hq\.cursor\`
 
 **Files:**
+
 - `master-context.md` - Your preferences, AI philosophy
 - `universal-patterns.md` - Cross-project learnings
 
 **In your side project `.cursor/rules.md`:**
+
 ```markdown
 ## Universal Standards
+
 **Location:** C:\Users\Owner\workspace\devops-hq\.cursor\master-context.md
 **Apply:** All universal patterns and preferences
 ```
@@ -200,12 +206,14 @@ All projects reference universal patterns:
 ## 🛠️ Scripts Available
 
 ### 1. `switch-project.ps1` - Switch between projects
+
 ```powershell
 .\scripts\switch-project.ps1 <project-name>
 .\scripts\switch-project.ps1 -list
 ```
 
 ### 2. `new-side-project.ps1` - Create new project
+
 ```powershell
 .\scripts\new-side-project.ps1 -name "project-name" -description "What it does"
 ```
@@ -239,6 +247,7 @@ All projects reference universal patterns:
 **Comprehensive Guide:** `docs/project-management/SIDE-PROJECTS-STRUCTURE.md`
 
 **Read this for:**
+
 - Detailed naming rules
 - Template creation guide
 - Archive procedures
@@ -251,6 +260,7 @@ All projects reference universal patterns:
 Your side projects system is ready. Start building! 🎯
 
 **Next Steps:**
+
 1. Create your first side project
 2. Set up .cursor/ config
 3. Start coding
@@ -258,4 +268,3 @@ Your side projects system is ready. Start building! 🎯
 5. Archive when complete/paused
 
 **Questions?** See full docs or ask Cursor AI Agents Director! 🟡
-

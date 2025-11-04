@@ -12,6 +12,7 @@ Example: 2025-11-ai-resume-builder
 ```
 
 **Rules:**
+
 - ✅ Lowercase only
 - ✅ Hyphens only (no underscores/spaces)
 - ✅ Date prefix auto-added by script
@@ -23,11 +24,13 @@ Example: 2025-11-ai-resume-builder
 ## 🚀 QUICK COMMANDS
 
 ### Create New Project
+
 ```powershell
 .\scripts\new-side-project.ps1 -name "project-name"
 ```
 
 ### Switch Projects
+
 ```powershell
 # Main project
 .\scripts\switch-project.ps1 galaxyco
@@ -40,6 +43,7 @@ Example: 2025-11-ai-resume-builder
 ```
 
 ### Archive Project
+
 ```powershell
 mv Side_Projects\active\PROJECT Side_Projects\archive\
 ```
@@ -96,4 +100,3 @@ workspace\
 ---
 
 **Consistent naming. Clean organization. Daily shipping.** 🎯
-

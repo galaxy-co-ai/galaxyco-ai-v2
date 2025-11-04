@@ -16,9 +16,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ## 📋 WCAG 2.1 AA Requirements Checklist
 
 ### 1. Color Contrast (Success Criterion 1.4.3)
+
 **Standard:** 4.5:1 for normal text, 3:1 for large text (18pt+ or 14pt+ bold)
 
 #### 🔍 Areas to Audit:
+
 - [ ] Body text on backgrounds (all colors)
 - [ ] Button text on button backgrounds
 - [ ] Link text colors
@@ -31,15 +33,18 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Muted text colors
 
 #### ⚠️ Known Issues from Previous Work:
+
 - **Warning color:** Was `rgb(251 191 36)` (1.78:1 FAIL), fixed to `rgb(217 119 6)` (4.5:1 PASS) ✅
 - Need to verify all other colors meet standards
 
 ---
 
 ### 2. Keyboard Navigation (Success Criterion 2.1.1)
+
 **Standard:** All functionality available via keyboard
 
 #### 🔍 Areas to Test:
+
 - [ ] Tab through all interactive elements
 - [ ] Enter/Space activate buttons
 - [ ] Escape closes modals/dialogs
@@ -50,6 +55,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Keyboard shortcuts don't conflict
 
 #### Pages to Test:
+
 - [ ] Dashboard
 - [ ] Agents List
 - [ ] Agent Builder
@@ -62,9 +68,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 3. Focus Indicators (Success Criterion 2.4.7)
+
 **Standard:** Visible focus indicator for all interactive elements
 
 #### 🔍 Areas to Audit:
+
 - [ ] Buttons have visible focus ring
 - [ ] Links have visible focus indicator
 - [ ] Form inputs have focus ring
@@ -75,15 +83,18 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Custom components have focus styles
 
 #### Current Implementation:
+
 - Tailwind `focus:ring-2 focus:ring-primary` - **VERIFY CONTRAST**
 - Need to ensure focus rings meet 3:1 contrast ratio
 
 ---
 
 ### 4. ARIA Labels (Success Criterion 4.1.2)
+
 **Standard:** All UI components have accessible names
 
 #### 🔍 Areas to Add ARIA:
+
 - [ ] Icon-only buttons (e.g., hamburger menu, close buttons)
 - [ ] Search inputs
 - [ ] Filter dropdowns
@@ -96,6 +107,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Alerts/Toasts
 
 #### Pattern to Follow:
+
 ```tsx
 <button aria-label="Close dialog">
   <X className="h-4 w-4" />
@@ -105,9 +117,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 5. Semantic HTML (Success Criterion 4.1.1)
+
 **Standard:** Use proper HTML elements for their intended purpose
 
 #### 🔍 Areas to Audit:
+
 - [ ] Proper heading hierarchy (h1 → h2 → h3, no skips)
 - [ ] `<nav>` for navigation
 - [ ] `<main>` for main content
@@ -122,9 +136,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 6. Form Accessibility (Success Criterion 3.3.2)
+
 **Standard:** Labels and instructions provided for all inputs
 
 #### 🔍 Areas to Audit:
+
 - [ ] All inputs have associated `<label>`
 - [ ] Use `htmlFor` to link labels to inputs
 - [ ] Error messages use `aria-describedby`
@@ -134,6 +150,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Autocomplete attributes where appropriate
 
 #### Pattern to Follow:
+
 ```tsx
 <label htmlFor="email">Email address</label>
 <input
@@ -150,9 +167,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 7. Responsive Design (Success Criterion 1.4.10)
+
 **Standard:** Content reflows without loss of information at 320px width
 
 #### 🔍 Viewports to Test:
+
 - [ ] Mobile (320px - iPhone SE)
 - [ ] Mobile (375px - iPhone 12)
 - [ ] Mobile (414px - iPhone 14 Plus)
@@ -162,6 +181,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - [ ] Desktop (1920px - desktop)
 
 #### Pages to Test:
+
 - [ ] Dashboard (metrics should stack)
 - [ ] Agents List (grid should stack)
 - [ ] Agent Builder (split view should stack)
@@ -173,24 +193,29 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 8. Text Spacing (Success Criterion 1.4.12)
+
 **Standard:** Content adapts to increased spacing without loss
 
 #### 🔍 Test Cases:
+
 - [ ] Line height at least 1.5× font size ✅ (Tailwind default)
 - [ ] Paragraph spacing at least 2× font size
 - [ ] Letter spacing at least 0.12× font size
 - [ ] Word spacing at least 0.16× font size
 
 #### Current Implementation:
+
 - Tailwind typography already follows these standards ✅
 - Need to verify custom components
 
 ---
 
 ### 9. Alternative Text (Success Criterion 1.1.1)
+
 **Standard:** All non-text content has text alternative
 
 #### 🔍 Areas to Audit:
+
 - [ ] All `<img>` tags have meaningful `alt` text
 - [ ] Decorative images have `alt=""` or `role="presentation"`
 - [ ] Icons have ARIA labels when meaningful
@@ -200,9 +225,11 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ---
 
 ### 10. Link Purpose (Success Criterion 2.4.4)
+
 **Standard:** Link purpose can be determined from link text alone
 
 #### 🔍 Areas to Audit:
+
 - [ ] Avoid "click here" or "read more" without context
 - [ ] Links describe their destination
 - [ ] External links indicated visually (`<ExternalLink>` icon) ✅
@@ -213,12 +240,14 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ## 🛠️ Tools for Testing
 
 ### Automated Testing:
+
 1. **axe DevTools** - Browser extension for accessibility scanning
 2. **WAVE** - WebAIM accessibility evaluation tool
 3. **Lighthouse** - Chrome DevTools accessibility audit
 4. **Pa11y** - Command-line accessibility testing
 
 ### Manual Testing:
+
 1. **Keyboard only** - Unplug mouse, navigate with Tab/Enter/Space
 2. **Screen reader** - VoiceOver (Mac), NVDA (Windows), JAWS (Windows)
 3. **Color contrast checker** - WebAIM Contrast Checker
@@ -229,6 +258,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ## 📊 Current State Assessment
 
 ### Known Good:
+
 - ✅ Warning color fixed (WCAG AA compliant)
 - ✅ Typography line height (1.5×)
 - ✅ External links have visual indicator
@@ -236,6 +266,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 - ✅ Semantic HTML in most places
 
 ### Known Issues (Need Fixing):
+
 - ⚠️ Icon buttons missing ARIA labels
 - ⚠️ Some form inputs missing labels
 - ⚠️ Contrast of muted text colors (need verification)
@@ -250,6 +281,7 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 ## 🎯 Priority Order
 
 ### High Priority (Must Fix):
+
 1. Color contrast violations
 2. Icon buttons without ARIA labels
 3. Form inputs without labels
@@ -257,12 +289,14 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 5. Missing focus indicators
 
 ### Medium Priority (Should Fix):
+
 6. Semantic HTML improvements
 7. Heading hierarchy
 8. Skip links
 9. Link purpose clarity
 
 ### Low Priority (Nice to Have):
+
 10. Enhanced screen reader experience
 11. Additional keyboard shortcuts
 12. Improved focus management
@@ -281,6 +315,5 @@ Ensure GalaxyCo meets WCAG 2.1 AA standards for accessibility, making the platfo
 
 ---
 
-*Phase 4 Started: November 3, 2025*  
-*Status: IN PROGRESS*
-
+_Phase 4 Started: November 3, 2025_  
+_Status: IN PROGRESS_

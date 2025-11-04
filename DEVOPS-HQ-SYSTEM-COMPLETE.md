@@ -43,6 +43,7 @@ workspace/
 ### ✅ GOES IN DevOps HQ (Universal)
 
 **Applies to ALL projects:**
+
 - Partnership protocol (how YOU and AI work together)
 - Universal patterns (monorepo, TypeScript, component patterns)
 - Reusable workflows (Git, CI/CD, deployment)
@@ -53,6 +54,7 @@ workspace/
 ### ❌ STAYS IN PROJECT (Project-Specific)
 
 **Specific to one project:**
+
 - Business logic (GalaxyCo features, API endpoints)
 - Project documentation (roadmaps, features)
 - Project code (components, APIs, schemas)
@@ -98,6 +100,7 @@ workspace/
 ## ✅ Verification Checklist
 
 **Before adding to devops-hq:**
+
 - [ ] Universal application (applies to ALL projects)
 - [ ] Cross-project benefit (referenced in different projects)
 - [ ] Reusable pattern (not business logic)
@@ -112,12 +115,14 @@ workspace/
 ## 🎯 Key Files
 
 **DevOps HQ:**
+
 - `devops-hq/.cursor/master-context.md` - Partnership protocol
 - `devops-hq/.cursor/universal-patterns.md` - Cross-project learnings
 - `devops-hq/.cursor/DEVOPS-HQ-USAGE-GUIDELINES.md` - Complete guide
 - `devops-hq/.cursor/CONTRIBUTION-CHECKLIST.md` - Quick checklist
 
 **Projects Reference:**
+
 - `galaxyco-ai-2.0/.cursor/galaxyco-rules.md` - GalaxyCo-specific rules
 - `Side_Projects/active/PROJECT/.cursor/rules.md` - Project-specific rules
 
@@ -152,6 +157,7 @@ workspace/
 ## 📖 Quick Reference
 
 **Universal (DevOps HQ):**
+
 - ✅ Partnership protocol
 - ✅ Reusable patterns
 - ✅ Cross-project learnings
@@ -159,6 +165,7 @@ workspace/
 - ✅ Universal scripts
 
 **Project-Specific:**
+
 - ❌ Business logic
 - ❌ API endpoints
 - ❌ Component implementations
@@ -168,4 +175,3 @@ workspace/
 ---
 
 **System is ready. Keep devops-hq clean, focused, and universally applicable!** 🎯
-

@@ -46,29 +46,30 @@ Identify and fix security vulnerabilities in GalaxyCo codebase, with special foc
 ### Step 1: Database Query Audit
 
 **Find all database queries:**
+
 ```bash
 # Search for database queries
 rg "db\.(select|insert|update|delete)" --type typescript
 ```
 
 **Check each query for:**
+
 ```typescript
 // ❌ SECURITY VIOLATION: Missing orgId filter
 await db.select().from(agents);
 
 // ✅ CORRECT: orgId filtering
-await db
-  .select()
-  .from(agents)
-  .where(eq(agents.orgId, orgId));
+await db.select().from(agents).where(eq(agents.orgId, orgId));
 ```
 
 **Common violations:**
+
 - Missing orgId in WHERE clause
 - Using raw SQL without parameterization
 - Not verifying orgId from auth
 
 **Fix template:**
+
 ```typescript
 // Before (INSECURE)
 export async function getAgents() {
@@ -78,15 +79,12 @@ export async function getAgents() {
 // After (SECURE)
 export async function getAgents() {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     throw new Error('Unauthorized');
   }
 
-  return await db
-    .select()
-    .from(agents)
-    .where(eq(agents.orgId, orgId)); // MANDATORY orgId filter
+  return await db.select().from(agents).where(eq(agents.orgId, orgId)); // MANDATORY orgId filter
 }
 ```
 
@@ -95,6 +93,7 @@ export async function getAgents() {
 ### Step 2: Server Action Audit
 
 **Find all Server Actions:**
+
 ```bash
 # Search for 'use server' directives
 rg "^'use server'" --type typescript
@@ -103,6 +102,7 @@ rg "^'use server'" --type typescript
 **Check each action for:**
 
 1. **Zod Validation**
+
 ```typescript
 // ❌ VIOLATION: No input validation
 export async function createAgent(data: any) {
@@ -122,6 +122,7 @@ export async function createAgent(input: unknown) {
 ```
 
 2. **Auth Check**
+
 ```typescript
 // ❌ VIOLATION: No auth check
 export async function createAgent(data: CreateAgentInput) {
@@ -131,11 +132,11 @@ export async function createAgent(data: CreateAgentInput) {
 // ✅ CORRECT: Auth verification
 export async function createAgent(data: CreateAgentInput) {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     return { success: false, error: 'Unauthorized' };
   }
-  
+
   await db.insert(agents).values({
     ...data,
     orgId, // Set from auth, not from user input
@@ -144,6 +145,7 @@ export async function createAgent(data: CreateAgentInput) {
 ```
 
 3. **Error Handling**
+
 ```typescript
 // ❌ VIOLATION: Technical error exposed
 export async function createAgent(data: CreateAgentInput) {
@@ -171,6 +173,7 @@ export async function createAgent(data: CreateAgentInput) {
 ### Step 3: Component Security Audit
 
 **Find all Client Components:**
+
 ```bash
 # Search for 'use client' directives
 rg "^'use client'" --type typescript
@@ -179,6 +182,7 @@ rg "^'use client'" --type typescript
 **Check for:**
 
 1. **Sensitive Data Exposure**
+
 ```typescript
 // ❌ VIOLATION: Exposing sensitive data
 'use client';
@@ -188,7 +192,7 @@ export function UserProfile() {
     email: 'user@example.com',
     apiKey: 'sk-1234567890', // ❌ API key in client!
   });
-  
+
   return <div>{user.apiKey}</div>; // ❌ Displaying API key!
 }
 
@@ -200,19 +204,20 @@ export function UserProfile() {
     email: 'user@example.com',
     // API key fetched server-side only
   });
-  
+
   return <div>{user.email}</div>;
 }
 ```
 
 2. **Console Logs**
+
 ```typescript
 // ❌ VIOLATION: Console logs in production
 'use client';
 
 export function DataDisplay({ data }: Props) {
   console.log('User data:', data); // ❌ Exposes data in browser console
-  
+
   return <div>{data.name}</div>;
 }
 
@@ -229,12 +234,14 @@ export function DataDisplay({ data }: Props) {
 ### Step 4: Environment Variables Audit
 
 **Check for hardcoded secrets:**
+
 ```bash
 # Search for potential hardcoded secrets
 rg "(api_key|apiKey|secret|password|token)" --type typescript -i
 ```
 
 **Violations to look for:**
+
 ```typescript
 // ❌ VIOLATION: Hardcoded API key
 const OPENAI_API_KEY = 'sk-1234567890';
@@ -248,6 +255,7 @@ const DATABASE_URL = process.env.DATABASE_URL;
 ```
 
 **Check `.env.example` exists:**
+
 ```bash
 # Verify .env.example has all required variables
 cat .env.example
@@ -258,12 +266,14 @@ cat .env.example
 ### Step 5: Authentication Routes Audit
 
 **Check protected routes:**
+
 ```bash
 # Find all route files
 find apps/web/app -name "page.tsx"
 ```
 
 **Verify each route has auth:**
+
 ```typescript
 // ❌ VIOLATION: No auth check
 export default async function DashboardPage() {
@@ -277,11 +287,11 @@ import { redirect } from 'next/navigation';
 
 export default async function DashboardPage() {
   const { userId } = await auth();
-  
+
   if (!userId) {
     redirect('/sign-in');
   }
-  
+
   const agents = await getAgents();
   return <div>{/* ... */}</div>;
 }
@@ -292,12 +302,14 @@ export default async function DashboardPage() {
 ### Step 6: File Upload Security
 
 **Check file upload endpoints:**
+
 ```bash
 # Search for file upload handlers
 rg "(formData|FileReader|upload)" --type typescript
 ```
 
 **Verify:**
+
 1. File type validation
 2. File size limits
 3. Virus scanning (if applicable)
@@ -318,12 +330,12 @@ export async function uploadFile(file: File) {
   if (!ALLOWED_TYPES.includes(file.type)) {
     return { success: false, error: 'Invalid file type' };
   }
-  
+
   // Validate file size
   if (file.size > MAX_FILE_SIZE) {
     return { success: false, error: 'File too large (max 5MB)' };
   }
-  
+
   // Proceed with upload
   await saveFile(file);
 }
@@ -334,6 +346,7 @@ export async function uploadFile(file: File) {
 ### Step 7: XSS Prevention
 
 **Check for dangerous patterns:**
+
 ```bash
 # Search for dangerouslySetInnerHTML
 rg "dangerouslySetInnerHTML" --type typescript
@@ -401,6 +414,7 @@ echo "✅ Security audit complete"
 ```
 
 ### Run the audit:
+
 ```bash
 chmod +x scripts/security-audit.sh
 ./scripts/security-audit.sh
@@ -412,7 +426,7 @@ chmod +x scripts/security-audit.sh
 
 After audit, create report:
 
-```markdown
+````markdown
 # Security Audit Report
 
 **Date:** [Date]
@@ -429,20 +443,25 @@ After audit, create report:
 ## Critical Issues
 
 ### 1. Missing orgId Filter in [Function]
+
 **File:** `apps/web/lib/queries/get-agents.ts`
 **Line:** 10
 **Risk:** Cross-organization data leakage
 **Fix:**
+
 ```typescript
 // Add orgId filter
 .where(eq(agents.orgId, orgId))
 ```
+````
 
 ### 2. Unvalidated Input in [Action]
+
 **File:** `apps/web/lib/actions/create-agent.ts`
 **Line:** 5
 **Risk:** SQL injection, invalid data
 **Fix:**
+
 ```typescript
 // Add Zod validation
 const validated = createAgentSchema.parse(input);
@@ -461,6 +480,7 @@ const validated = createAgentSchema.parse(input);
 - [ ] Fix high priority issues
 - [ ] Schedule follow-up audit
 - [ ] Update security documentation
+
 ```
 
 ---
@@ -509,3 +529,4 @@ If security vulnerability found in production:
 
 **Remember: Security is not optional. Every query, every action, every input must be secured.**
 
+```

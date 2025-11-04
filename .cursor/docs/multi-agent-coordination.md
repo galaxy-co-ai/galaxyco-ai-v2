@@ -9,31 +9,37 @@
 ## 🎯 Agent Roster
 
 ### 1. 🔵 Frontend Architect Agent
+
 - **Scope:** React/Next.js, UI components, client-side
 - **Branch:** `feature/frontend-agent`
 - **Context:** `.cursor/context/frontend-architect-context.md`
 
 ### 2. 🟢 Backend Systems Agent
+
 - **Scope:** APIs, databases, server-side logic
 - **Branch:** `feature/backend-agent`
 - **Context:** `.cursor/context/backend-systems-context.md`
 
 ### 3. 🟠 DevOps & Infrastructure Agent
+
 - **Scope:** Deployment, CI/CD, infrastructure
 - **Branch:** `feature/devops-agent`
 - **Context:** `.cursor/context/devops-infrastructure-context.md`
 
 ### 4. 🎨 UI/UX Design Agent
+
 - **Scope:** Design thinking, wireframes, design systems
 - **Branch:** `feature/ui-agent`
 - **Context:** `.cursor/context/ui-ux-design-context.md`
 
 ### 5. 🟣 Quality & Testing Agent
+
 - **Scope:** Testing, QA, code quality
 - **Branch:** `feature/qa-agent`
 - **Context:** `.cursor/context/quality-testing-context.md`
 
 ### 6. 🔧 Cursor Engineer Agent
+
 - **Scope:** Cursor optimization, MCP servers, environment
 - **Branch:** `feature/cursor-engineer`
 - **Context:** `.cursor/context/cursor-engineer-context.md`
@@ -45,6 +51,7 @@
 ### File Conflict Resolution
 
 **When agents need same file:**
+
 1. Conflict detection system activates
 2. Agents coordinate via messaging
 3. Sequential execution (one agent at a time)
@@ -53,16 +60,19 @@
 ### Cross-Agent Dependencies
 
 **Frontend ↔ Backend:**
+
 - Frontend needs API → Backend creates endpoint
 - Backend needs UI → Frontend creates component
 - Coordination via messaging system
 
 **UI/UX ↔ Frontend:**
+
 - UI/UX creates design → Frontend implements
 - Frontend needs design → UI/UX provides specs
 - Design review process
 
 **All Agents ↔ Cursor Engineer:**
+
 - Cursor Engineer optimizes environment
 - All agents benefit from optimization
 - Cursor Engineer creates reference docs
@@ -96,6 +106,7 @@
 ## ✅ Quality Standards
 
 **All agents must:**
+
 - ✅ Follow GalaxyCo development standards
 - ✅ Use TypeScript strict mode
 - ✅ Validate input with Zod
@@ -115,4 +126,3 @@
 ---
 
 **Status:** ✅ Ready for Production Use
-

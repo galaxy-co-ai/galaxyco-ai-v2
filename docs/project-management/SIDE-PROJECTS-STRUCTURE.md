@@ -34,6 +34,7 @@ C:\Users\Owner\workspace\
 **Format:** `YYYY-MM-project-name`
 
 **Rules:**
+
 1. **Date Prefix:** `YYYY-MM` (year-month when started)
 2. **Separator:** Single hyphen `-`
 3. **Project Name:** Lowercase, kebab-case, descriptive
@@ -42,6 +43,7 @@ C:\Users\Owner\workspace\
 6. **Max Length:** 50 characters total
 
 **Examples (GOOD):**
+
 ```
 ✅ 2025-11-ai-resume-builder
 ✅ 2025-11-crypto-tracker
@@ -50,6 +52,7 @@ C:\Users\Owner\workspace\
 ```
 
 **Examples (BAD):**
+
 ```
 ❌ my-project              # Missing date prefix
 ❌ 2025_11_project         # Wrong separator (underscore)
@@ -61,6 +64,7 @@ C:\Users\Owner\workspace\
 ### File/Folder Sub-Naming
 
 **Within each project:**
+
 ```
 2025-11-project-name\
 ├── .cursor\                      # Cursor AI config
@@ -99,6 +103,7 @@ mkdir .cursor
 ### Step 2: Set Up Minimal Cursor Config
 
 Create `.cursor/context.md`:
+
 ```markdown
 # [Project Name]
 
@@ -107,16 +112,20 @@ Create `.cursor/context.md`:
 **Type:** [Web App / API / Tool / Experiment]
 
 ## What is this?
+
 [One paragraph description]
 
 ## Tech Stack
+
 - [List technologies]
 
 ## Goals
+
 1. [Primary goal]
 2. [Secondary goal]
 
 ## Status
+
 - [ ] Initial setup
 - [ ] Core feature 1
 - [ ] Core feature 2
@@ -124,25 +133,31 @@ Create `.cursor/context.md`:
 ```
 
 Create `.cursor/rules.md`:
+
 ```markdown
 # [Project Name] - Cursor Rules
 
 ## Universal Standards
+
 **Location:** C:\Users\Owner\workspace\devops-hq\.cursor\master-context.md
 **Apply:** All universal patterns and preferences
 
 ## Project-Specific Rules
 
 ### Tech Stack
+
 [Your specific tech stack rules]
 
 ### Code Style
+
 [Any project-specific style preferences]
 
 ### Testing
+
 [Testing requirements]
 
 ### Deployment
+
 [Where/how to deploy]
 ```
 
@@ -157,23 +172,30 @@ Create `.cursor/rules.md`:
 ## Quick Start
 
 \`\`\`bash
+
 # Install dependencies
+
 pnpm install
 
 # Run development
+
 pnpm dev
 
 # Run tests
+
 pnpm test
 \`\`\`
 
 ## What is this?
+
 [Brief description]
 
 ## Why?
+
 [Motivation for building this]
 
 ## Tech Stack
+
 [List technologies]
 ```
 
@@ -214,6 +236,7 @@ if (Test-Path $projectPath) {
 ```
 
 **Usage:**
+
 ```bash
 # Switch to side project
 .\scripts\switch-project.ps1 2025-11-ai-resume-builder
@@ -229,6 +252,7 @@ ls C:\Users\Owner\workspace\Side_Projects\active
 ### Active Projects Limit: 2-4 MAX
 
 **When you hit 4 active projects:**
+
 1. Complete or pause one before starting new one
 2. Move completed/paused to `archive/`
 3. Keep `active/` lean and focused
@@ -285,6 +309,7 @@ echo "# ARCHIVED: [Reason]" > archive/2025-10-old-project/ARCHIVED.md
 4. **chrome-extension-template** - Chrome extension starter
 
 **Create from template:**
+
 ```bash
 # Copy template
 cp -r Side_Projects/templates/nextjs-template Side_Projects/active/2025-11-new-project
@@ -303,12 +328,14 @@ pnpm install
 **Location:** `C:\Users\Owner\workspace\devops-hq\.cursor\`
 
 **Contains (UNIVERSAL ONLY - No Project-Specific Content):**
+
 - `master-context.md` - Partnership protocol (how YOU and AI work together)
 - `universal-patterns.md` - Cross-project learnings that benefit ALL projects
 - `CONTRIBUTION-CHECKLIST.md` - Guidelines for what belongs here
 - `DEVOPS-HQ-USAGE-GUIDELINES.md` - Complete usage guide
 
 **Rules:**
+
 - ✅ Only add patterns that apply to ALL projects
 - ✅ Only add workflows reusable across projects
 - ❌ NEVER add project-specific business logic
@@ -316,6 +343,7 @@ pnpm install
 - ❌ NEVER add session notes or progress updates
 
 **Update After Every Project:**
+
 - Found a great **universal** pattern? Add to universal-patterns.md
 - Discovered a gotcha that applies **everywhere**? Document it
 - Built something **reusable**? Add to templates/
@@ -327,6 +355,7 @@ pnpm install
 ## 📋 Quick Reference Card
 
 ### Starting New Project
+
 ```bash
 cd C:\Users\Owner\workspace\Side_Projects\active
 mkdir 2025-MM-project-name
@@ -338,6 +367,7 @@ cursor .
 ```
 
 ### Switching Projects
+
 ```bash
 # GalaxyCo (main)
 cd C:\Users\Owner\workspace\galaxyco-ai-2.0
@@ -349,12 +379,14 @@ cursor .
 ```
 
 ### Archiving Project
+
 ```bash
 mv Side_Projects/active/PROJECT Side_Projects/archive/
 echo "ARCHIVED: [reason]" > Side_Projects/archive/PROJECT/ARCHIVED.md
 ```
 
 ### Listing Active Projects
+
 ```bash
 ls C:\Users\Owner\workspace\Side_Projects\active
 ```
@@ -389,4 +421,3 @@ Before creating ANY new project, verify:
 ---
 
 **This is your standard. Follow it religiously.** 🎯
-

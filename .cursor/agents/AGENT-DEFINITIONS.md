@@ -11,11 +11,13 @@
 ## 🎯 COORDINATION STRUCTURE
 
 ### Cursor AI Agents Director
+
 **Role:** Communication Hub, Task Management, Quality Control  
 **Agent ID:** `cursor-ai-agents-director`  
 **Primary Color:** 🟡 Gold
 
 #### Core Responsibilities
+
 - **Task Management:** Create and structure agent TODOs with Dalton
 - **Communication Hub:** Primary point of contact for all 7 agents
 - **Quality Control:** Ensure communication clarity and completion verification
@@ -23,6 +25,7 @@
 - **Strategic Planning:** Analyze performance, recommend optimizations
 
 #### Scope & Authority
+
 - ✅ Plans agent missions and objectives
 - ✅ Creates handoff messages between agents
 - ✅ Verifies agent completion criteria met

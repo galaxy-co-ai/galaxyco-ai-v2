@@ -1,12 +1,12 @@
 #!/usr/bin/env npx tsx
 /**
  * Command Validation Script
- * 
+ *
  * Validates .cursor/commands.json against JSON schema
- * 
+ *
  * Usage:
  *   pnpm validate:commands
- * 
+ *
  * Runs automatically on pre-commit hook
  */
 
@@ -31,7 +31,9 @@ if (!fs.existsSync(schemaPath)) {
 }
 
 if (!fs.existsSync(commandsPath)) {
-  console.log('⚠️  No commands.json file found (this is ok if you haven\'t created custom commands yet)');
+  console.log(
+    "⚠️  No commands.json file found (this is ok if you haven't created custom commands yet)",
+  );
   process.exit(0);
 }
 
@@ -65,24 +67,24 @@ if (commands.commands) {
   // Check for duplicate names
   const names = commands.commands.map((cmd: any) => cmd.name);
   const duplicates = names.filter((name: string, index: number) => names.indexOf(name) !== index);
-  
+
   if (duplicates.length > 0) {
     console.error(`❌ Duplicate command names found: ${duplicates.join(', ')}`);
     hasErrors = true;
   }
-  
+
   // Check for invalid command names (spaces, special chars)
   commands.commands.forEach((cmd: any) => {
     if (!/^[a-z0-9-]+$/.test(cmd.name)) {
       console.error(`❌ Invalid command name: "${cmd.name}" (must be lowercase, no spaces)`);
       hasErrors = true;
     }
-    
+
     if (!cmd.command || cmd.command.trim() === '') {
       console.error(`❌ Empty command for: "${cmd.name}"`);
       hasErrors = true;
     }
-    
+
     if (!cmd.description || cmd.description.trim() === '') {
       console.error(`❌ Missing description for: "${cmd.name}"`);
       hasErrors = true;
@@ -98,4 +100,3 @@ if (hasErrors) {
 console.log(`✅ Commands validated successfully!`);
 console.log(`   Found ${commands.commands?.length || 0} command(s)`);
 process.exit(0);
-

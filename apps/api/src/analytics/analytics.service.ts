@@ -20,7 +20,7 @@ export class AnalyticsService {
       .where(eq(customers.workspaceId, workspaceId));
 
     const newCustomers = allCustomers.filter(
-      (c) => new Date(c.createdAt).getTime() > startDate.getTime()
+      (c) => new Date(c.createdAt).getTime() > startDate.getTime(),
     );
 
     const activeCustomers = allCustomers.filter((c) => c.status === 'active');
@@ -31,7 +31,9 @@ export class AnalyticsService {
       .from(prospects)
       .where(eq(prospects.workspaceId, workspaceId));
 
-    const qualifiedProspects = allProspects.filter((p) => p.stage === 'qualified' || p.stage === 'proposal');
+    const qualifiedProspects = allProspects.filter(
+      (p) => p.stage === 'qualified' || p.stage === 'proposal',
+    );
 
     return {
       customers: {
@@ -43,7 +45,8 @@ export class AnalyticsService {
       prospects: {
         total: allProspects.length,
         qualified: qualifiedProspects.length,
-        conversionRate: allCustomers.length > 0 ? (allCustomers.length / allProspects.length) * 100 : 0,
+        conversionRate:
+          allCustomers.length > 0 ? (allCustomers.length / allProspects.length) * 100 : 0,
       },
       revenue: {
         // TODO: Calculate from invoices
@@ -67,8 +70,8 @@ export class AnalyticsService {
       .where(
         and(
           eq(agentExecutions.workspaceId, workspaceId),
-          gte(agentExecutions.createdAt, startDate)
-        )
+          gte(agentExecutions.createdAt, startDate),
+        ),
       );
 
     const total = executions.length;
@@ -77,10 +80,9 @@ export class AnalyticsService {
 
     const avgDuration =
       executions.filter((e) => e.durationMs).reduce((sum, e) => sum + (e.durationMs || 0), 0) /
-      executions.filter((e) => e.durationMs).length || 0;
+        executions.filter((e) => e.durationMs).length || 0;
 
-    const totalCost =
-      executions.reduce((sum, e) => sum + (e.cost || 0), 0) / 100; // Convert cents to dollars
+    const totalCost = executions.reduce((sum, e) => sum + (e.cost || 0), 0) / 100; // Convert cents to dollars
 
     return {
       executions: {
@@ -108,10 +110,7 @@ export class AnalyticsService {
       .select()
       .from(gridExecutions)
       .where(
-        and(
-          eq(gridExecutions.workspaceId, workspaceId),
-          gte(gridExecutions.createdAt, startDate)
-        )
+        and(eq(gridExecutions.workspaceId, workspaceId), gte(gridExecutions.createdAt, startDate)),
       );
 
     const total = executions.length;
@@ -145,7 +144,8 @@ export class AnalyticsService {
     return {
       agents: {
         executions: agentExecutionsList.length,
-        totalCost: agentExecutionsList.reduce((sum: number, e: any) => sum + (e.cost || 0), 0) / 100,
+        totalCost:
+          agentExecutionsList.reduce((sum: number, e: any) => sum + (e.cost || 0), 0) / 100,
       },
       workflows: {
         executions: workflowExecutions.length,
@@ -153,4 +153,3 @@ export class AnalyticsService {
     };
   }
 }
-

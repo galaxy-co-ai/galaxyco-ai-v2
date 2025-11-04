@@ -17,6 +17,7 @@ This system uses AI to automatically generate high-quality tests from components
 **Command:** `ai-generate-tests`
 
 **What it does:**
+
 1. Analyzes component code
 2. Identifies user interactions
 3. Generates behavior-based tests
@@ -25,6 +26,7 @@ This system uses AI to automatically generate high-quality tests from components
 6. Adds edge cases
 
 **Prompt Template:**
+
 ```
 Analyze this component and generate comprehensive tests:
 
@@ -72,14 +74,14 @@ describe('ComponentName', () => {
   describe('Rendering', () => {
     it('should render successfully with valid props', () => {
       render(<ComponentName data={mockData} />);
-      
+
       expect(screen.getByRole('heading')).toBeInTheDocument();
       expect(screen.getByText('Expected text')).toBeInTheDocument();
     });
 
     it('should render loading state', () => {
       render(<ComponentName data={mockData} isLoading={true} />);
-      
+
       expect(screen.getByRole('status')).toBeInTheDocument();
       expect(screen.getByText(/loading/i)).toBeInTheDocument();
     });
@@ -87,14 +89,14 @@ describe('ComponentName', () => {
     it('should render error state', () => {
       const error = 'Something went wrong';
       render(<ComponentName data={mockData} error={error} />);
-      
+
       expect(screen.getByRole('alert')).toBeInTheDocument();
       expect(screen.getByText(error)).toBeInTheDocument();
     });
 
     it('should render empty state', () => {
       render(<ComponentName data={[]} />);
-      
+
       expect(screen.getByText(/no items/i)).toBeInTheDocument();
     });
   });
@@ -103,27 +105,27 @@ describe('ComponentName', () => {
     it('should handle button click', async () => {
       const user = userEvent.setup();
       const mockHandler = vi.fn();
-      
+
       render(<ComponentName onAction={mockHandler} />);
-      
+
       const button = screen.getByRole('button', { name: /action/i });
       await user.click(button);
-      
+
       expect(mockHandler).toHaveBeenCalledTimes(1);
     });
 
     it('should handle form submission', async () => {
       const user = userEvent.setup();
       const mockSubmit = vi.fn();
-      
+
       render(<ComponentName onSubmit={mockSubmit} />);
-      
+
       const input = screen.getByRole('textbox', { name: /name/i });
       await user.type(input, 'Test Value');
-      
+
       const submit = screen.getByRole('button', { name: /submit/i });
       await user.click(submit);
-      
+
       await waitFor(() => {
         expect(mockSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -135,19 +137,19 @@ describe('ComponentName', () => {
 
     it('should show loading state during async operation', async () => {
       const user = userEvent.setup();
-      const slowAction = vi.fn(() => new Promise(resolve => 
+      const slowAction = vi.fn(() => new Promise(resolve =>
         setTimeout(resolve, 100)
       ));
-      
+
       render(<ComponentName onAction={slowAction} />);
-      
+
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       // Should show loading
       expect(button).toBeDisabled();
       expect(screen.getByText(/loading|processing/i)).toBeInTheDocument();
-      
+
       // Should complete
       await waitFor(() => {
         expect(button).not.toBeDisabled();
@@ -158,20 +160,20 @@ describe('ComponentName', () => {
   describe('Edge Cases', () => {
     it('should handle null data gracefully', () => {
       render(<ComponentName data={null} />);
-      
+
       expect(screen.getByText(/no items|empty/i)).toBeInTheDocument();
     });
 
     it('should handle undefined props gracefully', () => {
       render(<ComponentName />);
-      
+
       expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
     });
 
     it('should handle very long text', () => {
       const longText = 'a'.repeat(1000);
       render(<ComponentName title={longText} />);
-      
+
       // Should truncate or handle gracefully
       expect(screen.getByText(/a{1,}/)).toBeInTheDocument();
     });
@@ -179,7 +181,7 @@ describe('ComponentName', () => {
     it('should handle special characters', () => {
       const specialText = '<script>alert("xss")</script>';
       render(<ComponentName title={specialText} />);
-      
+
       // Should escape HTML
       expect(screen.queryByRole('script')).not.toBeInTheDocument();
     });
@@ -188,27 +190,27 @@ describe('ComponentName', () => {
   describe('Accessibility', () => {
     it('should have no accessibility violations', async () => {
       const { container } = render(<ComponentName data={mockData} />);
-      
+
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('should have proper ARIA labels', () => {
       render(<ComponentName data={mockData} />);
-      
+
       expect(screen.getByLabelText(/label text/i)).toBeInTheDocument();
     });
 
     it('should support keyboard navigation', async () => {
       const user = userEvent.setup();
       const mockHandler = vi.fn();
-      
+
       render(<ComponentName onAction={mockHandler} />);
-      
+
       // Tab to button
       await user.tab();
       expect(screen.getByRole('button')).toHaveFocus();
-      
+
       // Press Enter
       await user.keyboard('{Enter}');
       expect(mockHandler).toHaveBeenCalled();
@@ -216,12 +218,12 @@ describe('ComponentName', () => {
 
     it('should have visible focus indicators', async () => {
       const user = userEvent.setup();
-      
+
       render(<ComponentName />);
-      
+
       const button = screen.getByRole('button');
       await user.tab();
-      
+
       // Focus indicator should be visible (check computed styles)
       expect(button).toHaveFocus();
       const styles = window.getComputedStyle(button);
@@ -234,11 +236,11 @@ describe('ComponentName', () => {
       const user = userEvent.setup();
       const mockAction = vi.mocked(actionName);
       mockAction.mockResolvedValue({ success: true, data: { id: '123' } });
-      
+
       render(<ComponentName />);
-      
+
       await user.click(screen.getByRole('button'));
-      
+
       await waitFor(() => {
         expect(mockAction).toHaveBeenCalled();
       });
@@ -247,15 +249,15 @@ describe('ComponentName', () => {
     it('should handle Server Action errors', async () => {
       const user = userEvent.setup();
       const mockAction = vi.mocked(actionName);
-      mockAction.mockResolvedValue({ 
-        success: false, 
-        error: 'Operation failed' 
+      mockAction.mockResolvedValue({
+        success: false,
+        error: 'Operation failed'
       });
-      
+
       render(<ComponentName />);
-      
+
       await user.click(screen.getByRole('button'));
-      
+
       await waitFor(() => {
         expect(screen.getByText('Operation failed')).toBeInTheDocument();
       });
@@ -268,28 +270,28 @@ describe('ComponentName', () => {
         id: i,
         name: `Item ${i}`,
       }));
-      
+
       const { container } = render(<ComponentName data={largeData} />);
-      
+
       // Should render without errors
       expect(container).toBeInTheDocument();
     });
 
     it('should not re-render unnecessarily', async () => {
       const renderSpy = vi.fn();
-      
+
       function TestWrapper({ data }: any) {
         renderSpy();
         return <ComponentName data={data} />;
       }
-      
+
       const { rerender } = render(<TestWrapper data={mockData} />);
-      
+
       expect(renderSpy).toHaveBeenCalledTimes(1);
-      
+
       // Re-render with same data
       rerender(<TestWrapper data={mockData} />);
-      
+
       // Should use memoization
       expect(renderSpy).toHaveBeenCalledTimes(2); // Will depend on memoization
     });
@@ -331,7 +333,7 @@ async function tddWorkflow() {
 
   // Step 1: RED - Write failing test
   console.log(chalk.red.bold('STEP 1: RED - Write Failing Test'));
-  
+
   const { testFile } = await inquirer.prompt([
     {
       type: 'input',
@@ -439,10 +441,10 @@ test.describe('Visual Regression Tests', () => {
 
   test('Dashboard page visual regression', async ({ page }) => {
     await page.goto('http://localhost:3000/dashboard');
-    
+
     // Wait for page to be fully loaded
     await page.waitForLoadState('networkidle');
-    
+
     // Take screenshot and compare
     await expect(page).toHaveScreenshot('dashboard-page.png', {
       fullPage: true,
@@ -453,7 +455,7 @@ test.describe('Visual Regression Tests', () => {
   test('Agents list visual regression', async ({ page }) => {
     await page.goto('http://localhost:3000/agents');
     await page.waitForLoadState('networkidle');
-    
+
     await expect(page).toHaveScreenshot('agents-list.png', {
       fullPage: true,
       animations: 'disabled',
@@ -463,7 +465,7 @@ test.describe('Visual Regression Tests', () => {
   test('Agent card component', async ({ page }) => {
     await page.goto('http://localhost:3000/agents');
     await page.waitForLoadState('networkidle');
-    
+
     // Screenshot specific component
     const agentCard = page.locator('[data-testid="agent-card"]').first();
     await expect(agentCard).toHaveScreenshot('agent-card.png');
@@ -471,14 +473,14 @@ test.describe('Visual Regression Tests', () => {
 
   test('Form validation states', async ({ page }) => {
     await page.goto('http://localhost:3000/agents/new');
-    
+
     // Empty state
     await expect(page).toHaveScreenshot('form-empty.png');
-    
+
     // Filled state
     await page.fill('[name="name"]', 'Test Agent');
     await expect(page).toHaveScreenshot('form-filled.png');
-    
+
     // Error state
     await page.fill('[name="name"]', '');
     await page.click('[type="submit"]');
@@ -487,11 +489,11 @@ test.describe('Visual Regression Tests', () => {
 
   test('Dark mode visual regression', async ({ page }) => {
     await page.goto('http://localhost:3000/dashboard');
-    
+
     // Toggle dark mode
     await page.click('[data-testid="theme-toggle"]');
     await page.waitForTimeout(500); // Wait for theme transition
-    
+
     await expect(page).toHaveScreenshot('dashboard-dark.png', {
       fullPage: true,
     });
@@ -500,10 +502,10 @@ test.describe('Visual Regression Tests', () => {
   test('Mobile responsive visual regression', async ({ page }) => {
     // Mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     await page.goto('http://localhost:3000/dashboard');
     await page.waitForLoadState('networkidle');
-    
+
     await expect(page).toHaveScreenshot('dashboard-mobile.png', {
       fullPage: true,
     });
@@ -511,12 +513,12 @@ test.describe('Visual Regression Tests', () => {
 
   test('Loading states visual regression', async ({ page }) => {
     // Intercept API to delay response
-    await page.route('**/api/**', route => {
+    await page.route('**/api/**', (route) => {
       setTimeout(() => route.continue(), 1000);
     });
-    
+
     await page.goto('http://localhost:3000/agents');
-    
+
     // Capture loading state
     await expect(page).toHaveScreenshot('agents-loading.png');
   });
@@ -532,7 +534,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './apps/web/__tests__/visual',
-  
+
   // Visual regression settings
   expect: {
     toHaveScreenshot: {
@@ -540,32 +542,32 @@ export default defineConfig({
       threshold: 0.2, // 20% tolerance
     },
   },
-  
+
   // Run tests in parallel
   fullyParallel: true,
-  
+
   // Fail fast on CI
   forbidOnly: !!process.env.CI,
-  
+
   // Retry on CI
   retries: process.env.CI ? 2 : 0,
-  
+
   // Reporter
   reporter: [
     ['html', { outputFolder: 'playwright-report/visual' }],
     ['junit', { outputFile: 'test-results/visual.xml' }],
   ],
-  
+
   use: {
     // Base URL
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
-    
+
     // Collect trace on failure
     trace: 'on-first-retry',
-    
+
     // Screenshot on failure
     screenshot: 'only-on-failure',
-    
+
     // Video on failure
     video: 'retain-on-failure',
   },
@@ -669,6 +671,7 @@ fi
 ### Pre-Test Checklist
 
 Before deploying, ensure:
+
 - [ ] All tests pass
 - [ ] Coverage > 80%
 - [ ] No accessibility violations
@@ -679,4 +682,3 @@ Before deploying, ensure:
 ---
 
 **🎯 AI-Powered Testing enables autonomous quality assurance!**
-

@@ -7,6 +7,7 @@
 ## 📋 Workflow Overview
 
 This workflow guides you through creating a complete, production-ready feature with all necessary files:
+
 - Database schema and migrations
 - Server Actions with validation
 - React components (Server and Client)
@@ -20,36 +21,44 @@ This workflow guides you through creating a complete, production-ready feature w
 ### Step 1: Feature Planning
 
 **Ask the user:**
+
 1. What is the feature name?
 2. What does it do?
 3. What data needs to be stored?
 4. What are the main user interactions?
 
 **Create a plan document:**
+
 ```markdown
 # Feature: [Name]
 
 ## Overview
+
 [Description]
 
 ## Database Schema
+
 - Tables needed
 - Columns and types
 - Relationships
 - Indexes
 
 ## Server Actions
+
 - Action 1: [Purpose]
 - Action 2: [Purpose]
 
 ## Components
+
 - Component 1: [Purpose] (Server/Client)
 - Component 2: [Purpose] (Server/Client)
 
 ## Routes
+
 - /[route-path] - [Description]
 
 ## Security Considerations
+
 - orgId filtering: Yes
 - Auth required: Yes
 - Input validation: Zod schemas
@@ -60,9 +69,11 @@ This workflow guides you through creating a complete, production-ready feature w
 ### Step 2: Database Schema
 
 **Files to create:**
+
 1. `packages/database/src/schema/[feature-name].ts`
 
 **Pattern:**
+
 ```typescript
 import { pgTable, text, timestamp, uuid, jsonb } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -71,13 +82,13 @@ import { organizations } from './organizations';
 export const [tableName] = pgTable('[table_name]', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: text('org_id').notNull(), // MANDATORY for multi-tenant
-  
+
   // Feature-specific fields
   name: text('name').notNull(),
   description: text('description'),
   status: text('status').notNull().default('draft'),
   metadata: jsonb('metadata'),
-  
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -92,6 +103,7 @@ export const [tableName]Relations = relations([tableName], ({ one }) => ({
 ```
 
 **Generate migration:**
+
 ```bash
 cd packages/database && pnpm db:generate
 ```
@@ -101,10 +113,12 @@ cd packages/database && pnpm db:generate
 ### Step 3: Database Queries
 
 **Files to create:**
+
 1. `apps/web/lib/queries/get-[feature].ts`
 2. `apps/web/lib/queries/get-[feature]-by-id.ts`
 
 **Pattern:**
+
 ```typescript
 'use server';
 
@@ -115,13 +129,13 @@ import { auth } from '@clerk/nextjs/server';
 
 /**
  * Get all [feature] items for the current organization
- * 
+ *
  * @security Multi-tenant: Filtered by orgId
  * @returns Array of [feature] items
  */
 export async function get[Feature]() {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     throw new Error('Unauthorized');
   }
@@ -142,14 +156,14 @@ export async function get[Feature]() {
 
 /**
  * Get a specific [feature] item by ID
- * 
+ *
  * @param id - The item ID
  * @security Multi-tenant: Filtered by orgId
  * @returns The [feature] item or null
  */
 export async function get[Feature]ById(id: string) {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     throw new Error('Unauthorized');
   }
@@ -179,11 +193,13 @@ export async function get[Feature]ById(id: string) {
 ### Step 4: Server Actions
 
 **Files to create:**
+
 1. `apps/web/lib/actions/create-[feature].ts`
 2. `apps/web/lib/actions/update-[feature].ts`
 3. `apps/web/lib/actions/delete-[feature].ts`
 
 **Pattern:**
+
 ```typescript
 'use server';
 
@@ -205,14 +221,14 @@ type Create[Feature]Input = z.infer<typeof create[Feature]Schema>;
 
 /**
  * Create a new [feature] item
- * 
+ *
  * @param input - The [feature] data
  * @security Multi-tenant: Uses orgId from auth
  * @returns Success/error result
  */
 export async function create[Feature](input: Create[Feature]Input) {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     return {
       success: false,
@@ -242,7 +258,7 @@ export async function create[Feature](input: Create[Feature]Input) {
     };
   } catch (error) {
     console.error('Error creating [feature]:', error);
-    
+
     // User-friendly error message
     return {
       success: false,
@@ -259,11 +275,13 @@ export async function create[Feature](input: Create[Feature]Input) {
 ### Step 5: React Components
 
 **Files to create:**
+
 1. `apps/web/components/galaxy/[feature]/[feature]-list.tsx` (Server Component)
 2. `apps/web/components/galaxy/[feature]/[feature]-card.tsx` (Client Component)
 3. `apps/web/components/galaxy/[feature]/[feature]-form.tsx` (Client Component)
 
 **Server Component Pattern:**
+
 ```typescript
 // ✅ Server Component (no 'use client')
 import { Suspense } from 'react';
@@ -295,6 +313,7 @@ export async function [Feature]List() {
 ```
 
 **Client Component Pattern:**
+
 ```typescript
 'use client';
 
@@ -319,10 +338,10 @@ export function [Feature]Card({ item }: [Feature]CardProps) {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    
+
     try {
       const result = await delete[Feature](item.id);
-      
+
       if (result.success) {
         toast.success('[Feature] deleted successfully');
       } else {
@@ -411,7 +430,7 @@ export function [Feature]Form() {
   async function onSubmit(values: FormValues) {
     try {
       const result = await create[Feature](values);
-      
+
       if (result.success) {
         toast.success('[Feature] created successfully');
         form.reset();
@@ -515,10 +534,12 @@ export default function [Feature]Page() {
 ### Step 8: Tests
 
 **Files to create:**
+
 1. `apps/web/__tests__/actions/create-[feature].test.ts`
 2. `apps/web/__tests__/component/[feature]-card.test.tsx`
 
 **Server Action Test:**
+
 ```typescript
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { create[Feature] } from '@/lib/actions/create-[feature]';
@@ -581,25 +602,29 @@ describe('create[Feature]', () => {
 
 **File:** `docs/features/[feature].md`
 
-```markdown
+````markdown
 # [Feature] Feature
 
 ## Overview
+
 [Description of what this feature does]
 
 ## Architecture
 
 ### Database Schema
+
 - Table: `[table_name]`
 - Key fields: id, orgId, name, description, status
 - Indexes: orgId for multi-tenant queries
 
 ### Server Actions
+
 - `create[Feature]` - Create new item
 - `update[Feature]` - Update existing item
 - `delete[Feature]` - Delete item
 
 ### Components
+
 - `[Feature]List` - Server Component displaying all items
 - `[Feature]Card` - Client Component for individual items
 - `[Feature]Form` - Client Component for creating items
@@ -607,11 +632,13 @@ describe('create[Feature]', () => {
 ## Security
 
 ### Multi-Tenant Isolation
+
 ✅ All queries filter by orgId
 ✅ Server Actions verify orgId from auth
 ✅ No cross-organization data leakage
 
 ### Input Validation
+
 ✅ Zod schemas validate all inputs
 ✅ Type-safe database queries
 ✅ User-friendly error messages
@@ -619,6 +646,7 @@ describe('create[Feature]', () => {
 ## Usage
 
 ### Creating a [Feature]
+
 ```typescript
 import { create[Feature] } from '@/lib/actions/create-[feature]';
 
@@ -627,8 +655,10 @@ const result = await create[Feature]({
   description: 'Description here',
 });
 ```
+````
 
 ### Querying [Feature]
+
 ```typescript
 import { get[Feature] } from '@/lib/queries/get-[feature]';
 
@@ -636,13 +666,16 @@ const items = await get[Feature](); // Filtered by orgId
 ```
 
 ## Testing
+
 - Unit tests: `__tests__/actions/[feature].test.ts`
 - Component tests: `__tests__/component/[feature].test.tsx`
 - Coverage: 85%
 
 ## Related Features
+
 - [Related feature 1]
 - [Related feature 2]
+
 ```
 
 ---
@@ -683,3 +716,4 @@ Once all steps are complete:
 
 **Congratulations! Feature is production-ready! 🎉**
 
+```

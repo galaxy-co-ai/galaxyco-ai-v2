@@ -1,4 +1,5 @@
 # 🚀 GALAXYCO.AI DEPLOYMENT COMMANDS
+
 ## Quick Reference for Production Deployment
 
 ---
@@ -6,6 +7,7 @@
 ## 🔧 OPTION 1: Vercel CLI (Recommended)
 
 ### Deploy to Production
+
 ```bash
 # Navigate to project root
 cd C:\Users\Owner\workspace\galaxyco-ai-2.0
@@ -15,6 +17,7 @@ vercel --prod
 ```
 
 **Expected Output:**
+
 ```
 Vercel CLI 33.0.0
 🔍  Inspect: https://vercel.com/...
@@ -26,6 +29,7 @@ Vercel CLI 33.0.0
 ## 🔧 OPTION 2: Git Push (Auto-Deploy)
 
 ### Push to Main Branch
+
 ```bash
 # Make sure you're on main branch
 git checkout main
@@ -35,6 +39,7 @@ git push origin main
 ```
 
 **Expected:**
+
 - Vercel detects push
 - Starts build automatically
 - Deploys to production
@@ -45,6 +50,7 @@ git push origin main
 ## 🔧 OPTION 3: Vercel Dashboard (Manual)
 
 ### Via Web Interface
+
 1. Go to https://vercel.com/dashboard
 2. Select GalaxyCo project
 3. Click "Deployments" tab
@@ -53,6 +59,7 @@ git push origin main
 6. Click "Deploy"
 
 **Expected:**
+
 - Build starts
 - Completes in 2-3 minutes
 - Production URL updated
@@ -62,6 +69,7 @@ git push origin main
 ## ✅ VERIFY DEPLOYMENT
 
 ### Check Deployment Status
+
 ```bash
 # List recent deployments
 vercel ls
@@ -71,6 +79,7 @@ vercel inspect <deployment-url>
 ```
 
 ### Test Production URL
+
 ```bash
 # Test homepage loads
 curl https://galaxyco.ai
@@ -85,18 +94,21 @@ curl https://galaxyco.ai
 ### Quick Commands to Test
 
 **Test 1: Homepage**
+
 ```bash
 # Should return 200
 curl -I https://galaxyco.ai
 ```
 
 **Test 2: API Health (if exists)**
+
 ```bash
 # Check if API responds
 curl https://galaxyco.ai/api/health
 ```
 
 **Test 3: Marketplace API**
+
 ```bash
 # Check marketplace endpoint
 curl "https://galaxyco.ai/api/marketplace?limit=5"
@@ -107,6 +119,7 @@ curl "https://galaxyco.ai/api/marketplace?limit=5"
 ## 📊 MONITOR LOGS
 
 ### View Production Logs
+
 ```bash
 # Real-time logs
 vercel logs --prod
@@ -116,6 +129,7 @@ vercel logs --prod --follow
 ```
 
 ### View Specific Deployment Logs
+
 ```bash
 # Get deployment ID first
 vercel ls
@@ -129,6 +143,7 @@ vercel logs <deployment-id>
 ## 🚨 ROLLBACK (If Needed)
 
 ### Instant Rollback
+
 ```bash
 # List deployments
 vercel ls
@@ -138,6 +153,7 @@ vercel promote <previous-deployment-url>
 ```
 
 **Or via Dashboard:**
+
 1. Go to Vercel Dashboard → Deployments
 2. Find previous working deployment
 3. Click "Promote to Production"
@@ -150,6 +166,7 @@ vercel promote <previous-deployment-url>
 ## 🔑 ENVIRONMENT VARIABLES
 
 ### Check Environment Variables
+
 ```bash
 # List all env vars
 vercel env ls
@@ -159,6 +176,7 @@ vercel env pull
 ```
 
 ### Add/Update Environment Variable
+
 ```bash
 # Add new variable
 vercel env add
@@ -174,12 +192,14 @@ vercel env rm VARIABLE_NAME
 ## 📋 USEFUL COMMANDS
 
 ### Check Build Output
+
 ```bash
 # See build logs
 vercel logs <deployment-id> --since 10m
 ```
 
 ### Check Project Info
+
 ```bash
 # Get project details
 vercel inspect
@@ -189,6 +209,7 @@ vercel domains ls
 ```
 
 ### Force Redeploy
+
 ```bash
 # Redeploy without code changes
 vercel --force
@@ -234,6 +255,7 @@ vercel --prod && vercel logs --prod --follow
 ## 📞 TROUBLESHOOTING
 
 ### Build Fails
+
 ```bash
 # Check build logs
 vercel logs <deployment-id>
@@ -245,6 +267,7 @@ vercel logs <deployment-id>
 ```
 
 ### Deployment Slow
+
 ```bash
 # Check deployment status
 vercel inspect <deployment-url>
@@ -254,6 +277,7 @@ vercel inspect <deployment-url>
 ```
 
 ### Can't Access Production URL
+
 ```bash
 # Check domain status
 vercel domains ls
@@ -270,6 +294,7 @@ vercel ls
 ## 🎉 SUCCESS INDICATORS
 
 **Deployment Successful If:**
+
 - ✅ `vercel --prod` returns production URL
 - ✅ `curl -I https://galaxyco.ai` returns 200
 - ✅ Build time: 2-3 minutes
@@ -277,6 +302,7 @@ vercel ls
 - ✅ Homepage loads in browser
 
 **Deployment Failed If:**
+
 - ❌ Build fails with errors
 - ❌ Deployment stuck (> 5 minutes)
 - ❌ 404 or 500 errors
@@ -296,6 +322,7 @@ vercel ls
 **READY TO DEPLOY!** 🚀
 
 **Recommended Command:**
+
 ```bash
 vercel --prod
 ```
@@ -305,4 +332,3 @@ Then execute smoke tests from `LAUNCH-CHECKLIST-NOV-4.md`
 ---
 
 **END OF DEPLOYMENT COMMANDS**
-

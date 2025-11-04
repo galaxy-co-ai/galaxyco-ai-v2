@@ -10,7 +10,7 @@ import { WorkspaceId } from '../decorators/workspace.decorator';
 export class WorkflowsController {
   constructor(
     private readonly workflowsService: WorkflowsService,
-    private readonly executorService: WorkflowExecutorService
+    private readonly executorService: WorkflowExecutorService,
   ) {}
 
   @Get(':id')
@@ -23,7 +23,7 @@ export class WorkflowsController {
     @WorkspaceId() workspaceId: string,
     @Query('status') status?: string,
     @Query('limit') limit?: string,
-    @Query('offset') offset?: string
+    @Query('offset') offset?: string,
   ) {
     return this.workflowsService.listWorkflows(workspaceId, {
       status,
@@ -37,9 +37,13 @@ export class WorkflowsController {
     @Param('id') id: string,
     @WorkspaceId() workspaceId: string,
     @User() userId: string,
-    @Body() body: { input?: Record<string, any> }
+    @Body() body: { input?: Record<string, any> },
   ) {
-    return this.executorService.executeWorkflow(id, { workspaceId, userId, variables: {} }, body.input || {});
+    return this.executorService.executeWorkflow(
+      id,
+      { workspaceId, userId, variables: {} },
+      body.input || {},
+    );
   }
 
   @Post(':id/validate')
@@ -52,4 +56,3 @@ export class WorkflowsController {
     return this.workflowsService.getWorkflowAnalytics(id, workspaceId);
   }
 }
-

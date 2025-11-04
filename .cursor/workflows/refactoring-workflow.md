@@ -19,6 +19,7 @@
 ### Pattern 1: Client Component → Server Component
 
 **When to do it:**
+
 - Component doesn't use state
 - No event handlers
 - Only displays data
@@ -27,12 +28,14 @@
 **Steps:**
 
 1. **Verify eligibility:**
+
 ```bash
 # Check if component can be a Server Component
 grep -E "(useState|useEffect|onClick|onChange)" component.tsx
 ```
 
 2. **Before (Client Component):**
+
 ```typescript
 'use client';
 
@@ -65,6 +68,7 @@ export function AgentsList() {
 ```
 
 3. **After (Server Component):**
+
 ```typescript
 // No 'use client' directive
 import { Suspense } from 'react';
@@ -88,6 +92,7 @@ export async function AgentsList() {
 ```
 
 4. **Benefits:**
+
 - ✅ Faster initial load (no client JS)
 - ✅ Better SEO
 - ✅ Direct database access
@@ -98,6 +103,7 @@ export async function AgentsList() {
 ### Pattern 2: API Route → Server Action
 
 **When to do it:**
+
 - API route is only used by your app
 - Simple CRUD operations
 - Want better type safety
@@ -106,6 +112,7 @@ export async function AgentsList() {
 **Steps:**
 
 1. **Before (API Route):**
+
 ```typescript
 // app/api/agents/route.ts
 import { NextResponse } from 'next/server';
@@ -115,12 +122,9 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function POST(request: Request) {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const body = await request.json();
@@ -135,6 +139,7 @@ export async function POST(request: Request) {
 ```
 
 2. **After (Server Action):**
+
 ```typescript
 // lib/actions/create-agent.ts
 'use server';
@@ -152,7 +157,7 @@ const createAgentSchema = z.object({
 
 export async function createAgent(input: unknown) {
   const { orgId } = await auth();
-  
+
   if (!orgId) {
     return { success: false, error: 'Unauthorized' };
   }
@@ -178,6 +183,7 @@ export async function createAgent(input: unknown) {
 ```
 
 3. **Update client code:**
+
 ```typescript
 // Before (API Route)
 const response = await fetch('/api/agents', {
@@ -193,6 +199,7 @@ const result = await createAgent(data);
 ```
 
 4. **Benefits:**
+
 - ✅ Type-safe (no JSON parsing)
 - ✅ Built-in validation
 - ✅ Simpler caching (revalidatePath)
@@ -204,6 +211,7 @@ const result = await createAgent(data);
 ### Pattern 3: Prop Drilling → Context/Zustand
 
 **When to do it:**
+
 - Passing props through 3+ components
 - Same props passed to many components
 - Global state needed
@@ -211,11 +219,12 @@ const result = await createAgent(data);
 **Steps:**
 
 1. **Before (Prop Drilling):**
+
 ```typescript
 // ❌ Props passed through multiple levels
 function App() {
   const [theme, setTheme] = useState('light');
-  
+
   return <Layout theme={theme} setTheme={setTheme} />;
 }
 
@@ -233,6 +242,7 @@ function ThemeToggle({ theme, setTheme }) {
 ```
 
 2. **After (Zustand Store):**
+
 ```typescript
 // stores/theme-store.ts
 import { create } from 'zustand';
@@ -266,12 +276,13 @@ function Sidebar() {
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useThemeStore();
-  
+
   return <button onClick={toggleTheme}>Toggle ({theme})</button>;
 }
 ```
 
 3. **Benefits:**
+
 - ✅ No prop drilling
 - ✅ Components decoupled
 - ✅ Easy to add new consumers
@@ -282,6 +293,7 @@ function ThemeToggle() {
 ### Pattern 4: Large Component → Multiple Components
 
 **When to do it:**
+
 - Component > 200 lines
 - Multiple responsibilities
 - Hard to test
@@ -290,6 +302,7 @@ function ThemeToggle() {
 **Steps:**
 
 1. **Before (Large Component):**
+
 ```typescript
 // ❌ 500 lines, does too much
 export function DashboardPage() {
@@ -344,6 +357,7 @@ export function DashboardPage() {
 ```
 
 2. **After (Multiple Components):**
+
 ```typescript
 // dashboard-page.tsx (Server Component)
 import { Suspense } from 'react';
@@ -357,11 +371,11 @@ export default async function DashboardPage() {
       <Suspense fallback={<AgentsSkeleton />}>
         <AgentsSection />
       </Suspense>
-      
+
       <Suspense fallback={<TasksSkeleton />}>
         <TasksSection />
       </Suspense>
-      
+
       <Suspense fallback={<MetricsSkeleton />}>
         <MetricsSection />
       </Suspense>
@@ -392,6 +406,7 @@ export async function AgentsSection() {
 ```
 
 3. **Benefits:**
+
 - ✅ Each component has single responsibility
 - ✅ Easier to test
 - ✅ Easier to understand
@@ -403,6 +418,7 @@ export async function AgentsSection() {
 ### Pattern 5: Untyped → Fully Typed
 
 **When to do it:**
+
 - Using `any` type
 - TypeScript errors ignored
 - Props not typed
@@ -411,6 +427,7 @@ export async function AgentsSection() {
 **Steps:**
 
 1. **Before (Untyped):**
+
 ```typescript
 // ❌ Using 'any' everywhere
 export function AgentCard({ agent }: { agent: any }) {
@@ -419,7 +436,7 @@ export function AgentCard({ agent }: { agent: any }) {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    
+
     const result: any = await response.json();
     return result;
   };
@@ -429,6 +446,7 @@ export function AgentCard({ agent }: { agent: any }) {
 ```
 
 2. **After (Fully Typed):**
+
 ```typescript
 // types/agent.ts
 export interface Agent {
@@ -470,6 +488,7 @@ export function AgentCard({ agent }: AgentCardProps) {
 ```
 
 3. **Benefits:**
+
 - ✅ Type safety
 - ✅ Better IDE autocomplete
 - ✅ Catch errors at compile time
@@ -491,6 +510,7 @@ export function AgentCard({ agent }: AgentCardProps) {
    - Missing error handling
 
 2. **Write Tests (If Missing)**
+
    ```bash
    # Create test file first
    pnpm test:run component.test.tsx
@@ -508,13 +528,14 @@ export function AgentCard({ agent }: AgentCardProps) {
    - Run tests frequently
 
 5. **Verify Functionality**
+
    ```bash
    # Run tests
    pnpm test:run
-   
+
    # Type check
    turbo run typecheck
-   
+
    # Lint
    turbo run lint
    ```
@@ -572,6 +593,7 @@ Before marking refactoring complete:
 ## 📊 Measuring Success
 
 **Before refactoring, measure:**
+
 - Lines of code
 - Complexity (cyclomatic)
 - Test coverage
@@ -580,6 +602,7 @@ Before marking refactoring complete:
 - Bundle size
 
 **After refactoring, verify improvement:**
+
 ```bash
 # Lines of code
 cloc src/
@@ -606,4 +629,3 @@ pnpm build && du -sh .next/
 ---
 
 **Remember: Refactoring is about improving code structure without changing behavior. Test, verify, commit, repeat!**
-

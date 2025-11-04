@@ -12,6 +12,7 @@
 **Color:** 🟡 Gold
 
 **Your Role:**
+
 - Create and structure agent TODOs with Dalton
 - Primary communication hub for 6 agents
 - Communication quality control
@@ -46,15 +47,18 @@ Orchestrate 6 agents through 3-phase plan to bring GalaxyCo.ai from **85% → 12
 ## 📁 KEY DOCUMENTS
 
 **Strategic Plans:**
+
 - `.cursor/STRATEGIC-COMPLETION-PLAN.md` - Main 3-phase plan
 - `.cursor/AGENT-MICRO-SPRINTS-PLAN.md` - Agent improvements
 - `.cursor/LANDING-PAGE-OVERHAUL-PLAN.md` - Landing page strategy
 
 **Your Role:**
+
 - `.cursor/agents/COORDINATION-DIRECTOR-DEFINITION.md` - Complete role doc
 - `.cursor/agents/AGENT-DEFINITIONS.md` - Updated with your role
 
 **Session Files:**
+
 - `CURSOR-AI-AGENTS-DIRECTOR-FINAL-KICKOFF.md` - Copy this to resume!
 - `DALTON-SESSION-WRAP-UP-NOV-3.md` - Session summary
 
@@ -70,4 +74,3 @@ Orchestrate 6 agents through 3-phase plan to bring GalaxyCo.ai from **85% → 12
 ---
 
 **Ready to orchestrate 6 agents to exceptional launch!** 🟡🚀
-

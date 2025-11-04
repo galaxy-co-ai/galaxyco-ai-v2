@@ -13,6 +13,7 @@
 **When:** Agent needs to modify file outside their scope or file is locked
 
 **Format:**
+
 ```json
 {
   "type": "file_access_request",
@@ -26,6 +27,7 @@
 ```
 
 **Response:**
+
 ```json
 {
   "type": "file_access_approval",
@@ -40,6 +42,7 @@
 **When:** Backend changes API structure
 
 **Format:**
+
 ```json
 {
   "type": "api_schema_change",
@@ -59,6 +62,7 @@
 **When:** UI/UX Design Agent completes design, Frontend needs to implement
 
 **Format:**
+
 ```json
 {
   "type": "design_specification",
@@ -79,6 +83,7 @@
 **When:** Agents need to coordinate on shared work
 
 **Format:**
+
 ```json
 {
   "type": "coordination_request",
@@ -97,6 +102,7 @@
 ### Step 1: Identify Need
 
 Agent realizes they need:
+
 - File access outside scope
 - Information from another agent
 - Coordination on shared work
@@ -118,6 +124,7 @@ await messaging.send({
 ### Step 3: Receive & Review
 
 Receiving agent:
+
 1. Checks message queue
 2. Reviews request
 3. Determines response
@@ -135,6 +142,7 @@ await messaging.respond({
 ### Step 5: Execute
 
 Requesting agent:
+
 1. Receives approval
 2. Proceeds with work
 3. Releases lock when done
@@ -144,21 +152,25 @@ Requesting agent:
 ## 🎯 Priority Levels
 
 ### Critical
+
 - **Response Time:** Immediate
 - **Use Cases:** Production bug, security issue
 - **Protocol:** Stop all work, address immediately
 
 ### High
+
 - **Response Time:** < 5 minutes
 - **Use Cases:** Blocking feature work
 - **Protocol:** Prioritize over other work
 
 ### Medium
+
 - **Response Time:** < 30 minutes
 - **Use Cases:** Feature coordination
 - **Protocol:** Address during current work session
 
 ### Low
+
 - **Response Time:** < 2 hours
 - **Use Cases:** Future planning, questions
 - **Protocol:** Address when convenient
@@ -168,12 +180,14 @@ Requesting agent:
 ## ✅ Communication Checklist
 
 **Before sending message:**
+
 - [ ] Is this really necessary? (Can I work around it?)
 - [ ] Have I checked file locks?
 - [ ] Is my request clear and specific?
 - [ ] Is priority set correctly?
 
 **When receiving message:**
+
 - [ ] Read message immediately
 - [ ] Review request carefully
 - [ ] Check file/context status
@@ -185,6 +199,7 @@ Requesting agent:
 ## 🚫 Communication Anti-Patterns
 
 ❌ **Don't:**
+
 - Modify files without checking locks
 - Send vague requests
 - Ignore coordination requests
@@ -192,6 +207,7 @@ Requesting agent:
 - Assume silence means approval
 
 ✅ **Do:**
+
 - Check locks before modifying
 - Be specific in requests
 - Respond promptly
@@ -202,4 +218,3 @@ Requesting agent:
 
 **Status:** ✅ Active Protocol
 **Last Updated:** ${new Date().toISOString()}
-

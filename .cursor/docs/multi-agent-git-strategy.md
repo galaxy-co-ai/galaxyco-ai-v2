@@ -11,18 +11,21 @@
 ### ✅ **Recommended: Local Branches** (Default)
 
 **Use this when:**
+
 - Agents are working on related features
 - Agents can coordinate via file locks (built-in system)
 - You want to merge work frequently
 - Simple workflow
 
 **How it works:**
+
 - All 6 agents work in **same repository** (same working directory)
 - Each agent uses **different feature branches** if needed
 - Conflict detection system handles file conflicts automatically
 - Commits happen to appropriate branches
 
 **Example:**
+
 ```bash
 # Frontend Agent on feature/frontend-component
 # Backend Agent on feature/backend-api
@@ -35,17 +38,20 @@
 ### 🔀 **Alternative: Git Worktrees** (Advanced)
 
 **Use this when:**
+
 - Agents are working on **completely independent features**
 - You need **separate working directories** (e.g., different node_modules)
 - One agent needs to test while another is developing
 - You want **true isolation** between agent work
 
 **How it works:**
+
 - Each agent gets **separate working directory**
 - Same repository, different branches
 - No file conflicts possible (different directories)
 
 **Setup:**
+
 ```bash
 # Create worktrees for each agent
 git worktree add ../galaxyco-frontend-agent feature/frontend-component
@@ -61,11 +67,13 @@ cd ../galaxyco-backend-agent   # Backend Agent workspace
 ```
 
 **Pros:**
+
 - ✅ Complete isolation
 - ✅ No conflicts possible
 - ✅ Can test/build independently
 
 **Cons:**
+
 - ❌ More complex setup
 - ❌ Need to manage multiple directories
 - ❌ Cursor needs to open each worktree separately
@@ -75,18 +83,21 @@ cd ../galaxyco-backend-agent   # Backend Agent workspace
 ### ☁️ **Cloud/Remote Branches** (For Collaboration)
 
 **Use this when:**
+
 - Working with team members
 - Need backup/remote tracking
 - Want PRs for each agent's work
 - Collaboration required
 
 **How it works:**
+
 - Push branches to GitHub/GitLab
 - Create PRs for each agent's feature
 - Agents can see each other's work
 - Standard Git workflow
 
 **Example:**
+
 ```bash
 # Each agent pushes to their branch
 git push origin feature/frontend-component
@@ -115,12 +126,14 @@ Repository: galaxyco-ai-2.0/
 ```
 
 **Workflow:**
+
 1. All agents check out same feature branch
 2. Conflict detection handles file conflicts
 3. Agents coordinate via messaging system
 4. Commit to same branch when ready
 
 **Pros:**
+
 - ✅ Simple
 - ✅ Easy coordination
 - ✅ Built-in conflict detection
@@ -139,7 +152,7 @@ git checkout main
 git checkout -b feature/frontend-component
 git push origin feature/frontend-component
 
-# Backend Agent branch  
+# Backend Agent branch
 git checkout main
 git checkout -b feature/backend-api
 git push origin feature/backend-api
@@ -153,12 +166,14 @@ git push origin feature/design-system
 ```
 
 **Each Cursor chat:**
+
 - Opens project in same directory
 - Each agent checks out their branch
 - Agents work independently
 - Merge via PRs when ready
 
 **Pros:**
+
 - ✅ Feature isolation
 - ✅ Can review each agent's work separately
 - ✅ Easy to merge independently
@@ -185,11 +200,13 @@ git worktree add ../galaxyco-cursor feature/cursor-opt
 ```
 
 **Pros:**
+
 - ✅ Complete isolation
 - ✅ No conflicts possible
 - ✅ Independent builds/test runs
 
 **Cons:**
+
 - ❌ More complex
 - ❌ Multiple Cursor windows needed
 
@@ -200,6 +217,7 @@ git worktree add ../galaxyco-cursor feature/cursor-opt
 ### **Use: Local Branches + Cloud Sync**
 
 **Why:**
+
 1. ✅ **Simple** - All agents in same repo
 2. ✅ **Coordinated** - Built-in conflict detection works
 3. ✅ **Flexible** - Can use separate branches per feature
@@ -216,7 +234,7 @@ git pull origin main
 git checkout -b feature/frontend-work
 git push origin feature/frontend-work
 
-# Backend Agent  
+# Backend Agent
 git checkout main
 git checkout -b feature/backend-work
 git push origin feature/backend-work
@@ -274,13 +292,13 @@ git push origin feature/cursor-opt-work
 
 ## 📊 Decision Matrix
 
-| Scenario | Use | Why |
-|----------|-----|-----|
-| Agents working on same feature | **Local branches** | Simple, coordinated |
-| Agents working on different features | **Local branches** | Easy PR workflow |
-| Need complete isolation | **Worktrees** | Separate directories |
-| Working with team | **Cloud branches** | Collaboration, PRs |
-| Solo development | **Local branches** | Simplest option |
+| Scenario                             | Use                | Why                  |
+| ------------------------------------ | ------------------ | -------------------- |
+| Agents working on same feature       | **Local branches** | Simple, coordinated  |
+| Agents working on different features | **Local branches** | Easy PR workflow     |
+| Need complete isolation              | **Worktrees**      | Separate directories |
+| Working with team                    | **Cloud branches** | Collaboration, PRs   |
+| Solo development                     | **Local branches** | Simplest option      |
 
 ---
 
@@ -346,6 +364,7 @@ git push origin feature/cursor-engineer
 ```
 
 **In each Cursor chat:**
+
 ```bash
 # Frontend Agent chat
 git checkout feature/frontend-agent
@@ -361,12 +380,14 @@ git checkout feature/backend-agent
 ## 💡 Summary
 
 **For your 6 agent chats:**
+
 - ✅ **Use Local Branches** (simplest, recommended)
 - ✅ **Push to GitHub** (backup, PRs)
 - ✅ **Same repository** (conflict detection works)
 - ✅ **Different branches per agent** (feature isolation)
 
 **Only use worktrees if:**
+
 - You need separate working directories
 - One agent needs to build/test while another develops
 - Complete isolation is required
@@ -377,4 +398,3 @@ git checkout feature/backend-agent
 
 **Last Updated:** ${new Date().toISOString()}
 **Status:** Ready to use
-

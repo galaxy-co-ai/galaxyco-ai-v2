@@ -9,6 +9,7 @@ Use this checklist when creating or reviewing any component in GalaxyCo.ai.
 Before shipping any component:
 
 ### 1. Keyboard Accessibility
+
 - [ ] All interactive elements are keyboard accessible (Tab, Enter, Space)
 - [ ] Focus order is logical (follows visual flow)
 - [ ] Focus indicators are visible (2px ring)
@@ -17,6 +18,7 @@ Before shipping any component:
 - [ ] Skip links work (if applicable)
 
 ### 2. Screen Reader Support
+
 - [ ] All icon-only buttons have `aria-label`
 - [ ] All form inputs have labels or `aria-label`
 - [ ] Images have meaningful `alt` text (or `alt=""` if decorative)
@@ -25,6 +27,7 @@ Before shipping any component:
 - [ ] Proper heading hierarchy (h1 → h2 → h3)
 
 ### 3. Visual Design
+
 - [ ] Text contrast meets 4.5:1 minimum (normal text)
 - [ ] Large text contrast meets 3:1 minimum (18pt+)
 - [ ] UI components contrast meets 3:1 minimum
@@ -32,6 +35,7 @@ Before shipping any component:
 - [ ] Disabled states are visually distinct
 
 ### 4. Responsive Design
+
 - [ ] Works at 320px viewport width (iPhone SE)
 - [ ] Content reflows without horizontal scroll
 - [ ] Touch targets are minimum 44×44px
@@ -39,6 +43,7 @@ Before shipping any component:
 - [ ] No content loss at any breakpoint
 
 ### 5. Semantic HTML
+
 - [ ] Uses proper HTML elements (`<button>`, `<nav>`, `<main>`)
 - [ ] ARIA used only when HTML insufficient
 - [ ] Landmark roles present (`<nav>`, `<main>`, `<header>`)
@@ -52,6 +57,7 @@ Before shipping any component:
 ### Button Components
 
 **Requirements:**
+
 - [ ] If icon-only: Must have `aria-label`
 - [ ] If toggle: Must have `aria-pressed` state
 - [ ] If expandable: Must have `aria-expanded` state
@@ -59,12 +65,9 @@ Before shipping any component:
 - [ ] Disabled: `disabled` attribute (not just styling)
 
 **Example:**
+
 ```tsx
-<button
-  aria-label="Settings"
-  aria-pressed={isActive}
-  disabled={isLoading}
->
+<button aria-label="Settings" aria-pressed={isActive} disabled={isLoading}>
   <Settings />
 </button>
 ```
@@ -74,6 +77,7 @@ Before shipping any component:
 ### Form Components
 
 **Requirements:**
+
 - [ ] Every input has associated `<label>` or `aria-label`
 - [ ] Required fields have `aria-required="true"`
 - [ ] Invalid fields have `aria-invalid="true"`
@@ -81,6 +85,7 @@ Before shipping any component:
 - [ ] Field hints linked via `aria-describedby`
 
 **Example:**
+
 ```tsx
 <label htmlFor="email">Email *</label>
 <input
@@ -102,6 +107,7 @@ Before shipping any component:
 ### Modal/Dialog Components
 
 **Requirements:**
+
 - [ ] Has `role="dialog"` and `aria-modal="true"`
 - [ ] Has `aria-labelledby` (title) and `aria-describedby` (description)
 - [ ] Traps focus when open
@@ -110,13 +116,9 @@ Before shipping any component:
 - [ ] Background content marked `inert` (or prevented from focus)
 
 **Example:**
+
 ```tsx
-<div
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="dialog-title"
-  aria-describedby="dialog-desc"
->
+<div role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
   <h2 id="dialog-title">Confirm Action</h2>
   <p id="dialog-desc">This cannot be undone.</p>
 </div>
@@ -127,6 +129,7 @@ Before shipping any component:
 ### Navigation Components
 
 **Requirements:**
+
 - [ ] Wrapped in `<nav>` element
 - [ ] Has `aria-label` if multiple navs on page
 - [ ] Current page indicated with `aria-current="page"`
@@ -134,9 +137,10 @@ Before shipping any component:
 - [ ] Submenus have `aria-label` describing purpose
 
 **Example:**
+
 ```tsx
 <nav aria-label="Main navigation">
-  <Link href="/dashboard" aria-current={isActive ? "page" : undefined}>
+  <Link href="/dashboard" aria-current={isActive ? 'page' : undefined}>
     Dashboard
   </Link>
 </nav>
@@ -147,6 +151,7 @@ Before shipping any component:
 ### Card/List Components
 
 **Requirements:**
+
 - [ ] If clickable: Entire card is `<a>` or has click handler on semantic element
 - [ ] Has clear heading (h2, h3)
 - [ ] Action buttons have descriptive labels
@@ -154,6 +159,7 @@ Before shipping any component:
 - [ ] List items use `<li>` elements
 
 **Example:**
+
 ```tsx
 <article className="card">
   <h3>Agent Name</h3>
@@ -169,6 +175,7 @@ Before shipping any component:
 ### Search Components
 
 **Requirements:**
+
 - [ ] Input has `type="search"`
 - [ ] Input has `aria-label` if no visible label
 - [ ] Has clear button (if applicable) with `aria-label="Clear search"`
@@ -176,6 +183,7 @@ Before shipping any component:
 - [ ] Loading state announced
 
 **Example:**
+
 ```tsx
 <input
   type="search"
@@ -192,6 +200,7 @@ Before shipping any component:
 ### Tab Components
 
 **Requirements:**
+
 - [ ] Tab buttons have `role="tab"`
 - [ ] Tab list has `role="tablist"`
 - [ ] Tab panels have `role="tabpanel"`
@@ -200,6 +209,7 @@ Before shipping any component:
 - [ ] Tab panel linked via `aria-controls` and `aria-labelledby`
 
 **Example:**
+
 ```tsx
 <div role="tablist">
   <button
@@ -224,6 +234,7 @@ Before shipping any component:
 ### Dropdown/Select Components
 
 **Requirements:**
+
 - [ ] Button has `aria-haspopup="menu"` or `aria-haspopup="listbox"`
 - [ ] Button has `aria-expanded` state
 - [ ] Menu has `role="menu"` or `role="listbox"`
@@ -236,12 +247,14 @@ Before shipping any component:
 ### Loading/Skeleton Components
 
 **Requirements:**
+
 - [ ] Has `aria-busy="true"` on loading container
 - [ ] Has `aria-live="polite"` on status updates
 - [ ] Loading text announced to screen readers
 - [ ] Spinners have `role="status"` and descriptive text
 
 **Example:**
+
 ```tsx
 <div aria-busy={isLoading} aria-live="polite">
   {isLoading ? (
@@ -260,6 +273,7 @@ Before shipping any component:
 ### Toast/Notification Components
 
 **Requirements:**
+
 - [ ] Has `role="alert"` for important notifications
 - [ ] Has `role="status"` for non-critical updates
 - [ ] Has `aria-live="assertive"` for urgent alerts
@@ -268,12 +282,9 @@ Before shipping any component:
 - [ ] Auto-dismiss: Minimum 5 seconds display time
 
 **Example:**
+
 ```tsx
-<div
-  role="alert"
-  aria-live="assertive"
-  aria-atomic="true"
->
+<div role="alert" aria-live="assertive" aria-atomic="true">
   <p>{message}</p>
   <button aria-label="Close notification">
     <X />
@@ -286,6 +297,7 @@ Before shipping any component:
 ## 🧪 Testing Protocol
 
 ### 1. Keyboard Test (5 minutes)
+
 ```
 1. Unplug mouse
 2. Tab through component
@@ -295,6 +307,7 @@ Before shipping any component:
 ```
 
 ### 2. Screen Reader Test (10 minutes)
+
 ```
 VoiceOver (Mac):
 1. Cmd+F5 to start
@@ -310,6 +323,7 @@ NVDA (Windows):
 ```
 
 ### 3. Contrast Test (2 minutes)
+
 ```
 1. Open Chrome DevTools
 2. Inspect text element
@@ -319,6 +333,7 @@ NVDA (Windows):
 ```
 
 ### 4. Responsive Test (5 minutes)
+
 ```
 1. Open DevTools
 2. Toggle device toolbar
@@ -329,6 +344,7 @@ NVDA (Windows):
 ```
 
 ### 5. Focus Management (3 minutes)
+
 ```
 1. Open modal
 2. Tab through elements
@@ -355,6 +371,7 @@ Before merging, confirm:
 ## 📊 Quick Reference
 
 ### Minimum Standards
+
 - **Contrast:** 4.5:1 (normal), 3:1 (large)
 - **Touch targets:** 44×44px
 - **Viewport:** 320px minimum
@@ -362,6 +379,7 @@ Before merging, confirm:
 - **Keyboard:** 100% accessible
 
 ### Common ARIA Attributes
+
 - `aria-label` - Label for icon-only elements
 - `aria-labelledby` - Reference to label element
 - `aria-describedby` - Reference to description
@@ -380,6 +398,5 @@ Before merging, confirm:
 
 ---
 
-*Version 1.0 - November 3, 2025*  
-*GalaxyCo.ai Accessibility Standards*
-
+_Version 1.0 - November 3, 2025_  
+_GalaxyCo.ai Accessibility Standards_

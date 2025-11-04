@@ -119,10 +119,8 @@ export class WorkflowsService {
     const running = executions.filter((e) => e.status === 'running').length;
 
     const avgDuration =
-      executions
-        .filter((e) => e.durationMs)
-        .reduce((sum, e) => sum + (e.durationMs || 0), 0) /
-      executions.filter((e) => e.durationMs).length || 0;
+      executions.filter((e) => e.durationMs).reduce((sum, e) => sum + (e.durationMs || 0), 0) /
+        executions.filter((e) => e.durationMs).length || 0;
 
     return {
       workflowId: id,
@@ -139,4 +137,3 @@ export class WorkflowsService {
     };
   }
 }
-

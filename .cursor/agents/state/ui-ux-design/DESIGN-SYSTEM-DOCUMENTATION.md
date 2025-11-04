@@ -22,24 +22,27 @@ GalaxyCo.ai follows Linear's minimal, professional aesthetic with Framer's vibra
 ### Primary Colors
 
 **Framer Blue (#0055FF)**
+
 - Primary actions, links, brand elements
 - Contrast: 5.3:1 on white ✅
 - Use for: Buttons, links, active states
 
 ```tsx
 // Usage
-className="bg-primary text-primary-foreground"
-className="text-primary"
-className="border-primary"
+className = 'bg-primary text-primary-foreground';
+className = 'text-primary';
+className = 'border-primary';
 ```
 
 **Secondary Blue (#0099FF)**
+
 - Hover states, accents
 - Less prominent than primary
 
 ### Neutral Colors
 
 **Light Mode:**
+
 - Background: `#ffffff` (white)
 - Surface: `#fafafa` (cards, elevated)
 - Border: `#e5e7eb` (subtle)
@@ -47,6 +50,7 @@ className="border-primary"
 - Muted: `#64748b` (gray, 4.54:1)
 
 **Dark Mode:**
+
 - Background: `#000000` (black)
 - Surface: `#0a0a0a` (cards)
 - Border: `#1e293b` (subtle)
@@ -56,26 +60,30 @@ className="border-primary"
 ### Semantic Colors
 
 **Success** - `rgb(34 197 94)` Green
+
 - Contrast: 3.5:1 (large text only)
 - Use for: Success messages, positive states
 
 **Warning** - `rgb(217 119 6)` Amber
+
 - Contrast: 4.5:1 ✅
 - Use for: Warnings, caution states
 
 **Error/Destructive** - `rgb(239 68 68)` Red
+
 - Contrast: 4.4:1 ✅
 - Use for: Errors, destructive actions
 
 ### Color Contrast Standards
 
-| Text Type | Minimum | GalaxyCo |
-|-----------|---------|----------|
-| Normal text | 4.5:1 | 4.5:1+ ✅ |
-| Large text (18pt+) | 3:1 | 3:1+ ✅ |
-| UI components | 3:1 | 3:1+ ✅ |
+| Text Type          | Minimum | GalaxyCo  |
+| ------------------ | ------- | --------- |
+| Normal text        | 4.5:1   | 4.5:1+ ✅ |
+| Large text (18pt+) | 3:1     | 3:1+ ✅   |
+| UI components      | 3:1     | 3:1+ ✅   |
 
 **Test Before Using:**
+
 ```bash
 # Use WebAIM Contrast Checker
 https://webaim.org/resources/contrastchecker/
@@ -94,21 +102,26 @@ Inspect → Accessibility tab → Contrast ratio
 **Monospace:** JetBrains Mono
 
 ```css
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+font-family:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  sans-serif;
 ```
 
 ### Font Sizes
 
-| Size | px | rem | Line Height | Use Case |
-|------|----|----|-------------|----------|
-| xs | 12px | 0.75rem | 16px | Labels, captions |
-| sm | 14px | 0.875rem | 20px | Small body, tables |
-| base | 16px | 1rem | 24px | **Body text (default)** |
-| lg | 18px | 1.125rem | 28px | Subheadings |
-| xl | 20px | 1.25rem | 28px | Card titles |
-| 2xl | 24px | 1.5rem | 32px | Section titles |
-| 3xl | 30px | 1.875rem | 36px | Page titles |
-| 4xl | 36px | 2.25rem | 40px | Hero headlines |
+| Size | px   | rem      | Line Height | Use Case                |
+| ---- | ---- | -------- | ----------- | ----------------------- |
+| xs   | 12px | 0.75rem  | 16px        | Labels, captions        |
+| sm   | 14px | 0.875rem | 20px        | Small body, tables      |
+| base | 16px | 1rem     | 24px        | **Body text (default)** |
+| lg   | 18px | 1.125rem | 28px        | Subheadings             |
+| xl   | 20px | 1.25rem  | 28px        | Card titles             |
+| 2xl  | 24px | 1.5rem   | 32px        | Section titles          |
+| 3xl  | 30px | 1.875rem | 36px        | Page titles             |
+| 4xl  | 36px | 2.25rem  | 40px        | Hero headlines          |
 
 ### Font Weights
 
@@ -124,11 +137,11 @@ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
 ```tsx
 // Good
-className="leading-normal" // 1.5
-className="leading-tight"  // 1.25 (headings only)
+className = 'leading-normal'; // 1.5
+className = 'leading-tight'; // 1.25 (headings only)
 
 // Bad
-className="leading-3" // Too tight for body text
+className = 'leading-3'; // Too tight for body text
 ```
 
 ### Letter Spacing
@@ -138,9 +151,9 @@ className="leading-3" // Too tight for body text
 **Uppercase:** `0.05em` (slightly loose)
 
 ```tsx
-className="tracking-tight"  // Headings
-className="tracking-normal" // Body
-className="tracking-wide"   // Uppercase labels
+className = 'tracking-tight'; // Headings
+className = 'tracking-normal'; // Body
+className = 'tracking-wide'; // Uppercase labels
 ```
 
 ---
@@ -151,17 +164,17 @@ className="tracking-wide"   // Uppercase labels
 
 All spacing uses 4px increments for consistency.
 
-| Token | px | rem | Use Case |
-|-------|----|----|----------|
-| 1 | 4px | 0.25rem | Tight (badges) |
-| 2 | 8px | 0.5rem | Small gaps |
-| 3 | 12px | 0.75rem | Medium-tight |
-| 4 | 16px | 1rem | **Base spacing** |
-| 6 | 24px | 1.5rem | **Card padding** |
-| 8 | 32px | 2rem | **Grid gaps** |
-| 12 | 48px | 3rem | **Section spacing** |
-| 16 | 64px | 4rem | Large sections |
-| 24 | 96px | 6rem | **Hero spacing** |
+| Token | px   | rem     | Use Case            |
+| ----- | ---- | ------- | ------------------- |
+| 1     | 4px  | 0.25rem | Tight (badges)      |
+| 2     | 8px  | 0.5rem  | Small gaps          |
+| 3     | 12px | 0.75rem | Medium-tight        |
+| 4     | 16px | 1rem    | **Base spacing**    |
+| 6     | 24px | 1.5rem  | **Card padding**    |
+| 8     | 32px | 2rem    | **Grid gaps**       |
+| 12    | 48px | 3rem    | **Section spacing** |
+| 16    | 64px | 4rem    | Large sections      |
+| 24    | 96px | 6rem    | **Hero spacing**    |
 
 ### Linear-Style Generous Spacing
 
@@ -195,11 +208,13 @@ All spacing uses 4px increments for consistency.
 ### Buttons
 
 **Sizes:**
+
 - Small: `h-8` (32px)
 - Default: `h-10` (40px)
 - Large: `h-11` (44px) - Minimum for touch
 
 **Variants:**
+
 - Primary: Framer blue background
 - Secondary: Subtle background
 - Ghost: Transparent, hover bg
@@ -220,6 +235,7 @@ All spacing uses 4px increments for consistency.
 ### Cards
 
 **Structure:**
+
 ```tsx
 <div className="rounded-xl border border-border bg-card p-6">
   <h3 className="text-xl font-semibold mb-3">Title</h3>
@@ -235,11 +251,13 @@ All spacing uses 4px increments for consistency.
 ### Forms
 
 **Input Sizing:**
+
 ```tsx
 <input className="h-10 px-4" /> {/* 40px height, 16px horizontal padding */}
 ```
 
 **Label Pattern:**
+
 ```tsx
 <label htmlFor="email" className="text-sm font-medium mb-2">
   Email
@@ -248,6 +266,7 @@ All spacing uses 4px increments for consistency.
 ```
 
 **Error States:**
+
 ```tsx
 <input
   className="border-destructive focus:ring-destructive"
@@ -275,29 +294,29 @@ xl: 1280px  // Large desktop
 
 ```tsx
 // Default: Mobile (320px+)
-className="flex-col"
+className = 'flex-col';
 
 // Tablet
-className="flex-col md:flex-row"
+className = 'flex-col md:flex-row';
 
 // Desktop
-className="flex-col md:flex-row lg:grid lg:grid-cols-3"
+className = 'flex-col md:flex-row lg:grid lg:grid-cols-3';
 ```
 
 ### Grid Patterns
 
 **Mobile:** 1 column  
 **Tablet:** 2 columns  
-**Desktop:** 3-4 columns  
+**Desktop:** 3-4 columns
 
 ```tsx
-className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
 ```
 
 ### Touch Targets
 
 **Minimum:** 44×44px (iOS guidelines)  
-**Recommended:** 48×48px  
+**Recommended:** 48×48px
 
 ```tsx
 // Too small for touch
@@ -315,13 +334,13 @@ className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
 
 ```tsx
 // Card
-className="shadow-sm" // 0 1px 2px rgba(0,0,0,0.05)
+className = 'shadow-sm'; // 0 1px 2px rgba(0,0,0,0.05)
 
 // Elevated
-className="shadow-md" // 0 4px 6px rgba(0,0,0,0.07)
+className = 'shadow-md'; // 0 4px 6px rgba(0,0,0,0.07)
 
 // Modal
-className="shadow-xl" // 0 20px 25px rgba(0,0,0,0.1)
+className = 'shadow-xl'; // 0 20px 25px rgba(0,0,0,0.1)
 ```
 
 **Principle:** Use shadows sparingly. Linear-style designs prefer subtle borders over heavy shadows.
@@ -330,24 +349,24 @@ className="shadow-xl" // 0 20px 25px rgba(0,0,0,0.1)
 
 ## 🎨 Border Radius
 
-| Size | Value | Use Case |
-|------|-------|----------|
-| sm | 4px | Small elements (badges) |
-| DEFAULT | 8px | **Buttons, inputs** |
-| md | 12px | Cards |
-| lg | 16px | **Modals, dialogs** |
-| xl | 24px | Large cards |
-| full | 9999px | Pills, avatars |
+| Size    | Value  | Use Case                |
+| ------- | ------ | ----------------------- |
+| sm      | 4px    | Small elements (badges) |
+| DEFAULT | 8px    | **Buttons, inputs**     |
+| md      | 12px   | Cards                   |
+| lg      | 16px   | **Modals, dialogs**     |
+| xl      | 24px   | Large cards             |
+| full    | 9999px | Pills, avatars          |
 
 ```tsx
 // Standard card
-className="rounded-xl"  // 12px
+className = 'rounded-xl'; // 12px
 
 // Button
-className="rounded"     // 8px
+className = 'rounded'; // 8px
 
 // Avatar
-className="rounded-full" // Circle
+className = 'rounded-full'; // Circle
 ```
 
 ---
@@ -361,9 +380,9 @@ className="rounded-full" // Circle
 **Slow:** 300ms - Large movements
 
 ```tsx
-className="transition-colors duration-fast"   // 150ms
-className="transition-all duration-200"       // 200ms
-className="transition-transform duration-300" // 300ms
+className = 'transition-colors duration-fast'; // 150ms
+className = 'transition-all duration-200'; // 200ms
+className = 'transition-transform duration-300'; // 300ms
 ```
 
 ### Easing
@@ -385,8 +404,9 @@ className="transition-transform duration-300" // 300ms
 ### Focus Indicators
 
 **Required on all interactive elements:**
+
 ```tsx
-className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+className = 'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2';
 ```
 
 **Minimum:** 2px visible ring  
@@ -395,6 +415,7 @@ className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-
 ### Skip Links
 
 **Required on all pages:**
+
 ```tsx
 <a href="#main-content" className="skip-link">
   Skip to main content
@@ -404,6 +425,7 @@ className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-
 ### ARIA Labels
 
 **Icon-only buttons MUST have labels:**
+
 ```tsx
 <button aria-label="Settings">
   <Settings />
@@ -432,12 +454,14 @@ className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-
 ### Shadcn/ui
 
 **Base components from shadcn:**
+
 - Button, Input, Select
 - Dialog, Sheet, Dropdown
 - Toast, Alert, Badge
 - Tabs, Accordion, Card
 
 **Import:**
+
 ```tsx
 import { Button } from '@/components/ui/button';
 ```
@@ -445,11 +469,13 @@ import { Button } from '@/components/ui/button';
 ### Kibo UI
 
 **Advanced components:**
+
 - Complex data tables
 - Advanced forms
 - Charts and visualizations
 
 **Import:**
+
 ```tsx
 import { KiboDataTable } from '@/components/kibo';
 ```
@@ -457,11 +483,13 @@ import { KiboDataTable } from '@/components/kibo';
 ### Galaxy Components
 
 **Custom GalaxyCo components:**
+
 - AgentCard
 - FlowBuilder
 - WorkflowCanvas
 
 **Import:**
+
 ```tsx
 import { AgentCard } from '@/components/galaxy';
 ```
@@ -493,16 +521,19 @@ import { AgentCard } from '@/components/galaxy';
 ## 📚 Resources
 
 ### Design Tools
+
 - [Figma](https://figma.com) - Design files
 - [Linear](https://linear.app) - Design inspiration
 - [Framer](https://framer.com) - Color system
 
 ### Development
+
 - [Tailwind CSS](https://tailwindcss.com) - Utility classes
 - [Shadcn/ui](https://ui.shadcn.com) - Component library
 - [Radix UI](https://radix-ui.com) - Accessible primitives
 
 ### Accessibility
+
 - [WCAG 2.1](https://w3.org/WAI/WCAG21/quickref/) - Guidelines
 - [WebAIM](https://webaim.org) - Contrast checker
 - [axe DevTools](https://deque.com/axe/devtools/) - Testing
@@ -527,7 +558,6 @@ import { AgentCard } from '@/components/galaxy';
 
 ---
 
-*Version 2.0 - November 3, 2025*  
-*GalaxyCo.ai Design System*  
-*Quality: 9.3/10 (Premium)*
-
+_Version 2.0 - November 3, 2025_  
+_GalaxyCo.ai Design System_  
+_Quality: 9.3/10 (Premium)_

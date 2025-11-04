@@ -1,14 +1,14 @@
 #!/usr/bin/env npx tsx
 /**
  * Deployment Health Check Script
- * 
+ *
  * Checks production deployment health after deployment
- * 
+ *
  * Usage:
  *   pnpm deploy:health                    - Check default production URL
  *   pnpm deploy:health --url https://... - Check custom URL
  *   pnpm deploy:health --ci             - CI mode (fails on errors)
- * 
+ *
  * Checks:
  * - Production URL responds
  * - Health endpoint returns 200
@@ -18,14 +18,14 @@
 
 import { execSync } from 'child_process';
 
-const PRODUCTION_URL = process.env.PRODUCTION_URL || process.env.VERCEL_URL || 'https://galaxyco.ai';
+const PRODUCTION_URL =
+  process.env.PRODUCTION_URL || process.env.VERCEL_URL || 'https://galaxyco.ai';
 const CI_MODE = process.argv.includes('--ci');
 
 // Parse custom URL from args
 const urlIndex = process.argv.indexOf('--url');
-const BASE_URL = urlIndex > -1 && process.argv[urlIndex + 1] 
-  ? process.argv[urlIndex + 1] 
-  : PRODUCTION_URL;
+const BASE_URL =
+  urlIndex > -1 && process.argv[urlIndex + 1] ? process.argv[urlIndex + 1] : PRODUCTION_URL;
 
 // Routes to check
 const ROUTES_TO_CHECK = [
@@ -55,7 +55,7 @@ const results: HealthCheckResult[] = [];
 async function checkRoute(path: string, name: string): Promise<HealthCheckResult> {
   const url = `${BASE_URL}${path}`;
   const startTime = Date.now();
-  
+
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -65,10 +65,10 @@ async function checkRoute(path: string, name: string): Promise<HealthCheckResult
       // 10 second timeout
       signal: AbortSignal.timeout(10000),
     });
-    
+
     const responseTime = Date.now() - startTime;
     const status = response.ok ? 'pass' : 'fail';
-    
+
     return {
       route: path,
       name,
@@ -92,7 +92,7 @@ console.log('\n📊 Running Health Checks...\n');
 for (const route of ROUTES_TO_CHECK) {
   const result = await checkRoute(route.path, route.name);
   results.push(result);
-  
+
   if (result.status === 'pass') {
     console.log(`✅ ${route.name} (${route.path})`);
     if (result.statusCode) {
@@ -113,11 +113,12 @@ for (const route of ROUTES_TO_CHECK) {
 }
 
 // Summary
-const passed = results.filter(r => r.status === 'pass').length;
-const failed = results.filter(r => r.status === 'fail').length;
-const avgResponseTime = results
-  .filter(r => r.responseTime !== undefined)
-  .reduce((sum, r) => sum + (r.responseTime || 0), 0) / passed;
+const passed = results.filter((r) => r.status === 'pass').length;
+const failed = results.filter((r) => r.status === 'fail').length;
+const avgResponseTime =
+  results
+    .filter((r) => r.responseTime !== undefined)
+    .reduce((sum, r) => sum + (r.responseTime || 0), 0) / passed;
 
 console.log('\n' + '='.repeat(60));
 console.log('📊 Health Check Summary');
@@ -130,10 +131,10 @@ if (avgResponseTime > 0) {
 }
 
 // Check for slow responses
-const slowRoutes = results.filter(r => r.responseTime && r.responseTime > 2000);
+const slowRoutes = results.filter((r) => r.responseTime && r.responseTime > 2000);
 if (slowRoutes.length > 0) {
   console.log('\n⚠️  Slow Routes (>2s):');
-  slowRoutes.forEach(r => {
+  slowRoutes.forEach((r) => {
     console.log(`   - ${r.name}: ${r.responseTime}ms`);
   });
 }
@@ -142,7 +143,7 @@ if (slowRoutes.length > 0) {
 if (failed > 0) {
   console.log('\n❌ Deployment health check failed!');
   console.log('Review the errors above and fix issues before considering deployment successful.');
-  
+
   if (CI_MODE) {
     process.exit(1);
   }
@@ -153,4 +154,3 @@ if (failed > 0) {
 
 // Exit with appropriate code
 process.exit(failed > 0 ? 1 : 0);
-

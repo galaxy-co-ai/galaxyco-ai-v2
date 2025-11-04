@@ -2,7 +2,7 @@
 
 /**
  * GalaxyCo Cursor Environment Setup Script
- * 
+ *
  * One-command setup for the complete Cursor development environment
  * Zero friction, zero manual configuration
  */
@@ -136,7 +136,9 @@ if (!fs.existsSync(cursorRulesPath)) {
 }
 
 if (!fs.existsSync(mcpConfigPath)) {
-  console.log(chalk.yellow('⚠  MCP config not found (contains secrets, must be created manually)'));
+  console.log(
+    chalk.yellow('⚠  MCP config not found (contains secrets, must be created manually)'),
+  );
   console.log(chalk.gray('   See .cursor/mcp.json.example for template'));
 } else {
   logSuccess('MCP config found');
@@ -158,7 +160,7 @@ logStep('Verifying workflows...');
 const workflowsDir = path.join(rootDir, '.cursor', 'workflows');
 
 if (fs.existsSync(workflowsDir)) {
-  const workflows = fs.readdirSync(workflowsDir).filter(f => f.endsWith('.md'));
+  const workflows = fs.readdirSync(workflowsDir).filter((f) => f.endsWith('.md'));
   logSuccess(`${workflows.length} workflows available`);
 } else {
   logError('Workflows directory not found');
@@ -228,7 +230,7 @@ console.log(chalk.green('• Code quality: 50% fewer bugs'));
 console.log(chalk.green('• Pattern consistency: 100%'));
 console.log(chalk.green('• Team velocity: 2-3x increase'));
 
-console.log(chalk.white.bold('\n🚀 You\'re ready to ship like a 20-person team!\n'));
+console.log(chalk.white.bold("\n🚀 You're ready to ship like a 20-person team!\n"));
 
 // Check if MCP config needs setup
 if (!fs.existsSync(mcpConfigPath)) {
@@ -247,4 +249,3 @@ if (!envContent.includes('GITHUB_TOKEN=') || envContent.includes('your_')) {
 }
 
 process.exit(0);
-

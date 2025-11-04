@@ -49,4 +49,3 @@
   "required": ["commands"],
   "additionalProperties": false
 }
-

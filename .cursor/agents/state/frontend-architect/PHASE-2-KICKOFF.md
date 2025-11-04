@@ -15,6 +15,7 @@
 **Build Agent Marketplace UI and Templates Library to unlock hidden assets and provide instant value to users.**
 
 **Current State:**
+
 - ✅ Backend marketplace API complete (Backend Agent built it!)
 - ✅ 10 pre-built agent templates ready
 - ✅ Installation API working
@@ -22,6 +23,7 @@
 - ❌ **No frontend UI** to browse/install agents
 
 **Target State:**
+
 - ✅ Beautiful marketplace page (`/marketplace`)
 - ✅ Agent cards with install button
 - ✅ Search and filtering
@@ -68,6 +70,7 @@
 ## 🎯 Phase 2 Tasks (Priority Order)
 
 ### Task 1: Agent Marketplace Page (3-4 hours) ⭐ CRITICAL
+
 **Priority:** 🔴 HIGH  
 **Status:** 🟡 Not Started  
 **Estimated:** 3-4 hours
@@ -76,6 +79,7 @@
 Create beautiful marketplace page where users can browse and install pre-built agents.
 
 **Backend API Already Exists:**
+
 ```
 GET /api/marketplace
   Query params: query?, category?, featured?, sortBy?, limit?, offset?
@@ -91,20 +95,21 @@ POST /api/marketplace/agents/[id]/install
 **Implementation Steps:**
 
 1. **Create Marketplace Page** (`apps/web/app/(app)/marketplace/page.tsx`)
+
    ```typescript
    'use client';
-   
+
    import { useQuery, useMutation } from '@tanstack/react-query';
    import { useState } from 'react';
    import { Input } from '@/components/ui/input';
    import { Button } from '@/components/ui/button';
    import { AgentCard } from '@/components/marketplace/agent-card';
    import { toast } from '@/hooks/use-toast';
-   
+
    export default function MarketplacePage() {
      const [searchQuery, setSearchQuery] = useState('');
      const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-     
+
      const { data, isLoading } = useQuery({
        queryKey: ['marketplace-agents', searchQuery, selectedCategory],
        queryFn: async () => {
@@ -112,13 +117,13 @@ POST /api/marketplace/agents/[id]/install
          if (searchQuery) params.set('query', searchQuery);
          if (selectedCategory) params.set('category', selectedCategory);
          params.set('sortBy', 'trending');
-         
+
          const res = await fetch(`/api/marketplace?${params}`);
          if (!res.ok) throw new Error('Failed to fetch agents');
          return res.json();
        },
      });
-     
+
      const installMutation = useMutation({
        mutationFn: async (agentId: string) => {
          const res = await fetch(`/api/marketplace/agents/${agentId}/install`, {
@@ -141,7 +146,7 @@ POST /api/marketplace/agents/[id]/install
          });
        },
      });
-     
+
      return (
        <div className="container mx-auto py-8 space-y-6">
          <div>
@@ -150,7 +155,7 @@ POST /api/marketplace/agents/[id]/install
              Install pre-built agents in 10 seconds
            </p>
          </div>
-         
+
          {/* Search and Filters */}
          <div className="flex gap-4">
            <Input
@@ -161,7 +166,7 @@ POST /api/marketplace/agents/[id]/install
            />
            {/* Category filter dropdown */}
          </div>
-         
+
          {/* Loading State */}
          {isLoading && (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -170,7 +175,7 @@ POST /api/marketplace/agents/[id]/install
              ))}
            </div>
          )}
-         
+
          {/* Agent Grid */}
          {data?.templates && (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -190,14 +195,15 @@ POST /api/marketplace/agents/[id]/install
    ```
 
 2. **Create AgentCard Component** (`apps/web/components/marketplace/agent-card.tsx`)
+
    ```typescript
    'use client';
-   
+
    import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
    import { Button } from '@/components/ui/button';
    import { Badge } from '@/components/ui/badge';
    import { Star, Download, TrendingUp } from 'lucide-react';
-   
+
    interface AgentCardProps {
      agent: {
        id: string;
@@ -218,10 +224,10 @@ POST /api/marketplace/agents/[id]/install
      onInstall: () => void;
      isInstalling?: boolean;
    }
-   
+
    export function AgentCard({ agent, onInstall, isInstalling }: AgentCardProps) {
      const rating = agent.rating ? (agent.rating / 100).toFixed(1) : null;
-     
+
      return (
        <Card className="hover:shadow-lg transition-shadow">
          <CardHeader>
@@ -242,7 +248,7 @@ POST /api/marketplace/agents/[id]/install
              )}
            </div>
          </CardHeader>
-         
+
          <CardContent>
            <div className="space-y-2">
              {agent.kpis && (
@@ -255,7 +261,7 @@ POST /api/marketplace/agents/[id]/install
                  )}
                </div>
              )}
-             
+
              {rating && (
                <div className="flex items-center gap-1">
                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -267,14 +273,14 @@ POST /api/marketplace/agents/[id]/install
                  )}
                </div>
              )}
-             
+
              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                <Download className="w-4 h-4" />
                <span>{agent.installCount.toLocaleString()} installs</span>
              </div>
            </div>
          </CardContent>
-         
+
          <CardFooter>
            <Button
              onClick={onInstall}
@@ -294,6 +300,7 @@ POST /api/marketplace/agents/[id]/install
    - Use lucide-react `Store` icon
 
 **Success Criteria:**
+
 - [ ] Marketplace page loads agents from API
 - [ ] Search functionality works
 - [ ] Category filtering works
@@ -306,6 +313,7 @@ POST /api/marketplace/agents/[id]/install
 ---
 
 ### Task 2: Templates Library Integration (2 hours)
+
 **Priority:** 🟡 MEDIUM  
 **Status:** 🟡 Not Started  
 **Estimated:** 2 hours
@@ -326,6 +334,7 @@ Add "Start from Template" feature to Flow Builder.
    - Load template into Flow Builder
 
 **Success Criteria:**
+
 - [ ] "Start from Template" button visible in Flow Builder
 - [ ] Template selector modal opens
 - [ ] Templates load from API
@@ -335,6 +344,7 @@ Add "Start from Template" feature to Flow Builder.
 ---
 
 ### Task 3: Demo Workflow Feature (1-2 hours)
+
 **Priority:** 🟡 MEDIUM  
 **Status:** 🟡 Not Started  
 **Estimated:** 1-2 hours
@@ -354,6 +364,7 @@ Add "Try Demo" button that shows workflow execution without signup.
    - Opens demo workflow modal
 
 **Success Criteria:**
+
 - [ ] Demo workflow loads without signup
 - [ ] Mock execution shows results
 - [ ] Results are shareable
@@ -364,11 +375,12 @@ Add "Try Demo" button that shows workflow execution without signup.
 ## 🏗️ Architecture Patterns to Follow
 
 ### React Query Usage
+
 ```typescript
 // ✅ CORRECT - Use React Query for server state
 const { data, isLoading } = useQuery({
   queryKey: ['marketplace-agents'],
-  queryFn: () => fetch('/api/marketplace').then(r => r.json()),
+  queryFn: () => fetch('/api/marketplace').then((r) => r.json()),
 });
 
 // ❌ WRONG - Don't use useState for server data
@@ -376,6 +388,7 @@ const [agents, setAgents] = useState([]);
 ```
 
 ### Loading States
+
 ```typescript
 // ✅ CORRECT - Show loading skeleton
 {isLoading && <SkeletonCard />}
@@ -385,6 +398,7 @@ const [agents, setAgents] = useState([]);
 ```
 
 ### Error Handling
+
 ```typescript
 // ✅ CORRECT - Show user-friendly errors
 const { data, error } = useQuery({...});
@@ -398,6 +412,7 @@ if (error) {
 ```
 
 ### Toast Notifications
+
 ```typescript
 // ✅ CORRECT - Success feedback
 installMutation.onSuccess(() => {
@@ -413,6 +428,7 @@ installMutation.onSuccess(() => {
 ## 📊 Success Metrics
 
 ### Functionality ✅
+
 - [ ] Marketplace page loads agents
 - [ ] Search works
 - [ ] Filtering works
@@ -421,6 +437,7 @@ installMutation.onSuccess(() => {
 - [ ] Demo workflow works
 
 ### User Experience ✅
+
 - [ ] Loading states for all async operations
 - [ ] Success feedback after installation
 - [ ] Error messages are user-friendly
@@ -428,6 +445,7 @@ installMutation.onSuccess(() => {
 - [ ] Accessible (WCAG compliance)
 
 ### Code Quality ✅
+
 - [ ] 0 linting errors
 - [ ] 0 TypeScript errors
 - [ ] Uses React Query for server state
@@ -439,6 +457,7 @@ installMutation.onSuccess(() => {
 ## 📁 Files to Create/Modify
 
 ### New Files to Create:
+
 1. `apps/web/app/(app)/marketplace/page.tsx` - Marketplace page
 2. `apps/web/components/marketplace/agent-card.tsx` - Agent card component
 3. `apps/web/components/marketplace/agent-grid.tsx` - Agent grid layout (optional)
@@ -446,6 +465,7 @@ installMutation.onSuccess(() => {
 5. `apps/web/hooks/use-marketplace.ts` - Marketplace hooks (optional, for reusability)
 
 ### Files to Modify:
+
 1. `apps/web/app/(app)/workflows/builder/page.tsx` - Add "Start from Template" button
 2. Navigation component - Add marketplace link
 
@@ -454,12 +474,14 @@ installMutation.onSuccess(() => {
 ## ✅ Completion Checklist
 
 ### Pre-Execution
+
 - [ ] Read all context files listed above
 - [ ] Review marketplace API endpoints
 - [ ] Understand agent template schema
 - [ ] Review component patterns
 
 ### Task 1: Marketplace Page
+
 - [ ] Create marketplace page component
 - [ ] Create AgentCard component
 - [ ] Add search functionality
@@ -470,16 +492,19 @@ installMutation.onSuccess(() => {
 - [ ] Test responsive design
 
 ### Task 2: Templates Library
+
 - [ ] Create template selector modal
 - [ ] Integrate into Flow Builder
 - [ ] Test template loading
 
 ### Task 3: Demo Workflow
+
 - [ ] Create demo workflow component
 - [ ] Add to landing page
 - [ ] Test demo execution
 
 ### Post-Execution
+
 - [ ] Run linting → 0 errors
 - [ ] Run TypeScript check → 0 errors
 - [ ] Test on mobile devices
@@ -491,12 +516,14 @@ installMutation.onSuccess(() => {
 ## 🎯 Expected Outcomes
 
 ### Immediate Value
+
 - ✅ Users can browse 10 pre-built agents
 - ✅ One-click installation (10 seconds)
 - ✅ Instant value (no building from scratch)
 - ✅ Time to value: 60 seconds → 10 seconds
 
 ### Strategic Value
+
 - ✅ Competitive differentiation (marketplace)
 - ✅ User retention (instant value)
 - ✅ Discovery mechanism for features
@@ -509,11 +536,13 @@ installMutation.onSuccess(() => {
 **Estimated Duration:** 6 hours
 
 **Breakdown:**
+
 - Task 1 (Marketplace UI): 3-4 hours
 - Task 2 (Templates Library): 2 hours
 - Task 3 (Demo Workflow): 1-2 hours
 
 **Milestones:**
+
 - Hour 1-4: Marketplace page complete
 - Hour 5-6: Templates + Demo complete
 
@@ -522,12 +551,14 @@ installMutation.onSuccess(() => {
 ## 💡 Key Points
 
 ### Backend Already Complete! ✅
+
 - Marketplace API endpoints exist
 - Installation API working
 - 10 pre-built agents ready
 - Rating system implemented
 
 ### You Just Need Frontend! 🎨
+
 - Beautiful UI components
 - React Query integration
 - Loading states
@@ -535,6 +566,7 @@ installMutation.onSuccess(() => {
 - Responsive design
 
 ### Success = Users Install Agents in 10 Seconds ⚡
+
 - Instant value
 - No building from scratch
 - Competitive advantage
@@ -550,7 +582,7 @@ Questions? Check context files first. Still unclear? Ask Director immediately.
 ---
 
 **Estimated Timeline:**
+
 - Start: Now
 - Expected Completion: 6 hours
 - Actual Completion: [filled by agent]
-

@@ -69,7 +69,7 @@ export async function connectIntegration(
   try {
     // Open Connect UI
     const connect = nangoClient.openConnectUI({
-      onEvent: (event) => {
+      onEvent: (event: any) => {
         if (event.type === 'close') {
           callbacks?.onClose?.();
         } else if (event.type === 'connect') {
@@ -111,7 +111,7 @@ export async function connectMultipleIntegrations(
 ): Promise<void> {
   try {
     const connect = nangoClient.openConnectUI({
-      onEvent: (event) => {
+      onEvent: (event: any) => {
         if (event.type === 'close') {
           callbacks?.onClose?.();
         } else if (event.type === 'connect') {

@@ -13,10 +13,12 @@ Model Context Protocol (MCP) servers extend Cursor's capabilities by connecting 
 ## ✅ Currently Active Servers
 
 ### 1. Kibo UI MCP
+
 **Status:** ✅ Active  
 **What it does:** Provides access to 1,101 UI component patterns
 
 **Usage:**
+
 ```
 Agent: "Show me all button variants from Kibo UI"
 Agent: "Create a data table with Kibo UI components"
@@ -24,6 +26,7 @@ Agent: "Find a dropdown component with search functionality"
 ```
 
 **Benefits:**
+
 - Access to comprehensive component library
 - Consistent UI patterns
 - Pre-built complex components
@@ -31,16 +34,19 @@ Agent: "Find a dropdown component with search functionality"
 ---
 
 ### 2. Filesystem MCP
+
 **Status:** ✅ Active  
 **What it does:** Enhanced file operations within the workspace
 
 **Usage:**
+
 - Better file searching
 - Improved file reading/writing
 - Directory operations
 - File metadata access
 
 **Benefits:**
+
 - Faster file operations
 - More reliable file handling
 - Better error reporting
@@ -48,10 +54,12 @@ Agent: "Find a dropdown component with search functionality"
 ---
 
 ### 3. Memory MCP
+
 **Status:** ✅ Active  
 **What it does:** Persistent knowledge across Cursor sessions
 
 **Usage:**
+
 ```
 Agent: "Remember that we use Server Actions instead of API routes"
 Agent: "What patterns have we established for error handling?"
@@ -59,6 +67,7 @@ Agent: "Recall the orgId filtering requirement"
 ```
 
 **Benefits:**
+
 - Agent remembers project patterns
 - Consistent behavior across sessions
 - Learns from your codebase
@@ -82,12 +91,14 @@ Agent: "Recall the orgId filtering requirement"
    - Copy the token
 
 2. **Add to environment variables:**
+
    ```bash
    # Add to .env.local or system environment
    GITHUB_TOKEN=ghp_your_token_here
    ```
 
 3. **Update .cursor/mcp.json:**
+
    ```json
    {
      "mcpServers": {
@@ -111,6 +122,7 @@ Agent: "Recall the orgId filtering requirement"
    ```
 
 **Benefits:**
+
 - Create/update GitHub issues without leaving IDE
 - Review PRs inline
 - Search across repositories
@@ -127,22 +139,20 @@ Agent: "Recall the orgId filtering requirement"
 **Setup Steps:**
 
 1. **Verify DATABASE_URL is set:**
+
    ```bash
    # Should already be in your environment
    echo $DATABASE_URL
    ```
 
 2. **Update .cursor/mcp.json:**
+
    ```json
    {
      "mcpServers": {
        "postgres": {
          "command": "npx",
-         "args": [
-           "-y",
-           "@modelcontextprotocol/server-postgres",
-           "${DATABASE_URL}"
-         ]
+         "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
        }
      }
    }
@@ -158,6 +168,7 @@ Agent: "Recall the orgId filtering requirement"
    ```
 
 **Benefits:**
+
 - Query database directly from Cursor
 - Inspect schema without external tools
 - Debug data issues quickly
@@ -181,12 +192,14 @@ Agent: "Recall the orgId filtering requirement"
    - Copy your API key
 
 2. **Add to environment variables:**
+
    ```bash
    # Add to .env.local or system environment
    BRAVE_API_KEY=your_api_key_here
    ```
 
 3. **Update .cursor/mcp.json:**
+
    ```json
    {
      "mcpServers": {
@@ -211,6 +224,7 @@ Agent: "Recall the orgId filtering requirement"
    ```
 
 **Benefits:**
+
 - Research without leaving IDE
 - Find documentation and examples
 - Stay updated on latest practices
@@ -227,6 +241,7 @@ Agent: "Recall the orgId filtering requirement"
 **Setup Steps:**
 
 1. **Update .cursor/mcp.json:**
+
    ```json
    {
      "mcpServers": {
@@ -247,6 +262,7 @@ Agent: "Recall the orgId filtering requirement"
    ```
 
 **Benefits:**
+
 - Better problem-solving for complex features
 - More thorough architectural analysis
 - Step-by-step reasoning visible
@@ -261,6 +277,7 @@ Agent: "Recall the orgId filtering requirement"
 **To add ALL pending MCP servers at once:**
 
 1. **Set up environment variables:**
+
    ```bash
    # Add to .env.local
    GITHUB_TOKEN=ghp_your_github_token
@@ -269,13 +286,14 @@ Agent: "Recall the orgId filtering requirement"
    ```
 
 2. **Replace .cursor/mcp.json with:**
+
    ```bash
    # Backup current config
    cp .cursor/mcp.json .cursor/mcp.json.backup
-   
+
    # Copy enhanced config
    cp .cursor/mcp.json.enhanced .cursor/mcp.json
-   
+
    # Remove the _comment and _pendingServers sections
    # Move servers from _pendingServers to mcpServers
    ```
@@ -294,12 +312,14 @@ Agent: "Recall the orgId filtering requirement"
 ### MCP Server Not Showing Up
 
 **Check:**
+
 1. JSON syntax is correct (no trailing commas)
 2. Environment variables are set correctly
 3. Cursor has been restarted
 4. Internet connection is active
 
 **Fix:**
+
 ```bash
 # Verify JSON syntax
 cat .cursor/mcp.json | jq .
@@ -317,11 +337,13 @@ echo $DATABASE_URL
 ### Server Shows Error Status
 
 **Check:**
+
 1. API keys are valid
 2. Network isn't blocking the connection
 3. npx can download packages
 
 **Fix:**
+
 ```bash
 # Test npx can download
 npx -y @modelcontextprotocol/server-memory --help
@@ -335,12 +357,14 @@ npx -y @modelcontextprotocol/server-memory --help
 ### Server Is Slow
 
 **Optimize:**
+
 1. Check internet connection speed
 2. Verify not hitting API rate limits
 3. Consider local caching
 4. Check Cursor settings for performance
 
 **Monitor:**
+
 ```
 Expected response times:
 - Filesystem MCP: < 100ms
@@ -358,39 +382,46 @@ Expected response times:
 ### When to Use Each Server
 
 **Kibo UI:**
+
 - Building new UI components
 - Need component inspiration
 - Want consistent patterns
 
 **Filesystem:**
+
 - File operations (reading, writing)
 - Directory navigation
 - File metadata queries
 
 **Memory:**
+
 - Ask about project patterns
 - Recall previous decisions
 - Check established conventions
 
 **GitHub:**
+
 - Create/update issues
 - Review PRs
 - Search code in repos
 - Check issue status
 
 **PostgreSQL:**
+
 - Debug database issues
 - Verify data structure
 - Check multi-tenant isolation
 - Inspect schema
 
 **Brave Search:**
+
 - Research latest practices
 - Find documentation
 - Look up examples
 - Competitive analysis
 
 **Sequential Thinking:**
+
 - Complex architectural decisions
 - Multi-step problem solving
 - Feature planning
@@ -471,4 +502,3 @@ Expected response times:
 **Questions?** Check the troubleshooting section or ask in #engineering
 
 **Ready to supercharge Cursor?** Follow the setup steps above! 🚀
-

@@ -8,28 +8,34 @@
 ## ✅ Active MCP Servers (7 Total)
 
 ### 1. Kibo UI ✅
+
 **Status:** Active  
 **What it does:** Access to 1,101 UI component patterns
 
 ### 2. Filesystem ✅
+
 **Status:** Active  
 **What it does:** Enhanced file operations
 
 ### 3. Memory ✅
+
 **Status:** Active  
 **What it does:** Persistent knowledge across sessions
 
 ### 4. GitKraken ✅
+
 **Status:** Active  
 **What it does:** Git operations and GitHub integration
 
 ### 5. GitHub MCP ✅ NEW!
+
 **Status:** Active  
 **What it does:** Direct GitHub access for issues, PRs, code search
 
 **Token configured:** ✅ Added to `.cursor/mcp.json`
 
 **Try it:**
+
 ```
 Agent: "List recent issues in the GalaxyCo repository"
 Agent: "Show me open PRs that need review"
@@ -37,12 +43,14 @@ Agent: "Create a new issue for testing the SaveMessage feature"
 ```
 
 ### 6. PostgreSQL MCP ✅ NEW!
+
 **Status:** Active  
 **What it does:** Direct database queries and schema inspection
 
 **Database:** Your Neon Postgres instance (configured)
 
 **Try it:**
+
 ```
 Agent: "Show me the schema for the users table"
 Agent: "Query the last 10 workspaces in the database"
@@ -50,20 +58,24 @@ Agent: "Check if all queries are filtering by orgId"
 ```
 
 ### 7. Sequential Thinking MCP ✅ NEW!
+
 **Status:** Active  
 **What it does:** Enhanced reasoning for complex problems
 
 **Try it:**
+
 ```
 Agent: "Use sequential thinking to design the SaveMessage feature"
 Agent: "Break down the visual flow builder implementation step by step"
 ```
 
 ### 8. Brave Search MCP ⚠️ DISABLED
+
 **Status:** Disabled (no API key yet)  
 **What it does:** Web research capabilities
 
 **To enable:**
+
 1. Get API key from https://brave.com/search/api/
 2. Update `.cursor/mcp.json` with your key
 3. Set `"disabled": false`
@@ -73,6 +85,7 @@ Agent: "Break down the visual flow builder implementation step by step"
 ## 🚀 What You Can Do Now
 
 ### GitHub Operations
+
 ```
 "Create a GitHub issue titled 'Test SaveMessage feature' with description 'End-to-end testing needed'"
 
@@ -84,6 +97,7 @@ Agent: "Break down the visual flow builder implementation step by step"
 ```
 
 ### Database Operations
+
 ```
 "Show me the schema for the messages table"
 
@@ -95,6 +109,7 @@ Agent: "Break down the visual flow builder implementation step by step"
 ```
 
 ### Enhanced Reasoning
+
 ```
 "Use sequential thinking to plan the integration of Kibo UI components"
 
@@ -108,11 +123,13 @@ Agent: "Break down the visual flow builder implementation step by step"
 ## 🔐 Security Note
 
 **GitHub Token Storage:**
+
 - ✅ Token is stored in `.cursor/mcp.json`
 - ⚠️ Make sure `.cursor/mcp.json` is in `.gitignore` (it should be)
 - ✅ Token has appropriate scopes: `repo`, `read:org`, `workflow`
 
 **Database Connection:**
+
 - ✅ Using your existing Neon Postgres connection string
 - ✅ Connection is SSL encrypted
 
@@ -123,18 +140,21 @@ Agent: "Break down the visual flow builder implementation step by step"
 ### Quick Test Commands
 
 **GitHub MCP:**
+
 ```bash
 # In Agent (Cmd+L):
 "List all repositories I have access to"
 ```
 
 **PostgreSQL MCP:**
+
 ```bash
 # In Agent (Cmd+L):
 "Show me all table names in the database"
 ```
 
 **Sequential Thinking MCP:**
+
 ```bash
 # In Agent (Cmd+L):
 "Use sequential thinking to explain how Next.js Server Actions work"
@@ -170,4 +190,3 @@ All recommended MCP servers are now configured and ready to use. After restartin
 - ✅ Git operations via GitKraken
 
 **Restart Cursor now to activate everything!** 🚀
-

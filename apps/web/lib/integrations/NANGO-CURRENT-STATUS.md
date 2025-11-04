@@ -32,11 +32,13 @@
 **File:** `apps/web/lib/integrations/nango-client.ts`
 
 **Current (Line 17):**
+
 ```typescript
-export const nangoClient = new Nango();  // ❌ Missing session token
+export const nangoClient = new Nango(); // ❌ Missing session token
 ```
 
 **Should be:**
+
 ```typescript
 // Don't create global instance - create per-request with session token
 // Remove this line entirely
@@ -47,6 +49,7 @@ export const nangoClient = new Nango();  // ❌ Missing session token
 ### 2. Connect Flow Implementation
 
 **Current Flow:**
+
 ```typescript
 const connect = nangoClient.openConnectUI({ ... });
 const tokenResult = await getSessionToken([integrationId]);
@@ -54,6 +57,7 @@ connect.setSessionToken(tokenResult.token);  // ❌ Deprecated method
 ```
 
 **Modern Flow:**
+
 ```typescript
 // 1. Get session token first
 const tokenResult = await getSessionToken([integrationId]);
@@ -72,6 +76,7 @@ const result = await nango.auth(integrationId);
 **Current:** Incomplete type declarations in `nango-types.d.ts`
 
 **Needed:**
+
 ```typescript
 declare module '@nangohq/frontend' {
   interface NangoConfig {
@@ -109,12 +114,12 @@ declare module '@nangohq/node' {
 
   export class Nango {
     constructor(config: { secretKey: string; host?: string });
-    
+
     createConnectSession(params: CreateConnectSessionParams): Promise<ConnectSession>;
-    
+
     getConnection(
       providerConfigKey: string,
-      connectionId: string
+      connectionId: string,
     ): Promise<{
       connection_id: string;
       provider_config_key: string;
@@ -123,9 +128,9 @@ declare module '@nangohq/node' {
       created_at: string;
       updated_at: string;
     }>;
-    
+
     deleteConnection(providerConfigKey: string, connectionId: string): Promise<void>;
-    
+
     proxy(params: {
       method: string;
       endpoint: string;
@@ -178,7 +183,7 @@ declare module '@nangohq/node' {
 ## 🔧 Estimated Effort
 
 - Type declarations: 30 minutes
-- Frontend updates: 1 hour  
+- Frontend updates: 1 hour
 - Webhook handler: 1 hour
 - Testing: 1 hour
 - **Total: ~3.5 hours**
@@ -192,4 +197,3 @@ See `NANGO-INTEGRATION-GUIDE.md` for complete modern implementation guide.
 ---
 
 **Next Step:** Update type declarations and frontend implementation to match modern Nango flow.
-

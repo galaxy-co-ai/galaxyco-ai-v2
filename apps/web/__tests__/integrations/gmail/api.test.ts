@@ -75,16 +75,12 @@ describe('Gmail API', () => {
         bcc: ['bcc@example.com'],
       });
 
-<<<<<<< Updated upstream
-      const call = (global.fetch as any).mock.calls[0];
-=======
       // Second call (index 1) is the send message call
       const call = (global.fetch as any).mock.calls[1];
       expect(call).toBeDefined();
       expect(call[1]).toBeDefined();
       expect(call[1].body).toBeDefined();
 
->>>>>>> Stashed changes
       const body = JSON.parse(call[1].body);
 
       // Verify email contains CC and BCC

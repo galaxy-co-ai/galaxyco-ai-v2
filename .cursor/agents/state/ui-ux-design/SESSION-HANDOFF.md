@@ -19,6 +19,7 @@
 ## ✅ COMPLETED WORK (Phases 0-2)
 
 ### Phase 0: Foundation ✅ COMPLETE
+
 - **Framer Blue Migration**
   - Updated `apps/web/styles/globals.css` - Primary color #0055FF
   - Updated `apps/web/tailwind.config.ts` - Framer Blue tokens
@@ -27,6 +28,7 @@
   - Document: `.cursor/design/migration-status.md`
 
 ### Phase 1: Visual Audit ✅ COMPLETE
+
 - **Screenshot Baseline:** 8 core pages captured
 - **Quality Report:** `docs/audit/quality-report.md`
   - Dashboard: 7.5/10
@@ -44,6 +46,7 @@
   - Typography hierarchy needs refinement
 
 ### Phase 2: Component System Excellence ✅ COMPLETE
+
 - **Component Audit:** `docs/audit/phase-2-component-audit.md`
   - 200+ components inventoried
   - shadcn/ui: 45 components (100% token compliant) ✅
@@ -57,6 +60,7 @@
   - Avatar-stack, Rating, Ticker (medium priority)
 
 ### Phase 2 Execution: Purple Eradication ✅ COMPLETE
+
 - **Spec Created:** `docs/audit/FRONTEND-PURPLE-ERADICATION-SPEC.md`
 - **Handed to:** Frontend Architect Agent
 - **Result:** 100% SUCCESS ✅
@@ -72,11 +76,13 @@
 ## 🚧 IN PROGRESS: Phase 3 Prep (Next Action)
 
 ### What's Queued:
+
 - **Phase 3:** Linear-quality polish (spacing, typography, shadows)
 - **Phase 4:** WCAG 2.1 AA compliance + responsive testing
 - **Phase 5:** Documentation + component library
 
 ### Frontend Agent Status:
+
 - ✅ Ready to continue
 - ✅ Purple eradication complete
 - ⏭️ Waiting for Phase 3 instructions (spacing polish)
@@ -97,7 +103,7 @@
 
 ## 📨 READY-TO-SEND PROMPT (Phase 3 - Spacing Polish)
 
-```markdown
+````markdown
 Hey Frontend Architect Agent! 🎉
 
 **Incredible work on the purple eradication!** Zero purple remaining, 100% brand compliance achieved.
@@ -120,6 +126,7 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 ## 🎨 Linear Spacing Standards:
 
 ### 1. Section Vertical Spacing
+
 ```tsx
 // BEFORE (too tight)
 <section className="py-16">  // 64px
@@ -127,8 +134,10 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 // AFTER (Linear standard)
 <section className="py-24">  // 96px ✅
 ```
+````
 
 ### 2. Card Internal Padding
+
 ```tsx
 // BEFORE (cramped)
 <Card className="p-4">  // 16px
@@ -138,6 +147,7 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 ```
 
 ### 3. Grid Gaps
+
 ```tsx
 // BEFORE (tight)
 <div className="grid gap-4">  // 16px
@@ -148,6 +158,7 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 ```
 
 ### 4. List Spacing
+
 ```tsx
 // BEFORE
 <div className="space-y-2">  // 8px
@@ -158,6 +169,7 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 ```
 
 ### 5. Heading Margins
+
 ```tsx
 // BEFORE
 <h1 className="mb-4">  // 16px
@@ -171,6 +183,7 @@ Now let's take GalaxyCo from **8.2/10 to 8.9/10** with Linear-quality polish.
 ## 📋 Files to Update (Priority Order):
 
 **Critical:**
+
 1. `app/(app)/dashboard/page.tsx`
    - py-16 → py-24 (sections)
    - p-4 → p-6 (stats cards)
@@ -224,6 +237,7 @@ Then update Card component to use `shadow-subtle`.
 **Target:** 8.2/10 → 8.9/10 (+0.7)
 
 🚀 Let's make it premium!
+
 ```
 
 ---
@@ -468,8 +482,8 @@ When starting next session, verify:
 
 Everything you need is in this document. You can seamlessly continue where the last session left off.
 
-**Current State:** 8.2/10 ✅  
-**Next Target:** 8.9/10 (Phase 3)  
+**Current State:** 8.2/10 ✅
+**Next Target:** 8.9/10 (Phase 3)
 **Final Goal:** 9.5/10 (Industry-leading)
 
 **Next Action:** Copy-paste Phase 3 prompt to Frontend Agent (or choose Phase 4/5 parallel work)
@@ -478,7 +492,8 @@ Everything you need is in this document. You can seamlessly continue where the l
 
 ---
 
-*Session Handoff Created: November 3, 2025*  
-*By: UI/UX Design Agent (Claude Sonnet 4.5 Thinking)*  
+*Session Handoff Created: November 3, 2025*
+*By: UI/UX Design Agent (Claude Sonnet 4.5 Thinking)*
 *Status: ✅ Ready for Next Session*
 
+```

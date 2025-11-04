@@ -13,13 +13,13 @@ interface ExecutionContext {
 export class WorkflowExecutorService {
   /**
    * Execute a workflow
-   * 
+   *
    * This is the heavy processing that should NOT happen in Next.js
    */
   async executeWorkflow(
     workflowId: string,
     context: ExecutionContext,
-    input: Record<string, any>
+    input: Record<string, any>,
   ): Promise<{ executionId: string; status: string; output: any }> {
     // Create execution record
     const [execution] = await db
@@ -81,7 +81,7 @@ export class WorkflowExecutorService {
     executionId: string,
     nodes: any[],
     input: Record<string, any>,
-    context: ExecutionContext
+    context: ExecutionContext,
   ): Promise<any> {
     const results: Record<string, any> = {};
     let stepIndex = 0;
@@ -119,7 +119,9 @@ export class WorkflowExecutorService {
             completedAt: new Date(),
             durationMs: Date.now() - stepStartTime,
           })
-          .where(and(eq(executionSteps.executionId, executionId), eq(executionSteps.nodeId, node.id)));
+          .where(
+            and(eq(executionSteps.executionId, executionId), eq(executionSteps.nodeId, node.id)),
+          );
 
         results[node.id] = output;
       } catch (error) {
@@ -132,7 +134,9 @@ export class WorkflowExecutorService {
             completedAt: new Date(),
             durationMs: Date.now() - stepStartTime,
           })
-          .where(and(eq(executionSteps.executionId, executionId), eq(executionSteps.nodeId, node.id)));
+          .where(
+            and(eq(executionSteps.executionId, executionId), eq(executionSteps.nodeId, node.id)),
+          );
 
         throw error;
       }
@@ -147,7 +151,7 @@ export class WorkflowExecutorService {
   private async executeNode(
     node: any,
     input: Record<string, any>,
-    context: ExecutionContext
+    context: ExecutionContext,
   ): Promise<any> {
     // Node execution logic based on type
     switch (node.nodeType) {
@@ -192,4 +196,3 @@ export class WorkflowExecutorService {
       .where(and(eq(gridExecutions.id, executionId), eq(gridExecutions.workspaceId, workspaceId)));
   }
 }
-

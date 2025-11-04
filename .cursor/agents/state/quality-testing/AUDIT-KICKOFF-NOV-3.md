@@ -18,6 +18,7 @@ You are the Quality & Testing Agent for GalaxyCo.ai.
 Perform comprehensive audit of entire platform to ensure launch readiness. This is the final gate before launch.
 
 **CONTEXT FILES TO READ FIRST:**
+
 1. `.cursor/agents/state/backend-systems/PHASE-3-COMPLETE.md` - Phase 3 completion (READ THIS FIRST)
 2. `.cursor/agents/state/backend-systems/PHASE-1-TASKS-1-3-COMPLETE.md` - Phase 1 fixes
 3. `.cursor/agents/state/frontend-architect/PHASE-2-COMPLETE.md` - Phase 2 marketplace UI
@@ -26,6 +27,7 @@ Perform comprehensive audit of entire platform to ensure launch readiness. This 
 6. `.cursor/agents/state/quality-testing/PHASE-3-COMPLETE-AUDIT.md` - Full audit checklist
 
 **PHASE 3 COMPLETION SUMMARY:**
+
 - ✅ Redis caching implemented for marketplace, templates, and workflows APIs
 - ✅ Performance targets: Sub-200ms API responses achieved (with cache)
 - ✅ Cache invalidation working correctly
@@ -34,6 +36,7 @@ Perform comprehensive audit of entire platform to ensure launch readiness. This 
 - ✅ Duration: ~1.5 hours (30 minutes ahead of schedule)
 
 **CURRENT PLATFORM STATUS:**
+
 - Phase 1: ✅ Complete (Backend fixes - OAuth callback, Clerk auth, workflow execution)
 - Phase 2: ✅ Complete (Marketplace UI - marketplace page, templates, agent installation)
 - Phase 3: ✅ Complete (Performance optimization - Redis caching)
@@ -55,6 +58,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 **Objective:** Verify all features work end-to-end.
 
 #### Flow 1: Email Sending (Phase 1 Fixes)
+
 1. [ ] Connect Gmail OAuth → Redirects to callback
 2. [ ] Check database → Integration record exists
 3. [ ] Check database → OAuth tokens record exists (encrypted)
@@ -65,12 +69,14 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 8. [ ] **Email arrives in dalton@galaxyco.ai inbox** 🎉
 
 **Verification:**
+
 - [ ] Server logs show `[OAUTH_CALLBACK]` success messages
 - [ ] Server logs show `[WORKFLOW_EXECUTE]` success messages
 - [ ] Database queries confirm data persistence
 - [ ] Email arrives successfully
 
 #### Flow 2: Marketplace & Agent Installation (Phase 2)
+
 1. [ ] Navigate to `/marketplace` → Page loads
 2. [ ] Search "email" → Filters to email agents
 3. [ ] Select "Productivity" category → Filters correctly
@@ -81,12 +87,14 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 8. [ ] Navigate to `/agents` → Installed agent appears
 
 **Verification:**
+
 - [ ] Marketplace API responds < 200ms (with cache)
 - [ ] Installation API works
 - [ ] Agent appears in workspace
 - [ ] UI updates correctly
 
 #### Flow 3: Template Selection in Flow Builder (Phase 2)
+
 1. [ ] Navigate to `/workflows/builder`
 2. [ ] Click "Start from Template" button
 3. [ ] Template Selector modal opens
@@ -96,12 +104,14 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 7. [ ] Success toast: "Template selected!"
 
 **Verification:**
+
 - [ ] Modal opens/closes correctly
 - [ ] Templates load from API
 - [ ] Template selection works
 - [ ] Integration with Flow Builder works
 
 #### Flow 4: Performance Verification (Phase 3)
+
 1. [ ] Marketplace API → < 200ms response time (with cache)
 2. [ ] Templates API → < 200ms response time (with cache)
 3. [ ] Workflows API → < 200ms response time (with cache)
@@ -109,6 +119,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 5. [ ] Redis connection working
 
 **Verification:**
+
 - [ ] API response times measured (use browser dev tools Network tab)
 - [ ] Cache hit/miss rates logged (check Redis or server logs)
 - [ ] Performance meets targets
@@ -122,32 +133,40 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 **Test Execution:**
 
 1. **Unit/Integration Tests**
+
    ```bash
    pnpm test
    ```
+
    - [ ] All tests pass
    - [ ] Pass rate ≥ 98% (current baseline: 98.9%)
    - [ ] No new test failures
 
 2. **E2E Tests (Playwright)**
+
    ```bash
    pnpm test:e2e
    ```
+
    - [ ] All E2E tests pass
    - [ ] Critical user journeys tested
    - [ ] No flaky tests
 
 3. **TypeScript Check**
+
    ```bash
    pnpm typecheck
    ```
+
    - [ ] 0 TypeScript errors
    - [ ] All types correct
 
 4. **Linting**
+
    ```bash
    pnpm lint
    ```
+
    - [ ] 0 linting errors
    - [ ] Code quality standards met
 
@@ -248,6 +267,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 **Objective:** Manually test all critical user journeys.
 
 **Journey 1: New User Onboarding**
+
 1. [ ] Sign up → Works smoothly
 2. [ ] First login → Welcome experience
 3. [ ] Browse marketplace → Can see agents
@@ -256,6 +276,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 6. [ ] Execute workflow → Success
 
 **Journey 2: Email Automation**
+
 1. [ ] Connect Gmail → OAuth works (redirects correctly)
 2. [ ] Integration status shows "Connected" → Verified
 3. [ ] Create email workflow → Works
@@ -263,6 +284,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 5. [ ] Email arrives → Verified in inbox
 
 **Journey 3: Agent Marketplace**
+
 1. [ ] Browse marketplace → Loads quickly (< 200ms)
 2. [ ] Search agents → Filters work
 3. [ ] Install agent → < 10 seconds
@@ -270,12 +292,14 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 5. [ ] Cache invalidation → Works (install → marketplace refreshes)
 
 **Journey 4: Template Workflow**
+
 1. [ ] Start from template → Modal opens
 2. [ ] Select template → Loads into builder
 3. [ ] Customize workflow → Works
 4. [ ] Execute workflow → Success
 
 **Journey 5: Error Recovery**
+
 1. [ ] Disconnect Gmail → Error handled gracefully
 2. [ ] Workflow fails → Helpful error message (not technical error)
 3. [ ] Reconnect integration → Works
@@ -288,18 +312,21 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 **Before claiming audit complete:**
 
 **Code Quality:**
+
 - [ ] Run `pnpm typecheck` (no errors)
 - [ ] Run `pnpm lint` (no errors)
 - [ ] Run `pnpm test` (all passing, ≥98% pass rate)
 - [ ] No console.log statements (check for logger usage)
 
 **Standards Compliance:**
+
 - [ ] Multi-tenant isolation verified (orgId/workspaceId filters)
 - [ ] TypeScript strict mode (no 'any' without justification)
 - [ ] User-friendly error messages (never show technical errors)
 - [ ] Accessibility standards met (WCAG AA)
 
 **Documentation:**
+
 - [ ] Completion document created (see template below)
 - [ ] Key findings documented
 - [ ] Issues/blockers documented with severity
@@ -361,6 +388,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 ## 🎯 SUCCESS CRITERIA
 
 **Platform Launch Ready If:**
+
 - ✅ All critical features work end-to-end
 - ✅ Email sending verified (email arrives in inbox)
 - ✅ Test pass rate ≥ 98%
@@ -371,6 +399,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 - ✅ No critical blockers
 
 **Launch Blocked If:**
+
 - ❌ Email sending doesn't work
 - ❌ Critical features broken
 - ❌ Security vulnerabilities found
@@ -383,6 +412,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 ## 🚨 WHEN TO ASK FOR HELP
 
 **Stop and ask Director if:**
+
 - [ ] Critical blocker found (email sending broken)
 - [ ] Security vulnerability discovered
 - [ ] Test pass rate drops significantly
@@ -399,6 +429,7 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 **Estimated Duration:** 4-6 hours
 
 **Breakdown:**
+
 - E2E Feature Verification: 2 hours
 - Test Suite Execution: 1 hour
 - Security Audit: 1 hour
@@ -416,13 +447,16 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 ## 🎯 CREDENTIALS FOR TESTING
 
 **Test Account:**
+
 - Email: dalton@galaxyco.ai
-- Password: EnergyFX3_!
+- Password: EnergyFX3\_!
 
 **Google OAuth:**
+
 - Test email: dalton@galaxyco.ai (for receiving test emails)
 
 **Database:**
+
 - Check integration records in `integrations` table
 - Check OAuth tokens in `oauth_tokens` table (encrypted)
 
@@ -445,4 +479,3 @@ Verify platform is 100% ready for launch on Wednesday 3 PM.
 ---
 
 This kickoff provides complete context for Quality Testing Agent to perform comprehensive audit!
-

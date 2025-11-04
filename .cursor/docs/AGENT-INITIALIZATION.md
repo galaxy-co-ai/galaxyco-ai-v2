@@ -7,6 +7,7 @@
 ## 🎯 The Problem
 
 **Before:**
+
 - Agent starts session
 - You explain role: "You're the Frontend Architect..."
 - You explain scope: "You work on components in apps/web/..."
@@ -15,6 +16,7 @@
 - **Result:** 2,000+ tokens wasted, every session!
 
 **After:**
+
 - Agent runs: `init-frontend-architect`
 - **Result:** Full context loaded instantly, zero explanation needed!
 
@@ -33,11 +35,13 @@
 ## 📋 Agent Initialization Commands
 
 ### 1. Frontend Architect Agent 🔵
+
 ```
 Command: init-frontend-architect
 ```
 
 **What it loads:**
+
 - Role: React/Next.js components and UI implementation
 - Scope: apps/web/app/, apps/web/components/, etc.
 - Patterns: Server Components, shadcn/ui, Kibo UI
@@ -50,11 +54,13 @@ Command: init-frontend-architect
 ---
 
 ### 2. Backend Systems Agent 🟢
+
 ```
 Command: init-backend-systems
 ```
 
 **What it loads:**
+
 - Role: APIs, database, Server Actions
 - Scope: apps/api/, apps/web/lib/actions/, packages/database/
 - Patterns: Server Actions, multi-tenant (orgId), Zod validation
@@ -65,6 +71,7 @@ Command: init-backend-systems
 "✅ I'm ready to build APIs and database logic!"
 
 **CRITICAL REMINDERS:**
+
 - ALWAYS filter by orgId (multi-tenant security)
 - ALWAYS validate with Zod
 - Server Actions > API routes
@@ -72,11 +79,13 @@ Command: init-backend-systems
 ---
 
 ### 3. DevOps & Infrastructure Agent 🟠
+
 ```
 Command: init-devops-infrastructure
 ```
 
 **What it loads:**
+
 - Role: Deployments, CI/CD, infrastructure
 - Scope: .github/workflows/, infra/, scripts/deployment/
 - Patterns: Vercel deploys, GitHub Actions, Docker
@@ -89,11 +98,13 @@ Command: init-devops-infrastructure
 ---
 
 ### 4. UI/UX Design Agent 🎨
+
 ```
 Command: init-ui-ux-design
 ```
 
 **What it loads:**
+
 - Role: Design thinking, wireframes, UX strategy
 - Scope: docs/design-system/, docs/wireframes/, .cursor/design/
 - Patterns: Linear aesthetic, WCAG AA compliance
@@ -104,6 +115,7 @@ Command: init-ui-ux-design
 "✅ I'm ready to create designs and UX strategy!"
 
 **DESIGN PRINCIPLES:**
+
 - Linear-inspired minimal aesthetic
 - Framer blue accent (#0099FF)
 - WCAG 2.1 AA compliance minimum
@@ -112,13 +124,15 @@ Command: init-ui-ux-design
 ---
 
 ### 5. Quality & Testing Agent 🟣
+
 ```
 Command: init-quality-testing
 ```
 
 **What it loads:**
+
 - Role: Testing, QA, code quality
-- Scope: tests/, **/*.test.ts, **/*.spec.ts
+- Scope: tests/, **/\*.test.ts, **/\*.spec.ts
 - Patterns: Vitest, Playwright, Testing Library
 - Standards: Testing standards, 80%+ coverage
 - Last session: Previous tests and coverage progress
@@ -127,6 +141,7 @@ Command: init-quality-testing
 "✅ I'm ready to write comprehensive tests!"
 
 **TESTING PRINCIPLES:**
+
 - Test behavior, not implementation
 - Mock all external dependencies
 - Include accessibility tests
@@ -135,11 +150,13 @@ Command: init-quality-testing
 ---
 
 ### 6. Cursor Engineer Agent 🔧
+
 ```
 Command: init-cursor-engineer
 ```
 
 **What it loads:**
+
 - Role: Cursor optimization, automation, productivity
 - Scope: .cursor/, scripts/, .husky/
 - Accomplishments: 16 commands, 4 workflows, 14 snippets
@@ -150,6 +167,7 @@ Command: init-cursor-engineer
 "✅ I'm ready to optimize Cursor and eliminate friction!"
 
 **MY MISSION:**
+
 - Make GalaxyCo ship like 20-person team
 - Zero friction development
 - Autonomous quality assurance
@@ -161,15 +179,17 @@ Command: init-cursor-engineer
 ### Example: Frontend Architect Session
 
 **BEFORE (Old Way - Wastes Context):**
+
 ```
-User: "You're the Frontend Architect. You work on React components 
-in apps/web/. Always use Server Components by default. Use shadcn/ui 
+User: "You're the Frontend Architect. You work on React components
+in apps/web/. Always use Server Components by default. Use shadcn/ui
 for UI. Remember to include loading states..."
 
 [2000+ tokens wasted explaining role]
 ```
 
 **AFTER (New Way - Zero Waste):**
+
 ```
 User: init-frontend-architect
 
@@ -185,7 +205,7 @@ Ready to build! What should I work on?
 
 User: Create a task list component
 
-Agent: [Immediately starts building with full context, 
+Agent: [Immediately starts building with full context,
 no questions about patterns or structure]
 ```
 
@@ -226,14 +246,14 @@ Each initialization command:
 
 ### Per Session Savings
 
-| Agent | Without Init | With Init | Savings |
-|-------|-------------|-----------|---------|
+| Agent    | Without Init  | With Init   | Savings          |
+| -------- | ------------- | ----------- | ---------------- |
 | Frontend | ~2,500 tokens | ~500 tokens | **2,000 tokens** |
-| Backend | ~2,800 tokens | ~500 tokens | **2,300 tokens** |
-| DevOps | ~2,000 tokens | ~400 tokens | **1,600 tokens** |
-| UI/UX | ~2,200 tokens | ~450 tokens | **1,750 tokens** |
-| Testing | ~2,000 tokens | ~400 tokens | **1,600 tokens** |
-| Cursor | ~1,800 tokens | ~400 tokens | **1,400 tokens** |
+| Backend  | ~2,800 tokens | ~500 tokens | **2,300 tokens** |
+| DevOps   | ~2,000 tokens | ~400 tokens | **1,600 tokens** |
+| UI/UX    | ~2,200 tokens | ~450 tokens | **1,750 tokens** |
+| Testing  | ~2,000 tokens | ~400 tokens | **1,600 tokens** |
+| Cursor   | ~1,800 tokens | ~400 tokens | **1,400 tokens** |
 
 **Average Savings:** ~1,900 tokens per session
 
@@ -252,6 +272,7 @@ Each initialization command:
 ## 🎓 Best Practices
 
 ### Always Initialize First
+
 ```
 ✅ CORRECT:
 User: init-frontend-architect
@@ -267,6 +288,7 @@ User: "Use Server Components..."
 ```
 
 ### Let Init Command Do the Work
+
 ```
 ✅ CORRECT:
 User: init-backend-systems
@@ -279,6 +301,7 @@ User: "Also remember to always filter by orgId..."
 ```
 
 ### Trust the Context
+
 ```
 ✅ CORRECT:
 Agent after init: "I know to use Server Components by default"
@@ -360,14 +383,14 @@ Should I continue with E2E tests?"
 
 **Command Pattern:** `init-[agent-name]`
 
-| Agent | Command | Color |
-|-------|---------|-------|
-| Frontend Architect | `init-frontend-architect` | 🔵 Blue |
-| Backend Systems | `init-backend-systems` | 🟢 Green |
+| Agent                   | Command                      | Color     |
+| ----------------------- | ---------------------------- | --------- |
+| Frontend Architect      | `init-frontend-architect`    | 🔵 Blue   |
+| Backend Systems         | `init-backend-systems`       | 🟢 Green  |
 | DevOps & Infrastructure | `init-devops-infrastructure` | 🟠 Orange |
-| UI/UX Design | `init-ui-ux-design` | 🎨 Purple |
-| Quality & Testing | `init-quality-testing` | 🟣 Purple |
-| Cursor Engineer | `init-cursor-engineer` | 🔧 Gray |
+| UI/UX Design            | `init-ui-ux-design`          | 🎨 Purple |
+| Quality & Testing       | `init-quality-testing`       | 🟣 Purple |
+| Cursor Engineer         | `init-cursor-engineer`       | 🔧 Gray   |
 
 ---
 
@@ -389,17 +412,21 @@ After running init command, agent should:
 ## 💡 Pro Tips
 
 ### 1. Use in Cursor Command Palette
+
 ```
 Cmd+Shift+P → "init-frontend-architect"
 ```
 
 ### 2. Create Keyboard Shortcuts
+
 Assign shortcuts to frequently used init commands
 
 ### 3. Add to Session Templates
+
 Create session templates that auto-run init command
 
 ### 4. Verify Init Success
+
 After init, ask: "What's your role?"  
 Agent should explain immediately without reading files
 
@@ -408,6 +435,7 @@ Agent should explain immediately without reading files
 ## 🎉 Impact
 
 **Before Agent Init System:**
+
 - ❌ Explaining role every session
 - ❌ Reminding about patterns
 - ❌ Clarifying file scope
@@ -415,6 +443,7 @@ Agent should explain immediately without reading files
 - ❌ Slower session start
 
 **After Agent Init System:**
+
 - ✅ Zero explanation needed
 - ✅ Patterns pre-loaded
 - ✅ Scope understood
@@ -426,4 +455,3 @@ Agent should explain immediately without reading files
 **This is the future of multi-agent development! 🚀**
 
 **Zero wasted tokens. Maximum productivity. Pure human + AI excellence.**
-
