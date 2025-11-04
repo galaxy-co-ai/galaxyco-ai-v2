@@ -9,7 +9,7 @@
   :root {
     /* Framer Brand Colors */
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 224 14% 9%; /* Near-black with slight blue tint - cleaner than pure black */
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
