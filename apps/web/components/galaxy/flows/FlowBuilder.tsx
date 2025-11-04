@@ -291,25 +291,12 @@ export function FlowBuilder({
                 />
 
                 <div className="flex items-center justify-between">
-<<<<<<< Updated upstream
                   <p className="text-xs text-muted-foreground">
-=======
-                  <p id="workflow-description-hint" className="text-xs text-muted-foreground">
->>>>>>> Stashed changes
                     Press <kbd className="px-1.5 py-0.5 rounded bg-muted">⌘</kbd> +{' '}
                     <kbd className="px-1.5 py-0.5 rounded bg-muted">Enter</kbd> to generate
                   </p>
 
-<<<<<<< Updated upstream
                   <Button onClick={handleGenerate} disabled={isGenerating || !input.trim()}>
-=======
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={isGenerating || !input.trim()}
-                    aria-label="Generate workflow from description"
-                    aria-busy={isGenerating}
-                  >
->>>>>>> Stashed changes
                     {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -369,7 +356,6 @@ export function FlowBuilder({
                 animate={{ opacity: 1, y: 0 }}
                 className="flex gap-2"
               >
-<<<<<<< Updated upstream
                 <Button size="sm" variant="outline" onClick={handleReset}>
                   <RotateCcw className="mr-2 h-4 w-4" />
                   Reset
@@ -377,25 +363,6 @@ export function FlowBuilder({
 
                 <Button size="sm" variant="outline" onClick={handleSave}>
                   <Save className="mr-2 h-4 w-4" />
-=======
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleReset}
-                  aria-label="Reset workflow and start over"
-                >
-                  <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />
-                  Reset
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleSave}
-                  aria-label="Save workflow for later use"
-                >
-                  <Save className="mr-2 h-4 w-4" aria-hidden="true" />
->>>>>>> Stashed changes
                   Save
                 </Button>
 

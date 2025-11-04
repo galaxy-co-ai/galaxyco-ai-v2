@@ -60,12 +60,8 @@ export function StatsCard({ stat }: StatsCardProps) {
                 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
               color === 'orange' &&
                 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
-<<<<<<< Updated upstream
               color === 'purple' &&
                 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-=======
-              color === 'primary' && 'bg-primary/10 text-primary dark:bg-primary/20',
->>>>>>> Stashed changes
             )}
           >
             {/* Note: icon would be rendered here - for now using placeholder */}

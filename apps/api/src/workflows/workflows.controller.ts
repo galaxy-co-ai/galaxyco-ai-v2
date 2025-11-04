@@ -14,13 +14,13 @@ export class WorkflowsController {
   ) {}
 
   @Get(':id')
-  async getWorkflow(@Param('id') id: string, @Workspace() workspaceId: string) {
+  async getWorkflow(@Param('id') id: string, @WorkspaceId() workspaceId: string) {
     return this.workflowsService.getWorkflow(id, workspaceId);
   }
 
   @Get()
   async listWorkflows(
-    @Workspace() workspaceId: string,
+    @WorkspaceId() workspaceId: string,
     @Query('status') status?: string,
     @Query('limit') limit?: string,
     @Query('offset') offset?: string
@@ -35,7 +35,7 @@ export class WorkflowsController {
   @Post(':id/execute')
   async executeWorkflow(
     @Param('id') id: string,
-    @Workspace() workspaceId: string,
+    @WorkspaceId() workspaceId: string,
     @User() userId: string,
     @Body() body: { input?: Record<string, any> }
   ) {
@@ -43,12 +43,12 @@ export class WorkflowsController {
   }
 
   @Post(':id/validate')
-  async validateWorkflow(@Param('id') id: string, @Workspace() workspaceId: string) {
+  async validateWorkflow(@Param('id') id: string, @WorkspaceId() workspaceId: string) {
     return this.workflowsService.validateWorkflow(id, workspaceId);
   }
 
   @Get(':id/analytics')
-  async getAnalytics(@Param('id') id: string, @Workspace() workspaceId: string) {
+  async getAnalytics(@Param('id') id: string, @WorkspaceId() workspaceId: string) {
     return this.workflowsService.getWorkflowAnalytics(id, workspaceId);
   }
 }

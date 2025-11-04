@@ -10,7 +10,7 @@ export class AnalyticsController {
 
   @Get('sales')
   async getSalesAnalytics(
-    @Workspace() workspaceId: string,
+    @WorkspaceId() workspaceId: string,
     @Query('timeRange') timeRange: '7d' | '30d' | '90d' = '30d'
   ) {
     return this.analyticsService.getSalesAnalytics(workspaceId, timeRange);
@@ -18,7 +18,7 @@ export class AnalyticsController {
 
   @Get('agents')
   async getAgentAnalytics(
-    @Workspace() workspaceId: string,
+    @WorkspaceId() workspaceId: string,
     @Query('timeRange') timeRange: '7d' | '30d' | '90d' = '30d'
   ) {
     return this.analyticsService.getAgentAnalytics(workspaceId, timeRange);
@@ -26,14 +26,14 @@ export class AnalyticsController {
 
   @Get('workflows')
   async getWorkflowAnalytics(
-    @Workspace() workspaceId: string,
+    @WorkspaceId() workspaceId: string,
     @Query('timeRange') timeRange: '7d' | '30d' | '90d' = '30d'
   ) {
     return this.analyticsService.getWorkflowAnalytics(workspaceId, timeRange);
   }
 
   @Get('usage')
-  async getUsageAnalytics(@Workspace() workspaceId: string) {
+  async getUsageAnalytics(@WorkspaceId() workspaceId: string) {
     return this.analyticsService.getUsageAnalytics(workspaceId);
   }
 }

@@ -9,23 +9,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Handle, Position, NodeProps } from '@xyflow/react';
-<<<<<<< Updated upstream
 import { Play, CheckCircle, Zap, GitBranch, Plug, AlertCircle, Loader2 } from 'lucide-react';
-=======
-import {
-  Play,
-  CheckCircle,
-  Zap,
-  GitBranch,
-  Plug,
-  AlertCircle,
-  Loader2,
-  Mail,
-  MessageCircle,
-  Users,
-  Calendar,
-} from 'lucide-react';
->>>>>>> Stashed changes
 import { cn } from '@/lib/utils';
 
 export interface FlowNodeData {
@@ -159,19 +143,9 @@ function StatusIcon({ status }: { status?: FlowNodeData['status'] }) {
  * Custom Node Component - Make.com 3D Isometric Style
  */
 export function CustomFlowNode({ data, selected }: NodeProps) {
-<<<<<<< Updated upstream
   const { label, type, description, integration, status } = data as unknown as FlowNodeData;
   const config = getNodeConfig(type, status);
   const Icon = config.icon;
-=======
-  const { label, type, description, integration, integrationAction, status } =
-    data as unknown as FlowNodeData;
-  const config = getNodeConfig(type, status);
-
-  // Use integration-specific icon if this is an integration node
-  const Icon =
-    type === 'integration' && integration ? getIntegrationIcon(integration) : config.icon;
->>>>>>> Stashed changes
 
   return (
     <div className="perspective-1000 relative">
