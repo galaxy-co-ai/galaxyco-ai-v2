@@ -19,10 +19,11 @@ export interface OAuthConfig {
 export function generateGoogleOAuthUrl(config: OAuthConfig): string {
   const { integrationType } = config;
 
-  // Use the actual client ID from env (or fallback for development)
-  const clientId =
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-    '8590991268-hkdrl87qu1qk6698cb06mu6ije4cppml.apps.googleusercontent.com';
+  // Use the client ID from environment variables
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    throw new Error('Google OAuth client ID not configured');
+  }
   const redirectUri = `${window.location.origin}/api/auth/oauth/google/callback`;
 
   // Generate state token
