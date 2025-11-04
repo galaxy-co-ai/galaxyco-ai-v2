@@ -85,22 +85,7 @@ export async function PATCH(req: NextRequest) {
       preferences: updatedPreferences,
     });
   } catch (error) {
-<<<<<<< Updated upstream
     console.error('Update preferences error:', error);
-=======
-    console.error('[Preferences Update Error]', error);
-
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          error: 'Invalid input',
-          details: error.errors[0]?.message || 'Validation failed',
-        },
-        { status: 400 },
-      );
-    }
-
->>>>>>> Stashed changes
     return NextResponse.json(
       {
         error: 'Failed to update preferences',

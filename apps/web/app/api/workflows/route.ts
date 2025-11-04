@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-<<<<<<< Updated upstream
-=======
 import { db } from '@galaxyco/database';
 import { galaxyGrids } from '@galaxyco/database/schema';
 import { eq, and, desc } from 'drizzle-orm';
 import { z } from 'zod';
 import { withCache } from '@/lib/cache/with-cache';
 import { cacheTTL } from '@/lib/cache/redis';
->>>>>>> Stashed changes
 
 /**
  * GET /api/workflows
@@ -39,139 +36,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
-<<<<<<< Updated upstream
-    // TODO: Replace with real DB query once workflows table exists
-    // For now, return stub data with proper structure
-    const stubWorkflows = [
-      {
-        id: 'workflow_1',
-        workspaceId,
-        name: 'Lead Qualification Pipeline',
-        description: 'End-to-end prospect research, email outreach, and CRM sync',
-        status: 'active',
-        steps: [
-          {
-            id: 'step_1',
-            type: 'research',
-            name: 'Research Prospect',
-            config: { sources: ['linkedin', 'company-website', 'news'] },
-          },
-          {
-            id: 'step_2',
-            type: 'email',
-            name: 'Send Outreach Email',
-            config: { template: 'cold-outreach', delay: 0 },
-          },
-          {
-            id: 'step_3',
-            type: 'crm',
-            name: 'Sync to CRM',
-            config: { crmProvider: 'hubspot', action: 'create-or-update' },
-          },
-        ],
-        metrics: {
-          totalExecutions: 156,
-          successfulExecutions: 142,
-          failedExecutions: 14,
-          lastExecutedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        },
-        createdBy: clerkUserId,
-        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: 'workflow_2',
-        workspaceId,
-        name: 'Customer Onboarding',
-        description: 'Automated customer onboarding workflow with welcome emails and setup tasks',
-        status: 'active',
-        steps: [
-          {
-            id: 'step_1',
-            type: 'email',
-            name: 'Send Welcome Email',
-            config: { template: 'welcome', delay: 0 },
-          },
-          {
-            id: 'step_2',
-            type: 'task',
-            name: 'Create Onboarding Tasks',
-            config: { tasks: ['setup-account', 'configure-settings'] },
-          },
-          {
-            id: 'step_3',
-            type: 'notification',
-            name: 'Notify Team',
-            config: { channels: ['slack', 'email'] },
-          },
-        ],
-        metrics: {
-          totalExecutions: 89,
-          successfulExecutions: 84,
-          failedExecutions: 5,
-          lastExecutedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-        },
-        createdBy: clerkUserId,
-        createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: 'workflow_3',
-        workspaceId,
-        name: 'Monthly Report Generation',
-        description: 'Generate and distribute monthly analytics reports to stakeholders',
-        status: 'draft',
-        steps: [
-          {
-            id: 'step_1',
-            type: 'data',
-            name: 'Aggregate Data',
-            config: {
-              timeRange: '30d',
-              metrics: ['revenue', 'users', 'engagement'],
-            },
-          },
-          {
-            id: 'step_2',
-            type: 'report',
-            name: 'Generate Report',
-            config: { format: 'pdf', template: 'monthly-summary' },
-          },
-          {
-            id: 'step_3',
-            type: 'email',
-            name: 'Distribute Report',
-            config: { recipients: ['stakeholders'], attachReport: true },
-          },
-        ],
-        metrics: {
-          totalExecutions: 0,
-          successfulExecutions: 0,
-          failedExecutions: 0,
-          lastExecutedAt: null,
-        },
-        createdBy: clerkUserId,
-        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ];
-
-    // Filter by status if provided
-    let workflows = stubWorkflows;
-    if (status) {
-      workflows = workflows.filter((w) => w.status === status);
-    }
-
-    // Apply pagination
-    const paginatedWorkflows = workflows.slice(offset, offset + limit);
-
-    return NextResponse.json({
-      workflows: paginatedWorkflows,
-      total: workflows.length,
-      limit,
-      offset,
-    });
-=======
     // Create cache key based on workspace and filters
     const cacheKey = `workspace:${workspaceId}:workflows:${status}:${limit}:${offset}`;
 
@@ -226,7 +90,6 @@ export async function GET(req: NextRequest) {
     );
 
     return NextResponse.json(result);
->>>>>>> Stashed changes
   } catch (error) {
     console.error('Workflows API error:', error);
     return NextResponse.json(
@@ -242,8 +105,6 @@ export async function GET(req: NextRequest) {
 /**
  * POST /api/workflows
  * Create a new workflow
- *
- * NOTE: Stub implementation - will need workflows table in database
  */
 export async function POST(req: NextRequest) {
   try {
@@ -253,11 +114,6 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-<<<<<<< Updated upstream
-    const { workspaceId, name, description, steps } = body;
-
-    if (!workspaceId || !name || !steps) {
-=======
 
     // Validate input
     const CreateWorkflowSchema = z.object({
@@ -312,41 +168,15 @@ export async function POST(req: NextRequest) {
     console.error('[Workflows API Error]', error);
 
     if (error instanceof z.ZodError) {
->>>>>>> Stashed changes
       return NextResponse.json(
-        { error: 'workspaceId, name, and steps are required' },
+        {
+          error: 'Invalid input',
+          details: error.errors[0]?.message || 'Validation failed',
+        },
         { status: 400 },
       );
     }
 
-<<<<<<< Updated upstream
-    // TODO: Insert into database once workflows table exists
-    const newWorkflow = {
-      id: `workflow_${Date.now()}`,
-      workspaceId,
-      name,
-      description: description || '',
-      status: 'draft',
-      steps,
-      metrics: {
-        totalExecutions: 0,
-        successfulExecutions: 0,
-        failedExecutions: 0,
-        lastExecutedAt: null,
-      },
-      createdBy: clerkUserId,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    return NextResponse.json({
-      success: true,
-      workflow: newWorkflow,
-    });
-  } catch (error) {
-    console.error('Create workflow error:', error);
-=======
->>>>>>> Stashed changes
     return NextResponse.json(
       {
         error: 'Failed to create workflow',

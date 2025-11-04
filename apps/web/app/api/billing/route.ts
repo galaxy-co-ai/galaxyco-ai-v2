@@ -21,15 +21,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'workspaceId is required' }, { status: 400 });
     }
 
-<<<<<<< Updated upstream
     // TODO: In production, this would:
     // 1. Fetch Stripe customer ID from workspace
     // 2. Query Stripe API for billing details
     // 3. Return subscription, invoices, payment methods
-=======
-    // Get workspace with billing info
-    const [workspace] = await db.select().from(workspaces).where(eq(workspaces.id, workspaceId));
->>>>>>> Stashed changes
 
     // Stub data for now
     const billingData = {
@@ -107,21 +102,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-<<<<<<< Updated upstream
     const body = await req.json();
     const { workspaceId, action, data } = body;
-=======
-    // TODO: Implement Stripe Checkout Session creation
-    return NextResponse.json(
-      {
-        error: 'Stripe integration not yet implemented',
-        message: 'This is a stub endpoint. Integrate Stripe to enable billing.',
-      },
-      { status: 501 }, // Not Implemented
-    );
-  } catch (error) {
-    console.error('[Billing Create Error]', error);
->>>>>>> Stashed changes
 
     if (!workspaceId || !action) {
       return NextResponse.json({ error: 'workspaceId and action are required' }, { status: 400 });
