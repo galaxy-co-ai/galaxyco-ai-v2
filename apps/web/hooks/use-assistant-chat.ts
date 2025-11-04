@@ -68,6 +68,8 @@ export function useAssistantChat(options: UseAssistantChatOptions = {}) {
         });
 
         if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API error:', errorText);
           throw new Error(`API error: ${response.status}`);
         }
 
@@ -88,60 +90,28 @@ export function useAssistantChat(options: UseAssistantChatOptions = {}) {
         ]);
 
         if (reader) {
+          // toTextStreamResponse() returns plain text stream, not JSON
           while (true) {
             const { done, value } = await reader.read();
+
             if (done) break;
 
             const chunk = decoder.decode(value, { stream: true });
-            // Parse SSE format: "data: text\n\n"
-            const lines = chunk.split('\n');
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6);
-                if (data === '[DONE]') continue;
-                try {
-                  // Try to parse as JSON first (for structured data)
-                  const parsed = JSON.parse(data);
-                  if (parsed.content) {
-                    assistantContent += parsed.content;
-                  } else if (typeof parsed === 'string') {
-                    assistantContent += parsed;
-                  }
-                } catch {
-                  // If not JSON, treat as plain text
-                  assistantContent += data;
-                }
+            assistantContent += chunk;
 
-                // Update message in real-time
-                setMessages((prev) => {
-                  const index = prev.findIndex((m) => m.id === assistantMessageId);
-                  if (index >= 0) {
-                    const updated = [...prev];
-                    updated[index] = {
-                      ...updated[index],
-                      content: assistantContent,
-                    };
-                    return updated;
-                  }
-                  return prev;
-                });
-              } else if (line.trim() && !line.startsWith(':')) {
-                // Plain text chunk
-                assistantContent += line;
-                setMessages((prev) => {
-                  const index = prev.findIndex((m) => m.id === assistantMessageId);
-                  if (index >= 0) {
-                    const updated = [...prev];
-                    updated[index] = {
-                      ...updated[index],
-                      content: assistantContent,
-                    };
-                    return updated;
-                  }
-                  return prev;
-                });
+            // Update message in real-time with each chunk
+            setMessages((prev) => {
+              const index = prev.findIndex((m) => m.id === assistantMessageId);
+              if (index >= 0) {
+                const updated = [...prev];
+                updated[index] = {
+                  ...updated[index],
+                  content: assistantContent,
+                };
+                return updated;
               }
-            }
+              return prev;
+            });
           }
         }
 
