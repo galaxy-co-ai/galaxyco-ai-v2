@@ -1,16 +1,19 @@
 /**
  * Kibo UI Components - Central Export
- * All Kibo UI components in one place
+ * Advanced UI components for GalaxyCo.ai
  *
- * NOTE: Temporary implementations until Kibo UI registry is back online
- * See KIBO-UI-MIGRATION-STRATEGY.md for replacement plan
+ * Component Hierarchy:
+ * - Core: credit-card, spinner
+ * - Display: status, ticker, badge, tags, typography, avatar-stack, banner, code-block, announcement, pill, rating, relative-time, marquee, theme-switcher
+ * - Interaction: dropzone, mini-calendar, tree
+ * - Data Visualization: contribution-graph, comparison, patterns
  */
 
-// Core Components (Official Kibo UI)
+// Core Components
 export * from './credit-card';
 export * from './spinner';
 
-// Display Components (Temporary - will be replaced)
+// Display Components
 export * from './status';
 export * from './ticker';
 export * from './badge';
@@ -26,12 +29,12 @@ export * from './relative-time';
 export * from './marquee';
 export * from './theme-switcher';
 
-// Interaction Components (Temporary - will be replaced)
+// Interaction Components
 export * from './dropzone';
 export * from './mini-calendar';
 export * from './tree';
 
-// Data Visualization (Temporary - will be replaced)
+// Data Visualization Components
 export * from './contribution-graph';
 export * from './comparison';
 export * from './patterns';
