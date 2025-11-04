@@ -8,11 +8,11 @@
 
 import { Nango } from '@nangohq/node';
 
-// Validate environment variable exists
+// Nango secret key is required - set in Vercel environment variables
 if (!process.env.NANGO_SECRET_KEY) {
   throw new Error(
     'NANGO_SECRET_KEY is not defined in environment variables. ' +
-      'Please add it to your .env.local file.',
+      'Please add it to Vercel environment variables.',
   );
 }
 
