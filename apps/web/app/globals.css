@@ -12,10 +12,10 @@
     --foreground: 224 14% 9%; /* Near-black with slight blue tint - cleaner than pure black */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 224 14% 9%; /* Match main foreground */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 224 14% 9%; /* Match main foreground */
 
     /* Framer Primary Blue #0055FF */
     --primary: 219 100% 50%;

@@ -148,7 +148,7 @@ export function WorkflowVisualizer({
                 <Icon className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
               </div>
               <div className="flex-1">
-                <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                <div className="text-sm font-medium text-foreground">
                   {index + 1}. {node.label}
                 </div>
                 {node.integration && (

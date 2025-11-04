@@ -155,9 +155,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalPr
         {/* Header */}
         <div className="flex items-center justify-between border-b px-6 py-4">
           <div>
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-              Upload Documents
-            </h2>
+            <h2 className="text-xl font-semibold text-foreground">Upload Documents</h2>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
               Upload PDFs, Word docs, images, and more
             </p>
@@ -186,9 +184,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalPr
               )}
             >
               <Upload className="h-12 w-12 text-neutral-400" />
-              <h3 className="mt-4 font-semibold text-neutral-900 dark:text-neutral-100">
-                Drag and drop files here
-              </h3>
+              <h3 className="mt-4 font-semibold text-foreground">Drag and drop files here</h3>
               <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
                 or click to browse your files
               </p>
@@ -228,9 +224,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalPr
                     )}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {upload.file.name}
-                    </h4>
+                    <h4 className="font-medium text-foreground">{upload.file.name}</h4>
                     <div className="mt-1 flex items-center gap-2">
                       {upload.status === 'complete' ? (
                         <p className="text-xs text-green-600">
@@ -260,7 +254,7 @@ export function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalPr
               {allComplete && (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-dashed border-neutral-300 text-sm font-medium text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+                  className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-dashed border-neutral-300 text-sm font-medium text-neutral-600 hover:border-neutral-400 hover:text-foreground dark:border-neutral-700 dark:text-neutral-400"
                 >
                   <Upload className="h-4 w-4" />
                   Upload More Files

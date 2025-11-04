@@ -29,9 +29,7 @@ const VARIANT_COLORS = {
 export function VariantGrid({ variants, onSelectVariant }: VariantGridProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-        Choose Your Agent Configuration
-      </h2>
+      <h2 className="text-xl font-semibold text-foreground">Choose Your Agent Configuration</h2>
       <p className="text-sm text-neutral-600 dark:text-neutral-400">
         Select the version that best fits your needs
       </p>

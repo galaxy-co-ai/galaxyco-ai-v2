@@ -57,9 +57,7 @@ export function ChatMessageComponent({ message }: ChatMessageProps) {
           className={cn(
             'rounded-lg px-4 py-2 text-sm',
             isUser && 'bg-primary text-white',
-            !isUser &&
-              !isSystem &&
-              'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100',
+            !isUser && !isSystem && 'bg-neutral-100 text-foreground dark:bg-neutral-800',
             isSystem &&
               'border border-orange-200 bg-orange-50 text-orange-900 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-200',
           )}

@@ -10,3 +10,7 @@ pnpm-lock.yaml
 playwright-report
 test-results
 
+# Temporary documentation files
+docs/design-system/FRAMER-LINEAR-UPGRADE-PLAN.md
+UI-UPGRADE-COMPLETE.md
+UI-UX-AUDIT-FINDINGS.md

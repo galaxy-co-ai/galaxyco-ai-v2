@@ -27,7 +27,7 @@ export function MetricCard({ label, value, icon: Icon, trend, className }: Metri
         </div>
       </div>
       <div className="mt-3 flex items-baseline gap-2">
-        <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{value}</p>
+        <p className="text-2xl font-bold text-foreground">{value}</p>
         {trend && (
           <span
             className={cn(

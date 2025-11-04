@@ -175,7 +175,7 @@ export function ScheduleConfig({ config, onChange }: ScheduleConfigProps) {
       {config.triggerType === 'webhook' && (
         <div className="space-y-4 pl-4 border-l-2 border-primary/20">
           <div className="rounded-lg bg-neutral-50 dark:bg-neutral-900 p-4">
-            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-2">
+            <p className="text-sm font-medium text-foreground mb-2">
               Webhook URL (will be generated)
             </p>
             <code className="text-xs text-neutral-600 dark:text-neutral-400 break-all">

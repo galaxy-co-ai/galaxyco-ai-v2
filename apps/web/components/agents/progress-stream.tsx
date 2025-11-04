@@ -23,9 +23,7 @@ export function ProgressStream({ steps, isOpen }: ProgressStreamProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-300 dark:border-neutral-700 shadow-2xl p-6 w-full max-w-md mx-4">
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-          Building Your Agent...
-        </h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">Building Your Agent...</h3>
 
         <div className="space-y-3 mb-6">
           {steps.map((step, index) => (
@@ -44,7 +42,7 @@ export function ProgressStream({ steps, isOpen }: ProgressStreamProps) {
                   step.status === 'complete'
                     ? 'text-neutral-600 dark:text-neutral-400'
                     : step.status === 'active'
-                      ? 'text-neutral-900 dark:text-neutral-100 font-medium'
+                      ? 'text-foreground font-medium'
                       : 'text-neutral-500'
                 }`}
               >
@@ -58,7 +56,7 @@ export function ProgressStream({ steps, isOpen }: ProgressStreamProps) {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-neutral-600 dark:text-neutral-400">Progress</span>
-            <span className="text-neutral-900 dark:text-neutral-100 font-medium">{progress}%</span>
+            <span className="text-foreground font-medium">{progress}%</span>
           </div>
           <div className="h-2 w-full rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
             <div

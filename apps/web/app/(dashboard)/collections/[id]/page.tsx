@@ -171,9 +171,7 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <FileText className="h-12 w-12 text-neutral-400" />
-        <h3 className="mt-4 font-semibold text-neutral-900 dark:text-neutral-100">
-          Document not found
-        </h3>
+        <h3 className="mt-4 font-semibold text-foreground">Document not found</h3>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
           The document you&apos;re looking for doesn&apos;t exist or has been deleted.
         </p>
@@ -210,9 +208,7 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
               <TypeIcon className="h-6 w-6 text-neutral-600 dark:text-neutral-400" />
             </div>
             <div>
-              <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-                {document.title}
-              </h1>
+              <h1 className="text-2xl font-semibold text-foreground">{document.title}</h1>
               <div className="mt-2 flex items-center gap-2">
                 {getStatusBadge(document.status)}
                 <span className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -248,29 +244,25 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
         <div className="mx-auto max-w-4xl space-y-6">
           {/* Metadata Card */}
           <div className="rounded-lg border bg-white p-6 shadow-sm dark:bg-neutral-900">
-            <h2 className="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Document Information
-            </h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">Document Information</h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                   File Name
                 </dt>
-                <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {document.fileName || '—'}
-                </dd>
+                <dd className="mt-1 text-sm text-foreground">{document.fileName || '—'}</dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                   File Size
                 </dt>
-                <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                <dd className="mt-1 text-sm text-foreground">
                   {formatFileSize(document.fileSize)}
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Type</dt>
-                <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                <dd className="mt-1 text-sm text-foreground">
                   {document.mimeType || document.type}
                 </dd>
               </div>
@@ -278,18 +270,14 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
                 <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                   Uploaded
                 </dt>
-                <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                  {formatDate(document.createdAt)}
-                </dd>
+                <dd className="mt-1 text-sm text-foreground">{formatDate(document.createdAt)}</dd>
               </div>
               {document.metadata?.author && (
                 <div>
                   <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                     Author
                   </dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
-                    {document.metadata.author}
-                  </dd>
+                  <dd className="mt-1 text-sm text-foreground">{document.metadata.author}</dd>
                 </div>
               )}
               {document.metadata?.wordCount && (
@@ -297,7 +285,7 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
                   <dt className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                     Word Count
                   </dt>
-                  <dd className="mt-1 text-sm text-neutral-900 dark:text-neutral-100">
+                  <dd className="mt-1 text-sm text-foreground">
                     {document.metadata.wordCount.toLocaleString()}
                   </dd>
                 </div>
@@ -345,9 +333,7 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
           {/* Summary */}
           {document.summary && (
             <div className="rounded-lg border bg-white p-6 shadow-sm dark:bg-neutral-900">
-              <h2 className="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                Summary
-              </h2>
+              <h2 className="mb-4 text-lg font-semibold text-foreground">Summary</h2>
               <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
                 {document.summary}
               </p>
@@ -357,9 +343,7 @@ export default function DocumentDetailPage({ params }: { params: { id: string } 
           {/* Content Preview */}
           {document.content && document.status === 'ready' && (
             <div className="rounded-lg border bg-white p-6 shadow-sm dark:bg-neutral-900">
-              <h2 className="mb-4 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                Content Preview
-              </h2>
+              <h2 className="mb-4 text-lg font-semibold text-foreground">Content Preview</h2>
               <div className="prose prose-sm max-w-none dark:prose-invert">
                 <pre className="whitespace-pre-wrap rounded-md bg-neutral-50 p-4 text-sm dark:bg-neutral-800">
                   {document.content.length > 2000

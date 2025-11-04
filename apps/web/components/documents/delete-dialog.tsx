@@ -65,11 +65,8 @@ export function DeleteDialog({
           </div>
           <DialogDescription className="text-left">
             Are you sure you want to delete{' '}
-            <span className="font-semibold text-neutral-900 dark:text-neutral-100">
-              {documentName}
-            </span>
-            ? This action cannot be undone and the document will be permanently removed from your
-            collection.
+            <span className="font-semibold text-foreground">{documentName}</span>? This action
+            cannot be undone and the document will be permanently removed from your collection.
           </DialogDescription>
         </DialogHeader>
 

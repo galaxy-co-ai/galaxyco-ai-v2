@@ -193,9 +193,7 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
                   <Bot className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-neutral-900 dark:text-neutral-100">
-                    🚀 GalaxyCo AI Assistant
-                  </h3>
+                  <h3 className="font-bold text-foreground">🚀 GalaxyCo AI Assistant</h3>
                   <p className="text-xs font-medium text-primary">Your badass automation expert</p>
                 </div>
               </div>
@@ -233,7 +231,7 @@ export function ChatPanel({ isOpen, onClose, conversationId }: ChatPanelProps) {
                     <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 blur-xl" />
                     <Bot className="relative h-16 w-16 text-primary" />
                   </div>
-                  <h4 className="mt-6 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                  <h4 className="mt-6 text-xl font-bold text-foreground">
                     🔥 Let&apos;s automate your business!
                   </h4>
                   <p className="mt-3 max-w-xs text-sm text-neutral-600 dark:text-neutral-400">

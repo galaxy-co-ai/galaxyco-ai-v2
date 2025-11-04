@@ -54,9 +54,7 @@ export function ActivityFeed({ activities }: ActivityFeedProps) {
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-            Recent Activity
-          </h2>
+          <h2 className="text-xl font-semibold text-foreground">Recent Activity</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
             Latest updates from your agents
           </p>
@@ -90,9 +88,7 @@ export function ActivityFeed({ activities }: ActivityFeedProps) {
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="font-medium text-sm text-neutral-900 dark:text-neutral-100">
-                    {activity.title}
-                  </p>
+                  <p className="font-medium text-sm text-foreground">{activity.title}</p>
                   {activity.priority === 'high' ||
                     (activity.priority === 'urgent' && (
                       <Badge variant="destructive" className="text-xs">

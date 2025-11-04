@@ -147,9 +147,7 @@ export function TestPlayground({
         <div
           className={`${activeTab === 'inputs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6`}
         >
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-            Test Configuration
-          </h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">Test Configuration</h3>
 
           <div className="space-y-4">
             {/* Trigger Type */}
@@ -253,9 +251,7 @@ export function TestPlayground({
           className={`${activeTab === 'logs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
         >
           <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Execution Log
-            </h3>
+            <h3 className="text-lg font-semibold text-foreground">Execution Log</h3>
           </div>
           <div className="p-4 space-y-2 max-h-[400px] overflow-y-auto">
             {testResult ? (
@@ -274,9 +270,7 @@ export function TestPlayground({
                         {(log.duration / 1000).toFixed(2)}s
                       </span>
                     )}
-                    <span className="ml-2 text-neutral-900 dark:text-neutral-100">
-                      {log.message}
-                    </span>
+                    <span className="ml-2 text-foreground">{log.message}</span>
                     {log.details && (
                       <div className="mt-1 text-xs text-neutral-500">{log.details}</div>
                     )}
@@ -301,9 +295,7 @@ export function TestPlayground({
           className={`${activeTab === 'outputs' ? 'block' : 'hidden'} lg:block rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden`}
         >
           <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-              Agent Output
-            </h3>
+            <h3 className="text-lg font-semibold text-foreground">Agent Output</h3>
           </div>
           <div className="p-4 space-y-4 max-h-[400px] overflow-y-auto">
             {testResult?.outputs && testResult.outputs.length > 0 ? (
@@ -324,7 +316,7 @@ export function TestPlayground({
                     )}
 
                     <div className="flex-1">
-                      <div className="font-medium text-sm text-neutral-900 dark:text-neutral-100 mb-2 capitalize">
+                      <div className="font-medium text-sm text-foreground mb-2 capitalize">
                         {output.type.replace('-', ' ')}
                       </div>
                       <div className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-pre-wrap">

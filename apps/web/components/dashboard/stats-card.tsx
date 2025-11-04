@@ -35,7 +35,7 @@ export function StatsCard({ stat }: StatsCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{title}</p>
-          <p className="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-100">{value}</p>
+          <p className="mt-2 text-3xl font-bold text-foreground">{value}</p>
 
           {/* Change indicator */}
           {change !== undefined && change !== 0 && (

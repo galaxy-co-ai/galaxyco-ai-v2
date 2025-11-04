@@ -343,15 +343,13 @@ export default function AgentBuilderPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Agents
           </button>
           <div className="h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
-          <h1 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-            Create New Agent
-          </h1>
+          <h1 className="text-lg font-semibold text-foreground">Create New Agent</h1>
         </div>
       </div>
 
@@ -376,9 +374,7 @@ export default function AgentBuilderPage() {
 
             {/* Prompt Input */}
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                Describe Your Agent
-              </h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">Describe Your Agent</h2>
               <PromptInput onEnhance={handleEnhance} onGenerate={handleGenerate} />
             </div>
           </>
@@ -390,9 +386,7 @@ export default function AgentBuilderPage() {
 
         {currentStep === 'iteration' && selectedVariant && (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-              Refine Your Agent
-            </h2>
+            <h2 className="text-xl font-semibold text-foreground">Refine Your Agent</h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Use the chat to describe changes. The workflow updates in real-time.
             </p>
@@ -403,7 +397,7 @@ export default function AgentBuilderPage() {
               <ErrorBoundary>
                 <div className="rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden">
                   <div className="border-b border-neutral-200 dark:border-neutral-800 px-4 py-3">
-                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">Workflow</h3>
+                    <h3 className="font-medium text-foreground">Workflow</h3>
                   </div>
                   <div className="h-[400px] lg:h-[calc(100%-57px)]">
                     <WorkflowVisualizer
@@ -431,7 +425,7 @@ export default function AgentBuilderPage() {
             <div className="flex items-center justify-between pt-4">
               <button
                 onClick={() => selectVariant(null as any)}
-                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
               >
                 ← Choose Different Variant
               </button>
@@ -449,16 +443,14 @@ export default function AgentBuilderPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                  Test Your Agent
-                </h2>
+                <h2 className="text-xl font-semibold text-foreground">Test Your Agent</h2>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
                   Run a test with sample data to verify your workflow
                 </p>
               </div>
               <button
                 onClick={() => setStep('iteration')}
-                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
               >
                 ← Back to Refine
               </button>

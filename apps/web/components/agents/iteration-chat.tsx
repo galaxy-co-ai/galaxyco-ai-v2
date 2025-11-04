@@ -55,9 +55,7 @@ export function IterationChat({ messages, onSendMessage, isSending }: IterationC
                   <Sparkles className="h-6 w-6 text-primary" />
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                Refine Your Agent
-              </h3>
+              <h3 className="text-lg font-semibold text-foreground">Refine Your Agent</h3>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 Describe changes you&apos;d like to make to your agent&apos;s workflow. You can add
                 steps, modify logic, or integrate new services.
@@ -77,7 +75,7 @@ export function IterationChat({ messages, onSendMessage, isSending }: IterationC
                       ? 'bg-primary text-white'
                       : message.role === 'system'
                         ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 text-sm'
-                        : 'bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100'
+                        : 'bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-foreground'
                   }`}
                 >
                   {message.role !== 'system' && (

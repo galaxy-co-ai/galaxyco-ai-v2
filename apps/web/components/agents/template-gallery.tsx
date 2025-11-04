@@ -77,9 +77,7 @@ export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-          Quick Start Templates
-        </h3>
+        <h3 className="text-lg font-semibold text-foreground">Quick Start Templates</h3>
         <button className="text-sm text-primary hover:text-primary/80 transition-colors">
           See All →
         </button>
@@ -100,9 +98,7 @@ export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h4 className="font-medium text-neutral-900 dark:text-neutral-100 text-sm">
-                  {template.name}
-                </h4>
+                <h4 className="font-medium text-foreground text-sm">{template.name}</h4>
               </div>
 
               <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2">

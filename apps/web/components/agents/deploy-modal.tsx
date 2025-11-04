@@ -94,9 +94,7 @@ export function DeployModal({ isOpen, onClose, agentId, agentName, onDeploy }: D
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/20 mb-4">
               <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-              Agent Deployed!
-            </h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">Agent Deployed!</h3>
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
               {agentName} is now active and ready to run
             </p>

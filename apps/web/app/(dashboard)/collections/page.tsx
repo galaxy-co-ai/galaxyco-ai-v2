@@ -214,9 +214,7 @@ export default function CollectionsPage() {
               />
             )}
             <div>
-              <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-                Collections
-              </h1>
+              <h1 className="text-2xl font-semibold text-foreground">Collections</h1>
               <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
                 {selectedIds.size > 0
                   ? `${selectedIds.size} selected`
@@ -337,9 +335,7 @@ export default function CollectionsPage() {
         ) : filteredDocuments.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <FileText className="h-12 w-12 text-neutral-400" />
-            <h3 className="mt-4 font-semibold text-neutral-900 dark:text-neutral-100">
-              No documents found
-            </h3>
+            <h3 className="mt-4 font-semibold text-foreground">No documents found</h3>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
               Upload documents to get started with collections
             </p>
@@ -376,9 +372,7 @@ export default function CollectionsPage() {
                     {getCategoryIcon(doc.category)}
                   </div>
                   <div className="flex flex-1 flex-col p-4">
-                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {doc.title}
-                    </h3>
+                    <h3 className="font-medium text-foreground">{doc.title}</h3>
                     <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
                       {doc.category.replace(/_/g, ' ')}
                     </p>
@@ -416,9 +410,7 @@ export default function CollectionsPage() {
                     {getCategoryIcon(doc.category)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-neutral-900 dark:text-neutral-100">
-                      {doc.title}
-                    </h3>
+                    <h3 className="font-medium text-foreground">{doc.title}</h3>
                     <p className="text-xs text-neutral-600 dark:text-neutral-400">
                       {doc.category.replace(/_/g, ' ')}
                     </p>

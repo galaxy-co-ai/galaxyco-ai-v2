@@ -90,9 +90,7 @@ export function AgentCardKibo({ agent, onView, onToggle, onConfigure }: AgentCar
 
             {/* Title & Status */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 truncate mb-1">
-                {agent.name}
-              </h3>
+              <h3 className="text-lg font-semibold text-foreground truncate mb-1">{agent.name}</h3>
               <div className="flex items-center gap-2">
                 <div
                   className={cn(

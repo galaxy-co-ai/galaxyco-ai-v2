@@ -340,9 +340,7 @@ export function EnhancedChatPanel({
                 <Bot className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">
-                  AI Assistant
-                </h3>
+                <h3 className="font-semibold text-foreground">AI Assistant</h3>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400">
                   {conversationId ? 'Active conversation' : 'Ready to help'}
                 </p>
@@ -384,9 +382,7 @@ export function EnhancedChatPanel({
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center p-8 text-center">
                 <Bot className="h-12 w-12 text-neutral-400" />
-                <h4 className="mt-4 font-semibold text-neutral-900 dark:text-neutral-100">
-                  Start a conversation
-                </h4>
+                <h4 className="mt-4 font-semibold text-foreground">Start a conversation</h4>
                 <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
                   Ask me about agents, workflows, prospects, or anything else!
                 </p>

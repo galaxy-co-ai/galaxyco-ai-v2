@@ -22,9 +22,7 @@ export function AgentsList({ agents }: AgentsListProps) {
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-            Active Agents
-          </h2>
+          <h2 className="text-xl font-semibold text-foreground">Active Agents</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
             Manage your AI automation agents
           </p>
@@ -64,9 +62,7 @@ export function AgentsList({ agents }: AgentsListProps) {
               {/* Agent Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                    {agent.name}
-                  </h3>
+                  <h3 className="font-medium text-foreground truncate">{agent.name}</h3>
                   <Badge className={getAgentStatusBadgeColor(agent.status)}>{agent.status}</Badge>
                 </div>
 

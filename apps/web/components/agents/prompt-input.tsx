@@ -87,9 +87,7 @@ export function PromptInput({ onEnhance, onGenerate }: PromptInputProps) {
           <div className="flex items-start gap-2">
             <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
             <div className="flex-1 space-y-2">
-              <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                ✨ Enhanced Version:
-              </p>
+              <p className="text-sm font-medium text-foreground">✨ Enhanced Version:</p>
               <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
                 {enhancedPrompt}
               </p>
