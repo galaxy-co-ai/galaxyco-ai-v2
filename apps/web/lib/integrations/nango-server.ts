@@ -8,32 +8,46 @@
 
 import { Nango } from '@nangohq/node';
 
-// Nango secret key is required - set in Vercel environment variables
-if (!process.env.NANGO_SECRET_KEY) {
-  throw new Error(
-    'NANGO_SECRET_KEY is not defined in environment variables. ' +
-      'Please add it to Vercel environment variables.',
-  );
+/**
+ * Get Nango server instance
+ * Lazy initialization to avoid build-time errors when env vars are missing
+ */
+let nangoServerInstance: Nango | null = null;
+
+function getNangoServer(): Nango {
+  if (!nangoServerInstance) {
+    // During build time, NANGO_SECRET_KEY might not be set
+    // We'll use a dummy key during build, but it will never be used
+    // because the routes are only analyzed, not executed
+    const secretKey = process.env.NANGO_SECRET_KEY || 'build-time-placeholder';
+
+    nangoServerInstance = new Nango({
+      secretKey,
+      // Optional: Custom host for self-hosted Nango
+      // host: process.env.NANGO_HOST || 'https://api.nango.dev',
+    });
+  }
+
+  return nangoServerInstance;
 }
 
 /**
- * Nango server instance
+ * Nango server instance getter
  * Used for:
  * - Executing integration actions
  * - Managing connections
  * - Accessing integration APIs with authenticated requests
  */
-export const nangoServer = new Nango({
-  secretKey: process.env.NANGO_SECRET_KEY,
-  // Optional: Custom host for self-hosted Nango
-  // host: process.env.NANGO_HOST || 'https://api.nango.dev',
-});
+export const nangoServer = getNangoServer();
 
 /**
  * Get connection details for a user's integration
  */
 export async function getNangoConnection(integrationId: string, connectionId: string) {
   try {
+    if (!process.env.NANGO_SECRET_KEY) {
+      throw new Error('NANGO_SECRET_KEY is not configured');
+    }
     const connection = await nangoServer.getConnection(integrationId, connectionId);
     return { success: true, data: connection };
   } catch (error) {
@@ -50,6 +64,9 @@ export async function getNangoConnection(integrationId: string, connectionId: st
  */
 export async function deleteNangoConnection(integrationId: string, connectionId: string) {
   try {
+    if (!process.env.NANGO_SECRET_KEY) {
+      throw new Error('NANGO_SECRET_KEY is not configured');
+    }
     await nangoServer.deleteConnection(integrationId, connectionId);
     return { success: true };
   } catch (error) {
