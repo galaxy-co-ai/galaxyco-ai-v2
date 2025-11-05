@@ -10,7 +10,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@ui/*": ["./components/ui/*"],
+      "@figma/*": ["./components/figma/*"],
+      "@kibo/*": ["./src/components/kibo-ui/*"],
+      "@features/*": ["./components/features/*"]
     },
     "allowJs": true
   },

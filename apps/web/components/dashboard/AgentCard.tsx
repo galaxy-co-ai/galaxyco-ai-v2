@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AgentCardKibo } from '@/components/galaxy/AgentCardKibo';
+import { AgentCardKibo } from '@/components/figma/shared/AgentCardKibo';
 
 interface AgentStats {
   executionsToday: number;

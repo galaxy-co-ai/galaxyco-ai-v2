@@ -12,7 +12,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, X, Loader2, ExternalLink, Zap } from 'lucide-react';
-import { GridView } from '@/components/galaxy/flows/GridView';
+import { GridView } from '@/components/figma/shared/GridView';
 
 interface ToolExecution {
   tool: string;

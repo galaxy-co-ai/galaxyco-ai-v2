@@ -1,7 +1,7 @@
 /**
  * GalaxyCo.ai Design System - Global Styles
- * Linear-inspired minimalism + Framer blue accent
- * Updated: November 3, 2025
+ * Linear-inspired minimalism + Framer blue accent + Figma design tokens
+ * Updated: November 5, 2025
  * Primary Color: #0055FF (Framer blue)
  */
 
@@ -11,6 +11,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Import Figma-specific design tokens */
+@import './figma-tokens.css';
 
 /* Base layer enhancements */
 @layer base {

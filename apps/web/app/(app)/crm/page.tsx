@@ -1,191 +1,238 @@
 /**
- * CRM Dashboard - GalaxyCo.ai 2.0
- * Customer Relationship Management hub
- * October 19, 2025
+ * CRM Page - Figma Design
+ * Complete rebuild to match Figma design exactly
+ * Updated: November 5, 2025
  */
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useWorkspace } from '@/contexts/workspace-context';
-import { Spinner } from '@/components/ui/spinner';
-import { WorkspaceGuard } from '@/components/workspace/workspace-guard';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
-import { Users, UserCircle, Briefcase, Target, TrendingUp, ChevronRight } from 'lucide-react';
-import { MetricCard } from '@/components/galaxy/MetricCard';
-import { DashboardStats } from '@/components/galaxy/DashboardStats';
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Users,
+  DollarSign,
+  Calendar,
+  Zap,
+  Clock,
+  Search,
+} from 'lucide-react';
+import {
+  MetricsBar,
+  ContactCard,
+  ContactDetail,
+} from '@/components/figma/crm';
+import type { CRMMetric } from '@/components/figma/crm/MetricsBar';
+import type { ContactCardProps } from '@/components/figma/crm/ContactCard';
 
-interface CRMMetrics {
-  totalCustomers: number;
-  totalContacts: number;
-  totalProjects: number;
-  totalProspects: number;
-  activeCustomers: number;
-  activeProjects: number;
-}
+export default function CRMPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedContactId, setSelectedContactId] = useState('1');
 
-export default function CRMDashboard() {
-  return (
-    <WorkspaceGuard>
-      <CRMContent />
-    </WorkspaceGuard>
-  );
-}
-
-function CRMContent() {
-  const { currentWorkspace } = useWorkspace();
-  const [metrics, setMetrics] = useState<CRMMetrics | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchMetrics() {
-      if (!currentWorkspace?.id) return;
-
-      try {
-        setIsLoading(true);
-
-        // Fetch CRM metrics
-        const [customersRes, contactsRes, projectsRes, prospectsRes] = await Promise.all([
-          fetch(`/api/customers?workspaceId=${currentWorkspace.id}&limit=1`),
-          fetch(`/api/contacts?workspaceId=${currentWorkspace.id}&limit=1`),
-          fetch(`/api/projects?workspaceId=${currentWorkspace.id}&limit=1`),
-          fetch(`/api/prospects?workspaceId=${currentWorkspace.id}&limit=1`),
-        ]);
-
-        const customers = customersRes.ok ? await customersRes.json() : { total: 0 };
-        const contacts = contactsRes.ok ? await contactsRes.json() : { total: 0 };
-        const projects = projectsRes.ok ? await projectsRes.json() : { total: 0 };
-        const prospects = prospectsRes.ok ? await prospectsRes.json() : { total: 0 };
-
-        setMetrics({
-          totalCustomers: customers.total || 0,
-          totalContacts: contacts.total || 0,
-          totalProjects: projects.total || 0,
-          totalProspects: prospects.total || 0,
-          activeCustomers: customers.active || 0,
-          activeProjects: projects.active || 0,
-        });
-      } catch (error) {
-        console.error('Failed to fetch CRM metrics:', error);
-        toast.error('Failed to load CRM dashboard');
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchMetrics();
-  }, [currentWorkspace?.id]);
-
-  if (isLoading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  const crmSections = [
+  // Top Metrics (from Figma)
+  const metrics: CRMMetric[] = [
     {
-      title: 'Customers',
-      href: '/crm/customers',
       icon: Users,
-      description: 'Manage customer accounts and relationships',
-      count: metrics?.totalCustomers || 0,
-      activeCount: metrics?.activeCustomers || 0,
+      label: 'Contacts',
+      value: 248,
+      change: '+12%',
+      changeType: 'increase',
     },
     {
-      title: 'Contacts',
-      href: '/crm/contacts',
-      icon: UserCircle,
-      description: 'Individual contacts and decision makers',
-      count: metrics?.totalContacts || 0,
+      icon: DollarSign,
+      label: 'Pipeline',
+      value: '$1.2M',
+      change: '+8%',
+      changeType: 'increase',
     },
     {
-      title: 'Projects',
-      href: '/crm/projects',
-      icon: Briefcase,
-      description: 'Active projects and engagements',
-      count: metrics?.totalProjects || 0,
-      activeCount: metrics?.activeProjects || 0,
+      icon: Calendar,
+      label: 'This Week',
+      value: 38,
+      change: '+24%',
+      changeType: 'increase',
     },
     {
-      title: 'Prospects',
-      href: '/crm/prospects',
-      icon: Target,
-      description: 'Potential customers and leads',
-      count: metrics?.totalProspects || 0,
+      icon: Zap,
+      label: 'Hot Leads',
+      value: 12,
+      badge: 'Active',
+      badgeColor: 'bg-red-500/10 text-red-600 border-red-500/20',
     },
     {
-      title: 'Segments',
-      href: '/crm/segments',
-      icon: TrendingUp,
-      description: 'Customer segmentation and targeting',
-      count: 0,
+      icon: Clock,
+      label: 'Avg Response',
+      value: '2.4h',
+      change: '-15%',
+      changeType: 'decrease',
+    },
+  ];
+
+  // Contacts Data (from Figma)
+  const contacts: Omit<ContactCardProps, 'onClick' | 'className'>[] = [
+    {
+      id: '1',
+      name: 'Sarah Chen',
+      company: 'TechCorp Inc',
+      initials: 'SC',
+      score: 92,
+      aiInsight: 'Highly engaged, mentioned budget approval',
+      status: 'hot',
+      dealValue: '$45,000',
+      isSelected: selectedContactId === '1',
+    },
+    {
+      id: '2',
+      name: 'Michael Rodriguez',
+      company: 'InnovateLabs',
+      initials: 'MR',
+      score: 76,
+      aiInsight: 'Interested in API integrations',
+      status: 'warm',
+      dealValue: '$28,000',
+      isSelected: selectedContactId === '2',
+    },
+    {
+      id: '3',
+      name: 'Emma Thompson',
+      company: 'Global Systems',
+      initials: 'ET',
+      score: 68,
+      aiInsight: 'Needs legal review on SLA terms',
+      status: 'warm',
+      dealValue: '$62,000',
+      isSelected: selectedContactId === '3',
+    },
+    {
+      id: '4',
+      name: 'James Park',
+      company: 'StartupXYZ',
+      initials: 'JP',
+      score: 42,
+      aiInsight: 'No response to last 2 follow-ups',
+      status: 'cold',
+      dealValue: '$15,000',
+      isSelected: selectedContactId === '4',
+    },
+  ];
+
+  // Selected Contact Details
+  const selectedContact = {
+    name: 'Sarah Chen',
+    company: 'TechCorp Inc',
+    initials: 'SC',
+    score: 92,
+    status: 'hot' as const,
+    aiInsight: 'Highly engaged, mentioned budget approval',
+    nextAction: 'Send Q4 proposal by Friday',
+    dealValue: '$45,000',
+    interactions: 12,
+    lastContact: '2 hours ago',
+    sentiment: 'positive' as const,
+  };
+
+  const interactionHistory = [
+    {
+      id: '1',
+      type: 'call' as const,
+      sentiment: 'positive' as const,
+      time: 'Today, 2:30 PM',
+      duration: '23 min',
+      description:
+        'Discussed Q4 implementation timeline and budget allocation. Sarah expressed strong interest in expanding the partnership and mentioned their team is ready to move forward pending executive approval.',
+      actionItems: [
+        'Send proposal by Friday',
+        'Schedule technical demo for next week',
+        'Connect with their CTO',
+      ],
+      hasTranscript: true,
+    },
+    {
+      id: '2',
+      type: 'email' as const,
+      sentiment: 'neutral' as const,
+      time: 'Yesterday, 9:15 AM',
+      description: 'Follow-up email regarding technical requirements and integration timeline.',
     },
   ];
 
   return (
-    <div className="h-full flex flex-col bg-background">
-      {/* Page Header - Linear Style */}
-      <div className="border-b px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">CRM</h1>
-            <p className="text-sm text-muted-foreground mt-1">Customer Relationship Management</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-sm">
-              {metrics?.totalCustomers || 0} Customers
-            </Badge>
-            <Badge variant="secondary" className="text-sm">
-              {metrics?.totalContacts || 0} Contacts
-            </Badge>
-          </div>
+    <div className="space-y-6 pb-8">
+      {/* Page Header */}
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">CRM</h1>
+          <p className="text-muted-foreground">
+            Auto-transcribe and organize calls, meetings, and emails
+          </p>
         </div>
+
+        {/* Metrics Bar */}
+        <MetricsBar metrics={metrics} />
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {crmSections.map((section) => {
-            const Icon = section.icon;
-            return (
-              <Link key={section.href} href={section.href}>
-                <Card className="p-6 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer h-full">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="size-12 rounded-lg bg-muted flex items-center justify-center">
-                      <Icon className="size-6 text-foreground" />
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  </div>
+      <Tabs defaultValue="contacts" className="w-full">
+        {/* Tabs */}
+        <TabsList>
+          <TabsTrigger value="contacts">Contacts</TabsTrigger>
+          <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="sales">Sales</TabsTrigger>
+        </TabsList>
 
-                  <h3 className="text-lg font-semibold text-foreground mb-1">{section.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">{section.description}</p>
+        <TabsContent value="contacts" className="mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left: Contact List (1/3) */}
+            <div className="lg:col-span-1 space-y-4">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search contacts..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
 
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-foreground">{section.count}</span>
-                      <span className="text-sm text-muted-foreground">total</span>
-                    </div>
-                    {section.activeCount !== undefined && (
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-lg font-semibold text-primary">
-                          {section.activeCount}
-                        </span>
-                        <span className="text-xs text-muted-foreground">active</span>
-                      </div>
-                    )}
-                  </div>
-                </Card>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+              {/* Contact Cards */}
+              <ScrollArea className="h-[calc(100vh-20rem)]">
+                <div className="space-y-3 pr-4">
+                  {contacts.map((contact) => (
+                    <ContactCard
+                      key={contact.id}
+                      {...contact}
+                      onClick={() => setSelectedContactId(contact.id)}
+                    />
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+
+            {/* Right: Contact Detail (2/3) */}
+            <div className="lg:col-span-2">
+              <ContactDetail
+                contact={selectedContact}
+                interactions={interactionHistory}
+              />
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="projects">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Projects view coming soon</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="sales">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Sales view coming soon</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

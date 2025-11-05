@@ -9,10 +9,10 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useWorkspace } from '@/contexts/workspace-context';
-import { FlowBuilder } from '@/components/galaxy/flows/FlowBuilder';
+import { FlowBuilder } from '@/components/figma/shared/FlowBuilder';
 import { toast } from 'sonner';
-import { FlowNode, FlowEdge } from '@/components/galaxy/flows/FlowParser';
-import { executeWorkflow } from '@/components/galaxy/flows/FlowExecutor';
+import { FlowNode, FlowEdge } from '@/components/figma/shared/FlowParser';
+import { executeWorkflow } from '@/components/figma/shared/FlowExecutor';
 
 export default function WorkflowBuilderPage() {
   const { currentWorkspace } = useWorkspace();

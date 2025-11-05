@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { AgentCardKibo } from '@/components/galaxy/AgentCardKibo';
+import { AgentCardKibo } from '@/components/figma/shared/AgentCardKibo';
 import { CreditCard } from '@/src/components/kibo-ui/credit-card';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

@@ -10,7 +10,7 @@ import {
   generateWorkflowName,
   FlowNode,
   FlowEdge,
-} from '@/components/galaxy/flows/FlowParser';
+} from '@/components/figma/shared/FlowParser';
 
 describe('FlowParser', () => {
   describe('autoLayoutNodes', () => {
