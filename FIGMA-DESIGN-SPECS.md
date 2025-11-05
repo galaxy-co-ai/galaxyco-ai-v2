@@ -20,6 +20,7 @@
 ## 🎨 Design System Overview
 
 This design follows a **modern, clean aesthetic** with:
+
 - **shadcn/ui** component library as the foundation
 - **Tailwind CSS** for utility styling
 - **OKLCH color space** for better color perception
@@ -32,66 +33,43 @@ This design follows a **modern, clean aesthetic** with:
 ## 🌈 Color Tokens
 
 ### Light Mode
+
 ```css
---background: #ffffff
---foreground: oklch(0.145 0 0)           /* Near black */
---primary: #030213                        /* Dark blue-black */
---secondary: oklch(0.95 0.0058 264.53)   /* Very light purple */
---muted: #ececf0                         /* Light gray */
---muted-foreground: #717182              /* Medium gray */
---accent: #e9ebef                        /* Light gray-blue */
---border: rgba(0, 0, 0, 0.1)            /* 10% black */
---destructive: #d4183d                   /* Red */
---radius: 0.625rem                       /* 10px */
+--background: #ffffff --foreground: oklch(0.145 0 0) /* Near black */ --primary: #030213
+  /* Dark blue-black */ --secondary: oklch(0.95 0.0058 264.53) /* Very light purple */
+  --muted: #ececf0 /* Light gray */ --muted-foreground: #717182 /* Medium gray */ --accent: #e9ebef
+  /* Light gray-blue */ --border: rgba(0, 0, 0, 0.1) /* 10% black */ --destructive: #d4183d
+  /* Red */ --radius: 0.625rem /* 10px */;
 ```
 
 ### Dark Mode
+
 ```css
---background: oklch(0.145 0 0)           /* Near black */
---foreground: oklch(0.985 0 0)           /* Near white */
---primary: oklch(0.985 0 0)              /* Near white */
---secondary: oklch(0.269 0 0)            /* Dark gray */
---muted: oklch(0.269 0 0)                /* Dark gray */
---muted-foreground: oklch(0.708 0 0)     /* Medium gray */
---accent: oklch(0.269 0 0)               /* Dark gray */
---border: oklch(0.269 0 0)               /* Dark gray */
+--background: oklch(0.145 0 0) /* Near black */ --foreground: oklch(0.985 0 0) /* Near white */
+  --primary: oklch(0.985 0 0) /* Near white */ --secondary: oklch(0.269 0 0) /* Dark gray */
+  --muted: oklch(0.269 0 0) /* Dark gray */ --muted-foreground: oklch(0.708 0 0) /* Medium gray */
+  --accent: oklch(0.269 0 0) /* Dark gray */ --border: oklch(0.269 0 0) /* Dark gray */;
 ```
 
 ### Semantic Colors (Status)
+
 ```css
 /* Success / Active */
---success-bg: bg-green-500/10
---success-text: text-green-600
---success-border: border-green-500/20
-
-/* Processing / Info */
---processing-bg: bg-blue-500/10
---processing-text: text-blue-600
---processing-border: border-blue-500/20
-
-/* Warning */
---warning-bg: bg-orange-500/10
---warning-text: text-orange-600
---warning-border: border-orange-500/20
-
-/* Idle / Neutral */
---idle-bg: bg-gray-500/10
---idle-text: text-gray-600
---idle-border: border-gray-500/20
-
-/* Error / Attention */
---error-bg: bg-red-500/10
---error-text: text-red-600
---error-border: border-red-500/20
+--success-bg: bg-green-500/10 --success-text: text-green-600 --success-border: border-green-500/20
+  /* Processing / Info */ --processing-bg: bg-blue-500/10 --processing-text: text-blue-600
+  --processing-border: border-blue-500/20 /* Warning */ --warning-bg: bg-orange-500/10
+  --warning-text: text-orange-600 --warning-border: border-orange-500/20 /* Idle / Neutral */
+  --idle-bg: bg-gray-500/10 --idle-text: text-gray-600 --idle-border: border-gray-500/20
+  /* Error / Attention */ --error-bg: bg-red-500/10 --error-text: text-red-600
+  --error-border: border-red-500/20;
 ```
 
 ### Chart Colors
+
 ```css
---chart-1: oklch(0.646 0.222 41.116)    /* Orange */
---chart-2: oklch(0.6 0.118 184.704)      /* Cyan */
---chart-3: oklch(0.398 0.07 227.392)     /* Blue */
---chart-4: oklch(0.828 0.189 84.429)     /* Yellow-green */
---chart-5: oklch(0.769 0.188 70.08)      /* Green */
+--chart-1: oklch(0.646 0.222 41.116) /* Orange */ --chart-2: oklch(0.6 0.118 184.704) /* Cyan */
+  --chart-3: oklch(0.398 0.07 227.392) /* Blue */ --chart-4: oklch(0.828 0.189 84.429)
+  /* Yellow-green */ --chart-5: oklch(0.769 0.188 70.08) /* Green */;
 ```
 
 ---
@@ -99,31 +77,29 @@ This design follows a **modern, clean aesthetic** with:
 ## 📝 Typography
 
 ### Font Stack
+
 ```css
-font-family: ui-sans-serif, system-ui, sans-serif, 
-             "Apple Color Emoji", "Segoe UI Emoji", 
-             "Segoe UI Symbol", "Noto Color Emoji"
+font-family:
+  ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  'Noto Color Emoji';
 ```
 
 ### Font Sizes
+
 ```css
---font-size: 16px         /* Base */
---text-xs: 0.75rem       /* 12px */
---text-sm: 0.875rem      /* 14px */
---text-base: 1rem        /* 16px */
---text-lg: 1.125rem      /* 18px */
---text-xl: 1.25rem       /* 20px */
---text-2xl: 1.5rem       /* 24px */
---text-3xl: 1.875rem     /* 30px */
+--font-size: 16px /* Base */ --text-xs: 0.75rem /* 12px */ --text-sm: 0.875rem /* 14px */
+  --text-base: 1rem /* 16px */ --text-lg: 1.125rem /* 18px */ --text-xl: 1.25rem /* 20px */
+  --text-2xl: 1.5rem /* 24px */ --text-3xl: 1.875rem /* 30px */;
 ```
 
 ### Font Weights
+
 ```css
---font-weight-normal: 400
---font-weight-medium: 500
+--font-weight-normal: 400 --font-weight-medium: 500;
 ```
 
 ### Typography Scale
+
 ```typescript
 h1: {
   fontSize: "var(--text-2xl)",      // 24px
@@ -165,6 +141,7 @@ p: {
 **Component:** `DashboardStats.tsx`
 
 **Specs:**
+
 ```typescript
 - Height: 32px (h-8)
 - Padding: 16px horizontal (px-4)
@@ -177,6 +154,7 @@ p: {
 ```
 
 **Color Variants:**
+
 ```typescript
 Blue (Active Agents):
   gradient: "from-blue-500/10 to-blue-500/20"
@@ -210,6 +188,7 @@ Orange (Success Rate):
 **Component:** `AgentStatusCard.tsx`
 
 **Specs:**
+
 ```typescript
 Container:
   - Padding: 16px (p-4)
@@ -233,21 +212,19 @@ Status Badge:
 ```
 
 **Status Colors:**
+
 ```typescript
-Processing:
-  bg: "bg-blue-500/10"
-  text: "text-blue-600"
-  dot: "bg-blue-600 animate-pulse"
+Processing: bg: 'bg-blue-500/10';
+text: 'text-blue-600';
+dot: 'bg-blue-600 animate-pulse';
 
-Active:
-  bg: "bg-green-500/10"
-  text: "text-green-600"
-  dot: "bg-green-600"
+Active: bg: 'bg-green-500/10';
+text: 'text-green-600';
+dot: 'bg-green-600';
 
-Idle:
-  bg: "bg-gray-500/10"
-  text: "text-gray-600"
-  dot: "bg-gray-600"
+Idle: bg: 'bg-gray-500/10';
+text: 'text-gray-600';
+dot: 'bg-gray-600';
 ```
 
 ---
@@ -255,6 +232,7 @@ Idle:
 ### 3. Floating Toolbar
 
 **Specs:**
+
 ```typescript
 Container:
   - Background: "bg-background/80 backdrop-blur-lg"
@@ -286,6 +264,7 @@ Separator:
 **Component:** `ActivityFeed.tsx`
 
 **Specs:**
+
 ```typescript
 Container Card:
   - Border Radius: 24px (rounded-2xl)
@@ -317,6 +296,7 @@ Timeline Connector:
 ### 5. Workflow Visualizer
 
 **Specs:**
+
 ```typescript
 Canvas:
   - Border Radius: 12px (rounded-xl)
@@ -354,6 +334,7 @@ Shadow Effect:
 ### 6. Integration Cards
 
 **Specs:**
+
 ```typescript
 Card:
   - Padding: 20px (p-5)
@@ -419,6 +400,7 @@ Main Content:
 ## 🎯 Shadow System
 
 ### Elevation Scale
+
 ```typescript
 Level 1 (Subtle):
   "shadow-[0_2px_10px_rgb(0,0,0,0.04)]"
@@ -452,16 +434,18 @@ Color-specific shadows (with glow):
    - OKLCH color space for better accessibility
 
 2. **Import Components:**
+
    ```bash
    # All shadcn/ui components already included
    project-extracted/components/ui/
    ```
 
 3. **Use Custom Components:**
+
    ```typescript
-   import { AgentStatusCard } from '@/components/AgentStatusCard'
-   import { ActivityFeed } from '@/components/ActivityFeed'
-   import { DashboardStats } from '@/components/DashboardStats'
+   import { AgentStatusCard } from '@/components/AgentStatusCard';
+   import { ActivityFeed } from '@/components/ActivityFeed';
+   import { DashboardStats } from '@/components/DashboardStats';
    ```
 
 4. **Adapt for GalaxyCo:**
@@ -474,6 +458,7 @@ Color-specific shadows (with glow):
 ## 📦 Component Manifest
 
 ### Pages (5)
+
 - `Dashboard.tsx` - Main dashboard with stats, agents, activity
 - `Studio.tsx` - Agent studio/builder
 - `CRM.tsx` - CRM integration page
@@ -481,6 +466,7 @@ Color-specific shadows (with glow):
 - `Marketing.tsx` - Marketing automation
 
 ### Custom Components (9)
+
 - `ActivityFeed.tsx` - Real-time activity stream
 - `AgentStatusCard.tsx` - Individual agent status display
 - `AppSidebar.tsx` - Main navigation sidebar
@@ -492,6 +478,7 @@ Color-specific shadows (with glow):
 - `WorkflowVisualizer.tsx` - Workflow diagram renderer
 
 ### shadcn/ui Components (43)
+
 All standard shadcn/ui components included in `components/ui/`
 
 ---
@@ -533,11 +520,12 @@ All standard shadcn/ui components included in `components/ui/`
 ## 📊 Data Structure Examples
 
 ### Agent Data Type
+
 ```typescript
 interface ActiveAgent {
   id: string;
   name: string;
-  status: "active" | "idle" | "processing";
+  status: 'active' | 'idle' | 'processing';
   tasksCompleted: number;
   lastActive: string;
   type: string;
@@ -545,22 +533,24 @@ interface ActiveAgent {
 ```
 
 ### Activity Data Type
+
 ```typescript
 interface RecentActivity {
   id: string;
   agent: string;
   action: string;
   time: string;
-  status: "success" | "warning" | "error";
+  status: 'success' | 'warning' | 'error';
 }
 ```
 
 ### Workflow Data Type
+
 ```typescript
 interface Workflow {
   id: string;
   name: string;
-  status: "active" | "processing";
+  status: 'active' | 'processing';
   triggers: number;
   actions: number;
   runs: number;
@@ -569,7 +559,7 @@ interface Workflow {
 
 interface WorkflowNode {
   id: string;
-  type: "trigger" | "filter" | "action";
+  type: 'trigger' | 'filter' | 'action';
   label: string;
   icon: LucideIcon;
   position: { x: number; y: number };
@@ -603,4 +593,3 @@ interface WorkflowNode {
 **Generated:** November 5, 2025  
 **Version:** 1.0  
 **Status:** ✅ Production Ready
-

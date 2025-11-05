@@ -12,4 +12,3 @@ export { MetricsSummary } from './MetricsSummary';
 
 // Re-export shared components commonly used in dashboard
 export { DashboardStats, AgentStatusCard, ActivityFeed, MetricCard } from '../shared';
-

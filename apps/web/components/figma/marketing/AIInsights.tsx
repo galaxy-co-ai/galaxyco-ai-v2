@@ -19,19 +19,9 @@ export interface AIInsightsProps {
   className?: string;
 }
 
-export function AIInsights({
-  recommendation,
-  onApply,
-  onLearnMore,
-  className,
-}: AIInsightsProps) {
+export function AIInsights({ recommendation, onApply, onLearnMore, className }: AIInsightsProps) {
   return (
-    <Card
-      className={cn(
-        'p-6 bg-purple-500/5 border-purple-500/20',
-        className
-      )}
-    >
+    <Card className={cn('p-6 bg-purple-500/5 border-purple-500/20', className)}>
       <div className="flex gap-4">
         {/* Icon */}
         <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500/10 to-blue-500/20 flex items-center justify-center flex-shrink-0">
@@ -47,11 +37,7 @@ export function AIInsights({
 
           {/* Actions */}
           <div className="flex gap-2">
-            <Button
-              size="sm"
-              className="bg-primary hover:bg-primary-hover"
-              onClick={onApply}
-            >
+            <Button size="sm" className="bg-primary hover:bg-primary-hover" onClick={onApply}>
               Apply Recommendations
             </Button>
             <Button
@@ -68,4 +54,3 @@ export function AIInsights({
     </Card>
   );
 }
-

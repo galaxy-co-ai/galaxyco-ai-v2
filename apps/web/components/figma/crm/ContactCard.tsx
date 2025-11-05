@@ -54,7 +54,7 @@ export function ContactCard({
         isSelected
           ? 'border-primary bg-primary/5 shadow-md'
           : 'border-transparent hover:border-border hover:shadow-sm',
-        className
+        className,
       )}
       onClick={onClick}
     >
@@ -97,4 +97,3 @@ export function ContactCard({
     </Card>
   );
 }
-

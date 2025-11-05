@@ -7,21 +7,23 @@
 ## 📊 Dashboard Page Mapping
 
 ### Current GalaxyCo Dashboard
+
 **Location:** `apps/web/app/(app)/dashboard/page.tsx`
 
 ### Figma Dashboard Components
+
 **Location:** `project-extracted/pages/Dashboard.tsx`
 
 ### Direct Replacements
 
-| GalaxyCo Current | Figma Component | Benefits |
-|-----------------|----------------|----------|
-| Dashboard header | `Dashboard` header section | Better typography, spacing |
-| Stats/KPIs | `DashboardStats.tsx` | Animated gradient pills |
-| Agent list | `AgentStatusCard.tsx` | Status badges, pulse animations |
-| Activity/logs | `ActivityFeed.tsx` | Timeline design, status dots |
-| Workflows | `WorkflowVisualizer.tsx` | Visual node-based diagram |
-| Quick actions | Floating toolbar | Glassy blur effect |
+| GalaxyCo Current | Figma Component            | Benefits                        |
+| ---------------- | -------------------------- | ------------------------------- |
+| Dashboard header | `Dashboard` header section | Better typography, spacing      |
+| Stats/KPIs       | `DashboardStats.tsx`       | Animated gradient pills         |
+| Agent list       | `AgentStatusCard.tsx`      | Status badges, pulse animations |
+| Activity/logs    | `ActivityFeed.tsx`         | Timeline design, status dots    |
+| Workflows        | `WorkflowVisualizer.tsx`   | Visual node-based diagram       |
+| Quick actions    | Floating toolbar           | Glassy blur effect              |
 
 ---
 
@@ -45,6 +47,7 @@
 ```
 
 **What you get:**
+
 - ✅ Animated status badges
 - ✅ Pulse effect for processing
 - ✅ Better visual hierarchy
@@ -66,6 +69,7 @@ const activities = useAgentActivity(); // Your Zustand store
 ```
 
 **What you get:**
+
 - ✅ Timeline visualization
 - ✅ Status color coding
 - ✅ Scrollable container
@@ -84,13 +88,13 @@ const activities = useAgentActivity(); // Your Zustand store
 // Current: Basic stat cards
 // Upgrade to: Gradient pills with icons
 
-<Badge 
-  variant="outline" 
-  className="h-8 px-4 rounded-full border-0 
-             bg-gradient-to-br from-blue-500/10 to-blue-500/20 
-             text-blue-600 
-             shadow-[0_2px_10px_rgb(59,130,246,0.15)] 
-             hover:shadow-[0_4px_20px_rgb(59,130,246,0.25)] 
+<Badge
+  variant="outline"
+  className="h-8 px-4 rounded-full border-0
+             bg-gradient-to-br from-blue-500/10 to-blue-500/20
+             text-blue-600
+             shadow-[0_2px_10px_rgb(59,130,246,0.15)]
+             hover:shadow-[0_4px_20px_rgb(59,130,246,0.25)]
              transition-all"
 >
   <Bot className="h-3.5 w-3.5 mr-2" />
@@ -99,6 +103,7 @@ const activities = useAgentActivity(); // Your Zustand store
 ```
 
 **Perfect for:**
+
 - Dashboard metrics
 - Agent counts
 - Task completion
@@ -114,9 +119,9 @@ const activities = useAgentActivity(); // Your Zustand store
 
 ```typescript
 // Add floating toolbar for quick access
-<div className="bg-background/80 backdrop-blur-lg 
-                border border-border rounded-full 
-                shadow-[0_8px_30px_rgb(0,0,0,0.08)] 
+<div className="bg-background/80 backdrop-blur-lg
+                border border-border rounded-full
+                shadow-[0_8px_30px_rgb(0,0,0,0.08)]
                 px-3 py-2 flex items-center gap-1">
   <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
     <Plus className="h-4 w-4" />
@@ -126,6 +131,7 @@ const activities = useAgentActivity(); // Your Zustand store
 ```
 
 **Perfect for:**
+
 - Create new agent
 - Access knowledge base
 - Manage integrations
@@ -142,7 +148,9 @@ const activities = useAgentActivity(); // Your Zustand store
 **Use in GalaxyCo:** `apps/web/app/(app)/workflows/page.tsx`
 
 **Key Features to Copy:**
+
 1. **Canvas with dot grid background**
+
    ```typescript
    style={{
      backgroundImage: "radial-gradient(circle, hsl(var(--muted-foreground)) 1px, transparent 1px)",
@@ -162,6 +170,7 @@ const activities = useAgentActivity(); // Your Zustand store
    - Animated on hover
 
 **Replace:**
+
 - Current workflow list → Visual canvas
 - Text-based flow → Node diagrams
 - Static view → Interactive builder
@@ -176,6 +185,7 @@ const activities = useAgentActivity(); // Your Zustand store
 **Use in GalaxyCo:** `apps/web/app/(app)/integrations/page.tsx`
 
 **Features to adopt:**
+
 1. **Search bar** with icon
 2. **Category filters** (badges)
 3. **Grid layout** (responsive)
@@ -184,8 +194,8 @@ const activities = useAgentActivity(); // Your Zustand store
 
 ```typescript
 // Per integration card:
-<Card className="p-5 rounded-xl border-0 
-                 shadow-[0_4px_20px_rgb(0,0,0,0.04)] 
+<Card className="p-5 rounded-xl border-0
+                 shadow-[0_4px_20px_rgb(0,0,0,0.04)]
                  hover:shadow-[0_6px_30px_rgb(0,0,0,0.08)]">
   <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600">
     <integration.icon className="h-6 w-6 text-white" />
@@ -195,6 +205,7 @@ const activities = useAgentActivity(); // Your Zustand store
 ```
 
 **Data structure matches GalaxyCo needs:**
+
 ```typescript
 interface Integration {
   id: string;
@@ -233,29 +244,29 @@ interface Integration {
 
 ```typescript
 // Active agents
-className="bg-green-500/10 text-green-600"
+className = 'bg-green-500/10 text-green-600';
 
 // Processing
-className="bg-blue-500/10 text-blue-600"
+className = 'bg-blue-500/10 text-blue-600';
 
 // Idle
-className="bg-gray-500/10 text-gray-600"
+className = 'bg-gray-500/10 text-gray-600';
 
 // Error
-className="bg-red-500/10 text-red-600"
+className = 'bg-red-500/10 text-red-600';
 ```
 
 ### Step 3: Apply Shadow System
 
 ```typescript
 // Card elevation
-className="shadow-[0_4px_20px_rgb(0,0,0,0.04)]"
+className = 'shadow-[0_4px_20px_rgb(0,0,0,0.04)]';
 
 // Hover state
-className="hover:shadow-[0_6px_30px_rgb(0,0,0,0.08)]"
+className = 'hover:shadow-[0_6px_30px_rgb(0,0,0,0.08)]';
 
 // Floating elements
-className="shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
+className = 'shadow-[0_8px_30px_rgb(0,0,0,0.06)]';
 ```
 
 ---
@@ -266,16 +277,16 @@ className="shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
 
 ```typescript
 // Stats pills
-className="flex items-center gap-3 flex-wrap"
+className = 'flex items-center gap-3 flex-wrap';
 
 // Agent cards
-className="grid gap-6 lg:grid-cols-2"
+className = 'grid gap-6 lg:grid-cols-2';
 
 // Integration marketplace
-className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
 
 // Main content
-className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+className = 'grid gap-6 md:grid-cols-2 lg:grid-cols-3';
 ```
 
 ---
@@ -283,30 +294,35 @@ className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
 ## 🚀 Quick Wins (Do These First!)
 
 ### 1. Upgrade Dashboard Stats (15 min)
+
 Copy the gradient pill design from Figma dashboard → Your dashboard
 
 **Impact:** ⭐⭐⭐⭐⭐  
 **Effort:** ⚡ (Very Easy)
 
 ### 2. Add Status Badges (10 min)
+
 Replace text status → Animated badges with dots
 
 **Impact:** ⭐⭐⭐⭐  
 **Effort:** ⚡ (Very Easy)
 
 ### 3. Improve Card Shadows (5 min)
+
 Update shadow classes to match Figma system
 
 **Impact:** ⭐⭐⭐  
 **Effort:** ⚡ (Very Easy)
 
 ### 4. Add Activity Timeline (30 min)
+
 Copy `ActivityFeed.tsx` → Connect to your data
 
 **Impact:** ⭐⭐⭐⭐⭐  
 **Effort:** ⚡⚡ (Easy)
 
 ### 5. Implement Workflow Visualizer (1 hour)
+
 Copy workflow dialog → Adapt for your flows
 
 **Impact:** ⭐⭐⭐⭐⭐  
@@ -317,18 +333,21 @@ Copy workflow dialog → Adapt for your flows
 ## 🔄 Component Migration Strategy
 
 ### Phase 1: Drop-in Replacements (Low Risk)
+
 1. ✅ Color tokens (globals.css)
 2. ✅ Shadow system (utility classes)
 3. ✅ Status badges (simple components)
 4. ✅ Stats pills (Badge component)
 
 ### Phase 2: New Components (Medium Risk)
+
 1. ⚠️ ActivityFeed (need data connection)
 2. ⚠️ AgentStatusCard (replace existing cards)
 3. ⚠️ DashboardStats (integrate with data)
 4. ⚠️ Floating toolbar (new feature)
 
 ### Phase 3: Complex Features (Higher Risk)
+
 1. 🔥 WorkflowVisualizer (major feature)
 2. 🔥 Integration marketplace (new page)
 3. 🔥 Full dashboard redesign
@@ -338,32 +357,37 @@ Copy workflow dialog → Adapt for your flows
 
 ## 📊 Component Reusability Matrix
 
-| Component | GalaxyCo Pages | Reusability | Customization Needed |
-|-----------|---------------|-------------|---------------------|
-| DashboardStats | Dashboard, Agents, Workflows | High | Data source only |
-| AgentStatusCard | Agents, Dashboard | High | Icon, colors |
-| ActivityFeed | Dashboard, all pages (sidebar) | High | Activity data format |
-| WorkflowVisualizer | Workflows | Medium | Node types, actions |
-| Floating Toolbar | Global | High | Action buttons |
-| Integration Cards | Integrations | High | Integration list |
+| Component          | GalaxyCo Pages                 | Reusability | Customization Needed |
+| ------------------ | ------------------------------ | ----------- | -------------------- |
+| DashboardStats     | Dashboard, Agents, Workflows   | High        | Data source only     |
+| AgentStatusCard    | Agents, Dashboard              | High        | Icon, colors         |
+| ActivityFeed       | Dashboard, all pages (sidebar) | High        | Activity data format |
+| WorkflowVisualizer | Workflows                      | Medium      | Node types, actions  |
+| Floating Toolbar   | Global                         | High        | Action buttons       |
+| Integration Cards  | Integrations                   | High        | Integration list     |
 
 ---
 
 ## 💡 Best Practices
 
 ### 1. Start Small
+
 Don't rebuild everything at once. Pick one component and perfect it.
 
 ### 2. Keep Existing Data Layer
+
 The Figma components are UI-only. Keep your Server Actions, Zustand stores, etc.
 
 ### 3. Maintain GalaxyCo Branding
+
 Adapt colors if needed, but keep the structure and interaction patterns.
 
 ### 4. Test Responsive
+
 The Figma design is mobile-first. Test on all breakpoints.
 
 ### 5. Preserve Accessibility
+
 Components use semantic HTML and ARIA. Don't remove these.
 
 ---
@@ -398,6 +422,7 @@ Components use semantic HTML and ARIA. Don't remove these.
 ### Example 1: Agent Status in GalaxyCo
 
 **Before:**
+
 ```typescript
 <div className="p-4 border rounded">
   <h3>{agent.name}</h3>
@@ -406,6 +431,7 @@ Components use semantic HTML and ARIA. Don't remove these.
 ```
 
 **After (Figma style):**
+
 ```typescript
 <Card className="p-4 shadow-[0_4px_20px_rgb(0,0,0,0.04)] border-0 rounded-xl">
   <div className="flex items-start gap-4">
@@ -426,6 +452,7 @@ Components use semantic HTML and ARIA. Don't remove these.
 ### Example 2: Dashboard Stats
 
 **Before:**
+
 ```typescript
 <div className="grid grid-cols-4 gap-4">
   {stats.map(stat => (
@@ -438,14 +465,15 @@ Components use semantic HTML and ARIA. Don't remove these.
 ```
 
 **After (Figma style):**
+
 ```typescript
 <div className="flex items-center gap-3 flex-wrap">
   {stats.map(stat => (
-    <Badge 
+    <Badge
       key={stat.label}
-      className={`h-8 px-4 rounded-full border-0 
-                  bg-gradient-to-br ${stat.gradient} 
-                  ${stat.textColor} ${stat.shadowColor} 
+      className={`h-8 px-4 rounded-full border-0
+                  bg-gradient-to-br ${stat.gradient}
+                  ${stat.textColor} ${stat.shadowColor}
                   transition-all`}
     >
       <stat.icon className="h-3.5 w-3.5 mr-2" />
@@ -476,4 +504,3 @@ Components use semantic HTML and ARIA. Don't remove these.
 ---
 
 **Ready to start?** Begin with `FIGMA-DESIGN-SPECS.md` for complete specifications!
-

@@ -1,4 +1,5 @@
 # 🎨 UI Structure Optimization Plan
+
 ## Making Figma Integration Seamless
 
 **Date:** November 5, 2025  
@@ -57,6 +58,7 @@ project-extracted/                   ← Figma export (reference only)
 ## ⚠️ Current Issues
 
 ### 1. **Multiple Component Sources**
+
 - shadcn/ui components in `/components/ui/`
 - Kibo UI in `/src/components/kibo-ui/`
 - Galaxy components in `/components/galaxy/`
@@ -65,19 +67,22 @@ project-extracted/                   ← Figma export (reference only)
 **Problem:** Confusion about which to use, version conflicts
 
 ### 2. **Scattered Feature Components**
+
 - 20+ folders in `/components/` for different features
 - Hard to find where UI changes should go
 - Mixing presentation + logic
 
 ### 3. **Inconsistent Import Paths**
+
 ```typescript
 // Multiple ways to import same concepts:
-import { Button } from '@/components/ui/button';           // shadcn
-import { Pill } from '@/src/components/kibo-ui/pill';      // Kibo
-import { DashboardStats } from '@/components/galaxy/...';  // Galaxy
+import { Button } from '@/components/ui/button'; // shadcn
+import { Pill } from '@/src/components/kibo-ui/pill'; // Kibo
+import { DashboardStats } from '@/components/galaxy/...'; // Galaxy
 ```
 
 ### 4. **Design Token Duplication**
+
 - Design tokens in `styles/globals.css`
 - More tokens in `tailwind.config.ts`
 - Reference tokens in `project-extracted/styles/globals.css`
@@ -168,12 +173,14 @@ apps/web/
 
 **Purpose:** All Figma-specific components in ONE place
 **Benefits:**
+
 - ✅ Clear separation from base components
 - ✅ Easy to find and modify
 - ✅ Organized by page
 - ✅ Shared components in `/shared/`
 
 **Migration:**
+
 ```bash
 # Move existing Galaxy components
 components/galaxy/ → components/figma/shared/
@@ -189,6 +196,7 @@ components/figma/marketing/
 ### 2. **Consolidate Design Tokens**
 
 **Current (scattered):**
+
 ```css
 styles/globals.css                   ← Some tokens
 tailwind.config.ts                   ← More tokens
@@ -196,6 +204,7 @@ project-extracted/styles/globals.css ← Figma tokens
 ```
 
 **Recommended (single source):**
+
 ```css
 styles/
 ├── globals.css                      ← Core system
@@ -203,6 +212,7 @@ styles/
 ```
 
 **Import order in globals.css:**
+
 ```css
 @tailwind base;
 @tailwind components;
@@ -214,6 +224,7 @@ styles/
 ### 3. **Clean Import Paths**
 
 **Before (confusing):**
+
 ```typescript
 import { Button } from '@/components/ui/button';
 import { Pill } from '@/src/components/kibo-ui/pill';
@@ -221,6 +232,7 @@ import { DashboardStats } from '@/components/galaxy/DashboardStats';
 ```
 
 **After (clear hierarchy):**
+
 ```typescript
 // Base components (rarely change)
 import { Button, Card, Input } from '@/components/ui';
@@ -242,8 +254,8 @@ import { useAgentFilters } from '@/components/features/agents';
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@ui/*": ["./components/ui/*"],           // Base components
-      "@figma/*": ["./components/figma/*"],     // Figma designs
+      "@ui/*": ["./components/ui/*"], // Base components
+      "@figma/*": ["./components/figma/*"], // Figma designs
       "@kibo/*": ["./src/components/kibo-ui/*"], // Advanced patterns
       "@features/*": ["./components/features/*"] // Business logic
     }
@@ -252,6 +264,7 @@ import { useAgentFilters } from '@/components/features/agents';
 ```
 
 **Imports become:**
+
 ```typescript
 import { Button } from '@ui/button';
 import { StatsPills } from '@figma/dashboard';
@@ -281,6 +294,7 @@ mv components/galaxy/* components/figma/shared/
 ### **Phase 2: Extract Figma Tokens (10 minutes)**
 
 Create `styles/figma-tokens.css`:
+
 ```css
 /**
  * Figma Design Tokens
@@ -289,16 +303,16 @@ Create `styles/figma-tokens.css`:
 
 :root {
   /* Figma Colors */
-  --figma-blue: 59 130 246;      /* Blue pills, status */
-  --figma-green: 34 197 94;      /* Green pills, success */
-  --figma-purple: 168 85 247;    /* Purple pills, AI */
-  --figma-orange: 249 115 22;    /* Orange pills, metrics */
-  
+  --figma-blue: 59 130 246; /* Blue pills, status */
+  --figma-green: 34 197 94; /* Green pills, success */
+  --figma-purple: 168 85 247; /* Purple pills, AI */
+  --figma-orange: 249 115 22; /* Orange pills, metrics */
+
   /* Figma Shadows (from your design) */
   --figma-shadow-sm: 0 2px 10px rgb(0 0 0 / 0.04);
   --figma-shadow-md: 0 4px 20px rgb(0 0 0 / 0.04);
   --figma-shadow-lg: 0 8px 30px rgb(0 0 0 / 0.06);
-  
+
   /* Figma Glows (colored shadows) */
   --figma-glow-blue: 0 2px 10px rgb(59 130 246 / 0.15);
   --figma-glow-green: 0 2px 10px rgb(34 197 94 / 0.15);
@@ -330,11 +344,12 @@ Create `styles/figma-tokens.css`:
 ### **Phase 3: Component Template**
 
 Standard template for all Figma components:
+
 ```typescript
 /**
  * [ComponentName] - Figma Design Component
  * Page: [Dashboard/Studio/etc]
- * 
+ *
  * Design: Matches Figma design exactly
  * Updated: [Date]
  */
@@ -417,37 +432,42 @@ components/figma/
 ## 🎯 Benefits of This Structure
 
 ### **1. Crystal Clear Component Location**
+
 ```typescript
 // Want to modify dashboard? Look here:
-components/figma/dashboard/
-
-// Want to modify CRM? Look here:
-components/figma/crm/
-
-// Need a shared gradient pill? Look here:
-components/figma/shared/GradientPill.tsx
+components /
+  figma /
+  dashboard /
+  // Want to modify CRM? Look here:
+  components /
+  figma /
+  crm /
+  // Need a shared gradient pill? Look here:
+  components /
+  figma /
+  shared /
+  GradientPill.tsx;
 ```
 
 ### **2. No Version Conflicts**
+
 - Base components (`/ui/`) = stable, rarely change
 - Figma components (`/figma/`) = your designs, frequently updated
 - Kibo UI (`/kibo-ui/`) = advanced patterns, use when needed
 - Clear separation = no conflicts
 
 ### **3. Easy Imports**
+
 ```typescript
 // Page component imports
-import { 
-  StatsPills, 
-  AgentCard, 
-  ActivityTimeline 
-} from '@/components/figma/dashboard';
+import { StatsPills, AgentCard, ActivityTimeline } from '@/components/figma/dashboard';
 
 // Or with alias:
 import { StatsPills } from '@figma/dashboard';
 ```
 
 ### **4. One Design Token File**
+
 ```css
 /* styles/figma-tokens.css */
 /* ALL Figma-specific design tokens in ONE place */
@@ -457,6 +477,7 @@ import { StatsPills } from '@figma/dashboard';
 ### **5. Figma → Code Workflow**
 
 **When you update Figma:**
+
 1. Export new design
 2. Open corresponding file: `components/figma/[page]/[component].tsx`
 3. Update that ONE file
@@ -468,6 +489,7 @@ import { StatsPills } from '@figma/dashboard';
 ## 🛠️ Migration Steps (I'll Do This)
 
 ### **Step 1: Reorganize (10 min)**
+
 ```bash
 # Create new structure
 mkdir components/figma/{dashboard,studio,knowledge-base,crm,marketing,shared}
@@ -480,12 +502,14 @@ rm -rf components/galaxy
 ```
 
 ### **Step 2: Extract Figma Tokens (5 min)**
+
 ```bash
 # Create figma-tokens.css from your designs
 # Move all Figma-specific CSS variables there
 ```
 
 ### **Step 3: Update Path Aliases (2 min)**
+
 ```json
 // tsconfig.json
 "paths": {
@@ -499,6 +523,7 @@ rm -rf components/galaxy
 ### **Step 4: Build Page Components (Per Page)**
 
 For each of your 5 pages, I'll:
+
 1. Create page-specific folder in `/components/figma/`
 2. Break down Figma design into reusable components
 3. Implement each component matching Figma exactly
@@ -512,22 +537,28 @@ For each of your 5 pages, I'll:
 ### **Your Figma Dashboard Has:**
 
 **Top Section:**
+
 - 4 gradient stat pills → `StatsPills.tsx`
 
 **Toolbar:**
+
 - 8 action buttons → `FloatingToolbar.tsx`
 
 **Main Content:**
+
 - Grid of agent cards → `AgentGrid.tsx` + `AgentCard.tsx`
 - "4 Running" badge → Use `StatusBadge.tsx` from shared
 
 **Bottom:**
+
 - 3 metric cards → `MetricsSummary.tsx` + `MetricCard.tsx` (shared)
 
 **Right Sidebar:**
+
 - Activity timeline → `ActivityTimeline.tsx`
 
 **Component Tree:**
+
 ```typescript
 // apps/web/app/(app)/dashboard/page.tsx
 export default function DashboardPage() {
@@ -557,6 +588,7 @@ export default function DashboardPage() {
 ```
 
 **Figma tokens include:**
+
 - Colors (exact from Figma)
 - Shadows (4 levels + colored glows)
 - Border radius (sm/md/lg/xl)
@@ -643,21 +675,22 @@ className="bg-blue-500/10"           ← Uses --figma-blue
 
 ## 📊 Comparison: Before vs After
 
-| Aspect | Before (Current) | After (Optimized) |
-|--------|------------------|-------------------|
-| **Component Location** | Scattered across 20+ folders | Organized by page in `/figma/` |
-| **Import Paths** | 4-5 different patterns | 2-3 clear patterns with aliases |
-| **Design Tokens** | 3 files (conflicting) | 1 file (`figma-tokens.css`) |
-| **Figma Updates** | Hunt through folders | Go to `/figma/[page]/` |
-| **Shared Components** | Copy-paste between pages | Use from `/figma/shared/` |
-| **Learning Curve** | High (where is X?) | Low (predictable structure) |
-| **Modification Time** | 10-15 min (find + edit) | 2-3 min (direct edit) |
+| Aspect                 | Before (Current)             | After (Optimized)               |
+| ---------------------- | ---------------------------- | ------------------------------- |
+| **Component Location** | Scattered across 20+ folders | Organized by page in `/figma/`  |
+| **Import Paths**       | 4-5 different patterns       | 2-3 clear patterns with aliases |
+| **Design Tokens**      | 3 files (conflicting)        | 1 file (`figma-tokens.css`)     |
+| **Figma Updates**      | Hunt through folders         | Go to `/figma/[page]/`          |
+| **Shared Components**  | Copy-paste between pages     | Use from `/figma/shared/`       |
+| **Learning Curve**     | High (where is X?)           | Low (predictable structure)     |
+| **Modification Time**  | 10-15 min (find + edit)      | 2-3 min (direct edit)           |
 
 ---
 
 ## ⚡ Quick Wins
 
 ### **1. Path Aliases (Immediate)**
+
 ```json
 // Just add to tsconfig.json
 "@figma/*": ["./components/figma/*"]
@@ -666,6 +699,7 @@ className="bg-blue-500/10"           ← Uses --figma-blue
 **Impact:** Clean imports everywhere
 
 ### **2. Create figma-tokens.css (5 min)**
+
 ```css
 /* Extract all Figma-specific variables to ONE file */
 ```
@@ -673,6 +707,7 @@ className="bg-blue-500/10"           ← Uses --figma-blue
 **Impact:** Single source of truth for design
 
 ### **3. Create /components/figma/ (10 min)**
+
 ```bash
 # Organize by page
 mkdir -p components/figma/{dashboard,studio,knowledge-base,crm,marketing,shared}
@@ -685,10 +720,11 @@ mkdir -p components/figma/{dashboard,studio,knowledge-base,crm,marketing,shared}
 ## 🎨 For Your 5 Figma Pages
 
 ### **Dashboard**
+
 ```
 figma/dashboard/
 ├── StatsPills.tsx           ← 4 gradient pills
-├── FloatingToolbar.tsx      ← 8 action buttons  
+├── FloatingToolbar.tsx      ← 8 action buttons
 ├── AgentCard.tsx            ← Agent status cards
 ├── AgentGrid.tsx            ← Grid wrapper
 ├── ActivityTimeline.tsx     ← Right sidebar
@@ -696,7 +732,8 @@ figma/dashboard/
 └── index.ts
 ```
 
-### **Studio**  
+### **Studio**
+
 ```
 figma/studio/
 ├── ChatPanel.tsx            ← Left AI chat
@@ -706,6 +743,7 @@ figma/studio/
 ```
 
 ### **Knowledge Base**
+
 ```
 figma/knowledge-base/
 ├── SearchHeader.tsx         ← Search + filters + view toggle
@@ -716,6 +754,7 @@ figma/knowledge-base/
 ```
 
 ### **CRM**
+
 ```
 figma/crm/
 ├── MetricsBar.tsx           ← Top 5 metrics
@@ -727,6 +766,7 @@ figma/crm/
 ```
 
 ### **Marketing**
+
 ```
 figma/marketing/
 ├── MetricsGrid.tsx          ← Top 4 metrics
@@ -743,6 +783,7 @@ figma/marketing/
 **I recommend we do the reorganization FIRST (15 minutes), then build your pages.**
 
 **Advantages:**
+
 1. ✅ Clean slate for Figma integration
 2. ✅ Easy to maintain long-term
 3. ✅ No version conflicts
@@ -750,6 +791,7 @@ figma/marketing/
 5. ✅ Clear component ownership
 
 **Process:**
+
 1. I reorganize the structure (15 min)
 2. You review and approve
 3. I build each page to match Figma exactly
@@ -763,17 +805,20 @@ figma/marketing/
 ## 🚀 Ready to Execute?
 
 **Option 1: Full Optimization (Recommended)**
+
 - Reorganize structure now
 - Then build pages with clean architecture
 - Time: 15 min setup + 2-3 hours implementation
 
 **Option 2: Quick Start**
+
 - Just create `/components/figma/` folders
 - Build pages incrementally
 - Reorganize later
 - Time: 5 min setup + 2-3 hours implementation
 
 **Option 3: Minimal Change**
+
 - Keep current structure
 - Build in `/components/galaxy/`
 - Rename later
@@ -784,4 +829,3 @@ figma/marketing/
 ---
 
 **What would you prefer?** I can start the reorganization immediately while Vercel deploys, then we'll have a perfect structure for building your Figma pages! 🚀
-

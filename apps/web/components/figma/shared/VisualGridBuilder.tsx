@@ -56,7 +56,7 @@ const initialNodes: NodeType[] = [
     shadow: 'shadow-green-500/50',
     position: { x: 300, y: 100 },
   },
-  
+
   // Central Hub: Main AI Assistant
   {
     id: 3,
@@ -67,7 +67,7 @@ const initialNodes: NodeType[] = [
     shadow: 'shadow-purple-500/50',
     position: { x: 300, y: 250 }, // Center position
   },
-  
+
   // Branch 1: Email automation (top-right)
   {
     id: 4,
@@ -96,7 +96,7 @@ const initialNodes: NodeType[] = [
     shadow: 'shadow-pink-500/50',
     position: { x: 900, y: 150 },
   },
-  
+
   // Branch 2: Document processing (bottom)
   {
     id: 7,
@@ -141,12 +141,12 @@ const connections: { from: number; to: number }[] = [
   // Top input branch
   { from: 1, to: 2 },
   { from: 2, to: 3 },
-  
+
   // Branch 1: Email automation (from central hub)
   { from: 3, to: 4 },
   { from: 4, to: 5 },
   { from: 5, to: 6 },
-  
+
   // Branch 2: Document processing (from central hub)
   { from: 3, to: 7 },
   { from: 7, to: 8 },

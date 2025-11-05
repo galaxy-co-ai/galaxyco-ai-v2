@@ -35,6 +35,7 @@ packages/*/.turbo/
 *.key
 secrets.json
 SECRETS_CHECKLIST_FILLED.md
+ENV_AUDIT_*.md
 
 # IDE
 .vscode/

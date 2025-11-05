@@ -182,7 +182,7 @@ export default function DashboardPage() {
   ];
 
   const runningAgentsCount = agents.filter(
-    (a) => a.status === 'active' || a.status === 'processing'
+    (a) => a.status === 'active' || a.status === 'processing',
   ).length;
 
   return (
@@ -191,7 +191,7 @@ export default function DashboardPage() {
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's an overview of your AI agents and workflows.
+          Welcome back! Here&apos;s an overview of your AI agents and workflows.
         </p>
       </div>
 

@@ -85,10 +85,7 @@ export function SearchHeader({
             variant="ghost"
             size="sm"
             onClick={() => onViewModeChange('grid')}
-            className={cn(
-              'h-8 w-8 p-0',
-              viewMode === 'grid' && 'bg-muted'
-            )}
+            className={cn('h-8 w-8 p-0', viewMode === 'grid' && 'bg-muted')}
           >
             <Grid3x3 className="h-4 w-4" />
           </Button>
@@ -96,10 +93,7 @@ export function SearchHeader({
             variant="ghost"
             size="sm"
             onClick={() => onViewModeChange('list')}
-            className={cn(
-              'h-8 w-8 p-0',
-              viewMode === 'list' && 'bg-muted'
-            )}
+            className={cn('h-8 w-8 p-0', viewMode === 'list' && 'bg-muted')}
           >
             <List className="h-4 w-4" />
           </Button>
@@ -116,4 +110,3 @@ export function SearchHeader({
     </div>
   );
 }
-

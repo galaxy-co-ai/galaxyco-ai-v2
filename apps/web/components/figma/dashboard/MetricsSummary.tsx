@@ -36,7 +36,7 @@ export function MetricsSummary({ metrics, className }: MetricsSummaryProps) {
             key={index}
             className={cn(
               'figma-card p-8 cursor-pointer',
-              'hover:scale-[1.02] transition-transform duration-200'
+              'hover:scale-[1.02] transition-transform duration-200',
             )}
             onClick={metric.onClick}
           >
@@ -45,7 +45,7 @@ export function MetricsSummary({ metrics, className }: MetricsSummaryProps) {
               <div
                 className={cn(
                   'h-14 w-14 rounded-xl flex items-center justify-center',
-                  metric.iconBgGradient
+                  metric.iconBgGradient,
                 )}
               >
                 <Icon className={cn('h-7 w-7', metric.iconColor)} />
@@ -66,4 +66,3 @@ export function MetricsSummary({ metrics, className }: MetricsSummaryProps) {
     </div>
   );
 }
-

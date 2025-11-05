@@ -73,7 +73,7 @@ export function AgentCard({
               className={cn(
                 'h-1.5 w-1.5 rounded-full mr-1.5',
                 config.dotColor,
-                config.pulse && 'figma-pulse'
+                config.pulse && 'figma-pulse',
               )}
             />
             {config.label}
@@ -90,4 +90,3 @@ export function AgentCard({
     </Card>
   );
 }
-

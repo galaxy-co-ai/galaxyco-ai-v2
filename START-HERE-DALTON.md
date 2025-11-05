@@ -24,6 +24,7 @@ pnpm dev
 ```
 
 **Visit:**
+
 - http://localhost:3000/dashboard
 - http://localhost:3000/studio
 - http://localhost:3000/knowledge-base
@@ -33,12 +34,15 @@ pnpm dev
 ## 🎨 What You'll See
 
 ### Dashboard
+
 - 🌈 Gradient pills • 💎 Floating toolbar • 🤖 Agent cards • ✨ 3 modals
 
 ### Studio
+
 - 💬 AI Assistant chat • 🎨 Visual Workflow Builder • 📊 Auto-building
 
 ### Knowledge Base
+
 - 📊 Stats pills • 📁 Folder sidebar • 🎯 Grid/List views • 🔍 Search
 
 **All match your Figma designs exactly!**
@@ -48,6 +52,7 @@ pnpm dev
 ## ⏳ Remaining Pages
 
 I have complete Figma code ready for:
+
 - CRM (Contacts/Projects/Sales)
 - Marketing (Campaign management)
 

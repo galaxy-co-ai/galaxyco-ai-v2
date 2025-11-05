@@ -17,6 +17,7 @@ The Vercel deployment was failing due to TypeScript compilation errors and a run
 ### 1. **Separator Component - TypeScript Error**
 
 **Error:**
+
 ```
 Type '{ orientation: string; className: string; }' is not assignable to type 'IntrinsicAttributes & SeparatorProps'
 Property 'orientation' does not exist on type 'SeparatorProps'
@@ -25,12 +26,14 @@ Property 'orientation' does not exist on type 'SeparatorProps'
 **Location:** `apps/web/app/(app)/dashboard/page.tsx:544`
 
 **Fix:** Updated `apps/web/components/ui/separator.tsx` to:
+
 - Use the proper Radix UI `@radix-ui/react-separator` primitive
 - Support `orientation` prop (`horizontal` | `vertical`)
 - Support `decorative` prop for accessibility
 - Apply proper styling based on orientation
 
 **Code Change:**
+
 ```typescript
 // BEFORE: Simple <hr> element
 export interface SeparatorProps extends React.HTMLAttributes<HTMLHRElement> {}
@@ -59,6 +62,7 @@ const Separator = React.forwardRef<
 ### 2. **AvatarFallback Import - TypeScript Error**
 
 **Error:**
+
 ```
 Module '"@/components/ui/avatar"' has no exported member 'AvatarFallback'
 ```
@@ -66,10 +70,12 @@ Module '"@/components/ui/avatar"' has no exported member 'AvatarFallback'
 **Location:** `apps/web/app/(app)/knowledge-base/page.tsx:9`
 
 **Fix:** Removed unused import
+
 - `AvatarFallback` was imported but never used in the file
 - The Avatar component has been refactored to include all sub-components internally
 
 **Code Change:**
+
 ```typescript
 // BEFORE
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -83,6 +89,7 @@ import { Avatar } from '@/components/ui/avatar';
 ### 3. **Nango Environment Variable - Build-Time Error**
 
 **Error:**
+
 ```
 Error: NANGO_SECRET_KEY is not defined in environment variables.
     at 57593 (C:\...\apps\web\.next\server\app\api\integrations\disconnect\route.js:1:5711)
@@ -90,12 +97,14 @@ Error: NANGO_SECRET_KEY is not defined in environment variables.
 
 **Location:** `apps/web/lib/integrations/nango-server.ts`
 
-**Issue:** 
+**Issue:**
+
 - Nango client was being instantiated at module load time
 - Environment variable check was throwing during Next.js build static analysis
 - Build process tries to collect page data, which imports the module
 
 **Fix:** Implemented lazy initialization with build-time safety
+
 ```typescript
 // BEFORE: Immediate initialization (fails during build)
 if (!process.env.NANGO_SECRET_KEY) {
@@ -123,6 +132,7 @@ export async function getNangoConnection(integrationId: string, connectionId: st
 ```
 
 This approach:
+
 - ✅ Allows build to complete (placeholder is never executed)
 - ✅ Validates env var at runtime when functions are called
 - ✅ Provides clear error messages in production if misconfigured
@@ -133,18 +143,21 @@ This approach:
 ## 🔍 Build Validation
 
 ### Local Build Test
+
 ```bash
 cd apps/web
 pnpm build
 ```
 
 **Result:** ✅ Success
+
 - TypeScript compilation: ✅ Passed
 - Static page generation: ✅ 209/209 pages
 - No build errors
 - Only expected dynamic server warnings (normal for API routes using `headers()`)
 
 ### File Changes
+
 ```
 modified:   apps/web/app/(app)/knowledge-base/page.tsx
 modified:   apps/web/components/ui/separator.tsx
@@ -160,6 +173,7 @@ modified:   apps/web/lib/integrations/nango-server.ts
 **Status:** Pushed to GitHub ✅
 
 **Vercel Deployment:**
+
 - Push detected: ✅
 - Auto-deployment triggered: ✅
 - Expected outcome: Successful deployment
@@ -173,18 +187,22 @@ modified:   apps/web/lib/integrations/nango-server.ts
 The following warnings are **normal and expected** during build:
 
 ### Dynamic Server Usage Warnings
+
 These are informational warnings for API routes that use dynamic features:
+
 - Routes using `headers()` for authentication (Clerk)
 - Routes using `searchParams` for OAuth callbacks
 - Routes using `cookies()` for session management
 
 **Example:**
+
 ```
-Error generating Gmail auth URL: Route /api/integrations/gmail/authorize couldn't be 
+Error generating Gmail auth URL: Route /api/integrations/gmail/authorize couldn't be
 rendered statically because it used `headers`.
 ```
 
 **Why this is OK:**
+
 - These are API routes, not static pages
 - They need to be dynamic (not static) by design
 - Next.js correctly marks them as server-rendered
@@ -197,6 +215,7 @@ rendered statically because it used `headers`.
 The build now successfully compiles with the complete Figma UI integration:
 
 **Pages Deployed:**
+
 - ✅ Dashboard (complete Figma design)
 - ✅ Studio (AI Assistant + Workflow Builder tabs)
 - ✅ Knowledge Base (Document grid/list with folders)
@@ -204,6 +223,7 @@ The build now successfully compiles with the complete Figma UI integration:
 - ✅ Marketing (Campaign cards with KPIs)
 
 **UI Components:**
+
 - ✅ Gradient stats pills
 - ✅ Agent status cards with pulse animations
 - ✅ Activity timeline
@@ -234,12 +254,14 @@ The build now successfully compiles with the complete Figma UI integration:
 Ensure these are set in Vercel:
 
 **Critical (may show runtime errors if missing):**
+
 - `NANGO_SECRET_KEY` - Nango integration API key
 - `CLERK_SECRET_KEY` - Clerk authentication
 - `DATABASE_URL` - Neon Postgres connection
 - `OPENAI_API_KEY` - OpenAI API access
 
 **Optional (fallback to defaults):**
+
 - `UPSTASH_REDIS_URL` - Redis caching (falls back to in-memory)
 - `UPSTASH_REDIS_TOKEN` - Redis authentication
 
@@ -285,17 +307,20 @@ Ensure these are set in Vercel:
 ### If Deployment Still Fails
 
 **Check Vercel Build Logs:**
+
 1. Go to Vercel dashboard
 2. Click on the failing deployment
 3. Review "Building" tab for errors
 4. Review "Functions" tab for route errors
 
 **Common Issues:**
+
 - Missing environment variables (add in Vercel settings)
 - Package installation failures (check pnpm-lock.yaml)
 - Memory limits (upgrade Vercel plan if needed)
 
 **Quick Fixes:**
+
 ```bash
 # Force fresh build
 vercel --force
@@ -318,4 +343,3 @@ vercel env pull .env.local
 **Last Updated:** November 5, 2025  
 **Author:** AI Assistant  
 **Commit:** `81add1b`
-

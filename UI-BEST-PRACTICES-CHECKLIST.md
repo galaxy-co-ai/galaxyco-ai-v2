@@ -49,6 +49,7 @@
 - [ ] Text has sufficient contrast (WCAG AA: 4.5:1 minimum)
 
 **Common Colors:**
+
 ```tsx
 ✅ bg-primary, text-foreground, border-border
 ❌ bg-blue-500, text-gray-600, border-[#ECECEC]
@@ -86,6 +87,7 @@
 - [ ] Tested on actual mobile device or DevTools
 
 **Breakpoints:**
+
 ```tsx
 ✅ className="flex-col md:flex-row"
 ✅ className="text-2xl md:text-4xl"
@@ -113,6 +115,7 @@
 - [ ] Forms have associated `<label>` elements
 
 **Example:**
+
 ```tsx
 ✅ <button aria-label="Close dialog">×</button>
 ✅ <img src="/logo.png" alt="GalaxyCo logo" />
@@ -162,6 +165,7 @@
 - [ ] **Disabled** - Visually disabled, not interactive
 
 **Example:**
+
 ```tsx
 ✅ {isLoading && <Skeleton />}
 ✅ {error && <ErrorMessage />}
@@ -219,6 +223,7 @@
 - [ ] No sensitive data in commit
 
 **Conventional Commit Format:**
+
 ```
 feat(scope): message
 fix(scope): message
@@ -380,10 +385,10 @@ pnpm prettier --write .
 ---
 
 **Before you commit, ask yourself:**
+
 1. Would I be proud to show this to users?
 2. Can everyone use it (including people with disabilities)?
 3. Does it follow the design system?
 4. Is it maintainable by other developers?
 
 If the answer to any is "no", keep polishing! 💎
-

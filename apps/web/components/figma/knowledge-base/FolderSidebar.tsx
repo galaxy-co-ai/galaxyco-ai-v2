@@ -60,18 +60,18 @@ export function FolderSidebar({
                 className={cn(
                   'w-full p-3 rounded-xl text-left transition-all',
                   'hover:bg-muted/50 hover:shadow-sm',
-                  isSelected && 'bg-muted shadow-sm'
+                  isSelected && 'bg-muted shadow-sm',
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <div className={cn('h-8 w-8 rounded-lg flex items-center justify-center', config.bg)}>
+                  <div
+                    className={cn('h-8 w-8 rounded-lg flex items-center justify-center', config.bg)}
+                  >
                     <Folder className={cn('h-4 w-4', config.icon)} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{folder.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {folder.documentCount} docs
-                    </p>
+                    <p className="text-xs text-muted-foreground">{folder.documentCount} docs</p>
                   </div>
                 </div>
               </button>
@@ -82,4 +82,3 @@ export function FolderSidebar({
     </Card>
   );
 }
-

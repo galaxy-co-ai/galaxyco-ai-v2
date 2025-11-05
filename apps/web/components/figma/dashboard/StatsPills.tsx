@@ -50,4 +50,3 @@ export function StatsPills({ stats, className }: StatsPillsProps) {
     </div>
   );
 }
-

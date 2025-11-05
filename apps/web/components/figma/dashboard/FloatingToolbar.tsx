@@ -60,4 +60,3 @@ export function FloatingToolbar({ actions, separatorAfter = 3, className }: Floa
     </TooltipProvider>
   );
 }
-

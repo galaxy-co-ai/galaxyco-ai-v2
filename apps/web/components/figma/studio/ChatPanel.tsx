@@ -20,7 +20,7 @@ export interface ChatPanelProps {
 
 export function ChatPanel({ className }: ChatPanelProps) {
   const [message, setMessage] = useState(
-    "I want an agent that monitors my inbox for invoice emails, extracts the important details, and adds them to my accounting software..."
+    'I want an agent that monitors my inbox for invoice emails, extracts the important details, and adds them to my accounting software...',
   );
 
   return (
@@ -42,8 +42,8 @@ export function ChatPanel({ className }: ChatPanelProps) {
             <div className="flex-1 space-y-3">
               <div className="bg-muted/50 rounded-xl p-4">
                 <p className="text-sm">
-                  Hi! I'm your AI assistant. Tell me what kind of agent you'd like to create,
-                  and I'll help you build it step by step.
+                  Hi! I&apos;m your AI assistant. Tell me what kind of agent you&apos;d like to
+                  create, and I&apos;ll help you build it step by step.
                 </p>
                 <p className="text-sm mt-3 font-medium">I can help with:</p>
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
@@ -83,4 +83,3 @@ export function ChatPanel({ className }: ChatPanelProps) {
     </Card>
   );
 }
-

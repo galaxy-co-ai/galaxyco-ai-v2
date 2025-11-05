@@ -82,9 +82,7 @@ export function ContactDetail({ contact, interactions, className }: ContactDetai
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-lg">{contact.name}</h3>
-                  <Badge className={statusConfig[contact.status].color}>
-                    {contact.status}
-                  </Badge>
+                  <Badge className={statusConfig[contact.status].color}>{contact.status}</Badge>
                   <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20">
                     <Star className="h-3 w-3 mr-1 fill-current" />
                     {contact.score}
@@ -162,9 +160,7 @@ export function ContactDetail({ contact, interactions, className }: ContactDetai
                 <span className="text-xs">Sentiment</span>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-lg font-semibold">
-                  {sentimentConfig[contact.sentiment].label}
-                </p>
+                <p className="text-lg font-semibold">{sentimentConfig[contact.sentiment].label}</p>
               </div>
             </div>
           </div>
@@ -189,9 +185,7 @@ export function ContactDetail({ contact, interactions, className }: ContactDetai
                       <div
                         className={cn(
                           'h-8 w-8 rounded-lg flex items-center justify-center',
-                          interaction.type === 'call'
-                            ? 'bg-green-500/10'
-                            : 'bg-blue-500/10'
+                          interaction.type === 'call' ? 'bg-green-500/10' : 'bg-blue-500/10',
                         )}
                       >
                         {interaction.type === 'call' ? (
@@ -202,9 +196,7 @@ export function ContactDetail({ contact, interactions, className }: ContactDetai
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm capitalize">
-                            {interaction.type}
-                          </span>
+                          <span className="font-medium text-sm capitalize">{interaction.type}</span>
                           <Badge className={sentimentConfig[interaction.sentiment].color}>
                             {sentimentConfig[interaction.sentiment].label}
                           </Badge>
@@ -248,4 +240,3 @@ export function ContactDetail({ contact, interactions, className }: ContactDetai
     </Card>
   );
 }
-

@@ -45,12 +45,8 @@ export function ActivityTimeline({ activities, className }: ActivityTimelineProp
               <div key={activity.id} className="flex gap-4">
                 {/* Timeline dot and line */}
                 <div className="flex flex-col items-center">
-                  <div
-                    className={cn('figma-timeline-dot', statusDotClass[activity.status])}
-                  />
-                  {index < activities.length - 1 && (
-                    <div className="w-px h-full bg-border mt-2" />
-                  )}
+                  <div className={cn('figma-timeline-dot', statusDotClass[activity.status])} />
+                  {index < activities.length - 1 && <div className="w-px h-full bg-border mt-2" />}
                 </div>
 
                 {/* Activity content */}
@@ -67,4 +63,3 @@ export function ActivityTimeline({ activities, className }: ActivityTimelineProp
     </Card>
   );
 }
-

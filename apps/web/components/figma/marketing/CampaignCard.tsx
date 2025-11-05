@@ -97,11 +97,7 @@ export function CampaignCard({
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {tags.slice(0, 3).map((tag, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className="bg-muted/50 text-xs rounded-full"
-            >
+            <Badge key={index} variant="outline" className="bg-muted/50 text-xs rounded-full">
               {tag}
             </Badge>
           ))}
@@ -120,4 +116,3 @@ export function CampaignCard({
     </Card>
   );
 }
-

@@ -19,11 +19,7 @@ export interface WorkflowCanvasProps {
   className?: string;
 }
 
-export function WorkflowCanvas({
-  activeCount = 3,
-  isLive = true,
-  className,
-}: WorkflowCanvasProps) {
+export function WorkflowCanvas({ activeCount = 3, isLive = true, className }: WorkflowCanvasProps) {
   return (
     <Card className={cn('figma-card flex flex-col h-[calc(100vh-16rem)]', className)}>
       {/* Header with Status */}
@@ -55,4 +51,3 @@ export function WorkflowCanvas({
     </Card>
   );
 }
-

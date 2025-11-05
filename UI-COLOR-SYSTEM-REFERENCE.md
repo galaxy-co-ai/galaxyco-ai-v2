@@ -22,14 +22,16 @@
 ### **Brand Colors (Primary)**
 
 #### Framer Blue - Primary
+
 ```css
---primary: 0 85 255;          /* #0055FF - Main brand color */
---primary-foreground: 255 255 255;  /* White text on primary */
---primary-hover: 0 68 221;    /* #0044dd - Hover state */
---primary-active: 0 51 187;   /* #0033bb - Active/pressed state */
+--primary: 0 85 255; /* #0055FF - Main brand color */
+--primary-foreground: 255 255 255; /* White text on primary */
+--primary-hover: 0 68 221; /* #0044dd - Hover state */
+--primary-active: 0 51 187; /* #0033bb - Active/pressed state */
 ```
 
 **Usage:**
+
 - ✅ Primary CTAs (Get Started, Save, Submit)
 - ✅ Active states (selected nav, active tab)
 - ✅ Links (main content links)
@@ -38,6 +40,7 @@
 - ❌ Body text (poor contrast)
 
 **Examples:**
+
 ```tsx
 <Button className="bg-primary hover:bg-primary-hover">
   Get Started
@@ -53,33 +56,38 @@
 ### **Neutrals (90% of UI)**
 
 #### Backgrounds
+
 ```css
---background: 255 255 255;           /* #FFFFFF - Page background */
---background-elevated: 250 250 252;  /* #FAFAFC - Cards, panels */
---background-subtle: 248 250 252;    /* #F8FAFC - Hover states */
+--background: 255 255 255; /* #FFFFFF - Page background */
+--background-elevated: 250 250 252; /* #FAFAFC - Cards, panels */
+--background-subtle: 248 250 252; /* #F8FAFC - Hover states */
 ```
 
 #### Foregrounds (Text)
+
 ```css
---foreground: 20 23 26;              /* #14171A - Main text */
---foreground-muted: 100 116 139;     /* #64748B - Secondary text */
---foreground-subtle: 100 116 139;    /* #64748B - Tertiary text */
+--foreground: 20 23 26; /* #14171A - Main text */
+--foreground-muted: 100 116 139; /* #64748B - Secondary text */
+--foreground-subtle: 100 116 139; /* #64748B - Tertiary text */
 ```
 
 #### Borders & Dividers
+
 ```css
---border: 226 232 240;               /* #E2E8F0 - Default border */
---border-hover: 203 213 225;         /* #CBD5E1 - Hover border */
---border-focus: 0 85 255;            /* #0055FF - Focus ring */
+--border: 226 232 240; /* #E2E8F0 - Default border */
+--border-hover: 203 213 225; /* #CBD5E1 - Hover border */
+--border-focus: 0 85 255; /* #0055FF - Focus ring */
 ```
 
 #### Muted (Backgrounds & Text)
+
 ```css
---muted: 241 245 249;                /* #F1F5F9 - Muted background */
---muted-foreground: 100 116 139;     /* #64748B - Muted text */
+--muted: 241 245 249; /* #F1F5F9 - Muted background */
+--muted-foreground: 100 116 139; /* #64748B - Muted text */
 ```
 
 **Usage:**
+
 ```tsx
 // Page layout
 <div className="bg-background text-foreground">
@@ -96,23 +104,23 @@
 ### **Secondary Color**
 
 ```css
---secondary: 52 64 80;               /* #344050 - Slate blue */
+--secondary: 52 64 80; /* #344050 - Slate blue */
 --secondary-foreground: 248 250 252; /* #F8FAFC - Light text */
---secondary-hover: 71 85 105;        /* #475569 - Hover */
---secondary-active: 51 65 85;        /* #334155 - Active */
+--secondary-hover: 71 85 105; /* #475569 - Hover */
+--secondary-active: 51 65 85; /* #334155 - Active */
 ```
 
 **Usage:**
+
 - ✅ Secondary buttons
 - ✅ Alternative CTAs
 - ✅ Neutral actions
 - ✅ Footer backgrounds
 
 **Example:**
+
 ```tsx
-<Button variant="secondary">
-  Learn More
-</Button>
+<Button variant="secondary">Learn More</Button>
 ```
 
 ---
@@ -120,6 +128,7 @@
 ### **Semantic Colors**
 
 #### Success (Green)
+
 ```css
 /* Static colors - don't use variables */
 bg-success: rgb(34 197 94)           /* #22C55E */
@@ -129,12 +138,14 @@ border-success: rgb(74 222 128)      /* #4ADE80 */
 ```
 
 **Usage:**
+
 - ✅ Success messages
 - ✅ Completed states
 - ✅ Positive indicators
 - ✅ Active status
 
 #### Warning (Amber) - WCAG AA Compliant
+
 ```css
 bg-warning: rgb(217 119 6)           /* #D97706 - 4.5:1 contrast */
 text-warning-foreground: rgb(15 23 42) /* #0F172A - Dark text */
@@ -143,21 +154,24 @@ border-warning: rgb(252 211 77)      /* #FCD34D */
 ```
 
 **Usage:**
+
 - ✅ Warning messages
 - ✅ Caution states
 - ✅ Important notices
 
 #### Error/Destructive (Red)
+
 ```css
---destructive: 220 38 38;            /* #DC2626 - 4.5:1 contrast */
+--destructive: 220 38 38; /* #DC2626 - 4.5:1 contrast */
 --destructive-foreground: 255 255 255; /* White */
---destructive-hover: 220 38 38;      /* Hover */
---destructive-active: 185 28 28;     /* #B91C1C - Active */
+--destructive-hover: 220 38 38; /* Hover */
+--destructive-active: 185 28 28; /* #B91C1C - Active */
 --destructive-light: rgb(254 242 242); /* #FEF2F2 */
 --destructive-border: rgb(248 113 113); /* #F87171 */
 ```
 
 **Usage:**
+
 - ✅ Error messages
 - ✅ Delete buttons
 - ✅ Dangerous actions
@@ -168,34 +182,39 @@ border-warning: rgb(252 211 77)      /* #FCD34D */
 ### **Component-Specific Colors**
 
 #### Cards
+
 ```css
---card: 255 255 255;                 /* #FFFFFF */
---card-foreground: 20 23 26;         /* #14171A */
+--card: 255 255 255; /* #FFFFFF */
+--card-foreground: 20 23 26; /* #14171A */
 ```
 
 #### Popovers & Dropdowns
+
 ```css
---popover: 255 255 255;              /* #FFFFFF */
---popover-foreground: 20 23 26;      /* #14171A */
+--popover: 255 255 255; /* #FFFFFF */
+--popover-foreground: 20 23 26; /* #14171A */
 ```
 
 #### Accents
+
 ```css
---accent: 240 249 255;               /* #F0F9FF - Light blue */
---accent-foreground: 20 23 26;       /* #14171A */
+--accent: 240 249 255; /* #F0F9FF - Light blue */
+--accent-foreground: 20 23 26; /* #14171A */
 ```
 
 #### Interactive States
+
 ```css
---hover: 248 250 252;                /* #F8FAFC - Hover background */
---active: 241 245 249;               /* #F1F5F9 - Active background */
---selected: 245 243 255;             /* #F5F3FF - Selected state */
+--hover: 248 250 252; /* #F8FAFC - Hover background */
+--active: 241 245 249; /* #F1F5F9 - Active background */
+--selected: 245 243 255; /* #F5F3FF - Selected state */
 ```
 
 #### Inputs
+
 ```css
---input: 226 232 240;                /* #E2E8F0 - Input border */
---ring: 0 85 255;                    /* #0055FF - Focus ring */
+--input: 226 232 240; /* #E2E8F0 - Input border */
+--ring: 0 85 255; /* #0055FF - Focus ring */
 ```
 
 ---
@@ -206,17 +225,17 @@ All colors have dark mode overrides:
 
 ```css
 .dark {
-  --background: 15 23 42;            /* #0F172A - Dark bg */
-  --foreground: 248 250 252;         /* #F8FAFC - Light text */
-  
-  --background-elevated: 30 41 59;   /* #1E293B */
-  --background-subtle: 51 65 85;     /* #334155 */
-  
-  --border: 51 65 85;                /* #334155 */
-  --border-hover: 71 85 105;         /* #475569 */
-  
+  --background: 15 23 42; /* #0F172A - Dark bg */
+  --foreground: 248 250 252; /* #F8FAFC - Light text */
+
+  --background-elevated: 30 41 59; /* #1E293B */
+  --background-subtle: 51 65 85; /* #334155 */
+
+  --border: 51 65 85; /* #334155 */
+  --border-hover: 71 85 105; /* #475569 */
+
   /* Primary stays the same (Framer blue works in both modes) */
-  --primary: 0 85 255;               /* #0055FF */
+  --primary: 0 85 255; /* #0055FF */
 }
 ```
 
@@ -277,13 +296,13 @@ All colors have dark mode overrides:
 
 ### **High Contrast (Text on Backgrounds)**
 
-| Background | Text | Contrast | WCAG |
-|-----------|------|----------|------|
-| `bg-background` | `text-foreground` | 15:1 | AAA ✅ |
-| `bg-primary` | `text-primary-foreground` | 7:1 | AA ✅ |
-| `bg-destructive` | `text-destructive-foreground` | 4.5:1 | AA ✅ |
-| `bg-warning` | `text-warning-foreground` | 4.5:1 | AA ✅ |
-| `bg-muted` | `text-muted-foreground` | 5.2:1 | AA ✅ |
+| Background       | Text                          | Contrast | WCAG   |
+| ---------------- | ----------------------------- | -------- | ------ |
+| `bg-background`  | `text-foreground`             | 15:1     | AAA ✅ |
+| `bg-primary`     | `text-primary-foreground`     | 7:1      | AA ✅  |
+| `bg-destructive` | `text-destructive-foreground` | 4.5:1    | AA ✅  |
+| `bg-warning`     | `text-warning-foreground`     | 4.5:1    | AA ✅  |
+| `bg-muted`       | `text-muted-foreground`       | 5.2:1    | AA ✅  |
 
 ### **Common Patterns**
 
@@ -314,19 +333,21 @@ All colors have dark mode overrides:
 ## 🚫 FORBIDDEN PATTERNS
 
 ### **Don't Hardcode Colors**
+
 ```tsx
 // ❌ BAD
-className="bg-blue-500"
-className="text-gray-600"
-className="border-slate-300"
+className = 'bg-blue-500';
+className = 'text-gray-600';
+className = 'border-slate-300';
 
 // ✅ GOOD
-className="bg-primary"
-className="text-foreground-muted"
-className="border-border"
+className = 'bg-primary';
+className = 'text-foreground-muted';
+className = 'border-border';
 ```
 
 ### **Don't Use Inline Styles**
+
 ```tsx
 // ❌ BAD
 style={{ color: '#0055FF', backgroundColor: '#FFFFFF' }}
@@ -336,6 +357,7 @@ className="text-primary bg-background"
 ```
 
 ### **Don't Mix RGB and HSL**
+
 ```tsx
 // ❌ BAD (inconsistent format)
 --my-color: 224 14% 9%;  /* HSL */
@@ -352,19 +374,19 @@ className="text-primary bg-background"
 
 **Quick Reference Table:**
 
-| Need | Token | Tailwind Class |
-|------|-------|----------------|
-| Main brand color | `primary` | `bg-primary` |
-| Main text | `foreground` | `text-foreground` |
-| Secondary text | `foreground-muted` | `text-foreground-muted` |
-| Page background | `background` | `bg-background` |
-| Card background | `background-elevated` | `bg-background-elevated` |
-| Border | `border` | `border-border` |
-| Success | Static | `bg-success` |
-| Warning | Static | `bg-warning` |
-| Error | `destructive` | `bg-destructive` |
-| Hover state | `hover` | `bg-hover` |
-| Selected state | `selected` | `bg-selected` |
+| Need             | Token                 | Tailwind Class           |
+| ---------------- | --------------------- | ------------------------ |
+| Main brand color | `primary`             | `bg-primary`             |
+| Main text        | `foreground`          | `text-foreground`        |
+| Secondary text   | `foreground-muted`    | `text-foreground-muted`  |
+| Page background  | `background`          | `bg-background`          |
+| Card background  | `background-elevated` | `bg-background-elevated` |
+| Border           | `border`              | `border-border`          |
+| Success          | Static                | `bg-success`             |
+| Warning          | Static                | `bg-warning`             |
+| Error            | `destructive`         | `bg-destructive`         |
+| Hover state      | `hover`               | `bg-hover`               |
+| Selected state   | `selected`            | `bg-selected`            |
 
 ---
 
@@ -380,4 +402,3 @@ className="text-primary bg-background"
 **Updated:** November 4, 2025  
 **Maintained By:** AI Development Agent  
 **Status:** ✅ Active - All colors standardized to RGB format
-

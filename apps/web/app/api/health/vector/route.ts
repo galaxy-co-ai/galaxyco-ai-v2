@@ -7,7 +7,9 @@ import { getVectorClient } from '@/lib/vector';
  */
 export async function GET() {
   try {
-    const configured = !!(process.env.UPSTASH_VECTOR_REST_URL && process.env.UPSTASH_VECTOR_REST_TOKEN);
+    const configured = !!(
+      process.env.UPSTASH_VECTOR_REST_URL && process.env.UPSTASH_VECTOR_REST_TOKEN
+    );
 
     if (!configured) {
       return NextResponse.json(

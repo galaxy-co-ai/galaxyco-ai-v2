@@ -10,19 +10,8 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Users,
-  DollarSign,
-  Calendar,
-  Zap,
-  Clock,
-  Search,
-} from 'lucide-react';
-import {
-  MetricsBar,
-  ContactCard,
-  ContactDetail,
-} from '@/components/figma/crm';
+import { Users, DollarSign, Calendar, Zap, Clock, Search } from 'lucide-react';
+import { MetricsBar, ContactCard, ContactDetail } from '@/components/figma/crm';
 import type { CRMMetric } from '@/components/figma/crm/MetricsBar';
 import type { ContactCardProps } from '@/components/figma/crm/ContactCard';
 
@@ -213,10 +202,7 @@ export default function CRMPage() {
 
             {/* Right: Contact Detail (2/3) */}
             <div className="lg:col-span-2">
-              <ContactDetail
-                contact={selectedContact}
-                interactions={interactionHistory}
-              />
+              <ContactDetail contact={selectedContact} interactions={interactionHistory} />
             </div>
           </div>
         </TabsContent>

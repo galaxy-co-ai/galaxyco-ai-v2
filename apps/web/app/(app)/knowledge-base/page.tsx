@@ -8,11 +8,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import {
-  SearchHeader,
-  DocumentCard,
-  FolderSidebar,
-} from '@/components/figma/knowledge-base';
+import { SearchHeader, DocumentCard, FolderSidebar } from '@/components/figma/knowledge-base';
 import type { FolderItem } from '@/components/figma/knowledge-base/FolderSidebar';
 import type { DocumentCardProps } from '@/components/figma/knowledge-base/DocumentCard';
 
@@ -149,9 +145,7 @@ export default function KnowledgeBasePage() {
           <div
             className={cn(
               'grid gap-6',
-              viewMode === 'grid'
-                ? 'grid-cols-1 md:grid-cols-2'
-                : 'grid-cols-1'
+              viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1',
             )}
           >
             {documents.map((doc) => (

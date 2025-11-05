@@ -35,8 +35,8 @@ export function MetricsBar({ metrics, className }: MetricsBarProps) {
           metric.changeType === 'increase'
             ? 'text-green-600'
             : metric.changeType === 'decrease'
-            ? 'text-green-600' // Decrease can be good (e.g., response time)
-            : 'text-muted-foreground';
+              ? 'text-green-600' // Decrease can be good (e.g., response time)
+              : 'text-muted-foreground';
 
         return (
           <div key={index} className="flex items-center gap-2">
@@ -51,7 +51,7 @@ export function MetricsBar({ metrics, className }: MetricsBarProps) {
                 <Badge
                   className={cn(
                     'text-xs h-5',
-                    metric.badgeColor || 'bg-red-500/10 text-red-600 border-red-500/20'
+                    metric.badgeColor || 'bg-red-500/10 text-red-600 border-red-500/20',
                   )}
                 >
                   {metric.badge}
@@ -64,4 +64,3 @@ export function MetricsBar({ metrics, className }: MetricsBarProps) {
     </div>
   );
 }
-

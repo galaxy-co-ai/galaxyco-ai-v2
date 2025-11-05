@@ -8,19 +8,8 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Target,
-  DollarSign,
-  Eye,
-  TrendingUp,
-  Plus,
-  Megaphone,
-} from 'lucide-react';
-import {
-  MetricsGrid,
-  AIInsights,
-  CampaignCard,
-} from '@/components/figma/marketing';
+import { Target, DollarSign, Eye, TrendingUp, Plus, Megaphone } from 'lucide-react';
+import { MetricsGrid, AIInsights, CampaignCard } from '@/components/figma/marketing';
 import type { MarketingMetric } from '@/components/figma/marketing/MetricsGrid';
 import type { CampaignCardProps } from '@/components/figma/marketing/CampaignCard';
 
@@ -108,7 +97,7 @@ export default function MarketingPage() {
   ];
 
   const aiRecommendation =
-    "Based on your recent campaigns, I recommend increasing budget allocation to the Q4 Product Launch Campaign by 15% and creating a retargeting campaign for visitors who engaged with holiday content. Would you like me to create these optimizations?";
+    'Based on your recent campaigns, I recommend increasing budget allocation to the Q4 Product Launch Campaign by 15% and creating a retargeting campaign for visitors who engaged with holiday content. Would you like me to create these optimizations?';
 
   return (
     <div className="space-y-8 pb-8">
@@ -131,11 +120,7 @@ export default function MarketingPage() {
       <MetricsGrid metrics={metrics} />
 
       {/* AI Insights */}
-      <AIInsights
-        recommendation={aiRecommendation}
-        onApply={() => {}}
-        onLearnMore={() => {}}
-      />
+      <AIInsights recommendation={aiRecommendation} onApply={() => {}} onLearnMore={() => {}} />
 
       {/* Campaign Cards */}
       <div>

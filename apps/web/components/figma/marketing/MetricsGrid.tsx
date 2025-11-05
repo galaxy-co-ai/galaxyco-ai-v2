@@ -36,8 +36,8 @@ export function MetricsGrid({ metrics, className }: MetricsGridProps) {
           metric.trendType === 'positive'
             ? 'text-green-600'
             : metric.trendType === 'negative'
-            ? 'text-red-600'
-            : 'text-muted-foreground';
+              ? 'text-red-600'
+              : 'text-muted-foreground';
 
         return (
           <Card key={index} className="figma-card p-6">
@@ -46,7 +46,7 @@ export function MetricsGrid({ metrics, className }: MetricsGridProps) {
               <div
                 className={cn(
                   'h-12 w-12 rounded-xl flex items-center justify-center',
-                  metric.iconBgGradient
+                  metric.iconBgGradient,
                 )}
               >
                 <Icon className={cn('h-6 w-6', metric.iconColor)} />
@@ -72,4 +72,3 @@ export function MetricsGrid({ metrics, className }: MetricsGridProps) {
     </div>
   );
 }
-

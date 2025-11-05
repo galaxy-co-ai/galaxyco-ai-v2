@@ -66,14 +66,16 @@ export function DocumentCard({
     <Card
       className={cn(
         'figma-card p-6 cursor-pointer hover:scale-[1.02] transition-transform',
-        className
+        className,
       )}
       onClick={onClick}
     >
       <div className="space-y-4">
         {/* Icon and Actions */}
         <div className="flex items-start justify-between">
-          <div className={cn('h-12 w-12 rounded-xl flex items-center justify-center', config.bgColor)}>
+          <div
+            className={cn('h-12 w-12 rounded-xl flex items-center justify-center', config.bgColor)}
+          >
             <Icon className={cn('h-6 w-6', config.color)} />
           </div>
           <div className="flex items-center gap-1">
@@ -104,11 +106,7 @@ export function DocumentCard({
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {tags.slice(0, 2).map((tag, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className="bg-muted/50 text-xs rounded-full"
-            >
+            <Badge key={index} variant="outline" className="bg-muted/50 text-xs rounded-full">
               {tag}
             </Badge>
           ))}
@@ -132,4 +130,3 @@ export function DocumentCard({
     </Card>
   );
 }
-
