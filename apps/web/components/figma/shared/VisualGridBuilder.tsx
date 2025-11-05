@@ -25,9 +25,6 @@ import {
   Trash2,
 } from 'lucide-react';
 
-// Define connections between nodes
-const connections: { from: number; to: number }[] = [];
-
 interface NodeType {
   id: number;
   type: string;
@@ -38,17 +35,123 @@ interface NodeType {
   position: { x: number; y: number };
 }
 
-// Initial node data - Start with just the AI Assistant node
+// Initial node data - AI Assistant as central hub with organized workflow branches
 const initialNodes: NodeType[] = [
+  // Top-left branch: Document input
   {
     id: 1,
+    type: 'trigger',
+    icon: Sparkles,
+    label: 'AI Assistant',
+    gradient: 'from-blue-400 to-blue-600',
+    shadow: 'shadow-blue-500/50',
+    position: { x: 100, y: 100 },
+  },
+  {
+    id: 2,
+    type: 'action',
+    icon: FileText,
+    label: 'Document',
+    gradient: 'from-green-400 to-green-600',
+    shadow: 'shadow-green-500/50',
+    position: { x: 300, y: 100 },
+  },
+  
+  // Central Hub: Main AI Assistant
+  {
+    id: 3,
     type: 'ai-assistant',
     icon: Sparkles,
     label: 'AI Assistant',
     gradient: 'from-purple-500 to-purple-700',
     shadow: 'shadow-purple-500/50',
-    position: { x: 400, y: 250 },
+    position: { x: 300, y: 250 }, // Center position
   },
+  
+  // Branch 1: Email automation (top-right)
+  {
+    id: 4,
+    type: 'integration',
+    icon: Mail,
+    label: 'Email',
+    gradient: 'from-blue-400 to-blue-600',
+    shadow: 'shadow-blue-500/50',
+    position: { x: 500, y: 150 },
+  },
+  {
+    id: 5,
+    type: 'ai-assistant',
+    icon: Sparkles,
+    label: 'AI Assistant',
+    gradient: 'from-pink-400 to-pink-600',
+    shadow: 'shadow-pink-500/50',
+    position: { x: 700, y: 150 },
+  },
+  {
+    id: 6,
+    type: 'integration',
+    icon: Database,
+    label: 'Database',
+    gradient: 'from-pink-400 to-pink-600',
+    shadow: 'shadow-pink-500/50',
+    position: { x: 900, y: 150 },
+  },
+  
+  // Branch 2: Document processing (bottom)
+  {
+    id: 7,
+    type: 'action',
+    icon: FileText,
+    label: 'Document',
+    gradient: 'from-red-400 to-red-600',
+    shadow: 'shadow-red-500/50',
+    position: { x: 500, y: 350 },
+  },
+  {
+    id: 8,
+    type: 'action',
+    icon: MessageSquare,
+    label: 'Message',
+    gradient: 'from-orange-400 to-orange-600',
+    shadow: 'shadow-orange-500/50',
+    position: { x: 700, y: 350 },
+  },
+  {
+    id: 9,
+    type: 'action',
+    icon: FileText,
+    label: 'Document',
+    gradient: 'from-red-400 to-red-600',
+    shadow: 'shadow-red-500/50',
+    position: { x: 900, y: 350 },
+  },
+  {
+    id: 10,
+    type: 'integration',
+    icon: Mail,
+    label: 'Email',
+    gradient: 'from-orange-400 to-orange-600',
+    shadow: 'shadow-orange-500/50',
+    position: { x: 1100, y: 350 },
+  },
+];
+
+// Define connections - AI Assistant (id: 3) as central hub
+const connections: { from: number; to: number }[] = [
+  // Top input branch
+  { from: 1, to: 2 },
+  { from: 2, to: 3 },
+  
+  // Branch 1: Email automation (from central hub)
+  { from: 3, to: 4 },
+  { from: 4, to: 5 },
+  { from: 5, to: 6 },
+  
+  // Branch 2: Document processing (from central hub)
+  { from: 3, to: 7 },
+  { from: 7, to: 8 },
+  { from: 8, to: 9 },
+  { from: 9, to: 10 },
 ];
 
 export function VisualGridBuilder() {
@@ -57,7 +160,7 @@ export function VisualGridBuilder() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [selectedNode, setSelectedNode] = useState<number | null>(1); // Start with AI Assistant selected
+  const [selectedNode, setSelectedNode] = useState<number | null>(3); // Start with central AI Assistant hub selected
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Calculate bounding box of all nodes and adjust zoom
