@@ -5,6 +5,12 @@
  * Now using Next.js API routes (/api/agents) instead of external NestJS backend
  */
 
+'use server';
+
+import { db } from '@galaxyco/database';
+import { agents } from '@galaxyco/database/schema';
+import { eq } from 'drizzle-orm';
+
 const API_BASE_URL = '/api'; // Use Next.js API routes
 
 interface CreateAgentPayload {
@@ -316,4 +322,62 @@ export async function executeAgent(
   }
 
   return response.json();
+}
+
+/**
+ * Server Actions for AI Assistant Tool Integration
+ * These are simplified wrappers that can be called directly from the tool framework
+ */
+
+interface CreateAgentActionInput {
+  workspaceId: string;
+  createdBy: string;
+  name: string;
+  description: string;
+  type: string;
+  status?: string;
+  configuration?: any;
+}
+
+/**
+ * Create agent via Server Action (for AI Assistant)
+ */
+export async function createAgentAction(input: CreateAgentActionInput): Promise<any> {
+  const [agent] = await db
+    .insert(agents)
+    .values({
+      workspaceId: input.workspaceId,
+      createdBy: input.createdBy,
+      name: input.name,
+      description: input.description,
+      type: input.type as any,
+      status: (input.status as any) || 'draft',
+      config: input.configuration || {},
+    })
+    .returning();
+
+  return agent;
+}
+
+/**
+ * Update agent via Server Action (for AI Assistant)
+ */
+export async function updateAgentAction(agentId: string, updates: any): Promise<any> {
+  const [updated] = await db
+    .update(agents)
+    .set({
+      ...updates,
+      updatedAt: new Date(),
+    })
+    .where(eq(agents.id, agentId))
+    .returning();
+
+  return updated;
+}
+
+/**
+ * Delete agent via Server Action (for AI Assistant)
+ */
+export async function deleteAgentAction(agentId: string): Promise<void> {
+  await db.delete(agents).where(eq(agents.id, agentId));
 }

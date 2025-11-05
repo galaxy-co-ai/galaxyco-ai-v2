@@ -6,6 +6,7 @@
 
 import { AppShell } from '@/components/layout/app-shell';
 import { ChatWidget } from '@/components/chat/chat-widget';
+import { FloatingAssistant } from '@/components/floating-assistant/FloatingAssistant';
 import { WorkspaceProvider } from '@/contexts/workspace-context';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ErrorBoundary } from '@/components/error/error-boundary';
@@ -25,6 +26,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <ErrorBoundary>{children}</ErrorBoundary>
             </AppShell>
             <ChatWidget />
+            <FloatingAssistant autoOpenOnFirstVisit={true} />
           </SidebarProvider>
         </WorkspaceProvider>
       </QueryProvider>

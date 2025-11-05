@@ -26,9 +26,7 @@ vi.mock('@/lib/vector', () => ({
 
 vi.mock('@langchain/openai', () => ({
   OpenAIEmbeddings: vi.fn().mockImplementation(() => ({
-    embedQuery: vi.fn().mockResolvedValue(
-      Array.from({ length: 1536 }, () => Math.random())
-    ),
+    embedQuery: vi.fn().mockResolvedValue(Array.from({ length: 1536 }, () => Math.random())),
   })),
 }));
 
@@ -127,7 +125,7 @@ describe('RAGServiceV2', () => {
         },
         {
           id: 'item-2',
-          score: 0.90,
+          score: 0.9,
           metadata: {
             workspaceId: 'other-workspace', // Different workspace!
             type: 'document',
@@ -271,7 +269,7 @@ describe('RAGServiceV2', () => {
             workspaceId: testWorkspaceId,
             title: 'New Item',
           }),
-        })
+        }),
       );
 
       mockDbInsert.mockRestore();
@@ -343,7 +341,7 @@ describe('RAGServiceV2', () => {
         },
         {
           id: 'item-2',
-          score: 0.90,
+          score: 0.9,
           metadata: { workspaceId: 'workspace-B' },
         },
         {
@@ -385,4 +383,3 @@ describe('RAGServiceV2', () => {
     });
   });
 });
-

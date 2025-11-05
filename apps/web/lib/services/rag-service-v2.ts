@@ -45,13 +45,18 @@ export interface RAGContext {
 
 export interface KnowledgeItemInput {
   workspaceId: string;
+  createdBy: string; // Required - user who created it
   collectionId?: string | null;
-  type: 'document' | 'note' | 'webpage' | 'conversation';
+  type: 'document' | 'url' | 'image' | 'text'; // Match database enum
   title: string;
   content: string;
+  sourceUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
+  mimeType?: string | null;
   metadata?: Record<string, any>;
   tags?: string[];
-  status?: 'pending' | 'processing' | 'ready' | 'failed';
+  status?: 'processing' | 'ready' | 'failed'; // Match database enum (no 'pending')
 }
 
 export class RAGServiceV2 {
@@ -99,7 +104,7 @@ export class RAGServiceV2 {
       return await this.searchWithPostgreSQL(queryEmbedding, params);
     } catch (error) {
       console.error('Vector search failed, falling back to PostgreSQL:', error);
-      
+
       // Always have a fallback
       const queryEmbedding = await this.generateQueryEmbedding(query);
       return await this.searchWithPostgreSQL(queryEmbedding, params);
@@ -116,7 +121,7 @@ export class RAGServiceV2 {
       limit: number;
       threshold: number;
       filters: SearchParams['filters'];
-    }
+    },
   ): Promise<SearchResult[]> {
     if (!this.vectorClient) {
       throw new Error('Vector client not initialized');
@@ -135,15 +140,15 @@ export class RAGServiceV2 {
     // 2. Filter by workspaceId and other criteria (multi-tenant isolation)
     const filteredResults = vectorResults.filter((result) => {
       const metadata = result.metadata as Record<string, any>;
-      
+
       // CRITICAL: Always filter by workspace for security
       if (metadata.workspaceId !== workspaceId) return false;
 
       // Apply additional filters
-      if (filters.collectionIds?.length) {
+      if (filters?.collectionIds?.length) {
         if (!filters.collectionIds.includes(metadata.collectionId)) return false;
       }
-      if (filters.types?.length) {
+      if (filters?.types?.length) {
         if (!filters.types.includes(metadata.type)) return false;
       }
 
@@ -152,7 +157,7 @@ export class RAGServiceV2 {
     });
 
     // 3. Fetch full items from PostgreSQL (source of truth)
-    const itemIds = filteredResults.map((r) => r.id);
+    const itemIds = filteredResults.map((r) => String(r.id)); // Ensure string type
     if (itemIds.length === 0) return [];
 
     const items = await db
@@ -161,8 +166,8 @@ export class RAGServiceV2 {
       .where(
         and(
           inArray(knowledgeItems.id, itemIds),
-          eq(knowledgeItems.workspaceId, workspaceId) // Double-check security
-        )
+          eq(knowledgeItems.workspaceId, workspaceId), // Double-check security
+        ),
       );
 
     // 4. Combine vector scores with PostgreSQL data
@@ -190,7 +195,7 @@ export class RAGServiceV2 {
    */
   private async searchWithPostgreSQL(
     queryEmbedding: number[],
-    params: SearchParams
+    params: SearchParams,
   ): Promise<SearchResult[]> {
     const { workspaceId, limit = 10, threshold = 0.7, filters = {} } = params;
 
@@ -249,14 +254,19 @@ export class RAGServiceV2 {
         .insert(knowledgeItems)
         .values({
           workspaceId: input.workspaceId,
-          collectionId: input.collectionId,
+          createdBy: input.createdBy,
+          collectionId: input.collectionId || null,
           type: input.type,
           title: input.title,
           content: input.content,
+          sourceUrl: input.sourceUrl || null,
+          fileName: input.fileName || null,
+          fileSize: input.fileSize || null,
+          mimeType: input.mimeType || null,
           metadata: input.metadata || {},
           tags: input.tags || [],
           embeddings: embedding, // Store as backup
-          status: 'ready',
+          status: input.status || 'ready',
         })
         .returning();
 
@@ -349,9 +359,7 @@ export class RAGServiceV2 {
     });
 
     // Generate summary of sources
-    const summary = sources
-      .map((s) => `${s.item.title}: ${s.snippet}`)
-      .join('\n\n');
+    const summary = sources.map((s) => `${s.item.title}: ${s.snippet}`).join('\n\n');
 
     return {
       sources,
@@ -438,4 +446,3 @@ export function getRAGService(): RAGServiceV2 {
   }
   return ragServiceInstance;
 }
-
