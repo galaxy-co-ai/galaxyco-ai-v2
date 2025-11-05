@@ -6,8 +6,8 @@
 
 :root {
   /* ============================================
-     FIGMA COLORS - Gradient Pills & Status
-     ============================================ */
+   FIGMA COLORS - Gradient Pills & Status
+   ============================================ */
   
   /* Gradient Pill Colors (from your Figma design) */
   --figma-blue: 59 130 246;        /* Blue: Active Agents, Info */
@@ -26,8 +26,8 @@
   --figma-status-cold: 59 130 246;       /* Blue */
 
   /* ============================================
-     FIGMA SHADOWS - Professional Elevation
-     ============================================ */
+   FIGMA SHADOWS - Professional Elevation
+   ============================================ */
   
   /* Base Shadows (subtle, professional) */
   --figma-shadow-xs: 0 1px 3px rgb(0 0 0 / 0.03);
@@ -51,8 +51,8 @@
   --figma-glow-orange-hover: 0 4px 20px rgb(249 115 22 / 0.25);
 
   /* ============================================
-     FIGMA SPACING - From Your Designs
-     ============================================ */
+   FIGMA SPACING - From Your Designs
+   ============================================ */
   
   --figma-spacing-xs: 0.5rem;      /* 8px  - Tight */
   --figma-spacing-sm: 0.75rem;     /* 12px - Small */
@@ -62,8 +62,8 @@
   --figma-spacing-2xl: 3rem;       /* 48px - XXL */
 
   /* ============================================
-     FIGMA BORDER RADIUS - Rounded Corners
-     ============================================ */
+   FIGMA BORDER RADIUS - Rounded Corners
+   ============================================ */
   
   --figma-radius-sm: 0.5rem;       /* 8px  - Small elements */
   --figma-radius-md: 0.625rem;     /* 10px - Cards (default) */
@@ -73,8 +73,8 @@
   --figma-radius-full: 9999px;     /* Pills, badges, avatars */
 
   /* ============================================
-     FIGMA TRANSITIONS - Smooth Animations
-     ============================================ */
+   FIGMA TRANSITIONS - Smooth Animations
+   ============================================ */
   
   --figma-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --figma-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -85,134 +85,132 @@
    FIGMA COMPONENT UTILITY CLASSES
    ============================================ */
 
-@layer components {
-  /* Gradient Pills (Dashboard stats) */
-  .figma-pill {
-    @apply px-4 py-2 rounded-full font-medium text-sm;
-    box-shadow: var(--figma-shadow-sm);
-    transition: all var(--figma-transition-fast);
+/* Gradient Pills (Dashboard stats) */
+.figma-pill {
+  @apply px-4 py-2 rounded-full font-medium text-sm;
+  box-shadow: var(--figma-shadow-sm);
+  transition: all var(--figma-transition-fast);
   }
 
-  .figma-pill:hover {
-    box-shadow: var(--figma-shadow-md);
-    transform: translateY(-1px);
+.figma-pill:hover {
+  box-shadow: var(--figma-shadow-md);
+  transform: translateY(-1px);
   }
 
-  .figma-pill-blue {
-    @apply bg-gradient-to-br from-blue-500/10 to-blue-500/20 text-blue-600;
-    box-shadow: var(--figma-glow-blue);
+.figma-pill-blue {
+  @apply bg-gradient-to-br from-blue-500/10 to-blue-500/20 text-blue-600;
+  box-shadow: var(--figma-glow-blue);
   }
 
-  .figma-pill-blue:hover {
-    box-shadow: var(--figma-glow-blue-hover);
+.figma-pill-blue:hover {
+  box-shadow: var(--figma-glow-blue-hover);
   }
 
-  .figma-pill-green {
-    @apply bg-gradient-to-br from-green-500/10 to-green-500/20 text-green-600;
-    box-shadow: var(--figma-glow-green);
+.figma-pill-green {
+  @apply bg-gradient-to-br from-green-500/10 to-green-500/20 text-green-600;
+  box-shadow: var(--figma-glow-green);
   }
 
-  .figma-pill-green:hover {
-    box-shadow: var(--figma-glow-green-hover);
+.figma-pill-green:hover {
+  box-shadow: var(--figma-glow-green-hover);
   }
 
-  .figma-pill-purple {
-    @apply bg-gradient-to-br from-purple-500/10 to-purple-500/20 text-purple-600;
-    box-shadow: var(--figma-glow-purple);
+.figma-pill-purple {
+  @apply bg-gradient-to-br from-purple-500/10 to-purple-500/20 text-purple-600;
+  box-shadow: var(--figma-glow-purple);
   }
 
-  .figma-pill-purple:hover {
-    box-shadow: var(--figma-glow-purple-hover);
+.figma-pill-purple:hover {
+  box-shadow: var(--figma-glow-purple-hover);
   }
 
-  .figma-pill-orange {
-    @apply bg-gradient-to-br from-orange-500/10 to-orange-500/20 text-orange-600;
-    box-shadow: var(--figma-glow-orange);
+.figma-pill-orange {
+  @apply bg-gradient-to-br from-orange-500/10 to-orange-500/20 text-orange-600;
+  box-shadow: var(--figma-glow-orange);
   }
 
-  .figma-pill-orange:hover {
-    box-shadow: var(--figma-glow-orange-hover);
+.figma-pill-orange:hover {
+  box-shadow: var(--figma-glow-orange-hover);
   }
 
   /* Figma Cards (professional elevation) */
-  .figma-card {
-    @apply bg-white border-0;
-    border-radius: var(--figma-radius-lg);
-    box-shadow: var(--figma-shadow-md);
-    transition: all var(--figma-transition-base);
+.figma-card {
+  @apply bg-white border-0;
+  border-radius: var(--figma-radius-lg);
+  box-shadow: var(--figma-shadow-md);
+  transition: all var(--figma-transition-base);
   }
 
-  .figma-card:hover {
-    box-shadow: var(--figma-shadow-lg);
+.figma-card:hover {
+  box-shadow: var(--figma-shadow-lg);
   }
 
   /* Figma Status Badges */
-  .figma-badge-active {
-    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
-    @apply bg-green-500/10 text-green-600 border border-green-500/20;
+.figma-badge-active {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  @apply bg-green-500/10 text-green-600 border border-green-500/20;
   }
 
-  .figma-badge-processing {
-    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
-    @apply bg-blue-500/10 text-blue-600 border border-blue-500/20;
+.figma-badge-processing {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  @apply bg-blue-500/10 text-blue-600 border border-blue-500/20;
   }
 
-  .figma-badge-idle {
-    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
-    @apply bg-gray-500/10 text-gray-600 border border-gray-500/20;
+.figma-badge-idle {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  @apply bg-gray-500/10 text-gray-600 border border-gray-500/20;
   }
 
   /* Figma Icon Backgrounds (gradient circles/squares) */
-  .figma-icon-bg {
-    @apply flex items-center justify-center rounded-lg;
-    @apply bg-gradient-to-br from-purple-500/10 to-blue-500/10;
-    transition: all var(--figma-transition-fast);
+.figma-icon-bg {
+  @apply flex items-center justify-center rounded-lg;
+  @apply bg-gradient-to-br from-purple-500/10 to-blue-500/10;
+  transition: all var(--figma-transition-fast);
   }
 
-  .figma-icon-bg:hover {
-    @apply from-purple-500/15 to-blue-500/15;
+.figma-icon-bg:hover {
+  @apply from-purple-500/15 to-blue-500/15;
   }
 
   /* Floating Toolbar (glass morphism) */
-  .figma-toolbar {
-    @apply fixed bottom-8 left-1/2 -translate-x-1/2;
-    @apply bg-white/80 backdrop-blur-lg border border-black/10;
-    @apply rounded-full px-4 py-2;
-    box-shadow: var(--figma-shadow-lg);
+.figma-toolbar {
+  @apply fixed bottom-8 left-1/2 -translate-x-1/2;
+  @apply bg-white/80 backdrop-blur-lg border border-black/10;
+  @apply rounded-full px-4 py-2;
+  box-shadow: var(--figma-shadow-lg);
   }
 
   /* Timeline Dot (activity feed) */
-  .figma-timeline-dot {
-    @apply h-2 w-2 rounded-full;
-    box-shadow: 0 0 0 4px rgb(var(--background));
+.figma-timeline-dot {
+  @apply h-2 w-2 rounded-full;
+  box-shadow: 0 0 0 4px rgb(var(--background));
   }
 
-  .figma-timeline-dot-success {
-    @apply bg-green-500;
+.figma-timeline-dot-success {
+  @apply bg-green-500;
   }
 
-  .figma-timeline-dot-warning {
-    @apply bg-yellow-500;
+.figma-timeline-dot-warning {
+  @apply bg-yellow-500;
   }
 
-  .figma-timeline-dot-error {
-    @apply bg-red-500;
+.figma-timeline-dot-error {
+  @apply bg-red-500;
   }
 
   /* Pulse Animation (processing status) */
-  .figma-pulse {
-    animation: figma-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.figma-pulse {
+  animation: figma-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  @keyframes figma-pulse {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+@keyframes figma-pulse {
+  0%, 100% {
+    opacity: 1;
   }
-}
+  50% {
+    opacity: 0.5;
+  }
+  }
 
 /* ============================================
    FIGMA-SPECIFIC OVERRIDES
