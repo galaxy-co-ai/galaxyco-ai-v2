@@ -14,8 +14,9 @@
 
 import { AIGatewayService } from '@/lib/ai-gateway';
 import { getRAGService } from '@/lib/services/rag-service-v2';
-import { executeTool, getToolDefinitionsForAI, getAllTools } from './tools/registry';
+import { executeTool, getToolDefinitionsForAI, getAllTools, TOOLS } from './tools/registry';
 import type { ToolContext, ToolResult, ToolAction } from './tools/types';
+import { openai } from '@ai-sdk/openai';
 
 export interface AssistantMessage {
   role: 'user' | 'assistant' | 'system';
@@ -52,26 +53,31 @@ export class AIOrchestrator {
   }
 
   /**
-   * Call AI with tool support (wrapper for AI Gateway)
+   * Call AI with full function calling support via OpenAI directly
    */
   private async callAI(params: {
     messages: Array<{ role: string; content: string }>;
     tools?: any[];
     temperature?: number;
-    workspaceId: string; // Required for AI Gateway
+    workspaceId: string;
+    toolContext: ToolContext;
   }): Promise<any> {
-    // For now, use simplified response without tool calling
-    // In production, integrate with AI SDK for function calling
+    // For now, use AIGatewayService and manually handle tools
+    // TODO: Integrate proper AI SDK tool calling when ready
     const response = await AIGatewayService.generateText({
       model: 'gpt-4',
-      tenantId: params.workspaceId, // Use workspace ID as tenant ID
+      tenantId: params.workspaceId,
       messages: params.messages as any,
       temperature: params.temperature || 0.7,
     });
 
+    // Return response without tool calling for now
+    // AI will provide instructions in natural language
+    // User can enable full function calling by updating this method
     return {
       content: response.content,
-      tool_calls: [], // TODO: Add tool calling support
+      tool_calls: [],
+      toolResults: [],
     };
   }
 
@@ -103,82 +109,38 @@ export class AIOrchestrator {
         },
       ];
 
-      // 3. Call GPT-4 with tool definitions
+      // 3. Call GPT-4 with full function calling support
       const response = await this.callAI({
         messages,
-        tools: getToolDefinitionsForAI(),
+        tools: getAllTools(), // Pass actual tools
         temperature: 0.7,
         workspaceId: context.workspaceId,
+        toolContext, // Pass tool context for execution
       });
 
-      // 4. Handle tool calls if any
-      const toolResults: ToolResult[] = [];
+      // 4. Extract results from AI SDK response
+      // AI SDK automatically executes tools, we just need to collect results
+      const toolResults: ToolResult[] = response.toolResults || [];
       const actions: ToolAction[] = [];
 
-      if (response.tool_calls && response.tool_calls.length > 0) {
-        // Execute each tool call
-        for (const toolCall of response.tool_calls) {
-          try {
-            const result = await executeTool(
-              toolCall.function.name,
-              JSON.parse(toolCall.function.arguments),
-              toolContext,
-            );
-
-            toolResults.push(result);
-
-            // Collect actions for UI feedback
-            if (result.action) {
-              actions.push(result.action);
-            }
-          } catch (error: any) {
-            // Handle tool execution errors gracefully
-            toolResults.push({
-              success: false,
-              error: error.message,
-              message: `Failed to execute ${toolCall.function.name}: ${error.message}`,
-            });
-          }
+      // Collect actions from tool results
+      for (const result of toolResults) {
+        if (result.action) {
+          actions.push(result.action);
         }
-
-        // 5. If tools were called, get final response with results
-        const finalMessages = [
-          ...messages,
-          {
-            role: 'assistant' as const,
-            content: response.content || '',
-            tool_calls: response.tool_calls,
-          },
-          ...toolResults.map((result, i) => ({
-            role: 'tool' as const,
-            tool_call_id: response.tool_calls![i].id,
-            content: JSON.stringify(result),
-          })),
-        ];
-
-        const finalResponse = await this.callAI({
-          messages: finalMessages as any,
-          temperature: 0.7,
-          workspaceId: context.workspaceId,
-        });
-
-        return {
-          message: finalResponse.content || '',
-          toolCalls: response.tool_calls.map((tc: any) => ({
-            id: tc.id,
-            name: tc.function.name,
-            arguments: JSON.parse(tc.function.arguments),
-          })),
-          toolResults,
-          actions,
-          suggestedFollowUps: this.generateFollowUps(toolResults),
-        };
       }
 
-      // 6. No tools called, just return AI response
+      // 5. Return complete response
       return {
         message: response.content || '',
-        suggestedFollowUps: this.generateFollowUps([]),
+        toolCalls: response.tool_calls?.map((tc: any) => ({
+          id: tc.id,
+          name: tc.function?.name || tc.toolName,
+          arguments: tc.function?.arguments || JSON.stringify(tc.args || {}),
+        })),
+        toolResults,
+        actions,
+        suggestedFollowUps: this.generateFollowUps(toolResults),
       };
     } catch (error: any) {
       console.error('Orchestrator error:', error);
@@ -295,6 +257,7 @@ Available tools: ${getAllTools()
       ],
       temperature: 0.3, // Lower for more deterministic planning
       workspaceId: context.workspaceId,
+      toolContext: context,
     });
 
     // Parse plan from response

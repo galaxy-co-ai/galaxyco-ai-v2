@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { ConfirmationDialog } from './ConfirmationDialog';
 
 export interface AssistantChatProps {
   userId: string;
@@ -70,6 +71,11 @@ What would you like me to do?`,
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [suggestedFollowUps, setSuggestedFollowUps] = useState<string[]>([]);
+  const [pendingAction, setPendingAction] = useState<{
+    type: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -128,9 +134,26 @@ What would you like me to do?`,
       setMessages((prev) => [...prev, assistantMessage]);
       setSuggestedFollowUps(data.suggestedFollowUps || []);
 
-      // Execute any actions (navigation, UI updates, etc.)
-      if (data.actions) {
-        executeActions(data.actions);
+      // Check for destructive actions that need confirmation
+      const destructiveActions = data.actions?.filter((a: Action) =>
+        ['delete', 'disconnect'].includes(a.type),
+      );
+
+      if (destructiveActions && destructiveActions.length > 0) {
+        // Show confirmation dialog
+        setPendingAction({
+          type: destructiveActions[0].type,
+          message: `Are you sure you want to ${destructiveActions[0].label?.toLowerCase() || 'perform this action'}? This cannot be undone.`,
+          onConfirm: () => {
+            executeActions(data.actions);
+            setPendingAction(null);
+          },
+        });
+      } else {
+        // Execute non-destructive actions immediately
+        if (data.actions) {
+          executeActions(data.actions);
+        }
       }
 
       onNewMessage?.();
@@ -335,6 +358,21 @@ What would you like me to do?`,
           </Button>
         </div>
       </div>
+
+      {/* Confirmation Dialog for Destructive Actions */}
+      {pendingAction && (
+        <ConfirmationDialog
+          open={!!pendingAction}
+          onOpenChange={(open) => {
+            if (!open) setPendingAction(null);
+          }}
+          title="Confirm Action"
+          description={pendingAction.message}
+          actionLabel="Yes, continue"
+          onConfirm={pendingAction.onConfirm}
+          onCancel={() => setPendingAction(null)}
+        />
+      )}
     </div>
   );
 }
