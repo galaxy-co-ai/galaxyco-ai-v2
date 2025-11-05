@@ -5,8 +5,6 @@
  * Provides insights for optimization and improvement.
  */
 
-'use server';
-
 import { db } from '@galaxyco/database';
 import { aiConversations, aiMessages } from '@galaxyco/database/schema';
 import { eq, and, gte, desc, count, sql } from 'drizzle-orm';
