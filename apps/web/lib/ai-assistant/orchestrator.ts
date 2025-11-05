@@ -18,6 +18,8 @@ import { executeTool, getToolDefinitionsForAI, getAllTools, TOOLS } from './tool
 import type { ToolContext, ToolResult, ToolAction } from './tools/types';
 import OpenAI from 'openai';
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import { measureAsync, performanceTracker } from './performance';
+import { logAssistantUsage } from './monitoring';
 
 export interface AssistantMessage {
   role: 'user' | 'assistant' | 'system';
@@ -122,9 +124,13 @@ export class AIOrchestrator {
     context: ConversationContext,
     toolContext: ToolContext,
   ): Promise<AssistantResponse> {
+    const startTime = Date.now();
+    
     try {
       // 1. Enhance user message with RAG context (knowledge base)
-      const ragContext = await this.ragService.getRAGContext(userMessage, context.workspaceId, 3);
+      const ragContext = await measureAsync('rag_query', () =>
+        this.ragService.getRAGContext(userMessage, context.workspaceId, 3),
+      );
 
       // 2. Build conversation messages with system prompt
       const messages = [
@@ -143,13 +149,15 @@ export class AIOrchestrator {
       ];
 
       // 3. Call GPT-4 with full function calling support
-      const response = await this.callAI({
-        messages,
-        tools: getAllTools(), // Pass actual tools
-        temperature: 0.7,
-        workspaceId: context.workspaceId,
-        toolContext, // Pass tool context for execution
-      });
+      const response = await measureAsync('gpt4_call', () =>
+        this.callAI({
+          messages,
+          tools: getAllTools(), // Pass actual tools
+          temperature: 0.7,
+          workspaceId: context.workspaceId,
+          toolContext, // Pass tool context for execution
+        }),
+      );
 
       // 4. Extract results from AI SDK response
       // AI SDK automatically executes tools, we just need to collect results
@@ -163,7 +171,21 @@ export class AIOrchestrator {
         }
       }
 
-      // 5. Return complete response
+      // 5. Log usage for analytics
+      const responseTime = Date.now() - startTime;
+      performanceTracker.record('total_response_time', responseTime);
+
+      await logAssistantUsage({
+        workspaceId: context.workspaceId,
+        userId: context.userId,
+        conversationId: `conv-${Date.now()}`, // Would use actual conversation ID
+        message: userMessage,
+        toolsUsed: toolResults.map((r) => r.data?.type || 'unknown'),
+        responseTime,
+        success: toolResults.every((r) => r.success),
+      });
+
+      // 6. Return complete response
       return {
         message: response.content || '',
         toolCalls: response.tool_calls?.map((tc: any) => ({

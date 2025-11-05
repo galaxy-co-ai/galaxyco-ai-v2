@@ -22,6 +22,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { ConfirmationDialog } from './ConfirmationDialog';
+import { VoiceInput } from './VoiceInput';
 
 export interface AssistantChatProps {
   userId: string;
@@ -344,18 +345,32 @@ What would you like me to do?`,
             className="resize-none"
             disabled={isLoading}
           />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading}
-            size="icon"
-            className="h-auto"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <VoiceInput
+              onTranscript={(text) => {
+                setInput(text);
+                // Auto-send after voice input
+                setTimeout(() => {
+                  if (text.trim()) {
+                    handleSend();
+                  }
+                }, 500);
+              }}
+              disabled={isLoading}
+            />
+            <Button
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading}
+              size="icon"
+              className="h-auto"
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
