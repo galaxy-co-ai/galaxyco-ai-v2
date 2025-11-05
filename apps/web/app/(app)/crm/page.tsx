@@ -16,6 +16,8 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Users, UserCircle, Briefcase, Target, TrendingUp, ChevronRight } from 'lucide-react';
+import { MetricCard } from '@/components/galaxy/MetricCard';
+import { DashboardStats } from '@/components/galaxy/DashboardStats';
 
 interface CRMMetrics {
   totalCustomers: number;

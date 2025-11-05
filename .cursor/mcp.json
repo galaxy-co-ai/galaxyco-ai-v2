@@ -34,6 +34,9 @@
         "@modelcontextprotocol/server-postgres",
         "postgresql://neondb_owner:npg_XexJt1VYKYaP@ep-holy-brook-a5xm8wxb.us-east-2.aws.neon.tech/neondb?sslmode=require"
       ]
+    },
+    "figma": {
+      "url": "https://mcp.figma.com/mcp"
     }
   }
 }

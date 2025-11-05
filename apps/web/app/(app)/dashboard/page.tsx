@@ -16,12 +16,16 @@ import {
   Building2,
   ExternalLink,
   Activity,
+  CheckCircle2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWorkspace } from '@/contexts/workspace-context';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import Link from 'next/link';
+import { DashboardStats } from '@/components/galaxy/DashboardStats';
+import { AgentStatusCard } from '@/components/galaxy/AgentStatusCard';
+import { ActivityFeed } from '@/components/galaxy/ActivityFeed';
 
 interface DashboardStats {
   agents: {
@@ -128,88 +132,129 @@ export default function DashboardPage() {
   // Active agents (up to 3)
   const activeAgentsList = agents.filter((a) => a.status === 'active').slice(0, 3);
 
+  // Mock activity data (replace with real data later)
+  const mockActivities = [
+    {
+      id: '1',
+      agent: 'Email Triage Agent',
+      action: 'Processed 12 high-priority emails',
+      time: '2 min ago',
+      status: 'success' as const,
+    },
+    {
+      id: '2',
+      agent: 'CRM Data Sync',
+      action: 'Synced 24 contacts to Salesforce',
+      time: '15 min ago',
+      status: 'success' as const,
+    },
+    {
+      id: '3',
+      agent: 'Invoice Processor',
+      action: 'Waiting for approval on invoice #1247',
+      time: '1 hour ago',
+      status: 'warning' as const,
+    },
+  ];
+
+  const statsData = [
+    {
+      label: 'Active Agents',
+      value: stats?.agents.active || 0,
+      icon: Bot,
+      variant: 'blue' as const,
+    },
+    {
+      label: 'Tasks Completed',
+      value: '1,247',
+      icon: CheckCircle2,
+      variant: 'green' as const,
+    },
+    {
+      label: 'Hours Saved',
+      value: '342',
+      icon: Clock,
+      variant: 'purple' as const,
+    },
+    {
+      label: 'Success Rate',
+      value: '98.5%',
+      icon: TrendingUp,
+      variant: 'orange' as const,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-12">
-        {/* Dashboard Header - Framer/Linear Inspired */}
+        {/* Dashboard Header */}
         <div className="space-y-3">
           <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-lg lg:text-xl text-muted-foreground">
-            Welcome back! Here&apos;s what&apos;s happening today.
+            Welcome back! Here&apos;s an overview of your AI agents and workflows.
           </p>
         </div>
 
-        {/* Key Metrics - Framer/Linear Inspired */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <MetricCard
-            icon={Bot}
-            label="Active Agents"
-            value={stats?.agents.active || 0}
-            total={stats?.agents.total || 0}
-          />
-          <MetricCard icon={Users} label="Customers" value={stats?.customers.total || 0} />
-          <MetricCard icon={Activity} label="Projects" value={stats?.projects.total || 0} />
-          <MetricCard
-            icon={DollarSign}
-            label="Revenue (30d)"
-            value={`$${Math.floor(parseInt(stats?.revenue.total || '0') / 100).toLocaleString()}`}
-          />
-        </div>
+        {/* Stats Pills - New Figma Design */}
+        <DashboardStats stats={statsData} />
 
-        {/* Quick Actions - Framer/Linear Inspired */}
-        <div className="space-y-8">
-          <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <ActionCard
-              icon={Bot}
-              label="Create Agent"
-              href="/agents/new"
-              description="Build a new AI agent"
-            />
-            <ActionCard
-              icon={Users}
-              label="Add Customer"
-              href="/customers"
-              description="Create customer record"
-            />
-            <ActionCard
-              icon={FileText}
-              label="New Document"
-              href="/documents"
-              description="Upload or create document"
-            />
-            <ActionCard
-              icon={Mail}
-              label="Send Campaign"
-              href="/campaigns"
-              description="Launch email campaign"
-            />
+        {/* Active Agents Grid */}
+        {activeAgentsList.length > 0 && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold">Active Agents</h2>
+              <p className="text-muted-foreground">Your AI workforce in action</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {activeAgentsList.map((agent) => (
+                <AgentStatusCard
+                  key={agent.id}
+                  name={agent.name}
+                  type="AI Agent"
+                  status="active"
+                  tasksCompleted={Math.floor(Math.random() * 500)}
+                  lastActive="5 min ago"
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Activity Feed */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ActivityFeed activities={mockActivities} className="lg:col-span-1" />
+
+          {/* Quick Actions - Keeping existing design */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold">Quick Actions</h2>
+              <p className="text-muted-foreground">Common tasks and shortcuts</p>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <ActionCard
+                icon={Bot}
+                label="Create Agent"
+                href="/agents/new"
+                description="Build a new AI agent"
+              />
+              <ActionCard
+                icon={Users}
+                label="Add Customer"
+                href="/customers"
+                description="Create customer record"
+              />
+              <ActionCard
+                icon={FileText}
+                label="New Document"
+                href="/documents"
+                description="Upload or create document"
+              />
+            </div>
           </div>
         </div>
 
         {/* Resources Footer */}
         <DashboardFooter />
-      </div>
-    </div>
-  );
-}
-
-interface MetricCardProps {
-  icon: React.ElementType;
-  label: string;
-  value: number | string;
-  total?: number;
-}
-
-function MetricCard({ icon: Icon, label, value, total }: MetricCardProps) {
-  return (
-    <div className="p-8 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:scale-[1.02] group">
-      <div className="text-sm lg:text-base text-muted-foreground mb-2 font-medium">{label}</div>
-      <div className="text-4xl lg:text-5xl font-bold tracking-tight">
-        {value}
-        {total ? (
-          <span className="text-base text-muted-foreground font-normal"> / {total}</span>
-        ) : null}
       </div>
     </div>
   );
