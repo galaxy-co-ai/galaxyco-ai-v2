@@ -16,7 +16,8 @@ import { AIGatewayService } from '@/lib/ai-gateway';
 import { getRAGService } from '@/lib/services/rag-service-v2';
 import { executeTool, getToolDefinitionsForAI, getAllTools, TOOLS } from './tools/registry';
 import type { ToolContext, ToolResult, ToolAction } from './tools/types';
-import { openai } from '@ai-sdk/openai';
+import OpenAI from 'openai';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 
 export interface AssistantMessage {
   role: 'user' | 'assistant' | 'system';
@@ -53,7 +54,8 @@ export class AIOrchestrator {
   }
 
   /**
-   * Call AI with full function calling support via OpenAI directly
+   * Call AI with FULL function calling support (ENABLED)
+   * AI can now actually execute tools!
    */
   private async callAI(params: {
     messages: Array<{ role: string; content: string }>;
@@ -62,22 +64,53 @@ export class AIOrchestrator {
     workspaceId: string;
     toolContext: ToolContext;
   }): Promise<any> {
-    // For now, use AIGatewayService and manually handle tools
-    // TODO: Integrate proper AI SDK tool calling when ready
-    const response = await AIGatewayService.generateText({
-      model: 'gpt-4',
-      tenantId: params.workspaceId,
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // Convert tools to OpenAI function calling format
+    const functions = Object.entries(TOOLS).map(([name, toolDef]) => ({
+      name,
+      description: toolDef.description,
+      parameters: zodToJsonSchema(toolDef.parameters) as any,
+    }));
+
+    // Call GPT-4 with function calling
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4-turbo-preview',
       messages: params.messages as any,
+      functions,
+      function_call: 'auto', // Let AI decide when to use tools
       temperature: params.temperature || 0.7,
     });
 
-    // Return response without tool calling for now
-    // AI will provide instructions in natural language
-    // User can enable full function calling by updating this method
+    const message = response.choices[0].message;
+
+    // Handle function calls
+    const toolResults: ToolResult[] = [];
+    const toolCalls: any[] = [];
+
+    if (message.function_call) {
+      const toolName = message.function_call.name;
+      const args = JSON.parse(message.function_call.arguments);
+
+      // Execute the tool
+      const result = await executeTool(toolName, args, params.toolContext);
+      toolResults.push(result);
+
+      toolCalls.push({
+        id: Date.now().toString(),
+        function: {
+          name: toolName,
+          arguments: message.function_call.arguments,
+        },
+      });
+    }
+
     return {
-      content: response.content,
-      tool_calls: [],
-      toolResults: [],
+      content: message.content || 'Tool executed successfully.',
+      tool_calls: toolCalls,
+      toolResults,
     };
   }
 
