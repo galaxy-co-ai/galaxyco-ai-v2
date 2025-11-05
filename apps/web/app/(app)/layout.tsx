@@ -6,7 +6,7 @@
 
 import { AppShell } from '@/components/layout/app-shell';
 import { ChatWidget } from '@/components/chat/chat-widget';
-import { WorkspaceProvider } from '@/hooks/useWorkspace';
+import { WorkspaceProvider } from '@/contexts/workspace-context';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ErrorBoundary } from '@/components/error/error-boundary';
 import { QueryProvider } from '@/components/providers/query-provider';
